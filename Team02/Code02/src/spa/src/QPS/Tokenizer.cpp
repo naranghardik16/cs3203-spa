@@ -1,6 +1,6 @@
 #pragma once
 #include "Tokenizer.h"
-#include "StringUtil.h"
+#include "General/StringUtil.h"
 #include <utility>
 #include "QPS/PqlException/SyntaxErrorException.h"
 

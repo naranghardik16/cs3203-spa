@@ -1,5 +1,5 @@
 #pragma once
-#include "StringUtil.h"
+#include "General/StringUtil.h"
 #include <unordered_map>
 #include "AbstractSyntaxExtractor.h"
 #include "QPS/PqlException/SyntaxErrorException.h"

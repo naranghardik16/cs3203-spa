@@ -1,4 +1,4 @@
-#include "QPS/StringUtil.h"
+#include "General/StringUtil.h"
 #include "catch.hpp"
 
 TEST_CASE("Check if Trim works as expected") {

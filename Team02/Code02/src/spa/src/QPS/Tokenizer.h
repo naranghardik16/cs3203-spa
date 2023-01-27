@@ -3,7 +3,7 @@
 #include <vector>
 #include <regex>
 #include <unordered_map>
-#include "StringUtil.h"
+#include "General/StringUtil.h"
 #include "LexicalRuleValidator.h"
 
 class Tokenizer {
