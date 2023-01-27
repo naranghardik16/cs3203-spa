@@ -1,8 +1,15 @@
 #include "catch.hpp"
 #include "QPS/AbstractSyntaxExtractor.h"
 #include "QPS/PqlException/SemanticErrorException.h"
+#include "QPS/PqlException/SyntaxErrorException.h"
 
 auto extractor = std::shared_ptr<AbstractSyntaxExtractor>();
+const std::string kSuchThatStartIndicator = "such that ";
+const std::string kPatternStartIndicator = "pattern ";
+
+const std::string kEntityKey = "Entity";
+const std::string kFirstParameterKey = "First Parameter";
+const std::string kSecondParameterKey = "Second Parameter";
 
 //Check if design entities and corresponding synonyms can be extracted from declarations
 TEST_CASE("Check if ExtractAbstractSyntaxFromDeclaration works as expected") {
@@ -41,6 +48,67 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromDeclaration works as expected") {
     try {
       std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromDeclarations(declarations);
     } catch (const SemanticErrorException& rse) {
+      REQUIRE(1);
+    }
+  }
+}
+
+TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
+  SECTION("Test on Such That Clause") {
+    std::string clause = "such that Uses (a, v)";
+    std::unordered_map<std::string, std::string> correct_map = {{kEntityKey, "Uses"},
+                                                                                         {kFirstParameterKey, "a"},
+                                                                                         {kSecondParameterKey, "v"}};
+
+    std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromClause(clause, kSuchThatStartIndicator);
+
+    REQUIRE(map == correct_map);
+  }
+
+  SECTION("Test on Pattern Clause") {
+    std::string clause = "pattern a (\"count\", _)";
+    std::unordered_map<std::string, std::string> correct_map = {{kEntityKey, "a"},
+                                                                {kFirstParameterKey, "\"count\""},
+                                                                {kSecondParameterKey, "_"}};
+
+    std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromClause(clause, kPatternStartIndicator);
+
+    REQUIRE(map == correct_map);
+  }
+
+  SECTION("Test on empty Clause") {
+    std::string clause = "";
+    std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromClause(clause, kPatternStartIndicator);
+    REQUIRE(map.empty());
+  }
+
+  SECTION("Test on invalid pattern clause with invalid concrete syntax") {
+    std::string invalid_pattern_clause = "pattern a (\"count\" _)"; //invalid clause without comma
+    try {
+      std::unordered_map<std::string, std::string>
+          map = extractor->ExtractAbstractSyntaxFromClause(invalid_pattern_clause, kPatternStartIndicator);
+    } catch (const SyntaxErrorException& e) {
+      REQUIRE(1);
+    }
+  }
+
+  SECTION("Test on invalid such that clause with invalid concrete syntax") {
+    std::string invalid_such_that_clause = "such that a, v)"; //invalid clause without (
+    try {
+      std::unordered_map<std::string, std::string>
+          map = extractor->ExtractAbstractSyntaxFromClause(invalid_such_that_clause, kSuchThatStartIndicator);
+    } catch (const SyntaxErrorException& e) {
+      REQUIRE(1);
+    }
+  }
+
+
+  SECTION("Test on clause with missing abstract syntax") {
+    std::string invalid_such_that_clause = "such that (,)"; //checks will be done by validator to throw exception
+    try {
+      std::unordered_map<std::string, std::string>
+          map = extractor->ExtractAbstractSyntaxFromClause(invalid_such_that_clause, kSuchThatStartIndicator);
+    } catch (const SyntaxErrorException& e) {
       REQUIRE(1);
     }
   }
