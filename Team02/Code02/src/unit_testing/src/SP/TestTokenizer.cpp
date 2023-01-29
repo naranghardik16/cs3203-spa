@@ -12,7 +12,7 @@ void require(bool b) {
   REQUIRE(b);
 }
 
-TEST_CASE("1st Test") {
+TEST_CASE("SP Tokenizer Test") {
   string input = "while (i > 0) {\n"
                  "  x = x + z * 5;\n"
                  "  z = 2;\n"
