@@ -14,7 +14,8 @@ const std::string kSelectKeyword = "Select";
 const std::string kSuchThatStartIndicator = "such that ";
 const std::string kPatternStartIndicator = "pattern ";
 
-std::regex such_that_regex("such that [A-Za-z]");
+//such that should have a relationship ref next e.g. "Modifies" etc which start with a letter
+std::regex such_that_regex("such that [A-Z]");
 // next token should be a syn-assign, which starts with a letter rather than , or ) e.g. (pattern, pattern)
 std::regex pattern_regex("pattern [A-Za-z]");
 
