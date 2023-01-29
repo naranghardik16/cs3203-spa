@@ -14,7 +14,7 @@ const std::string kSelectKeyword = "Select";
 const std::string kSuchThatStartIndicator = "such that ";
 const std::string kPatternStartIndicator = "pattern ";
 
-//such that should have a relationship ref next e.g. "Modifies" etc which start with a letter
+//such that should have a relationship ref next e.g. "Modifies" etc. which start with a letter
 std::regex such_that_regex("such that [A-Z]");
 // next token should be a syn-assign, which starts with a letter rather than , or ) e.g. (pattern, pattern)
 std::regex pattern_regex("pattern [A-Za-z]");
@@ -28,7 +28,7 @@ const char kComma = ',';
  * Splits the query into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddDeclarationsAndStatementsIntoMap(std::string query,
+std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddDeclarationsAndStatementsIntoMap(const std::string& query,
                                                                                 std::unordered_map<std::string, std::vector<std::string>>& map) {
     std::string delimiter = ";";
     std::vector<std::string> declaration_statements;
@@ -70,7 +70,7 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSynonymI
 /*
  * Finds the start of a clause using regex.
  */
-size_t Tokenizer::FindStartOfSubClauseIndex(std::string s, std::regex rgx) {
+size_t Tokenizer::FindStartOfSubClauseIndex(const std::string& s, const std::regex& rgx) {
   std::smatch match;
   std::regex_search(s, match, rgx);
   if (match.empty()){
@@ -172,11 +172,11 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSelectSu
  * Synonym in Select statement, Such that clause and Pattern Clause.
  * Throws an exception if there is no Select Keyword.
  */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::TokenizeQuery(std::string query) {
+std::unordered_map<std::string, std::vector<std::string>> Tokenizer::TokenizeQuery(const std::string& query) {
   std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
   std::pair<std::vector<std::string>, std::string> declaration_select_pair;
 
-  subclauses_map = AddDeclarationsAndStatementsIntoMap(std::move(query), subclauses_map);
+  subclauses_map = AddDeclarationsAndStatementsIntoMap(query, subclauses_map);
 
   std::string select_statement = subclauses_map[kSelectKeyword][0];
   //Further Split Select statement into synonym, such that clause and pattern clause
