@@ -15,7 +15,7 @@ vector<vector<Token>>* Tokenizer::tokenize(istream & stream) {
   vector<string> lines = splitLines(stream);
   int i;
   for (i = 0; i < lines.size(); i++) {
-//    cout << "Line no: " << i+1 << " contains: "  << lines[i] << "\n";
+    cout << "Line no: " << i+1 << " contains: "  << lines[i] << "\n";
   }
 
   return NULL;
