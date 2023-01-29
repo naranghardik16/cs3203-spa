@@ -3,9 +3,9 @@
 
 class Expression {
  public:
-  [[nodiscard]] std::string GetExpressionType();
+  explicit Expression(std::string expression_type);
+  [[nodiscard]] std::string GetExpressionType() const;
 
  private:
   std::string expression_type_;
-
 };
