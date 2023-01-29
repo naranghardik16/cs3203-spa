@@ -1,14 +1,15 @@
-#include "FollowHandler.h"
+#include "StmtToStmtHandler.h"
 
+const std::unordered_set<std::string> kRel({"Follows", "Follows*", "Parent", "Parent*"});
 const std::unordered_set<std::string> kStmtEntity({"stmt", "read", "print", "assign", "if", "while", "call"});
 const std::string kEntityKey = "Entity";
 const std::string kFirstParameterKey = "First Parameter";
 const std::string kSecondParameterKey = "Second Parameter";
 
-void FollowHandler::Handle(Map &declaration, Map &clause) {
+void StmtToStmtHandler::Handle(Map &declaration, Map &clause) {
   std::string &rel_ref(clause[kEntityKey]);
 
-  if (rel_ref != "Follows" || rel_ref != "Follows*") {
+  if (kRel.find(rel_ref) == kRel.end()) {
     Handler::Handle(declaration, clause);
   }
 

@@ -6,7 +6,10 @@
 #include "..\PqlException\SemanticErrorException.h"
 #include "..\PqlException\SyntaxErrorException.h"
 
-class FollowHandler : public Handler {
+/*
+ * Validate stmt/proc and variable relationship (Uses, Modifies).
+ */
+class StmtProcToVarHandler : public Handler{
  public:
   void Handle(Map &declaration, Map &clause) override;
 };
