@@ -5,7 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include "General/StringUtil.h"
-#include "LexicalRuleValidator.h"
+#include "General/LexicalRuleValidator.h"
 
 class Tokenizer {
 

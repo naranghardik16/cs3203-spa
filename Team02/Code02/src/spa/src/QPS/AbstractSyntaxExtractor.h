@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <unordered_map>
-#include "QPS/LexicalRuleValidator.h"
+#include "General/LexicalRuleValidator.h"
 
 class AbstractSyntaxExtractor {
  public:

@@ -1,4 +1,4 @@
-#include "QPS/LexicalRuleValidator.h"
+#include "General/LexicalRuleValidator.h"
 #include "catch.hpp"
 
 auto lexical_rule_validator = std::shared_ptr<LexicalRuleValidator>();
