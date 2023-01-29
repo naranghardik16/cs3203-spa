@@ -1,7 +1,3 @@
-//
-// Created by Kai Qi Yong on 29/1/23.
-//
-
 #ifndef SPA_SRC_SPA_SRC_SP_PUNCTUATIONTOKEN_H_
 #define SPA_SRC_SPA_SRC_SP_PUNCTUATIONTOKEN_H_
 #include "Token.h"
@@ -18,6 +14,7 @@ class PunctuationToken : public Token {
   inline static const string SEMICOLON = ";";
   inline static const string UNDERSCORE = "_";
   inline static const string DOUBLE_QUOTE = "\"";
+  inline static const string EQUAL = "=";
   PunctuationToken(string val);
   string GetType();
   bool Equals(PunctuationToken *other);

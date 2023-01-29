@@ -1,6 +1,3 @@
-//
-// Created by Kai Qi Yong on 29/1/23.
-//
 #include "PunctuationToken.h"
 using namespace std;
 
@@ -19,6 +16,8 @@ PunctuationToken::PunctuationToken(string val) : Token(val) {
     type_ = UNDERSCORE;
   } else if (this->GetValue() == DOUBLE_QUOTE) {
     type_ = DOUBLE_QUOTE;
+  } else if (this->GetValue() == EQUAL) {
+    type_ = EQUAL;
   }
 }
 

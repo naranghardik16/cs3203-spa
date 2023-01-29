@@ -1,6 +1,3 @@
-//
-// Created by Kai Qi Yong on 29/1/23.
-//
 #include "ConditionalOperatorToken.h"
 using namespace std;
 
