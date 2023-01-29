@@ -33,6 +33,20 @@ TEST_CASE("Check if AddDeclarationsAndStatementsIntoMap works") {
 }
 
 TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
+  SECTION("Test if AddSelectSubclausesIntoMap works on repeated terminal names with keyword pattern") {
+    std::string statement = "Select pattern such that Parent* (  w  ,pattern) pattern pattern    (\"count\",   _   )  ";
+
+    //we trim before searching for keywords so the returned string will be a trimmed version
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"pattern"}},
+                                                                             {kSuchThatKey, {"such that Parent* ( w ,pattern)"}},
+                                                                             {kPatternKey, {"pattern pattern (\"count\", _ )"}}};
+
+    std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
+    auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
+
+    REQUIRE(map == correct_map);
+  }
+
   SECTION("Test if AddSelectSubclausesIntoMap can handle terminal names being synonyms") {
     std::string statement = "Select such such that Parent* (pattern, such) pattern such (\"count\", _)";
     std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"such"}},
@@ -41,6 +55,7 @@ TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
 
     std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
     auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
+
     REQUIRE(map == correct_map);
   }
 
@@ -114,6 +129,22 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
 
     REQUIRE(map == correct_map);
     REQUIRE(reversed_map == correct_reversed_map);
+  }
+
+  SECTION("Random spaces") {
+    std::string query = "assign a;\n"
+                        "Select a pattern a(_, \"1                +   y\")";
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign a"}},
+                                                                             {select_statement_key,
+                                                                              {"Select a pattern a(_, \"1 + y\")"}},
+                                                                             {kSynonymKey, {"a"}},
+                                                                             {kSuchThatKey,
+                                                                              {}},
+                                                                             {kPatternKey,
+                                                                              {"pattern a(_, \"1 + y\")"}}};
+    auto map = tokenizer->TokenizeQuery(query);
+
+    REQUIRE(map == correct_map);
   }
 
   SECTION("Invalid clause without closing bracket") {

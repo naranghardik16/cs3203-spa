@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <utility>
-#include "LexicalRuleValidator.h"
+#include "General/LexicalRuleValidator.h"
 #include "AbstractSyntaxExtractor.h"
 #include "Tokenizer.h"
 #include "PqlException/SyntaxErrorException.h"

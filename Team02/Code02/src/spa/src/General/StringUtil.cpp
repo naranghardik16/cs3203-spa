@@ -49,23 +49,13 @@ std::vector<std::string> string_util::SplitStringByDelimiter(std::string s, cons
 }
 
 /*
- * Checks if a character is a white space (e.g. tab, space etc).
- */
-bool string_util::IsWhiteSpace(char c) {
-  bool result;
-  result = c == ' ' || c == '\n' || c == '\r' ||
-      c == '\t' || c == '\v' || c == '\f';
-  return result;
-}
-
-/*
  * Returns the first word in a string by finding the first whitespace in the string.
  * If there is no whitespace, then the input string is returned.
  */
 std::string string_util::GetFirstWord(const std::string& s) {
   size_t white_space_index = s.length();
   for (int i = 0; i < s.length(); i++) {
-    if (IsWhiteSpace(s[i])) {
+    if (std::isspace(s[i])) {
       white_space_index = i;
       break;
     }
@@ -80,4 +70,14 @@ std::string string_util::GetFirstWord(const std::string& s) {
 std::string string_util::GetClauseAfterKeyword(const std::string& clause, const std::string& keyword) {
   size_t new_start_index = clause.find(keyword) + keyword.length();
   return Trim(clause.substr(new_start_index,clause.length() - 1));
+}
+
+/*
+ * Trims extra whitespace left and right of string as well as inside the string.
+ * Reference: https://stackoverflow.com/questions/35301432/remove-extra-white-spaces-in-c
+ */
+std::string string_util::RemoveExtraWhitespacesInString(const std::string& input) {
+  std::string output;
+  std::unique_copy(input.begin(), input.end(), std::back_insert_iterator<std::string>(output),[](char a,char b){ return std::isspace(a) && std::isspace(b);});
+  return output;
 }

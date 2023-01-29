@@ -57,7 +57,7 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
  * Returns an empty map if the clause is empty because it is optional to have a such that clause.
  */
 std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbstractSyntaxFromClause(const std::string& clause,
-                                                                                                        const std::string& clause_start_indicator) {
+                                                                                                      const std::string& clause_start_indicator) {
   std::unordered_map<std::string, std::string> map;
 
   if (clause.empty()) {

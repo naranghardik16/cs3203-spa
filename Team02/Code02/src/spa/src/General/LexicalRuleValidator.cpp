@@ -1,4 +1,4 @@
-#include "LexicalRuleValidator.h"
+#include "General/LexicalRuleValidator.h"
 #include <iostream>
 #include <utility>
 

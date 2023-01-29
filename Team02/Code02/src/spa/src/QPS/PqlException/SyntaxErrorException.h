@@ -1,9 +1,8 @@
-//
-// Created by isabe on 24/01/2023.
 #pragma once
 #include <iostream>
+#include "PqlException.h"
 
-class SyntaxErrorException : public std::exception {
+class SyntaxErrorException : public PqlException {
  public:
   char* what();
 };

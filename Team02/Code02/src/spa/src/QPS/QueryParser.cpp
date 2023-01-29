@@ -37,7 +37,7 @@ std::unordered_map<std::string, std::unordered_map<std::string, std::string>> Qu
       pattern_statement = subclauses_map[kSuchThatKey][0];
     }
 
-    //Extract the abstract syntax from the query. If the clause is empty then a empty map is returned.
+    //Extract the abstract syntax from the query. If the clause is empty then an empty map is returned.
     auto declaration_map = AbstractSyntaxExtractor::ExtractAbstractSyntaxFromDeclarations(declaration_statements);
     auto such_that_map =
         AbstractSyntaxExtractor::ExtractAbstractSyntaxFromClause(such_that_statement, kSuchThatStartIndicator);
