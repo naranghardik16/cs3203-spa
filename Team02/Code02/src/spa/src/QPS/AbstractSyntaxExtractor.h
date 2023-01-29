@@ -11,7 +11,6 @@ class AbstractSyntaxExtractor {
 
   static std::unordered_map<std::string, std::string> ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations);
 
-  static std::unordered_map<std::string, std::string> ExtractAbstractSyntaxFromClause(const std::string& clause,
-                                                                                                               const std::string& clause_start_indicator);
+  static std::unordered_map<std::string, std::string> ExtractAbstractSyntaxFromClause(const std::string& clause,const std::string& clause_start_indicator);
 
 };

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <regex>
+#include <algorithm>
+
 
 namespace string_util {
 
@@ -15,8 +17,7 @@ std::vector<std::string> SplitStringByDelimiter(std::string s, const std::string
 
 std::string GetFirstWord(const std::string& s);
 
-bool IsWhiteSpace(char c);
-
 std::string GetClauseAfterKeyword(const std::string& clause, const std::string& keyword);
 
+std::string RemoveExtraWhitespacesInString(const std::string &input);
 }
