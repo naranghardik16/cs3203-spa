@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 #include "QueryParser.h"
 
 const std::string kSuchThatStartIndicator = "such that ";

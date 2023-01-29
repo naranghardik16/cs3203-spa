@@ -9,6 +9,6 @@
 
 class QueryParser {
  public:
-  static std::unordered_map<std::string, std::unordered_map<std::string, std::string>> QueryParser::ParseQuery(std::string query);
+  static std::unordered_map<std::string, std::unordered_map<std::string, std::string>> ParseQuery(std::string query);
 };
 
