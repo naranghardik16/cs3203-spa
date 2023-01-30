@@ -11,4 +11,5 @@ void Handler::Handle(Map &declaration, Map &clause) {
   if (this->next_handler_) {
     return this->next_handler_->Handle(declaration, clause);
   }
+  throw SyntaxErrorException();
 }
