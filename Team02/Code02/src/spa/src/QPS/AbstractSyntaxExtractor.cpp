@@ -4,14 +4,7 @@
 #include "AbstractSyntaxExtractor.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
-
-const char kOpeningBracket = '(';
-const char kClosingBracket = ')';
-const char kComma = ',';
-
-const std::string kEntityKey = "Entity";
-const std::string kFirstParameterKey = "First Parameter";
-const std::string kSecondParameterKey = "Second Parameter";
+#include "QPS/PQLConstants.h"
 
 AbstractSyntaxExtractor::AbstractSyntaxExtractor() = default;
 
@@ -74,9 +67,9 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
   }
 
   size_t start_of_rel_ref_index = clause.find(clause_start_indicator) + clause_start_indicator.length();
-  size_t opening_bracket_index = clause.find(kOpeningBracket);
-  size_t comma_index = clause.find(kComma);
-  size_t closing_bracket_index = clause.find_last_of(kClosingBracket);
+  size_t opening_bracket_index = clause.find(pql_constants::kOpeningBracket);
+  size_t comma_index = clause.find(pql_constants::kComma);
+  size_t closing_bracket_index = clause.find_last_of(pql_constants::kClosingBracket);
 
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
@@ -95,9 +88,9 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
     throw SyntaxErrorException();
   }
 
-  map.insert({kEntityKey, relationship});
-  map.insert({kFirstParameterKey, first_parameter});
-  map.insert({kSecondParameterKey, second_parameter});
+  map.insert({pql_constants::kEntityKey, relationship});
+  map.insert({pql_constants::kFirstParameterKey, first_parameter});
+  map.insert({pql_constants::kSecondParameterKey, second_parameter});
 
   return map;
 }
