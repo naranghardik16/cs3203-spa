@@ -18,7 +18,27 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromDeclaration works as expected") {
     std::unordered_map<std::string, std::string> correct_synonym_to_design_entity_map = {{"v", "variable"}};
 
     std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromDeclarations(declarations);
+
     REQUIRE(map == correct_synonym_to_design_entity_map);
+  }
+
+  SECTION("Test if exception is thrown for one invalid design entity and one synonym") {
+    std::vector<std::string> declarations{"variablexyz v"};
+
+    try {
+    std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromDeclarations(declarations);
+    } catch (SyntaxErrorException e) {
+      REQUIRE(1);
+    }
+  }
+
+  SECTION("Test if exception is thrown for invalid synonym") {
+    std::vector<std::string> declarations{"variable 1v"};
+    try {
+      std::unordered_map<std::string, std::string> map = extractor->ExtractAbstractSyntaxFromDeclarations(declarations);
+    } catch (SyntaxErrorException e) {
+      REQUIRE(1);
+    }
   }
 
   SECTION("Test case of one design entity and multiple synonyms with random spaces in between") {
