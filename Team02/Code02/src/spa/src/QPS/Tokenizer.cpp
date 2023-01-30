@@ -2,7 +2,7 @@
 #include "Tokenizer.h"
 #include "General/StringUtil.h"
 #include <utility>
-#include "QPS/PqlException/SyntaxErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
 
 const std::string kDeclarationKey = "Declarations";
 const std::string kSelectKey = "Select";

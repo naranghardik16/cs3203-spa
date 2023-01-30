@@ -2,8 +2,8 @@
 #include "General/StringUtil.h"
 #include <unordered_map>
 #include "AbstractSyntaxExtractor.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
-#include "QPS/PqlException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
 
 const char kOpeningBracket = '(';
 const char kClosingBracket = ')';

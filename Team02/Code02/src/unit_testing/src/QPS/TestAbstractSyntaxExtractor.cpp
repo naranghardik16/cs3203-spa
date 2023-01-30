@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "QPS/AbstractSyntaxExtractor.h"
-#include "QPS/PqlException/SemanticErrorException.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
 
 auto extractor = std::shared_ptr<AbstractSyntaxExtractor>();
 const std::string kSuchThatStartIndicator = "such that ";
