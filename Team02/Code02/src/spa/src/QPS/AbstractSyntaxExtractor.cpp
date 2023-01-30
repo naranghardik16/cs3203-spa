@@ -37,16 +37,25 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
   std::string design_entity;
 
   for (const std::string &kDeclaration : declarations) {
-    design_entity = ExtractDesignEntity(kDeclaration);
-    std::string synonym_substring = kDeclaration.substr( design_entity.length());
+    design_entity = string_util::GetFirstWord(kDeclaration);
+    if (!LexicalRuleValidator::IsDesignEntity(design_entity)) {
+      throw SyntaxErrorException();
+    }
+    std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
-        throw SemanticErrorException();
+        throw SemanticErrorException(); //repeated synonyms
+      }
+      if (!LexicalRuleValidator::IsSynonym(kSynonym)) {
+        throw SyntaxErrorException();
       }
       synonym_to_design_entity_map.insert({kSynonym, design_entity});
+
     }
   }
+
+
   return synonym_to_design_entity_map;
 }
 
