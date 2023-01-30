@@ -11,7 +11,7 @@ void StmtProcToVarHandler::Handle(Map &declaration, Map &clause) {
   std::string &rel_ref(clause[kEntityKey]);
 
   if (kRel.find(rel_ref) == kRel.end()) {
-    Handler::Handle(declaration, clause);
+    return Handler::Handle(declaration, clause);
   }
 
   std::string &arg_1(clause[kFirstParameterKey]);

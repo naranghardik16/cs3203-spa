@@ -1,4 +1,5 @@
 #include "StmtToStmtHandler.h"
+#include <iostream>
 
 const std::unordered_set<std::string> kRel({"Follows", "Follows*", "Parent", "Parent*"});
 const std::unordered_set<std::string> kStmtEntity({"stmt", "read", "print", "assign", "if", "while", "call"});
@@ -10,7 +11,7 @@ void StmtToStmtHandler::Handle(Map &declaration, Map &clause) {
   std::string &rel_ref(clause[kEntityKey]);
 
   if (kRel.find(rel_ref) == kRel.end()) {
-    Handler::Handle(declaration, clause);
+    return Handler::Handle(declaration, clause);
   }
 
   std::string &arg_1(clause[kFirstParameterKey]);

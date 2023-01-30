@@ -28,5 +28,5 @@ void SuchThatBaseHandler::Handle(Map &declaration, Map &clause) {
     throw SemanticErrorException();
   }
 
-  Handler::Handle(declaration, clause);
+  return Handler::Handle(declaration, clause);
 }
