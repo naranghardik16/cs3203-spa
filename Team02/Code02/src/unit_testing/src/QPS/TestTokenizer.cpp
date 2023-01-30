@@ -1,7 +1,7 @@
 #pragma once
 #include "QPS/Tokenizer.h"
-#include "QPS/PqlException/SemanticErrorException.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
 #include "catch.hpp"
 
 auto tokenizer = std::shared_ptr<Tokenizer>();

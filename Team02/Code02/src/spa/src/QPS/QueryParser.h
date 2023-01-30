@@ -4,8 +4,8 @@
 #include "General/LexicalRuleValidator.h"
 #include "AbstractSyntaxExtractor.h"
 #include "Tokenizer.h"
-#include "PqlException/SyntaxErrorException.h"
-#include "PqlException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
 
 class QueryParser {
  public:
