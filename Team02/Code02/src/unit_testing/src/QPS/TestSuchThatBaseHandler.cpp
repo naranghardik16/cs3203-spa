@@ -1,8 +1,8 @@
 #include "catch.hpp"
 
 #include "QPS/ValidationHandler/SuchThatBaseHandler.h"
-#include "QPS/PqlException/SemanticErrorException.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
 
 typedef std::unordered_map<std::string, std::string> Map;
 

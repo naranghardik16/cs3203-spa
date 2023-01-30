@@ -3,8 +3,8 @@
 #include "Handler.h"
 #include <unordered_set>
 #include "General/LexicalRuleValidator.h"
-#include "..\PqlException\SyntaxErrorException.h"
-#include "..\PqlException\SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
 
 class SuchThatBaseHandler : public Handler {
  public:
