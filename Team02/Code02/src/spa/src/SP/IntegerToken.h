@@ -4,7 +4,7 @@
 
 class IntegerToken : public Token {
  public:
-  bool Equals(IntegerToken *other);
+  bool Equals(Token &other);
 };
 
 #endif //SPA_SRC_SPA_SRC_SP_INTEGERTOKEN_H_

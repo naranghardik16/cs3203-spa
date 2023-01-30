@@ -8,3 +8,8 @@ Token::Token(string val) {
 string Token::GetValue() {
   return value_;
 }
+
+bool Token::Equals(Token &other) {
+  // make sure that the passed type is the same
+  return this->GetValue() == other.GetValue();
+}
