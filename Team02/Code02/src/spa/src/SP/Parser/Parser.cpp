@@ -1,12 +1,25 @@
 #pragma once
 
 #include "Parser.h"
+#include "ProcedureParser.h"
 
 // TODO remove the below const
 const std::string kProc = "procedure";
 
-Program Parser::ParseSource(TokenStream &token) {
-  return {};
+Program Parser::ParseSource(TokenStream &tokens) {
+  // take in tokens
+  Program program = Program();
+  auto *proc_parser = new ProcedureParser();
+  while (!tokens.empty()) {
+    try {
+      Procedure *proc = proc_parser->ParseEntity(tokens);
+      program.AddToProcedureList(proc);
+    } catch (const SyntaxErrorException &e) {
+      throw SyntaxErrorException();
+    } catch (const SemanticErrorException &e) {
+    }
+  }
+  return program;
 }
 
 bool Parser::IsStatement(Line &line) {

@@ -9,3 +9,15 @@ TEST_CASE("Check if IsProcedure works") {
   REQUIRE(Parser::IsProcedure(proc_line) == true);
   REQUIRE(Parser::IsProcedure(stmt_line) == false);
 }
+
+TEST_CASE(
+    "Check if Parser throws Syntax Error for not starting with a procedure") {
+  Parser::TokenStream invalid_proc_tokens{{"x", "assign", "y"}};
+  auto parser = new Parser();
+  try {
+    auto program = parser->ParseSource(invalid_proc_tokens);
+  } catch (const SyntaxErrorException &e) {
+    REQUIRE(1);
+  }
+
+}
