@@ -1,20 +1,19 @@
 #include "ConditionalOperatorToken.h"
 using namespace std;
 
-ConditionalOperatorToken::ConditionalOperatorToken(string val) : Token(val) {
-  if (this->GetValue() == AND) {
-    type_ = AND;
-  } else if (this->GetValue() == OR) {
-    type_ = OR;
-  } else if (this->GetValue() == NOT) {
-    type_ = NOT;
-  }
+ConditionalOperatorToken::ConditionalOperatorToken(string val, ConditionalOperatorType type) : Token(val) {
+  type_ = type;
 }
 
-string ConditionalOperatorToken::GetType() {
+ConditionalOperatorType ConditionalOperatorToken::GetType() {
   return type_;
 }
 
-bool ConditionalOperatorToken::Equals(ConditionalOperatorToken *other) {
-  return this->GetType() == other->GetType() && this->GetValue() == other->GetValue() == 0;
+bool ConditionalOperatorToken::Equals(Token &other) {
+  // make sure that the passed type is the same
+  ConditionalOperatorToken *cot = dynamic_cast<ConditionalOperatorToken*>(&other);
+  if (cot) {
+    return this->GetType() == cot->GetType() && this->GetValue() == cot->GetValue();
+  }
+  return false;
 }
