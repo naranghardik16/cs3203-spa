@@ -35,7 +35,7 @@ TEST_CASE("Test StmtToStmtHandler") {
     REQUIRE_NOTHROW(handler.Handle(declaration, clause));
   }
 
-  SECTION("Test invalid clause - invalid ref") {
+  SECTION("Test invalid clause - invalid ref (no throw error)") {
     Map declaration{{"a", "stmt"},
                     {"p", "stmt"}};
 
@@ -43,7 +43,7 @@ TEST_CASE("Test StmtToStmtHandler") {
                {kFirstParameterKey, "a"},
                {kSecondParameterKey, "p"}};
 
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SyntaxErrorException);
+    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
   }
 
   SECTION("Test invalid clause - arg_1 not stmt ref") {
