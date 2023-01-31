@@ -17,6 +17,8 @@ class LexicalRuleValidator {
 
   static bool IsSynonym(std::string s);
 
+  static bool IsUnderscore(std::string s);
+
   static bool IsName(std::string s);
 
   static bool IsInteger(std::string s);
