@@ -4,60 +4,57 @@
 #include <utility>
 #include "General/SpaException/SyntaxErrorException.h"
 #include "PQLConstants.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "Clause/SuchThatClauseSyntax.h"
+#include "Clause/PatternClauseSyntax.h"
+
+typedef std::pair<std::string, std::pair<std::string, std::string>> SyntaxPair;
+typedef std::pair<std::string, std::string> ParameterPair;
+typedef std::pair<std::vector<std::string>, std::string> QueryStatementPair;
 
 /*
- * Splits the query into declarations and select statement then adds this values into a map.
+ * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
  */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddDeclarationsAndStatementsIntoMap(const std::string& query,
-                                                                                std::unordered_map<std::string, std::vector<std::string>>& map) {
-    std::string delimiter = ";";
-    std::vector<std::string> declaration_statements;
-    std::vector<std::string> select_statements;
-    std::string declaration;
+QueryStatementPair Tokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
+  std::string delimiter = ";";
+  std::vector<std::string> declaration_statements;
+  std::string declaration;
 
-    std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);
-    size_t delimiter_index = query_trimmed.find(delimiter);
-    while (delimiter_index != std::string::npos) {
-      declaration = string_util::Trim(query_trimmed.substr(0, delimiter_index));
-      declaration_statements.push_back(declaration);
-      query_trimmed.erase(0, delimiter_index + delimiter.length());
-      delimiter_index = query_trimmed.find(delimiter);
-    }
+  std::string temp = query_extra_whitespace_removed;
+  size_t delimiter_index = temp.find(delimiter);
+  while (delimiter_index != std::string::npos) {
+    declaration = string_util::Trim(temp.substr(0, delimiter_index));
+    declaration_statements.push_back(declaration);
+    temp.erase(0, delimiter_index + delimiter.length());
+    delimiter_index = temp.find(delimiter);
+  }
 
-    select_statements.push_back(string_util::Trim(query_trimmed));
+  std::string select_statement = string_util::Trim(temp);
 
-    map.insert({pql_constants::kDeclarationKey, declaration_statements});
-    map.insert({pql_constants::kSelectKey, select_statements});
-    return map;
-}
-
-/*
- * Parses for the synonym in the clause and adds the synonym into the map.
- * Throws an exception if there is no synonym found.
- */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSynonymIntoMap(const std::string& clause,
-                                                                                       std::unordered_map<std::string, std::vector<std::string>>& map) {
-  std::vector<std::string> synonym_vector;
-  std::string synonym = string_util::GetFirstWord(clause);
-  if (synonym.empty()) {
+  if (declaration_statements.empty() || select_statement.empty()) {
     throw SyntaxErrorException();
   }
-  synonym_vector.push_back(synonym);
-  map.insert({pql_constants::kSynonymKey, synonym_vector});
-  return map;
+  if (select_statement.substr(0, pql_constants::kSelectKeyword.length()) != pql_constants::kSelectKeyword) {
+    throw SyntaxErrorException();
+  }
+
+  QueryStatementPair declaration_select_statement_pair;
+  declaration_select_statement_pair.first = declaration_statements;
+  declaration_select_statement_pair.second = select_statement;
+  return declaration_select_statement_pair;
 }
 
 /*
  * Finds the start of a clause using regex.
  */
-size_t Tokenizer::FindStartOfSubClauseIndex(const std::string& s, const std::regex& rgx) {
+size_t Tokenizer::FindStartOfSubClauseIndex(const std::string& substr_after_synonym, const std::regex& rgx) {
   std::smatch match;
-  std::regex_search(s, match, rgx);
+  std::regex_search(substr_after_synonym, match, rgx);
   if (match.empty()){
     return std::string::npos;
   }
-  return s.find(match[0]);
+  return substr_after_synonym.find(match[0]);
 }
 
 /*
@@ -83,24 +80,104 @@ std::vector<size_t> Tokenizer::GetIndexListOfClauses(const std::string& statemen
 }
 
 /*
+ * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for further validation.
+ */
+std::unordered_map<std::string, std::string> Tokenizer::ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations) {
+  std::unordered_map<std::string, std::string> synonym_to_design_entity_map;
+  std::string design_entity;
+  bool is_have_repeated_variable_name = false;
+
+  for (const std::string &kDeclaration : declarations) {
+    design_entity = string_util::GetFirstWord(kDeclaration);
+    if (!LexicalRuleValidator::IsDesignEntity(design_entity)) {
+      throw SyntaxErrorException();
+    }
+    std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
+    std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
+    for (const std::string &kSynonym : synonym_list) {
+      if (!LexicalRuleValidator::IsSynonym(kSynonym)) {
+        throw SyntaxErrorException();
+      }
+      if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
+        //we want to throw syntax exception first if there are any but this will mean that we will continue to loop and parse the declarations, which takes extra time
+        is_have_repeated_variable_name = true;
+      }
+      synonym_to_design_entity_map.insert({kSynonym, design_entity});
+    }
+  }
+
+  if (is_have_repeated_variable_name) {
+    throw SemanticErrorException(); //repeated synonyms
+  }
+
+  return synonym_to_design_entity_map;
+}
+
+/*
+ * Parses for the synonym in the clause and adds the synonym into the map.
+ */
+std::string Tokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
+  std::vector<std::string> synonym_vector;
+  std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
+  std::string synonym = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
+  if (!LexicalRuleValidator::IsSynonym(synonym)) {
+    throw SyntaxErrorException();
+  }
+  return synonym;
+}
+
+/*
+ * Extracts the entity (e.g. the relationship reference or the syn-assign), parameters in the relationship reference
+ * from a such that clause or pattern clause.
+ * Throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found.
+ * Returns an empty map if the clause is empty because it is optional to have a such that clause.
+ */
+SyntaxPair Tokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause,const std::string& clause_start_indicator) {
+  size_t start_of_rel_ref_index = clause.find(clause_start_indicator) + clause_start_indicator.length();
+  size_t opening_bracket_index = clause.find(pql_constants::kOpeningBracket);
+  size_t comma_index = clause.find(pql_constants::kComma);
+  size_t closing_bracket_index = clause.find_last_of(pql_constants::kClosingBracket);
+
+  //check for concrete syntax like ( , ) and keywords like such,that or pattern
+  if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
+      (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
+    throw SyntaxErrorException();
+  }
+
+  std::string relationship = string_util::Trim(clause.substr(start_of_rel_ref_index,
+                                                             opening_bracket_index - start_of_rel_ref_index));
+  std::string first_parameter = string_util::Trim(clause.substr(opening_bracket_index+1,
+
+                                                                comma_index - (opening_bracket_index+1)));
+  std::string second_parameter = string_util::Trim(clause.substr(comma_index+1,
+                                                                 closing_bracket_index-(comma_index+1)));
+
+  std::string remaining_clause = string_util::Trim(clause.substr(closing_bracket_index+1));
+
+  if (!remaining_clause.empty()) {
+    throw SyntaxErrorException();
+  }
+
+  SyntaxPair clause_syntax;
+  ParameterPair parameters;
+  parameters.first = first_parameter;
+  parameters.second = second_parameter;
+  clause_syntax.first = relationship;
+  clause_syntax.second = parameters;
+
+  return clause_syntax;
+}
+
+/*
  * Parses for the such that clause and pattern clause in the clause and adds the synonym into the map.
  * */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSubclausesIntoMap(const std::string& statement,
-                                                                                          std::unordered_map<std::string, std::vector<std::string>>& map) {
+std::vector<std::shared_ptr<ClauseSyntax>> Tokenizer::ParseSubClauses(const std::string& statement) {
 
   std::string sub_clause;
-  std::vector<std::string> such_that_statements;
-  std::vector<std::string> pattern_statements;
   std::vector<size_t> index_list;
-
+  std::vector<std::shared_ptr<ClauseSyntax>> syntax_pair_list;
   std::string statement_trimmed = string_util::RemoveExtraWhitespacesInString(statement);
   index_list = GetIndexListOfClauses(statement_trimmed);
-
-  if (index_list.empty()) {
-    map.insert({pql_constants::kSuchThatKey, such_that_statements});
-    map.insert({pql_constants::kPatternKey, pattern_statements});
-    return map;
-  }
 
   index_list.push_back(statement_trimmed.length());
   size_t start_index = 0;
@@ -109,61 +186,16 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSubclaus
     sub_clause = string_util::Trim(statement_trimmed.substr(start_index,next_index));
     start_index = next_index;
     if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kPatternRegex) == 0) {
-      pattern_statements.push_back(sub_clause);
+      SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kPatternStartIndicator);
+      std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
+      syntax_pair_list.push_back(pattern_syntax);
     } else if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kSuchThatRegex) == 0) {
-      such_that_statements.push_back(sub_clause);
+      SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kSuchThatStartIndicator);
+      std::shared_ptr<ClauseSyntax> such_that_syntax = std::make_shared<SuchThatClauseSyntax>(syntax);
+      syntax_pair_list.push_back(such_that_syntax);
     } else {
       continue;
     }
   }
-
-  map.insert({pql_constants::kSuchThatKey, such_that_statements});
-  map.insert({pql_constants::kPatternKey, pattern_statements});
-
-  return map;
+  return syntax_pair_list;
 }
-
-
-/*
- * Parses for the such that synonym, such that clause and pattern clause to add into the map.
- */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSelectSubclausesIntoMap(const std::string& clause,
-                                                                                                std::unordered_map<std::string, std::vector<std::string>>& map) {
-
-  size_t select_index = clause.find(pql_constants::kSelectKeyword);
-  if (select_index == std::string::npos) {
-    throw SyntaxErrorException();
-  }
-
-  //Extract synonym
-  std::string remaining_clause = string_util::GetClauseAfterKeyword(clause, pql_constants::kSelectKeyword);
-  map = AddSynonymIntoMap(remaining_clause, map);
-
-  //Extract other optional subclauses -- such that and pattern
-  std::string synonym = map.at(pql_constants::kSynonymKey)[0];
-  remaining_clause = string_util::GetClauseAfterKeyword(remaining_clause, synonym);
-
-  map = AddSubclausesIntoMap(remaining_clause,map);
-
-  return map;
-}
-
-/*
- * The tokenizer will tokenize the query into 5 subclauses: Declaration statements, Select Statements,
- * Synonym in Select statement, Such that clause and Pattern Clause.
- * Throws an exception if there is no Select Keyword.
- */
-std::unordered_map<std::string, std::vector<std::string>> Tokenizer::TokenizeQuery(const std::string& query) {
-  std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
-  std::pair<std::vector<std::string>, std::string> declaration_select_pair;
-
-  subclauses_map = AddDeclarationsAndStatementsIntoMap(query, subclauses_map);
-
-  std::string select_statement = subclauses_map[pql_constants::kSelectKeyword][0];
-  //Further Split Select statement into synonym, such that clause and pattern clause
-
-  subclauses_map = AddSelectSubclausesIntoMap(select_statement, subclauses_map);
-
-  return subclauses_map;
-}
-

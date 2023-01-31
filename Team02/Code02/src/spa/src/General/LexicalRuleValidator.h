@@ -29,4 +29,6 @@ class LexicalRuleValidator {
 
   static bool IsDesignEntity(const std::string& s);
 
+  static bool IsRelationshipReference(const std::string& s);
+
 };

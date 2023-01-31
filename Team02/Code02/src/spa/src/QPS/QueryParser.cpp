@@ -2,43 +2,44 @@
 #include "QueryParser.h"
 #include "PQLConstants.h"
 
-std::unordered_map<std::string, std::unordered_map<std::string, std::string>> QueryParser::ParseQuery(std::string query) {
+ParserOutput QueryParser::ParseQuery(std::string query) {
   std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
-  std::shared_ptr<AbstractSyntaxExtractor> ase = std::make_shared<AbstractSyntaxExtractor>();
+  std::shared_ptr<QpsValidator> validator = std::make_shared<QpsValidator>();
   try {
-    //Tokenize by splitting the query into its subclauses
-    std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
-    subclauses_map = tk->TokenizeQuery(std::move(query));
-    std::vector<std::string> declaration_statements = subclauses_map[pql_constants::kDeclarationKey];
-    std::vector<std::string> select_statements = subclauses_map[pql_constants::kSelectKey];
-    std::vector<std::string> synonyms = subclauses_map[pql_constants::kSynonymKey];
+    //Split Query into declarations and select statement
+    std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);
+    QueryStatementPair declaration_select_pair;
 
-    std::string such_that_statement;
-    if (subclauses_map[pql_constants::kSuchThatKey].empty()) {
-      such_that_statement = "";
-    } else {
-      such_that_statement = subclauses_map[pql_constants::kSuchThatKey][0];
+    //Throws syntax error exception if either declarations or select statement is empty
+    // and if select statement does not start with Select keyword
+    declaration_select_pair = tk->SplitQuery(query_trimmed);
+    std::vector<std::string> declarations = declaration_select_pair.first;
+    std::string trimmed_select_statement = declaration_select_pair.second;
+
+    std::string remaining_clause = string_util::Trim(trimmed_select_statement.substr(pql_constants::kSelectKeyword.length()));
+    //Extract synonym -- throws a SyntaxErrorException if synonym does not adhere to synonym syntax
+    Synonym synonym = tk->ParseSynonym(remaining_clause);
+    remaining_clause = string_util::GetClauseAfterKeyword(remaining_clause, synonym);
+
+    //Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
+    auto syntax_pair_list = tk->ParseSubClauses(remaining_clause);
+
+    //create declaration map -- extracts all the design entities and synonyms first then checks for syntax
+    //after checking for syntax, if there are repeated synonyms then semantic exception is thrown
+    DeclarationMap declaration_map = tk->ExtractAbstractSyntaxFromDeclarations(declarations);
+
+    //syntax validation followed by semantic validation
+    for (const std::shared_ptr<ClauseSyntax>& kClauseSyntax : syntax_pair_list) {
+      validator->ValidateSubClause(declaration_map, kClauseSyntax);
     }
 
-    std::string pattern_statement;
-    if (subclauses_map[pql_constants::kPatternKey].empty()) {
-      pattern_statement = "";
-    } else {
-      pattern_statement = subclauses_map[pql_constants::kSuchThatKey][0];
-    }
+    //consolidate parsing result
+    ParserOutput output;
+    output.first = synonym;
+    output.second = std::pair<std::vector<std::shared_ptr<ClauseSyntax>>, DeclarationMap>(syntax_pair_list, declaration_map);
 
-    //Extract the abstract syntax from the query. If the clause is empty then an empty map is returned.
-    auto declaration_map = ase->ExtractAbstractSyntaxFromDeclarations(declaration_statements);
-    auto such_that_map =
-        ase->ExtractAbstractSyntaxFromClause(such_that_statement, pql_constants::kSuchThatStartIndicator);
-    auto pattern_map =
-        ase->ExtractAbstractSyntaxFromClause(pattern_statement, pql_constants::kPatternStartIndicator);
+    return output;
 
-    //Validate the query
-    QpsValidator::Validate(declaration_map, such_that_map, pattern_map);
-
-    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> final_map;
-    return final_map;
   } catch (const SyntaxErrorException& e) {
   } catch (const SemanticErrorException& e) {
   }

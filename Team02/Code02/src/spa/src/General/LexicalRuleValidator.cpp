@@ -114,3 +114,10 @@ bool LexicalRuleValidator::IsDesignEntity(const std::string& s) {
   return s == "stmt" || s == "read" || s == "print" || s == "call" || s == "while" ||
       s == "if" || s == "assign" || s == "variable" || s == "constant" || s == "procedure";
 }
+
+/*
+ * Validates if a string is a Relationship Reference.
+ */
+bool LexicalRuleValidator::IsRelationshipReference(const std::string& s) {
+  return s == "Follows" || s == "Follows*" || s == "Parent" || s == "Parent*" || s == "Uses" || s == "Modifies";
+}
