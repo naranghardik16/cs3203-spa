@@ -2,6 +2,8 @@
 
 #include "core/model/Procedure.h"
 #include "EntityParser.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "StatementParserFactory.h"
 
 class ProcedureParser : public EntityParser<Procedure> {
  public:

@@ -3,6 +3,7 @@
 #include<deque>
 #include<vector>
 #include "StatementParser.h"
+#include "AssignStatementParser.h"
 
 class StatementParserFactory {
   typedef std::vector<std::string> Line;
