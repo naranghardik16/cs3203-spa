@@ -10,7 +10,7 @@ class Token {
  public:
   Token(string val);
   string GetValue();
-  virtual bool Equals(Token* other);
+  virtual bool Equals(Token &other) = 0;
 };
 
 #endif //SPA_SRC_SPA_SRC_TOKEN_H_

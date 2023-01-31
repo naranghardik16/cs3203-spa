@@ -1,30 +1,19 @@
 #include "PunctuationToken.h"
 using namespace std;
 
-PunctuationToken::PunctuationToken(string val) : Token(val) {
-  if (this->GetValue() == LEFT_PARENTHESIS) {
-    type_ = LEFT_PARENTHESIS;
-  } else if (this->GetValue() == RIGHT_PARENTHESIS) {
-    type_ = RIGHT_PARENTHESIS;
-  } else if (this->GetValue() == LEFT_BRACE) {
-    type_ = LEFT_BRACE;
-  } else if (this->GetValue() == RIGHT_BRACE) {
-    type_ = RIGHT_BRACE;
-  } else if (this->GetValue() == SEMICOLON) {
-    type_ = SEMICOLON;
-  } else if (this->GetValue() == UNDERSCORE) {
-    type_ = UNDERSCORE;
-  } else if (this->GetValue() == DOUBLE_QUOTE) {
-    type_ = DOUBLE_QUOTE;
-  } else if (this->GetValue() == EQUAL) {
-    type_ = EQUAL;
-  }
+PunctuationToken::PunctuationToken(string val, PunctuationType type) : Token(val) {
+  type_ = type;
 }
 
-string PunctuationToken::GetType() {
+PunctuationType PunctuationToken::GetType() {
   return type_;
 }
 
-bool PunctuationToken::Equals(PunctuationToken *other) {
-  return this->GetType() == other->GetType() && this->GetValue() == other->GetValue() == 0;
+bool PunctuationToken::Equals(Token &other) {
+  // make sure that the passed type is the same
+  PunctuationToken *pot = dynamic_cast<PunctuationToken*>(&other);
+  if (pot) {
+    return this->GetType() == pot->GetType() && this->GetValue() == pot->GetValue();
+  }
+  return false;
 }
