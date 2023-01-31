@@ -7,5 +7,6 @@ class ProcedureParser : public EntityParser<Procedure> {
  public:
   Procedure *ParseEntity(TokenStream &tokens) override;
  private:
-  std::string ExtractProcName(Line &line);
+  static std::string ExtractProcName(Line &line);
+  static inline bool IsProcedureEnd(Line &line);
 };

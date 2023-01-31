@@ -5,7 +5,7 @@
 template<typename Entity>
 class EntityParser {
  public:
-  typedef std::deque<std::vector<std::string>> TokenStream;
   typedef std::vector<std::string> Line;
+  typedef std::deque<Line> TokenStream;
   virtual Entity *ParseEntity(TokenStream &tokens) = 0;
 };
