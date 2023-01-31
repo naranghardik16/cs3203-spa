@@ -2,16 +2,9 @@
 #include "General/StringUtil.h"
 #include <unordered_map>
 #include "AbstractSyntaxExtractor.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
-#include "QPS/PqlException/SemanticErrorException.h"
-
-const char kOpeningBracket = '(';
-const char kClosingBracket = ')';
-const char kComma = ',';
-
-const std::string kEntityKey = "Entity";
-const std::string kFirstParameterKey = "First Parameter";
-const std::string kSecondParameterKey = "Second Parameter";
+#include "General/SpaException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "QPS/PQLConstants.h"
 
 AbstractSyntaxExtractor::AbstractSyntaxExtractor() = default;
 
@@ -37,16 +30,25 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
   std::string design_entity;
 
   for (const std::string &kDeclaration : declarations) {
-    design_entity = ExtractDesignEntity(kDeclaration);
-    std::string synonym_substring = kDeclaration.substr( design_entity.length());
+    design_entity = string_util::GetFirstWord(kDeclaration);
+    if (!LexicalRuleValidator::IsDesignEntity(design_entity)) {
+      throw SyntaxErrorException();
+    }
+    std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
-        throw SemanticErrorException();
+        throw SemanticErrorException(); //repeated synonyms
+      }
+      if (!LexicalRuleValidator::IsSynonym(kSynonym)) {
+        throw SyntaxErrorException();
       }
       synonym_to_design_entity_map.insert({kSynonym, design_entity});
+
     }
   }
+
+
   return synonym_to_design_entity_map;
 }
 
@@ -65,9 +67,9 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
   }
 
   size_t start_of_rel_ref_index = clause.find(clause_start_indicator) + clause_start_indicator.length();
-  size_t opening_bracket_index = clause.find(kOpeningBracket);
-  size_t comma_index = clause.find(kComma);
-  size_t closing_bracket_index = clause.find_last_of(kClosingBracket);
+  size_t opening_bracket_index = clause.find(pql_constants::kOpeningBracket);
+  size_t comma_index = clause.find(pql_constants::kComma);
+  size_t closing_bracket_index = clause.find_last_of(pql_constants::kClosingBracket);
 
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
@@ -86,9 +88,9 @@ std::unordered_map<std::string, std::string> AbstractSyntaxExtractor::ExtractAbs
     throw SyntaxErrorException();
   }
 
-  map.insert({kEntityKey, relationship});
-  map.insert({kFirstParameterKey, first_parameter});
-  map.insert({kSecondParameterKey, second_parameter});
+  map.insert({pql_constants::kEntityKey, relationship});
+  map.insert({pql_constants::kFirstParameterKey, first_parameter});
+  map.insert({pql_constants::kSecondParameterKey, second_parameter});
 
   return map;
 }

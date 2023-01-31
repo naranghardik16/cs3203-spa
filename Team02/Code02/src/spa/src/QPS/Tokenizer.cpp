@@ -2,27 +2,8 @@
 #include "Tokenizer.h"
 #include "General/StringUtil.h"
 #include <utility>
-#include "QPS/PqlException/SyntaxErrorException.h"
-
-const std::string kDeclarationKey = "Declarations";
-const std::string kSelectKey = "Select";
-const std::string kSynonymKey = "Synonym";
-const std::string kSuchThatKey = "Such That";
-const std::string kPatternKey = "Pattern";
-
-const std::string kSelectKeyword = "Select";
-const std::string kSuchThatStartIndicator = "such that ";
-const std::string kPatternStartIndicator = "pattern ";
-
-//such that should have a relationship ref next e.g. "Modifies" etc. which start with a letter
-std::regex such_that_regex("such that [A-Z]");
-// next token should be a syn-assign, which starts with a letter rather than , or ) e.g. (pattern, pattern)
-std::regex pattern_regex("pattern [A-Za-z]");
-
-const char kOpeningBracket = '(';
-const char kClosingBracket = ')';
-const char kComma = ',';
-
+#include "General/SpaException/SyntaxErrorException.h"
+#include "PQLConstants.h"
 
 /*
  * Splits the query into declarations and select statement then adds this values into a map.
@@ -46,8 +27,8 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddDeclarat
 
     select_statements.push_back(string_util::Trim(query_trimmed));
 
-    map.insert({kDeclarationKey, declaration_statements});
-    map.insert({kSelectKey, select_statements});
+    map.insert({pql_constants::kDeclarationKey, declaration_statements});
+    map.insert({pql_constants::kSelectKey, select_statements});
     return map;
 }
 
@@ -63,7 +44,7 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSynonymI
     throw SyntaxErrorException();
   }
   synonym_vector.push_back(synonym);
-  map.insert({kSynonymKey, synonym_vector});
+  map.insert({pql_constants::kSynonymKey, synonym_vector});
   return map;
 }
 
@@ -85,13 +66,13 @@ size_t Tokenizer::FindStartOfSubClauseIndex(const std::string& s, const std::reg
 std::vector<size_t> Tokenizer::GetIndexListOfClauses(const std::string& statement) {
   std::vector<size_t> index_list;
 
-  size_t such_that_index = FindStartOfSubClauseIndex(statement, such_that_regex);
+  size_t such_that_index = FindStartOfSubClauseIndex(statement, pql_constants::kSuchThatRegex);
   if (such_that_index != std::string::npos) {
     index_list.push_back(such_that_index);
   }
 
 
-  size_t pattern_index = FindStartOfSubClauseIndex(statement, pattern_regex);
+  size_t pattern_index = FindStartOfSubClauseIndex(statement, pql_constants::kPatternRegex);
   if (pattern_index != std::string::npos) {
     index_list.push_back(pattern_index);
   }
@@ -116,8 +97,8 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSubclaus
   index_list = GetIndexListOfClauses(statement_trimmed);
 
   if (index_list.empty()) {
-    map.insert({kSuchThatKey, such_that_statements});
-    map.insert({kPatternKey, pattern_statements});
+    map.insert({pql_constants::kSuchThatKey, such_that_statements});
+    map.insert({pql_constants::kPatternKey, pattern_statements});
     return map;
   }
 
@@ -127,17 +108,17 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSubclaus
     size_t next_index = index_list[i+1];
     sub_clause = string_util::Trim(statement_trimmed.substr(start_index,next_index));
     start_index = next_index;
-    if (FindStartOfSubClauseIndex(sub_clause, pattern_regex) == 0) {
+    if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kPatternRegex) == 0) {
       pattern_statements.push_back(sub_clause);
-    } else if (FindStartOfSubClauseIndex(sub_clause, such_that_regex) == 0) {
+    } else if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kSuchThatRegex) == 0) {
       such_that_statements.push_back(sub_clause);
     } else {
       continue;
     }
   }
 
-  map.insert({kSuchThatKey, such_that_statements});
-  map.insert({kPatternKey, pattern_statements});
+  map.insert({pql_constants::kSuchThatKey, such_that_statements});
+  map.insert({pql_constants::kPatternKey, pattern_statements});
 
   return map;
 }
@@ -149,17 +130,17 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSubclaus
 std::unordered_map<std::string, std::vector<std::string>> Tokenizer::AddSelectSubclausesIntoMap(const std::string& clause,
                                                                                                 std::unordered_map<std::string, std::vector<std::string>>& map) {
 
-  size_t select_index = clause.find(kSelectKeyword);
+  size_t select_index = clause.find(pql_constants::kSelectKeyword);
   if (select_index == std::string::npos) {
     throw SyntaxErrorException();
   }
 
   //Extract synonym
-  std::string remaining_clause = string_util::GetClauseAfterKeyword(clause, kSelectKeyword);
+  std::string remaining_clause = string_util::GetClauseAfterKeyword(clause, pql_constants::kSelectKeyword);
   map = AddSynonymIntoMap(remaining_clause, map);
 
   //Extract other optional subclauses -- such that and pattern
-  std::string synonym = map.at(kSynonymKey)[0];
+  std::string synonym = map.at(pql_constants::kSynonymKey)[0];
   remaining_clause = string_util::GetClauseAfterKeyword(remaining_clause, synonym);
 
   map = AddSubclausesIntoMap(remaining_clause,map);
@@ -178,7 +159,7 @@ std::unordered_map<std::string, std::vector<std::string>> Tokenizer::TokenizeQue
 
   subclauses_map = AddDeclarationsAndStatementsIntoMap(query, subclauses_map);
 
-  std::string select_statement = subclauses_map[kSelectKeyword][0];
+  std::string select_statement = subclauses_map[pql_constants::kSelectKeyword][0];
   //Further Split Select statement into synonym, such that clause and pattern clause
 
   subclauses_map = AddSelectSubclausesIntoMap(select_statement, subclauses_map);

@@ -1,15 +1,11 @@
 #pragma once
 #include "QPS/Tokenizer.h"
-#include "QPS/PqlException/SemanticErrorException.h"
-#include "QPS/PqlException/SyntaxErrorException.h"
+#include "General/SpaException/SemanticErrorException.h"
+#include "General/SpaException/SyntaxErrorException.h"
 #include "catch.hpp"
+#include "QPS/PQLConstants.h"
 
 auto tokenizer = std::shared_ptr<Tokenizer>();
-std::string kDeclarationKey = "Declarations";
-std::string select_statement_key = "Select";
-std::string kSynonymKey = "Synonym";
-std::string kSuchThatKey = "Such That";
-std::string kPatternKey = "Pattern";
 
 //Split declaration statements from Select Statement
 TEST_CASE("Check if AddDeclarationsAndStatementsIntoMap works") {
@@ -24,9 +20,9 @@ TEST_CASE("Check if AddDeclarationsAndStatementsIntoMap works") {
     std::string correct_select_statement = correct_select_statements[i];
 
     subclauses_map = tokenizer->AddDeclarationsAndStatementsIntoMap(query, subclauses_map);
-    std::vector<std::string> declaration_statements = subclauses_map[kDeclarationKey];
+    std::vector<std::string> declaration_statements = subclauses_map[pql_constants::kDeclarationKey];
     //will always have at least an "" string
-    std::string select_statement = subclauses_map[select_statement_key][0];
+    std::string select_statement = subclauses_map[pql_constants::kSelectKey][0];
     REQUIRE(correct_clauses == declaration_statements);
     REQUIRE(correct_select_statement == select_statement);
   }
@@ -37,9 +33,9 @@ TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
     std::string statement = "Select pattern such that Parent* (  w  ,pattern) pattern pattern    (\"count\",   _   )  ";
 
     //we trim before searching for keywords so the returned string will be a trimmed version
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"pattern"}},
-                                                                             {kSuchThatKey, {"such that Parent* ( w ,pattern)"}},
-                                                                             {kPatternKey, {"pattern pattern (\"count\", _ )"}}};
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kSynonymKey, {"pattern"}},
+                                                                             {pql_constants::kSuchThatKey, {"such that Parent* ( w ,pattern)"}},
+                                                                             {pql_constants::kPatternKey, {"pattern pattern (\"count\", _ )"}}};
 
     std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
     auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
@@ -49,9 +45,9 @@ TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
 
   SECTION("Test if AddSelectSubclausesIntoMap can handle terminal names being synonyms") {
     std::string statement = "Select such such that Parent* (pattern, such) pattern such (\"count\", _)";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"such"}},
-                                                                             {kSuchThatKey, {"such that Parent* (pattern, such)"}},
-                                                                             {kPatternKey, {"pattern such (\"count\", _)"}}};
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kSynonymKey, {"such"}},
+                                                                             {pql_constants::kSuchThatKey, {"such that Parent* (pattern, such)"}},
+                                                                             {pql_constants::kPatternKey, {"pattern such (\"count\", _)"}}};
 
     std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
     auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
@@ -61,9 +57,9 @@ TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
 
   SECTION("Test if AddSelectSubclausesIntoMap works without any such that or pattern clause") {
     std::string statement = "Select v";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"v"}},
-                                                                             {kSuchThatKey, {}},
-                                                                             {kPatternKey, {}}};
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kSynonymKey, {"v"}},
+                                                                             {pql_constants::kSuchThatKey, {}},
+                                                                             {pql_constants::kPatternKey, {}}};
 
     std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
     auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
@@ -73,9 +69,9 @@ TEST_CASE("Check if AddSelectSubclausesIntoMap works as expected") {
   SECTION("Test if AddSelectSubclausesIntoMap works on 1 such that and 1 pattern") {
     std::string statement = "Select a such that Parent* (w, a) pattern a (\"count\", _)";
     std::string reversed_conditions_statement = "Select a pattern a (\"count\", _) such that Parent* (w, a)";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kSynonymKey, {"a"}},
-                                                                     {kSuchThatKey, {"such that Parent* (w, a)"}},
-                                                                     {kPatternKey, {"pattern a (\"count\", _)"}}};
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kSynonymKey, {"a"}},
+                                                                     {pql_constants::kSuchThatKey, {"such that Parent* (w, a)"}},
+                                                                     {pql_constants::kPatternKey, {"pattern a (\"count\", _)"}}};
 
     std::unordered_map<std::string, std::vector<std::string>> subclauses_map;
     auto map = tokenizer->AddSelectSubclausesIntoMap(statement, subclauses_map);
@@ -111,19 +107,19 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
   SECTION("Repeated terminal names") {
     std::string query = "assign pattern; while w;\nSelect w such that Parent* (w, pattern) pattern pattern(_, \"(count)\")";
     std::string reversed_conditions_query = "assign pattern; while w;\nSelect w pattern pattern(_, \"(count)\") such that Parent* (w, pattern)";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign pattern", "while w"}},
-                                                                             {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign pattern", "while w"}},
+                                                                             {pql_constants::kSelectKey,
                                                                               {"Select w such that Parent* (w, pattern) pattern pattern(_, \"(count)\")"}},
-                                                                             {kSynonymKey, {"w"}},
-                                                                             {kSuchThatKey, {"such that Parent* (w, pattern)"}},
-                                                                             {kPatternKey, {"pattern pattern(_, \"(count)\")"}}};
+                                                                             {pql_constants::kSynonymKey, {"w"}},
+                                                                             {pql_constants::kSuchThatKey, {"such that Parent* (w, pattern)"}},
+                                                                             {pql_constants::kPatternKey, {"pattern pattern(_, \"(count)\")"}}};
 
-    std::unordered_map<std::string, std::vector<std::string>> correct_reversed_map = {{kDeclarationKey, {"assign pattern", "while w"}},
-                                                                                      {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_reversed_map = {{pql_constants::kDeclarationKey, {"assign pattern", "while w"}},
+                                                                                      {pql_constants::kSelectKey,
                                                                                        {"Select w pattern pattern(_, \"(count)\") such that Parent* (w, pattern)"}},
-                                                                                      {kSynonymKey, {"w"}},
-                                                                                      {kSuchThatKey, {"such that Parent* (w, pattern)"}},
-                                                                                      {kPatternKey, {"pattern pattern(_, \"(count)\")"}}};
+                                                                                      {pql_constants::kSynonymKey, {"w"}},
+                                                                                      {pql_constants::kSuchThatKey, {"such that Parent* (w, pattern)"}},
+                                                                                      {pql_constants::kPatternKey, {"pattern pattern(_, \"(count)\")"}}};
     auto map = tokenizer->TokenizeQuery(query);
     auto reversed_map = tokenizer->TokenizeQuery(reversed_conditions_query);
 
@@ -134,13 +130,13 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
   SECTION("Random spaces") {
     std::string query = "assign a;\n"
                         "Select a pattern a(_, \"1                +   y\")";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign a"}},
-                                                                             {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign a"}},
+                                                                             {pql_constants::kSelectKey,
                                                                               {"Select a pattern a(_, \"1 + y\")"}},
-                                                                             {kSynonymKey, {"a"}},
-                                                                             {kSuchThatKey,
+                                                                             {pql_constants::kSynonymKey, {"a"}},
+                                                                             {pql_constants::kSuchThatKey,
                                                                               {}},
-                                                                             {kPatternKey,
+                                                                             {pql_constants::kPatternKey,
                                                                               {"pattern a(_, \"1 + y\")"}}};
     auto map = tokenizer->TokenizeQuery(query);
 
@@ -149,13 +145,13 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
 
   SECTION("Invalid clause without closing bracket") {
     std::string query = "assign a; while w;\nSelect w such that Parent* (w, a pattern a (\"count\", _";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign a", "while w"}},
-                                                                             {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign a", "while w"}},
+                                                                             {pql_constants::kSelectKey,
                                                                               {"Select w such that Parent* (w, a pattern a (\"count\", _"}},
-                                                                             {kSynonymKey, {"w"}},
-                                                                             {kSuchThatKey,
+                                                                             {pql_constants::kSynonymKey, {"w"}},
+                                                                             {pql_constants::kSuchThatKey,
                                                                               {"such that Parent* (w, a"}},
-                                                                             {kPatternKey,
+                                                                             {pql_constants::kPatternKey,
                                                                               {"pattern a (\"count\", _"}}};
     auto map = tokenizer->TokenizeQuery(query);
 
@@ -166,23 +162,23 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
   SECTION("Select statement with 1 Such That clause") {
     std::string query = "variable v; procedure p;\nSelect p such that Modifies (p, \"x\")";
     std::unordered_map<std::string, std::vector<std::string>>
-        correct_map = {{kDeclarationKey, {"variable v", "procedure p"}},
-                       {select_statement_key, {"Select p such that Modifies (p, \"x\")"}},
-                       {kSynonymKey, {"p"}},
-                       {kSuchThatKey, {"such that Modifies (p, \"x\")"}},
-                       {kPatternKey, {}}};
+        correct_map = {{pql_constants::kDeclarationKey, {"variable v", "procedure p"}},
+                       {pql_constants::kSelectKey, {"Select p such that Modifies (p, \"x\")"}},
+                       {pql_constants::kSynonymKey, {"p"}},
+                       {pql_constants::kSuchThatKey, {"such that Modifies (p, \"x\")"}},
+                       {pql_constants::kPatternKey, {}}};
     auto map = tokenizer->TokenizeQuery(query);
     REQUIRE(map == correct_map);
   }
 
   SECTION("Select statement with 1 Pattern clause") {
     std::string query = "assign Select;\nSelect Select pattern Select ( \"normSq\" , _\"cenX * cenX\"_)";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign Select"}},
-                                                                             {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign Select"}},
+                                                                             {pql_constants::kSelectKey,
                                                                               {R"(Select Select pattern Select ( "normSq" , _"cenX * cenX"_))"}},
-                                                                             {kSynonymKey, {"Select"}},
-                                                                             {kSuchThatKey, {}},
-                                                                             {kPatternKey,
+                                                                             {pql_constants::kSynonymKey, {"Select"}},
+                                                                             {pql_constants::kSuchThatKey, {}},
+                                                                             {pql_constants::kPatternKey,
                                                                               {R"(pattern Select ( "normSq" , _"cenX * cenX"_))"}}};
     auto map = tokenizer->TokenizeQuery(query);
     REQUIRE(map == correct_map);
@@ -190,24 +186,24 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
 
   SECTION("Basic select statement with 1 declaration") {
     std::string query = "procedure p;\nSelect p";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"procedure p"}},
-                                                                             {select_statement_key, {"Select p"}},
-                                                                             {kSynonymKey, {"p"}},
-                                                                             {kSuchThatKey, {}},
-                                                                             {kPatternKey, {}}};
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"procedure p"}},
+                                                                             {pql_constants::kSelectKey, {"Select p"}},
+                                                                             {pql_constants::kSynonymKey, {"p"}},
+                                                                             {pql_constants::kSuchThatKey, {}},
+                                                                             {pql_constants::kPatternKey, {}}};
     auto map = tokenizer->TokenizeQuery(query);
     REQUIRE(map == correct_map);
   }
 
   SECTION("Select statement with 1 Pattern and 1 Such That Clause") {
     std::string query = "assign a; while w;\nSelect a such that Parent* (w, a) pattern a (\"count\", _)";
-    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign a", "while w"}},
-                                                                             {select_statement_key,
+    std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign a", "while w"}},
+                                                                             {pql_constants::kSelectKey,
                                                                               {"Select a such that Parent* (w, a) pattern a (\"count\", _)"}},
-                                                                             {kSynonymKey, {"a"}},
-                                                                             {kSuchThatKey,
+                                                                             {pql_constants::kSynonymKey, {"a"}},
+                                                                             {pql_constants::kSuchThatKey,
                                                                               {"such that Parent* (w, a)"}},
-                                                                             {kPatternKey,
+                                                                             {pql_constants::kPatternKey,
                                                                               {"pattern a (\"count\", _)"}}};
     auto map = tokenizer->TokenizeQuery(query);
     REQUIRE(map == correct_map);
@@ -216,13 +212,13 @@ TEST_CASE("Test if TokenizeQuery works as expected") {
 
    SECTION("Brackets inside a clause") {
   std::string query = "assign a; while w;\nSelect w such that Parent* (w, a) pattern a (\"(count)\", _)";
-  std::unordered_map<std::string, std::vector<std::string>> correct_map = {{kDeclarationKey, {"assign a", "while w"}},
-                                                                           {select_statement_key,
+  std::unordered_map<std::string, std::vector<std::string>> correct_map = {{pql_constants::kDeclarationKey, {"assign a", "while w"}},
+                                                                           {pql_constants::kSelectKey,
                                                                             {"Select w such that Parent* (w, a) pattern a (\"(count)\", _)"}},
-                                                                           {kSynonymKey, {"w"}},
-                                                                           {kSuchThatKey,
+                                                                           {pql_constants::kSynonymKey, {"w"}},
+                                                                           {pql_constants::kSuchThatKey,
                                                                             {"such that Parent* (w, a)"}},
-                                                                           {kPatternKey,
+                                                                           {pql_constants::kPatternKey,
                                                                             {"pattern a (\"(count)\", _)"}}};
   auto map = tokenizer->TokenizeQuery(query);
   REQUIRE(map == correct_map);
