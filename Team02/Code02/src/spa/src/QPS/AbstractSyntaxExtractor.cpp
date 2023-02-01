@@ -6,8 +6,6 @@
 #include "General/SpaException/SemanticErrorException.h"
 #include "QPS/PQLConstants.h"
 
-AbstractSyntaxExtractor::AbstractSyntaxExtractor() = default;
-
 /*
  * Extracts the first design entity in a string.
  */

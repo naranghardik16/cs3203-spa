@@ -4,7 +4,7 @@
 
 class NameToken : public Token {
  public:
-  bool Equals(NameToken *other);
+  bool Equals(Token &other);
 };
 
 #endif //SPA_SRC_SPA_SRC_SP_NAMETOKEN_H_

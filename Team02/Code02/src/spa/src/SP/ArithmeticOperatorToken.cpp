@@ -1,24 +1,19 @@
 #include "ArithmeticOperatorToken.h"
 using namespace std;
 
-ArithmeticOperatorToken::ArithmeticOperatorToken(string val) : Token(val) {
-  if (this->GetValue() == PLUS) {
-    type_ = PLUS;
-  } else if (this->GetValue() == MINUS) {
-    type_ = MINUS;
-  } else if (this->GetValue() == DIV) {
-    type_ = DIV;
-  } else if (this->GetValue() == MULTIPLY) {
-    type_ = MULTIPLY;
-  } else if (this->GetValue() == MOD) {
-    type_ = MOD;
-  }
+ArithmeticOperatorToken::ArithmeticOperatorToken(string val, ArithmeticOperatorType type) : Token(val) {
+  type_ = type;
 }
 
-string ArithmeticOperatorToken::GetType() {
+ArithmeticOperatorType ArithmeticOperatorToken::GetType() {
   return type_;
 }
 
-bool ArithmeticOperatorToken::Equals(ArithmeticOperatorToken *other) {
-  return this->GetType() == other->GetType() && this->GetValue() == other->GetValue() == 0;
+bool ArithmeticOperatorToken::Equals(Token &other) {
+  // make sure that the passed type is the same
+  ArithmeticOperatorToken *aot = dynamic_cast<ArithmeticOperatorToken*>(&other);
+  if (aot) {
+    return this->GetType() == aot->GetType() && this->GetValue() == aot->GetValue();
+  }
+  return false;
 }
