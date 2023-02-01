@@ -8,6 +8,8 @@
 #include "Clause/SuchThatClauseSyntax.h"
 #include "Clause/PatternClauseSyntax.h"
 #include "QPSTypeDefs.h"
+#include "QueryUtil.h"
+
 /*
  * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
@@ -85,13 +87,13 @@ std::unordered_map<std::string, std::string> Tokenizer::ExtractAbstractSyntaxFro
 
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
-    if (!LexicalRuleValidator::IsDesignEntity(design_entity)) {
+    if (!QueryUtil::IsDesignEntity(design_entity)) {
       throw SyntaxErrorException();
     }
     std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
-      if (!LexicalRuleValidator::IsSynonym(kSynonym)) {
+      if (!QueryUtil::IsSynonym(kSynonym)) {
         throw SyntaxErrorException();
       }
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
@@ -116,7 +118,7 @@ std::string Tokenizer::ParseSynonym(const std::string& select_keyword_removed_cl
   std::vector<std::string> synonym_vector;
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
   std::string synonym = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
-  if (!LexicalRuleValidator::IsSynonym(synonym)) {
+  if (!QueryUtil::IsSynonym(synonym)) {
     throw SyntaxErrorException();
   }
   return synonym;
