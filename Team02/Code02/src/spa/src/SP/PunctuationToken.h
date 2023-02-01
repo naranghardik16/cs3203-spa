@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_PUNCTUATIONTOKEN_H_
-#define SPA_SRC_SPA_SRC_SP_PUNCTUATIONTOKEN_H_
+#pragma once
 #include "Token.h"
 #include "PunctuationType.h"
 using namespace std;
@@ -19,5 +18,3 @@ class PunctuationToken : public Token {
   PunctuationType GetType();
   bool Equals(Token &other);
 };
-
-#endif //SPA_SRC_SPA_SRC_SP_PUNCTUATIONTOKEN_H_

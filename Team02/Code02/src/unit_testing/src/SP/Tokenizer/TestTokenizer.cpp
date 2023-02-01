@@ -1,3 +1,4 @@
+#pragma once
 #include "./SP/Parser/Parser.h"
 #include "./SP/Tokenizer.h"
 

@@ -1,6 +1,3 @@
-#ifndef SPA_SRC_SPA_SRC_TOKENIZER_H_
-#define SPA_SRC_SPA_SRC_TOKENIZER_H_
-
 #pragma once
 #include <iostream>
 #include <unordered_map>
@@ -69,7 +66,5 @@ class Tokenizer {
   Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
   Parser::TokenStream* Tokenize(istream &stream);
 };
-#endif //SPA_SRC_SPA_SRC_TOKENIZER_H_
-
 
 
