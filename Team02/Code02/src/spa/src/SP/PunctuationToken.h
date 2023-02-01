@@ -13,7 +13,6 @@ class PunctuationToken : public Token {
 //  inline static const string LEFT_BRACE = "(";
 //  inline static const string RIGHT_BRACE = ")";
 //  inline static const string SEMICOLON = ";";
-//  inline static const string UNDERSCORE = "_";
 //  inline static const string DOUBLE_QUOTE = "\"";
 //  inline static const string EQUAL = "=";
   PunctuationToken(string val, PunctuationType type);

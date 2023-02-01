@@ -7,7 +7,6 @@ enum PunctuationType {
   LEFT_BRACE,
   RIGHT_BRACE,
   SEMICOLON,
-  UNDERSCORE,
   DOUBLE_QUOTE,
   SINGLE_EQUAL
 };
