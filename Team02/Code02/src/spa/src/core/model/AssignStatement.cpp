@@ -1,11 +1,15 @@
 #include "AssignStatement.h"
 
-AssignStatement::AssignStatement(std::string_view var_name,
+AssignStatement::AssignStatement(Variable var,
                                  int stmt_number,
                                  std::string in_scope_of_proc)
-    : var_name_(var_name),
+    : variable_(std::move(var)),
       Statement(stmt_number, "assign", std::move(in_scope_of_proc)) {}
 
 void AssignStatement::AddExpression(Expression expression) {
   expression_ = std::move(expression);
+}
+
+Variable AssignStatement::GetVariable() const {
+  return variable_;
 }

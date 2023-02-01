@@ -2,5 +2,6 @@
 
 #include "Expression.h"
 class Variable : public Expression {
-  Variable(std::string name);
+ public:
+  Variable(std::string_view name);
 };

@@ -6,7 +6,14 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   tokens.pop_front();
   // need to extract lhs and the expression
   std::string_view var_name = ExtractVariableName(line);
-  return new AssignStatement(var_name, 2, "main");
+  Variable var(var_name);
+  auto assign_stmt = new AssignStatement(var, 2, "main");
+  std::vector<std::string> expression_tokens{line.begin() + 2, line.end()};
+  auto expr_parser =
+      ExpressionParserFactory::GetExpressionParser(expression_tokens);
+  auto expression = expr_parser->ParseEntity(expression_tokens);
+  assign_stmt->AddExpression(*expression);
+  return assign_stmt;
 }
 
 std::string_view AssignStatementParser::ExtractVariableName(Line &line) const {

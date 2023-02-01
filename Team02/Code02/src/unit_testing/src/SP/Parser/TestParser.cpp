@@ -12,7 +12,7 @@ TEST_CASE("Check if IsProcedure works") {
 }
 
 TEST_CASE("Check if AssignStatementParser works") {
-  Parser::Line stmt_line{"x", "assign", "y"};
+  Parser::Line stmt_line{"x", "assign", "y", ";"};
   Parser::TokenStream stmt_tokens{stmt_line};
   auto parser = new AssignStatementParser();
   try {
@@ -24,12 +24,17 @@ TEST_CASE("Check if AssignStatementParser works") {
 
 TEST_CASE("Check if Parser works with only assign statement") {
   Parser::Line proc_line{"procedure", "main", "{"};
-  Parser::Line stmt_line{"x", "assign", "y"};
+  Parser::Line stmt_line{"x", "assign", "y", ";"};
   Parser::Line end_line{"}"};
   Parser::TokenStream source{proc_line, stmt_line, end_line};
   auto parser = new Parser();
   try {
     auto program = parser->ParseSource(source);
+    auto stmt = program.GetProcedureList()[0]->GetStatementList()[0];
+    auto stmt_type = stmt->GetStatementType();
+    auto assign_stmt = dynamic_cast<AssignStatement *>(stmt);
+    auto var = assign_stmt->GetVariable();
+    REQUIRE(var == Variable("x"));
   } catch (const SpaException &e) {
     REQUIRE(0);
   }

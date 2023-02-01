@@ -1,15 +1,17 @@
 #pragma once
 #include "Statement.h"
 #include "Expression.h"
+#include "Variable.h"
 
 class AssignStatement : public Statement {
  public:
-  AssignStatement(std::string_view var_name,
+  AssignStatement(Variable var,
                   int stmt_number,
                   std::string in_scope_of_proc);
   void AddExpression(Expression expression);
+  [[nodiscard]]Variable GetVariable() const;
 
  private:
-  const std::string var_name_;
+  Variable variable_;
   Expression expression_;
 };

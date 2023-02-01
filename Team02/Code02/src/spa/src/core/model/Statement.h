@@ -6,6 +6,7 @@ class Statement {
   Statement(int stmt_number,
             std::string statement_type,
             std::string in_scope_of_proc);
+  virtual ~Statement() = default;
 
   [[nodiscard]] std::string GetStatementType() const;
   [[nodiscard]] std::string GetInScopeOfPrc() const;
