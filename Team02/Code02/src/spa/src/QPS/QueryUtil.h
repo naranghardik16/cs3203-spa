@@ -43,7 +43,7 @@ class QueryUtil {
 
   static bool IsProcedureSynonym(Map &declaration, const std::string& expression);
 
-  static SingleConstraintSet QueryUtil::GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2);
+  static SingleConstraintSet GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2);
 
   //TODO To complete this
   // static void QueryUtil::GetIntersectionOfPairSets(const PairConstraintSet& set_1, const PairConstraintSet&  set_2);
