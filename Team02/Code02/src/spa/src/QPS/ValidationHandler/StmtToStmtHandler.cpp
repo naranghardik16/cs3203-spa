@@ -1,4 +1,5 @@
 #include "StmtToStmtHandler.h"
+#include "QPS/QueryUtil.h"
 #include <iostream>
 
 const std::unordered_set<std::string> kRel({"Follows", "Follows*", "Parent", "Parent*"});
@@ -18,15 +19,15 @@ void StmtToStmtHandler::Handle(Map &declaration, Map &clause) {
   std::string &arg_2(clause[kSecondParameterKey]);
 
   //Check if is valid stmtRef
-  if (!LexicalRuleValidator::IsStmtRef(arg_1) || !LexicalRuleValidator::IsStmtRef(arg_2)) {
+  if (!QueryUtil::IsStmtRef(arg_1) || !QueryUtil::IsStmtRef(arg_2)) {
     throw SyntaxErrorException();
   }
 
   //Check if synonym is a statement synonym or its subset
-  if (LexicalRuleValidator::IsSynonym(arg_1) && kStmtEntity.find(declaration[arg_1]) == kStmtEntity.end()) {
+  if (QueryUtil::IsSynonym(arg_1) && kStmtEntity.find(declaration[arg_1]) == kStmtEntity.end()) {
     throw SemanticErrorException();
   }
-  if (LexicalRuleValidator::IsSynonym(arg_2) && kStmtEntity.find(declaration[arg_2]) == kStmtEntity.end()) {
+  if (QueryUtil::IsSynonym(arg_2) && kStmtEntity.find(declaration[arg_2]) == kStmtEntity.end()) {
     throw SemanticErrorException();
   }
 
