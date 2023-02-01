@@ -86,20 +86,25 @@ bool LexicalRuleValidator::IsSynonym(std::string s) {
 }
 
 /*
+ * Validates a Underscore token.
+ */
+bool LexicalRuleValidator::IsUnderscore(std::string s) {
+  return s == "_";
+}
+
+/*
  * Validates a Statement Reference in PQL.
  */
 bool LexicalRuleValidator::IsStmtRef(const std::string& s) {
-  bool is_underscore = s == "_";
-  return (is_underscore || IsSynonym(s) || IsInteger(s));
+  return (IsUnderscore(s) || IsSynonym(s) || IsInteger(s));
 }
 
 /*
  * Validates an Entity Reference in PQL.
  */
 bool LexicalRuleValidator::IsEntRef(std::string s) {
-  bool is_underscore = s == "_";
   bool is_ident_in_quotation = (s[0] == '"' && IsIdent(s.substr(1, s.length() - 2)) && s[s.length()-1] == '"');
-  return (is_underscore || IsSynonym(s) || is_ident_in_quotation);
+  return (IsUnderscore(s) || IsSynonym(s) || is_ident_in_quotation);
 }
 
 /*
