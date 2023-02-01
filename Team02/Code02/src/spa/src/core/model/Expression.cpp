@@ -13,5 +13,5 @@ std::string Expression::GetName() const {
 }
 
 bool Expression::operator==(const Expression &other) const {
-  return expression_type_ == other.expression_type_
+  return expression_type_ == other.expression_type_;
 }

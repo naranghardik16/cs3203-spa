@@ -41,6 +41,7 @@ TEST_CASE(
   auto parser = new Parser();
   try {
     auto program = parser->ParseSource(invalid_proc_tokens);
+    REQUIRE(0);
   } catch (const SyntaxErrorException &e) {
     REQUIRE(1);
   }

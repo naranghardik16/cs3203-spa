@@ -1,9 +1,10 @@
 #pragma once
 #include "StatementParser.h"
-#include "core/model/Statement.h"
+#include "core/model/AssignStatement.h"
 
 class AssignStatementParser : public StatementParser {
  public:
   AssignStatementParser() = default;
-  Statement *ParseEntity(TokenStream &tokens) override;
+  AssignStatement *ParseEntity(TokenStream &tokens) override;
+  [[nodiscard]] std::string_view ExtractVariableName(Line &line) const;
 };
