@@ -22,4 +22,16 @@ public:
   virtual void addConstant(CONSTANT constant);
   virtual VARIABLE_STORE_INDEX addVariable(VARIABLE variable);
   virtual PROCEDURE_STORE_INDEX addProcedure(PROCEDURE procedure);
+
+  //! API For communication with QPS
+  virtual std::unordered_set<std::string> GetVariables();
+  virtual std::unordered_set<std::string> GetStatements();
+  virtual std::unordered_set<std::string> GetReadStatements();
+  virtual std::unordered_set<std::string> GetPrintStatements();
+  virtual std::unordered_set<std::string> GetCallStatements();
+  virtual std::unordered_set<std::string> GetWhileStatements();
+  virtual std::unordered_set<std::string> GetIfStatements();
+  virtual std::unordered_set<std::string> GetAssignStatements();
+  virtual std::unordered_set<std::string> GetConstants();
+  virtual std::unordered_set<std::string> GetProcedures();
 };

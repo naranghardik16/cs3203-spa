@@ -37,3 +37,53 @@ void PKB::addConstant(PKBStores::CONSTANT constant) {
 PKBStores *PKB::getStores() {
   return this;
 }
+
+//TODO These are temporary dummy functions to build evaluator first for week 5 demo
+std::unordered_set<std::string> PKB::GetVariables() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetReadStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetPrintStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetCallStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetWhileStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+std::unordered_set<std::string> PKB::GetIfStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetAssignStatements() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetConstants() {
+  std::unordered_set<std::string> set;
+  return set;
+}
+
+std::unordered_set<std::string> PKB::GetProcedures() {
+  std::unordered_set<std::string> set;
+  return set;
+}
