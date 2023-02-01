@@ -3,7 +3,7 @@
 
 class Statement {
  public:
-  Statement(int line_number,
+  Statement(int stmt_number,
             std::string statement_type,
             std::string in_scope_of_proc);
 
@@ -11,7 +11,7 @@ class Statement {
   [[nodiscard]] std::string GetInScopeOfPrc() const;
 
  private:
-  int line_number_;
+  const int statement_number_;
   std::string statement_type_;
   std::string in_scope_of_proc_;
 };
