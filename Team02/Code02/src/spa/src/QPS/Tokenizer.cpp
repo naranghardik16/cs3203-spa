@@ -7,11 +7,7 @@
 #include "General/SpaException/SemanticErrorException.h"
 #include "Clause/SuchThatClauseSyntax.h"
 #include "Clause/PatternClauseSyntax.h"
-
-typedef std::pair<std::string, std::pair<std::string, std::string>> SyntaxPair;
-typedef std::pair<std::string, std::string> ParameterPair;
-typedef std::pair<std::vector<std::string>, std::string> QueryStatementPair;
-
+#include "QPSTypeDefs.h"
 /*
  * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c

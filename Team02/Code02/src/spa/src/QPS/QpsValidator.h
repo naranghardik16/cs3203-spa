@@ -5,8 +5,7 @@
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
 #include "QPS/Clause/ClauseSyntax.h";
-
-typedef std::unordered_map<std::string, std::string> Map;
+#include "QPSTypeDefs.h"
 
 class QpsValidator {
  public:
