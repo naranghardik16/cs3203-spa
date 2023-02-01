@@ -4,8 +4,8 @@
 #include <memory>
 #include <unordered_map>
 #include "General/SpaException/SyntaxErrorException.h"
+#include "QPS/QPSTypeDefs.h"
 
-typedef std::unordered_map<std::string, std::string> Map;
 /*
  * Handler base class.
  */

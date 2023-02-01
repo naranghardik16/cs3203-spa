@@ -1,5 +1,6 @@
 #include "PatternHandler.h"
-
+#include "QPS/QueryUtil.h"
+#include "QPS/QPSTypeDefs.h"
 const std::string kEntityKey = "Entity";
 const std::string kAssignEntity = "assign";
 const std::string kVariableEntity = "variable";
@@ -16,7 +17,7 @@ void PatternHandler::Handle(Map &declaration, Map &clause) {
   std::string &arg_1(clause[kFirstParameterKey]);
   std::string &arg_2(clause[kSecondParameterKey]);
 
-  if (!LexicalRuleValidator::IsSynonym(syn_assign) || !LexicalRuleValidator::IsEntRef(arg_1)) {
+  if (!QueryUtil::IsSynonym(syn_assign) || !QueryUtil::IsEntRef(arg_1)) {
     throw SyntaxErrorException();
   }
 
@@ -26,10 +27,10 @@ void PatternHandler::Handle(Map &declaration, Map &clause) {
   }
 
   //If arg_1 is synonym, check if it is declared and is 'variable' entity
-  if (LexicalRuleValidator::IsSynonym(arg_1) && declaration.find(syn_assign) == declaration.end()) {
+  if (QueryUtil::IsSynonym(arg_1) && declaration.find(syn_assign) == declaration.end()) {
     throw SemanticErrorException();
   }
-  if (LexicalRuleValidator::IsSynonym(arg_1) && declaration[arg_1] != kVariableEntity) {
+  if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != kVariableEntity) {
     throw SemanticErrorException();
   }
 
@@ -37,7 +38,7 @@ void PatternHandler::Handle(Map &declaration, Map &clause) {
   //TODO: milestone 1  - only handle partial matching or wildcard and only handle constant matching and variable matching
   bool valid_expr = arg_2[0] == '_' && arg_2[1] == '"' && arg_2[arg_2.length() - 2] == '"' && arg_2[arg_2.length() - 1] == '_' &&
       (LexicalRuleValidator::IsInteger(arg_2.substr(2, arg_2.length() - 4)) || LexicalRuleValidator::IsIdent(arg_2.substr(2, arg_2.length() - 4)));
-  if (!LexicalRuleValidator::IsUnderscore(arg_2) && !valid_expr) {
+  if (!QueryUtil::IsWildcard(arg_2) && !valid_expr) {
     throw SyntaxErrorException();
   }
 
