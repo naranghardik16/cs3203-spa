@@ -7,8 +7,9 @@ class AssignStatement : public Statement {
   AssignStatement(std::string_view var_name,
                   int stmt_number,
                   std::string in_scope_of_proc);
+  void AddExpression(Expression expression);
 
  private:
-  const std::string_view var_name_;
+  const std::string var_name_;
   Expression expression_;
 };
