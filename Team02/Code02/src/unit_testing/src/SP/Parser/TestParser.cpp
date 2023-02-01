@@ -16,7 +16,8 @@ TEST_CASE(
   auto parser = new Parser();
   try {
     auto program = parser->ParseSource(invalid_proc_tokens);
-  } catch (const SyntaxErrorException &e) {
+  } catch (SyntaxErrorException &e) {
+    std::cout << e.what() << std::endl;
     REQUIRE(1);
   }
 

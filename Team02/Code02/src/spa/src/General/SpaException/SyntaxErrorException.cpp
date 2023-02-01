@@ -1,6 +1,11 @@
 #pragma once
 #include "SyntaxErrorException.h"
 
-char* SyntaxErrorException::what() {
-  return "SyntaxError";
+SyntaxErrorException::SyntaxErrorException() : SpaException("Syntax Error ") {}
+
+SyntaxErrorException::SyntaxErrorException(std::string_view message)
+    : SpaException(message) {}
+
+std::string_view SyntaxErrorException::what() {
+  return message_;
 }

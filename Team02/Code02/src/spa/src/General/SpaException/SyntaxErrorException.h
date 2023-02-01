@@ -4,5 +4,7 @@
 
 class SyntaxErrorException : public SpaException {
  public:
-  char* what();
+  SyntaxErrorException();
+  explicit SyntaxErrorException(std::string_view);
+  std::string_view what();
 };
