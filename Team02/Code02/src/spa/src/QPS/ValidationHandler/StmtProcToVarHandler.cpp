@@ -1,4 +1,5 @@
 #include "StmtProcToVarHandler.h"
+#include "QPS/QueryUtil.h"
 
 const std::string kEntityKey = "Entity";
 const std::string kFirstParameterKey = "First Parameter";
@@ -18,23 +19,23 @@ void StmtProcToVarHandler::Handle(Map &declaration, Map &clause) {
   std::string &arg_2(clause[kSecondParameterKey]);
 
   //Check if arg_1 is "_"
-  if (LexicalRuleValidator::IsUnderscore(arg_1)) {
+  if (QueryUtil::IsWildcard(arg_1)) {
     throw SemanticErrorException();
   }
 
   //Check if arg_1 is stmtRef or entRef and if arg_2 is entRef
-  if (!LexicalRuleValidator::IsStmtRef(arg_1) || !LexicalRuleValidator::IsEntRef(arg_1)) {
+  if (!QueryUtil::IsStmtRef(arg_1) || !QueryUtil::IsEntRef(arg_1)) {
     throw SyntaxErrorException();
   }
-  if (!LexicalRuleValidator::IsEntRef(arg_2)) {
+  if (!QueryUtil::IsEntRef(arg_2)) {
     throw SyntaxErrorException();
   }
 
   //Check valid synonym for arg_1 and arg_2
-  if (LexicalRuleValidator::IsSynonym(arg_1) && kValidEntity.find(declaration[arg_1]) == kValidEntity.end()) {
+  if (QueryUtil::IsSynonym(arg_1) && kValidEntity.find(declaration[arg_1]) == kValidEntity.end()) {
     throw SemanticErrorException();
   }
-  if(LexicalRuleValidator::IsSynonym(arg_2) && declaration[arg_2] != kVariableEntity) {
+  if(QueryUtil::IsSynonym(arg_2) && declaration[arg_2] != kVariableEntity) {
     throw SemanticErrorException();
   }
 
