@@ -13,3 +13,7 @@ void AssignStatement::AddExpression(Expression expression) {
 Variable AssignStatement::GetVariable() const {
   return variable_;
 }
+
+Expression AssignStatement::GetExpression() const {
+  return expression_;
+}

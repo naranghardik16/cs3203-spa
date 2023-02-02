@@ -45,7 +45,9 @@ TEST_CASE("Check if Parser works with only assign statement") {
     auto stmt_type = stmt->GetStatementType();
     auto assign_stmt = dynamic_cast<AssignStatement *>(stmt);
     auto var = assign_stmt->GetVariable();
+    auto expression = assign_stmt->GetExpression();
     REQUIRE(var == Variable("x"));
+    REQUIRE(expression == Expression("y", "variable"));
   } catch (SpaException &e) {
     cout << e.what() << endl;
     REQUIRE(0);

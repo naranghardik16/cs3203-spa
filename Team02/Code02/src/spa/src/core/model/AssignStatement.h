@@ -10,6 +10,7 @@ class AssignStatement : public Statement {
                   std::string in_scope_of_proc);
   void AddExpression(Expression expression);
   [[nodiscard]]Variable GetVariable() const;
+  [[nodiscard]]Expression GetExpression() const;
 
  private:
   Variable variable_;
