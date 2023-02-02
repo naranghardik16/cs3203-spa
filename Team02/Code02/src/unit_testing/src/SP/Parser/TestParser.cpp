@@ -33,21 +33,29 @@ TEST_CASE("Check if AssignStatementParser works") {
 TEST_CASE("Check if Parser works with only assign statement") {
   Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
                          new PunctuationToken("{", LEFT_PARENTHESIS)};
-  Parser::Line stmt_line
+  Parser::Line stmt_line_var
       {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
        new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+  Parser::Line stmt_line_const
+      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
+       new IntegerToken("10"), new PunctuationToken(";", SEMICOLON)};
   Parser::Line end_line{new PunctuationToken("}", RIGHT_PARENTHESIS)};
-  Parser::TokenStream source{proc_line, stmt_line, end_line};
+  Parser::TokenStream
+      source{proc_line, stmt_line_var, stmt_line_const, end_line};
   auto parser = new Parser();
   try {
     auto program = parser->ParseSource(source);
-    auto stmt = program.GetProcedureList()[0]->GetStatementList()[0];
-    auto stmt_type = stmt->GetStatementType();
-    auto assign_stmt = dynamic_cast<AssignStatement *>(stmt);
+    auto stmt_var = program.GetProcedureList()[0]->GetStatementList()[0];
+    auto stmt_type = stmt_var->GetStatementType();
+    auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_var);
     auto var = assign_stmt->GetVariable();
     auto expression = assign_stmt->GetExpression();
     REQUIRE(var == Variable("x"));
     REQUIRE(expression == Expression("y", "variable"));
+    auto stmt_const = program.GetProcedureList()[0]->GetStatementList()[1];
+    assign_stmt = dynamic_cast<AssignStatement *>(stmt_const);
+    expression = assign_stmt->GetExpression();
+    REQUIRE(expression == Expression("10", "constant"));
   } catch (SpaException &e) {
     cout << e.what() << endl;
     REQUIRE(0);
