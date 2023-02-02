@@ -17,6 +17,50 @@ SyntaxPair CreateCorrectSyntaxPair(std::string entity, std::string first_paramet
   return syntax;
 }
 
+
+TEST_CASE("Check if ParseSubClauses works as expected") {
+  SECTION("Test if ParseSubClauses works on repeated terminal names with keyword pattern_ReturnList") {
+    std::string statement = "such that Parent* (  w  ,pattern) pattern pattern    (\"count\",   _   )  ";
+
+    //we trim before searching for keywords so the returned string will be a trimmed version
+    SyntaxPair correct_such_that_syntax = CreateCorrectSyntaxPair("Parent*", "w", "pattern");
+    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("pattern", "\"count\"", "_");
+    std::shared_ptr<ClauseSyntax>
+        such_that_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {such_that_clause_ptr, pattern_clause_ptr};
+
+    auto vector = tokenizer->ParseSubClauses(statement);
+    for (int i = 0; i < vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+  }
+
+  SECTION("Test if ParseSubClauses can handle terminal names being synonyms_ReturnList") {
+    std::string statement = "such     that       Parent*        (pattern,   such)   pattern   such (\"count\", _) ";
+    SyntaxPair correct_such_that_syntax = CreateCorrectSyntaxPair("Parent*", "pattern", "such");
+    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("such", "\"count\"", "_");
+    std::shared_ptr<ClauseSyntax>
+        such_that_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {such_that_clause_ptr, pattern_clause_ptr};
+
+    auto vector = tokenizer->ParseSubClauses(statement);
+    for (int i = 0; i < vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+  }
+
+  SECTION("Test if ParseSubClauses can handle invalid relationship reference_ThrowSyntaxErrorException") {
+    try {
+      std::string statement = "such     that       Parent  *        (pattern,   such)   pattern   such (\"count\", _) ";
+      auto vector = tokenizer->ParseSubClauses(statement);
+    } catch (const SyntaxErrorException& e) {
+      REQUIRE(1);
+    }
+  }
+}
+
 TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
   SECTION("Test on Pattern Clause_ReturnSyntaxPair") {
     std::string clause = "pattern a (\"count\", _)";
@@ -80,50 +124,6 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
     std::string invalid_such_that_clause = "such that (,)"; //checks will be done by validator to throw exception
     try {
       auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause, pql_constants::kSuchThatStartIndicator);
-    } catch (const SyntaxErrorException& e) {
-      REQUIRE(1);
-    }
-  }
-}
-
-
-TEST_CASE("Check if ParseSubClauses works as expected") {
-  SECTION("Test if ParseSubClauses works on repeated terminal names with keyword pattern_ReturnList") {
-    std::string statement = "such that Parent* (  w  ,pattern) pattern pattern    (\"count\",   _   )  ";
-
-    //we trim before searching for keywords so the returned string will be a trimmed version
-    SyntaxPair correct_such_that_syntax = CreateCorrectSyntaxPair("Parent*", "w", "pattern");
-    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("pattern", "\"count\"", "_");
-    std::shared_ptr<ClauseSyntax>
-        such_that_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
-    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {such_that_clause_ptr, pattern_clause_ptr};
-
-    auto vector = tokenizer->ParseSubClauses(statement);
-    for (int i = 0; i < vector.size(); i++) {
-      REQUIRE(vector[i]->Equals(*correct_vector[i]));
-    }
-  }
-
-  SECTION("Test if ParseSubClauses can handle terminal names being synonyms_ReturnList") {
-    std::string statement = "such     that       Parent*        (pattern,   such)   pattern   such (\"count\", _) ";
-    SyntaxPair correct_such_that_syntax = CreateCorrectSyntaxPair("Parent*", "pattern", "such");
-    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("such", "\"count\"", "_");
-    std::shared_ptr<ClauseSyntax>
-        such_that_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
-    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {such_that_clause_ptr, pattern_clause_ptr};
-
-    auto vector = tokenizer->ParseSubClauses(statement);
-    for (int i = 0; i < vector.size(); i++) {
-      REQUIRE(vector[i]->Equals(*correct_vector[i]));
-    }
-  }
-
-  SECTION("Test if ParseSubClauses can handle invalid relationship reference_ThrowSyntaxErrorException") {
-    try {
-      std::string statement = "such     that       Parent  *        (pattern,   such)   pattern   such (\"count\", _) ";
-      auto vector = tokenizer->ParseSubClauses(statement);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(1);
     }

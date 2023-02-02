@@ -4,7 +4,7 @@
 #include "ValidationHandler/StmtToStmtHandler.h"
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
-#include "QPS/Clause/ClauseSyntax.h";
+#include "QPS/Clause/ClauseSyntax.h"
 #include "QPSTypeDefs.h"
 
 class QpsValidator {
