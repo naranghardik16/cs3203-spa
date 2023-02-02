@@ -14,8 +14,8 @@ Program Parser::ParseSource(TokenStream &tokens) {
     try {
       Procedure *proc = proc_parser->ParseEntity(tokens);
       program.AddToProcedureList(proc);
-    } catch (const SyntaxErrorException &e) {
-      throw SyntaxErrorException();
+    } catch (SyntaxErrorException &e) {
+      throw SyntaxErrorException(e.what());
     } catch (const SemanticErrorException &e) {
     }
   }
@@ -27,6 +27,6 @@ bool Parser::IsStatement(Line &line) {
 }
 
 bool Parser::IsProcedure(Line &line) {
-  return !line.empty() && line[0] == kProc;
+  return !line.empty() && line[0]->GetValue() == kProc;
 }
 

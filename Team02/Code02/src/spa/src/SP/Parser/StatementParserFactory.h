@@ -6,7 +6,7 @@
 #include "AssignStatementParser.h"
 
 class StatementParserFactory {
-  typedef std::vector<std::string> Line;
+  typedef std::vector<Token *> Line;
   typedef std::deque<Line> TokenStream;
  public:
   static StatementParser *GetStatementParser(TokenStream &tokens);

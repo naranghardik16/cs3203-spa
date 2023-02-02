@@ -1,18 +1,23 @@
 #include "Tokenizer.h"
-#include "General/LexicalRuleValidator.h"
 
 Tokenizer::Tokenizer() {}
+
+template<typename Base, typename T>
+bool InstanceOf(const T *ptr) {
+  return dynamic_cast<const Base*>(ptr) != nullptr;
+}
 
 vector<string> Tokenizer::SplitLines(istream &stream) {
   vector<string> lines;
   string line;
   while (getline(stream, line)) {
+    string_util::RemoveExtraWhitespacesInString(line);
     lines.push_back(line);
   }
   return lines;
 }
 
-Token* Tokenizer::MatchToken(int first_char_index, string line, int* skip_index) {
+Token* Tokenizer::MatchOtherToken(int first_char_index, string line, int* skip_index) {
   string first_char = line.substr(first_char_index, 1);
   string first_and_second_char = line.substr(first_char_index, 2);
 
@@ -50,47 +55,97 @@ Token* Tokenizer::MatchToken(int first_char_index, string line, int* skip_index)
   return NULL;
 }
 
-void Form_Name_Or_Integer(int *start_index, int *end_index, int current_index) {
-  if (*start_index != -1) {
+void Tokenizer::FormNameOrInteger(int *start_index, int *end_index, int current_index) {
+  if (*start_index != NOT_SET) {
     *end_index = current_index;
   } else {
     *start_index = current_index;
+    *end_index = current_index;
   }
 }
 
-//void Form_Integer(int *start_index, int *end_index, int current_index) {
-//
-//}
+Token* Tokenizer::MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type) {
+  if (type == NAME_TYPE && lrv->IsName(val)) {
+    return new NameToken(val);
+  }
 
-vector<vector<Token>>* Tokenizer::Tokenize(istream &stream) {
-  vector<string> lines = SplitLines(stream);
-  LexicalRuleValidator *lrv = new LexicalRuleValidator();
-  int i;
-  int skip_index = -1;
-  bool is_forming_name = false;
-  bool is_forming_integer = false;
-  int start_index = -1;
-  int end_index = -1;
-  for (i = 0; i < lines.size(); i++) {
-    cout << "Line no: " << i+1 << " contains: "  << lines[i] << "\n";
-    for(string::size_type j = 0; j < lines[i].size(); j++) {
-      if (j == skip_index) {
-//        cout << "skip_index: " << skip_index << "\n";
-        continue;
-      }
-      if (lrv->IsLetter(lines[i][j])) {
-        is_forming_name = true;
-        Form_Name_Or_Integer(&start_index, &end_index, j);
-      } else if (lrv->IsDigit(lines[i][j])) {
-
-      } else {
-
-      }
-
-      Token* t = MatchToken(j, lines[i], &skip_index);
-
-    }
+  if (type == INTEGER_TYPE && lrv->IsInteger(val)) {
+    return new IntegerToken(val);
   }
 
   return NULL;
+}
+
+Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
+  Parser::TokenStream *token_stream = new Parser::TokenStream();
+  vector<Token*> line_of_tokens = {};
+  LexicalRuleValidator *lrv = new LexicalRuleValidator();
+
+  vector<string> lines = SplitLines(stream);
+  int i;
+  int skip_index = NOT_SET;
+  int type = NOT_SET;
+  int start_index = NOT_SET;
+  int end_index = NOT_SET;
+  for (i = 0; i < lines.size(); i++) {
+    for(string::size_type j = 0; j < lines[i].size(); j++) {
+      if ((j == skip_index) || (isspace(lines[i][j]) && type == NOT_SET)) {
+        skip_index = NOT_SET;
+        continue;
+      }
+
+      if (lrv->IsLetter(lines[i][j])) {
+        type = NAME_TYPE;
+        FormNameOrInteger(&start_index, &end_index, j);
+        continue;
+      } else if (lrv->IsDigit(lines[i][j])) {
+        type = INTEGER_TYPE;
+        FormNameOrInteger(&start_index, &end_index, j);
+        continue;
+      }
+
+      // only space and punctuation will be used as delimiter for name/integer
+      Token* current_token = MatchOtherToken(j, lines[i], &skip_index);
+      Token* prev_token = NULL;
+
+      // check if it is time to form the name/integer token
+      if (type != NOT_SET && (isspace(lines[i][j]) || (current_token != NULL &&  InstanceOf<PunctuationToken>(current_token)))) {
+        prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(start_index, j - start_index), type);
+      }
+
+      // check if a name/integer token was formed
+      if (type != NOT_SET && prev_token != NULL) {
+        line_of_tokens.push_back(prev_token);
+        type = NOT_SET;
+        start_index = NOT_SET;
+        end_index = NOT_SET;
+      } else if (type != NOT_SET && prev_token == NULL) {
+        throw SyntaxErrorException(lines[i].substr(start_index, j - start_index) + " is an invalid token");
+      }
+
+      if (current_token == NULL && prev_token != NULL) {
+        continue;
+      } else if (current_token == NULL) {
+        throw SyntaxErrorException(lines[i][j] + " is an invalid token");
+      }
+
+      line_of_tokens.push_back(current_token);
+
+      // check if this is the end of the line
+      PunctuationToken *pot = dynamic_cast<PunctuationToken*>(current_token);
+      if (!pot) {
+        continue;
+      }
+      auto it = END_OF_LINE_TOKENS.find(pot->GetType());
+      // key is not present
+      if (it == END_OF_LINE_TOKENS.end()) {
+        continue;
+      }
+
+      token_stream->push_back(line_of_tokens);
+      line_of_tokens.clear();
+    }
+  }
+
+  return token_stream;
 }

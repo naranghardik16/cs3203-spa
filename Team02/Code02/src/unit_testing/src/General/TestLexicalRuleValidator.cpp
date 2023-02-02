@@ -1,5 +1,6 @@
 #include "General/LexicalRuleValidator.h"
 #include "catch.hpp"
+#include "QPS/QueryUtil.h"
 
 auto lexical_rule_validator = std::shared_ptr<LexicalRuleValidator>();
 
@@ -98,7 +99,6 @@ TEST_CASE("Check if isIdent, isName, isSynonym follows rules correctly") {
       s.push_back(c);
       REQUIRE(lexical_rule_validator->IsIdent(s));
       REQUIRE(lexical_rule_validator->IsName(s));
-      REQUIRE(lexical_rule_validator->IsSynonym(s));
     }
   }
 
@@ -106,7 +106,6 @@ TEST_CASE("Check if isIdent, isName, isSynonym follows rules correctly") {
     std::string s = "a0123afbDS";
     REQUIRE(lexical_rule_validator->IsIdent(s));
     REQUIRE(lexical_rule_validator->IsName(s));
-    REQUIRE(lexical_rule_validator->IsSynonym(s));
   }
 
   SECTION("Test invalid cases") {
@@ -114,7 +113,6 @@ TEST_CASE("Check if isIdent, isName, isSynonym follows rules correctly") {
     for (const auto& kS : invalid_vector) {
       REQUIRE_FALSE(lexical_rule_validator->IsIdent(kS));
       REQUIRE_FALSE(lexical_rule_validator->IsName(kS));
-      REQUIRE_FALSE(lexical_rule_validator->IsSynonym(kS));
     }
   }
 
@@ -131,56 +129,5 @@ TEST_CASE("Check if isInteger follows rules correctly") {
 
   SECTION("Test invalid cases") {
     REQUIRE_FALSE(lexical_rule_validator->IsInteger("01234"));
-  }
-}
-
-TEST_CASE("Check if isStmtRef follows rules correctly") {
-  SECTION("Test valid cases") {
-    std::vector<std::string> valid_vector {"1", "12", "_", "a12AV"};
-    for (const auto& kS : valid_vector) {
-      REQUIRE(lexical_rule_validator->IsStmtRef(kS));
-    }
-  }
-
-  SECTION("Test invalid cases") {
-    std::vector<std::string> invalid_vector {"0a", "a3432SA!", "01"};
-    for (const auto& kS : invalid_vector) {
-      REQUIRE_FALSE(lexical_rule_validator->IsStmtRef(kS));
-    }
-  }
-}
-
-TEST_CASE("Check if isEntRef follows rules correctly") {
-
-  SECTION("Test valid cases") {
-    std::vector<std::string> valid_vector {"a12AV", "_", "\"a12AV\""};
-    for (const auto& kS : valid_vector) {
-      REQUIRE(lexical_rule_validator->IsEntRef(kS));
-    }
-  }
-
-  SECTION("Test invalid cases") {
-    std::vector<std::string> invalid_vector {"11", "0", "!", "\"a12AV@\""};
-    for (const auto& kS : invalid_vector) {
-      REQUIRE_FALSE(lexical_rule_validator->IsEntRef(kS));
-    }
-  }
-}
-
-TEST_CASE("Check if IsDesignEntity follows rules correctly") {
-
-  SECTION("Test valid cases") {
-    std::vector<std::string> valid_vector{"stmt", "read", "print", "call", "while", "if",
-                                          "assign", "variable", "constant", "procedure"};
-    for (const auto& kS : valid_vector) {
-      REQUIRE(lexical_rule_validator->IsDesignEntity(kS));
-    }
-  }
-
-  SECTION("Test invalid cases") {
-    std::vector<std::string> valid_vector{"23", ";", "var"};
-    for (const auto& kS : valid_vector) {
-      REQUIRE_FALSE(lexical_rule_validator->IsDesignEntity(kS));
-    }
   }
 }

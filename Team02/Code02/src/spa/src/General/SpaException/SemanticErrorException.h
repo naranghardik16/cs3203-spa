@@ -4,5 +4,7 @@
 
 class SemanticErrorException : public SpaException {
  public:
-  char* what();
+  SemanticErrorException();
+  SemanticErrorException(std::string_view message);
+  std::string_view what();
 };

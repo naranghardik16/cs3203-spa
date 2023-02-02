@@ -5,9 +5,8 @@ Variable *VariableParser::ParseEntity(TokenStream &tokens) {
 }
 
 Variable *VariableParser::ParseEntity(Line &line) {
-  if (line.size() == 2 && line[1] == ";") {
-    return new Variable(line[0]);
+  if (line.size() == 2 && line[1]->GetValue() == ";") {
+    return new Variable(line[0]->GetValue());
   }
-  throw SyntaxErrorException();
-  return nullptr;
+  throw SyntaxErrorException("Has more expressions other than one Variable");
 }

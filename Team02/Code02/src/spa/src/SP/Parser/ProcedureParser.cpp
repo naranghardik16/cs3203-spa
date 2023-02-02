@@ -17,7 +17,6 @@ Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
     proc->AddToStatementList(stmt);
     line = tokens.front();
   }
-
   if (IsProcedureEnd(line)) {
     tokens.pop_front();
   }
@@ -26,12 +25,15 @@ Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
 }
 
 std::string ProcedureParser::ExtractProcName(Line &line) {
-  if (line[0] != kProcedure || line.size() < 2) {
-    throw SyntaxErrorException();
+  if (line[0]->GetValue() != "procedure" || line.size() < 2) {
+    throw SyntaxErrorException("A procedure Line should start with procedure");
   }
-  return line[1];
+  return line[1]->GetValue();
 }
 
-inline bool ProcedureParser::IsProcedureEnd(Line &line) {
-  return std::find(line.begin(), line.end(), kEndProc) != line.end();
+bool ProcedureParser::IsProcedureEnd(Line &line) {
+  return std::find_if(std::begin(line), std::end(line),
+                      [&](Token *const p) {
+                        return p->GetValue() == "}";
+                      }) != std::end(line);
 }

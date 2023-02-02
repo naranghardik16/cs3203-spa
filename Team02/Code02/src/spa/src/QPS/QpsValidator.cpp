@@ -20,3 +20,7 @@ void QpsValidator::ValidatePattern(Map &declaration, Map &clause) {
 
   handler->Handle(declaration, clause);
 }
+
+//TODO To figure out validation -- this is dummy
+void QpsValidator::ValidateSubClause(Map &declaration, std::shared_ptr<ClauseSyntax> syntax) {
+};

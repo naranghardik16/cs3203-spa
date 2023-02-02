@@ -3,29 +3,40 @@
 
 #include "catch.hpp"
 #include <string>
+#include "SP/NameToken.h"
+#include "SP/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedure works") {
-  Parser::Line proc_line{"procedure", "main", "{"};
-  Parser::Line stmt_line{"x", "assign", "y"};
+  Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
+                         new PunctuationToken("{", LEFT_PARENTHESIS)};
+  Parser::Line stmt_line
+      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
+       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
   REQUIRE(Parser::IsProcedure(proc_line) == true);
   REQUIRE(Parser::IsProcedure(stmt_line) == false);
 }
 
 TEST_CASE("Check if AssignStatementParser works") {
-  Parser::Line stmt_line{"x", "assign", "y", ";"};
+  Parser::Line stmt_line
+      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
+       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
   Parser::TokenStream stmt_tokens{stmt_line};
   auto parser = new AssignStatementParser();
   try {
     auto stmt = parser->ParseEntity(stmt_tokens);
-  } catch (const SpaException &e) {
+  } catch (SpaException &e) {
+    std::cout << e.what() << std::endl;
     REQUIRE(0);
   }
 }
 
 TEST_CASE("Check if Parser works with only assign statement") {
-  Parser::Line proc_line{"procedure", "main", "{"};
-  Parser::Line stmt_line{"x", "assign", "y", ";"};
-  Parser::Line end_line{"}"};
+  Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
+                         new PunctuationToken("{", LEFT_PARENTHESIS)};
+  Parser::Line stmt_line
+      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
+       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+  Parser::Line end_line{new PunctuationToken("}", RIGHT_PARENTHESIS)};
   Parser::TokenStream source{proc_line, stmt_line, end_line};
   auto parser = new Parser();
   try {
@@ -35,19 +46,22 @@ TEST_CASE("Check if Parser works with only assign statement") {
     auto assign_stmt = dynamic_cast<AssignStatement *>(stmt);
     auto var = assign_stmt->GetVariable();
     REQUIRE(var == Variable("x"));
-  } catch (const SpaException &e) {
+  } catch (SpaException &e) {
+    cout << e.what() << endl;
     REQUIRE(0);
   }
 }
 
 TEST_CASE(
     "Check if Parser throws Syntax Error for not starting with a procedure") {
-  Parser::TokenStream invalid_proc_tokens{{"x", "assign", "y"}};
+  Parser::TokenStream invalid_proc_tokens
+      {{new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
+        new NameToken("y"), new PunctuationToken(";", SEMICOLON)}};
   auto parser = new Parser();
   try {
     auto program = parser->ParseSource(invalid_proc_tokens);
-    REQUIRE(0);
-  } catch (const SyntaxErrorException &e) {
+  } catch (SyntaxErrorException &e) {
+    std::cout << e.what() << std::endl;
     REQUIRE(1);
   }
 

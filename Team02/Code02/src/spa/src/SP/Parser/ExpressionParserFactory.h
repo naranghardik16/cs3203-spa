@@ -5,7 +5,7 @@
 #include "VariableParser.h"
 
 class ExpressionParserFactory {
-  typedef std::vector<std::string> Line;
+  typedef std::vector<Token *> Line;
 
  public:
   static ExpressionParser *GetExpressionParser(Line &line);
