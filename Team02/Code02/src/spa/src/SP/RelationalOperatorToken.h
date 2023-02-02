@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTOKEN_H_
-#define SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTOKEN_H_
+#pragma once
 #include "Token.h"
 #include "RelationalOperatorType.h"
 using namespace std;
@@ -18,4 +17,3 @@ class RelationalOperatorToken : public Token {
   RelationalOperatorType GetType();
   bool Equals(Token &other);
 };
-#endif //SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTOKEN_H_
