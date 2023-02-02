@@ -7,7 +7,8 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   std::string_view var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto assign_stmt = new AssignStatement(Variable("name"), 2, "main");
-  vector<Token *> expression_tokens{line.begin() + 2, line.end()};
+  CheckEndOfStatement(line);
+  vector<Token *> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
       ExpressionParserFactory::GetExpressionParser(expression_tokens);
   auto expression = expr_parser->ParseEntity(expression_tokens);
@@ -32,4 +33,14 @@ std::string_view AssignStatementParser::ExtractVariableName(Line &line) const {
     throw SyntaxErrorException("Multiple expressions in lhs of assign");
   }
   return line[0]->GetValue();
+}
+
+void AssignStatementParser::CheckEndOfStatement(Line &line) const {
+  if ((*prev(line.end()))->GetValue() != ";") {
+    throw SyntaxErrorException("AssignStatement does not end with ;");
+  }
+
+  if (line.size() < 4) {
+    throw SyntaxErrorException("Lesser tokens than what an AssignStatement has");
+  }
 }

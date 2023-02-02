@@ -1,8 +1,11 @@
 #pragma once
 
 #include<vector>
+#include "ConstantParser.h"
 #include "ExpressionParser.h"
 #include "VariableParser.h"
+#include "../NameToken.h"
+#include "../IntegerToken.h"
 
 class ExpressionParserFactory {
   typedef std::vector<Token *> Line;
