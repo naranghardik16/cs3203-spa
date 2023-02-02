@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTYPE_H_
-#define SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTYPE_H_
+#pragma once
 
 enum ConditionalOperatorType {
   AND,
@@ -7,4 +6,3 @@ enum ConditionalOperatorType {
   NOT,
 };
 
-#endif //SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTYPE_H_

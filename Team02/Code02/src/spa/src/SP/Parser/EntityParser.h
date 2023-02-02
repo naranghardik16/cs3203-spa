@@ -2,11 +2,12 @@
 #include <deque>
 #include <string>
 #include <vector>
+#include "../Token.h"
 
 template<typename Entity>
 class EntityParser {
  public:
-  typedef std::deque<std::vector<std::string>> TokenStream;
-  typedef std::vector<std::string> Line;
+  typedef std::deque<std::vector<Token*>> TokenStream;
+  typedef std::vector<Token*> Line;
   virtual Entity *ParseEntity(TokenStream &tokens) = 0;
 };

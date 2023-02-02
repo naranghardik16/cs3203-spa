@@ -7,7 +7,7 @@ Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   try {
-    std::string proc_name = ExtractProcName(line);
+    std::string proc_name = ExtractProcName( line);
     auto proc = new Procedure(proc_name);
     return proc;
   } catch (SyntaxErrorException &e) {
@@ -16,8 +16,8 @@ Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
 }
 
 std::string ProcedureParser::ExtractProcName(Line &line) {
-  if (line[0] != "procedure" || line.size() < 2) {
+  if (line[0]->GetValue() != "procedure" || line.size() < 2) {
     throw SyntaxErrorException();
   }
-  return line[1];
+  return line[1]->GetValue();
 }
