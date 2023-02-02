@@ -21,6 +21,6 @@ add_executable(unit_testing ${srcs}
         src/QPS/TestPqlEvaluator.cpp
         src/SP/Tokenizer/TestTokenizer.cpp
         src/SP/Parser/TestParser.cpp
-        src/PKB/TestPkbStores.cpp src/TestTNode.cpp)
+        src/PKB/TestPKB.cpp src/TestTNode.cpp src/PKB/Interfaces/TestPkbWriteFacade.cpp)
 
 target_link_libraries(unit_testing spa)

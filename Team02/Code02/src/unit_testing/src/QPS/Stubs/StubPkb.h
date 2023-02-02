@@ -1,4 +1,4 @@
-#include "PKB.h"
+#include "PKB/PKB.h"
 
 class StubPkb : public PKB {
   virtual std::unordered_set<std::string> GetVariables();

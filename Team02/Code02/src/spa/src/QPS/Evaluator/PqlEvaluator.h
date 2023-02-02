@@ -1,5 +1,5 @@
 #pragma once
-#include "PKB.h"
+#include "PKB/PKB.h"
 #include "QPS/QPSTypeDefs.h"
 
 class PqlEvaluator {
