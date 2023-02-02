@@ -75,6 +75,88 @@ bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expressio
   return result;
 }
 
+/*
+* Checks if the expression is a constant synonym
+*/
+bool QueryUtil::IsConstantSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "constant";
+  return result;
+}
+
+/*
+* Checks if the expression is a statement synonym
+*/
+bool QueryUtil::IsStatementSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "stmt";
+  return result;
+}
+
+
+/*
+* Checks if the expression is a read synonym
+*/
+bool QueryUtil::IsReadSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "read";
+  return result;
+}
+
+/*
+* Checks if the expression is a print synonym
+*/
+bool QueryUtil::IsPrintSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "print";
+  return result;
+}
+
+/*
+* Checks if the expression is a call synonym
+*/
+bool QueryUtil::IsCallSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "call";
+  return result;
+}
+
+/*
+* Checks if the expression is a while synonym
+*/
+bool QueryUtil::IsWhileSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "while";
+  return result;
+}
+
+/*
+* Checks if the expression is an if synonym
+*/
+bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "if";
+  return result;
+}
+
+
+/*
+* Checks if the expression is an assign synonym
+*/
+bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "assign";
+  return result;
+}
+
+/*
+* Checks if the expression is a procedure synonym
+*/
+bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
+  std::string type = declaration[expression];
+  bool result = type == "procedure";
+  return result;
+}
 
 /*
  * Get intersection between two vectors

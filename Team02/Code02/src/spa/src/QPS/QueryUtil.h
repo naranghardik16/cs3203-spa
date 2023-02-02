@@ -25,7 +25,25 @@ class QueryUtil {
 
   static bool IsVariableSynonym(Map &declaration, const std::string& expression);
 
-  static SingleConstraintSet QueryUtil::GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2);
+  static bool IsConstantSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsAssignSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsIfSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsStatementSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsWhileSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsPrintSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsReadSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsCallSynonym(Map &declaration, const std::string& expression);
+
+  static bool IsProcedureSynonym(Map &declaration, const std::string& expression);
+
+  static SingleConstraintSet GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2);
 
   //TODO To complete this
   // static void QueryUtil::GetIntersectionOfPairSets(const PairConstraintSet& set_1, const PairConstraintSet&  set_2);
