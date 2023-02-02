@@ -55,8 +55,8 @@ Token* Tokenizer::MatchOtherToken(int first_char_index, string line, int* skip_i
   return NULL;
 }
 
-void FormNameOrInteger(int *start_index, int *end_index, int current_index) {
-  if (*start_index != -1) {
+void Tokenizer::FormNameOrInteger(int *start_index, int *end_index, int current_index) {
+  if (*start_index != NOT_SET) {
     *end_index = current_index;
   } else {
     *start_index = current_index;
@@ -76,7 +76,6 @@ Token* Tokenizer::MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val,
   return NULL;
 }
 
-// TODO: Handle for multiple statements in a line by either { or } or ; as delimiter
 Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
   Parser::TokenStream *token_stream = new Parser::TokenStream();
   vector<Token*> line_of_tokens = {};
@@ -84,16 +83,14 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
 
   vector<string> lines = SplitLines(stream);
   int i;
-  int skip_index = -1;
-  int type = -1;
-  int start_index = -1;
-  int end_index = -1;
+  int skip_index = NOT_SET;
+  int type = NOT_SET;
+  int start_index = NOT_SET;
+  int end_index = NOT_SET;
   for (i = 0; i < lines.size(); i++) {
-//    cout << "Line no: " << i+1 << " contains: "  << lines[i] << "\n";
-
     for(string::size_type j = 0; j < lines[i].size(); j++) {
-      if ((j == skip_index) || (isspace(lines[i][j]) && type == -1)) {
-        skip_index = -1;
+      if ((j == skip_index) || (isspace(lines[i][j]) && type == NOT_SET)) {
+        skip_index = NOT_SET;
         continue;
       }
 
@@ -112,22 +109,24 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
       Token* prev_token = NULL;
 
       // check if it is time to form the name/integer token
-      if (type != -1 && (isspace(lines[i][j]) || (current_token != NULL &&  InstanceOf<PunctuationToken>(current_token)))) {
+      if (type != NOT_SET && (isspace(lines[i][j]) || (current_token != NULL &&  InstanceOf<PunctuationToken>(current_token)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(start_index, j - start_index), type);
       }
 
       // check if a name/integer token was formed
-      if (type != -1 && prev_token != NULL) {
-//        cout << "NameOrIntegerToken: " << prev_token->GetValue() << "\n";
+      if (type != NOT_SET && prev_token != NULL) {
         line_of_tokens.push_back(prev_token);
-        type = -1;
-        start_index = -1;
-        end_index = -1;
+        type = NOT_SET;
+        start_index = NOT_SET;
+        end_index = NOT_SET;
+      } else if (type != NOT_SET && prev_token == NULL) {
+        throw SyntaxErrorException(lines[i].substr(start_index, j - start_index) + " is an invalid token");
       }
 
-      if (current_token == NULL) {
+      if (current_token == NULL && prev_token != NULL) {
         continue;
-
+      } else if (current_token == NULL) {
+        throw SyntaxErrorException(lines[i][j] + " is an invalid token");
       }
 
       line_of_tokens.push_back(current_token);
