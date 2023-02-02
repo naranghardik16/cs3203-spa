@@ -3,5 +3,10 @@
 
 class SpaException : public std::exception {
  public:
-  virtual char* what() = 0;
+  SpaException() = default;
+  SpaException(std::string_view message);
+  virtual std::string_view what() = 0;
+
+ protected:
+  std::string message_;
 };

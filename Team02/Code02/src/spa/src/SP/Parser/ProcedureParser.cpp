@@ -6,18 +6,14 @@
 Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
-  try {
-    std::string proc_name = ExtractProcName( line);
-    auto proc = new Procedure(proc_name);
-    return proc;
-  } catch (SyntaxErrorException &e) {
-    throw SyntaxErrorException();
-  }
+  std::string proc_name = ExtractProcName(line);
+  auto proc = new Procedure(proc_name);
+  return proc;
 }
 
 std::string ProcedureParser::ExtractProcName(Line &line) {
-  if (line[0]->GetValue() != "procedure" || line.size() < 2) {
-    throw SyntaxErrorException();
+  if (line[0] != "procedure" || line.size() < 2) {
+    throw SyntaxErrorException("A procedure Line should start with procedure");
   }
   return line[1]->GetValue();
 }
