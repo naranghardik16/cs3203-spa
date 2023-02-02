@@ -1,4 +1,5 @@
 #include "SuchThatBaseHandler.h"
+#include "QPS/QueryUtil.h"
 
 const std::unordered_set<std::string> kRelRef({"Follows", "Follows*", "Parent", "Parent*", "Uses", "Modifies"});
 const std::string kEntityKey = "Entity";
@@ -21,10 +22,10 @@ void SuchThatBaseHandler::Handle(Map &declaration, Map &clause) {
   }
 
   //Check if synonyms declared
-  if (LexicalRuleValidator::IsSynonym(arg_1) && declaration.find(arg_1) == declaration.end()) {
+  if (QueryUtil::IsSynonym(arg_1) && declaration.find(arg_1) == declaration.end()) {
     throw SemanticErrorException();
   }
-  if (LexicalRuleValidator::IsSynonym(arg_2) && declaration.find(arg_2) == declaration.end()) {
+  if (QueryUtil::IsSynonym(arg_2) && declaration.find(arg_2) == declaration.end()) {
     throw SemanticErrorException();
   }
 

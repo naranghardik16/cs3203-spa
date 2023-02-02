@@ -1,6 +1,3 @@
-#ifndef SPA_SRC_SPA_SRC_TOKENIZER_H_
-#define SPA_SRC_SPA_SRC_TOKENIZER_H_
-
 #pragma once
 #include <iostream>
 #include <unordered_map>
@@ -14,20 +11,26 @@
 #include "ArithmeticOperatorToken.h"
 #include "RelationalOperatorToken.h"
 #include "ConditionalOperatorToken.h"
+#include "General/LexicalRuleValidator.h"
+#include "./General/StringUtil.h"
+#include "./General/Utilities.h"
+#include "./Parser/Parser.h"
+
 using namespace std;
 
 class Tokenizer {
+  inline static const int NAME_TYPE = 1;
+  inline static const int INTEGER_TYPE = 2;
   inline static const string ARITHMETIC_OPERATOR_RULE = "[*+-/%]";
   inline static const string CONDITIONAL_OPERATOR_RULE = "(?:(&&)|(!)|(\\|\\|))";
   inline static const string RELATIONAL_OPERATOR_RULE = "(?:(<=)|(<)|(>=)|(>)|(==)|(!=))";
-  inline static const string PUNCTUATION_OPERATOR_RULE = "[{}();_=\"]";
+  inline static const string PUNCTUATION_OPERATOR_RULE = "[{}();=\"]";
   inline static const unordered_map<string, PunctuationType> PUNCTUATION_TYPES = {
       {"{", LEFT_PARENTHESIS},
       {"}", RIGHT_PARENTHESIS},
       {"(", LEFT_BRACE},
       {")", RIGHT_BRACE},
       {";", SEMICOLON},
-      {"_", UNDERSCORE},
       {"\"", DOUBLE_QUOTE},
       {"=", SINGLE_EQUAL},
   };
@@ -51,13 +54,17 @@ class Tokenizer {
       {"||", OR},
       {"!", NOT}
   };
+  inline static const unordered_map<PunctuationType, bool> END_OF_LINE_TOKENS = {
+      {LEFT_PARENTHESIS, true },
+      {RIGHT_PARENTHESIS, true},
+      {SEMICOLON, true}
+  };
   vector<string> SplitLines(istream & stream);
  public:
   Tokenizer();
-  Token* MatchToken(int first_char_index, string line, int* skip_index);
-  vector<vector<Token>>* Tokenize(istream &stream);
+  Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
+  Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
+  Parser::TokenStream* Tokenize(istream &stream);
 };
-#endif //SPA_SRC_SPA_SRC_TOKENIZER_H_
-
 
 

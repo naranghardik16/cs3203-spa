@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_PUNCTUATIONTYPE_H_
-#define SPA_SRC_SPA_SRC_SP_PUNCTUATIONTYPE_H_
+#pragma once
 
 enum PunctuationType {
   LEFT_PARENTHESIS,
@@ -7,9 +6,6 @@ enum PunctuationType {
   LEFT_BRACE,
   RIGHT_BRACE,
   SEMICOLON,
-  UNDERSCORE,
   DOUBLE_QUOTE,
   SINGLE_EQUAL
 };
-
-#endif //SPA_SRC_SPA_SRC_SP_PUNCTUATIONTYPE_H_

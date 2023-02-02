@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTYPE_H_
-#define SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTYPE_H_
+#pragma once
 
 enum RelationalOperatorType {
   LT,
@@ -9,5 +8,3 @@ enum RelationalOperatorType {
   DOUBLE_EQUALS,
   NE,
 };
-
-#endif //SPA_SRC_SPA_SRC_SP_RELATIONALOPERATORTYPE_H_

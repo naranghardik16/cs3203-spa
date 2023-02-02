@@ -1,5 +1,7 @@
 #include "NameToken.h"
 
+NameToken::NameToken(string val) : Token(val) {}
+
 bool NameToken::Equals(Token &other) {
   // make sure that the passed type is the same
   NameToken *nt = dynamic_cast<NameToken*>(&other);

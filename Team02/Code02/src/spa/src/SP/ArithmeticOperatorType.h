@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTYPE_H_
-#define SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTYPE_H_
+#pragma once
 
 enum ArithmeticOperatorType {
   PLUS,
@@ -9,4 +8,3 @@ enum ArithmeticOperatorType {
   MOD
 };
 
-#endif //SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTYPE_H_

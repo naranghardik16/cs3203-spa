@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTOKEN_H_
-#define SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTOKEN_H_
+#pragma once
 #include "Token.h"
 #include "ConditionalOperatorType.h"
 using namespace std;
@@ -15,4 +14,3 @@ class ConditionalOperatorToken : public Token {
   ConditionalOperatorType GetType();
   bool Equals(Token &other);
 };
-#endif //SPA_SRC_SPA_SRC_SP_CONDITIONALOPERATORTOKEN_H_

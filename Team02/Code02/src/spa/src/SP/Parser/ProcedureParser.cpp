@@ -15,5 +15,5 @@ std::string ProcedureParser::ExtractProcName(Line &line) {
   if (line[0] != "procedure" || line.size() < 2) {
     throw SyntaxErrorException("A procedure Line should start with procedure");
   }
-  return line[1];
+  return line[1]->GetValue();
 }

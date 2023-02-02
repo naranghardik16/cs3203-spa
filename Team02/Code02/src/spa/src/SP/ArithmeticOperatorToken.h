@@ -1,5 +1,4 @@
-#ifndef SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTOKEN_H_
-#define SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTOKEN_H_
+#pragma once
 #include "Token.h"
 #include "ArithmeticOperatorType.h"
 using namespace std;
@@ -17,5 +16,3 @@ class ArithmeticOperatorToken : public Token {
   ArithmeticOperatorType GetType();
   bool Equals(Token &other);
 };
-
-#endif //SPA_SRC_SPA_SRC_SP_ARITHMETICOPERATORTOKEN_H_
