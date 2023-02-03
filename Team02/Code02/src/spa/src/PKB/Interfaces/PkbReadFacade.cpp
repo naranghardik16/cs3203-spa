@@ -7,19 +7,15 @@ PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 
 PkbReadFacade::~PkbReadFacade() {}
 
- std::shared_ptr<PkbReadFacade> PkbReadFacade::create(PKB& pkb) {
-  return std::make_shared<PkbReadFacade>(pkb);
-}
-
-KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX>  &PkbReadFacade::getVariableStore() {
+KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX>  &PkbReadFacade::GetVariableStore() {
   return pkb.entity_store_->getVariableStore();
 }
 
-KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &PkbReadFacade::getProcedureStore() {
+KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &PkbReadFacade::GetProcedureStore() {
   return pkb.entity_store_->getProcedureStore();
 }
 
-std::unordered_set<PkbTypes::CONSTANT> &PkbReadFacade::getConstantStore() {
+std::unordered_set<PkbTypes::CONSTANT> &PkbReadFacade::GetConstantStore() {
   return pkb.entity_store_->getConstantStore();
 }
 

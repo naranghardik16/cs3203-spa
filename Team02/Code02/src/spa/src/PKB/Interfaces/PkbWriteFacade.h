@@ -11,9 +11,9 @@ class PkbWriteFacade {
 
   ~PkbWriteFacade();
 
-  void addConstant(PkbTypes::CONSTANT constant);
+  void AddConstant(PkbTypes::CONSTANT constant);
 
-  PkbTypes::VARIABLE_STORE_INDEX addVariable(PkbTypes::VARIABLE variable);
+  PkbTypes::VARIABLE_STORE_INDEX AddVariable(PkbTypes::VARIABLE variable);
 
-  PkbTypes::PROCEDURE_STORE_INDEX addProcedure(PkbTypes::PROCEDURE procedure);
+  PkbTypes::PROCEDURE_STORE_INDEX AddProcedure(PkbTypes::PROCEDURE procedure);
 };

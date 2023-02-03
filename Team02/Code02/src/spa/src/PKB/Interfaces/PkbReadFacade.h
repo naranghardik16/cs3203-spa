@@ -14,13 +14,11 @@ class PkbReadFacade {
 
   ~PkbReadFacade();
 
-  static std::shared_ptr<PkbReadFacade> create(PKB& pkb);
+  KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX> &GetVariableStore();
 
-  KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX> &getVariableStore();
+  KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &GetProcedureStore();
 
-  KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &getProcedureStore();
-
-  std::unordered_set<PkbTypes::CONSTANT> &getConstantStore();
+  std::unordered_set<PkbTypes::CONSTANT> &GetConstantStore();
 
   std::unordered_set<std::string> GetVariables();
   std::unordered_set<std::string> GetStatements();
