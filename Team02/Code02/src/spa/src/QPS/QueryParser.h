@@ -3,7 +3,7 @@
 #include <utility>
 #include <memory>
 #include "General/LexicalRuleValidator.h"
-#include "Tokenizer.h"
+#include "QpsTokenizer.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "QPS/Util/QPSTypeDefs.h"

@@ -4,7 +4,7 @@
 #include "Query.h"
 
 std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
-  std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
+  std::shared_ptr<QpsTokenizer> tk = std::make_shared<QpsTokenizer>();
   try {
     //!Split Query into declarations and select statement
     std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);

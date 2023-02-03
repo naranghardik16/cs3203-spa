@@ -12,13 +12,13 @@
 #include "QPS/ClauseSyntaxValidator.h"
 #include "QPS/ClauseSemanticValidator.h"
 
-class Tokenizer {
+class QpsTokenizer {
 
  public:
   std::shared_ptr<ClauseSyntaxValidator> syntax_validator_;
   std::shared_ptr<ClauseSemanticValidator> semantic_validator_;
 
-  Tokenizer();
+  QpsTokenizer();
   QueryStatementPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   std::string ParseSynonym(const std::string& clause);
