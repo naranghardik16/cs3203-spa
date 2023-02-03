@@ -1,6 +1,6 @@
 #include "IntegerToken.h"
 
-IntegerToken::IntegerToken(string val) : Token(val) {}
+IntegerToken::IntegerToken(string val) : Token(val, INTEGER) {}
 
 bool IntegerToken::Equals(Token &other) {
   // make sure that the passed type is the same

@@ -1,13 +1,7 @@
 #include "ArithmeticOperatorToken.h"
 using namespace std;
 
-ArithmeticOperatorToken::ArithmeticOperatorToken(string val, ArithmeticOperatorType type) : Token(val) {
-  type_ = type;
-}
-
-ArithmeticOperatorType ArithmeticOperatorToken::GetType() {
-  return type_;
-}
+ArithmeticOperatorToken::ArithmeticOperatorToken(string val, TokenType type) : Token(val, type) {}
 
 bool ArithmeticOperatorToken::Equals(Token &other) {
   // make sure that the passed type is the same
