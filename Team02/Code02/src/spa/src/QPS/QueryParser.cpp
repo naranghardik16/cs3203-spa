@@ -1,10 +1,10 @@
 //#pragma once
 #include "QueryParser.h"
-#include "PQLConstants.h"
+#include "QPS/Util/PQLConstants.h"
+#include "Query.h"
 
-ParserOutput QueryParser::ParseQuery(std::string query) {
-  std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
-  std::shared_ptr<QpsValidator> validator = std::make_shared<QpsValidator>();
+std::string QueryParser::ParseQuery(std::string query) {
+  std::shared_ptr<QpsTokenizer> tk = std::make_shared<QpsTokenizer>();
   try {
     //!Split Query into declarations and select statement
     std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);
@@ -21,27 +21,25 @@ ParserOutput QueryParser::ParseQuery(std::string query) {
     Synonym synonym = tk->ParseSynonym(remaining_clause);
     remaining_clause = string_util::GetClauseAfterKeyword(remaining_clause, synonym);
 
-    //!Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
-    auto syntax_pair_list = tk->ParseSubClauses(remaining_clause);
-
     //!create declaration map -- extracts all the design entities and synonyms first then checks for syntax
     //!after checking for syntax, if there are repeated synonyms then semantic exception is thrown
     Map declaration_map = tk->ExtractAbstractSyntaxFromDeclarations(declarations);
 
-    //syntax validation followed by semantic validation
-    for (const std::shared_ptr<ClauseSyntax>& kClauseSyntax : syntax_pair_list) {
-      validator->ValidateSubClause(declaration_map, kClauseSyntax);
+    //!Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
+    auto syntax_pair_list = tk->ParseSubClauses(remaining_clause);
+
+    if (tk->semantic_validator_->has_semantic_error_) {
+      throw SemanticErrorException();
     }
 
     //!consolidate parsing result
-    ParserOutput output;
-    output.first = synonym;
-    output.second = std::pair<std::vector<std::shared_ptr<ClauseSyntax>>, Map>(syntax_pair_list, declaration_map);
-
-    return output;
+    std::shared_ptr<Query> query_ptr = std::make_shared<Query>(synonym, declaration_map, syntax_pair_list);
+    return "Pass";
 
   } catch (const SyntaxErrorException& e) {
+    return "Syntax Error";
   } catch (const SemanticErrorException& e) {
+    return "Semantic Error";
   }
 }
 

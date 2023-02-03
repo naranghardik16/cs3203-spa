@@ -1,5 +1,6 @@
 #pragma once
 #include "StatementParser.h"
+#include "core/model/Program.h"
 #include "core/model/AssignStatement.h"
 
 class AssignStatementParser : public StatementParser {

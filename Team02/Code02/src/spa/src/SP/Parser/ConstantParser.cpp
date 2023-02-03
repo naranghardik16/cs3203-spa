@@ -1,7 +1,7 @@
 #include "ConstantParser.h"
 
 Constant *ConstantParser::ParseEntity(TokenStream &tokens) {
-  ParseEntity(tokens.front());
+  return ParseEntity(tokens.front());
 }
 
 Constant *ConstantParser::ParseEntity(Line &line) {
