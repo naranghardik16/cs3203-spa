@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
-#include "Entity.h"
+//#include "Entity.h"
 
-class Statement : public Entity {
+class Statement {
  public:
   Statement(int stmt_number,
             std::string statement_type,

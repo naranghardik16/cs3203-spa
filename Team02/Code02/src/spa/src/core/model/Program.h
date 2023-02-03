@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "Entity.h"
+//#include "Entity.h"
 #include "core/model/Procedure.h"
 
-class Program : public Entity {
+class Program {
  public:
   typedef std::vector<Procedure *> ProcListContainer;
   Program();

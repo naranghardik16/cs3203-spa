@@ -1,9 +1,9 @@
 #pragma once
 
 #include<string>
-#include "Entity.h"
+//#include "Entity.h"
 
-class Expression : public Entity {
+class Expression {
  public:
   Expression() = default;
   explicit Expression(std::string_view name, std::string expression_type);

@@ -9,6 +9,7 @@ class Procedure : public Entity {
   typedef std::vector<Statement *> StmtListContainer;
   explicit Procedure(std::string proc_name);
   void AddToStatementList(Statement *stmt);
+  void Accept(ParserVisitor* visitor);
   [[nodiscard]] StmtListContainer GetStatementList() const;
   [[nodiscard]] std::string GetProcedureName() const;
 
