@@ -5,7 +5,7 @@
 #include "ValidationHandler/StmtToStmtHandler.h"
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
-#include "QPSTypeDefs.h"
+#include "QPS/Util/QPSTypeDefs.h"
 
 class ClauseSemanticValidator {
  public:

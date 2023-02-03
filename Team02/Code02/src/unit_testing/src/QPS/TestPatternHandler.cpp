@@ -1,7 +1,7 @@
 #include "catch.hpp"
 
 #include <memory>
-#include "QPS/QPSTypeDefs.h"
+#include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Clause/PatternClauseSyntax.h"
 #include "QPS/ValidationHandler/PatternHandler.h"
 #include "General/SpaException/SemanticErrorException.h"

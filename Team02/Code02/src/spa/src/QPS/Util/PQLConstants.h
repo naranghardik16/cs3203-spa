@@ -35,4 +35,9 @@ const std::string kPqlParentStarRel = "Parent*";
 const std::string kPqlUsesRel = "Uses";
 const std::string kPqlModifiesRel = "Modifies";
 
+const std::unordered_set<std::string> kRelRefs({kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel, kPqlUsesRel, kPqlModifiesRel});
+const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
+const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel});
+const std::unordered_set<std::string> kStmtProcToStmtRel({kPqlUsesRel, kPqlModifiesRel});
+const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity, kPqlProcedureEntity});
 }

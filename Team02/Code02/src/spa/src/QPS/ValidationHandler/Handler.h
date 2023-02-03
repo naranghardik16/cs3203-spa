@@ -1,10 +1,10 @@
 #pragma once
 
 #include <memory>
-#include "QPS/QPSTypeDefs.h"
+#include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Clause/ClauseSyntax.h"
-#include "QPS/QueryUtil.h"
-#include "QPS/PQLConstants.h"
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Util/PQLConstants.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
 

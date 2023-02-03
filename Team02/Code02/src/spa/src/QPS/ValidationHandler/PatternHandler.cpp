@@ -25,7 +25,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   std::string arg_1(clause->GetFirstParameter());
 
   //Check if syn_assign is declared and is 'assign' entity
-  if (declaration.find(syn_assign) == declaration.end() || declaration[syn_assign] != pql_constants::kAssignEntity) {
+  if (declaration.find(syn_assign) == declaration.end() || declaration[syn_assign] != pql_constants::kPqlAssignEntity) {
     throw SemanticErrorException();
   }
 
@@ -33,7 +33,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   if (QueryUtil::IsSynonym(arg_1) && declaration.find(syn_assign) == declaration.end()) {
     throw SemanticErrorException();
   }
-  if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kVariableEntity) {
+  if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlVariableEntity) {
     throw SemanticErrorException();
   }
 

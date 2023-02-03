@@ -40,7 +40,7 @@ void StmtProcToVarHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, 
   if (QueryUtil::IsSynonym(arg_1) && pql_constants::kStmtProcRefEntities.find(declaration[arg_1]) == pql_constants::kStmtProcRefEntities.end()) {
     throw SemanticErrorException();
   }
-  if(QueryUtil::IsSynonym(arg_2) && declaration[arg_2] != pql_constants::kVariableEntity) {
+  if(QueryUtil::IsSynonym(arg_2) && declaration[arg_2] != pql_constants::kPqlVariableEntity) {
     throw SemanticErrorException();
   }
 
