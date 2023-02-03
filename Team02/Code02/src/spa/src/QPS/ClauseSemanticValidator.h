@@ -9,9 +9,9 @@
 
 class ClauseSemanticValidator {
  public:
-  Map &declaration_;
+  Map declaration_;
   bool has_semantic_error_;
-  ClauseSemanticValidator(Map &declaration);
+  ClauseSemanticValidator();
   void ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidatePatternClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
 };

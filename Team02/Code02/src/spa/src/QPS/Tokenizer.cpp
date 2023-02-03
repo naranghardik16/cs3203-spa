@@ -11,6 +11,8 @@
 #include "QPS/Util/QueryUtil.h"
 #include "ExpressionParser.h"
 
+Tokenizer::Tokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
+
 /*
  * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
@@ -84,7 +86,6 @@ std::vector<size_t> Tokenizer::GetIndexListOfClauses(const std::string& statemen
 std::unordered_map<std::string, std::string> Tokenizer::ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations) {
   std::unordered_map<std::string, std::string> synonym_to_design_entity_map;
   std::string design_entity;
-  bool is_have_repeated_variable_name = false;
 
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
@@ -99,15 +100,12 @@ std::unordered_map<std::string, std::string> Tokenizer::ExtractAbstractSyntaxFro
       }
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
         //we want to throw syntax exception first if there are any but this will mean that we will continue to loop and parse the declarations, which takes extra time
-        is_have_repeated_variable_name = true;
+        semantic_validator_->has_semantic_error_ = true;
       }
       synonym_to_design_entity_map.insert({kSynonym, design_entity});
     }
   }
-
-  if (is_have_repeated_variable_name) {
-    throw SemanticErrorException(); //repeated synonyms
-  }
+  semantic_validator_->declaration_ = synonym_to_design_entity_map;
 
   return synonym_to_design_entity_map;
 }
@@ -188,10 +186,18 @@ std::vector<std::shared_ptr<ClauseSyntax>> Tokenizer::ParseSubClauses(const std:
       SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kPatternStartIndicator);
       syntax.second.second = ExpressionParser::ParseExpressionSpec(syntax.second.second);
       std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
+
+      syntax_validator_->ValidatePatternClauseSyntax(pattern_syntax);
+      semantic_validator_->ValidatePatternClauseSemantic(pattern_syntax);
+
       syntax_pair_list.push_back(pattern_syntax);
     } else if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kSuchThatRegex) == 0) {
       SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kSuchThatStartIndicator);
       std::shared_ptr<ClauseSyntax> such_that_syntax = std::make_shared<SuchThatClauseSyntax>(syntax);
+
+      syntax_validator_->ValidateSuchThatClauseSyntax(such_that_syntax);
+      semantic_validator_->ValidateSuchThatClauseSemantic(such_that_syntax);
+
       syntax_pair_list.push_back(such_that_syntax);
     } else {
       continue;
