@@ -6,7 +6,10 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   tokens.pop_front();
   std::string_view var_name = ExtractVariableName(line);
   Variable var(var_name);
-  auto assign_stmt = new AssignStatement(Variable("name"), 2, "main");
+  auto assign_stmt =
+      new AssignStatement(Program::GetAndIncreaseStatementNumber(),
+                          Variable("name"),
+                          "main");
   CheckEndOfStatement(line);
   vector<Token *> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
