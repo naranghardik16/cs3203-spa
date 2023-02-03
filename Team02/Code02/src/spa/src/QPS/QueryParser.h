@@ -7,10 +7,11 @@
 #include "QpsValidator.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
-#include "QPSTypeDefs.h"
+#include "QPS/Util/QPSTypeDefs.h"
+#include "Query.h"
 
 class QueryParser {
  public:
-  ParserOutput ParseQuery(std::string query);
+  std::shared_ptr<Query> ParseQuery(std::string query);
 };
 

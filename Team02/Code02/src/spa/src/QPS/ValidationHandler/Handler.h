@@ -4,7 +4,7 @@
 #include <memory>
 #include <unordered_map>
 #include "General/SpaException/SyntaxErrorException.h"
-#include "QPS/QPSTypeDefs.h"
+#include "QPS/Util/QPSTypeDefs.h"
 
 /*
  * Handler base class.

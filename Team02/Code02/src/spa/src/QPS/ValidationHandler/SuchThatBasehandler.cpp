@@ -1,5 +1,5 @@
 #include "SuchThatBaseHandler.h"
-#include "QPS/QueryUtil.h"
+#include "QPS/Util/QueryUtil.h"
 
 const std::unordered_set<std::string> kRelRef({"Follows", "Follows*", "Parent", "Parent*", "Uses", "Modifies"});
 const std::string kEntityKey = "Entity";

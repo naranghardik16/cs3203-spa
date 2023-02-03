@@ -1,5 +1,5 @@
 #include "StmtProcToVarHandler.h"
-#include "QPS/QueryUtil.h"
+#include "QPS/Util/QueryUtil.h"
 
 const std::string kEntityKey = "Entity";
 const std::string kFirstParameterKey = "First Parameter";

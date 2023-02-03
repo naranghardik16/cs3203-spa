@@ -1,7 +1,7 @@
 #include "VariableParser.h"
 
 Variable *VariableParser::ParseEntity(TokenStream &tokens) {
-  ParseEntity(tokens.front());
+  return ParseEntity(tokens.front());
 }
 
 Variable *VariableParser::ParseEntity(Line &line) {

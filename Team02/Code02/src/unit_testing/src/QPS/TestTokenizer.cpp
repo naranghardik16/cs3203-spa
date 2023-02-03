@@ -3,7 +3,7 @@
 #include "General/SpaException/SemanticErrorException.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "catch.hpp"
-#include "QPS/PQLConstants.h"
+#include "QPS/Util/PQLConstants.h"
 #include "QPS/Clause/SuchThatClauseSyntax.h"
 #include "QPS/Clause/PatternClauseSyntax.h"
 

@@ -1,8 +1,9 @@
 //#pragma once
 #include "QueryParser.h"
-#include "PQLConstants.h"
+#include "QPS/Util/PQLConstants.h"
+#include "Query.h"
 
-ParserOutput QueryParser::ParseQuery(std::string query) {
+std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
   std::shared_ptr<QpsValidator> validator = std::make_shared<QpsValidator>();
   try {
@@ -28,17 +29,14 @@ ParserOutput QueryParser::ParseQuery(std::string query) {
     //!after checking for syntax, if there are repeated synonyms then semantic exception is thrown
     Map declaration_map = tk->ExtractAbstractSyntaxFromDeclarations(declarations);
 
-    //syntax validation followed by semantic validation
+    //syntax validation followed by semantic validation using Visitor pattern
     for (const std::shared_ptr<ClauseSyntax>& kClauseSyntax : syntax_pair_list) {
       validator->ValidateSubClause(declaration_map, kClauseSyntax);
     }
 
     //!consolidate parsing result
-    ParserOutput output;
-    output.first = synonym;
-    output.second = std::pair<std::vector<std::shared_ptr<ClauseSyntax>>, Map>(syntax_pair_list, declaration_map);
-
-    return output;
+    std::shared_ptr<Query> query_ptr = std::make_shared<Query>(synonym, declaration_map, syntax_pair_list);
+    return query_ptr;
 
   } catch (const SyntaxErrorException& e) {
   } catch (const SemanticErrorException& e) {

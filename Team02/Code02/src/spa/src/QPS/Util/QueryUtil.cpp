@@ -1,12 +1,28 @@
 #pragma once
 #include "General/LexicalRuleValidator.h"
-#include "QueryUtil.h"
-#include "QPS/QPSTypeDefs.h"
-#include <unordered_map>
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Util/QPSTypeDefs.h"
 #include <algorithm>
+#include "QPS/Util/PQLConstants.h"
+#include "General/SpaException/SyntaxErrorException.h"
 
 /*
- * Validates a wildcard token,
+* Checks if the expression is a variable synonym
+* */
+bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
+  bool result = s[0] == '_' && s[s.length()-1] == '_';
+  return result;
+}
+
+/*
+ * Checks if a string is quoted.
+ */
+bool QueryUtil::IsQuoted(const std::string& s) {
+  return (s[0] == '"') && (s[s.length()-1] == '"');
+}
+
+/*
+ * Validates a wildcard token.
  */
 bool QueryUtil::IsWildcard(const std::string& s) {
   return s == "_";
@@ -37,15 +53,18 @@ bool QueryUtil::IsEntRef(const std::string& s) {
  * Validates if a string is a Design Entity in PQL.
  */
 bool QueryUtil::IsDesignEntity(const std::string& s) {
-  return s == "stmt" || s == "read" || s == "print" || s == "call" || s == "while" ||
-      s == "if" || s == "assign" || s == "variable" || s == "constant" || s == "procedure";
+  return s == pql_constants::kPqlStatementEntity || s == pql_constants::kPqlReadEntity || s == pql_constants::kPqlPrintEntity
+  || s == pql_constants::kPqlCallEntity || s == pql_constants::kPqlWhileEntity || s == pql_constants::kPqlIfEntity ||
+  s == pql_constants::kPqlAssignEntity || s == pql_constants::kPqlVariableEntity || s == pql_constants::kPqlConstantEntity ||
+  s == pql_constants::kPqlProcedureEntity;
 }
 
 /*
  * Validates if a string is a Relationship Reference.
  */
 bool QueryUtil::IsRelationshipReference(const std::string& s) {
-  return s == "Follows" || s == "Follows*" || s == "Parent" || s == "Parent*" || s == "Uses" || s == "Modifies";
+  return s == pql_constants::kPqlFollowsRel || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlParentRel
+  || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlUsesRel  || s == pql_constants::kPqlModifiesRel ;
 }
 
 
@@ -57,21 +76,12 @@ bool QueryUtil::IsCharacterString(const std::string& s) {
   return result;
 }
 
-
-/*
-* Checks if the expression is a variable synonym
-* */
-bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length()-1] == '_';
-  return result;
-}
-
 /*
 * Checks if the expression is a variable synonym
 */
 bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "variable";
+  bool result = type == pql_constants::kPqlVariableEntity;
   return result;
 }
 
@@ -80,7 +90,7 @@ bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expressio
 */
 bool QueryUtil::IsConstantSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "constant";
+  bool result = type == pql_constants::kPqlConstantEntity;
   return result;
 }
 
@@ -89,7 +99,7 @@ bool QueryUtil::IsConstantSynonym(Map &declaration, const std::string& expressio
 */
 bool QueryUtil::IsStatementSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "stmt";
+  bool result = type == pql_constants::kPqlStatementEntity;
   return result;
 }
 
@@ -99,7 +109,7 @@ bool QueryUtil::IsStatementSynonym(Map &declaration, const std::string& expressi
 */
 bool QueryUtil::IsReadSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "read";
+  bool result = type == pql_constants::kPqlReadEntity;
   return result;
 }
 
@@ -108,7 +118,7 @@ bool QueryUtil::IsReadSynonym(Map &declaration, const std::string& expression) {
 */
 bool QueryUtil::IsPrintSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "print";
+  bool result = type == pql_constants::kPqlPrintEntity;
   return result;
 }
 
@@ -117,7 +127,7 @@ bool QueryUtil::IsPrintSynonym(Map &declaration, const std::string& expression) 
 */
 bool QueryUtil::IsCallSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "call";
+  bool result = type == pql_constants::kPqlCallEntity;
   return result;
 }
 
@@ -135,7 +145,7 @@ bool QueryUtil::IsWhileSynonym(Map &declaration, const std::string& expression) 
 */
 bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "if";
+  bool result = type == pql_constants::kPqlIfEntity;
   return result;
 }
 
@@ -145,7 +155,7 @@ bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
 */
 bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "assign";
+  bool result = type == pql_constants::kPqlAssignEntity;
   return result;
 }
 
@@ -154,7 +164,7 @@ bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression)
 */
 bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
   std::string type = declaration[expression];
-  bool result = type == "procedure";
+  bool result = type == pql_constants::kPqlProcedureEntity;
   return result;
 }
 

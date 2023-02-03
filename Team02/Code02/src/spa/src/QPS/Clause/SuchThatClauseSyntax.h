@@ -1,8 +1,9 @@
+#pragma once
 #include "ClauseSyntax.h"
 
-typedef std::pair<std::string, std::pair<std::string, std::string>> SyntaxPair;
 class SuchThatClauseSyntax : public ClauseSyntax {
  public:
   SuchThatClauseSyntax(SyntaxPair pair);
   bool Equals(ClauseSyntax &other);
+  std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Synonym s, Map declaration_map);
 };
