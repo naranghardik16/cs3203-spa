@@ -1,27 +1,23 @@
 #include "SuchThatBaseHandler.h"
-#include "QPS/Util/QueryUtil.h"
 
-const std::unordered_set<std::string> kRelRef({"Follows", "Follows*", "Parent", "Parent*", "Uses", "Modifies"});
-const std::string kEntityKey = "Entity";
-const std::string kFirstParameterKey = "First Parameter";
-const std::string kSecondParameterKey = "Second Parameter";
-
-void SuchThatBaseHandler::Handle(Map &declaration, Map &clause) {
-  //Check if got such that clause
-  if (clause.empty()) {
-    return;
-  }
-
-  std::string &rel_ref(clause[kEntityKey]);
-  std::string &arg_1(clause[kFirstParameterKey]);
-  std::string &arg_2(clause[kSecondParameterKey]);
+void SuchThatBaseHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
+  std::string rel_ref(clause->GetEntity());
 
   //Check if relRef valid
-  if (kRelRef.find(rel_ref) == kRelRef.end()) {
+  if (pql_constants::kRelRefs.find(rel_ref) == pql_constants::kRelRefs.end()) {
     throw SyntaxErrorException();
   }
 
-  //Check if synonyms declared
+
+
+  return Handler::HandleSyntax(clause);
+}
+
+void SuchThatBaseHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
+  std::string arg_1(clause->GetFirstParameter());
+  std::string arg_2(clause->GetSecondParameter());
+
+
   if (QueryUtil::IsSynonym(arg_1) && declaration.find(arg_1) == declaration.end()) {
     throw SemanticErrorException();
   }
@@ -29,5 +25,5 @@ void SuchThatBaseHandler::Handle(Map &declaration, Map &clause) {
     throw SemanticErrorException();
   }
 
-  return Handler::Handle(declaration, clause);
+  return Handler::HandleSemantic(clause, declaration);
 }

@@ -3,15 +3,22 @@
 #include <vector>
 #include <regex>
 #include <string>
+#include <memory>
 #include <unordered_map>
 #include "General/StringUtil.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Clause/ClauseSyntax.h"
 #include "QPS/Util/QPSTypeDefs.h"
+#include "QPS/ClauseSyntaxValidator.h"
+#include "QPS/ClauseSemanticValidator.h"
 
-class Tokenizer {
+class QpsTokenizer {
 
  public:
+  std::shared_ptr<ClauseSyntaxValidator> syntax_validator_;
+  std::shared_ptr<ClauseSemanticValidator> semantic_validator_;
+
+  QpsTokenizer();
   QueryStatementPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   std::string ParseSynonym(const std::string& clause);

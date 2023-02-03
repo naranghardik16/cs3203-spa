@@ -3,8 +3,7 @@
 #include <utility>
 #include <memory>
 #include "General/LexicalRuleValidator.h"
-#include "Tokenizer.h"
-#include "QpsValidator.h"
+#include "QpsTokenizer.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "QPS/Util/QPSTypeDefs.h"
@@ -12,6 +11,6 @@
 
 class QueryParser {
  public:
-  std::shared_ptr<Query> ParseQuery(std::string query);
+  std::string ParseQuery(std::string query);
 };
 

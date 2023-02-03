@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ClauseSyntax.h"
 #include "QPS/Evaluator/PatternClauseEvaluator/AssignPatternClauseEvaluator.h"
 
