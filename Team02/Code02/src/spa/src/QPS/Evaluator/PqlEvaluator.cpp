@@ -3,11 +3,11 @@
 #include "PqlEvaluator.h"
 #include <stdexcept>
 
-PqlEvaluator::PqlEvaluator(std::shared_ptr<Query> parser_output, std::shared_ptr<PKB> pkb) {
+PqlEvaluator::PqlEvaluator(std::shared_ptr<Query> parser_output, std::shared_ptr<PkbReadFacade> pkb) {
   synonym_ = parser_output->GetSynonym();
   declaration_map_ = parser_output->GetDeclarationMap();
   syntax_pair_list_ = parser_output->GetClauseSyntaxPtrList();
-  pkb_ptr_ = pkb;
+  pkb_ = pkb;
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
@@ -24,25 +24,25 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
 
 std::unordered_set<std::string> PqlEvaluator::EvaluateTrivialSelectStatement() {
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetVariables();
+    return pkb_->GetVariables();
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetConstants();
+    return pkb_->GetConstants();
   } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetAssignStatements();
+    return pkb_->GetAssignStatements();
   } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetIfStatements();
+    return pkb_->GetIfStatements();
   } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetStatements();
+    return pkb_->GetStatements();
   } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetWhileStatements();
+    return pkb_->GetWhileStatements();
   } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetPrintStatements();
+    return pkb_->GetPrintStatements();
   } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetReadStatements();
+    return pkb_->GetReadStatements();
   } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetCallStatements();
+    return pkb_->GetCallStatements();
   } else if (QueryUtil::IsProcedureSynonym(declaration_map_, synonym_)) {
-    return pkb_ptr_->GetProcedures();
+    return pkb_->GetProcedures();
   } else {
     throw std::invalid_argument("The synonym is not validated correctly as the synonym type cannot be identified");
   }

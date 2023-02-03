@@ -1,5 +1,4 @@
 #pragma once
-#include "PKB.h"
 #include "QPS/Query.h"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"

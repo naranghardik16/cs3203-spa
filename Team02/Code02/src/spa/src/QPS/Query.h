@@ -1,5 +1,4 @@
 #pragma once
-#include "PKB.h"
 #include "QPS/Util/QPSTypeDefs.h"
 
 class Query {

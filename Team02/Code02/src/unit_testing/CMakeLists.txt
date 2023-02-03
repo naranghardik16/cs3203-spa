@@ -21,11 +21,9 @@ add_executable(unit_testing ${srcs}
         src/QPS/TestSuchThatBaseHandler.cpp
         src/QPS/TestQpsValidator.cpp
         src/QPS/TestQueryParser.cpp
-        src/QPS/Stubs/StubPkb.cpp
-        src/QPS/Stubs/StubPkb.h
         src/QPS/TestPqlEvaluator.cpp
         src/SP/Tokenizer/TestTokenizer.cpp
         src/SP/Parser/TestParser.cpp
-        src/PKB/TestPkbStores.cpp src/TestTNode.cpp src/QPS/TestExpressionParser.cpp)
+        src/TestTNode.cpp src/QPS/TestExpressionParser.cpp)
 
 target_link_libraries(unit_testing spa)
