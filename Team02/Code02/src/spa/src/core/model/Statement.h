@@ -3,11 +3,13 @@
 
 class Statement {
  public:
-  Statement(int stmt_number,
-            std::string statement_type,
-            std::string in_scope_of_proc);
+  Statement(
+      int statement_number,
+      std::string statement_type,
+      std::string in_scope_of_proc);
   virtual ~Statement() = default;
 
+  [[nodiscard]] int GetStatementNumber() const;
   [[nodiscard]] std::string GetStatementType() const;
   [[nodiscard]] std::string GetInScopeOfPrc() const;
 

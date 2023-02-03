@@ -5,8 +5,7 @@
 
 class AssignStatement : public Statement {
  public:
-  AssignStatement(Variable var,
-                  int stmt_number,
+  AssignStatement(int statement_number, Variable var,
                   std::string in_scope_of_proc);
   void AddExpression(Expression expression);
   [[nodiscard]]Variable GetVariable() const;
