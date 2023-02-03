@@ -1,6 +1,6 @@
 #include "NameToken.h"
 
-NameToken::NameToken(string val) : Token(val) {}
+NameToken::NameToken(string val) : Token(val, NAME) {}
 
 bool NameToken::Equals(Token &other) {
   // make sure that the passed type is the same

@@ -18,7 +18,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
     }
     return results;
   } catch (std::invalid_argument& e) {
-    cerr << e.what() << endl;
+    std::cerr << e.what() << std::endl;
   }
 }
 

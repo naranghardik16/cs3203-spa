@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Evaluator/PqlEvaluator.h"
-#include "Stubs/StubPkb.h"
+#include "PKB/Interfaces/PkbReadFacade.h"
 #include <memory>
 
 std::shared_ptr<Query> CreateParserOutput(Map declaration_map, Synonym synonym) {
@@ -11,14 +11,18 @@ std::shared_ptr<Query> CreateParserOutput(Map declaration_map, Synonym synonym) 
 
 //! This is temporary -- will need to edit as PKB functions are completed and parser is completed
 TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB") {
-  std::shared_ptr<PKB> pkb = std::make_shared<StubPkb>();
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
+
   SECTION("Test on variable synonym") {
     std::string query = "variable v;Select v";
 
     Map declaration_map = {{"v", "variable"}};
     auto correct_output = CreateParserOutput(declaration_map, "v");
 
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+
     auto eval_result = eval->Evaluate();
     std::unordered_set<std::string> correct_set({"a", "b", "c"});
     REQUIRE(eval_result == correct_set);
@@ -29,8 +33,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"s", "stmt"}};
     auto correct_output = CreateParserOutput(declaration_map, "s");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"1", "2", "3"});
@@ -42,8 +45,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"r", "read"}};
     auto correct_output = CreateParserOutput(declaration_map, "r");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"4", "5", "6"});
@@ -55,8 +57,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"p", "print"}};
     auto correct_output = CreateParserOutput(declaration_map, "p");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"6", "7", "8"});
@@ -68,8 +69,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"c", "call"}};
     auto correct_output = CreateParserOutput(declaration_map, "c");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"9", "10", "11"});
@@ -81,8 +81,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"w", "while"}};
     auto correct_output = CreateParserOutput(declaration_map, "w");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"12", "13", "14"});
@@ -95,8 +94,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"i", "if"}};
     auto correct_output = CreateParserOutput(declaration_map, "i");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"15", "16", "18"});
@@ -108,8 +106,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"a", "assign"}};
     auto correct_output = CreateParserOutput(declaration_map, "a");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"19", "20", "21"});
@@ -121,8 +118,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"c", "constant"}};
     auto correct_output = CreateParserOutput(declaration_map, "c");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"22", "23", "24"});
@@ -134,8 +130,7 @@ TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB")
 
     Map declaration_map = {{"p", "procedure"}};
     auto correct_output = CreateParserOutput(declaration_map, "p");
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
     std::unordered_set<std::string> correct_set({"eval", "parse", "validate"});

@@ -1,0 +1,27 @@
+#pragma once
+
+enum TokenType {
+  LEFT_PARENTHESIS,
+  RIGHT_PARENTHESIS,
+  LEFT_BRACE,
+  RIGHT_BRACE,
+  SEMICOLON,
+  DOUBLE_QUOTE,
+  SINGLE_EQUAL,
+  PLUS,
+  MINUS,
+  DIV,
+  MULTIPLY,
+  MOD,
+  LT,
+  LTE,
+  GT,
+  GTE,
+  DOUBLE_EQUALS,
+  NE,
+  AND,
+  OR,
+  NOT,
+  NAME,
+  INTEGER
+};
