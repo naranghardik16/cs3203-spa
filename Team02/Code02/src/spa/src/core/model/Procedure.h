@@ -2,8 +2,9 @@
 #include <vector>
 
 #include "core/model/Statement.h"
+#include "Entity.h"
 
-class Procedure {
+class Procedure : public Entity {
  public:
   typedef std::vector<Statement *> StmtListContainer;
   explicit Procedure(std::string proc_name);
