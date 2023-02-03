@@ -27,6 +27,6 @@ bool Parser::IsStatement(Line &line) {
 }
 
 bool Parser::IsProcedure(Line &line) {
-  return !line.empty() && line[0] == kProc;
+  return !line.empty() && line[0]->GetValue() == kProc;
 }
 

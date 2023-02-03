@@ -4,9 +4,9 @@
 Program::Program() : procedure_list_({}) {}
 
 void Program::AddToProcedureList(Procedure *proc) {
-  this->procedure_list_.push_back(proc);
+  procedure_list_.push_back(proc);
 }
 
 Program::ProcListContainer Program::GetProcedureList() {
-  return this->procedure_list_;
+  return procedure_list_;
 }
