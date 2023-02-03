@@ -15,12 +15,15 @@
 #include "./General/StringUtil.h"
 #include "./General/Utilities.h"
 #include "./Parser/Parser.h"
+#include "General/SpaException/SyntaxErrorException.h"
+
 
 using namespace std;
 
 class Tokenizer {
   inline static const int NAME_TYPE = 1;
   inline static const int INTEGER_TYPE = 2;
+  inline static const int NOT_SET = -1;
   inline static const string ARITHMETIC_OPERATOR_RULE = "[*+-/%]";
   inline static const string CONDITIONAL_OPERATOR_RULE = "(?:(&&)|(!)|(\\|\\|))";
   inline static const string RELATIONAL_OPERATOR_RULE = "(?:(<=)|(<)|(>=)|(>)|(==)|(!=))";
@@ -60,10 +63,11 @@ class Tokenizer {
       {SEMICOLON, true}
   };
   vector<string> SplitLines(istream & stream);
+  Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
+  void FormNameOrInteger(int *start_index, int *end_index, int current_index);
+  Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
  public:
   Tokenizer();
-  Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
-  Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
   Parser::TokenStream* Tokenize(istream &stream);
 };
 
