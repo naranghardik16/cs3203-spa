@@ -5,7 +5,6 @@
 #include "General/SpaException/SyntaxErrorException.h"
 #include "EntityParser.h"
 #include "ExpressionParserFactory.h"
-#include "../PunctuationType.h"
 
 class StatementParser : public EntityParser<Statement> {
  public:

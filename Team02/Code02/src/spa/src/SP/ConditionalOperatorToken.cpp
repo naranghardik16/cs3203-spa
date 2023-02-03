@@ -1,13 +1,7 @@
 #include "ConditionalOperatorToken.h"
 using namespace std;
 
-ConditionalOperatorToken::ConditionalOperatorToken(string val, ConditionalOperatorType type) : Token(val) {
-  type_ = type;
-}
-
-ConditionalOperatorType ConditionalOperatorToken::GetType() {
-  return type_;
-}
+ConditionalOperatorToken::ConditionalOperatorToken(string val, TokenType type) : Token(val, type) {}
 
 bool ConditionalOperatorToken::Equals(Token &other) {
   // make sure that the passed type is the same

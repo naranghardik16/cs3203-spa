@@ -22,35 +22,29 @@ Token* Tokenizer::MatchOtherToken(int first_char_index, string line, int* skip_i
   string first_and_second_char = line.substr(first_char_index, 2);
 
   if (regex_match(first_char, regex(ARITHMETIC_OPERATOR_RULE))) {
-//    cout << first_char << " matched\n";
-    return new ArithmeticOperatorToken(first_char, ARITHMETIC_OPERATOR_TYPES.find(first_char)->second);
+    return new ArithmeticOperatorToken(first_char, TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_and_second_char, regex(CONDITIONAL_OPERATOR_RULE))) {
-//    cout << first_and_second_char << " matched\n";
     *skip_index = first_char_index + 1;
-    return new ConditionalOperatorToken(first_and_second_char, CONDITONAL_OPERATOR_TYPES.find(first_and_second_char)->second);
+    return new ConditionalOperatorToken(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
   }
 
   if (regex_match(first_char, regex(CONDITIONAL_OPERATOR_RULE))) {
-//    cout << first_char << " matched\n";
-    return new ConditionalOperatorToken(first_char, CONDITONAL_OPERATOR_TYPES.find(first_char)->second);
+    return new ConditionalOperatorToken(first_char, TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_and_second_char, regex(RELATIONAL_OPERATOR_RULE))) {
-//    cout << first_and_second_char << " matched\n";
     *skip_index = first_char_index + 1;
-    return new RelationalOperatorToken(first_and_second_char, RELATIONAL_OPERATOR_TYPES.find(first_and_second_char)->second);
+    return new RelationalOperatorToken(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
   }
 
   if (regex_match(first_char, regex(RELATIONAL_OPERATOR_RULE))) {
-//    cout << first_char << " matched\n";
-    return new RelationalOperatorToken(first_char, RELATIONAL_OPERATOR_TYPES.find(first_char)->second);
+    return new RelationalOperatorToken(first_char, TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_char, regex(PUNCTUATION_OPERATOR_RULE))) {
-//    cout << first_char << " matched\n";
-    return new PunctuationToken(first_char, PUNCTUATION_TYPES.find(first_char)->second);
+    return new PunctuationToken(first_char, TOKEN_TYPES.find(first_char)->second);
   }
   return NULL;
 }
@@ -109,7 +103,7 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
       Token* prev_token = NULL;
 
       // check if it is time to form the name/integer token
-      if (type != NOT_SET && (isspace(lines[i][j]) || (current_token != NULL &&  InstanceOf<PunctuationToken>(current_token)))) {
+      if (type != NOT_SET && (isspace(lines[i][j]) || (current_token != NULL && InstanceOf<PunctuationToken>(current_token)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(start_index, j - start_index), type);
       }
 
@@ -132,11 +126,7 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
       line_of_tokens.push_back(current_token);
 
       // check if this is the end of the line
-      PunctuationToken *pot = dynamic_cast<PunctuationToken*>(current_token);
-      if (!pot) {
-        continue;
-      }
-      auto it = END_OF_LINE_TOKENS.find(pot->GetType());
+      auto it = END_OF_LINE_TOKENS.find(current_token->GetType());
       // key is not present
       if (it == END_OF_LINE_TOKENS.end()) {
         continue;
