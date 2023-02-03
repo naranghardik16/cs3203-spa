@@ -2,12 +2,14 @@
 #include <vector>
 
 #include "core/model/Statement.h"
+#include "Entity.h"
 
-class Procedure {
+class Procedure : public Entity {
  public:
   typedef std::vector<Statement *> StmtListContainer;
   explicit Procedure(std::string proc_name);
   void AddToStatementList(Statement *stmt);
+  void Accept(ParserVisitor* visitor);
   [[nodiscard]] StmtListContainer GetStatementList() const;
   [[nodiscard]] std::string GetProcedureName() const;
 

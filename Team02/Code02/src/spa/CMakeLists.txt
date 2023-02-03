@@ -8,7 +8,8 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Types/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Clause/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/PatternClauseEvaluator/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/SuchThatClauseEvaluator/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Util/*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Util/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.cpp")
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.h"
@@ -18,7 +19,8 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/ValidationHandler/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/AbstractDataModels/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Types/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Clause/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.h")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Clause/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h")
 
 add_library(spa ${srcs} ${headers})
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

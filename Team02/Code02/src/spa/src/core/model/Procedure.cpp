@@ -15,3 +15,7 @@ Procedure::StmtListContainer Procedure::GetStatementList() const {
 std::string Procedure::GetProcedureName() const {
   return procedure_name_;
 }
+
+void Procedure::Accept(ParserVisitor *visitor) {
+  visitor->VisitProcedure(this);
+}
