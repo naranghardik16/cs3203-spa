@@ -11,6 +11,6 @@
 
 class QueryParser {
  public:
-  std::shared_ptr<Query> ParseQuery(std::string query);
+  std::string ParseQuery(std::string query);
 };
 

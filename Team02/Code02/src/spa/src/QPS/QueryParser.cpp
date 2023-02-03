@@ -3,7 +3,7 @@
 #include "QPS/Util/PQLConstants.h"
 #include "Query.h"
 
-std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
+std::string QueryParser::ParseQuery(std::string query) {
   std::shared_ptr<QpsTokenizer> tk = std::make_shared<QpsTokenizer>();
   try {
     //!Split Query into declarations and select statement
@@ -34,10 +34,12 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
 
     //!consolidate parsing result
     std::shared_ptr<Query> query_ptr = std::make_shared<Query>(synonym, declaration_map, syntax_pair_list);
-    return query_ptr;
+    return "Pass";
 
   } catch (const SyntaxErrorException& e) {
+    return "Syntax Error";
   } catch (const SemanticErrorException& e) {
+    return "Semantic Error";
   }
 }
 
