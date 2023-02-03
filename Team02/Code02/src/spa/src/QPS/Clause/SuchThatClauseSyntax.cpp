@@ -10,6 +10,10 @@
 
 SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
 
+void SuchThatClauseSyntax::Accept(std::shared_ptr<Visitor> visitor) {
+  visitor->VisitSuchThatClause(this);
+}
+
 bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
   SuchThatClauseSyntax *sc = dynamic_cast<SuchThatClauseSyntax*>(&other);

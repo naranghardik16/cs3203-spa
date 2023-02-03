@@ -3,6 +3,10 @@
 
 PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
 
+void PatternClauseSyntax::Accept(std::shared_ptr<Visitor> visitor) {
+  visitor->VisitPatternClause(this);
+}
+
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
   PatternClauseSyntax *pc = dynamic_cast<PatternClauseSyntax*>(&other);

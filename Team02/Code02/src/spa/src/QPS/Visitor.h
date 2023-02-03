@@ -5,8 +5,10 @@
 #include "ValidationHandler/StmtToStmtHandler.h"
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
-#include "QPS/Clause/SuchThatClauseSyntax.h"
-#include "QPS/Clause/PatternClauseSyntax.h"
+
+class ClauseSyntax;
+class SuchThatClauseSyntax;
+class PatternClauseSyntax;
 
 class Visitor {
  public:
