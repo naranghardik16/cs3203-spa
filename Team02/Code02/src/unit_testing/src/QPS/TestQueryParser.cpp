@@ -42,8 +42,13 @@ TEST_CASE("Test Query Parser") {
     REQUIRE(qp->ParseQuery(query) == "Semantic Error");
   }
 
+  SECTION("Test valid query - valid pattern expr") {
+    std::string query("assign a; Select a pattern a(_, _)");
+    REQUIRE(qp->ParseQuery(query) == "Pass");
+  }
+
   SECTION("Test invalid query - invalid pattern expr - throw syntax error") {
-    std::string query("assign a; Select a such that Follows(a, _) pattern a(_, _"")");
+    std::string query("assign a; Select a such that Follows(a, _) pattern a(_, _\"\")");
     REQUIRE(qp->ParseQuery(query) == "Syntax Error");
   }
 }
