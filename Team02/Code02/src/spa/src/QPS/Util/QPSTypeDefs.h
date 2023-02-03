@@ -19,9 +19,7 @@ typedef std::string SecondParameter;
 typedef std::pair<FirstParameter, SecondParameter> ParameterPair;
 //refers to ref-ref/syn assign
 typedef std::pair<DesignEntity, ParameterPair> SyntaxPair;
-
 typedef std::vector<std::shared_ptr<ClauseSyntax>> ClauseSyntaxPtrList;
-typedef std::pair<Synonym, std::pair<ClauseSyntaxPtrList, Map>> ParserOutput;
 
 typedef std::string SingleConstraint;
 //! E.g. {1,2,3,4} for Select a (assign) is a SingleConstraintSet

@@ -3,12 +3,13 @@
 #include "General/StringUtil.h"
 #include <utility>
 #include "General/SpaException/SyntaxErrorException.h"
-#include "PQLConstants.h"
+#include "QPS/Util/PQLConstants.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "Clause/SuchThatClauseSyntax.h"
 #include "Clause/PatternClauseSyntax.h"
-#include "QPSTypeDefs.h"
-#include "QueryUtil.h"
+#include "QPS/Util/QPSTypeDefs.h"
+#include "QPS/Util/QueryUtil.h"
+#include "ExpressionParser.h"
 
 /*
  * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
@@ -185,6 +186,7 @@ std::vector<std::shared_ptr<ClauseSyntax>> Tokenizer::ParseSubClauses(const std:
     start_index = next_index;
     if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kPatternRegex) == 0) {
       SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kPatternStartIndicator);
+      syntax.second.second = ExpressionParser::ParseExpressionSpec(syntax.second.second);
       std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
       syntax_pair_list.push_back(pattern_syntax);
     } else if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kSuchThatRegex) == 0) {

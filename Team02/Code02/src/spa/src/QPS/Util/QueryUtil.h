@@ -17,6 +17,10 @@ class QueryUtil {
 
   static bool IsDesignEntity(const std::string& s);
 
+  static bool IsQuoted(const std::string& s);
+
+  static std::string RemoveQuotes(const std::string& s);
+
   static bool IsRelationshipReference(const std::string& s);
 
   static bool IsCharacterString(const std::string& s);

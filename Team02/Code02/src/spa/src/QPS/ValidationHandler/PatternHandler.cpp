@@ -1,6 +1,6 @@
 #include "PatternHandler.h"
-#include "QPS/QueryUtil.h"
-#include "QPS/QPSTypeDefs.h"
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Util/QPSTypeDefs.h"
 const std::string kEntityKey = "Entity";
 const std::string kAssignEntity = "assign";
 const std::string kVariableEntity = "variable";

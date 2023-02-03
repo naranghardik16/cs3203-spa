@@ -1,5 +1,5 @@
 #include "StmtToStmtHandler.h"
-#include "QPS/QueryUtil.h"
+#include "QPS/Util/QueryUtil.h"
 #include <iostream>
 
 const std::unordered_set<std::string> kRel({"Follows", "Follows*", "Parent", "Parent*"});

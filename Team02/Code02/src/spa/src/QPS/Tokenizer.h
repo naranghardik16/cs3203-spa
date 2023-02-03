@@ -7,10 +7,7 @@
 #include "General/StringUtil.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Clause/ClauseSyntax.h"
-
-typedef std::pair<std::string, std::pair<std::string, std::string>> SyntaxPair;
-typedef std::pair<std::string, std::string> ParameterPair;
-typedef std::pair<std::vector<std::string>, std::string> QueryStatementPair;
+#include "QPS/Util/QPSTypeDefs.h"
 
 class Tokenizer {
 
