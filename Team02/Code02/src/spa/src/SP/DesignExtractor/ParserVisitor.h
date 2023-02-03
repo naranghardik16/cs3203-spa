@@ -9,11 +9,15 @@ class Program;
 class Procedure;
 class Statement;
 class Expression;
+class Variable;
+class Constant;
 
 class ParserVisitor {
  public:
   void VisitProgram(Program *program);
   virtual void VisitProcedure(Procedure *procedure) = 0;
+  virtual void VisitVariable(Variable *variable) = 0;
+  virtual void VisitConstant(Constant *constant) = 0;
   void VisitStatement(Statement *statement);
   void VisitExpression(Expression *expression);
 };
