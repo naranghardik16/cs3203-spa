@@ -1,6 +1,6 @@
 #include "PatternHandler.h"
 
-void PatternHandler::HandleSyntax(ClauseSyntax *clause) {
+void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string syn_assign(clause->GetEntity());
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
@@ -20,7 +20,7 @@ void PatternHandler::HandleSyntax(ClauseSyntax *clause) {
   return;
 }
 
-void PatternHandler::HandleSemantic(ClauseSyntax *clause, Map &declaration) {
+void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
   std::string syn_assign(clause->GetEntity());
   std::string arg_1(clause->GetFirstParameter());
 

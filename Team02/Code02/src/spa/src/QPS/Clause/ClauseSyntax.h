@@ -5,6 +5,7 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Evaluator/ClauseEvaluator.h"
 
+
 class ClauseSyntax {
  private:
   SyntaxPair pair_;

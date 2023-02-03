@@ -1,6 +1,6 @@
-#include "ClauseSyntaxVisitor.h"
+#include "ClauseSyntaxValidator.h"
 
-void ClauseSyntaxVisitor::VisitSuchThatClause(SuchThatClauseSyntax *clause) const {
+void ClauseSyntaxValidator::ValidateSuchThatClauseSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::shared_ptr<SuchThatBaseHandler> handler_1 = std::make_shared<SuchThatBaseHandler>();
   std::shared_ptr<StmtToStmtHandler> handler_2 = std::make_shared<StmtToStmtHandler>();
   std::shared_ptr<StmtProcToVarHandler> handler_3 = std::make_shared<StmtProcToVarHandler>();
@@ -10,7 +10,7 @@ void ClauseSyntaxVisitor::VisitSuchThatClause(SuchThatClauseSyntax *clause) cons
   handler_1->HandleSyntax(clause);
 }
 
-void ClauseSyntaxVisitor::VisitPatternClause(PatternClauseSyntax *clause) const {
+void ClauseSyntaxValidator::ValidatePatternClauseSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::shared_ptr<PatternHandler> handler = std::make_shared<PatternHandler>();
 
   handler->HandleSyntax(clause);

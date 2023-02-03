@@ -25,12 +25,12 @@ class Handler {
    *
    * @param clause contains parameters of either such that clause or pattern clause
   */
-  virtual void HandleSyntax(ClauseSyntax *clause);
+  virtual void HandleSyntax(std::shared_ptr<ClauseSyntax> clause);
 
   /*
    * Semantic handle method to be implemented in derived class.
    *
    * @param clause contains parameters of either such that clause or pattern clause
   */
-  virtual void HandleSemantic(ClauseSyntax *clause, Map &declaration);
+  virtual void HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration);
 };

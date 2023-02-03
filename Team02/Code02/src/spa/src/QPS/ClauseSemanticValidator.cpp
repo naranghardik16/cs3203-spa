@@ -1,8 +1,10 @@
-#include "ClauseSemanticVisitor.h"
+#include "ClauseSemanticValidator.h"
 
-ClauseSemanticVisitor::ClauseSemanticVisitor(Map &declaration) : declaration_(declaration) {}
+ClauseSemanticValidator::ClauseSemanticValidator(Map &declaration) : declaration_(declaration) {
+  has_semantic_error_ = false;
+}
 
-void ClauseSemanticVisitor::VisitSuchThatClause(SuchThatClauseSyntax *clause) const {
+void ClauseSemanticValidator::ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyntax> clause) {
   std::shared_ptr<SuchThatBaseHandler> handler_1 = std::make_shared<SuchThatBaseHandler>();
   std::shared_ptr<StmtToStmtHandler> handler_2 = std::make_shared<StmtToStmtHandler>();
   std::shared_ptr<StmtProcToVarHandler> handler_3 = std::make_shared<StmtProcToVarHandler>();
@@ -12,7 +14,7 @@ void ClauseSemanticVisitor::VisitSuchThatClause(SuchThatClauseSyntax *clause) co
   handler_1->HandleSemantic(clause, declaration_);
 }
 
-void ClauseSemanticVisitor::VisitPatternClause(PatternClauseSyntax *clause) const {
+void ClauseSemanticValidator::ValidatePatternClauseSemantic(std::shared_ptr<ClauseSyntax> clause) {
   std::shared_ptr<PatternHandler> handler = std::make_shared<PatternHandler>();
 
   handler->HandleSemantic(clause, declaration_);

@@ -5,13 +5,10 @@
 #include "ValidationHandler/StmtToStmtHandler.h"
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
+#include "QPS/Clause/ClauseSyntax.h"
 
-class ClauseSyntax;
-class SuchThatClauseSyntax;
-class PatternClauseSyntax;
-
-class Visitor {
+class ClauseSyntaxValidator{
  public:
-  virtual void VisitSuchThatClause(SuchThatClauseSyntax *clause) const = 0;
-  virtual void VisitPatternClause(PatternClauseSyntax *clause) const = 0;
+  void ValidateSuchThatClauseSyntax(std::shared_ptr<ClauseSyntax> clause);
+  void ValidatePatternClauseSyntax(std::shared_ptr<ClauseSyntax> clause);
 };

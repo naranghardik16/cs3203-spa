@@ -5,6 +5,6 @@
 
 class PatternHandler : public Handler {
  public:
-  void HandleSyntax(ClauseSyntax *clause) override;
-  void HandleSemantic(ClauseSyntax *clause, Map &declaration) override;
+  void HandleSyntax(std::shared_ptr<ClauseSyntax> clause) override;
+  void HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) override;
 };

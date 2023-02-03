@@ -1,6 +1,6 @@
 #include "SuchThatBaseHandler.h"
 
-void SuchThatBaseHandler::HandleSyntax(ClauseSyntax *clause) {
+void SuchThatBaseHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string rel_ref(clause->GetEntity());
 
   //Check if relRef valid
@@ -13,7 +13,7 @@ void SuchThatBaseHandler::HandleSyntax(ClauseSyntax *clause) {
   return Handler::HandleSyntax(clause);
 }
 
-void SuchThatBaseHandler::HandleSemantic(ClauseSyntax *clause, Map &declaration) {
+void SuchThatBaseHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 

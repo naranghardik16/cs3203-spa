@@ -1,6 +1,6 @@
 #include "StmtToStmtHandler.h"
 
-void StmtToStmtHandler::HandleSyntax(ClauseSyntax *clause) {
+void StmtToStmtHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string rel_ref(clause->GetEntity());
 
   if (!CanHandler(rel_ref)) {
@@ -18,7 +18,7 @@ void StmtToStmtHandler::HandleSyntax(ClauseSyntax *clause) {
   return;
 }
 
-void StmtToStmtHandler::HandleSemantic(ClauseSyntax *clause, Map &declaration) {
+void StmtToStmtHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
   std::string rel_ref(clause->GetEntity());
 
   if (!CanHandler(rel_ref)) {
