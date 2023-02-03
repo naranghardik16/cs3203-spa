@@ -8,5 +8,5 @@ Constant *ConstantParser::ParseEntity(Line &line) {
   if (line.size() == 1) {
     return new Constant(line[0]->GetValue());
   }
-  throw SyntaxErrorException("Has more expressions other than a Constant");
+  throw SemanticErrorException("Has more expressions other than a Constant");
 }
