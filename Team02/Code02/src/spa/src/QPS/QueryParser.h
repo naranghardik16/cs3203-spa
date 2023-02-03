@@ -4,7 +4,6 @@
 #include <memory>
 #include "General/LexicalRuleValidator.h"
 #include "Tokenizer.h"
-#include "QpsValidator.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "QPS/Util/QPSTypeDefs.h"

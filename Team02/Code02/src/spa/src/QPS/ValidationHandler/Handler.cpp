@@ -7,8 +7,16 @@ std::shared_ptr<Handler> Handler::SetNext(std::shared_ptr<Handler> handler) {
   return handler;
 }
 
-void Handler::Handle(Map &declaration, Map &clause) {
+void Handler::HandleSyntax(ClauseSyntax *clause) {
   if (this->next_handler_) {
-    return this->next_handler_->Handle(declaration, clause);
+    return this->next_handler_->HandleSyntax(clause);
   }
+  throw SyntaxErrorException();
+}
+
+void Handler::HandleSemantic(ClauseSyntax *clause, Map &declaration) {
+  if (this->next_handler_) {
+    return this->next_handler_->HandleSemantic(clause, declaration);
+  }
+  throw SemanticErrorException();
 }

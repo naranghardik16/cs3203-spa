@@ -1,92 +1,83 @@
 #include "catch.hpp"
 
 #include "QPS/ValidationHandler/StmtToStmtHandler.h"
+#include "QPS/Clause/SuchThatClauseSyntax.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "General/SpaException/SyntaxErrorException.h"
 
-const std::string kEntityKey = "Entity";
-const std::string kAssignEntity = "assign";
-const std::string kVariableEntity = "variable";
-const std::string kFirstParameterKey = "First Parameter";
-const std::string kSecondParameterKey = "Second Parameter";
-
-TEST_CASE("Test StmtToStmtHandler") {
+TEST_CASE("Test StmtToStmtHandler handlerSyntax") {
   StmtToStmtHandler handler;
 
-  SECTION("Test valid clause - ref(assign, print)") {
+  SECTION("Test valid clause") {
+    SuchThatClauseSyntax clause{{"Follows", {"a", "p"}}};
+
+    REQUIRE_NOTHROW(handler.HandleSyntax(&clause));
+  }
+
+  SECTION("Test invalid clause syntax - invalid rel") {
+    SuchThatClauseSyntax clause{{"Followed", {"a", "p"}}};
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid clause syntax - arg_1 not stmt ref") {
+    SuchThatClauseSyntax clause{{"Follows", {"\"a\"", "p"}}};
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid clause syntax - arg_2 not stmt ref") {
+    SuchThatClauseSyntax clause{{"Follows", {"a", "\"p\""}}};
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
+  }
+}
+
+TEST_CASE("Test StmtToStmtHandler handlerSemantic") {
+  StmtToStmtHandler handler;
+
+  SECTION("Test valid clause semantic - ref(stmt, stmt)") {
+    Map declaration{{"a", "stmt"},
+                    {"p", "stmt"}};
+
+    SuchThatClauseSyntax clause{{"Follows", {"a", "p"}}};
+
+    REQUIRE_NOTHROW(handler.HandleSemantic(&clause, declaration));
+  }
+
+  SECTION("Test invalid clause syntax - invalid rel") {
+    Map declaration{{"a", "stmt"},
+                    {"p", "stmt"}};
+
+    SuchThatClauseSyntax clause{{"Uses", {"a", "p"}}};
+
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
+  }
+
+  SECTION("Test valid clause semantic - ref(assign, assign)") {
     Map declaration{{"a", "assign"},
-                    {"p", "print"}};
+                    {"p", "assign"}};
 
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "p"}};
+    SuchThatClauseSyntax clause{{"Follows", {"a", "p"}}};
 
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
-  }
-
-  SECTION("Test valid clause - ref(stmt, stmt)") {
-    Map declaration{{"a", "stmt"},
-                    {"p", "stmt"}};
-
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "p"}};
-
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
-  }
-
-  SECTION("Test invalid clause - invalid ref (no throw error)") {
-    Map declaration{{"a", "stmt"},
-                    {"p", "stmt"}};
-
-    Map clause{{kEntityKey, "Followed"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "p"}};
-
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
-  }
-
-  SECTION("Test invalid clause - arg_1 not stmt ref") {
-    Map declaration{{"a", "stmt"},
-                    {"p", "stmt"}};
-
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "\"a\""},
-               {kSecondParameterKey, "p"}};
-
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SyntaxErrorException);
-  }
-
-  SECTION("Test invalid clause - arg_2 not stmt ref") {
-    Map declaration{{"a", "stmt"},
-                    {"p", "stmt"}};
-
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "\"p\""}};
-
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SyntaxErrorException);
+    REQUIRE_NOTHROW(handler.HandleSemantic(&clause, declaration));
   }
 
   SECTION("Test invalid clause - arg_1 not stmt entity") {
     Map declaration{{"a", "variable"},
                     {"p", "stmt"}};
 
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "p"}};
+    SuchThatClauseSyntax clause{{"Follows", {"a", "p"}}};
 
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SemanticErrorException);
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
   }
 
   SECTION("Test invalid clause - arg_2 not stmt entity") {
     Map declaration{{"a", "read"},
                     {"p", "variable"}};
 
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "p"}};
+    SuchThatClauseSyntax clause{{"Follows", {"a", "p"}}};
 
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SemanticErrorException);
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
   }
 }

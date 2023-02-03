@@ -1,88 +1,58 @@
 #include "catch.hpp"
 
 #include "QPS/ValidationHandler/SuchThatBaseHandler.h"
+#include "QPS/Clause/SuchThatClauseSyntax.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "General/SpaException/SyntaxErrorException.h"
 
-typedef std::unordered_map<std::string, std::string> Map;
-
-const std::string kEntityKey = "Entity";
-const std::string kFirstParameterKey = "First Parameter";
-const std::string kSecondParameterKey = "Second Parameter";
-
-TEST_CASE("Test SuchThatBaseHandler") {
+TEST_CASE("Test SuchThatBaseHandler HandleSyntax") {
   SuchThatBaseHandler handler;
 
-  SECTION("Test valid clause") {
-    Map declaration{{"a", "assign"},
-                    {"v", "variable"}};
+  SECTION("Test valid clause syntax - throw exception from default handler") {
+    SuchThatClauseSyntax clause{{"Uses", {"a", "_"}}};
 
-    Map clause{{kEntityKey, "Uses"},
-        {kFirstParameterKey, "a"},
-        {kSecondParameterKey, "v"}};
-
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
   }
 
-  SECTION("Test valid clause, underscore") {
-    Map declaration{{"a", "assign"},
-                    {"v", "variable"}};
 
-    Map clause{{kEntityKey, "Uses"},
-               {kFirstParameterKey, "_"},
-               {kSecondParameterKey, "_"}};
+  SECTION("Test valid clause syntax with underscores - throw exception from default handler") {
+    SuchThatClauseSyntax clause{{"Uses", {"_", "_"}}};
 
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
   }
 
-  SECTION("Test pass invalid clause for Follow relation with entRef as argument as base handler does not validate it") {
+  SECTION("Test invalid clause syntax, invalid relRef") {
+    SuchThatClauseSyntax clause{{"Usesss", {"a", "v"}}};
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(&clause), SyntaxErrorException);
+  }
+}
+
+TEST_CASE("Test SuchThatBaseHandler HandleSemantic - throw exception from default handler") {
+  SuchThatBaseHandler handler;
+
+  SECTION("Test valid clause semantic") {
     Map declaration{{"a", "assign"},
-                    {"v", "variable"}};
+                    {"v" , "variable"}};
 
-    Map clause{{kEntityKey, "Follows"},
-               {kFirstParameterKey, "_"},
-               {kSecondParameterKey, "\"x\""}};
+    SuchThatClauseSyntax clause{{"Uses", {"a", "v"}}};
 
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
   }
 
-  SECTION("Test empty clause") {
-    Map declaration{{"a", "assign"},
-                    {"v", "variable"}};
-
-    Map clause{};
-
-    REQUIRE_NOTHROW(handler.Handle(declaration, clause));
-  }
-
-  SECTION("Test invalid clause, invalid relRef") {
-    Map declaration{{"a", "assign"},
-                    {"v", "variable"}};
-
-    Map clause{{kEntityKey, "Usesss"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "v"}};
-
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SyntaxErrorException);
-  }
-
-  SECTION("Test invalid clause, synonym not declared") {
+  SECTION("Test invalid clause semantic, synonym not declared") {
     Map declaration{{"a", "assign"}};
 
-    Map clause{{kEntityKey, "Uses"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "v"}};
+    SuchThatClauseSyntax clause{{"Uses", {"a", "v"}}};
 
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SemanticErrorException);
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
   }
 
-  SECTION("Test invalid clause, synonym not declared - empty declaration map") {
+  SECTION("Test invalid clause semantic, empty declaration map") {
     Map declaration{};
 
-    Map clause{{kEntityKey, "Uses"},
-               {kFirstParameterKey, "a"},
-               {kSecondParameterKey, "v"}};
+    SuchThatClauseSyntax clause{{"Uses", {"a", "v"}}};
 
-    REQUIRE_THROWS_AS(handler.Handle(declaration, clause), SemanticErrorException);
+    REQUIRE_THROWS_AS(handler.HandleSemantic(&clause, declaration), SemanticErrorException);
   }
 }

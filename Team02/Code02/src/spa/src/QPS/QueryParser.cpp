@@ -5,7 +5,6 @@
 
 std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
-  std::shared_ptr<QpsValidator> validator = std::make_shared<QpsValidator>();
   try {
     //!Split Query into declarations and select statement
     std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);
@@ -31,7 +30,7 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
 
     //syntax validation followed by semantic validation using Visitor pattern
     for (const std::shared_ptr<ClauseSyntax>& kClauseSyntax : syntax_pair_list) {
-      validator->ValidateSubClause(declaration_map, kClauseSyntax);
+      //validator->ValidateSubClause(declaration_map, kClauseSyntax);
     }
 
     //!consolidate parsing result
