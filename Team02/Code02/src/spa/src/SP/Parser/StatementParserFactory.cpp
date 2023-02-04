@@ -1,5 +1,6 @@
 #include "StatementParserFactory.h"
 #include "PrintStatementParser.h"
+#include "ReadStatementParser.h"
 
 StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     StatementParserFactory::Line> &tokens) {
@@ -8,9 +9,10 @@ StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     return new AssignStatementParser();
   } else if (CheckStatementType(line, "print")) {
     return new PrintStatementParser();
+  } else if (CheckStatementType(line, "read")) {
+    return new ReadStatementParser();
   }
-
-  return nullptr;
+  throw SemanticErrorException("Unknown Statement type");
 }
 bool StatementParserFactory::CheckStatementType(StatementParserFactory::Line &line,
                                                 std::string_view type_to_check) {
