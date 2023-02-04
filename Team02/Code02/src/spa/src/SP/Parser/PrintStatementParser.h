@@ -1,8 +1,12 @@
-//
-// Created by Sourabh Jaiswal on 5/2/23.
-//
+#pragma once
+#include "StatementParser.h"
+#include "core/model/Program.h"
+#include "core/model/PrintStatement.h"
 
-#ifndef SPA_SRC_SPA_SRC_SP_PARSER_PRINTSTATEMENTPARSER_H_
-#define SPA_SRC_SPA_SRC_SP_PARSER_PRINTSTATEMENTPARSER_H_
-
-#endif //SPA_SRC_SPA_SRC_SP_PARSER_PRINTSTATEMENTPARSER_H_
+class PrintStatementParser : public StatementParser {
+ public:
+  PrintStatementParser() = default;
+  PrintStatement *ParseEntity(TokenStream &tokens) override;
+  [[nodiscard]] std::string ExtractVariableName(Line &line) const;
+  void CheckEndOfStatement(Line &line) const;
+};

@@ -50,14 +50,20 @@ TEST_CASE("Check if Parser works with only assign statement") {
     auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_var);
     auto var = assign_stmt->GetVariable();
     auto expression = assign_stmt->GetExpression();
-    REQUIRE(assign_stmt->GetStatementNumber() == 1);
-    REQUIRE(var == Variable("x"));
-    REQUIRE(expression == Expression("y", "variable"));
+    SECTION(
+        "Check if the AssignStatement has correct fields with Variable expression") {
+      REQUIRE(assign_stmt->GetStatementNumber() == 1);
+      REQUIRE(var == Variable("x"));
+      REQUIRE(expression == Expression("y", "variable"));
+    }
     auto stmt_const = program.GetProcedureList()[0]->GetStatementList()[1];
     assign_stmt = dynamic_cast<AssignStatement *>(stmt_const);
     expression = assign_stmt->GetExpression();
-    REQUIRE(assign_stmt->GetStatementNumber() == 2);
-    REQUIRE(expression == Expression("10", "constant"));
+    SECTION(
+        "Check if the AssignStatement has correct fields with Constant expression") {
+      REQUIRE(assign_stmt->GetStatementNumber() == 2);
+      REQUIRE(expression == Expression("10", "constant"));
+    }
   } catch (SpaException &e) {
     cout << e.what() << endl;
     REQUIRE(0);

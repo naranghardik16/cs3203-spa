@@ -7,6 +7,6 @@ class AssignStatementParser : public StatementParser {
  public:
   AssignStatementParser() = default;
   AssignStatement *ParseEntity(TokenStream &tokens) override;
-  [[nodiscard]] std::string_view ExtractVariableName(Line &line) const;
+  [[nodiscard]] std::string ExtractVariableName(Line &line) const;
   void CheckEndOfStatement(Line &line) const;
 };
