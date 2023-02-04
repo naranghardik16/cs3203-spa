@@ -9,6 +9,7 @@ class EntityExtractor : public ParserVisitor {
   PKB pkb_ = PKB();
   PkbWriteFacade *pkb_write_facade_ = new PkbWriteFacade(pkb_);
  public:
+  EntityExtractor();
   void VisitProgram(Program *program);
   void VisitProcedure(Procedure *procedure);
   void VisitVariable(Variable *variable);

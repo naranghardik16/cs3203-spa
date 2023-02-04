@@ -1,13 +1,17 @@
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
+#pragma once
+#include "DesignExtractor.h"
 
-using namespace std;
+DesignExtractor::DesignExtractor() {};
 
+void DesignExtractor::ExtractDesign(Program *program) {
+  EntityExtractor *entity_extractor = new EntityExtractor();
+  Program::ProcListContainer procedures = program->GetProcedureList();
 
-#include "PKB/PKB.h"
-
-int DesignExtractor () {
-	return 0;
+  for (Procedure *p : procedures) {
+    p->Accept(entity_extractor);
+    Procedure::StmtListContainer statements = p->GetStatementList();
+//    for (Statement *s : statements) {
+//
+//    }
+  }
 }
