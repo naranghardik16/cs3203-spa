@@ -13,7 +13,6 @@
 #include "ConditionalOperatorToken.h"
 #include "General/LexicalRuleValidator.h"
 #include "./General/StringUtil.h"
-#include "./General/Utilities.h"
 #include "./Parser/Parser.h"
 #include "General/SpaException/SyntaxErrorException.h"
 
@@ -28,7 +27,7 @@ class Tokenizer {
   inline static const string CONDITIONAL_OPERATOR_RULE = "(?:(&&)|(!)|(\\|\\|))";
   inline static const string RELATIONAL_OPERATOR_RULE = "(?:(<=)|(<)|(>=)|(>)|(==)|(!=))";
   inline static const string PUNCTUATION_OPERATOR_RULE = "[{}();=\"]";
-  inline static const unordered_map<string, PunctuationType> PUNCTUATION_TYPES = {
+  inline static const unordered_map<string, TokenType> TOKEN_TYPES = {
       {"{", LEFT_PARENTHESIS},
       {"}", RIGHT_PARENTHESIS},
       {"(", LEFT_BRACE},
@@ -36,32 +35,28 @@ class Tokenizer {
       {";", SEMICOLON},
       {"\"", DOUBLE_QUOTE},
       {"=", SINGLE_EQUAL},
-  };
-  inline static const unordered_map<string, ArithmeticOperatorType> ARITHMETIC_OPERATOR_TYPES = {
       {"+", PLUS},
       {"-", MINUS},
       {"/", DIV},
       {"*", MULTIPLY},
-      {"%", MOD}
-  };
-  inline static const unordered_map<string, RelationalOperatorType> RELATIONAL_OPERATOR_TYPES = {
+      {"%", MOD},
       {"<", LT},
       {"<=", LTE},
       {">", GT},
       {">=", GTE},
       {"==", DOUBLE_EQUALS},
-      {"!=", NE}
-  };
-  inline static const unordered_map<string, ConditionalOperatorType> CONDITONAL_OPERATOR_TYPES = {
+      {"!=", NE},
       {"&&", AND},
       {"||", OR},
       {"!", NOT}
   };
-  inline static const unordered_map<PunctuationType, bool> END_OF_LINE_TOKENS = {
+
+  inline static const unordered_map<TokenType, bool> END_OF_LINE_TOKENS = {
       {LEFT_PARENTHESIS, true },
       {RIGHT_PARENTHESIS, true},
       {SEMICOLON, true}
   };
+
   vector<string> SplitLines(istream & stream);
   Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
   void FormNameOrInteger(int *start_index, int *end_index, int current_index);

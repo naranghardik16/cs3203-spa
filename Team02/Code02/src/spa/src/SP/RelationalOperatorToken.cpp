@@ -1,13 +1,7 @@
 #include "RelationalOperatorToken.h"
 using namespace std;
 
-RelationalOperatorToken::RelationalOperatorToken(string val, RelationalOperatorType type) : Token(val) {
-  type_ = type;
-}
-
-RelationalOperatorType RelationalOperatorToken::GetType() {
-  return type_;
-}
+RelationalOperatorToken::RelationalOperatorToken(string val, TokenType type) : Token(val, type) {}
 
 bool RelationalOperatorToken::Equals(Token &other) {
   // make sure that the passed type is the same

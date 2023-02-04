@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "QPS/QueryUtil.h"
+#include "QPS/Util/QueryUtil.h"
 
 TEST_CASE("Check if isStmtRef follows rules correctly") {
     SECTION("Test valid cases") {

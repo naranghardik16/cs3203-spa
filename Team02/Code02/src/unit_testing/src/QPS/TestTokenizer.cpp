@@ -1,13 +1,13 @@
 #pragma once
-#include "QPS/Tokenizer.h"
+#include "QPS/QpsTokenizer.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "catch.hpp"
-#include "QPS/PQLConstants.h"
+#include "QPS/Util/PQLConstants.h"
 #include "QPS/Clause/SuchThatClauseSyntax.h"
 #include "QPS/Clause/PatternClauseSyntax.h"
 
-auto tokenizer = std::make_shared<Tokenizer>();
+auto tokenizer = std::make_shared<QpsTokenizer>();
 
 SyntaxPair CreateCorrectSyntaxPair(std::string entity, std::string first_parameter, std::string second_parameter) {
   auto parameter_pair = std::pair<std::string, std::string>(first_parameter, second_parameter);
