@@ -7,7 +7,7 @@ PrintStatement *PrintStatementParser::ParseEntity(TokenStream &tokens) {
   Variable var(var_name);
   auto print_stmt =
       new PrintStatement(Program::GetAndIncreaseStatementNumber(), var, "main");
-
+  CheckEndOfStatement(line);
   return print_stmt;
 }
 
@@ -27,4 +27,14 @@ std::string PrintStatementParser::ExtractVariableName(Line &line) const {
 
   return line[1]->GetValue();
 
+}
+
+void PrintStatementParser::CheckEndOfStatement(Line &line) const {
+  if ((*prev(line.end()))->GetValue() != ";") {
+    throw SyntaxErrorException("AssignStatement does not end with ;");
+  }
+
+  if (line.size() > 3) {
+    throw SyntaxErrorException("Too many tokens in a PrintStatement");
+  }
 }
