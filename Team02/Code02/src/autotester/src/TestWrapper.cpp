@@ -25,7 +25,10 @@ void TestWrapper::parse(std::string filename) {
 void TestWrapper::evaluate(std::string query, std::list<std::string> &results) {
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
+  PKB pkb;
+  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(pkb);
 
+  Qps::ProcessQuery(query, results, pkb_read);
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
 }
