@@ -28,7 +28,7 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   //!Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
   auto syntax_pair_list = tk->ParseSubClauses(remaining_clause);
 
-  if (tk->semantic_validator_->has_semantic_error_) {
+  if (declaration_map.find(synonym) == declaration_map.end() || tk->semantic_validator_->has_semantic_error_) {
     throw SemanticErrorException();
   }
 
