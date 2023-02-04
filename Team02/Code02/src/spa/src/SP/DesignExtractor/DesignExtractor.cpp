@@ -1,10 +1,12 @@
 #pragma once
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor() {};
+DesignExtractor::DesignExtractor(PKB *pkb) {
+  pkb_ = pkb;
+};
 
 void DesignExtractor::ExtractDesign(Program *program) {
-  EntityExtractor *entity_extractor = new EntityExtractor();
+  EntityExtractor *entity_extractor = new EntityExtractor(pkb_);
   Program::ProcListContainer procedures = program->GetProcedureList();
 
   for (Procedure *p : procedures) {

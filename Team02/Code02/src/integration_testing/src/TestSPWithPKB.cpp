@@ -12,7 +12,10 @@
 TEST_CASE("Check if everything works together") {
   try {
     Tokenizer* tokenizer = new Tokenizer();
-    string input = "procedure computeCentroid {"
+    string input = "procedure main {\n"
+                   "  flag = 0;\n"
+                   "}\n"
+                   "procedure computeCentroid {\n"
                    "  count = 0;\n"
                    "  cenX = 0;\n"
                    "  cenY = 0;\n"
@@ -25,15 +28,24 @@ TEST_CASE("Check if everything works together") {
     Parser *parser = new Parser();
     Program program = parser->ParseSource(*tokens);
 
-    DesignExtractor *design_extractor = new DesignExtractor();
+    PKB *pkb = new PKB();
+    DesignExtractor *design_extractor = new DesignExtractor(pkb);
     design_extractor->ExtractDesign(&program);
 
-    PKB pkb = PKB();
-    PkbReadFacade *pkb_read_facade = new PkbReadFacade(pkb);
-    //#TODO: Implement portion when PKB is completed
+    PkbReadFacade *pkb_read_facade = new PkbReadFacade(*pkb);
     SECTION("Check if Accept(Procedure) works") {
-      pkb_read_facade->GetProcedureStore();
-      REQUIRE(1 == 1);
+      KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> procedure_store = pkb_read_facade->GetProcedureStore();
+      auto it = procedure_store.map.find("computeCentroid");
+      if (it == procedure_store.map.end()) {
+        FAIL();
+      }
+
+      it = procedure_store.map.find("main");
+      if (it == procedure_store.map.end()) {
+        FAIL();
+      } else {
+        SUCCEED();
+      }
     }
   } catch (SpaException *e) {
     cout << e->what();

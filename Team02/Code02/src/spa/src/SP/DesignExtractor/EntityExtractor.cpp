@@ -1,7 +1,10 @@
 #pragma once
 #include "EntityExtractor.h"
 
-EntityExtractor::EntityExtractor() {}
+EntityExtractor::EntityExtractor(PKB *pkb) {
+  pkb_ = pkb;
+  pkb_write_facade_ = new PkbWriteFacade(*pkb);
+}
 
 void EntityExtractor::VisitProcedure(Procedure *procedure) {
   PkbTypes::PROCEDURE p = procedure->GetProcedureName();
