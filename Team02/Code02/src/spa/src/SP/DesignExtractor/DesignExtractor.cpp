@@ -12,8 +12,8 @@ void DesignExtractor::ExtractDesign(Program *program) {
   for (Procedure *p : procedures) {
     p->Accept(entity_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
-//    for (Statement *s : statements) {
-//
-//    }
+    for (Statement *s : statements) {
+      s->Accept(entity_extractor);
+    }
   }
 }

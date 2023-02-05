@@ -11,3 +11,7 @@ ReadStatement::ReadStatement(int statement_number,
 Variable ReadStatement::GetVariable() const {
   return variable_;
 }
+
+void ReadStatement::Accept(ParserVisitor *visitor) {
+  visitor->VisitReadStatement(this);
+}
