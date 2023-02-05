@@ -5,6 +5,6 @@
 
 class Variable : public Expression, public Entity {
  public:
-  Variable(std::string_view name);
+  Variable(std::string name);
   void Accept(ParserVisitor *visitor) override;
 };
