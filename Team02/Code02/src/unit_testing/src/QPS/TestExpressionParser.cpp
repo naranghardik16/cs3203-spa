@@ -9,14 +9,14 @@ TEST_CASE("Test if the expression parser works as expected") {
   SECTION("Valid cases") {
     spec = "_\"x\"_";
     output = ExpressionParser::ParseExpressionSpec(spec);
-    REQUIRE(output == spec);
+    REQUIRE(output == "_x_");
 
     spec = "_";
     output = ExpressionParser::ParseExpressionSpec(spec);
     REQUIRE(output == spec);
 
     spec = "_\"1\"_";
-    REQUIRE(ExpressionParser::ParseExpressionSpec(spec) == spec);
+    REQUIRE(ExpressionParser::ParseExpressionSpec(spec) == "_1_");
 
   }
 

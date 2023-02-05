@@ -12,7 +12,7 @@ void StmtToStmtHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
 
   //Check if is valid stmtRef
   if (!QueryUtil::IsStmtRef(arg_1) || !QueryUtil::IsStmtRef(arg_2)) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("The statement reference was not valid");
   }
 
   return;
@@ -30,10 +30,10 @@ void StmtToStmtHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map
 
   //Check if synonym is a statement synonym or its subset
   if (QueryUtil::IsSynonym(arg_1) && pql_constants::kStmtRefEntities.find(declaration[arg_1]) == pql_constants::kStmtRefEntities.end()) {
-    throw SemanticErrorException();
+    throw SemanticErrorException("The synonym is not a statement synonym or its subset");
   }
   if (QueryUtil::IsSynonym(arg_2) && pql_constants::kStmtRefEntities.find(declaration[arg_2]) == pql_constants::kStmtRefEntities.end()) {
-    throw SemanticErrorException();
+    throw SemanticErrorException("The synonym is not a statement synonym or its subset");
   }
 
   return;
