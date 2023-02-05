@@ -1,0 +1,10 @@
+1 - comment
+variable x;
+Select x
+2
+5000
+1 - comment
+variable cenX;
+Select cenX
+15
+5000
