@@ -160,6 +160,15 @@ bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression)
 }
 
 /*
+* Checks if the expression is a container statement.
+*/
+bool QueryUtil::IsContainerStatementSynonym(Map &declaration, const std::string& expression) {
+  bool result = IsIfSynonym(declaration, expression) || IsWhileSynonym(declaration, expression);
+  return result;
+}
+
+
+/*
 * Checks if the expression is a procedure synonym
 */
 bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
@@ -169,12 +178,14 @@ bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expressi
 }
 
 /*
- * Get intersection between two vectors
- * TODO To complete this
- * Reference: https://stackoverflow.com/questions/19483663/vector-intersection-in-c
+ * Converts a vector to an unordered set
  */
-SingleConstraintSet QueryUtil::GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2) {
-  SingleConstraintSet set;
+std::unordered_set<std::string> QueryUtil::ConvertToSet(std::vector<std::vector<std::string>> v) {
+  std::unordered_set<std::string> set;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    set.insert(nested_vector[0]);
+  }
   return set;
 }
 

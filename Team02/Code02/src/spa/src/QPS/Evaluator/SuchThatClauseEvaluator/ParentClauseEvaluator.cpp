@@ -1,7 +1,7 @@
 #pragma once
 #include "ParentClauseEvaluator.h"
 
-PairConstraintSet ParentClauseEvaluator::EvaluateClause() {
-  PairConstraintSet set;
+std::vector<std::vector<std::string>> ParentClauseEvaluator::EvaluateClause() {
+  std::vector<std::vector<std::string>> set;
   return set;
 }
