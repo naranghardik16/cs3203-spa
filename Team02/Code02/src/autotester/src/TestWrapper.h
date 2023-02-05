@@ -4,13 +4,16 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "AbstractWrapper.h"
+// include your other headers here
 #include "PKB/PKB.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/Qps.h"
-
-// include your other headers here
-#include "AbstractWrapper.h"
+#include "SP/Tokenizer.h"
+#include "SP/Parser/Parser.h"
+#include "SP/DesignExtractor/DesignExtractor.h"
+#include <fstream>
 
 class TestWrapper : public AbstractWrapper {
  public:

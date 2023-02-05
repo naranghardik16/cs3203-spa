@@ -20,7 +20,6 @@ class EntityExtractor : public ParserVisitor {
   void VisitProcedure(Procedure *procedure) override;
   void VisitVariable(Variable *variable) override;
   void VisitConstant(Constant *constant) override;
-
   void VisitStatement(Statement *statement);
   void VisitExpression(Expression *expression);
 };

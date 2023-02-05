@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include "./SP/Tokenizer.h"
+#include "./SP/Parser/Parser.h"
 #include "./SP/DesignExtractor/DesignExtractor.h"
 //#include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
