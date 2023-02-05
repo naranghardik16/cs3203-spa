@@ -53,3 +53,35 @@ std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
   return assign_set;
 }
 
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
+  std::vector<std::vector<std::string>> result = {{"v"}, {"v1"}};
+  return result;
+}
+
+//!Ignore the rest below for the demo
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs() {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesProcedureVariablePairs() {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByProcedure(std::string proc_name) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}

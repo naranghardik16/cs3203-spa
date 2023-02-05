@@ -11,7 +11,7 @@ void StmtProcToVarHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string arg_2(clause->GetSecondParameter());
 
   //Check if arg_1 is stmtRef or entRef and if arg_2 is entRef
-  if (!QueryUtil::IsStmtRef(arg_1) || !QueryUtil::IsEntRef(arg_1)) {
+  if (!QueryUtil::IsStmtRef(arg_1) && !QueryUtil::IsEntRef(arg_1)) {
     throw SyntaxErrorException("Argument 1 is not a statement reference or an entity reference: " + arg_1);
   }
   if (!QueryUtil::IsEntRef(arg_2)) {
