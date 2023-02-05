@@ -4,6 +4,7 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
