@@ -6,6 +6,8 @@
 #include "./PKB/Interfaces/PkbWriteFacade.h"
 
 class AssignStatement;
+class PrintStatement;
+class ReadStatement;
 class Program;
 class Procedure;
 class Statement;
@@ -20,6 +22,7 @@ class ParserVisitor {
   virtual void VisitVariable(Variable *variable) = 0;
   virtual void VisitConstant(Constant *constant) = 0;
   virtual void VisitAssignStatement(AssignStatement *assign_statement) = 0;
-  void VisitStatement(Statement *statement);
+  virtual void VisitPrintStatement(PrintStatement *print_statement) = 0;
+  virtual void VisitReadStatement(ReadStatement *read_statement) = 0;
   void VisitExpression(Expression *expression);
 };

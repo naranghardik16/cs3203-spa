@@ -12,3 +12,7 @@ PrintStatement::PrintStatement(int statement_number,
 Variable PrintStatement::GetVariable() const {
   return variable_;
 }
+
+void PrintStatement::Accept(ParserVisitor *visitor) {
+  visitor->VisitPrintStatement(this);
+}

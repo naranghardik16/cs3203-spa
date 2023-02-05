@@ -11,6 +11,16 @@ void EntityExtractor::VisitAssignStatement(AssignStatement *assign_statement) {
   pkb_write_facade_->AddVariable(var_name);
 }
 
+void EntityExtractor::VisitPrintStatement(PrintStatement *print_statement) {
+  PkbTypes::VARIABLE var_name = print_statement->GetVariable().GetName();
+  pkb_write_facade_->AddVariable(var_name);
+}
+
+void EntityExtractor::VisitReadStatement(ReadStatement *read_statement) {
+  PkbTypes::VARIABLE var_name = read_statement->GetVariable().GetName();
+  pkb_write_facade_->AddVariable(var_name);
+}
+
 void EntityExtractor::VisitProcedure(Procedure *procedure) {
   PkbTypes::PROCEDURE p = procedure->GetProcedureName();
   pkb_write_facade_->AddProcedure(p);
