@@ -1,27 +1,41 @@
 #pragma once
 #include "QPS/Util/QueryUtil.h"
 #include "PqlEvaluator.h"
+#include "QPS/Clause/ClauseSyntax.h"
 #include <stdexcept>
+#include <utility>
 
-PqlEvaluator::PqlEvaluator(std::shared_ptr<Query> parser_output, std::shared_ptr<PkbReadFacade> pkb) {
+PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
   synonym_ = parser_output->GetSynonym();
   declaration_map_ = parser_output->GetDeclarationMap();
   syntax_pair_list_ = parser_output->GetClauseSyntaxPtrList();
-  pkb_ = pkb;
+  pkb_ = std::move(pkb);
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
+  Map map_test = declaration_map_;
+
   std::unordered_set<std::string> results;
-  try {
-    if (syntax_pair_list_.empty()) {
-      results = EvaluateTrivialSelectStatement();
-    }
+  if (syntax_pair_list_.empty()) {
+    results = EvaluateTrivialSelectStatement();
     return results;
-  } catch (std::invalid_argument& e) {
-    std::cerr << e.what() << std::endl;
   }
+
+  std::vector<std::vector<std::string>> evaluation_result;
+  for (const auto &kClause : syntax_pair_list_) {
+    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_, pkb_);
+    evaluation_result = evaluator->EvaluateClause();
+    //store result into table
+    //get intersection if needed
+  }
+
+  results = QueryUtil::ConvertToSet(evaluation_result);
+
+  return results;
 }
 
+
+//TODO change to vector<vector<std::string>>
 std::unordered_set<std::string> PqlEvaluator::EvaluateTrivialSelectStatement() {
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
     return pkb_->GetVariables();

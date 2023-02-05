@@ -12,7 +12,7 @@ class PqlEvaluator {
   std::shared_ptr<PkbReadFacade> pkb_;
 
  public:
-  PqlEvaluator(std::shared_ptr<Query> parser_output, std::shared_ptr<PkbReadFacade> pkb);
+  PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb);
 
   std::unordered_set<std::string> Evaluate();
 
