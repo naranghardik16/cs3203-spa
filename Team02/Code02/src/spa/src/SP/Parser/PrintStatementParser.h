@@ -1,12 +1,12 @@
 #pragma once
 #include "StatementParser.h"
 #include "core/model/Program.h"
-#include "core/model/AssignStatement.h"
+#include "core/model/PrintStatement.h"
 
-class AssignStatementParser : public StatementParser {
+class PrintStatementParser : public StatementParser {
  public:
-  AssignStatementParser() = default;
-  AssignStatement *ParseEntity(TokenStream &tokens) override;
+  PrintStatementParser() = default;
+  PrintStatement *ParseEntity(TokenStream &tokens) override;
   [[nodiscard]] std::string ExtractVariableName(Line &line) const;
   void CheckEndOfStatement(Line &line) const;
 };
