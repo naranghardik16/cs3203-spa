@@ -5,7 +5,7 @@ void SuchThatBaseHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
 
   //Check if relRef valid
   if (pql_constants::kRelRefs.find(rel_ref) == pql_constants::kRelRefs.end()) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("The relationship reference is invalid in the Such That clause");
   }
 
 
@@ -19,10 +19,10 @@ void SuchThatBaseHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, M
 
 
   if (QueryUtil::IsSynonym(arg_1) && declaration.find(arg_1) == declaration.end()) {
-    throw SemanticErrorException();
+    throw SemanticErrorException("The synonym in the first argument was not declared");
   }
   if (QueryUtil::IsSynonym(arg_2) && declaration.find(arg_2) == declaration.end()) {
-    throw SemanticErrorException();
+    throw SemanticErrorException("The synonym in the second argument was not declared");
   }
 
   return Handler::HandleSemantic(clause, declaration);
