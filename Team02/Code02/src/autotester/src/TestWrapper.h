@@ -4,6 +4,10 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include "PKB/PKB.h"
+#include "PKB/Interfaces/PkbWriteFacade.h"
+#include "PKB/Interfaces/PkbReadFacade.h"
+#include "QPS/Qps.h"
 
 // include your other headers here
 #include "AbstractWrapper.h"

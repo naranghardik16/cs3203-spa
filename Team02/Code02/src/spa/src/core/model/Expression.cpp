@@ -1,5 +1,6 @@
 #pragma once
 #include "Expression.h"
+#include "iostream"
 
 Expression::Expression(std::string_view name, std::string expression_type)
     : name_(name), expression_type_(std::move(expression_type)) {}
@@ -13,5 +14,5 @@ std::string Expression::GetName() const {
 }
 
 bool Expression::operator==(const Expression &other) const {
-  return expression_type_ == other.expression_type_;
+  return expression_type_ == other.expression_type_ && name_ == other.name_;
 }
