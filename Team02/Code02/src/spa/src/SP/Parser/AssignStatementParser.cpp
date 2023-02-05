@@ -14,7 +14,7 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto expr_parser =
       ExpressionParserFactory::GetExpressionParser(expression_tokens);
   auto expression = expr_parser->ParseEntity(expression_tokens);
-  assign_stmt->AddExpression(*expression);
+  assign_stmt->AddExpression(expression);
   return assign_stmt;
 }
 

@@ -64,7 +64,7 @@ TEST_CASE("Check if Parser works with only assign statement") {
       REQUIRE(assign_stmt->GetStatementType() == "assign");
       REQUIRE(assign_stmt->GetStatementNumber() == 1);
       REQUIRE(var == Variable("x"));
-      REQUIRE(expression == Expression("y", "variable"));
+      REQUIRE(*expression == Variable("y"));
     }
 
     SECTION(
@@ -74,7 +74,7 @@ TEST_CASE("Check if Parser works with only assign statement") {
       auto expression = assign_stmt->GetExpression();
       REQUIRE(assign_stmt->GetStatementType() == "assign");
       REQUIRE(assign_stmt->GetStatementNumber() == 2);
-      REQUIRE(expression == Expression("10", "constant"));
+      REQUIRE(*expression == Constant("10"));
     }
 
     SECTION("Check if the ReadStatement has correct fields") {
