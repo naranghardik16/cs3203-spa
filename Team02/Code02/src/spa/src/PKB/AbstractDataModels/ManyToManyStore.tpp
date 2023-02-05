@@ -3,11 +3,8 @@
 template<typename K, typename V>
 ManyToManyStore<K, V>::ManyToManyStore() {};
 
-template<typename K, typename V>
-ManyToManyStore<K, V>::~ManyToManyStore() {
-  delete this->forward_map_;
-  delete this->backward_map_;
-};
+//template<typename K, typename V>
+//ManyToManyStore<K, V>::~ManyToManyStore() {};
 
 template<typename K, typename V>
 void ManyToManyStore<K, V>::insert(K key, V value) {
@@ -17,7 +14,7 @@ void ManyToManyStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool ManyToManyStore<K, V>::contains(K key, V value) {
-  return this->backward_map_[value].find(key) != this->backward_map_[value].end();
+  return this->backward_map_.count(key);
 }
 
 template<typename K, typename V>

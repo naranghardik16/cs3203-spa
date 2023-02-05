@@ -1,13 +1,8 @@
 #include "OneToOneStore.h"
 
-template<typename K, typename V>
-OneToOneStore<K, V>::OneToOneStore() {};
 
-template<typename K, typename V>
-OneToOneStore<K, V>::~OneToOneStore() {
-  delete this->foward_map_;
-  delete this->backward_map_;
-};
+//template<typename K, typename V>
+//OneToOneStore<K, V>::~OneToOneStore() {};
 
 template<typename K, typename V>
 void OneToOneStore<K, V>::insert(K key, V value) {
@@ -18,7 +13,7 @@ void OneToOneStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::contains(K key, V value) {
-  return this->forward_map_.contains(key) && this->forward_map_[key] == value;
+  return this->forward_map_.count(key);
 }
 
 template<typename K, typename V>

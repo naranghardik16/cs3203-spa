@@ -1,32 +1,36 @@
 #include "EntityStore.h"
 
+#include <iostream>
+
+//EntityStore::~EntityStore() {}
+
 PkbTypes::INDEX EntityStore::addVariable(PkbTypes::VARIABLE variable) {
-  PkbTypes::INDEX index = this->variable_store_.length() + 1;
-  this->variable_store_.insert(std::move(variable), index);
-  return index;
+  PkbTypes::INDEX index = variable_store_.length() + 1;
+  variable_store_.insert(variable, index);
+  return 1;
 }
 
 PkbTypes::INDEX EntityStore::addProcedure(PkbTypes::PROCEDURE procedure) {
-  PkbTypes::INDEX index = this->procedure_store_.length() + 1;
-  this->procedure_store_.insert(std::move(procedure), index);
-  return index;
+  PkbTypes::INDEX index = procedure_store_.length() + 1;
+  procedure_store_.insert(procedure, index);
+  return 1;
 }
 
 PkbTypes::INDEX EntityStore::addConstant(PkbTypes::CONSTANT constant) {
-  PkbTypes::INDEX index = this->constant_store_.length() + 1;
-  this->constant_store_.insert(std::move(constant), index);
-  return index;
+  PkbTypes::INDEX index = constant_store_.length() + 1;
+  constant_store_.insert(constant, index);
+  return 1;
 }
 
 std::unordered_set<PkbTypes::VARIABLE> EntityStore::getVariables() {
-  return this->variable_store_.retrieveAllKeys();
+  return variable_store_.retrieveAllKeys();
 }
 
-std::unordered_set<PkbTypes::VARIABLE> EntityStore::getProcedures() {
-  return this->procedure_store_.retrieveAllKeys();
+std::unordered_set<PkbTypes::PROCEDURE> EntityStore::getProcedures() {
+  return procedure_store_.retrieveAllKeys();
 }
 
 std::unordered_set<PkbTypes::CONSTANT> EntityStore::getConstants() {
-  return this->constant_store_.retrieveAllKeys();
+  return constant_store_.retrieveAllKeys();
 }
 

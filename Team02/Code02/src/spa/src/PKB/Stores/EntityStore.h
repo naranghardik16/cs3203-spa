@@ -7,6 +7,10 @@
 
 class EntityStore {
  public:
+  EntityStore() = default ;
+
+//  ~EntityStore();
+
   PkbTypes::INDEX addConstant(PkbTypes::CONSTANT constant);
 
   PkbTypes::INDEX addVariable(PkbTypes::VARIABLE variable);

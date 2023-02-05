@@ -15,5 +15,5 @@ class PkbTypes {
   typedef std::unordered_set<LINE_NUMBER> LINE_SET;
   typedef std::variant<VARIABLE_SET, PROCEDURE> MODIFIES;
 
-  typedef uint64_t INDEX;
+  typedef std::size_t INDEX;
 };

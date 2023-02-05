@@ -4,16 +4,16 @@
 #include <unordered_set>
 #include <vector>
 
-template<typename K, typename V>
+template<class K, class V>
 class OneToOneStore {
  private:
   std::unordered_map<K, V> forward_map_;
-  std::unordered_map<K, V> backward_map_;
+  std::unordered_map<V, K> backward_map_;
   std::size_t size = 0;
 
  public:
-  OneToOneStore();
-  ~OneToOneStore();
+  OneToOneStore() = default;
+//  ~OneToOneStore();
 
   void insert(K key, V value);
   bool contains(K key, V value);
@@ -26,3 +26,5 @@ class OneToOneStore {
   std::unordered_set<K> retrieveAllKeys();
   std::unordered_set<V> retrieveAllValues();
 };
+
+#include "OneToOneStore.tpp"

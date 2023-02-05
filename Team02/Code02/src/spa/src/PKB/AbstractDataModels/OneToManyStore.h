@@ -13,7 +13,7 @@ class OneToManyStore {
 
  public:
   OneToManyStore();
-  ~OneToManyStore();
+//  ~OneToManyStore();
 
   void insert(K key, V value);
   bool contains(K key, V value);
@@ -26,3 +26,5 @@ class OneToManyStore {
   std::unordered_set<K> retrieveAllKeys();
   std::unordered_set<V> retrieveAllValues();
 };
+
+#include "OneToManyStore.tpp"
