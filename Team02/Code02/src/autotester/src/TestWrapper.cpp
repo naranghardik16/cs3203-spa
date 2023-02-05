@@ -18,22 +18,6 @@ TestWrapper::TestWrapper() {
   pkb = new PKB();
 }
 
-// Read all the lines in the file
-vector<string> read_all_lines(string const& filename)
-{
-  ifstream file(filename);
-
-  vector<string> lines;
-  while(not file.eof() && not file.fail()) {
-    // Get the line
-    std::string line;
-    std::getline(file, line);
-    // Add the line into the vector
-    lines.push_back(std::move(line));
-  }
-  return lines;
-}
-
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
   // call your parser to do the parsing
