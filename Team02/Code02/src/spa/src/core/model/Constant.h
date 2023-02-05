@@ -6,5 +6,5 @@
 class Constant : public Expression, public Entity {
  public:
   explicit Constant(std::string name);
-  void Accept(ParserVisitor *visitor);
+  void Accept(ParserVisitor *visitor) override;
 };
