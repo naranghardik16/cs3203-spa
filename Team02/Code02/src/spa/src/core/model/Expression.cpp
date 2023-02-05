@@ -2,7 +2,7 @@
 #include "Expression.h"
 #include "iostream"
 
-Expression::Expression(std::string_view name, std::string expression_type)
+Expression::Expression(std::string name, std::string expression_type)
     : name_(name), expression_type_(std::move(expression_type)) {}
 
 std::string Expression::GetExpressionType() const {
