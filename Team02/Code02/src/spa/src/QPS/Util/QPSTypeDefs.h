@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream>
-#include <utility>
+#include <vector>
+#include <string>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -25,8 +25,8 @@ typedef std::vector<std::shared_ptr<ClauseSyntax>> ClauseSyntaxPtrList;
 
 typedef std::string SingleConstraint;
 //! E.g. {1,2,3,4} for Select a (assign) is a SingleConstraintSet
-typedef  std::unordered_set<SingleConstraint> SingleConstraintSet;
+typedef std::unordered_set<SingleConstraint> SingleConstraintSet;
 
 typedef std::pair<std::string, std::string> PairConstraint;
 //! E.g. Uses(s,v) gives a PairConstraintSet {(1,v1), (2,v2)}
-typedef std::unordered_set<PairConstraint,hash_pair> PairConstraintSet;
+typedef std::unordered_set<PairConstraint, hash_pair> PairConstraintSet;

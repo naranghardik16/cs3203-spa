@@ -1,11 +1,10 @@
-#pragma once
-#include "./SP/Parser/Parser.h"
-#include "./SP/Tokenizer.h"
-
 #include "catch.hpp"
+
 #include <string>
 // must include <sstream> to use iss for istringstream
 #include <sstream>
+#include "./SP/Parser/Parser.h"
+#include "./SP/Tokenizer.h"
 
 using namespace std;
 

@@ -1,5 +1,4 @@
 #include "AssignStatementParser.h"
-#include "iostream"
 
 AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
@@ -8,18 +7,18 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   Variable var(var_name);
   auto assign_stmt =
       new AssignStatement(Program::GetAndIncreaseStatementNumber(),
-                          Variable("name"),
+                          var,
                           "main");
   CheckEndOfStatement(line);
   vector<Token *> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
       ExpressionParserFactory::GetExpressionParser(expression_tokens);
   auto expression = expr_parser->ParseEntity(expression_tokens);
-  assign_stmt->AddExpression(*expression);
+  assign_stmt->AddExpression(expression);
   return assign_stmt;
 }
 
-std::string_view AssignStatementParser::ExtractVariableName(Line &line) const {
+std::string AssignStatementParser::ExtractVariableName(Line &line) const {
   auto assign_keyword_itr = std::find_if(std::begin(line), std::end(line),
                                          [&](Token *const p) {
                                            return p->GetValue() == "=";

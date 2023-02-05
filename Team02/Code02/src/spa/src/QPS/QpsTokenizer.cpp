@@ -33,11 +33,16 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
 
   std::string select_statement = string_util::Trim(temp);
 
-  if (declaration_statements.empty() || select_statement.empty()) {
-    throw SyntaxErrorException();
+  if (declaration_statements.empty()) {
+    throw SyntaxErrorException("There is no declaration statement identified");
   }
+
+  if (select_statement.empty()) {
+    throw SyntaxErrorException("There is no select statement identified");
+  }
+
   if (select_statement.substr(0, pql_constants::kSelectKeyword.length()) != pql_constants::kSelectKeyword) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("There is no Select keyword in the Select statement");
   }
 
   QueryStatementPair declaration_select_statement_pair;
@@ -90,13 +95,13 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
     if (!QueryUtil::IsDesignEntity(design_entity)) {
-      throw SyntaxErrorException();
+      throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }
     std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
       if (!QueryUtil::IsSynonym(kSynonym)) {
-        throw SyntaxErrorException();
+        throw SyntaxErrorException("The synonym in the declaration does not adhere to the lexical rules of being a synonym");
       }
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
         //we want to throw syntax exception first if there are any but this will mean that we will continue to loop and parse the declarations, which takes extra time
@@ -118,7 +123,7 @@ std::string QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
   std::string synonym = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
   if (!QueryUtil::IsSynonym(synonym)) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("There is syntax error due to the synonym not adhering to synonym lexical rules.");
   }
   return synonym;
 }
@@ -138,7 +143,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   //check for concrete syntax like ( , ) and keywords like such,that or pattern
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("There is syntax error in the clause");
   }
 
   std::string relationship = string_util::Trim(clause.substr(start_of_rel_ref_index,
@@ -152,7 +157,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   std::string remaining_clause = string_util::Trim(clause.substr(closing_bracket_index+1));
 
   if (!remaining_clause.empty()) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("There are extra characters after the end of the clause");
   }
 
   SyntaxPair clause_syntax;
@@ -203,5 +208,6 @@ std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const s
       continue;
     }
   }
+
   return syntax_pair_list;
 }
