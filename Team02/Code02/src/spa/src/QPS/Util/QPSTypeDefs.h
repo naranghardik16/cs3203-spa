@@ -3,6 +3,7 @@
 #include <utility>
 #include <unordered_set>
 #include <unordered_map>
+#include <vector>
 #include "HashPair.h"
 // Forward declarations of classes if any
 
