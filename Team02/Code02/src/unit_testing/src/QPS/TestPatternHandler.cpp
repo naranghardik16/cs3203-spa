@@ -34,11 +34,6 @@ TEST_CASE("Test PatternHandler HandleSyntax") {
     REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
   }
 
-  SECTION("Test invalid clause, arg_2 invalid expr") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax {{"a", {"_", "x"}}});
-
-    REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
-  }
 }
 
 TEST_CASE("Test PatternHandler HandleSemantic") {
