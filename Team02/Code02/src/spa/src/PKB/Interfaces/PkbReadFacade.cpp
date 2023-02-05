@@ -20,46 +20,37 @@ std::unordered_set<std::string> PkbReadFacade::GetProcedures() {
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetStatements() {
-  std::unordered_set<std::string> statement_set({"1", "2", "3"});
-  return statement_set;
+  return this->pkb.statement_store_->getAllStatements();
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetReadStatements() {
-  std::unordered_set<std::string> read_set({"4", "5", "6"});
-  return read_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetPrintStatements() {
-  std::unordered_set<std::string> print_set({"6", "7", "8"});
-  return print_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetCallStatements() {
-  std::unordered_set<std::string> call_set({"9", "10", "11"});
-  return call_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::CALL);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetWhileStatements() {
-  std::unordered_set<std::string> while_set({"12", "13", "14"});
-  return while_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::WHILE);
 }
 std::unordered_set<std::string> PkbReadFacade::GetIfStatements() {
-  std::unordered_set<std::string> if_set({"15", "16", "18"});
-  return if_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::IF);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
-  std::unordered_set<std::string> assign_set({"19", "20", "21"});
-  return assign_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-
+//!Ignore the rest below for the demo
 std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
   std::vector<std::vector<std::string>> result = {{"v"}, {"v1"}};
   return result;
 }
-
-//!Ignore the rest below for the demo
 
 std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs() {
   std::vector<std::vector<std::string>> result;

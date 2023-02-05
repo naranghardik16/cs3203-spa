@@ -8,18 +8,18 @@ template<typename K, typename V>
 class OneToManyStore {
  private:
   std::unordered_map<K, std::unordered_set<V>> forward_map_;
-  std::unordered_set<V, K> backward_map_;
+  std::unordered_map<V, K> backward_map_;
   std::size_t size = 0;
 
  public:
-  OneToManyStore();
+  OneToManyStore() = default;
 //  ~OneToManyStore();
 
   void insert(K key, V value);
   bool contains(K key, V value);
   std::size_t length();
 
-  std::vector<V> retrieveFromKey(K key);
+  std::unordered_set<V> retrieveFromKey(K key);
   K retrieveFromValue(V value);
 
   std::vector<std::pair<K, V>> retrieveAll();

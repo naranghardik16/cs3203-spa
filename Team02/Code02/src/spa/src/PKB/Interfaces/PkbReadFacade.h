@@ -18,7 +18,6 @@ class PkbReadFacade {
   std::unordered_set<std::string> GetConstants();
   std::unordered_set<std::string> GetProcedures();
 
-  //! API for basic Select statements
   std::unordered_set<std::string> GetStatements();
   std::unordered_set<std::string> GetReadStatements();
   std::unordered_set<std::string> GetPrintStatements();
@@ -26,7 +25,6 @@ class PkbReadFacade {
   std::unordered_set<std::string> GetWhileStatements();
   std::unordered_set<std::string> GetIfStatements();
   std::unordered_set<std::string> GetAssignStatements();
-
 
   //! API for Modifies
   //TODO return the Result class instead
