@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
-//#include "Entity.h"
+#include "Entity.h"
 
-class Statement {
+class Statement : public Entity {
  public:
   Statement(
       int statement_number,
       std::string statement_type,
       std::string in_scope_of_proc);
   virtual ~Statement() = default;
-
+  virtual void Accept(ParserVisitor *visitor) = 0;
   [[nodiscard]] int GetStatementNumber() const;
   [[nodiscard]] std::string GetStatementType() const;
   [[nodiscard]] std::string GetInScopeOfPrc() const;

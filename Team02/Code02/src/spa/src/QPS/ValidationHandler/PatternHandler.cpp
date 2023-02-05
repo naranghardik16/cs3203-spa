@@ -9,14 +9,6 @@ void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
     throw SyntaxErrorException();
   }
 
-  //Check if arg_2 is underscore or valid expression
-  //TODO: milestone 1  - only handle partial matching or wildcard and only handle constant matching and variable matching
-  bool valid_expr = arg_2[0] == '_' && arg_2[1] == '"' && arg_2[arg_2.length() - 2] == '"' && arg_2[arg_2.length() - 1] == '_' &&
-      (LexicalRuleValidator::IsInteger(arg_2.substr(2, arg_2.length() - 4)) || LexicalRuleValidator::IsIdent(arg_2.substr(2, arg_2.length() - 4)));
-  if (!QueryUtil::IsWildcard(arg_2) && !valid_expr) {
-    throw SyntaxErrorException();
-  }
-
   return;
 }
 

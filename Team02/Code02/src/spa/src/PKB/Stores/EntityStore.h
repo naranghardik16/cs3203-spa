@@ -3,26 +3,29 @@
 #include <unordered_set>
 #include <string>
 #include "PKB/Types/PkbTypes.h"
-#include "PKB/AbstractDataModels/KeyValueStore.h"
-
+#include "PKB/AbstractDataModels/OneToOneStore.h"
 
 class EntityStore {
  public:
-  void addConstant(PkbTypes::CONSTANT constant);
+  EntityStore() = default ;
 
-  PkbTypes::VARIABLE_STORE_INDEX addVariable(PkbTypes::VARIABLE variable);
+//  ~EntityStore();
 
-  PkbTypes::PROCEDURE_STORE_INDEX addProcedure(PkbTypes::PROCEDURE procedure);
+  PkbTypes::INDEX addConstant(PkbTypes::CONSTANT constant);
 
-  KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX> &getVariableStore();
+  PkbTypes::INDEX addVariable(PkbTypes::VARIABLE variable);
 
-  KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &getProcedureStore();
+  PkbTypes::INDEX addProcedure(PkbTypes::PROCEDURE procedure);
 
-  std::unordered_set<PkbTypes::CONSTANT> &getConstantStore();
+  std::unordered_set<PkbTypes::VARIABLE> getVariables();
+
+  std::unordered_set<PkbTypes::PROCEDURE> getProcedures();
+
+  std::unordered_set<PkbTypes::CONSTANT> getConstants();
 
  protected:
-  KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX> variable_store_;
-  KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> procedure_store_;
-  std::unordered_set<PkbTypes::CONSTANT> constant_store_;
+  OneToOneStore<PkbTypes::VARIABLE, PkbTypes::INDEX> variable_store_;
+  OneToOneStore<PkbTypes::PROCEDURE, PkbTypes::INDEX> procedure_store_;
+  OneToOneStore<PkbTypes::CONSTANT, PkbTypes::INDEX> constant_store_;
 };
 

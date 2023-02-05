@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <utility>
 #include <memory>
@@ -11,6 +12,5 @@
 
 class QueryParser {
  public:
-  std::string ParseQuery(std::string query);
+  std::shared_ptr<Query> ParseQuery(std::string query);
 };
-

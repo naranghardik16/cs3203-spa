@@ -1,7 +1,7 @@
 #pragma once
 #include "FollowsStarClauseEvaluator.h"
 
-PairConstraintSet FollowsStarClauseEvaluator::EvaluateClause() {
-  PairConstraintSet set;
+std::vector<std::vector<std::string>> FollowsStarClauseEvaluator::EvaluateClause() {
+  std::vector<std::vector<std::string>> set;
   return set;
 }
