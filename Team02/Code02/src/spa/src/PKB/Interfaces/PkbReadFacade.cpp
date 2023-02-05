@@ -7,21 +7,16 @@ PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 
 PkbReadFacade::~PkbReadFacade() {}
 
-KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX>  &PkbReadFacade::GetVariableStore() {
-  return pkb.entity_store_->getVariableStore();
-}
-
-KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &PkbReadFacade::GetProcedureStore() {
-  return pkb.entity_store_->getProcedureStore();
-}
-
-std::unordered_set<PkbTypes::CONSTANT> &PkbReadFacade::GetConstantStore() {
-  return pkb.entity_store_->getConstantStore();
-}
-
 std::unordered_set<std::string> PkbReadFacade::GetVariables() {
-  std::unordered_set<std::string> variable_set({"a", "b", "c"});
-  return variable_set;
+  return this->pkb.entity_store_->getVariables();
+}
+
+std::unordered_set<std::string> PkbReadFacade::GetConstants() {
+  return this->pkb.entity_store_->getConstants();
+}
+
+std::unordered_set<std::string> PkbReadFacade::GetProcedures() {
+  return this->pkb.entity_store_->getProcedures();
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetStatements() {
@@ -58,12 +53,3 @@ std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
   return assign_set;
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetConstants() {
-  std::unordered_set<std::string> constant_set({"22", "23", "24"});
-  return constant_set;
-}
-
-std::unordered_set<std::string> PkbReadFacade::GetProcedures() {
-  std::unordered_set<std::string> p_set({"eval", "parse", "validate"});
-  return p_set;
-}

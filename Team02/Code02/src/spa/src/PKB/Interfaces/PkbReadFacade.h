@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 #include "PKB/Types/PkbTypes.h"
-#include "PKB/AbstractDataModels/KeyValueStore.h"
+#include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/PKB.h"
 
 class PkbReadFacade {
@@ -14,13 +14,24 @@ class PkbReadFacade {
 
   ~PkbReadFacade();
 
-  KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX> &GetVariableStore();
-
-  KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &GetProcedureStore();
-
-  std::unordered_set<PkbTypes::CONSTANT> &GetConstantStore();
+//  virtual bool modifies(LineNumber line, String variableName);
+//  virtual NAME_SET modifies(LineNumber line, Variable variable);
+//  virtual bool modifies(LineNumber line, Underscore underscore);
+//  virtual LINE_SET modifies(Statement statement, String variableName);
+//  virtual LINE_NAME_PAIRS modifies(Statement statement, Variable variable);
+//  virtual LINE_SET modifies(Statement, Underscore underscore);
+//  virtual bool modifies(String procedureName, String variableName);
+//  virtual NAME_SET modifies(String procedureName, Variable variable);
+//  virtual bool modifies(String procedureName, Underscore underscore);
+//  virtual NAME_SET modifies(Procedure, String variableName);
+//  virtual NAME_NAME_PAIRS modifies(Procedure, Variable variable);
+//  virtual NAME_SET modifies(Procedure, Underscore underscore);
 
   std::unordered_set<std::string> GetVariables();
+  std::unordered_set<std::string> GetConstants();
+  std::unordered_set<std::string> GetProcedures();
+
+
   std::unordered_set<std::string> GetStatements();
   std::unordered_set<std::string> GetReadStatements();
   std::unordered_set<std::string> GetPrintStatements();
@@ -28,7 +39,7 @@ class PkbReadFacade {
   std::unordered_set<std::string> GetWhileStatements();
   std::unordered_set<std::string> GetIfStatements();
   std::unordered_set<std::string> GetAssignStatements();
-  std::unordered_set<std::string> GetConstants();
-  std::unordered_set<std::string> GetProcedures();
+
+
 };
 
