@@ -3,6 +3,7 @@
 #include "./core/model/Procedure.h"
 #include "core/model/Constant.h"
 #include "core/model/Variable.h"
+#include "core/model/AssignStatement.h"
 
 class EntityExtractor : public ParserVisitor {
  private:
@@ -10,6 +11,7 @@ class EntityExtractor : public ParserVisitor {
   PkbWriteFacade *pkb_write_facade_;
  public:
   EntityExtractor(PKB *pkb);
+  void VisitAssignStatement(AssignStatement *assign_statement);
   void VisitProgram(Program *program);
   void VisitProcedure(Procedure *procedure);
   void VisitVariable(Variable *variable);

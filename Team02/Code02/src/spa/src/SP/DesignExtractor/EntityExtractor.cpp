@@ -6,6 +6,11 @@ EntityExtractor::EntityExtractor(PKB *pkb) {
   pkb_write_facade_ = new PkbWriteFacade(*pkb);
 }
 
+void EntityExtractor::VisitAssignStatement(AssignStatement *assign_statement) {
+  PkbTypes::VARIABLE var_name = assign_statement->GetVariable().GetName();
+  pkb_write_facade_->AddVariable(var_name);
+}
+
 void EntityExtractor::VisitProcedure(Procedure *procedure) {
   PkbTypes::PROCEDURE p = procedure->GetProcedureName();
   pkb_write_facade_->AddProcedure(p);
