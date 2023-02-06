@@ -17,7 +17,7 @@ class ManyToManyStore {
   void insert(K key, V value);
   bool contains(K key, V value);
 
-  std::unordered_set<V> retrieveFromKey(K key);
+  std::vector<V> retrieveFromKey(K key);
   std::vector<K> retrieveFromValue(V value);
 
   std::vector<std::pair<K, V>> retrieveAll();
