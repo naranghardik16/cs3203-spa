@@ -34,14 +34,15 @@ TEST_CASE("Check if SP works with PKB") {
 
     PkbReadFacade *pkb_read_facade = new PkbReadFacade(*pkb);
     SECTION("Check if Accept(Procedure) works") {
-      std::unordered_set<std::string> procedure_store_ = pkb_read_facade->GetProcedures();
-      auto it = procedure_store_.find("computeCentroid");
-      if (it == procedure_store_.end()) {
+      std::unordered_set<std::string>
+          procedure_store = pkb_read_facade->GetProcedures();
+      auto it = procedure_store.find("computeCentroid");
+      if (it == procedure_store.end()) {
         FAIL();
       }
 
-      it = procedure_store_.find("main");
-      if (it == procedure_store_.end()) {
+      it = procedure_store.find("main");
+      if (it == procedure_store.end()) {
         FAIL();
       } else {
         SUCCEED();
@@ -49,7 +50,8 @@ TEST_CASE("Check if SP works with PKB") {
     }
 
     SECTION("Check if Variables are stored correctly in the pkb") {
-      std::unordered_set<std::string> var_store = pkb_read_facade->GetVariables();
+      std::unordered_set<std::string>
+          var_store = pkb_read_facade->GetVariables();
       std::vector<std::string_view>
           var_names{"flag", "count", "cenX", "cenY", "input", "output"};
       for (auto var_name : var_names) {
