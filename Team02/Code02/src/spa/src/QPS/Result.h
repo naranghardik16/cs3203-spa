@@ -9,14 +9,14 @@
  * The index of synonym in header correspond to the col index in the table.
  */
 class Result {
- private:
+ public:
   ResultHeader header_;
   ResultTable table_;
- public:
   Result(ResultHeader header, ResultTable table);
 
   /*
    * Join two result on intercepting header. Result will be store in the calling object.
+   * Both of the table should not be empty, else nothing will happen.
    */
   void JoinResult(Result &result);
 

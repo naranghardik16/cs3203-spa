@@ -3,11 +3,17 @@
 Result::Result(ResultHeader header, ResultTable table) : header_(header), table_(table) {}
 
 void Result::JoinResult(Result &result) {
+  if (result.header_.empty() || this->header_.empty()) {
+    return;
+  }
   InterceptResult intercept = FindIntercept(this->header_, result.header_);
   ResultTable temp;
   for (auto &row : this->table_) {
     ResultTable join = FindMatch(row, result.table_, intercept);
     temp.insert(temp.end(), join.begin(), join.end());
+  }
+  for (auto &i : intercept.second) {
+    this->header_.push_back(result.header_[i]);
   }
   this->table_ = temp;
 }
@@ -50,4 +56,5 @@ ResultTable Result::FindMatch(ResultRow &row, ResultTable &table, InterceptResul
       }
     }
   }
+  return out;
 }
