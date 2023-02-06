@@ -13,9 +13,15 @@ class ModifiesStore {
   void addStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
   void addProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
 
+  std::vector<PkbTypes::VARIABLE> retrieveAllVariablesModifiedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number);
+
+  std::vector<std::vector<std::string>> pipe(std::vector<std::string> input);
 
  protected:
   ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE> modifies_statement_variable_;
   ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::VARIABLE> modifies_procedure_variable_;
+
+ private:
+  std::vector<std::vector<std::string>> convert(std::vector<std::string> s);
 };
 

@@ -46,12 +46,13 @@ std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-// TODO: All these functions for demo
-std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
-  std::vector<std::vector<std::string>> result;
-  return result;
+std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
+  return this->pkb.modifies_store_->pipe(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
 }
 
+
+
+// TODO: All these functions for demo
 std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs(std::string statement_type) {
   std::vector<std::vector<std::string>> result;
   return result;
