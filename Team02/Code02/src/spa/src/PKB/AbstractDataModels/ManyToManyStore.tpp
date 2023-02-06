@@ -9,7 +9,7 @@ ManyToManyStore<K, V>::ManyToManyStore() {};
 template<typename K, typename V>
 void ManyToManyStore<K, V>::insert(K key, V value) {
   this->forward_map_[key].insert(value);
-  this->backward_map_[key].insert(value);
+  this->backward_map_[value].insert(key);
 }
 
 template<typename K, typename V>
@@ -19,7 +19,7 @@ bool ManyToManyStore<K, V>::contains(K key, V value) {
 
 template<typename K, typename V>
 std::vector<V> ManyToManyStore<K, V>::retrieveFromKey(K key) {
-  return std::vector<K>(this->forward_map_[key].begin(), this->forward_map_[key].end());
+  return std::vector<V>(this->forward_map_[key].begin(), this->forward_map_[key].end());
 }
 
 template<typename K, typename V>
