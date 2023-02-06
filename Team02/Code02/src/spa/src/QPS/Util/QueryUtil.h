@@ -47,6 +47,10 @@ class QueryUtil {
 
   static bool IsContainerStatementSynonym(Map &declaration, const std::string& expression);
 
+  static bool IsATypeOfStatementSynonym(Map &declaration, const std::string& expression);
+
   static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
+  static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
+  static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
 };
 

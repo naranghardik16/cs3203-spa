@@ -32,7 +32,7 @@ TEST_CASE("Check if AssignStatementParser works") {
   }
 }
 
-TEST_CASE("Check if Parser works with only assign statement") {
+TEST_CASE("Check if Parser works with non control flow statements") {
   Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
                          new PunctuationToken("{", LEFT_PARENTHESIS)};
   Parser::Line stmt_line_var

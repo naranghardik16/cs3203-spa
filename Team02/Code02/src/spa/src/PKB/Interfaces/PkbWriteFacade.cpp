@@ -20,5 +20,13 @@ PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) {
   return pkb.entity_store_->addConstant(std::move(constant));
 }
 
+void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) {
+  this->pkb.modifies_store_->addStatementModifyingVariable(statement_number, variable);
+}
+
+void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) {
+  this->pkb.modifies_store_->addProcedureModifyingVariable(procedure, variable);
+}
+
 
 
