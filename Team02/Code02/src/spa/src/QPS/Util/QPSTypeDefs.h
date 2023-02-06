@@ -30,3 +30,10 @@ typedef std::unordered_set<SingleConstraint> SingleConstraintSet;
 typedef std::pair<std::string, std::string> PairConstraint;
 //! E.g. Uses(s,v) gives a PairConstraintSet {(1,v1), (2,v2)}
 typedef std::unordered_set<PairConstraint, hash_pair> PairConstraintSet;
+
+typedef std::vector<std::string> ResultHeader;
+typedef std::vector<std::string> ResultRow;
+typedef std::vector<std::vector<std::string>> ResultTable;
+typedef std::vector<std::pair<int, int>> Intercept;
+typedef std::vector<int> NonIntercept;
+typedef std::pair<Intercept, NonIntercept> InterceptResult;
