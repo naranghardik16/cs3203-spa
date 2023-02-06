@@ -200,7 +200,7 @@ TEST_CASE("Check if PQLEvaluator works as expected using Parser") {
     REQUIRE(eval_result == correct_set);
   }
 }
-*/
+
 
 
 TEST_CASE("Temp") {
@@ -219,3 +219,4 @@ TEST_CASE("Temp") {
     REQUIRE(eval_result == correct_set);
   }
 }
+ */
