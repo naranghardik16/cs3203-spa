@@ -71,7 +71,7 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
     if (is_second_arg_a_variable_synonym) {
       result = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
     } else if (is_second_arg_a_wildcard) {
-      //e.g. Modifies(p, _) --> get all procedures that are modified, Modifies(c, _)
+      //e.g. Modifies(p, _) --> get all procedures that do modification, Modifies(c, _)
       auto constraints = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
       result = QueryUtil::ExtractFirstElementInTheVectors(constraints);
     } else {
@@ -81,14 +81,8 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
   }
 
   if (is_first_arg_a_procedure_name) {
-    //e.g. Modifies("anya", v)
-    if (is_second_arg_a_variable_synonym) {
+    //e.g. Modifies("anya", v), e.g. Modifies("anya", _)
       result = pkb->GetVariablesModifiedByProcedure(first_arg_);
-    }
-    if (is_second_arg_a_wildcard) {
-      //e.g. Modifies("anya", _)
-      result = pkb->GetVariablesModifiedByProcedure(first_arg_);
-    }
   }
 
   return result;

@@ -167,6 +167,13 @@ bool QueryUtil::IsContainerStatementSynonym(Map &declaration, const std::string&
   return result;
 }
 
+/*
+ * Checks if the synonym belongs to the category of a statement synonym
+ */
+bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& expression) {
+  return !IsVariableSynonym(declaration, expression) && !IsConstantSynonym(declaration, expression)
+  && !IsProcedureSynonym(declaration, expression);
+}
 
 /*
 * Checks if the expression is a procedure synonym
