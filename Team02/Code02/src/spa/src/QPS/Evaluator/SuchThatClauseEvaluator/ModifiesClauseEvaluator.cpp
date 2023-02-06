@@ -17,8 +17,14 @@ bool ModifiesClauseEvaluator::IsBooleanConstraint() {
 
 bool ModifiesClauseEvaluator::EvaluateBooleanConstraint() {
   auto pkb = ClauseEvaluator::GetPKB();
-  //e.g. Modifies(5,IDENT) e.g. Modifies (5,"count")
-  return pkb->IsModifies(first_arg_, second_arg_);
+  auto is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
+  bool result;
+  if (is_first_arg_an_integer) {
+    result = pkb->IsModifiesStatement(first_arg_, second_arg_);
+  } else {
+    result = pkb->IsModifiesProcedure(first_arg_, second_arg_);
+  }
+  return result;
 }
 
 std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() {
@@ -31,7 +37,10 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
   bool is_second_arg_a_variable_synonym = QueryUtil::IsVariableSynonym(declaration_map, second_arg_);
-  bool is_first_arg_a_procedure_call = LexicalRuleValidator::IsIdent(first_arg_) && !QueryUtil::IsProcedureSynonym(declaration_map, second_arg_);
+  bool is_first_arg_a_procedure_synonym = QueryUtil::IsProcedureSynonym(declaration_map, second_arg_);
+  bool is_first_arg_a_call_synonym = QueryUtil::IsCallSynonym(declaration_map, second_arg_);
+  bool is_first_arg_a_procedure_name = LexicalRuleValidator::IsIdent(first_arg_) && !is_first_arg_a_procedure_synonym
+      && !is_first_arg_a_call_synonym;
 
   std::vector<std::vector<std::string>> result;
 
@@ -46,8 +55,8 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
       auto constraints = pkb->GetModifiesStatementVariablePairs(type);
       result = QueryUtil::ExtractFirstElementInTheVectors(constraints);
     } else {
-      //e.g. Modifies(a,”count”)
-        result = pkb->GetStatementsModifiesVariable(second_arg_);
+      //e.g. Modifies(a,”count”) -- get assignments that modify count
+        result = pkb->GetStatementsModifiesVariable(second_arg_, type);
       }
   }
 
@@ -63,7 +72,21 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
   }
 
   //! Evaluate Procedures
-  if (is_first_arg_a_procedure_call) {
+  if (is_first_arg_a_procedure_synonym || is_first_arg_a_call_synonym) {
+    //e.g. Modifies(p,v), Modifies(c,v)
+    if (is_second_arg_a_variable_synonym) {
+      result = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
+    } else if (is_second_arg_a_wildcard) {
+      //e.g. Modifies(p, _) --> get all procedures that are modified, Modifies(c, _)
+      auto constraints = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
+      result = QueryUtil::ExtractFirstElementInTheVectors(constraints);
+    } else {
+      //e.g. Modifies(p,”count”) -- get procedures that modify count,  Modifies(c, "count")
+      result = pkb->GetProceduresModifiesVariable(second_arg_, is_first_arg_a_call_synonym);
+    }
+  }
+
+  if (is_first_arg_a_procedure_name) {
     //e.g. Modifies("anya", v)
     if (is_second_arg_a_variable_synonym) {
       result = pkb->GetVariablesModifiedByProcedure(first_arg_);

@@ -57,7 +57,10 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariabl
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesProcedureVariablePairs() {
+/*
+ * If is call is true then return the procedures that are called in call statements only
+ */
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesProcedureVariablePairs(bool is_call) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
@@ -67,16 +70,23 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByProce
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name) {
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, std::string statement_type) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
+/*
+ * If is call is true then return the procedures that are called in call statements only
+ */
+std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name, bool is_call) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
 
-bool PkbReadFacade::IsModifies(std::string stmt_num, std::string ident) {
+bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string ident) {
+  return true;
+}
+
+bool PkbReadFacade::IsModifiesProcedure(std::string proc_name, std::string ident) {
   return true;
 }

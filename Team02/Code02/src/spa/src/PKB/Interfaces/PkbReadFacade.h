@@ -29,13 +29,13 @@ class PkbReadFacade {
   //! API for Modifies
   //TODO return the Result class instead
   std::vector<std::vector<std::string>> GetModifiesStatementVariablePairs(std::string statement_type);
-  std::vector<std::vector<std::string>> GetModifiesProcedureVariablePairs();
+  std::vector<std::vector<std::string>> GetModifiesProcedureVariablePairs(bool is_call);
   std::vector<std::vector<std::string>> GetVariablesModifiedByStatement(std::string stmt_num);
   std::vector<std::vector<std::string>> GetVariablesModifiedByProcedure(std::string proc_name);
-  std::vector<std::vector<std::string>> GetStatementsModifiesVariable(std::string var_name);
-  std::vector<std::vector<std::string>> GetProceduresModifiesVariable(std::string var_name);
-  bool IsModifies(std::string stmt_num, std::string ident);
-
+  std::vector<std::vector<std::string>> GetStatementsModifiesVariable(std::string var_name, std::string statement_type);
+  std::vector<std::vector<std::string>> GetProceduresModifiesVariable(std::string var_name, bool is_call);
+  bool IsModifiesStatement(std::string stmt_num, std::string ident);
+  bool IsModifiesProcedure(std::string proc_name, std::string ident);
 
 };
 
