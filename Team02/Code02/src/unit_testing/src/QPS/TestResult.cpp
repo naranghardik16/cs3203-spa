@@ -42,18 +42,23 @@ TEST_CASE("Test Result - Join result") {
   }
 
   SECTION("Test simple join - partially match extends with matching row - success") {
-    ResultHeader header_1{"w", "a"};
-    ResultTable table_1{{"5", "6"},
-                        {"5", "7"},
-                        {"5", "8"}};
+    ResultHeader header_1{"a", "v"};
+    ResultTable table_1{{"2", "x"}, {"4", "ost"}, {"6", "ost"}, {"6", "x"}, {"6", "y"}, {"6", "z"},
+                        {"6", "wes"}, {"10", "z"}, {"10", "ost"}, {"10", "x"}, {"10", "y"}, {"10", "z"},
+                        {"11", "x"}, {"11", "y"}, {"11", "z"}, {"13", "z"}, {"13", "wes"}, {"14", "ost"},
+                        {"14", "x"}, {"14", "y"}, {"14", "z"}, {"14", "wes"}, {"17", "z"}};
     Result r_1(header_1, table_1);
 
-    ResultHeader header_2{"a"};
-    ResultTable table_2{{"6"}};
+    ResultHeader header_2{"a1", "v"};
+    ResultTable table_2{{"6", "ost"}, {"10", "wes"}, {"11", "y"}, {"14", "ost"}};
     Result r_2(header_2, table_2);
 
-    ResultHeader expected_header{"w", "a"};
-    ResultTable expected_table{{"5", "6"}};
+    ResultHeader expected_header{"a", "v", "a1"};
+    ResultTable expected_table{{"4", "ost", "6"}, {"4", "ost", "14"}, {"6", "ost", "6"},
+                               {"6", "ost", "14"}, {"6", "y", "11"}, {"6", "wes", "10"},
+                               {"10", "ost", "6"}, {"10", "ost", "14"}, {"10", "y", "11"},
+                               {"11", "y", "11"}, {"13", "wes", "10"}, {"14", "ost", "6"},
+                               {"14", "ost", "14"}, {"14", "y", "11"}, {"14", "wes", "10"}};
     r_1.JoinResult(r_2);
 
     REQUIRE(r_1.header_ == expected_header);
