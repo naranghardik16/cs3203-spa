@@ -46,9 +46,9 @@ std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-//!Ignore the rest below for the demo
+// TODO: All these functions for demo
 std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
-  std::vector<std::vector<std::string>> result = {{"v"}, {"v1"}};
+  std::vector<std::vector<std::string>> result;
   return result;
 }
 
@@ -90,6 +90,8 @@ bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string ident)
 bool PkbReadFacade::IsModifiesProcedure(std::string proc_name, std::string ident) {
   return true;
 }
+
+
 
 std::vector<std::vector<std::string>> PkbReadFacade::GetFollowPairs(std::string statement_type, std::string statement_type_followee) {
   std::vector<std::vector<std::string>> result;
