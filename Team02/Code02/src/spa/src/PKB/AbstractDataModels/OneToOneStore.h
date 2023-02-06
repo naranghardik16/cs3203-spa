@@ -13,7 +13,7 @@ class OneToOneStore {
 
  public:
   OneToOneStore() = default;
-//  ~OneToOneStore();
+  ~OneToOneStore() = default;
 
   void insert(K key, V value);
   bool contains(K key, V value);
