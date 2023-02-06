@@ -39,7 +39,7 @@ class OneToManyStore {
    *
    * @param key - the target key to query
    * @param value - the target value to query
-   * @return
+   * @return true if exists, false otherwise
    */
   bool contains(K key, V value);
 
