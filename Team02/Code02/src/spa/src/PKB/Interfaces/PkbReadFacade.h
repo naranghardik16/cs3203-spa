@@ -6,7 +6,8 @@
 #include "PKB/PKB.h"
 
 /**
- * Facade implementation consisting of Read only methods which acts as an interface between QPS and PKB
+ * Facade implementation consisting of Read only methods
+ * which acts as an interface between QPS and PKB
  */
 class PkbReadFacade {
  private:
