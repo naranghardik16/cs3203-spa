@@ -13,8 +13,8 @@
  * A K key can have multiple V values and
  * A V value can have multiple K keys
  *
- * @tparam K - Key of the relation table
- * @tparam V - Value of the relation table
+ * @tparam K - Key of the relation store
+ * @tparam V - Value of the relation store
  */
 template<typename K, typename V>
 class ManyToManyStore {
@@ -37,7 +37,7 @@ class ManyToManyStore {
   void insert(K key, V value);
 
   /**
-   * Checks if K key and V value are present in the ManyToMany store
+   * Checks if key and value are present in the ManyToMany store
    *
    * @param key - the target key to query
    * @param value - the target value to query
