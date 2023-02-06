@@ -47,7 +47,7 @@ std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
 }
 
 std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
-  return this->pkb.modifies_store_->pipe(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
+  return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
 }
 
 

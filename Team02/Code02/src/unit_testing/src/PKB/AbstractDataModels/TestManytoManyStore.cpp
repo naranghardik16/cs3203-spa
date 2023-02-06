@@ -20,7 +20,8 @@ enum TestValues {
 TEST_CASE("AbstractDataModels: ManyToMany") {
   ManyToManyStore<TestKeys, TestValues> table;
   SECTION("empty state") {
-    REQUIRE(table.retrieveFromValue(TEST_VALUE2) == std::vector<TestKeys>{});
+    table.insert(TEST_KEY2, TEST_VALUE2);
+    REQUIRE(table.retrieveFromKey(TEST_KEY2) == std::vector<TestValues>{TEST_VALUE2});
   }
 
 }
