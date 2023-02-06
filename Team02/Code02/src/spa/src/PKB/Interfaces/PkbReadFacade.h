@@ -37,5 +37,10 @@ class PkbReadFacade {
   bool IsModifiesStatement(std::string stmt_num, std::string ident);
   bool IsModifiesProcedure(std::string proc_name, std::string ident);
 
+  //!API for Follows
+  std::vector<std::vector<std::string>> GetFollowPairs(std::string statement_type, std::string statement_type_followee);
+  std::vector<std::vector<std::string>> GetStatementsFollowedBy(std::string stmt_reference, std::string statement_type);
+  std::vector<std::vector<std::string>> GetStatementsFollowing(std::string stmt_reference, std::string statement_type);
+  bool IsFollows(std::string stmt_reference, std::string stmt_reference_followee);
 };
 

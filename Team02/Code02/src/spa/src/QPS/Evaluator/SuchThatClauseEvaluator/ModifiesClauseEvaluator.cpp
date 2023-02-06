@@ -61,14 +61,8 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
   }
 
   if (is_first_arg_an_integer) {
-    //e.g. Modifies(5, _)
-    if (is_second_arg_a_wildcard) {
+    //e.g. Modifies(5, _) e.g. Modifies(5,v)
       result = pkb->GetVariablesModifiedByStatement(first_arg_);
-    }
-    if (is_second_arg_a_variable_synonym) {
-      //e.g. Modifies(5,v)
-      result = pkb->GetVariablesModifiedByStatement(first_arg_);
-    }
   }
 
   //! Evaluate Procedures

@@ -90,3 +90,21 @@ bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string ident)
 bool PkbReadFacade::IsModifiesProcedure(std::string proc_name, std::string ident) {
   return true;
 }
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetFollowPairs(std::string statement_type, std::string statement_type_followee) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsFollowedBy(std::string stmt_reference, std::string statement_type) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsFollowing(std::string stmt_reference, std::string statement_type) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+bool PkbReadFacade::IsFollows(std::string stmt_reference, std::string stmt_reference_followee) {
+  return true;
+}
