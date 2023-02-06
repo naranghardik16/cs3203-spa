@@ -16,4 +16,8 @@ class PkbWriteFacade {
   PkbTypes::INDEX AddProcedure(PkbTypes::PROCEDURE procedure);
 
   PkbTypes::INDEX AddConstant(PkbTypes::CONSTANT constant);
+
+  void AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
+
+  void AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
 };
