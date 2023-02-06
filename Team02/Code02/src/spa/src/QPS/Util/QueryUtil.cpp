@@ -189,3 +189,28 @@ std::unordered_set<std::string> QueryUtil::ConvertToSet(std::vector<std::vector<
   return set;
 }
 
+/*
+ * Extract the first of a vector in a vector of vectors
+ */
+std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v) {
+  std::vector<std::vector<std::string>> result;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    std::vector<std::string> new_vector = {nested_vector[0]};
+    result.push_back(new_vector);
+  }
+  return result;
+}
+
+/*
+ * Extract the 2nd element of a vector in a vector of vectors
+ */
+std::vector<std::vector<std::string>> QueryUtil::ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v) {
+  std::vector<std::vector<std::string>> result;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    std::vector<std::string> new_vector = {nested_vector[1]};
+    result.push_back(new_vector);
+  }
+  return result;
+}

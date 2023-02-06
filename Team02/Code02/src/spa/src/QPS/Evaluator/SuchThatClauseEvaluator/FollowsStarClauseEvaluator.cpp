@@ -5,3 +5,10 @@ std::vector<std::vector<std::string>> FollowsStarClauseEvaluator::EvaluateClause
   std::vector<std::vector<std::string>> set;
   return set;
 }
+
+bool FollowsStarClauseEvaluator::IsBooleanConstraint() {
+  return true;
+}
+bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint() {
+  return true;
+}

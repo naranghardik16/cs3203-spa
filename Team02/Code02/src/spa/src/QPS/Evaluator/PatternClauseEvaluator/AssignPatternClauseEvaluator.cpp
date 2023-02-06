@@ -4,3 +4,10 @@ std::vector<std::vector<std::string>> AssignPatternClauseEvaluator::EvaluateClau
   std::vector<std::vector<std::string>> set;
   return set;
 }
+
+bool AssignPatternClauseEvaluator::IsBooleanConstraint() {
+  return true;
+}
+bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint() {
+  return true;
+}

@@ -52,7 +52,7 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByState
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs() {
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs(std::string statement_type) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
@@ -75,4 +75,8 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariab
 std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
   std::vector<std::vector<std::string>> result;
   return result;
+}
+
+bool PkbReadFacade::IsModifies(std::string stmt_num, std::string ident) {
+  return true;
 }
