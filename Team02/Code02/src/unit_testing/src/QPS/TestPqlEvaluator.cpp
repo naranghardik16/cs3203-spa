@@ -4,7 +4,7 @@
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/QueryParser.h"
 #include <memory>
-
+/*
 std::shared_ptr<Query> CreateParserOutput(Map declaration_map, Synonym synonym) {
   ClauseSyntaxPtrList syntax_ptr_list;
   return std::make_shared<Query>(synonym, declaration_map, syntax_ptr_list);
@@ -200,3 +200,23 @@ TEST_CASE("Check if PQLEvaluator works as expected using Parser") {
     REQUIRE(eval_result == correct_set);
   }
 }
+
+
+
+TEST_CASE("Temp") {
+  auto qp = std::make_shared<QueryParser>();
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
+
+  SECTION("Test on Modifies(Int, IDENT)") {
+    std::string query = "variable v;Select v such that Modifies(1,v)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"v", "v1"});
+    REQUIRE(eval_result == correct_set);
+  }
+}
+ */

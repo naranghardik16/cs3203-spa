@@ -18,7 +18,6 @@ class PkbReadFacade {
   std::unordered_set<std::string> GetConstants();
   std::unordered_set<std::string> GetProcedures();
 
-  //! API for basic Select statements
   std::unordered_set<std::string> GetStatements();
   std::unordered_set<std::string> GetReadStatements();
   std::unordered_set<std::string> GetPrintStatements();
@@ -27,16 +26,21 @@ class PkbReadFacade {
   std::unordered_set<std::string> GetIfStatements();
   std::unordered_set<std::string> GetAssignStatements();
 
-
   //! API for Modifies
   //TODO return the Result class instead
-  std::vector<std::vector<std::string>> GetModifiesStatementVariablePairs();
-  std::vector<std::vector<std::string>> GetModifiesProcedureVariablePairs();
+  std::vector<std::vector<std::string>> GetModifiesStatementVariablePairs(std::string statement_type);
+  std::vector<std::vector<std::string>> GetModifiesProcedureVariablePairs(bool is_call);
   std::vector<std::vector<std::string>> GetVariablesModifiedByStatement(std::string stmt_num);
   std::vector<std::vector<std::string>> GetVariablesModifiedByProcedure(std::string proc_name);
-  std::vector<std::vector<std::string>> GetStatementsModifiesVariable(std::string var_name);
-  std::vector<std::vector<std::string>> GetProceduresModifiesVariable(std::string var_name);
+  std::vector<std::vector<std::string>> GetStatementsModifiesVariable(std::string var_name, std::string statement_type);
+  std::vector<std::vector<std::string>> GetProceduresModifiesVariable(std::string var_name, bool is_call);
+  bool IsModifiesStatement(std::string stmt_num, std::string ident);
+  bool IsModifiesProcedure(std::string proc_name, std::string ident);
 
-
+  //!API for Follows
+  std::vector<std::vector<std::string>> GetFollowPairs(std::string statement_type, std::string statement_type_followee);
+  std::vector<std::vector<std::string>> GetStatementsFollowedBy(std::string stmt_reference, std::string statement_type);
+  std::vector<std::vector<std::string>> GetStatementsFollowing(std::string stmt_reference, std::string statement_type);
+  bool IsFollows(std::string stmt_reference, std::string stmt_reference_followee);
 };
 

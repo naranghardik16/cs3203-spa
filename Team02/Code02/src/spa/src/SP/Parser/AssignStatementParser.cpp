@@ -3,7 +3,7 @@
 AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
-  std::string_view var_name = ExtractVariableName(line);
+  std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto assign_stmt =
       new AssignStatement(Program::GetAndIncreaseStatementNumber(),

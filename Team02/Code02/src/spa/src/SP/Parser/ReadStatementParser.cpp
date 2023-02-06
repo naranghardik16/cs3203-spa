@@ -4,7 +4,7 @@
 ReadStatement *ReadStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
-  std::string_view var_name = ExtractVariableName(line);
+  std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto read_stmt =
       new ReadStatement(Program::GetAndIncreaseStatementNumber(), var,

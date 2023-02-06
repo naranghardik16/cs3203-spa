@@ -1,7 +1,8 @@
 //#include "OneToManyStore.h"
 
-template<typename K, typename V>
-OneToManyStore<K, V>::OneToManyStore() {};
+
+//template<typename K, typename V>
+//OneToManyStore<K, V>::OneToManyStore() {};
 
 //template<typename K, typename V>
 //OneToManyStore<K, V>::~OneToManyStore() {};
@@ -24,8 +25,8 @@ std::size_t OneToManyStore<K, V>::length() {
 }
 
 template<typename K, typename V>
-std::vector<V> OneToManyStore<K, V>::retrieveFromKey(K key) {
-  return std::vector<K>(this->forward_map_[key].begin(), this->forward_map_[key].end());
+std::unordered_set<V> OneToManyStore<K, V>::retrieveFromKey(K key) {
+  return this->forward_map_[key];
 }
 
 template<typename K, typename V>

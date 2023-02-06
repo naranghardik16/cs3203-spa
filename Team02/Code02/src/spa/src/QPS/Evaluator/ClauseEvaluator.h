@@ -24,6 +24,7 @@ class ClauseEvaluator {
   std::shared_ptr<PkbReadFacade> GetPKB();
 
   virtual std::vector<std::vector<std::string>> EvaluateClause() = 0;
-
+  virtual bool IsBooleanConstraint() = 0;
+  virtual bool EvaluateBooleanConstraint() = 0;
   virtual ~ClauseEvaluator() {};
 };

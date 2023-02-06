@@ -20,53 +20,47 @@ std::unordered_set<std::string> PkbReadFacade::GetProcedures() {
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetStatements() {
-  std::unordered_set<std::string> statement_set({"1", "2", "3"});
-  return statement_set;
+  return this->pkb.statement_store_->getAllStatements();
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetReadStatements() {
-  std::unordered_set<std::string> read_set({"4", "5", "6"});
-  return read_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetPrintStatements() {
-  std::unordered_set<std::string> print_set({"6", "7", "8"});
-  return print_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetCallStatements() {
-  std::unordered_set<std::string> call_set({"9", "10", "11"});
-  return call_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::CALL);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetWhileStatements() {
-  std::unordered_set<std::string> while_set({"12", "13", "14"});
-  return while_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::WHILE);
 }
 std::unordered_set<std::string> PkbReadFacade::GetIfStatements() {
-  std::unordered_set<std::string> if_set({"15", "16", "18"});
-  return if_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::IF);
 }
 
 std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
-  std::unordered_set<std::string> assign_set({"19", "20", "21"});
-  return assign_set;
+  return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-
+//!Ignore the rest below for the demo
 std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
   std::vector<std::vector<std::string>> result = {{"v"}, {"v1"}};
   return result;
 }
 
-//!Ignore the rest below for the demo
-
-std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs() {
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesStatementVariablePairs(std::string statement_type) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesProcedureVariablePairs() {
+/*
+ * If is call is true then return the procedures that are called in call statements only
+ */
+std::vector<std::vector<std::string>> PkbReadFacade::GetModifiesProcedureVariablePairs(bool is_call) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
@@ -76,12 +70,41 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetVariablesModifiedByProce
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name) {
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, std::string statement_type) {
   std::vector<std::vector<std::string>> result;
   return result;
 }
 
-std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
+/*
+ * If is call is true then return the procedures that are called in call statements only
+ */
+std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariable(std::string var_name, bool is_call) {
   std::vector<std::vector<std::string>> result;
   return result;
+}
+
+bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string ident) {
+  return true;
+}
+
+bool PkbReadFacade::IsModifiesProcedure(std::string proc_name, std::string ident) {
+  return true;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetFollowPairs(std::string statement_type, std::string statement_type_followee) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsFollowedBy(std::string stmt_reference, std::string statement_type) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+std::vector<std::vector<std::string>> PkbReadFacade::GetStatementsFollowing(std::string stmt_reference, std::string statement_type) {
+  std::vector<std::vector<std::string>> result;
+  return result;
+}
+
+bool PkbReadFacade::IsFollows(std::string stmt_reference, std::string stmt_reference_followee) {
+  return true;
 }

@@ -9,10 +9,11 @@ class PkbTypes {
   typedef std::string PROCEDURE;
   typedef std::string VARIABLE;
   typedef std::string CONSTANT;
-  typedef std::size_t LINE_NUMBER;
+  typedef std::string STATEMENT_NUMBER;
+  typedef std::string FIELD;
+
 
   typedef std::unordered_set<VARIABLE> VARIABLE_SET;
-  typedef std::unordered_set<LINE_NUMBER> LINE_SET;
   typedef std::variant<VARIABLE_SET, PROCEDURE> MODIFIES;
 
   typedef std::size_t INDEX;
