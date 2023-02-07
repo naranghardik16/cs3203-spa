@@ -3,6 +3,7 @@
 #include "QPS/Util/HashPair.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/Result.h"
+#include <memory>
 
 class ClauseEvaluator {
  private:

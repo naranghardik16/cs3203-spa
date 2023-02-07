@@ -85,7 +85,7 @@ std::vector<std::vector<std::string>> PkbReadFacade::GetProceduresModifiesVariab
 }
 
 bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string ident) {
-  return true;
+  return false;
 }
 
 bool PkbReadFacade::IsModifiesProcedure(std::string proc_name, std::string ident) {

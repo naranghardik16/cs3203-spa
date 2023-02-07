@@ -193,8 +193,37 @@ std::unordered_set<std::string> QueryUtil::ConvertToSet(std::vector<std::vector<
     auto nested_vector = v[i];
     set.insert(nested_vector[0]);
   }
+
   return set;
 }
+
+/*
+ * Converts an unordered set to a ResultRow format
+ */
+std::vector<std::vector<std::string>> QueryUtil::ConvertSetToResultRowFormat(std::unordered_set<std::string> s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
+/*
+ * Converts an unordered set of pairs to a ResultRow format
+ */
+std::vector<std::vector<std::string>> QueryUtil::ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string, std::string>> s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem.first);
+    nested_vector.push_back(kElem.second);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
 
 /*
  * Extract the first of a vector in a vector of vectors
