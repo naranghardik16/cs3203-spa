@@ -3,87 +3,63 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 
-bool ModifiesClauseEvaluator::IsBooleanConstraint() {
+bool ModifiesClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  auto is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
-  auto is_first_arg_a_procedure_call = LexicalRuleValidator::IsIdent(first_arg_)
-      && !QueryUtil::IsProcedureSynonym(declaration_map, second_arg_);
+
+  bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
+  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
   bool is_second_arg_a_variable_synonym = QueryUtil::IsVariableSynonym(declaration_map, second_arg_);
-  bool is_second_arg_a_ident = LexicalRuleValidator::IsIdent(second_arg_) && !is_second_arg_a_variable_synonym;
 
-  //e.g. Modifies("anya",”count”) or Modifies(5, "count)
-  return ((is_first_arg_an_integer && is_second_arg_a_ident) || is_first_arg_a_procedure_call && is_second_arg_a_ident);
-}
-
-bool ModifiesClauseEvaluator::EvaluateBooleanConstraint() {
-  auto pkb = ClauseEvaluator::GetPKB();
-  auto is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
-  bool result;
+  //! If first arg is wildcard then semantic error; If first arg is synonym then it is not considered boolean constraint
   if (is_first_arg_an_integer) {
-    result = pkb->IsModifiesStatement(first_arg_, second_arg_);
-  } else {
-    result = pkb->IsModifiesProcedure(first_arg_, second_arg_);
+    if (is_second_arg_a_wildcard) {
+      //Modifies(5, _) -- does 5 modify any variables?
+      return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
+    } else if (is_second_arg_a_variable_synonym) {
+      //Select v1 such that Modifies(5,v) -- does 5 modify any variables?
+      return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
+    } else {
+      //Modifies(5, "count") -- does 5 modify "count"?
+      return pkb->IsModifiesStatement(first_arg_, second_arg_);
+    }
   }
-  return result;
 }
 
-std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() {
-  auto syntax_pair = ClauseEvaluator::GetSyntaxPair();
+std::shared_ptr<Result> ModifiesClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  auto pkb = ClauseEvaluator::GetPKB();
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsAssignSynonym(declaration_map, first_arg_)
       || QueryUtil::IsReadSynonym(declaration_map, first_arg_) || QueryUtil::IsContainerStatementSynonym(declaration_map, first_arg_);
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
+
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
   bool is_second_arg_a_variable_synonym = QueryUtil::IsVariableSynonym(declaration_map, second_arg_);
-  bool is_first_arg_a_procedure_synonym = QueryUtil::IsProcedureSynonym(declaration_map, second_arg_);
-  bool is_first_arg_a_call_synonym = QueryUtil::IsCallSynonym(declaration_map, second_arg_);
-  bool is_first_arg_a_procedure_name = LexicalRuleValidator::IsIdent(first_arg_) && !is_first_arg_a_procedure_synonym
-      && !is_first_arg_a_call_synonym;
+  bool is_second_arg_a_ident = QueryUtil::IsQuoted(second_arg_);
+  ResultTable table;
 
-  std::vector<std::vector<std::string>> result;
-
-  //! Evaluate Statements
   if (is_first_arg_a_type_of_statement_synonym) {
     auto type = declaration_map[first_arg_];
-    //e.g. Modifies(a,v)
-    if (is_second_arg_a_variable_synonym) {
-      result = pkb->GetModifiesStatementVariablePairs(type);
-    } else if (is_second_arg_a_wildcard) {
-      //e.g. Modifies(a, _) --> get all assignments that are modified
-      auto constraints = pkb->GetModifiesStatementVariablePairs(type);
-      result = QueryUtil::ExtractFirstElementInTheVectors(constraints);
+    if (is_second_arg_a_wildcard) {
+      //e.g. Select s such that Modifies(s, _) --> is there a statement that modifies a variable?
+      auto constraints = pkb->GetModifiesStatementVariablePairs(declaration_map[first_arg_]);
+      table = QueryUtil::ExtractFirstElementInTheVectors(constraints);
+    } else if (is_second_arg_a_variable_synonym) {
+      //e.g. Modifies(a,v)
+      table = pkb->GetModifiesStatementVariablePairs(type);
     } else {
       //e.g. Modifies(a,”count”) -- get assignments that modify count
-        result = pkb->GetStatementsModifiesVariable(second_arg_, type);
+      table = pkb->GetStatementsModifiesVariable(second_arg_, type);
       }
   }
 
   if (is_first_arg_an_integer) {
-    //e.g. Modifies(5, _) e.g. Modifies(5,v)
-      result = pkb->GetVariablesModifiedByStatement(first_arg_);
+    //e.g.Modifies(5,v)
+    table = pkb->GetVariablesModifiedByStatement(first_arg_);
   }
 
-  //! Evaluate Procedures
-  if (is_first_arg_a_procedure_synonym || is_first_arg_a_call_synonym) {
-    //e.g. Modifies(p,v), Modifies(c,v)
-    if (is_second_arg_a_variable_synonym) {
-      result = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
-    } else if (is_second_arg_a_wildcard) {
-      //e.g. Modifies(p, _) --> get all procedures that do modification, Modifies(c, _)
-      auto constraints = pkb->GetModifiesProcedureVariablePairs(is_first_arg_a_call_synonym);
-      result = QueryUtil::ExtractFirstElementInTheVectors(constraints);
-    } else {
-      //e.g. Modifies(p,”count”) -- get procedures that modify count,  Modifies(c, "count")
-      result = pkb->GetProceduresModifiesVariable(second_arg_, is_first_arg_a_call_synonym);
-    }
-  }
+  ResultHeader header;
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
-  if (is_first_arg_a_procedure_name) {
-    //e.g. Modifies("anya", v), e.g. Modifies("anya", _)
-      result = pkb->GetVariablesModifiedByProcedure(first_arg_);
-  }
+  return result_ptr;
 
-  return result;
 }

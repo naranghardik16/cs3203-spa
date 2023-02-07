@@ -12,52 +12,76 @@ PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::sha
   pkb_ = std::move(pkb);
 }
 
+bool PqlEvaluator::IsBooleanConstraint(const SyntaxPair& pair) {
+  auto first_arg = pair.second.first;
+  auto second_arg = pair.second.second;
+  bool is_first_arg_a_synonym = declaration_map_.count(first_arg);
+  bool is_second_arg_a_synonym = declaration_map_.count(second_arg);
+  bool has_synonym = (is_first_arg_a_synonym) || is_second_arg_a_synonym;
+  return !has_synonym;
+}
+
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   Map map_test = declaration_map_;
 
-  std::unordered_set<std::string> results;
-  if (syntax_pair_list_.empty()) {
-    results = EvaluateTrivialSelectStatement();
-    return results;
+  std::shared_ptr<Result> evaluation_result = EvaluateTrivialSelectStatement();
+
+  //!Evaluate and remove all boolean constraints first
+  for (int i=0; i<syntax_pair_list_.size();i++) {
+    auto clause = syntax_pair_list_[i];
+    auto is_bool_constraint = IsBooleanConstraint(clause->GetSyntaxPair());
+
+    if (is_bool_constraint) {
+      auto evaluator = clause->CreateClauseEvaluator(synonym_, declaration_map_);
+      auto bool_output = evaluator->EvaluateBooleanConstraint(pkb_);
+      if (bool_output == false) {
+        std::unordered_set<std::string> empty_set;
+        return empty_set;
+      }
+      syntax_pair_list_.erase(syntax_pair_list_.begin()+i);
+    }
   }
 
-  std::vector<std::vector<std::string>> evaluation_result;
+  //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
   for (const auto &kClause : syntax_pair_list_) {
-    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_, pkb_);
-    evaluation_result = evaluator->EvaluateClause();
+    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_);
+    evaluation_result = evaluator->EvaluateClause(pkb_);
     //store result into table
     //get intersection if needed
   }
 
-  results = QueryUtil::ConvertToSet(evaluation_result);
+
+  ResultTable result_table = evaluation_result->GetResultTable();
+  auto results = QueryUtil::ConvertToSet(result_table);
 
   return results;
 }
 
-
-//TODO change to vector<vector<std::string>>
-std::unordered_set<std::string> PqlEvaluator::EvaluateTrivialSelectStatement() {
+std::shared_ptr<Result> PqlEvaluator::EvaluateTrivialSelectStatement() {
+  ResultHeader header;
+  header.push_back(synonym_);
+  ResultTable table;
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetVariables();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetVariables());
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetConstants();
+    table =  QueryUtil::ConvertSetToResultRowFormat(pkb_->GetConstants());
   } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetAssignStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetAssignStatements());
   } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetIfStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetIfStatements());
   } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetStatements());
   } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetWhileStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetWhileStatements());
   } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetPrintStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetPrintStatements());
   } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetReadStatements();
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetReadStatements());
   } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetCallStatements();
-  } else if (QueryUtil::IsProcedureSynonym(declaration_map_, synonym_)) {
-    return pkb_->GetProcedures();
-  } else {
-    throw std::invalid_argument("The synonym is not validated correctly as the synonym type cannot be identified");
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetCallStatements());
+  } else  {
+    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetProcedures());
   }
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+  return result_ptr;
 }

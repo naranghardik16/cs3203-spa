@@ -7,12 +7,11 @@ class ModifiesClauseEvaluator : public ClauseEvaluator {
   std::string first_arg_;
   std::string second_arg_;
  public:
-  ModifiesClauseEvaluator(Synonym s, Map d, SyntaxPair syntax_pair, std::shared_ptr<PkbReadFacade> pkb) : ClauseEvaluator(s,d,syntax_pair, pkb) {
+  ModifiesClauseEvaluator(Synonym s, Map d, SyntaxPair syntax_pair) : ClauseEvaluator(s,d,syntax_pair) {
     relationship_reference_ = syntax_pair.first;
     first_arg_ =  syntax_pair.second.first;
     second_arg_ = syntax_pair.second.second;
   }
-  std::vector<std::vector<std::string>> EvaluateClause();
-  bool IsBooleanConstraint();
-  bool EvaluateBooleanConstraint();
+  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb);
+  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb);
 };

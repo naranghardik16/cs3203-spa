@@ -2,6 +2,10 @@
 
 Result::Result(ResultHeader header, ResultTable table) : header_(header), table_(table) {}
 
+ResultTable Result::GetResultTable() {
+  return table_;
+}
+
 void Result::JoinResult(Result &result) {
   if (result.header_.empty() || this->header_.empty()) {
     return;

@@ -1,15 +1,13 @@
 #pragma once
 #include "UsesClauseEvaluator.h"
 
-bool UsesClauseEvaluator::IsBooleanConstraint() {
+bool UsesClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   return true;
 }
 
-bool UsesClauseEvaluator::EvaluateBooleanConstraint() {
-  return true;
-}
-
-std::vector<std::vector<std::string>> UsesClauseEvaluator::EvaluateClause() {
-  std::vector<std::vector<std::string>> set;
-  return set;
+std::shared_ptr<Result> UsesClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+  ResultHeader header;
+  ResultTable table;
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+  return result_ptr;
 }

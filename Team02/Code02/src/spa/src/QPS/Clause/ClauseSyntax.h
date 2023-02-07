@@ -17,5 +17,5 @@ class ClauseSyntax {
   SyntaxPair GetSyntaxPair();
 
   virtual bool Equals(ClauseSyntax &other) = 0;
-  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Synonym s, Map &declaration_map, std::shared_ptr<PkbReadFacade> pkb) = 0;
+  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Synonym s, Map &declaration_map) = 0;
 };

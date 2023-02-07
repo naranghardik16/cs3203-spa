@@ -22,21 +22,21 @@ bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   return false;
 }
 
-std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map, std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
   std::shared_ptr<ClauseEvaluator> evaluator;
   std::string relationship_reference = ClauseSyntax::GetEntity();
   if (relationship_reference == pql_constants::kPqlFollowsRel) {
-    evaluator = std::make_shared<FollowsClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<FollowsClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlFollowsStarRel) {
-    evaluator = std::make_shared<FollowsStarClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<FollowsStarClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlParentRel) {
-    evaluator = std::make_shared<ParentClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<ParentClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlParentStarRel) {
-    evaluator = std::make_shared<ParentStarClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<ParentStarClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlUsesRel) {
-    evaluator = std::make_shared<UsesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<UsesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else {
-    evaluator = std::make_shared<ModifiesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
+    evaluator = std::make_shared<ModifiesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   }
   return evaluator;
 }

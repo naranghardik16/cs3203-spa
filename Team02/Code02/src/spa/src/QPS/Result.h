@@ -23,4 +23,7 @@ class Result {
   //Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
   static ResultTable FindMatch(ResultRow &row, ResultTable &table, InterceptResult &intercept);
+
+  //Getter
+  ResultTable GetResultTable();
 };
