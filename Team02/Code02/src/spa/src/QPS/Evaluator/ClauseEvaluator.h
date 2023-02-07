@@ -1,8 +1,8 @@
 #pragma once
 #include "QPS/Util/QPSTypeDefs.h"
-#include "QPS/Util/HashPair.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/Result.h"
+#include "General/StatementTypeEnum.h"
 #include <memory>
 
 class ClauseEvaluator {
@@ -21,7 +21,6 @@ class ClauseEvaluator {
   Synonym GetSynonym();
   Map GetDeclarationMap();
   SyntaxPair GetSyntaxPair();
-
   virtual std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) = 0;
   virtual bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) = 0;
   virtual ~ClauseEvaluator() {};

@@ -3,16 +3,7 @@
 #include <string>
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
-
-enum StatementType {
-  IF,
-  READ,
-  PRINT,
-  CALL,
-  UNK,
-  ASSIGN,
-  WHILE
-};
+#include "General/StatementTypeEnum.h"
 
 class StatementStore {
  public:

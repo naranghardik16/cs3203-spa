@@ -2,7 +2,7 @@
 #include "SuchThatClauseSyntax.h"
 
 #include <utility>
-#include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesStatementClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/UsesClauseEvaluator.h"
 #include "QPS/Util/PQLConstants.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ParentStarClauseEvaluator.h"
@@ -36,7 +36,7 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Syn
   } else if (relationship_reference == pql_constants::kPqlUsesRel) {
     evaluator = std::make_shared<UsesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else {
-    evaluator = std::make_shared<ModifiesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+    evaluator = std::make_shared<ModifiesStatementClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   }
   return evaluator;
 }

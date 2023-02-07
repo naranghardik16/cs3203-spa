@@ -22,6 +22,6 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Clause/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h")
 
-add_library(spa ${srcs} ${headers} src/QPS/Result.h)
+add_library(spa ${srcs} ${headers} src/QPS/Result.h src/General/StatementTypeEnum.h src/General/StatementTypeEnum.h)
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

@@ -1,10 +1,9 @@
 #pragma once
-#include <vector>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
-#include "HashPair.h"
+#include <memory>
 // Forward declarations of classes if any
 
 typedef std::vector<std::string> Declarations;
@@ -23,13 +22,6 @@ typedef std::pair<DesignEntity, ParameterPair> SyntaxPair;
 class ClauseSyntax;
 typedef std::vector<std::shared_ptr<ClauseSyntax>> ClauseSyntaxPtrList;
 
-typedef std::string SingleConstraint;
-//! E.g. {1,2,3,4} for Select a (assign) is a SingleConstraintSet
-typedef std::unordered_set<SingleConstraint> SingleConstraintSet;
-
-typedef std::pair<std::string, std::string> PairConstraint;
-//! E.g. Uses(s,v) gives a PairConstraintSet {(1,v1), (2,v2)}
-typedef std::unordered_set<PairConstraint, hash_pair> PairConstraintSet;
 
 typedef std::vector<std::string> ResultHeader;
 typedef std::vector<std::string> ResultRow;

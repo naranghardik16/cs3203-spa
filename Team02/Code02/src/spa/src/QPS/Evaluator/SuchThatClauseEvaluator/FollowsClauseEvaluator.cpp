@@ -5,6 +5,7 @@
 
 
 bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
+  /*
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
@@ -39,11 +40,13 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
   }
 
   return !table.empty();
-
+   */
+  return true;
 }
 
 
 std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+  /*
   auto syntax_pair = ClauseEvaluator::GetSyntaxPair();
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
@@ -84,8 +87,9 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
     auto constraints = pkb->GetFollowPairs(declaration_map[second_arg_], kEmpty);
     table = QueryUtil::ExtractSecondElementInTheVectors(constraints);
   }
-
+*/
   ResultHeader header;
+  ResultTable table;
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
 }
