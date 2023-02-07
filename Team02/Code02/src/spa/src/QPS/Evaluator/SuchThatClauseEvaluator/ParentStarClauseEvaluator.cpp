@@ -1,15 +1,13 @@
 #pragma once
 #include "ParentStarClauseEvaluator.h"
 
-bool ParentStarClauseEvaluator::IsBooleanConstraint() {
+bool ParentStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   return true;
 }
 
-bool ParentStarClauseEvaluator::EvaluateBooleanConstraint() {
-  return true;
-}
-
-std::vector<std::vector<std::string>>ParentStarClauseEvaluator::EvaluateClause() {
-  std::vector<std::vector<std::string>> set;
-  return set;
+std::shared_ptr<Result> ParentStarClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+  ResultHeader header;
+  ResultTable table;
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+  return result_ptr;
 }

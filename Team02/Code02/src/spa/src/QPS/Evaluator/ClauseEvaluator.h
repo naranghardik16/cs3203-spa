@@ -2,29 +2,26 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Util/HashPair.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
+#include "QPS/Result.h"
 
 class ClauseEvaluator {
  private:
   Synonym synonym_;
   Map declaration_map_;
   SyntaxPair syntax_pair_;
-  std::shared_ptr<PkbReadFacade> pkb_;
 
  public:
-  ClauseEvaluator(Synonym synonym, Map declaration_map, SyntaxPair pair, std::shared_ptr<PkbReadFacade> pkb) {
+  ClauseEvaluator(Synonym synonym, Map declaration_map, SyntaxPair pair) {
     synonym_ = synonym;
     declaration_map_ = declaration_map;
     syntax_pair_ = pair;
-    pkb_ = std::move(pkb);
   }
 
   Synonym GetSynonym();
   Map GetDeclarationMap();
   SyntaxPair GetSyntaxPair();
-  std::shared_ptr<PkbReadFacade> GetPKB();
 
-  virtual std::vector<std::vector<std::string>> EvaluateClause() = 0;
-  virtual bool IsBooleanConstraint() = 0;
-  virtual bool EvaluateBooleanConstraint() = 0;
+  virtual std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) = 0;
+  virtual bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) = 0;
   virtual ~ClauseEvaluator() {};
 };

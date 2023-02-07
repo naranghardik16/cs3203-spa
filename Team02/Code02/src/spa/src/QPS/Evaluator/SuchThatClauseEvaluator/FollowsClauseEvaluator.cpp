@@ -3,15 +3,8 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 
-bool FollowsClauseEvaluator::IsBooleanConstraint() {
-  auto select_synonym = ClauseEvaluator::GetSynonym();
-  bool is_select_synonym_in_arg = first_arg_ == select_synonym || second_arg_ == select_synonym;
-  bool is_either_arg_an_ident = QueryUtil::IsQuoted(first_arg_) || QueryUtil::IsQuoted(second_arg_);
-  return (is_select_synonym_in_arg || is_either_arg_an_ident);
-}
 
-bool FollowsClauseEvaluator::EvaluateBooleanConstraint() {
-  auto pkb = ClauseEvaluator::GetPKB();
+bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
@@ -69,10 +62,10 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint() {
     return !result.empty();
   }
 
-  std::vector<std::vector<std::string>> FollowsClauseEvaluator::EvaluateClause() {
+
+std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
     auto syntax_pair = ClauseEvaluator::GetSyntaxPair();
     auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-    auto pkb = ClauseEvaluator::GetPKB();
 
     bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
     bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
@@ -95,6 +88,9 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint() {
       result = pkb->GetStatementsFollowing(first_arg_, declaration_map[second_arg_]);
     }
 
-    return result;
+    ResultHeader header;
+    ResultTable table;
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
   }
 

@@ -3,16 +3,8 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 
-bool ModifiesClauseEvaluator::IsBooleanConstraint() {
-  auto select_synonym = ClauseEvaluator::GetSynonym();
-  bool is_select_synonym_in_arg = first_arg_ == select_synonym || second_arg_ == select_synonym;
-  bool is_second_arg_an_ident = QueryUtil::IsQuoted(second_arg_);
-  return (is_select_synonym_in_arg || is_second_arg_an_ident);
-}
-
-bool ModifiesClauseEvaluator::EvaluateBooleanConstraint() {
+bool ModifiesClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  auto pkb = ClauseEvaluator::GetPKB();
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsAssignSynonym(declaration_map, first_arg_)
       || QueryUtil::IsReadSynonym(declaration_map, first_arg_) || QueryUtil::IsContainerStatementSynonym(declaration_map, first_arg_);
@@ -55,9 +47,8 @@ bool ModifiesClauseEvaluator::EvaluateBooleanConstraint() {
   return !result.empty();
 }
 
-std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() {
+std::shared_ptr<Result> ModifiesClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  auto pkb = ClauseEvaluator::GetPKB();
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsAssignSynonym(declaration_map, first_arg_)
       || QueryUtil::IsReadSynonym(declaration_map, first_arg_) || QueryUtil::IsContainerStatementSynonym(declaration_map, first_arg_);
@@ -84,5 +75,8 @@ std::vector<std::vector<std::string>> ModifiesClauseEvaluator::EvaluateClause() 
       result = pkb->GetVariablesModifiedByStatement(first_arg_);
   }
 
-  return result;
+  ResultHeader header;
+  ResultTable table;
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+  return result_ptr;
 }

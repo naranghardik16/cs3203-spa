@@ -10,7 +10,3 @@ Map ClauseEvaluator::GetDeclarationMap() {
 SyntaxPair ClauseEvaluator::GetSyntaxPair() {
   return syntax_pair_;
 }
-
-std::shared_ptr<PkbReadFacade> ClauseEvaluator::GetPKB() {
-  return pkb_;
-}

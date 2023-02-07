@@ -23,8 +23,8 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
 
   std::vector<std::vector<std::string>> evaluation_result;
   for (const auto &kClause : syntax_pair_list_) {
-    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_, pkb_);
-    evaluation_result = evaluator->EvaluateClause();
+    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_);
+    auto evaluation_result = evaluator->EvaluateClause(pkb_);
     //store result into table
     //get intersection if needed
   }
