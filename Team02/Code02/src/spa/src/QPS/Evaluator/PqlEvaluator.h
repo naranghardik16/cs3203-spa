@@ -3,6 +3,7 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
+#include "QPS/Result.h"
 #include <memory>
 
 class PqlEvaluator {
@@ -17,7 +18,7 @@ class PqlEvaluator {
 
   std::unordered_set<std::string> Evaluate();
 
-  std::unordered_set<std::string> EvaluateTrivialSelectStatement();
+  std::shared_ptr<Result> EvaluateTrivialSelectStatement();
 
   bool IsBooleanConstraint(const SyntaxPair& pair);
 };

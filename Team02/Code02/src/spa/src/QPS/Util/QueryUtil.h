@@ -52,8 +52,8 @@ class QueryUtil {
   static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
-  std::vector<std::vector<std::string>> ConvertSetToResultRowFormat(std::unordered_set<std::string> s);
-  std::vector<std::vector<std::string>> ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string,
+  static std::vector<std::vector<std::string>> ConvertSetToResultRowFormat(std::unordered_set<std::string> s);
+  static std::vector<std::vector<std::string>> ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string,
                                                                                                      std::string>> s);
 };
 
