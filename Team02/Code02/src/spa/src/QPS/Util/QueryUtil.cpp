@@ -2,9 +2,8 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 #include "QPS/Util/QPSTypeDefs.h"
-#include <algorithm>
 #include "QPS/Util/PQLConstants.h"
-#include "General/SpaException/SyntaxErrorException.h"
+#include "General/StatementTypeEnum.h"
 
 /*
 * Checks if the expression is a variable synonym
@@ -184,6 +183,26 @@ bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expressi
   return result;
 }
 
+
+/**
+ * Returns a statement type enum based on a given synonym
+ */
+StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& expression) {
+  if (IsIfSynonym(declaration, expression)) {
+    return StatementType::IF;
+  } else if (IsReadSynonym(declaration, expression)) {
+    return StatementType::READ;
+  } else if (IsPrintSynonym(declaration, expression)) {
+    return StatementType::PRINT;
+  } else if (IsCallSynonym(declaration, expression)) {
+    return StatementType::CALL;
+  } else if (IsAssignSynonym(declaration, expression)) {
+    return StatementType::ASSIGN;
+  } else {
+    return StatementType::WHILE;
+  }
+}
+
 /*
  * Converts a vector to an unordered set
  */
@@ -197,35 +216,7 @@ std::unordered_set<std::string> QueryUtil::ConvertToSet(std::vector<std::vector<
   return set;
 }
 
-/*
- * Converts an unordered set to a ResultRow format
- */
-std::vector<std::vector<std::string>> QueryUtil::ConvertSetToResultRowFormat(std::unordered_set<std::string> s) {
-  std::vector<std::vector<std::string>> result;
-  for (const auto& kElem: s) {
-    std::vector<std::string> nested_vector;
-    nested_vector.push_back(kElem);
-    result.push_back(nested_vector);
-  }
-  return result;
-}
-
-/*
- * Converts an unordered set of pairs to a ResultRow format
- */
-std::vector<std::vector<std::string>> QueryUtil::ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string, std::string>> s) {
-  std::vector<std::vector<std::string>> result;
-  for (const auto& kElem: s) {
-    std::vector<std::string> nested_vector;
-    nested_vector.push_back(kElem.first);
-    nested_vector.push_back(kElem.second);
-    result.push_back(nested_vector);
-  }
-  return result;
-}
-
-
-/*
+/**
  * Extract the first of a vector in a vector of vectors
  */
 std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v) {
@@ -238,7 +229,36 @@ std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors
   return result;
 }
 
-/*
+
+/**
+ * Converts an unordered set to a ResultRow format
+ */
+ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
+/**
+ * Converts an unordered set of pairs to a ResultRow format
+ */
+ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PairConstraintSet s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem.first);
+    nested_vector.push_back(kElem.second);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
+
+/**
  * Extract the 2nd element of a vector in a vector of vectors
  */
 std::vector<std::vector<std::string>> QueryUtil::ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v) {

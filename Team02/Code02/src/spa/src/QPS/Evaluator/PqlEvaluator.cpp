@@ -62,25 +62,25 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateTrivialSelectStatement() {
   header.push_back(synonym_);
   ResultTable table;
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetVariables());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetVariables());
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    table =  QueryUtil::ConvertSetToResultRowFormat(pkb_->GetConstants());
+    table =  QueryUtil::ConvertSetToResultTableFormat(pkb_->GetConstants());
   } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetAssignStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
   } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetIfStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
   } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetStatements());
   } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetWhileStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
   } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetPrintStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
   } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetReadStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
   } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetCallStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
   } else  {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetProcedures());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetProcedures());
   }
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;

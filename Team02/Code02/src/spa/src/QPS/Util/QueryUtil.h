@@ -3,6 +3,8 @@
 #include "QPSTypeDefs.h"
 #include <unordered_set>
 #include <unordered_map>
+#include "General/StatementTypeEnum.h"
+#include "PKB/Interfaces/PkbReadFacade.h"
 
 class QueryUtil {
 
@@ -49,11 +51,13 @@ class QueryUtil {
 
   static bool IsATypeOfStatementSynonym(Map &declaration, const std::string& expression);
 
+  static StatementType GetStatementType(Map &declaration, const std::string &expression);
+
   static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
-  static std::vector<std::vector<std::string>> ConvertSetToResultRowFormat(std::unordered_set<std::string> s);
-  static std::vector<std::vector<std::string>> ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string,
-                                                                                                     std::string>> s);
+
+  static ResultTable ConvertSetToResultTableFormat(SingleConstraintSet s);
+  static ResultTable ConvertPairSetToResultTableFormat(PairConstraintSet s);
 };
 

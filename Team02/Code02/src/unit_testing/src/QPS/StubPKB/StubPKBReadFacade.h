@@ -13,27 +13,40 @@ class StubPkbReadFacade : public PkbReadFacade {
 
   ~StubPkbReadFacade();
 
-  std::unordered_set<std::string> GetVariables();
-  std::unordered_set<std::string> GetConstants();
-  std::unordered_set<std::string> GetProcedures();
-
   //! API for basic Select statements
-  std::unordered_set<std::string> GetStatements();
-  std::unordered_set<std::string> GetReadStatements();
-  std::unordered_set<std::string> GetPrintStatements();
-  std::unordered_set<std::string> GetCallStatements();
-  std::unordered_set<std::string> GetWhileStatements();
-  std::unordered_set<std::string> GetIfStatements();
-  std::unordered_set<std::string> GetAssignStatements();
+  SingleConstraintSet GetVariables();
+  SingleConstraintSet GetConstants();
+  SingleConstraintSet GetProcedures();
+  SingleConstraintSet GetStatements();
+  SingleConstraintSet GetReadStatements();
+  SingleConstraintSet GetPrintStatements();
+  SingleConstraintSet GetCallStatements();
+  SingleConstraintSet GetWhileStatements();
+  SingleConstraintSet GetIfStatements();
+  SingleConstraintSet GetAssignStatements();
 
-  //! API for Modifies
-  //TODO return the Result class instead
-  std::vector<std::vector<std::string>> GetModifiesStatementVariablePairs();
-  std::vector<std::vector<std::string>> GetModifiesProcedureVariablePairs();
-  std::vector<std::vector<std::string>> GetVariablesModifiedByStatement(std::string stmt_num);
-  std::vector<std::vector<std::string>> GetVariablesModifiedByProcedure(std::string proc_name);
-  std::vector<std::vector<std::string>> GetStatementsModifiesVariable(std::string var_name);
-  std::vector<std::vector<std::string>> GetProceduresModifiesVariable(std::string var_name);
+  //! API for Modifies - Statement
+  SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
+  PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
+  SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
+  bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name);
+
+  //! API for Modifies - Procedure
+  SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
+  PairConstraintSet GetModifiesProcedureVariablePairs(bool is_call);
+  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name, bool is_call);
+  SingleConstraintSet GetProceduresThatModify(bool is_call);
+  bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
+
+  //!API for Follows
+  PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
+  SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
+  SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
+  bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
+  bool IsAnyFollowsRelationshipPresent();
 
 
 };
