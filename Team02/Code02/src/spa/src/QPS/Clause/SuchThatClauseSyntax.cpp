@@ -1,5 +1,7 @@
 #pragma once
 #include "SuchThatClauseSyntax.h"
+
+#include <utility>
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/UsesClauseEvaluator.h"
 #include "QPS/Util/PQLConstants.h"
@@ -8,11 +10,11 @@
 #include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsStarClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsClauseEvaluator.h"
 
-SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
 bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
-  SuchThatClauseSyntax *sc = dynamic_cast<SuchThatClauseSyntax*>(&other);
+  auto *sc = dynamic_cast<SuchThatClauseSyntax*>(&other);
   if (sc) {
     return (this->GetEntity() == sc->GetEntity()) && (this->GetFirstParameter() == sc->GetFirstParameter()) &&
         (this->GetSecondParameter() == sc->GetSecondParameter());
@@ -20,7 +22,7 @@ bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   return false;
 }
 
-std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map declaration_map) {
+std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
   std::shared_ptr<ClauseEvaluator> evaluator;
   std::string relationship_reference = ClauseSyntax::GetEntity();
   if (relationship_reference == pql_constants::kPqlFollowsRel) {

@@ -1,4 +1,6 @@
 #include "PkbWriteFacade.h"
+
+#include <utility>
 #include "PKB/PKB.h"
 
 
@@ -6,16 +8,24 @@ PkbWriteFacade::PkbWriteFacade(PKB& pkb): pkb(pkb) {}
 
 PkbWriteFacade::~PkbWriteFacade() {}
 
-PkbTypes::VARIABLE_STORE_INDEX PkbWriteFacade::AddVariable(PkbTypes::VARIABLE variable) {
-  return pkb.entity_store_->addVariable(variable);
+PkbTypes::INDEX PkbWriteFacade::AddVariable(PkbTypes::VARIABLE variable) {
+  return pkb.entity_store_->addVariable(std::move(variable));
 }
 
-PkbTypes::PROCEDURE_STORE_INDEX PkbWriteFacade::AddProcedure(PkbTypes::PROCEDURE procedure) {
-  return pkb.entity_store_->addProcedure(procedure);
+PkbTypes::INDEX PkbWriteFacade::AddProcedure(PkbTypes::PROCEDURE procedure) {
+  return pkb.entity_store_->addProcedure(std::move(procedure));
 }
 
-void PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) {
-  pkb.entity_store_->addConstant(constant);
+PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) {
+  return pkb.entity_store_->addConstant(std::move(constant));
+}
+
+void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) {
+  this->pkb.modifies_store_->addStatementModifyingVariable(statement_number, variable);
+}
+
+void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) {
+  this->pkb.modifies_store_->addProcedureModifyingVariable(procedure, variable);
 }
 
 

@@ -160,6 +160,22 @@ bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression)
 }
 
 /*
+* Checks if the expression is a container statement.
+*/
+bool QueryUtil::IsContainerStatementSynonym(Map &declaration, const std::string& expression) {
+  bool result = IsIfSynonym(declaration, expression) || IsWhileSynonym(declaration, expression);
+  return result;
+}
+
+/*
+ * Checks if the synonym belongs to the category of a statement synonym
+ */
+bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& expression) {
+  return !IsVariableSynonym(declaration, expression) && !IsConstantSynonym(declaration, expression)
+  && !IsProcedureSynonym(declaration, expression);
+}
+
+/*
 * Checks if the expression is a procedure synonym
 */
 bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
@@ -169,12 +185,68 @@ bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expressi
 }
 
 /*
- * Get intersection between two vectors
- * TODO To complete this
- * Reference: https://stackoverflow.com/questions/19483663/vector-intersection-in-c
+ * Converts a vector to an unordered set
  */
-SingleConstraintSet QueryUtil::GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2) {
-  SingleConstraintSet set;
+std::unordered_set<std::string> QueryUtil::ConvertToSet(std::vector<std::vector<std::string>> v) {
+  std::unordered_set<std::string> set;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    set.insert(nested_vector[0]);
+  }
+
   return set;
 }
 
+/*
+ * Converts an unordered set to a ResultRow format
+ */
+std::vector<std::vector<std::string>> QueryUtil::ConvertSetToResultRowFormat(std::unordered_set<std::string> s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
+/*
+ * Converts an unordered set of pairs to a ResultRow format
+ */
+std::vector<std::vector<std::string>> QueryUtil::ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string, std::string>> s) {
+  std::vector<std::vector<std::string>> result;
+  for (const auto& kElem: s) {
+    std::vector<std::string> nested_vector;
+    nested_vector.push_back(kElem.first);
+    nested_vector.push_back(kElem.second);
+    result.push_back(nested_vector);
+  }
+  return result;
+}
+
+
+/*
+ * Extract the first of a vector in a vector of vectors
+ */
+std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v) {
+  std::vector<std::vector<std::string>> result;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    std::vector<std::string> new_vector = {nested_vector[0]};
+    result.push_back(new_vector);
+  }
+  return result;
+}
+
+/*
+ * Extract the 2nd element of a vector in a vector of vectors
+ */
+std::vector<std::vector<std::string>> QueryUtil::ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v) {
+  std::vector<std::vector<std::string>> result;
+  for (int i = 0; i < v.size(); i++) {
+    auto nested_vector = v[i];
+    std::vector<std::string> new_vector = {nested_vector[1]};
+    result.push_back(new_vector);
+  }
+  return result;
+}

@@ -1,35 +1,36 @@
 #include "EntityStore.h"
 
-KeyValueStore<PkbTypes::VARIABLE, PkbTypes::VARIABLE_STORE_INDEX>  &EntityStore::getVariableStore() {
-  return this->variable_store_;
+#include <iostream>
+
+//EntityStore::~EntityStore() {}
+
+PkbTypes::INDEX EntityStore::addVariable(PkbTypes::VARIABLE variable) {
+  PkbTypes::INDEX index = variable_store_.length() + 1;
+  variable_store_.insert(variable, index);
+  return 1;
 }
 
-KeyValueStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE_STORE_INDEX> &EntityStore::getProcedureStore() {
-  return this->procedure_store_;
+PkbTypes::INDEX EntityStore::addProcedure(PkbTypes::PROCEDURE procedure) {
+  PkbTypes::INDEX index = procedure_store_.length() + 1;
+  procedure_store_.insert(procedure, index);
+  return 1;
 }
 
-std::unordered_set<PkbTypes::CONSTANT> &EntityStore::getConstantStore() {
-  return this->constant_store_;
+PkbTypes::INDEX EntityStore::addConstant(PkbTypes::CONSTANT constant) {
+  PkbTypes::INDEX index = constant_store_.length() + 1;
+  constant_store_.insert(constant, index);
+  return 1;
 }
 
-PkbTypes::VARIABLE_STORE_INDEX EntityStore::addVariable(PkbTypes::VARIABLE variable) {
-  PkbTypes::VARIABLE_STORE_INDEX index = this->variable_store_.size() + 1;
-  if (this->variable_store_.insert({variable, index})) {
-    return index;
-  } else {
-    return this->variable_store_.map[variable];
-  }
+std::unordered_set<PkbTypes::VARIABLE> EntityStore::getVariables() {
+  return variable_store_.retrieveAllKeys();
 }
 
-PkbTypes::PROCEDURE_STORE_INDEX EntityStore::addProcedure(PkbTypes::PROCEDURE procedure) {
-  PkbTypes::PROCEDURE_STORE_INDEX index = this->procedure_store_.size() + 1;
-  if (this->procedure_store_.insert({procedure, index})) {
-    return index;
-  } else {
-    return this->procedure_store_.map[procedure];
-  }
+std::unordered_set<PkbTypes::PROCEDURE> EntityStore::getProcedures() {
+  return procedure_store_.retrieveAllKeys();
 }
 
-void EntityStore::addConstant(PkbTypes::CONSTANT constant) {
-  this->constant_store_.insert(constant);
+std::unordered_set<PkbTypes::CONSTANT> EntityStore::getConstants() {
+  return constant_store_.retrieveAllKeys();
 }
+

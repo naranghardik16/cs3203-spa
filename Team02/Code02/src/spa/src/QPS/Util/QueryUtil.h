@@ -19,8 +19,6 @@ class QueryUtil {
 
   static bool IsQuoted(const std::string& s);
 
-  static std::string RemoveQuotes(const std::string& s);
-
   static bool IsRelationshipReference(const std::string& s);
 
   static bool IsCharacterString(const std::string& s);
@@ -47,10 +45,15 @@ class QueryUtil {
 
   static bool IsProcedureSynonym(Map &declaration, const std::string& expression);
 
-  static SingleConstraintSet GetIntersection(const SingleConstraintSet& set_1, const SingleConstraintSet& set_2);
+  static bool IsContainerStatementSynonym(Map &declaration, const std::string& expression);
 
-  //TODO To complete this
-  // static void QueryUtil::GetIntersectionOfPairSets(const PairConstraintSet& set_1, const PairConstraintSet&  set_2);
+  static bool IsATypeOfStatementSynonym(Map &declaration, const std::string& expression);
 
+  static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
+  static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
+  static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
+  static std::vector<std::vector<std::string>> ConvertSetToResultRowFormat(std::unordered_set<std::string> s);
+  static std::vector<std::vector<std::string>> ConvertPairSetToResultRowFormat(std::unordered_set<std::pair<std::string,
+                                                                                                     std::string>> s);
 };
 
