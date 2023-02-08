@@ -35,8 +35,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
       auto evaluator = clause->CreateClauseEvaluator(synonym_, declaration_map_);
       auto bool_output = evaluator->EvaluateBooleanConstraint(pkb_);
       if (bool_output == false) {
-        std::unordered_set<std::string> empty_set;
-        return empty_set;
+        return {};
       }
       syntax_pair_list_.erase(syntax_pair_list_.begin()+i);
     }
@@ -45,14 +44,19 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
   for (const auto &kClause : syntax_pair_list_) {
     auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_);
-    evaluation_result = evaluator->EvaluateClause(pkb_);
-    //store result into table
-    //get intersection if needed
+    std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
+
+    //get intersection
+    evaluation_result->JoinResult(intermediate_result);
+
+    //Whenever results become empty stop and return empty set
+    if (evaluation_result->table_.empty()) {
+      return {};
+    }
   }
 
 
-  ResultTable result_table = evaluation_result->GetResultTable();
-  auto results = QueryUtil::ConvertToSet(result_table);
+  std::unordered_set<std::string> results = evaluation_result->ProjectResult(synonym_);
 
   return results;
 }

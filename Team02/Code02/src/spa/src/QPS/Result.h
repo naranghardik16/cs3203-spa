@@ -18,12 +18,10 @@ class Result {
    * Join two result on intercepting header. Result will be store in the calling object.
    * Both of the table should not be empty, else nothing will happen.
    */
-  void JoinResult(Result &result);
+  void JoinResult(std::shared_ptr<Result> result);
+  std::unordered_set<std::string> ProjectResult(Synonym synonym);
 
   //Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
   static ResultTable FindMatch(ResultRow &row, ResultTable &table, InterceptResult &intercept);
-
-  //Getter
-  ResultTable GetResultTable();
 };
