@@ -1,5 +1,6 @@
 #pragma once
 #include "QPS/Evaluator/ClauseEvaluator.h"
+#include "QPS/Util/QueryUtil.h"
 
 class UsesStatementClauseEvaluator : public ClauseEvaluator {
  private:
