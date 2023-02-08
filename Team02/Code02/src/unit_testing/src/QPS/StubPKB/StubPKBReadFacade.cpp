@@ -1,5 +1,5 @@
 //! Preserving the stub written previously
-/*
+
 #pragma once
 #include "StubPKBReadFacade.h"
 
@@ -10,7 +10,7 @@
 StubPkbReadFacade::~StubPkbReadFacade() {}
 
 SingleConstraintSet StubPkbReadFacade::GetVariables() {
-  SingleConstraintSet var_set({"a", "b", "c"});
+  SingleConstraintSet var_set({"a", "b", "c", "x", "y"});
   return var_set;
 }
 
@@ -24,7 +24,7 @@ SingleConstraintSet StubPkbReadFacade::GetProcedures() {
   return set;
 }
 
-SingleConstraint StubPkbReadFacade::GetStatements() {
+SingleConstraintSet StubPkbReadFacade::GetStatements() {
   SingleConstraintSet statement_set({"1", "2", "3"});
   return statement_set;
 }
@@ -59,36 +59,87 @@ SingleConstraintSet StubPkbReadFacade::GetAssignStatements() {
   return assign_set;
 }
 
-
+//! API for Modifies - Statement
 SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
-  SingleConstraintSet result = {{"v"}, {"v1"}};
+  SingleConstraintSet result = {"x"};
   return result;
 }
 
-//!Ignore the rest below for the demo
-
-PairConstraintSet StubPkbReadFacade::GetModifiesStatementVariablePairs() {
-  SingleConstraintSet result;
+PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type) {
+  PairConstraintSet result;
   return result;
 }
 
-SingleConstraintSet StubPkbReadFacade::GetModifiesProcedureVariablePairs() {
-  SingleConstraintSet result;
+SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
+  SingleConstraintSet result = {"x"};
   return result;
 }
 
-SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByProcedure(std::string proc_name) {
-  SingleConstraintSet result;
+SingleConstraintSet GetStatementsThatModify(StatementType stmt_type) {
+  SingleConstraintSet result = {"x"};
   return result;
 }
 
-SingleConstraintSet StubPkbReadFacade::GetStatementsModifiesVariable(std::string var_name) {
-  SingleConstraintSet result;
+bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
+  return false;
+}
+
+//! API for Modifies - Procedure
+SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name) {
+  SingleConstraintSet result = {"x"};
   return result;
 }
 
-SingleConstraintSet StubPkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
-  SingleConstraintSet result;
+PairConstraintSet GetModifiesProcedureVariablePairs() {
+  PairConstraintSet result;
   return result;
 }
-*/
+
+SingleConstraintSet GetProceduresModifiesVariable(std::string var_name) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+SingleConstraintSet GetProceduresThatModify() {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
+  return false;
+}
+
+//!API for Follows
+PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
+  PairConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
+  return false;
+}
+
+bool IsAnyFollowsRelationshipPresent() {
+  return false;
+}
+

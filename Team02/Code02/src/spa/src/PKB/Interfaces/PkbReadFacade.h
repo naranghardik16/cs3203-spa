@@ -167,26 +167,23 @@ class PkbReadFacade {
 
   /**
    * Returns (procedure_name, variable name) pairs that have a Modifies relationship with the statement numbers
-   * @param is_call  If is_call is True, then we only want procedures that are called in call statements
    * @return a set of pairs (procedure_name, variable name)
    */
-  PairConstraintSet GetModifiesProcedureVariablePairs(bool is_call);
+  PairConstraintSet GetModifiesProcedureVariablePairs();
 
   /**
  * Get procedures that modify a specific variable
  * @param var_name which is the name of the variable like "v"
- * @param is_call  If is_call is True, then we only want procedures that are called in call statements
  * @return a set of variable names
  */
-  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name, bool is_call);
+  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
 
 
   /**
   * Returns the procedure names of procedures that have a Modifies relationship
-  * @param is_call  If is_call is True, then we only want procedures that are called in call statements
   * @return a set of procedure names
   */
-  SingleConstraintSet GetProceduresThatModify(bool is_call);
+  SingleConstraintSet GetProceduresThatModify();
 
   /**
   * Check if a specific procedure and variable have a Modifies relationship

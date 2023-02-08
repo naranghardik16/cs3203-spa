@@ -94,6 +94,7 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
 
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
+
     if (!QueryUtil::IsDesignEntity(design_entity)) {
       throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }

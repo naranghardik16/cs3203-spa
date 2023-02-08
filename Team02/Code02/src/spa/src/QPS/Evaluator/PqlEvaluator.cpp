@@ -86,6 +86,7 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateTrivialSelectStatement() {
   } else  {
     table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetProcedures());
   }
+
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
 }

@@ -76,7 +76,7 @@ bool PkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::
 
 
 //! Modifies Procedure API
-PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs(bool is_call) {
+PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
   PairConstraintSet result;
   return result;
 }
@@ -86,12 +86,12 @@ SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string p
   return result;
 }
 
-SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name, bool is_call) {
+SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
   SingleConstraintSet result;
   return result;
 }
 
-SingleConstraintSet PkbReadFacade::GetProceduresThatModify(bool is_call) {
+SingleConstraintSet PkbReadFacade::GetProceduresThatModify() {
   SingleConstraintSet result;
   return result;
 }
