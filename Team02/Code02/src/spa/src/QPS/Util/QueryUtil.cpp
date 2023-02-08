@@ -164,7 +164,7 @@ bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expressi
 }
 
 bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expression, const std::string type) {
-  if (!IsSynonym(expression) || declaration.count(expression) == 0) {
+  if (declaration.count(expression) == 0) {
     return false;
   }
 
