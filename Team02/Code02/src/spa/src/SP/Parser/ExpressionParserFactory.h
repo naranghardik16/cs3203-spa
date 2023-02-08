@@ -4,6 +4,7 @@
 #include "ConstantParser.h"
 #include "ExpressionParser.h"
 #include "VariableParser.h"
+#include "OperationParser.h"
 #include "../NameToken.h"
 #include "../IntegerToken.h"
 
