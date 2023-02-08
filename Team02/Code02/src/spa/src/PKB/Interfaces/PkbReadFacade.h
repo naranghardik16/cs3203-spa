@@ -50,70 +50,70 @@ class PkbReadFacade {
    *
    * @return set of variables
    */
-  std::unordered_set<std::string> GetVariables();
+  SingleConstraintSet GetVariables();
 
   /**
    * Get constants stored in PKB
    *
    * @return set of constants
    */
-  std::unordered_set<std::string> GetConstants();
+  SingleConstraintSet GetConstants();
 
   /**
    * Gets procedures stored in PKB
    *
    * @return set of procedures
    */
-  std::unordered_set<std::string> GetProcedures();
+  SingleConstraintSet GetProcedures();
 
   /**
    * Gets statements stored in PKB
    *
    * @return set of statements
    */
-  std::unordered_set<std::string> GetStatements();
+  SingleConstraintSet GetStatements();
 
   /**
    * Gets Read statements stored in PKB
    *
    * @return set of read statements
    */
-  std::unordered_set<std::string> GetReadStatements();
+  SingleConstraintSet GetReadStatements();
 
   /**
    * Gets Print statements stored in PKB
    *
    * @return set of print statements
    */
-  std::unordered_set<std::string> GetPrintStatements();
+  SingleConstraintSet GetPrintStatements();
 
   /**
    * Gets Call statements stored in PKB
    *
    * @return set of call statements
    */
-  std::unordered_set<std::string> GetCallStatements();
+  SingleConstraintSet GetCallStatements();
 
   /**
    * Gets while statements stored in PKB
    *
    * @return set of while statements
    */
-  std::unordered_set<std::string> GetWhileStatements();
+  SingleConstraintSet GetWhileStatements();
 
   /**
    * Gets if statements stored in PKB
    *
    * @return set of if statements
    */
-  std::unordered_set<std::string> GetIfStatements();
+  SingleConstraintSet GetIfStatements();
 
   /**
    * Gets assign statements stored in PKB
    *
    * @return set of assign statements
    */
-  std::unordered_set<std::string> GetAssignStatements();
+  SingleConstraintSet GetAssignStatements();
 
   //! API for Modifies - Statement
 
@@ -122,7 +122,7 @@ class PkbReadFacade {
  * @param statement_number which is the statement number in string
  * @return a set of variable names
  */
-  std::unordered_set<std::string> GetVariablesModifiedByStatement(std::string statement_number);
+  SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
 
   /**
    * Returns (statement number, variable name) pairs that have a Modifies relationship with the statement numbers
@@ -138,7 +138,7 @@ class PkbReadFacade {
  * @param statement_type which is a constraint to filter the statements returned
  * @return a set of variable names
  */
-  std::unordered_set<std::string> GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
 
 
   /**
@@ -146,7 +146,7 @@ class PkbReadFacade {
   * @param stmt_type which is the statement type constraint
   * @return a set of statement numbers
   */
-  std::unordered_set<std::string> GetModifiers(StatementType stmt_type);
+  SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
 
   /**
   * Check if a specific statement and variable have a Modifies relationship
@@ -154,23 +154,105 @@ class PkbReadFacade {
   * @param var_name which is the name of the variable like "v"
   * @return a set of variable names
   */
-  bool IsModifiesStatement(std::string stmt_num, std::string var_name);
-
-
-  /*
-  bool HasModifiesRelationship(StatementType stmt_type);
+  bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name);
 
   //! API for Modifies - Procedure
-  std::unordered_set<std::pair<std::string,std::string>> GetModifiesProcedureVariablePairs(bool is_call);
-  std::unordered_set<std::string> GetVariablesModifiedByProcedure(std::string proc_name);
-  std::unordered_set<std::string> GetProceduresModifiesVariable(std::string var_name, bool is_call);
-  bool IsModifiesProcedure(std::string proc_name, std::string ident);
+
+  /**
+ * Get variables modified by a specific procedure
+ * @param procedure_name which is the name of the procedure
+ * @return a set of variable names
+ */
+  SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
+
+  /**
+   * Returns (procedure_name, variable name) pairs that have a Modifies relationship with the statement numbers
+   * @param is_call  If is_call is True, then we only want procedures that are called in call statements
+   * @return a set of pairs (procedure_name, variable name)
+   */
+  PairConstraintSet GetModifiesProcedureVariablePairs(bool is_call);
+
+  /**
+ * Get procedures that modify a specific variable
+ * @param var_name which is the name of the variable like "v"
+ * @param is_call  If is_call is True, then we only want procedures that are called in call statements
+ * @return a set of variable names
+ */
+  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name, bool is_call);
+
+
+  /**
+  * Returns the procedure names of procedures that have a Modifies relationship
+  * @param is_call  If is_call is True, then we only want procedures that are called in call statements
+  * @return a set of procedure names
+  */
+  SingleConstraintSet GetProceduresThatModify(bool is_call);
+
+  /**
+  * Check if a specific procedure and variable have a Modifies relationship
+  * @param procedure_name which is the name of the procedure
+  * @param var_name which is the name of the variable like "v"
+  * @return true if the procedure and variable have a Modifies relationship
+  */
+  bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
 
   //!API for Follows
-  std::unordered_set<std::pair<std::string,std::string>> GetFollowPairs(std::string statement_type, std::string statement_type_followee);
-  std::unordered_set<std::string> GetStatementsFollowedBy(std::string stmt_reference, std::string statement_type);
-  std::unordered_set<std::string> GetStatementsFollowing(std::string stmt_reference, std::string statement_type);
-  bool IsFollows(std::string stmt_reference, std::string stmt_reference_followee);
-*/
+
+  /**
+   * Returns (statement number, statement number) pairs that have a Follows Relationship
+   * with the 2nd statement number being the follower of the first
+   * @param statement_type is the statement type of the statement being followed
+   * @param statement_type_follower is the statement type of the follower
+   * @return a set of pairs (statement number, statement number)
+   */
+  PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
+
+
+  /**
+ * Returns the statement numbers of statements followed by a specified statement
+ * @param statement_num is a specific statement
+ * @param statement_type is the constraint on the statements in the set
+ * @return a set of statement numbers
+ */
+  SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements following a specified statement
+   * @param statement_num is a specific statement
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements with followers
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are followers
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
+
+  /**
+   * Returns true if the statement in the second argument follows the statement in the first argument
+   * @param statement_num statement num of a statement
+   * @param statement_num_follower is the statement that should follow the statement in the first argument
+   * @return bool
+   */
+  bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
+
+  /**
+ * Returns true if there is a follows relationship stored between any statements
+ * @return bool
+ */
+  bool IsAnyFollowsRelationshipPresent();
+
 };
 

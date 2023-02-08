@@ -57,7 +57,7 @@ class QueryUtil {
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
 
-  static ResultTable ConvertSetToResultTableFormat(std::unordered_set<std::string> s);
-  static ResultTable ConvertPairSetToResultTableFormat(std::unordered_set<PairConstraint, hash_pair> s);
+  static ResultTable ConvertSetToResultTableFormat(SingleConstraintSet s);
+  static ResultTable ConvertPairSetToResultTableFormat(PairConstraintSet s);
 };
 

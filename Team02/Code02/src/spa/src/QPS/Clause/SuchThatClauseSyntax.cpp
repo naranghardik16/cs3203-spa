@@ -9,6 +9,9 @@
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ParentClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsStarClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsClauseEvaluator.h"
+#include "General/LexicalRuleValidator.h"
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesProcedureClauseEvaluator.h"
 
 SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
@@ -36,7 +39,17 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Syn
   } else if (relationship_reference == pql_constants::kPqlUsesRel) {
     evaluator = std::make_shared<UsesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
   } else {
-    evaluator = std::make_shared<ModifiesStatementClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+    auto first_arg = ClauseSyntax::GetSyntaxPair().second.first;
+    auto second_arg = ClauseSyntax::GetSyntaxPair().second.second;
+    bool first_arg_is_ident = QueryUtil::IsQuoted(first_arg);
+    bool first_arg_is_a_type_of_procedure_synonym = QueryUtil::IsProcedureSynonym(declaration_map, first_arg)
+        || QueryUtil::IsCallSynonym(declaration_map, first_arg);
+    if (first_arg_is_ident || first_arg_is_a_type_of_procedure_synonym) {
+      evaluator = std::make_shared<ModifiesProcedureClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+    } else {
+      //either statement synonym or integer
+      evaluator = std::make_shared<ModifiesStatementClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+    }
   }
   return evaluator;
 }

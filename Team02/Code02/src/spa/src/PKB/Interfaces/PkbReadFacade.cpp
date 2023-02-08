@@ -6,67 +6,133 @@ PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 
 PkbReadFacade::~PkbReadFacade() {}
 
-std::unordered_set<std::string> PkbReadFacade::GetVariables() {
+SingleConstraintSet PkbReadFacade::GetVariables() {
   return this->pkb.entity_store_->getVariables();
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetConstants() {
+SingleConstraintSet PkbReadFacade::GetConstants() {
   return this->pkb.entity_store_->getConstants();
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetProcedures() {
+SingleConstraintSet PkbReadFacade::GetProcedures() {
   return this->pkb.entity_store_->getProcedures();
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetStatements() {
+SingleConstraintSet PkbReadFacade::GetStatements() {
   return this->pkb.statement_store_->getAllStatements();
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetReadStatements() {
+SingleConstraintSet PkbReadFacade::GetReadStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetPrintStatements() {
+SingleConstraintSet PkbReadFacade::GetPrintStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetCallStatements() {
+SingleConstraintSet PkbReadFacade::GetCallStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::CALL);
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetWhileStatements() {
+SingleConstraintSet PkbReadFacade::GetWhileStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::WHILE);
 }
-std::unordered_set<std::string> PkbReadFacade::GetIfStatements() {
+
+SingleConstraintSet PkbReadFacade::GetIfStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::IF);
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetAssignStatements() {
+SingleConstraintSet PkbReadFacade::GetAssignStatements() {
   return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
+
+//! Modifies Statement API
 PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
   PairConstraintSet result;
   return result;
 }
 
 //TODO to put back the proper PKB implementation after type of return value is change to set
-std::unordered_set<std::string> PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
+SingleConstraintSet PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
   //return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
-  std::unordered_set<std::string> result = {"x"};
+  SingleConstraintSet result = {"x"};
   return result;
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  std::unordered_set<std::string> result;
+SingleConstraintSet PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
+  SingleConstraintSet result;
   return result;
 }
 
-std::unordered_set<std::string> PkbReadFacade::GetModifiers(StatementType stmt_type) {
-  std::unordered_set<std::string> result;
+SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
+  SingleConstraintSet result;
   return result;
 }
 
-bool PkbReadFacade::IsModifiesStatement(std::string stmt_num, std::string var_name) {
+bool PkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
   return true;
 }
+
+
+//! Modifies Procedure API
+PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs(bool is_call) {
+  PairConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure_name) {
+  SingleConstraintSet result = {"x"};
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name, bool is_call) {
+  SingleConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetProceduresThatModify(bool is_call) {
+  SingleConstraintSet result;
+  return result;
+}
+
+bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
+  return true;
+}
+
+//! Follows API
+PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
+  PairConstraintSet result;
+  return result;
+}
+
+
+SingleConstraintSet PkbReadFacade::GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
+  SingleConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
+  SingleConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsWithFollowers(StatementType statement_type) {
+  SingleConstraintSet result;
+  return result;
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementThatAreFollowers(StatementType statement_type) {
+  SingleConstraintSet result;
+  return result;
+}
+
+
+bool PkbReadFacade::HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
+  return true;
+}
+
+bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
+  return true;
+}
+

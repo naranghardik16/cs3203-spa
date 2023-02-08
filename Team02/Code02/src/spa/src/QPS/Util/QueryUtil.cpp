@@ -2,7 +2,6 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 #include "QPS/Util/QPSTypeDefs.h"
-#include <algorithm>
 #include "QPS/Util/PQLConstants.h"
 #include "General/StatementTypeEnum.h"
 
@@ -234,7 +233,7 @@ std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors
 /**
  * Converts an unordered set to a ResultRow format
  */
-ResultTable QueryUtil::ConvertSetToResultTableFormat(std::unordered_set<std::string> s) {
+ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;
@@ -247,7 +246,7 @@ ResultTable QueryUtil::ConvertSetToResultTableFormat(std::unordered_set<std::str
 /**
  * Converts an unordered set of pairs to a ResultRow format
  */
-ResultTable QueryUtil::ConvertPairSetToResultTableFormat(std::unordered_set<PairConstraint,hash_pair> s) {
+ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PairConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;

@@ -1,17 +1,18 @@
+/*
 #include "catch.hpp"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Evaluator/PqlEvaluator.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/QueryParser.h"
 #include <memory>
-/*
+
 std::shared_ptr<Query> CreateParserOutput(Map declaration_map, Synonym synonym) {
   ClauseSyntaxPtrList syntax_ptr_list;
   return std::make_shared<Query>(synonym, declaration_map, syntax_ptr_list);
 }
 
 //! This is temporary -- to make sure the demo can work -- need to figure out a way to create a stub PKB
-TEST_CASE("Check if PQLEvaluator works as expected given dummy inputs from PKB") {
+TEST_CASE("Check if PQLEvaluator works for basic select statements") {
   PKB pkb_ = PKB();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
 
@@ -188,30 +189,15 @@ TEST_CASE("Check if PQLEvaluator works as expected using Parser") {
     std::unordered_set<std::string> correct_set({"19", "20", "21"});
     REQUIRE(eval_result == correct_set);
   }
-
-  SECTION("Test on Modifies(Int, IDENT)") {
-    std::string query = "variable v;Select v such that Modifies(1,v)";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({"v", "v1"});
-    REQUIRE(eval_result == correct_set);
-  }
 }
 
-*/
 
-/*
-
-TEST_CASE("Temp") {
+TEST_CASE("Make sure Evaluation of Modifies") {
   auto qp = std::make_shared<QueryParser>();
   PKB pkb_ = PKB();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
 
-
-  SECTION("Test on Modifies(Int, Int)") {
+  SECTION("INT, IDENT") {
     std::string query = "variable v;Select v such that Modifies(1,\"v\")";
     auto correct_output = qp->ParseQuery(query);
 
@@ -223,17 +209,43 @@ TEST_CASE("Temp") {
 
   }
 
+  SECTION("INT, SYN") {
+      std::string query = "variable v;Select v such that Modifies(1,v)";
+      auto correct_output = qp->ParseQuery(query);
+      auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+      auto eval_result = eval->Evaluate();
+      std::unordered_set<std::string> correct_set({"v", "v1"});
+      REQUIRE(eval_result == correct_set);
+  }
 
-  SECTION("Test on Modifies(Int, IDENT)") {
-    std::string query = "variable v;Select v such that Modifies(1,v)";
+  SECTION("INT, WILDCARD") {
+    std::string query = "variable v;Select v such that Modifies(1,_)";
     auto correct_output = qp->ParseQuery(query);
-
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({"v", "v1"});
+    // should return all the variables
+    std::unordered_set<std::string> correct_set({"a", "b", "c"});
     REQUIRE(eval_result == correct_set);
   }
 
+  SECTION("SYN, WILDCARD") {
+    std::string query = "variable v;Select v such that Modifies(v,_)";
+    auto correct_output = qp->ParseQuery(query);
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+    auto eval_result = eval->Evaluate();
+    // should return all the variables
+    std::unordered_set<std::string> correct_set({"a", "b", "c"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("SYN, IDENT") {
+    std::string query = "assign a;Select a such that Modifies(a,\"v\")";
+  }
+
+  SECTION("SYN, ") {
+    std::string query = "variable v;Select v such that Modifies(v,_)";
+  }
+
 }
+
 */

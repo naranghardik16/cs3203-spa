@@ -13,7 +13,7 @@ bool ModifiesStatementClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr
       return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
   } else {
       //Modifies(5, "count") -- does 5 modify "count"?
-      return pkb->IsModifiesStatement(first_arg_, second_arg_);
+      return pkb->HasModifiesStatementRelationship(first_arg_, second_arg_);
   }
 }
 
@@ -38,11 +38,12 @@ std::shared_ptr<Result> ModifiesStatementClauseEvaluator::EvaluateClause(std::sh
 
   SingleConstraintSet single_constraint;
   PairConstraintSet pair_constraint;
+
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Select s such that Modifies(s, _) / Select s1 such that Modifies(s1,_)
       // Should return the statements that have a Modifies relationship with any variable
-      single_constraint = pkb->GetModifiers(QueryUtil::GetStatementType(declaration_map, first_arg_));
+      single_constraint = pkb->GetStatementsThatModify(QueryUtil::GetStatementType(declaration_map, first_arg_));
     } else if (is_second_arg_a_variable_synonym) {
       //e.g. Modifies(a,v)
       pair_constraint = pkb->GetModifiesStatementVariablePairs(QueryUtil::GetStatementType(declaration_map, first_arg_));
