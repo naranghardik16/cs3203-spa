@@ -79,27 +79,21 @@ bool QueryUtil::IsCharacterString(const std::string& s) {
 * Checks if the expression is a variable synonym
 */
 bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlVariableEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlVariableEntity);
 }
 
 /*
 * Checks if the expression is a constant synonym
 */
 bool QueryUtil::IsConstantSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlConstantEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlConstantEntity);
 }
 
 /*
 * Checks if the expression is a statement synonym
 */
 bool QueryUtil::IsStatementSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlStatementEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlStatementEntity);
 }
 
 
@@ -107,45 +101,35 @@ bool QueryUtil::IsStatementSynonym(Map &declaration, const std::string& expressi
 * Checks if the expression is a read synonym
 */
 bool QueryUtil::IsReadSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlReadEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlReadEntity);
 }
 
 /*
 * Checks if the expression is a print synonym
 */
 bool QueryUtil::IsPrintSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlPrintEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlPrintEntity);
 }
 
 /*
 * Checks if the expression is a call synonym
 */
 bool QueryUtil::IsCallSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlCallEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlCallEntity);
 }
 
 /*
 * Checks if the expression is a while synonym
 */
 bool QueryUtil::IsWhileSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == "while";
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlWhileEntity);
 }
 
 /*
 * Checks if the expression is an if synonym
 */
 bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlIfEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlIfEntity);
 }
 
 
@@ -153,9 +137,7 @@ bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
 * Checks if the expression is an assign synonym
 */
 bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlAssignEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlAssignEntity);
 }
 
 /*
@@ -178,11 +160,17 @@ bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& e
 * Checks if the expression is a procedure synonym
 */
 bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
-  std::string type = declaration[expression];
-  bool result = type == pql_constants::kPqlProcedureEntity;
-  return result;
+  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlProcedureEntity);
 }
 
+bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expression, const std::string type) {
+  if (declaration.count(expression) == 0) {
+    return false;
+  }
+
+  std::string t = declaration[expression];
+  return t == type;
+}
 
 /**
  * Returns a statement type enum based on a given synonym
