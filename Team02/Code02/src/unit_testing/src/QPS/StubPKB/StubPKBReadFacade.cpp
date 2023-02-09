@@ -20,7 +20,7 @@ SingleConstraintSet StubPkbReadFacade::GetConstants() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetProcedures() {
-  SingleConstraintSet set({"eval", "parse", "validate"});
+  SingleConstraintSet set({"execute", "anya"});
   return set;
 }
 
@@ -97,27 +97,32 @@ bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name
 
 //! API for Modifies - Procedure
 SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name) {
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (procedure_name == "\"anya\"") {
+    return {};
+  }
+  return {"y"};
 }
 
 PairConstraintSet GetModifiesProcedureVariablePairs() {
-  PairConstraintSet result;
-  return result;
+  return {std::make_pair("execute", "y")};
 }
 
 SingleConstraintSet GetProceduresModifiesVariable(std::string var_name) {
-  SingleConstraintSet result;
-  return result;
+  if (var_name == "\"y\"") {
+    return {"execute"};
+  }
+  return {};
 }
 
 SingleConstraintSet GetProceduresThatModify() {
-  SingleConstraintSet result;
-  return result;
+  return {"execute"};
 }
 
 bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
-  return false;
+  if (procedure_name == "\"anya\"" && var_name == "\"y\"") {
+    return false;
+  }
+  return true;
 }
 
 //!API for Follows

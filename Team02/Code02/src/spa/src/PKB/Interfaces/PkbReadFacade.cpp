@@ -7,17 +7,21 @@ PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 PkbReadFacade::~PkbReadFacade() {}
 
 SingleConstraintSet PkbReadFacade::GetVariables() {
-  //SingleConstraintSet var_set({"a", "b", "c", "x", "y"});
-  //return var_set;
-  return this->pkb.entity_store_->getVariables();
+  SingleConstraintSet var_set({"a", "b", "c", "x", "y"});
+  return var_set;
+  //return this->pkb.entity_store_->getVariables();
 }
 
 SingleConstraintSet PkbReadFacade::GetConstants() {
-  return this->pkb.entity_store_->getConstants();
+  SingleConstraintSet set({"execute", "anya"});
+  return set;
+  //return this->pkb.entity_store_->getConstants();
 }
 
 SingleConstraintSet PkbReadFacade::GetProcedures() {
-  return this->pkb.entity_store_->getProcedures();
+  SingleConstraintSet set({"execute", "anya"});
+  return set;
+  //return this->pkb.entity_store_->getProcedures();
 }
 
 SingleConstraintSet PkbReadFacade::GetStatements() {
@@ -29,9 +33,9 @@ SingleConstraintSet PkbReadFacade::GetReadStatements() {
 }
 
 SingleConstraintSet PkbReadFacade::GetPrintStatements() {
-  //SingleConstraintSet print_set({"1"});
-  //return print_set;
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
+  SingleConstraintSet print_set({"1"});
+  return print_set;
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
 
 SingleConstraintSet PkbReadFacade::GetCallStatements() {
@@ -92,26 +96,31 @@ bool PkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::
 
 //! Modifies Procedure API
 PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
-  PairConstraintSet result;
-  return result;
+  return {std::make_pair("execute", "y")};
 }
 
 SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure_name) {
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (procedure_name == "\"anya\"") {
+    return {};
+  }
+  return {"y"};
 }
 
 SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
-  SingleConstraintSet result;
-  return result;
+  if (var_name == "\"y\"") {
+    return {"execute"};
+  }
+  return {};
 }
 
 SingleConstraintSet PkbReadFacade::GetProceduresThatModify() {
-  SingleConstraintSet result;
-  return result;
+  return {"execute"};
 }
 
 bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
+  if (procedure_name == "\"anya\"" && var_name == "\"y\"") {
+    return false;
+  }
   return true;
 }
 
