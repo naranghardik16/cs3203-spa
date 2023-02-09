@@ -148,14 +148,14 @@ PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, St
 }
 
 
-SingleConstraintSet PkbReadFacade::GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
+SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
   if (statement_num == "3" && statement_type == StatementType::ALL) {
     return {"1","2"};
   }
   return {};
 }
 
-SingleConstraintSet PkbReadFacade::GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
+SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
   if (statement_num == "1" && statement_type == StatementType::ALL) {
     return {"2","3"};
   }
@@ -200,3 +200,60 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
 }
 
+//! Parent API
+
+PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreParents(StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildren(StatementType statement_type) {
+  return {};
+}
+
+bool PkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
+  return {};
+}
+
+bool PkbReadFacade::IsAnyParentRelationshipPresent() {
+  return {};
+}
+
+PairConstraintSet PkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestors(StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendants(StatementType statement_type) {
+  return {};
+}
+
+bool PkbReadFacade::HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant) {
+  return {};
+}
+
+bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
+  return {};
+}

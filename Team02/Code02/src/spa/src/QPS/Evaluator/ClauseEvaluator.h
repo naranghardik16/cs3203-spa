@@ -4,6 +4,8 @@
 #include "QPS/Result.h"
 #include "General/StatementTypeEnum.h"
 #include <memory>
+#include "General/LexicalRuleValidator.h"
+#include "QPS/Util/QueryUtil.h"
 
 class ClauseEvaluator {
  private:

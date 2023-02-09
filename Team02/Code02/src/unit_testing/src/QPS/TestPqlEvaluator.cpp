@@ -340,7 +340,7 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
   }
 
   //e.g. Follows(_,"3") --> Get all types of statements that stmt 3 follows
-  //stub->GetStatementsFollowedBy(3, StatementType::ALL) --> returns {1,2} --> since not empty we return all assign statements
+  //stub->GetStatementFollowedBy(3, StatementType::ALL) --> returns {1,2} --> since not empty we return all assign statements
   SECTION("WILDCARD, INT, Returns a set") {
     std::string query = "assign a;Select a such that Follows(_,3)";
     auto correct_output = qp->ParseQuery(query);
@@ -353,7 +353,7 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
   }
 
   //e.g. Follows("1", _) --> Get all types of statements that follow "1"
-  //return !pkb->GetStatementsFollowing(1, StatementType::ALL) --> returns {2,3} so not empty --> return all assign
+  //return !pkb->GetStatementFollowing(1, StatementType::ALL) --> returns {2,3} so not empty --> return all assign
   SECTION("INT, WILDCARD, Returns a set") {
     std::string query = "assign a;Select a such that Follows(1,_)";
     auto correct_output = qp->ParseQuery(query);
@@ -381,7 +381,7 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
   //! Non Boolean Constraints
 
   //e.g. Follows("1", a) --> Get statement that follow 5 of type assignment
-  //stub>GetStatementsFollowing(1, ASSIGN) will give 2
+  //stub>GetStatementFollowing(1, ASSIGN) will give 2
   SECTION("INT, SYN, Returns a set") {
     std::string query = "assign a;Select a such that Follows(1,a)";
     auto correct_output = qp->ParseQuery(query);
@@ -433,7 +433,7 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
   }
 
   //e.g. Follows(a,"2") --> Get statement that 2 follows of type assignment
-  //stub->GetStatementsFollowedBy(2, ASSIGN) -> {}
+  //stub->GetStatementFollowedBy(2, ASSIGN) -> {}
   SECTION("SYN, INT, Returns a set") {
     std::string query = "print p;assign a;Select a such that Follows(a, 2)";
     auto correct_output = qp->ParseQuery(query);
