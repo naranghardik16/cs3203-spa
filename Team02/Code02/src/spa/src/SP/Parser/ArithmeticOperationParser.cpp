@@ -32,12 +32,13 @@ Expression *ArithmeticOperationParser::Term() {
   Expression *term = Factor();
 
   while (pos_ != line_.size() && term != nullptr && count(factor_operators_.begin(), factor_operators_.end(), curr_token_->GetType())) {
+    string prev_token_value = curr_token_value_;
     GetNext();
     Expression *right_node = Factor();
     pair<Expression*, Expression*> arguments;
     arguments.first = term;
     arguments.second = right_node;
-    term = new ArithmeticOperation(curr_token_value_, arguments);
+    term = new ArithmeticOperation(prev_token_value, arguments);
   }
   return term;
 }
