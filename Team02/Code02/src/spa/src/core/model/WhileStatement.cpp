@@ -11,6 +11,7 @@ void WhileStatement::AddStatement(Statement *stmt) {
   loop_statements_.push_back(stmt);
 }
 
+// TODO: implement accept for the visitor pattern
 void WhileStatement::Accept(ParserVisitor *visitor) {
 
 }
