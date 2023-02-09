@@ -31,6 +31,16 @@ std::size_t OneToManyStore<K, V>::length() {
 }
 
 template<typename K, typename V>
+std::size_t OneToManyStore<K, V>::lengthKey() {
+  return this->forward_map_.size();
+}
+
+template<typename K, typename V>
+std::size_t OneToManyStore<K, V>::lengthValue() {
+  return this->size;
+}
+
+template<typename K, typename V>
 std::unordered_set<V> OneToManyStore<K, V>::retrieveFromKey(K key) {
   return this->forward_map_[key];
 }

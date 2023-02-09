@@ -67,6 +67,20 @@ class OneToManyStore {
   std::size_t length();
 
   /**
+   * Retrieves the number of keys in the OneToMany store
+   *
+   * @return the number of keys
+   */
+  std::size_t lengthKey();
+
+  /**
+   * Retrieves the number of values in the OneToMany store
+   *
+   * @return the number of values
+   */
+  std::size_t lengthValue();
+
+  /**
    * Retrieves value from OneToMany store based on key
    *
    * @param key - The key to query
