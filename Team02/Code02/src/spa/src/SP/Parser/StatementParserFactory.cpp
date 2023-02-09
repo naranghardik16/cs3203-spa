@@ -1,6 +1,4 @@
 #include "StatementParserFactory.h"
-#include "PrintStatementParser.h"
-#include "ReadStatementParser.h"
 
 StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     StatementParserFactory::Line> &tokens) {
@@ -11,6 +9,8 @@ StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     return new PrintStatementParser();
   } else if (CheckStatementType(line, "read")) {
     return new ReadStatementParser();
+  } else if (CheckStatementType(line, "while")) {
+    return new WhileStatementParser();
   }
   throw SemanticErrorException("Unknown Statement type");
 }

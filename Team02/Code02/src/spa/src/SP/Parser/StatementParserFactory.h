@@ -4,6 +4,9 @@
 #include<vector>
 #include "StatementParser.h"
 #include "AssignStatementParser.h"
+#include "PrintStatementParser.h"
+#include "ReadStatementParser.h"
+#include "WhileStatementParser.h"
 
 class StatementParserFactory {
   typedef std::vector<Token *> Line;
