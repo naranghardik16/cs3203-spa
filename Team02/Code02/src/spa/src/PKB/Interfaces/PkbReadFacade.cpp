@@ -49,90 +49,211 @@ SingleConstraintSet PkbReadFacade::GetAssignStatements() {
 
 //! Modifies Statement API
 PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
-  PairConstraintSet result;
-  return result;
+  if (statement_type == StatementType::PRINT) {
+    return {std::make_pair("1", "x")};
+  }
+  if (statement_type == StatementType::ASSIGN) {
+    return {std::make_pair("2", "a")};
+  }
+  return {};
 }
 
-//TODO to put back the proper PKB implementation after type of return value is change to set
 SingleConstraintSet PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
   //return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (statement_number == "1") {
+    return {"x"};
+  }
+  if (statement_number == "2") {
+    return {"a"};
+  }
+  return {};
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  SingleConstraintSet result;
-  return result;
+  if (var_name == "\"x\"" && statement_type == StatementType::PRINT) {
+    return {"1"};
+  }
+  if (var_name == "\"a\"" && statement_type == StatementType::ASSIGN) {
+    return {"2"};
+  }
+  return {};
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
-  SingleConstraintSet result;
-  return result;
+  if (stmt_type == StatementType::PRINT) {
+    return {"1"};
+  }
+  if (stmt_type == StatementType::ASSIGN) {
+    return {"2"};
+  }
+  return {};
 }
 
 bool PkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
-  return true;
+  if (stmt_num == "1" && var_name == "\"x\"") {
+    return true;
+  }
+  if (stmt_num == "2" && var_name == "\"a\"") {
+    return true;
+  }
+  return false;
 }
 
 
 //! Modifies Procedure API
-PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs(bool is_call) {
-  PairConstraintSet result;
-  return result;
+PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
+  return {std::make_pair("execute", "x"), std::make_pair("execute", "a")};
 }
 
 SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure_name) {
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (procedure_name == "\"execute\"") {
+    return {"x","a"};
+  }
+  return {};
 }
 
-SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name, bool is_call) {
-  SingleConstraintSet result;
-  return result;
+SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
+  if (var_name == "\"x\"") {
+    return {"execute"};
+  }
+  if (var_name == "\"a\"") {
+    return {"execute"};
+  }
+  return {};
 }
 
-SingleConstraintSet PkbReadFacade::GetProceduresThatModify(bool is_call) {
-  SingleConstraintSet result;
-  return result;
+SingleConstraintSet PkbReadFacade::GetProceduresThatModify() {
+  return {"execute"};
 }
 
 bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
-  return true;
+  if (procedure_name == "\"execute\"" && var_name == "\"x\"") {
+    return true;
+  }
+  if (procedure_name == "\"execute\"" && var_name == "\"a\"") {
+    return true;
+  }
+  return false;
 }
 
 //! Follows API
 PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
-  PairConstraintSet result;
-  return result;
+  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::ASSIGN) {
+    return {std::make_pair("1", "2")};
+  }
+  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::CALL) {
+    return {std::make_pair("1", "3")};
+  }
+  return {};
 }
 
 
-SingleConstraintSet PkbReadFacade::GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
-  SingleConstraintSet result;
-  return result;
+SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "3" && statement_type == StatementType::ALL) {
+    return {"1","2"};
+  }
+  return {};
 }
 
-SingleConstraintSet PkbReadFacade::GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
-  SingleConstraintSet result;
-  return result;
+SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "1" && statement_type == StatementType::ALL) {
+    return {"2","3"};
+  }
+  if (statement_num == "1" && statement_type == StatementType::ASSIGN) {
+    return {"2"};
+  }
+  return {};
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsWithFollowers(StatementType statement_type) {
-  SingleConstraintSet result;
-  return result;
+  if (statement_type == StatementType::PRINT) {
+    return {"1"};
+  }
+  if (statement_type == StatementType::ASSIGN) {
+    return {"2"};
+  }
+  return {};
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementThatAreFollowers(StatementType statement_type) {
-  SingleConstraintSet result;
-  return result;
+  if (statement_type == StatementType::ASSIGN) {
+    return {"2"};
+  }
+  if (statement_type == StatementType::READ) {
+    return {"3"};
+  }
+  return {};
 }
 
 
 bool PkbReadFacade::HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
-  return true;
+  if (statement_num == "1" && statement_num_follower == "2") {
+    return true;
+  }
+  if (statement_num == "1" && statement_num_follower == "3") {
+    return true;
+  }
+  return false;
 }
 
 bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
 }
 
+//! Parent API
+
+PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreParents(StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildren(StatementType statement_type) {
+  return {};
+}
+
+bool PkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
+  return {};
+}
+
+bool PkbReadFacade::IsAnyParentRelationshipPresent() {
+  return {};
+}
+
+PairConstraintSet PkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestors(StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendants(StatementType statement_type) {
+  return {};
+}
+
+bool PkbReadFacade::HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant) {
+  return {};
+}
+
+bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
+  return {};
+}

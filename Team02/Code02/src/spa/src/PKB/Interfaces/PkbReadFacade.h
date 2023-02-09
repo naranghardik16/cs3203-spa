@@ -167,26 +167,23 @@ class PkbReadFacade {
 
   /**
    * Returns (procedure_name, variable name) pairs that have a Modifies relationship with the statement numbers
-   * @param is_call  If is_call is True, then we only want procedures that are called in call statements
    * @return a set of pairs (procedure_name, variable name)
    */
-  PairConstraintSet GetModifiesProcedureVariablePairs(bool is_call);
+  PairConstraintSet GetModifiesProcedureVariablePairs();
 
   /**
  * Get procedures that modify a specific variable
  * @param var_name which is the name of the variable like "v"
- * @param is_call  If is_call is True, then we only want procedures that are called in call statements
  * @return a set of variable names
  */
-  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name, bool is_call);
+  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
 
 
   /**
   * Returns the procedure names of procedures that have a Modifies relationship
-  * @param is_call  If is_call is True, then we only want procedures that are called in call statements
   * @return a set of procedure names
   */
-  SingleConstraintSet GetProceduresThatModify(bool is_call);
+  SingleConstraintSet GetProceduresThatModify();
 
   /**
   * Check if a specific procedure and variable have a Modifies relationship
@@ -214,7 +211,7 @@ class PkbReadFacade {
  * @param statement_type is the constraint on the statements in the set
  * @return a set of statement numbers
  */
-  SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementFollowedBy(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements following a specified statement
@@ -222,7 +219,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementFollowing(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements with followers
@@ -254,5 +251,121 @@ class PkbReadFacade {
  */
   bool IsAnyFollowsRelationshipPresent();
 
+  //!API for Parent
+
+  /**
+   * Returns (statement number, statement number) pairs that have a Parent-Child Relationship
+   * with the 2nd statement number being the child of the first
+   * @param statement_type is the statement type of the statement that is the parent
+   * @param statement_type_child is the statement type of the child
+   * @return a set of pairs (statement number, statement number)
+   */
+  PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child);
+
+
+  /**
+ * Returns the statement numbers of statements that are parent of the specified statement
+ * @param statement_num is a specific statement
+ * @param statement_type is the constraint on the statements in the set
+ * @return a set of statement numbers
+ */
+  SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are child of the specified statement
+   * @param statement_num is a specific statement
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are parents
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are child of another statements
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type);
+
+  /**
+   * Returns true if the statement in the first argument is the parent of the statement in the second argument
+   * @param statement_num statement num of a statement
+   * @param statement_num_child is the statement that is child of the statement in the first argument
+   * @return bool
+   */
+  bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child);
+
+  /**
+ * Returns true if there is a Parent relationship stored between any statements
+ * @return bool
+ */
+  bool IsAnyParentRelationshipPresent();
+
+
+  //!API for ParentStar
+
+  /**
+   * Returns (statement number, statement number) pairs that have a Ancestor-Descendant Relationship
+   * with the 2nd statement number being the child of the first
+   * @param statement_type is the statement type of the statement that is the parent
+   * @param statement_type_descendant is the statement type of the child
+   * @return a set of pairs (statement number, statement number)
+   */
+  PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant);
+
+
+  /**
+ * Returns the statement numbers of statements that are ancestors of the specified statement
+ * @param statement_num is a specific statement
+ * @param statement_type is the constraint on the statements in the set
+ * @return a set of statement numbers
+ */
+  SingleConstraintSet GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are descendants of the specified statement
+   * @param statement_num is a specific statement
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are ancestors of any other statement type
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreAncestors(StatementType statement_type);
+
+  /**
+   * Returns the statement numbers of statements that are descendants of another statement (any type)
+   * These statements must be of the specified type
+   * @param statement_type is the constraint on the statements in the set
+   * @return a set of statement numbers
+   */
+  SingleConstraintSet GetStatementsThatAreDescendants(StatementType statement_type);
+
+  /**
+   * Returns true if the statement in the first argument is the ancestor of the statement in the second argument
+   * @param statement_num statement num of a statement
+   * @param statement_num_descendant is the statement that should is descendant of the statement in the first argument
+   * @return bool
+   */
+  bool HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant);
+
+  /**
+ * Returns true if there is a Parent relationship stored between any statements
+ * @return bool
+ */
+  bool IsAnyAncestorDescendantRelationshipPresent();
 };
 

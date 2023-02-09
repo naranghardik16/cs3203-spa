@@ -118,7 +118,18 @@ TEST_CASE("Test Query Parser") {
     REQUIRE(correct_synonym == synonym);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
+  }
 
+
+  SECTION("Test invalid query") {
+    std::string query("assign a;Select assign suchthatModifies(assign,\"count\") pattern a(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query") {
+    std::string query("assign a;Select assign such that Modifies(assign,\"count\") patterna(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
   }
 
   SECTION("Test invalid query") {

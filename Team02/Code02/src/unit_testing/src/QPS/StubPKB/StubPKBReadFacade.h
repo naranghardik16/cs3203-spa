@@ -1,5 +1,5 @@
 //! Preserving the stub written previously
-/*
+
 #pragma once
 #include <unordered_set>
 #include "PKB/Types/PkbTypes.h"
@@ -7,9 +7,10 @@
 #include "PKB/PKB.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
-class StubPkbReadFacade : public PkbReadFacade {
+//!Should inherit from PKBReadFacade
+class StubPkbReadFacade {
  public:
-  StubPkbReadFacade(PKB& pkb) : PKBReadFacade(pkb);
+  StubPkbReadFacade(PKB& pkb) {};
 
   ~StubPkbReadFacade();
 
@@ -34,9 +35,9 @@ class StubPkbReadFacade : public PkbReadFacade {
 
   //! API for Modifies - Procedure
   SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
-  PairConstraintSet GetModifiesProcedureVariablePairs(bool is_call);
-  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name, bool is_call);
-  SingleConstraintSet GetProceduresThatModify(bool is_call);
+  PairConstraintSet GetModifiesProcedureVariablePairs();
+  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
+  SingleConstraintSet GetProceduresThatModify();
   bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
 
   //!API for Follows
@@ -48,6 +49,4 @@ class StubPkbReadFacade : public PkbReadFacade {
   bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
   bool IsAnyFollowsRelationshipPresent();
 
-
 };
-*/
