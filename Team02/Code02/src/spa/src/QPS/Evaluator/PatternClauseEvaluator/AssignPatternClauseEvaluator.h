@@ -1,5 +1,7 @@
 #pragma once
 #include "QPS/Evaluator/ClauseEvaluator.h"
+#include "QPS/Util/QueryUtil.h"
+#include "General/LexicalRuleValidator.h"
 
 class AssignPatternClauseEvaluator : public ClauseEvaluator {
  private:
