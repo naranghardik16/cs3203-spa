@@ -11,6 +11,7 @@ bool ModifiesClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadF
   //! first_arg is stmtref: If first arg is wildcard then semantic error; If first arg is synonym then it is not considered boolean constraint
   //! So first arg is either ident or int
   //! Based on rule of boolean constraint, the 2nd arg cannot be a synonym so either wildcard or ident (since 2nd arg is entref)
+
   if (is_first_arg_an_integer) {
     if (is_second_arg_a_wildcard) {
       //Modifies(5, _) -- does 5 modify any variables?

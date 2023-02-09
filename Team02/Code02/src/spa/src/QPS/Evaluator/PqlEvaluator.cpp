@@ -22,8 +22,6 @@ bool PqlEvaluator::IsBooleanConstraint(const SyntaxPair& pair) {
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
-  Map map_test = declaration_map_;
-
   std::shared_ptr<Result> evaluation_result = EvaluateTrivialSelectStatement();
 
   //!Evaluate and remove all boolean constraints first
@@ -54,7 +52,6 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
       return {};
     }
   }
-
 
   std::unordered_set<std::string> results = evaluation_result->ProjectResult(synonym_);
 

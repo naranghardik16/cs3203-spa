@@ -25,7 +25,7 @@ SingleConstraintSet StubPkbReadFacade::GetProcedures() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetStatements() {
-  SingleConstraintSet statement_set({"1", "2", "3"});
+  SingleConstraintSet statement_set({ "2", "3"});
   return statement_set;
 }
 
@@ -35,7 +35,7 @@ SingleConstraintSet StubPkbReadFacade::GetReadStatements() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetPrintStatements() {
-  SingleConstraintSet print_set({"6", "7", "8"});
+  SingleConstraintSet print_set({"1"});
   return print_set;
 }
 
@@ -60,27 +60,38 @@ SingleConstraintSet StubPkbReadFacade::GetAssignStatements() {
 }
 
 //! API for Modifies - Statement
-SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(std::string stmt_num) {
-  SingleConstraintSet result = {"x"};
-  return result;
+SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(std::string statement_num) {
+  if (statement_num == "1") {
+    return {"x"};
+  }
+  return {};
 }
 
 PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type) {
-  PairConstraintSet result;
-  return result;
+  if (statement_type == StatementType::PRINT) {
+    return {std::make_pair("1", "x")};
+  }
+  return {};
 }
 
 SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (var_name == "\"count\"" && statement_type == StatementType::PRINT) {
+    return {};
+  }
+  return {};
 }
 
 SingleConstraintSet GetStatementsThatModify(StatementType stmt_type) {
-  SingleConstraintSet result = {"x"};
-  return result;
+  if (stmt_type == StatementType::PRINT) {
+    return {"1"};
+  }
+  return {};
 }
 
 bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
+  if (stmt_num == "1" && var_name == "\"x\"") {
+    return true;
+  }
   return false;
 }
 
@@ -96,12 +107,12 @@ PairConstraintSet GetModifiesProcedureVariablePairs() {
 }
 
 SingleConstraintSet GetProceduresModifiesVariable(std::string var_name) {
-  SingleConstraintSet result = {"x"};
+  SingleConstraintSet result;
   return result;
 }
 
 SingleConstraintSet GetProceduresThatModify() {
-  SingleConstraintSet result = {"x"};
+  SingleConstraintSet result;
   return result;
 }
 
