@@ -8,7 +8,7 @@ WhileStatement *WhileStatementParser::ParseEntity(TokenStream &tokens) {
                                        condition,
                                        "main");
   CheckStartOfLoopStatement(line);
-  while (!tokens.empty() && IsEndOfWhileStatement(tokens.front())) {
+  while (!tokens.empty() && !IsEndOfWhileStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto loop_stmt = stmt_parser->ParseEntity(tokens);
     while_stmt->AddStatement(loop_stmt);

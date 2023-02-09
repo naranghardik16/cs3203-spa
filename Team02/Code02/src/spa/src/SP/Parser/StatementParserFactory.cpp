@@ -11,6 +11,8 @@ StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     return new ReadStatementParser();
   } else if (CheckStatementType(line, "while")) {
     return new WhileStatementParser();
+  } else if (CheckStatementType(line, "if")) {
+    return new IfStatementParser();
   }
   throw SemanticErrorException("Unknown Statement type");
 }
