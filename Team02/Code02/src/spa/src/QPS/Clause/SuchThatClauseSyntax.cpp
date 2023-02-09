@@ -2,7 +2,8 @@
 #include "SuchThatClauseSyntax.h"
 #include <utility>
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/UsesClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/UsesSClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/UsesPClauseEvaluator.h"
 #include "QPS/Util/PQLConstants.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ParentStarClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ParentClauseEvaluator.h"
@@ -34,9 +35,13 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Syn
   } else if (relationship_reference == pql_constants::kPqlParentStarRel) {
     evaluator = std::make_shared<ParentStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlUsesRel) {
-    evaluator = std::make_shared<UsesStatementClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+    if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())) {
+      evaluator = std::make_shared<UsesPClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+    } else {
+      evaluator = std::make_shared<UsesSClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+    }
   } else {
-    evaluator = std::make_shared<ModifiesClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+    evaluator = std::make_shared<ModifiesClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   }
   return evaluator;
 }

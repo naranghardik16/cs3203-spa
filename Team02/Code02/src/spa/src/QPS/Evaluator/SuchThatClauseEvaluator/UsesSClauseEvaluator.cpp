@@ -1,23 +1,22 @@
-#include "UsesProcedureClauseEvaluator.h"
+#include "UsesSClauseEvaluator.h"
 
-bool UsesProcedureClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
+bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_second_arg_a_wildcard) {
-    //Example query: Uses("Main", _)
+    //Example query: Uses(5, _)
 
     //TODO: PKB call
     return true;
   } else {
-    //Example query: uses("Main", "count")
-
+    //Example query: uses(5, "count")
     //TODO: PKB call
     return true;
   }
 }
 
-std::shared_ptr<Result> UsesProcedureClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   ResultHeader header;
   ResultTable table;
 
@@ -37,15 +36,15 @@ std::shared_ptr<Result> UsesProcedureClauseEvaluator::EvaluateClause(std::shared
   PairConstraintSet pair_constraint;
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    //Example query: Uses(p, v)
+    //Example query: Uses(s, v)
 
     //TODO: PKB call
   } else if (is_first_arg_synonym) {
-    //Example query: Uses(p, _) or Uses(p, "x")
+    //Example query: Uses(s, _) or Uses(s, "x")
 
     //TODO: PKB call
   } else {
-    //Example query: Uses("Main", v)
+    //Example query: Uses(1, v)
 
     //TODO: PKB call
   }
