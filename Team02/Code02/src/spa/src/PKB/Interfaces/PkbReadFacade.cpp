@@ -221,10 +221,10 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatIsPare
 }
 
 PkbCommunicationTypes:: PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "5" && (statement_type == StatementType::ALL || statement_type == StatementType::ASSIGN)) {
-    return {"6","7"};
-  }
-  return {};
+if (statement_num == "5" && (statement_type == StatementType::ALL || statement_type == StatementType::ASSIGN)) {
+return {"6","7"};
+}
+return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreParents(StatementType statement_type) {
