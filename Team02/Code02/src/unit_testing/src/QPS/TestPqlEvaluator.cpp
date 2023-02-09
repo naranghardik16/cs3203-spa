@@ -448,3 +448,77 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
 }
 
 
+TEST_CASE("Make sure Parent Clause Evaluator Works") {
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
+  auto qp = std::make_shared<QueryParser>();
+
+  //! Boolean Constraints
+  //e.g. Parent(_,_) -- return all Parent-Child relationships between statements
+  // return pkb->IsAnyParentRelationshipPresent();
+
+  //e.g. Parent(_,"5") --> Get all types of statements that "5" is child of
+  //return !pkb->GetStatementThatIsParentOf(second_arg_, StatementType::ALL).empty();
+
+  //e.g. Parent("5", _) --> Get all types of statements that are child of"5"
+  //return !pkb->GetStatementsThatAreChildrenOf(first_arg_, StatementType::ALL).empty();
+
+  //e.g. Parent(5, 6) --> Check if 5 is parent of 6
+  //return pkb->HasParentChildRelationship(first_arg_, second_arg_);
+
+
+  //e.g. Parent(s, _) --> Get statements that are parents
+  //pkb->GetStatementsThatAreParents(QueryUtil::GetStatementType(declaration_map, first_arg_));
+
+  //e.g. Parent(a,p) --> get (assign stmt parent, print stmt child) pairs
+  //pair_constraint = pkb->GetParentChildPairs(QueryUtil::GetStatementType(declaration_map, first_arg_), QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+  //e.g. Parent(a,"5") --> Get assign statement that is parent of 5
+  //single_constraint = pkb->GetStatementThatIsParentOf(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
+
+
+  //e.g. Parent("5", a) --> Get assign statements that are children of 5
+  //single_constraint = pkb->GetStatementsThatAreChildrenOf(first_arg_, QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+  //e.g. Parent(_, s) --> Get statements are child of any other statement
+  //single_constraint = pkb->GetStatementsThatAreChildren(QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+}
+
+TEST_CASE("Make sure ParentStar Clause Evaluator Works") {
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<PkbReadFacade>(pkb_);
+  auto qp = std::make_shared<QueryParser>();
+
+  //! Boolean Constraints
+
+  //e.g. Parent*(_,_) -- return all Parent*-Descendant relationships between statements
+  //return pkb->IsAnyAncestorDescendantRelationshipPresent();
+
+  //e.g. Parent*(_,"5") --> Get all types of statements that "5" is descendant to
+  //return !pkb->GetStatementsThatAreAncestorOf(second_arg_, StatementType::ALL).empty();
+
+
+  //e.g. Parent*("5", _) --> Get all types of statements that are descendants of"5"
+  //return !pkb->GetStatementsThatAreDescendantsOf(first_arg_, StatementType::ALL).empty();
+
+  //e.g. Parent*(5, 6) --> Check if 5 is parent of 6
+  //return pkb->HasAncestorDescendantRelationship(first_arg_, second_arg_);
+
+  //e.g. Parent*(s, _) --> Get statements that are ancestors
+  //single_constraint = pkb->GetStatementsThatAreAncestors(QueryUtil::GetStatementType(declaration_map, first_arg_));
+
+  //e.g. Parent*(a,p) --> get (assign stmt parent, print stmt descendant) pairs
+  //pair_constraint = pkb->GetAncestorDescendantPairs(QueryUtil::GetStatementType(declaration_map, first_arg_), QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+  //e.g. Parent*(a,"5") --> Get assign statements that are ancestors of 5
+  //single_constraint = pkb->GetStatementsThatAreAncestorOf(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
+
+  //e.g. Parent("5", a) --> Get assign statements that are descendants of 5
+  //single_constraint = pkb->GetStatementsThatAreDescendantsOf(first_arg_, QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+
+  //e.g. Parent*(_, s) --> Get statements that are descendant of any other statement type
+  //single_constraint = pkb->GetStatementsThatAreDescendants(QueryUtil::GetStatementType(declaration_map, second_arg_));
+
+}
