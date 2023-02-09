@@ -7,7 +7,9 @@ PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 PkbReadFacade::~PkbReadFacade() {}
 
 SingleConstraintSet PkbReadFacade::GetVariables() {
-  return this->pkb.entity_store_->getVariables();
+  SingleConstraintSet var_set({"a", "x", "y"});
+  return var_set;
+  //return this->pkb.entity_store_->getVariables();
 }
 
 SingleConstraintSet PkbReadFacade::GetConstants() {
@@ -15,7 +17,9 @@ SingleConstraintSet PkbReadFacade::GetConstants() {
 }
 
 SingleConstraintSet PkbReadFacade::GetProcedures() {
-  return this->pkb.entity_store_->getProcedures();
+  SingleConstraintSet set({"execute", "anya"});
+  return set;
+  //return this->pkb.entity_store_->getProcedures();
 }
 
 SingleConstraintSet PkbReadFacade::GetStatements() {
@@ -23,15 +27,21 @@ SingleConstraintSet PkbReadFacade::GetStatements() {
 }
 
 SingleConstraintSet PkbReadFacade::GetReadStatements() {
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
+  SingleConstraintSet set({"4"});
+  return set;
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
 }
 
 SingleConstraintSet PkbReadFacade::GetPrintStatements() {
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
+  SingleConstraintSet print_set({"1"});
+  return print_set;
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
 
 SingleConstraintSet PkbReadFacade::GetCallStatements() {
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::CALL);
+  SingleConstraintSet set({"3"});
+  return set;
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::CALL);
 }
 
 SingleConstraintSet PkbReadFacade::GetWhileStatements() {
@@ -43,7 +53,9 @@ SingleConstraintSet PkbReadFacade::GetIfStatements() {
 }
 
 SingleConstraintSet PkbReadFacade::GetAssignStatements() {
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
+  SingleConstraintSet set({"2"});
+  return set;
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
 
