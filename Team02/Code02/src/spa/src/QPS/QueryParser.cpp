@@ -25,8 +25,11 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   //!after checking for syntax, if there are repeated synonyms then semantic exception is thrown
   Map declaration_map = tk->ExtractAbstractSyntaxFromDeclarations(declarations);
 
-  //!Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
-  auto syntax_pair_list = tk->ParseSubClauses(remaining_clause);
+  ClauseSyntaxPtrList syntax_pair_list;
+  if (!remaining_clause.empty()) {
+    //!Extract syntax of subclauses -- throws a SyntaxErrorException if subclause does not adhere to syntax
+    syntax_pair_list = tk->ParseSubClauses(remaining_clause);
+  }
 
   if (declaration_map.find(synonym) == declaration_map.end() || tk->semantic_validator_->has_semantic_error_) {
     throw SemanticErrorException();
