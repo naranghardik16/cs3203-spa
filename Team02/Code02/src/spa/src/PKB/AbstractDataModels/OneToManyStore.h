@@ -44,6 +44,22 @@ class OneToManyStore {
   bool contains(K key, V value);
 
   /**
+   * Checks if key is present in the OneToMany store
+   *
+   * @param key - the target key to query
+   * @return true if exists, false otherwise
+   */
+  bool containsKey(K key);
+
+  /**
+   * Checks if value is present in the OneToMany store
+   *
+   * @param value - the target value to query
+   * @return true if exists, false otherwise
+   */
+  bool containsValue(V value);
+
+  /**
    * Retrieves the number of relations in the store
    *
    * @return The number of relations

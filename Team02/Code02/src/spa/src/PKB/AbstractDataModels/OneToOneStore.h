@@ -41,12 +41,27 @@ class OneToOneStore {
   bool contains(K key, V value);
 
   /**
+   * Checks if the key is present in the OneToOne store
+   *
+   * @param key - the target key to query
+   * @return true if exists, false otherwise
+   */
+  bool containsKey(K key);
+
+  /**
+   * Checks if the value is present in the OneToOne store
+   *
+   * @param value - the target value to query
+   * @return  true if exists, false otherwise
+   */
+  bool containsValue(V value);
+
+  /**
    * Retrieves the number of relations in the store
    *
    * @return The number of relations
    */
   std::size_t length();
-
   /**
    * Retrieves value from OneToOne store based on key
    *

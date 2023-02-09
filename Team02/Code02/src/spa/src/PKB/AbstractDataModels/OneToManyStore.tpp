@@ -1,12 +1,3 @@
-//#include "OneToManyStore.h"
-
-
-//template<typename K, typename V>
-//OneToManyStore<K, V>::OneToManyStore() {};
-
-//template<typename K, typename V>
-//OneToManyStore<K, V>::~OneToManyStore() {};
-
 template<typename K, typename V>
 void OneToManyStore<K, V>::insert(K key, V value) {
   this->forward_map_[key].insert(value);
@@ -16,7 +7,22 @@ void OneToManyStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool OneToManyStore<K, V>::contains(K key, V value) {
-  return this->backward_map_.count(key) && this->backward_map_[key] == value;
+  auto iter = this->forward_map_.find(key);
+  if (iter == this->forward_map_.end()) {
+    return false;
+  }
+  return iter->second.count(value) > 0;
+//  return this->backward_map_.count(key) && this->backward_map_[key] == value;
+}
+
+template<typename K, typename V>
+bool OneToManyStore<K, V>::containsKey(K key) {
+  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToManyStore<K, V>::containsValue(V value) {
+  return this->backward_map_.count(value);
 }
 
 template<typename K, typename V>
