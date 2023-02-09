@@ -14,7 +14,46 @@ void ManyToManyStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool ManyToManyStore<K, V>::contains(K key, V value) {
-  return this->backward_map_.count(key);
+  auto forward_it = this->forward_map_.find(key);
+  if (forward_it == this->forward_map_.end()) {
+    return false;
+  }
+  auto backward_it = this->backward_map_.find(value);
+  if (backward_it == this->backward_map_.end()) {
+    return false;
+  }
+  return forward_it->second.count(value) > 0 && backward_it->second.count(key) > 0;
+
+//  return this->backward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool ManyToManyStore<K, V>::containsKey(K key) {
+  return this->forward_map_.count(key) > 0;
+}
+
+template<typename K, typename V>
+bool ManyToManyStore<K, V>::containsValue(V value) {
+  return this->backward_map_.count(value) > 0;
+}
+
+template<typename K, typename V>
+std::size_t ManyToManyStore<K, V>::length() {
+  std::size_t count = 0;
+  for (const auto &[k, vs] : this->forward_map_) {
+    count += vs.size();
+  }
+  return count;
+}
+
+template<typename K, typename V>
+std::size_t ManyToManyStore<K, V>::lengthKey() {
+  return this->forward_map_.size();
+}
+
+template<typename K, typename V>
+std::size_t ManyToManyStore<K, V>::lengthValue() {
+  return this->backward_map_.size();
 }
 
 template<typename K, typename V>
