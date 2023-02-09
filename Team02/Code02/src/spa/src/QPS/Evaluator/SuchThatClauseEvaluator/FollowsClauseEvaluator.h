@@ -7,7 +7,7 @@ class FollowsClauseEvaluator : public ClauseEvaluator {
   std::string first_arg_;
   std::string second_arg_;
  public:
-  FollowsClauseEvaluator(Synonym s, Map d, SyntaxPair syntax_pair) : ClauseEvaluator(s,d,syntax_pair) {
+  FollowsClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
     relationship_reference_ = syntax_pair.first;
     first_arg_ =  syntax_pair.second.first;
     second_arg_ = syntax_pair.second.second;

@@ -30,7 +30,6 @@ bool ParentStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRea
 }
 
 std::shared_ptr<Result> ParentStarClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  auto syntax_pair = ClauseEvaluator::GetSyntaxPair();
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
