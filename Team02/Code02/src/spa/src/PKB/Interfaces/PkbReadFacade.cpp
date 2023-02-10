@@ -27,13 +27,13 @@ SingleConstraintSet PkbReadFacade::GetStatements() {
 }
 
 SingleConstraintSet PkbReadFacade::GetReadStatements() {
-  SingleConstraintSet set({"4"});
+  SingleConstraintSet set({"1"});
   return set;
   //return this->pkb.statement_store_->getStatementsFromType(StatementType::READ);
 }
 
 SingleConstraintSet PkbReadFacade::GetPrintStatements() {
-  SingleConstraintSet print_set({"1"});
+  SingleConstraintSet print_set({"4"});
   return print_set;
   //return this->pkb.statement_store_->getStatementsFromType(StatementType::PRINT);
 }
@@ -49,11 +49,12 @@ SingleConstraintSet PkbReadFacade::GetWhileStatements() {
 }
 
 SingleConstraintSet PkbReadFacade::GetIfStatements() {
-  return this->pkb.statement_store_->getStatementsFromType(StatementType::IF);
+  return {"5"};
+  //return this->pkb.statement_store_->getStatementsFromType(StatementType::IF);
 }
 
 SingleConstraintSet PkbReadFacade::GetAssignStatements() {
-  SingleConstraintSet set({"2"});
+  SingleConstraintSet set({"2", "6", "7"});
   return set;
   //return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
@@ -61,7 +62,7 @@ SingleConstraintSet PkbReadFacade::GetAssignStatements() {
 
 //! Modifies Statement API
 PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
-  if (statement_type == StatementType::PRINT) {
+  if (statement_type == StatementType::READ) {
     return {std::make_pair("1", "x")};
   }
   if (statement_type == StatementType::ASSIGN) {
@@ -82,7 +83,7 @@ SingleConstraintSet PkbReadFacade::GetVariablesModifiedByStatement(std::string s
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  if (var_name == "\"x\"" && statement_type == StatementType::PRINT) {
+  if (var_name == "\"x\"" && statement_type == StatementType::READ) {
     return {"1"};
   }
   if (var_name == "\"a\"" && statement_type == StatementType::ASSIGN) {
@@ -92,7 +93,7 @@ SingleConstraintSet PkbReadFacade::GetStatementsModifiesVariable(std::string var
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
-  if (stmt_type == StatementType::PRINT) {
+  if (stmt_type == StatementType::READ) {
     return {"1"};
   }
   if (stmt_type == StatementType::ASSIGN) {
@@ -150,10 +151,10 @@ bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name,
 
 //! Follows API
 PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
-  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::ASSIGN) {
+  if (statement_type == StatementType::READ && statement_type_follower == StatementType::ASSIGN) {
     return {std::make_pair("1", "2")};
   }
-  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::CALL) {
+  if (statement_type == StatementType::READ && statement_type_follower == StatementType::CALL) {
     return {std::make_pair("1", "3")};
   }
   return {};
@@ -162,23 +163,23 @@ PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, St
 
 SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
   if (statement_num == "3" && statement_type == StatementType::ALL) {
-    return {"1","2"};
-  }
-  return {};
-}
-
-SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "1" && statement_type == StatementType::ALL) {
-    return {"2","3"};
-  }
-  if (statement_num == "1" && statement_type == StatementType::ASSIGN) {
     return {"2"};
   }
   return {};
 }
 
+SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "1" && (statement_type == StatementType::ALL || statement_type == StatementType::ASSIGN)) {
+    return {"2"};
+  }
+  if (statement_num == "2" && (statement_type == StatementType::ALL || statement_type == StatementType::CALL)) {
+    return {"3"};
+  }
+  return {};
+}
+
 SingleConstraintSet PkbReadFacade::GetStatementsWithFollowers(StatementType statement_type) {
-  if (statement_type == StatementType::PRINT) {
+  if (statement_type == StatementType::READ) {
     return {"1"};
   }
   if (statement_type == StatementType::ASSIGN) {
@@ -191,7 +192,7 @@ SingleConstraintSet PkbReadFacade::GetStatementThatAreFollowers(StatementType st
   if (statement_type == StatementType::ASSIGN) {
     return {"2"};
   }
-  if (statement_type == StatementType::READ) {
+  if (statement_type == StatementType::CALL) {
     return {"3"};
   }
   return {};
@@ -215,6 +216,9 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 //! Parent API
 
 PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
+  if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
+    return {std::make_pair("5","6"), std::make_pair("5","7")};
+  }
   return {};
 }
 
@@ -223,6 +227,9 @@ SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statem
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "5" && (statement_type == StatementType::ALL || statement_type == StatementType::ASSIGN)) {
+    return {"6","7"};
+  }
   return {};
 }
 
@@ -231,15 +238,21 @@ SingleConstraintSet PkbReadFacade::GetStatementsThatAreParents(StatementType sta
 }
 
 SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildren(StatementType statement_type) {
+  if (statement_type == StatementType::ASSIGN) {
+    return {"6","7"};
+  }
   return {};
 }
 
 bool PkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
-  return {};
+  if (statement_num == "5" && statement_num_child == "6") {
+    return true;
+  }
+  return false;
 }
 
 bool PkbReadFacade::IsAnyParentRelationshipPresent() {
-  return {};
+  return true;
 }
 
 PairConstraintSet PkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
