@@ -7,53 +7,48 @@
 #include "PKB/PKB.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
+StubPkbReadFacade::StubPkbReadFacade(PKB &pkb): PkbReadFacade(pkb) {}
+
 StubPkbReadFacade::~StubPkbReadFacade() {}
 
 PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariables() {
-  PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet var_set({"a", "x", "y"});
-  return var_set;
+  return PkbReadFacade::GetVariables();
 }
 
 PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetConstants() {
-  PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet set({"execute", "anya"});
-  return set;
+  return PkbReadFacade::GetConstants();
 }
 
 PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProcedures() {
-  PkbCommunicationTypes::PkbCommunicationTypes::SingleConstraintSet set({"execute", "anya"});
-  return set;
+  return PkbReadFacade::GetProcedures();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatements() {
-  return {};
+  return PkbReadFacade::GetStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetReadStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"4"});
-  return set;
+  return PkbReadFacade::GetReadStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetPrintStatements() {
-  PkbCommunicationTypes::SingleConstraintSet print_set({"1"});
-  return print_set;
+  return PkbReadFacade::GetPrintStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetCallStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"3"});
-  return set;
+  return PkbReadFacade::GetCallStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileStatements() {
-  return {};
+  return PkbReadFacade::GetWhileStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfStatements() {
-  return {};
+  return PkbReadFacade::GetIfStatements();
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"2"});
-  return set;
+  return PkbReadFacade::GetAssignStatements();
 }
 
 
@@ -70,14 +65,7 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatement
 
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
-  //return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
-  if (statement_number == "1") {
-    return {"x"};
-  }
-  if (statement_number == "2") {
-    return {"a"};
-  }
-  return {};
+  return PkbReadFacade::GetVariablesModifiedByProcedure(statement_number);
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {

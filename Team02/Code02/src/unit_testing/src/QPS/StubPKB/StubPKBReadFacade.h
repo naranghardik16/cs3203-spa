@@ -9,26 +9,26 @@
 #include "PKB/Types/PkbCommunicationTypes.h"
 
 //!Should inherit from PKBReadFacade
-class StubPkbReadFacade {
+class StubPkbReadFacade: public PkbReadFacade {
  public:
-  StubPkbReadFacade(PKB& pkb) {};
+  StubPkbReadFacade(PKB& pkb);
 
   ~StubPkbReadFacade();
 
   //! API for basic Select statements
-  PkbCommunicationTypes::SingleConstraintSet GetVariables();
-  PkbCommunicationTypes::SingleConstraintSet GetConstants();
-  PkbCommunicationTypes::SingleConstraintSet GetProcedures();
-  PkbCommunicationTypes::SingleConstraintSet GetStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetReadStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetPrintStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetCallStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetWhileStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetIfStatements();
-  PkbCommunicationTypes::SingleConstraintSet GetAssignStatements();
+  PkbCommunicationTypes::SingleConstraintSet GetVariables() override;
+  PkbCommunicationTypes::SingleConstraintSet GetConstants() override;
+  PkbCommunicationTypes::SingleConstraintSet GetProcedures() override;
+  PkbCommunicationTypes::SingleConstraintSet GetStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetReadStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetPrintStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetCallStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetAssignStatements() override;
 
   //! API for Modifies - Statement
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
+  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number) override;
   PkbCommunicationTypes::PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
   PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
   PkbCommunicationTypes::SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);

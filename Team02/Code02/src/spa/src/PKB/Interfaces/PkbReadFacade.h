@@ -25,70 +25,70 @@ class PkbReadFacade {
    *
    * @return set of variables
    */
-  PkbCommunicationTypes::SingleConstraintSet GetVariables();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetVariables();
 
   /**
    * Get constants stored in PKB
    *
    * @return set of constants
    */
-  PkbCommunicationTypes::SingleConstraintSet GetConstants();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetConstants();
 
   /**
    * Gets procedures stored in PKB
    *
    * @return set of procedures
    */
-  PkbCommunicationTypes::SingleConstraintSet GetProcedures();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetProcedures();
 
   /**
    * Gets statements stored in PKB
    *
    * @return set of statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatements();
 
   /**
    * Gets Read statements stored in PKB
    *
    * @return set of read statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetReadStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetReadStatements();
 
   /**
    * Gets Print statements stored in PKB
    *
    * @return set of print statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetPrintStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetPrintStatements();
 
   /**
    * Gets Call statements stored in PKB
    *
    * @return set of call statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetCallStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetCallStatements();
 
   /**
    * Gets while statements stored in PKB
    *
    * @return set of while statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetWhileStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetWhileStatements();
 
   /**
    * Gets if statements stored in PKB
    *
    * @return set of if statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetIfStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetIfStatements();
 
   /**
    * Gets assign statements stored in PKB
    *
    * @return set of assign statements
    */
-  PkbCommunicationTypes::SingleConstraintSet GetAssignStatements();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignStatements();
 
   //! API for Modifies - Statement
 
@@ -97,7 +97,7 @@ class PkbReadFacade {
  * @param statement_number which is the statement number in string
  * @return a set of variable names
  */
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
 
   /**
    * Returns (statement number, variable name) pairs that have a Modifies relationship with the statement numbers
@@ -105,7 +105,7 @@ class PkbReadFacade {
    * @param statement_type enum
    * @return a set of pairs (statement number, variable name)
    */
-  PkbCommunicationTypes::PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
+  virtual PkbCommunicationTypes::PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
 
   /**
  * Get statements that modify a specific variable, with the statements being constrained to a type specification
@@ -113,7 +113,7 @@ class PkbReadFacade {
  * @param statement_type which is a constraint to filter the statements returned
  * @return a set of variable names
  */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
 
 
   /**
@@ -121,7 +121,7 @@ class PkbReadFacade {
   * @param stmt_type which is the statement type constraint
   * @return a set of statement numbers
   */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
 
   /**
   * Check if a specific statement and variable have a Modifies relationship
@@ -129,7 +129,7 @@ class PkbReadFacade {
   * @param var_name which is the name of the variable like "v"
   * @return a set of variable names
   */
-  bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name);
+  virtual bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name);
 
   //! API for Modifies - Procedure
 
@@ -138,27 +138,27 @@ class PkbReadFacade {
  * @param procedure_name which is the name of the procedure
  * @return a set of variable names
  */
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
 
   /**
    * Returns (procedure_name, variable name) pairs that have a Modifies relationship with the statement numbers
    * @return a set of pairs (procedure_name, variable name)
    */
-  PkbCommunicationTypes::PairConstraintSet GetModifiesProcedureVariablePairs();
+  virtual PkbCommunicationTypes::PairConstraintSet GetModifiesProcedureVariablePairs();
 
   /**
  * Get procedures that modify a specific variable
  * @param var_name which is the name of the variable like "v"
  * @return a set of variable names
  */
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
 
 
   /**
   * Returns the procedure names of procedures that have a Modifies relationship
   * @return a set of procedure names
   */
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresThatModify();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresThatModify();
 
   /**
   * Check if a specific procedure and variable have a Modifies relationship
@@ -166,7 +166,7 @@ class PkbReadFacade {
   * @param var_name which is the name of the variable like "v"
   * @return true if the procedure and variable have a Modifies relationship
   */
-  bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
+  virtual bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
 
   //!API for Follows
 
@@ -177,7 +177,7 @@ class PkbReadFacade {
    * @param statement_type_follower is the statement type of the follower
    * @return a set of pairs (statement number, statement number)
    */
-  PkbCommunicationTypes::PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
+  virtual PkbCommunicationTypes::PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
 
 
   /**
@@ -186,7 +186,7 @@ class PkbReadFacade {
  * @param statement_type is the constraint on the statements in the set
  * @return a set of statement numbers
  */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementFollowedBy(std::string statement_num, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementFollowedBy(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements following a specified statement
@@ -194,7 +194,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementFollowing(std::string statement_num, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementFollowing(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements with followers
@@ -202,7 +202,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are followers
@@ -210,7 +210,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
 
   /**
    * Returns true if the statement in the second argument follows the statement in the first argument
@@ -218,13 +218,13 @@ class PkbReadFacade {
    * @param statement_num_follower is the statement that should follow the statement in the first argument
    * @return bool
    */
-  bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
+  virtual bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
 
   /**
  * Returns true if there is a follows relationship stored between any statements
  * @return bool
  */
-  bool IsAnyFollowsRelationshipPresent();
+  virtual bool IsAnyFollowsRelationshipPresent();
 
   //!API for Parent
 
@@ -235,7 +235,7 @@ class PkbReadFacade {
    * @param statement_type_child is the statement type of the child
    * @return a set of pairs (statement number, statement number)
    */
-  PkbCommunicationTypes::PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child);
+  virtual PkbCommunicationTypes::PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child);
 
 
   /**
@@ -244,7 +244,7 @@ class PkbReadFacade {
  * @param statement_type is the constraint on the statements in the set
  * @return a set of statement numbers
  */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are child of the specified statement
@@ -252,7 +252,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are parents
@@ -260,7 +260,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are child of another statements
@@ -268,7 +268,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type);
 
   /**
    * Returns true if the statement in the first argument is the parent of the statement in the second argument
@@ -276,13 +276,13 @@ class PkbReadFacade {
    * @param statement_num_child is the statement that is child of the statement in the first argument
    * @return bool
    */
-  bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child);
+  virtual bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child);
 
   /**
  * Returns true if there is a Parent relationship stored between any statements
  * @return bool
  */
-  bool IsAnyParentRelationshipPresent();
+  virtual bool IsAnyParentRelationshipPresent();
 
 
   //!API for ParentStar
@@ -294,7 +294,7 @@ class PkbReadFacade {
    * @param statement_type_descendant is the statement type of the child
    * @return a set of pairs (statement number, statement number)
    */
-  PkbCommunicationTypes::PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant);
+  virtual PkbCommunicationTypes::PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant);
 
 
   /**
@@ -303,7 +303,7 @@ class PkbReadFacade {
  * @param statement_type is the constraint on the statements in the set
  * @return a set of statement numbers
  */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are descendants of the specified statement
@@ -311,7 +311,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendantsOf(std::string statement_num,
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendantsOf(std::string statement_num,
                                                                                StatementType statement_type);
 
   /**
@@ -320,7 +320,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestors(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestors(StatementType statement_type);
 
   /**
    * Returns the statement numbers of statements that are descendants of another statement (any type)
@@ -328,7 +328,7 @@ class PkbReadFacade {
    * @param statement_type is the constraint on the statements in the set
    * @return a set of statement numbers
    */
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendants(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendants(StatementType statement_type);
 
   /**
    * Returns true if the statement in the first argument is the ancestor of the statement in the second argument
@@ -336,12 +336,12 @@ class PkbReadFacade {
    * @param statement_num_descendant is the statement that should is descendant of the statement in the first argument
    * @return bool
    */
-  bool HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant);
+  virtual bool HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant);
 
   /**
  * Returns true if there is a Parent relationship stored between any statements
  * @return bool
  */
-  bool IsAnyAncestorDescendantRelationshipPresent();
+  virtual bool IsAnyAncestorDescendantRelationshipPresent();
 };
 
