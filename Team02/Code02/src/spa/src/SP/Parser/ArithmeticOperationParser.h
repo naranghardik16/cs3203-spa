@@ -1,4 +1,6 @@
 #pragma once
+
+#include "OperationParser.h"
 #include "../../core/model/ArithmeticOperation.h"
 #include "../../core/model/Constant.h"
 #include "../../core/model/Variable.h"
@@ -8,18 +10,21 @@
 using namespace std;
 
 
-class ArithmeticOperationParser {
+class ArithmeticOperationParser : public OperationParser {
  public:
-  ArithmeticOperationParser(vector<Token*> &line);
-  ArithmeticOperation *Parse();
+//  ArithmeticOperationParser(vector<Token*> &line);
+  ArithmeticOperationParser() = default;
+  Expression *Parse() override;
+//  Operation *ParseEntity(TokenStream &tokens) override;
+//  Operation *ParseEntity(Line &line) override;
  private:
-  vector<Token*> line_;
+//  vector<Token*> line_;
   vector<TokenType> term_operators_ = { PLUS, MINUS };
   vector<TokenType> factor_operators_ = {MULTIPLY, DIV, MOD};
-  int pos_ = 0;
-  Token *curr_token_;
-  string curr_token_value_;
-  void GetNext();
+//  int pos_ = 0;
+//  Token *curr_token_;
+//  string curr_token_value_;
+//  void GetNext();
   Expression *Term();
   Expression *Factor();
 };

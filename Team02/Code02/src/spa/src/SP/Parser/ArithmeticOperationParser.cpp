@@ -1,23 +1,27 @@
-#pragma once
 #include "ArithmeticOperationParser.h"
 
-ArithmeticOperationParser::ArithmeticOperationParser(vector<Token *> &line) {
-  line_ = line;
-  GetNext();
-}
+//ArithmeticOperationParser::ArithmeticOperationParser(vector<Token *> &line) {
+//  line_ = line;
+//  GetNext();
+//}
+//ArithmeticOperationParser::ArithmeticOperationParser() : OperationParser() {}
 
-void ArithmeticOperationParser::GetNext() {
-  if (pos_ < line_.size()) {
-    curr_token_ =  line_.at(pos_);
-    curr_token_value_ = curr_token_->GetValue();
-    pos_++;
-  }
-}
+//Operation *ArithmeticOperationParser::ParseEntity(TokenStream &tokens) {
+//  return ParseEntity(tokens.front());
+//}
 
-ArithmeticOperation *ArithmeticOperationParser::Parse() {
+//Operation *ArithmeticOperationParser::ParseEntity(Line &line) {
+//  Setup(line);
+//  return Parse();
+//}
+
+/*
+expr: expr '+' term | expr '-' term | term
+ */
+Expression *ArithmeticOperationParser::Parse() {
   Expression *root = Term();
-  while (pos_ != line_.size() && root != nullptr && count(term_operators_.begin(), term_operators_.end(), curr_token_->GetType())) {
-    string prev_token_value = curr_token_value_;
+  while (!IsEndOfLine() && root != nullptr && count(term_operators_.begin(), term_operators_.end(), GetCurrentTokenType())) {
+    string prev_token_value = GetCurrentTokenValue();
     GetNext();
     Expression *right_node = Term();
     pair<Expression*, Expression*> arguments;
@@ -25,14 +29,18 @@ ArithmeticOperation *ArithmeticOperationParser::Parse() {
     arguments.second = right_node;
     root = new ArithmeticOperation(prev_token_value, arguments);
   }
-  return dynamic_cast<ArithmeticOperation*>(root);
+//  return dynamic_cast<ArithmeticOperation*>(root);
+  return root;
 }
 
+/*
+term: term '*' factor | term '/' factor | term '%' factor | factor
+ */
 Expression *ArithmeticOperationParser::Term() {
   Expression *term = Factor();
 
-  while (pos_ != line_.size() && term != nullptr && count(factor_operators_.begin(), factor_operators_.end(), curr_token_->GetType())) {
-    string prev_token_value = curr_token_value_;
+  while (!IsEndOfLine() && term != nullptr && count(factor_operators_.begin(), factor_operators_.end(), GetCurrentTokenType())) {
+    string prev_token_value = GetCurrentTokenValue();
     GetNext();
     Expression *right_node = Factor();
     pair<Expression*, Expression*> arguments;
@@ -43,19 +51,22 @@ Expression *ArithmeticOperationParser::Term() {
   return term;
 }
 
+/*
+factor: var_name | const_value | '(' expr ')'
+ */
 Expression *ArithmeticOperationParser::Factor() {
   Expression *term = nullptr;
 
-  if (curr_token_->GetType() == LEFT_PARENTHESIS) {
+  if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
     GetNext();
     term = Parse();
-    if (curr_token_->GetType() != RIGHT_PARENTHESIS) {
+    if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
       throw new SyntaxErrorException("Missing )");
     }
-  } else if (curr_token_->GetType() == INTEGER) {
-    term = new Constant(curr_token_value_);
-  } else if (curr_token_->GetType() == NAME) {
-    term = new Variable(curr_token_value_);
+  } else if (GetCurrentTokenType() == INTEGER) {
+    term = new Constant(GetCurrentTokenValue());
+  } else if (GetCurrentTokenType() == NAME) {
+    term = new Variable(GetCurrentTokenValue());
   }
   GetNext();
   return term;

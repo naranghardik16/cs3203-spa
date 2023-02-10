@@ -12,5 +12,13 @@ bool ConditionalOperation::operator==(const Expression &other) const {
     return false;
   }
   auto casted_other = dynamic_cast<const ConditionalOperation&>(other);
-  return this->GetArguments().first->operator==(*casted_other.GetArguments().first) && this->GetArguments().second->operator==(*casted_other.GetArguments().second);
+  if (!this->GetArguments().first->operator==(*casted_other.GetArguments().first)) {
+    return false;
+  }
+
+  if (this->GetArguments().second == NULL && casted_other.GetArguments().second == NULL) {
+    return true;
+  }
+
+  return this->GetArguments().second->operator==(*casted_other.GetArguments().second);;
 }
