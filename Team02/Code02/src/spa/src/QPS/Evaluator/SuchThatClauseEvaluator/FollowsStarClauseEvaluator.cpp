@@ -1,5 +1,6 @@
 #pragma once
 #include "FollowsStarClauseEvaluator.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
@@ -44,8 +45,8 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Follows* (s,s)

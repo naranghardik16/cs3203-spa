@@ -4,13 +4,15 @@
 #include <unordered_set>
 #include <vector>
 
+#include "PKB/Util/PairHasherUtil.h"
+
 /**
  * Relational data structure to support One-One relationships.
  *
  * Supports lookup in forward and backward directions.
  *
- * @tparam K - Key of the relation store
- * @tparam V - Value of the relation store
+ * @tparam K - Key of the relation store.
+ * @tparam V - Value of the relation store.
  */
 template<class K, class V>
 class OneToOneStore {
@@ -20,67 +22,74 @@ class OneToOneStore {
   std::size_t size = 0;
 
  public:
-  OneToOneStore() = default;
-  ~OneToOneStore() = default;
+  /**
+   * Constructor for OneToOneStore.
+   */
+  OneToOneStore();
 
   /**
-   * Insert a key and value into OneToOne store
+   * Constructor for OneToOneStore.
+   */
+  ~OneToOneStore();
+
+  /**
+   * Insert a key and value into OneToOne store.
    *
-   * @param key - the key to be inserted
-   * @param value - the value to be inserted
+   * @param key - The key to be inserted.
+   * @param value - The value to be inserted.
    */
   void insert(K key, V value);
 
   /**
-   * Checks if key and value are present in the OneToOne store
+   * Checks if key and value are present in the OneToOne store.
    *
-   * @param key - the target key to query
-   * @param value - the target value to query
-   * @return true if exists, false otherwise
+   * @param key - The target key to query.
+   * @param value - The target value to query.
+   * @return True if the key-value pair exists, false otherwise.
    */
   bool contains(K key, V value);
 
   /**
-   * Retrieves the number of relations in the store
+   * Retrieves the number of relations in the store.
    *
-   * @return The number of relations
+   * @return The number of relations present in the store.
    */
   std::size_t length();
 
   /**
-   * Retrieves value from OneToOne store based on key
+   * Retrieves value from OneToOne store based on key.
    *
-   * @param key - The key to query
-   * @return The target value
+   * @param key - The key to query.
+   * @return The target value.
    */
   V retrieveFromKey(K key);
 
   /**
-   * Retrieves key from OneToOne store based on value
+   * Retrieves key from OneToOne store based on value.
    *
-   * @param value - The value to query
-   * @return the target key
+   * @param value - The value to query.
+   * @return The target key.
    */
   K retrieveFromValue(V value);
 
   /**
-   * Retrieve all the key-value pairs
+   * Retrieve all the key-value pairs.
    *
-   * @return key-value pairs
+   * @return An unordered set of key-value pairs present in the store.
    */
-  std::vector<std::pair<K, V>> retrieveAll();
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> retrieveAll();
 
   /**
-   * Retrieve set of keys from OneToOne store
+   * Retrieve set of keys from OneToOne store.
    *
-   * @return set of keys
+   * @return An unordered set of keys.
    */
   std::unordered_set<K> retrieveAllKeys();
 
   /**
-   * Retrieve set of values from OneToOne store
+   * Retrieve set of values from OneToOne store.
    *
-   * @return set of values
+   * @return An unordered set of values.
    */
   std::unordered_set<V> retrieveAllValues();
 };

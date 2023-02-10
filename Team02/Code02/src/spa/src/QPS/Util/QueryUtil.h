@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "General/StatementTypeEnum.h"
-#include "PKB/Interfaces/PkbReadFacade.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 class QueryUtil {
 
@@ -59,7 +59,7 @@ class QueryUtil {
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
 
-  static ResultTable ConvertSetToResultTableFormat(SingleConstraintSet s);
-  static ResultTable ConvertPairSetToResultTableFormat(PairConstraintSet s);
+  static ResultTable ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s);
+  static ResultTable ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s);
 };
 

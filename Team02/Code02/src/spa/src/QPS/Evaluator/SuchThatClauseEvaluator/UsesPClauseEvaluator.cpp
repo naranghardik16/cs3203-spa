@@ -1,4 +1,5 @@
 #include "UsesPClauseEvaluator.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool UsesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
@@ -33,8 +34,8 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(p, v)

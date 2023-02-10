@@ -4,17 +4,19 @@
 #include <unordered_set>
 #include <vector>
 
+#include "PKB/Util/PairHasherUtil.h"
+
 /**
  * Relational data structure to support many-many relationships.
  *
  * Supports lookup in forward and backward directions.
  *
  * ManyToMany relationship is defined as follows:
- * A K key can have multiple V values and
- * A V value can have multiple K keys
+ * A K key can have multiple V values and a V value can
+ * have multiple K keys.
  *
- * @tparam K - Key of the relation store
- * @tparam V - Value of the relation store
+ * @tparam K - Key of the relation store.
+ * @tparam V - Value of the relation store.
  */
 template<typename K, typename V>
 class ManyToManyStore {
@@ -24,60 +26,65 @@ class ManyToManyStore {
 
  public:
   /**
-   *
+   * Constructor for ManyToManyStore class.
    */
   ManyToManyStore();
 
   /**
-   * Insert a K key and a V value into ManyToMany store
+   * Destructor for ManyToManyStore class.
+   */
+  ~ManyToManyStore();
+
+  /**
+   * Insert a K key and a V value into ManyToMany store.
    *
-   * @param key - the key to be inserted
-   * @param value - the value to be inserted
+   * @param key - Key to be inserted.
+   * @param value - Value to be inserted.
    */
   void insert(K key, V value);
 
   /**
-   * Checks if key and value are present in the ManyToMany store
+   * Checks if key and value are present in the ManyToMany store.
    *
-   * @param key - the target key to query
-   * @param value - the target value to query
-   * @return true if exists, false otherwise
+   * @param key - The target key to query.
+   * @param value - The target value to query.
+   * @return True if the key-value pair exists, false otherwise.
    */
   bool contains(K key, V value);
 
   /**
-   * Retrieves value based on key
+   * Retrieves value(s) based on key.
    *
-   * @param key - the target key
-   * @return vector of values
+   * @param key - The target key.
+   * @return An unordered set of values associated with the key given.
    */
-  std::vector<V> retrieveFromKey(K key);
+  std::unordered_set<V> retrieveFromKey(K key);
 
   /**
-   * Retrieves key based on value
-   * @param value - the target value
-   * @return vector of keys
+   * Retrieves key(s) based on value.
+   * @param value - The target value.
+   * @return An unordered set of keys associated with the value given.
    */
-  std::vector<K> retrieveFromValue(V value);
+  std::unordered_set<K> retrieveFromValue(V value);
 
   /**
-   * Retrieve all the key-value pairs
+   * Retrieve all the key-value pairs in the store.
    *
-   * @return key-value pairs
+   * @return All the key-value pair in the ManyToMany store.
    */
-  std::vector<std::pair<K, V>> retrieveAll();
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> retrieveAll();
 
   /**
-   * Retrieve all keys in ManyToMany store
+   * Retrieve all keys in ManyToMany store.
    *
-   * @return set of keys
+   * @return An unordered set of keys.
    */
   std::unordered_set<K> retrieveAllKeys();
 
   /**
-   * Retrieve all values in ManyToMany store
+   * Retrieve all values in ManyToMany store.
    *
-   * @return set of values
+   * @return An unordered set of values.
    */
   std::unordered_set<V> retrieveAllValues();
 };
