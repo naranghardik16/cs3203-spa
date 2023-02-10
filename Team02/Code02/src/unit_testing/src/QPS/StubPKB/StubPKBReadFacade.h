@@ -6,46 +6,47 @@
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/PKB.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 //!Should inherit from PKBReadFacade
-class StubPkbReadFacade {
+class StubPkbReadFacade: public PkbReadFacade {
  public:
-  StubPkbReadFacade(PKB& pkb) {};
+  StubPkbReadFacade(PKB& pkb);
 
   ~StubPkbReadFacade();
 
   //! API for basic Select statements
-  SingleConstraintSet GetVariables();
-  SingleConstraintSet GetConstants();
-  SingleConstraintSet GetProcedures();
-  SingleConstraintSet GetStatements();
-  SingleConstraintSet GetReadStatements();
-  SingleConstraintSet GetPrintStatements();
-  SingleConstraintSet GetCallStatements();
-  SingleConstraintSet GetWhileStatements();
-  SingleConstraintSet GetIfStatements();
-  SingleConstraintSet GetAssignStatements();
+  PkbCommunicationTypes::SingleConstraintSet GetVariables() override;
+  PkbCommunicationTypes::SingleConstraintSet GetConstants() override;
+  PkbCommunicationTypes::SingleConstraintSet GetProcedures() override;
+  PkbCommunicationTypes::SingleConstraintSet GetStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetReadStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetPrintStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetCallStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfStatements() override;
+  PkbCommunicationTypes::SingleConstraintSet GetAssignStatements() override;
 
   //! API for Modifies - Statement
-  SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number);
-  PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
-  SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
-  SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
+  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number) override;
+  PkbCommunicationTypes::PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatModify(StatementType stmt_type);
   bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name);
 
   //! API for Modifies - Procedure
-  SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
-  PairConstraintSet GetModifiesProcedureVariablePairs();
-  SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
-  SingleConstraintSet GetProceduresThatModify();
+  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name);
+  PkbCommunicationTypes::PairConstraintSet GetModifiesProcedureVariablePairs();
+  PkbCommunicationTypes::SingleConstraintSet GetProceduresModifiesVariable(std::string var_name);
+  PkbCommunicationTypes::SingleConstraintSet GetProceduresThatModify();
   bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name);
 
   //!API for Follows
-  PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
-  SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type);
-  SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type);
-  SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
-  SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
+  PkbCommunicationTypes::PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsFollowedBy(std::string statement_num, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsFollowing(std::string statement_num, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type);
   bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
   bool IsAnyFollowsRelationshipPresent();
 

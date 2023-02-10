@@ -4,6 +4,7 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Util/PQLConstants.h"
 #include "General/StatementTypeEnum.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 /*
 * Checks if the expression is a variable synonym
@@ -226,7 +227,7 @@ std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors
 /**
  * Converts an unordered set to a ResultRow format
  */
-ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
+ResultTable QueryUtil::ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;
@@ -239,7 +240,7 @@ ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
 /**
  * Converts an unordered set of pairs to a ResultRow format
  */
-ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PairConstraintSet s) {
+ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;

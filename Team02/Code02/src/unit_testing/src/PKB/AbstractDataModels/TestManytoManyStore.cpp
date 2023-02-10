@@ -19,12 +19,12 @@ TEST_CASE("AbstractDataModels: ManyToMany") {
   ManyToManyStore<TestKeys, TestValues> store;
   SECTION("Test to check empty ManyToMany store") {
     REQUIRE(store.length() == 0);
-    REQUIRE(store.lengthValue() == 0);
-    REQUIRE(store.lengthKey() == 0);
+    REQUIRE(store.numberOfValues() == 0);
+    REQUIRE(store.numberOfKeys() == 0);
     REQUIRE_FALSE(store.containsValue(TEST_VALUE1));
     REQUIRE_FALSE(store.containsKey(TEST_KEY1));
     REQUIRE_FALSE(store.contains(TEST_KEY1, TEST_VALUE1));
-    REQUIRE(store.retrieveAllValues() == std::unordered_set<TestValues>());
+    REQUIRE(store.retrieveAllValues() == std::unordered_set<TestValues>({}));
   }
 
   SECTION("Test to check update and delete operations for ManyToMany store") {
@@ -47,9 +47,9 @@ TEST_CASE("AbstractDataModels: ManyToMany") {
       i++;
     }
 
-    REQUIRE(store.lengthKey() == 3);
+    REQUIRE(store.numberOfKeys() == 3);
     REQUIRE(store.length() == 3);
-    REQUIRE(store.lengthValue() == 3);
+    REQUIRE(store.numberOfValues() == 3);
     REQUIRE(store.retrieveAllKeys() == keys);
     REQUIRE(store.retrieveAllValues() == values);
     REQUIRE_NOTHROW(store.insert(TEST_KEY1, TEST_VALUE1));
@@ -64,7 +64,6 @@ TEST_CASE("AbstractDataModels: ManyToMany") {
     keysSet1.push_back(TEST_KEY2);
 
     REQUIRE_NOTHROW(store.insert(TEST_KEY2, TEST_VALUE4));
-
   }
 
 }
