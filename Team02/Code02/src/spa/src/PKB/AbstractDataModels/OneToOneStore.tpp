@@ -1,7 +1,9 @@
-//#include "OneToOneStore.h"
 
-//template<typename K, typename V>
-//OneToOneStore<K, V>::~OneToOneStore() {};
+template<typename K, typename V>
+OneToOneStore<K, V>::OneToOneStore() {};
+
+template<typename K, typename V>
+OneToOneStore<K, V>::~OneToOneStore() {};
 
 template<typename K, typename V>
 void OneToOneStore<K, V>::insert(K key, V value) {
@@ -31,10 +33,10 @@ K OneToOneStore<K, V>::retrieveFromValue(V value) {
 }
 
 template<typename K, typename V>
-std::vector<std::pair<K, V>> OneToOneStore<K, V>::retrieveAll() {
-  std::vector<std::pair<K, V>> result;
+std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToOneStore<K, V>::retrieveAll() {
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->forward_map_) {
-    result.push_back(std::make_pair<K, V>(p.first, p.second));
+    result.insert(std::make_pair<K, V>(p.first, p.second));
   }
   return result;
 }

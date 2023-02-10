@@ -21,7 +21,7 @@ TEST_CASE("AbstractDataModels: ManyToMany") {
   ManyToManyStore<TestKeys, TestValues> table;
   SECTION("empty state") {
     table.insert(TEST_KEY2, TEST_VALUE2);
-    REQUIRE(table.retrieveFromKey(TEST_KEY2) == std::vector<TestValues>{TEST_VALUE2});
+    REQUIRE(table.retrieveFromKey(TEST_KEY2) == std::unordered_set<TestValues>{TEST_VALUE2});
   }
 
 }

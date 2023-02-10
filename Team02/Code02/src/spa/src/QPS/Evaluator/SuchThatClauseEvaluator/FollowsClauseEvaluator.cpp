@@ -2,6 +2,7 @@
 #include "FollowsClauseEvaluator.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 
 bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
@@ -51,8 +52,8 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Follows(s, _) --> Get statements that have followers
