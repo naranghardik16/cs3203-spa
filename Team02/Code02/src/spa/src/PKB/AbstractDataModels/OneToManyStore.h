@@ -54,11 +54,41 @@ class OneToManyStore {
   bool contains(K key, V value);
 
   /**
+   * Checks if key is present in the OneToMany store.
+   *
+   * @param key - The target key to query.
+   * @return True if the key exists, false otherwise.
+   */
+  bool containsKey(K key);
+
+  /**
+   * Checks if value is present in the OneToMany store.
+   *
+   * @param value - The target value to query.
+   * @return True if the value exists, false otherwise.
+   */
+  bool containsValue(V value);
+
+  /**
    * Retrieves the number of relations in the store.
    *
    * @return The number of relations present in the store.
    */
   std::size_t length();
+
+  /**
+   * Retrieves the number of keys in the OneToMany store.
+   *
+   * @return The number of keys in the store.
+   */
+  std::size_t numberOfKeys();
+
+  /**
+   * Retrieves the number of values in the OneToMany store.
+   *
+   * @return The number of values.
+   */
+  std::size_t numberOfValues();
 
   /**
    * Retrieves value from OneToMany store based on key.
@@ -91,7 +121,7 @@ class OneToManyStore {
   std::unordered_set<K> retrieveAllKeys();
 
   /**
-   * Retrieves set of all values from OneToMany store
+   * Retrieves set of all values from OneToMany store.
    *
    * @return An unordered set of all values present in the store.
    */

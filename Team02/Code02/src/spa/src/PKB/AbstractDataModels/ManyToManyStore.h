@@ -53,6 +53,44 @@ class ManyToManyStore {
   bool contains(K key, V value);
 
   /**
+   * Checks if key is present in the ManyToMany store.
+   *
+   * @param key - The target key to query.
+   * @return True if key exists in the store, false otherwise.
+   */
+  bool containsKey(K key);
+
+  /**
+   * Checks if value is present in the ManyToMany store.
+   *
+   * @param value - The target value to query.
+   * @return True if value exists in the store, false otherwise.
+   */
+  bool containsValue(V value);
+
+  /**
+   * Retrieves the number of relations in the ManyToMany store.
+   *
+   * @return The number of key-value pairs in the store.
+   */
+  std::size_t length();
+
+  /**
+   * Retrieves the number of keys in the ManyToMany store.
+   *
+   * @return The number of keys.
+   */
+  std::size_t numberOfKeys();
+
+  /**
+   * Retrieves the number of values in the ManyToMany store.
+   *
+   * @return The number of values.
+   */
+  std::size_t numberOfValues();
+
+
+  /**
    * Retrieves value(s) based on key.
    *
    * @param key - The target key.

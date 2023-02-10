@@ -50,6 +50,22 @@ class OneToOneStore {
   bool contains(K key, V value);
 
   /**
+   * Checks if the key is present in the OneToOne store.
+   *
+   * @param key - The target key to query.
+   * @return True if they key exists, false otherwise.
+   */
+  bool containsKey(K key);
+
+  /**
+   * Checks if the value is present in the OneToOne store.
+   *
+   * @param value - The target value to query.
+   * @return True if the value exists, false otherwise.
+   */
+  bool containsValue(V value);
+
+  /**
    * Retrieves the number of relations in the store.
    *
    * @return The number of relations present in the store.

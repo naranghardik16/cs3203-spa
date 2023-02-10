@@ -14,7 +14,20 @@ void OneToOneStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::contains(K key, V value) {
-  return this->forward_map_.count(key);
+  auto iter = this->forward_map_.find(key);
+  return iter != this->forward_map_.end() && iter->second == value;
+//  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToOneStore<K, V>::containsKey(K key) {
+  return this->forward_map_.find(key) != this->forward_map_.end();
+//  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToOneStore<K, V>::containsValue(V value) {
+  return this->backward_map_.count(value);
 }
 
 template<typename K, typename V>
