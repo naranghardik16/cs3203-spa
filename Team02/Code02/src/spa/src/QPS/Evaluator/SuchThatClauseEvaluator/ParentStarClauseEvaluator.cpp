@@ -16,13 +16,13 @@ bool ParentStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRea
       return pkb->IsAnyAncestorDescendantRelationshipPresent();
     } else {
       //e.g. Parent*(_,"5") --> Get all types of statements that "5" is descendant to
-      return !pkb->GetStatementsThatAreAncestorOf(second_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementsThatAreAncestorOf(second_arg_, StatementType::STATEMENT).empty();
     }
   } else {
     //! Must be an integer since the definition of Boolean constraint is no synonyms
     if (is_second_arg_a_wildcard) {
       //e.g. Parent*("5", _) --> Get all types of statements that are descendants of"5"
-      return !pkb->GetStatementsThatAreDescendantsOf(first_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementsThatAreDescendantsOf(first_arg_, StatementType::STATEMENT).empty();
     } else {
       //e.g. Parent*(5, 6) --> Check if 5 is parent of 6
       return pkb->HasAncestorDescendantRelationship(first_arg_, second_arg_);

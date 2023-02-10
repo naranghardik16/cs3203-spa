@@ -50,4 +50,22 @@ class StubPkbReadFacade: public PkbReadFacade {
   bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower);
   bool IsAnyFollowsRelationshipPresent();
 
+  //!API for Parent
+
+  PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child);
+  SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type);
+  bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child);
+  bool IsAnyParentRelationshipPresent();
+
+  //!API for ParentStar
+  PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant);
+  SingleConstraintSet GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreAncestors(StatementType statement_type);
+  SingleConstraintSet GetStatementsThatAreDescendants(StatementType statement_type);
+  bool HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant);
+  bool IsAnyAncestorDescendantRelationshipPresent();
 };

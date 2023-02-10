@@ -19,13 +19,13 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
       return pkb->IsAnyFollowsRelationshipPresent();
     } else {
       //e.g. Follows(_,"5") --> Get all types of statements that "5" follows
-      return !pkb->GetStatementFollowedBy(second_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementFollowedBy(second_arg_, StatementType::STATEMENT).empty();
     }
   } else {
     //! Must be an integer since the definition of Boolean constraint is no synonyms
     if (is_second_arg_a_wildcard) {
       //e.g. Follows("5", _) --> Get all types of statements that follow "5"
-      return !pkb->GetStatementFollowing(first_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementFollowing(first_arg_, StatementType::STATEMENT).empty();
     } else {
       //e.g. Follows(5, 6)
       return pkb->HasFollowsRelationship(first_arg_, second_arg_);

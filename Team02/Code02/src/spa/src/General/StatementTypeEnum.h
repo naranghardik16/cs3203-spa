@@ -8,6 +8,6 @@ enum StatementType {
   UNK,
   ASSIGN,
   WHILE,
-  ALL
+  STATEMENT
 };
 
