@@ -28,10 +28,10 @@ class Tokenizer {
   inline static const string RELATIONAL_OPERATOR_RULE = "(?:(<=)|(<)|(>=)|(>)|(==)|(!=))";
   inline static const string PUNCTUATION_OPERATOR_RULE = "[{}();=\"]";
   inline static const unordered_map<string, TokenType> TOKEN_TYPES = {
-      {"{", LEFT_PARENTHESIS},
-      {"}", RIGHT_PARENTHESIS},
-      {"(", LEFT_BRACE},
-      {")", RIGHT_BRACE},
+      {"(", LEFT_PARENTHESIS},
+      {")", RIGHT_PARENTHESIS},
+      {"{", LEFT_BRACE},
+      {"}", RIGHT_BRACE},
       {";", SEMICOLON},
       {"\"", DOUBLE_QUOTE},
       {"=", SINGLE_EQUAL},
@@ -52,8 +52,8 @@ class Tokenizer {
   };
 
   inline static const unordered_map<TokenType, bool> END_OF_LINE_TOKENS = {
-      {LEFT_PARENTHESIS, true },
-      {RIGHT_PARENTHESIS, true},
+      {LEFT_BRACE, true },
+      {RIGHT_BRACE, true},
       {SEMICOLON, true}
   };
 

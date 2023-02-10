@@ -46,10 +46,10 @@ Expression *ArithmeticOperationParser::Term() {
 Expression *ArithmeticOperationParser::Factor() {
   Expression *term = nullptr;
 
-  if (curr_token_->GetType() == LEFT_BRACE) {
+  if (curr_token_->GetType() == LEFT_PARENTHESIS) {
     GetNext();
     term = Parse();
-    if (curr_token_->GetType() != RIGHT_BRACE) {
+    if (curr_token_->GetType() != RIGHT_PARENTHESIS) {
       throw new SyntaxErrorException("Missing )");
     }
   } else if (curr_token_->GetType() == INTEGER) {

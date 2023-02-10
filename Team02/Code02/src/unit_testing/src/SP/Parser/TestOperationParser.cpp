@@ -91,8 +91,8 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
     REQUIRE(actual->operator==(*root));
   }
   SECTION("Check if arithmetic expression with only 3 operands where the 1st pair is enclosed by () and uses 1 (+ or -) followed by 1 (* or / or %) operator and 1 operand (e.g., (x + z) * 5) parses correctly") {
-    Parser::Line expr_line{new PunctuationToken("(", LEFT_BRACE), new NameToken("x"), new ArithmeticOperatorToken("+", PLUS),
-                           new NameToken("z"), new PunctuationToken(")", RIGHT_BRACE), new ArithmeticOperatorToken("*", MULTIPLY),
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new ArithmeticOperatorToken("+", PLUS),
+                           new NameToken("z"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ArithmeticOperatorToken("*", MULTIPLY),
                            new IntegerToken("5")};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line);
     auto actual = expr_parser->ParseEntity(expr_line);
@@ -109,8 +109,8 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
   SECTION("Check if arithmetic expression with only > 3 operands using a mixture of operators (+-*/%) and 1 pair enclosed in () (e.g., z % ost + x * (y * z)) parses correctly") {
     Parser::Line expr_line{new NameToken("z"), new ArithmeticOperatorToken("%", MOD), new NameToken("ost"),
                            new ArithmeticOperatorToken("+", PLUS), new NameToken("x"), new ArithmeticOperatorToken("*", MULTIPLY),
-                           new PunctuationToken("(", LEFT_BRACE), new NameToken("y"), new ArithmeticOperatorToken("*", MULTIPLY),
-                           new NameToken("z"), new PunctuationToken(")", RIGHT_BRACE)};
+                           new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("y"), new ArithmeticOperatorToken("*", MULTIPLY),
+                           new NameToken("z"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line);
     auto actual = expr_parser->ParseEntity(expr_line);
     pair<Expression*, Expression*> root_left_subtree_args;

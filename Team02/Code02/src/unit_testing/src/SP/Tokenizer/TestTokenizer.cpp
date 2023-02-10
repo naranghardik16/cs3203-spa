@@ -40,19 +40,19 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
     Parser::TokenStream *actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("while"), new PunctuationToken("(", LEFT_BRACE), new NameToken("i"),
+        {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
          new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
          new NameToken("i"), new RelationalOperatorToken("<=", LTE), new IntegerToken("10"),
-         new PunctuationToken(")", RIGHT_BRACE), new PunctuationToken("{", LEFT_PARENTHESIS)},
+         new PunctuationToken(")", RIGHT_PARENTHESIS), new PunctuationToken("{", LEFT_BRACE)},
         {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL), new NameToken("x"),
          new ArithmeticOperatorToken("+", PLUS), new NameToken("z"), new ArithmeticOperatorToken("*", MULTIPLY),
          new IntegerToken("5"), new ArithmeticOperatorToken("/", DIV), new IntegerToken("2"),
          new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("z"), new PunctuationToken("=", SINGLE_EQUAL), new PunctuationToken("(", LEFT_BRACE),
+        {new NameToken("z"), new PunctuationToken("=", SINGLE_EQUAL), new PunctuationToken("(", LEFT_PARENTHESIS),
          new IntegerToken("10"), new ArithmeticOperatorToken("-", MINUS), new NameToken("x"),
-         new PunctuationToken(")", RIGHT_BRACE), new ArithmeticOperatorToken("%", MOD), new IntegerToken("2"),
+         new PunctuationToken(")", RIGHT_PARENTHESIS), new ArithmeticOperatorToken("%", MOD), new IntegerToken("2"),
          new PunctuationToken(";", SEMICOLON)},
-        {new PunctuationToken("}", RIGHT_PARENTHESIS)}
+        {new PunctuationToken("}", RIGHT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -64,16 +64,16 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
     Parser::TokenStream *actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("if"), new PunctuationToken("(", LEFT_BRACE), new NameToken("i"),
-         new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"), new PunctuationToken(")", RIGHT_BRACE),
-         new PunctuationToken("{", LEFT_PARENTHESIS)},
+        {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
+         new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"), new PunctuationToken(")", RIGHT_PARENTHESIS),
+         new PunctuationToken("{", LEFT_BRACE)},
         {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("1"),
          new PunctuationToken(";", SEMICOLON)},
         {new NameToken("y"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("3"),
          new PunctuationToken(";", SEMICOLON)},
         {new NameToken("z"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("5"),
         new PunctuationToken(";", SEMICOLON)},
-        {new PunctuationToken("}", RIGHT_PARENTHESIS)}
+        {new PunctuationToken("}", RIGHT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -130,7 +130,7 @@ TEST_CASE("Checks if SP Tokenizer::MatchOtherToken works as expected") {
 
   SECTION("Test if it returns the PunctuationToken with the correct PunctuationType") {
     Token *t = tokenizer->MatchOtherToken(6, conditional_and_relational_input, &skip_index);
-    PunctuationToken *pt = new PunctuationToken("(", LEFT_BRACE);
+    PunctuationToken *pt = new PunctuationToken("(", LEFT_PARENTHESIS);
     REQUIRE(t->Equals(*pt));
   }
 }
