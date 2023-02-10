@@ -61,7 +61,7 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignStatement
 
 //! Modifies Statement API
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
-  if (statement_type == StatementType::PRINT) {
+  if (statement_type == StatementType::READ) {
     return {std::make_pair("1", "x")};
   }
   if (statement_type == StatementType::ASSIGN) {
@@ -72,7 +72,6 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatement
 
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
-  //return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
   if (statement_number == "1") {
     return {"x"};
   }
@@ -83,7 +82,7 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifi
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  if (var_name == "\"x\"" && statement_type == StatementType::PRINT) {
+  if (var_name == "\"x\"" && statement_type == StatementType::READ) {
     return {"1"};
   }
   if (var_name == "\"a\"" && statement_type == StatementType::ASSIGN) {
@@ -93,7 +92,7 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsModif
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
-  if (stmt_type == StatementType::PRINT) {
+  if (stmt_type == StatementType::READ) {
     return {"1"};
   }
   if (stmt_type == StatementType::ASSIGN) {
@@ -151,28 +150,25 @@ bool StubPkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_n
 
 //! Follows API
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
-  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::ASSIGN) {
+  if (statement_type == StatementType::READ && statement_type_follower == StatementType::ASSIGN) {
     return {std::make_pair("1", "2")};
   }
-  if (statement_type == StatementType::PRINT && statement_type_follower == StatementType::CALL) {
+  if (statement_type == StatementType::READ && statement_type_follower == StatementType::CALL) {
     return {std::make_pair("1", "3")};
   }
   return {};
 }
 
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
   if (statement_num == "3" && statement_type == StatementType::STATEMENT) {
-    return {"1","2"};
+    return {"2"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "1" && statement_type == StatementType::STATEMENT) {
-    return {"2","3"};
-  }
-  if (statement_num == "1" && statement_type == StatementType::ASSIGN) {
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "1" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::ASSIGN)) {
     return {"2"};
   }
   return {};
