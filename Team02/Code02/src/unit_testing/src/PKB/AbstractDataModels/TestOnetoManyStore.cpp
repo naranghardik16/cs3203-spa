@@ -22,8 +22,8 @@ TEST_CASE("AbstractDataModels: OneToMany") {
   OneToManyStore<TestKeys, TestValues> store;
   SECTION("empty store") {
     REQUIRE(store.length() == 0);
-    REQUIRE(store.lengthValue() == 0);
-    REQUIRE(store.lengthKey() == 0);
+    REQUIRE(store.numberOfValues() == 0);
+    REQUIRE(store.numberOfKeys() == 0);
     REQUIRE(store.retrieveAllKeys() == std::unordered_set<TestKeys>());
   }
 
@@ -62,8 +62,8 @@ TEST_CASE("AbstractDataModels: OneToMany") {
     REQUIRE(store.retrieveFromKey(TEST_KEY3) == valuesSet);
     REQUIRE(store.retrieveFromValue(TEST_VALUE5) == TEST_KEY3);
     REQUIRE(store.length() == 4);
-    REQUIRE(store.lengthKey() == 3);
-    REQUIRE(store.lengthValue() == 4);
+    REQUIRE(store.numberOfKeys() == 3);
+    REQUIRE(store.numberOfValues() == 4);
   }
 
 
