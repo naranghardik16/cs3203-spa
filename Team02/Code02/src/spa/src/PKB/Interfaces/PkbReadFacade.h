@@ -113,7 +113,7 @@ class PkbReadFacade {
  * @param statement_type which is a constraint to filter the statements returned
  * @return a set of variable names
  */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable, StatementType statement_type);
 
 
   /**

@@ -68,7 +68,7 @@ std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> ManyToManyStore<K
   std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->forward_map_) {
     for (auto& s: p.second) {
-      result.insert(std::make_pair<K, V>(p.first, s));
+      result.insert(std::make_pair(p.first, s));
     }
   }
   return result;

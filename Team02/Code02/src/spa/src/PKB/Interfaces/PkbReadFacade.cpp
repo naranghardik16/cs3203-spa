@@ -47,94 +47,96 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignStatements() 
   return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-
-//! Modifies Statement API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
-  if (statement_type == StatementType::READ) {
-    return {std::make_pair("1", "x")};
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> modifies_statements_ =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p: statement_variable_pairs_) {
+    if (modifies_statements_.count(p.first) > 0) {
+      result.insert(p);
+    }
   }
-  if (statement_type == StatementType::ASSIGN) {
-    return {std::make_pair("2", "a")};
-  }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
-  //return this->pkb.modifies_store_->convert(this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(statement_number));
-  if (statement_number == "1") {
-    return {"x"};
-  }
-  if (statement_number == "2") {
-    return {"a"};
-  }
-  return {};
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
+  return this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(std::move(statement_number));
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  if (var_name == "\"x\"" && statement_type == StatementType::READ) {
-    return {"1"};
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetStatementsModifiesVariable(std::string variable, StatementType statement_type) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> modifies_statements_ =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: statement_variable_pairs_) {
+    if (modifies_statements_.count(p.first) > 0 && p.second == variable) {
+      result.insert(p.first);
+    }
   }
-  if (var_name == "\"a\"" && statement_type == StatementType::ASSIGN) {
-    return {"2"};
-  }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
-  if (stmt_type == StatementType::READ) {
-    return {"1"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType statement_type) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> modifies_statements_ =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: statement_variable_pairs_) {
+    if (modifies_statements_.count(p.first) > 0) {
+      result.insert(p.first);
+    }
   }
-  if (stmt_type == StatementType::ASSIGN) {
-    return {"2"};
-  }
-  return {};
+
+  return result;
 }
 
-bool PkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
-  if (stmt_num == "1" && var_name == "\"x\"") {
-    return true;
-  }
-  if (stmt_num == "2" && var_name == "\"a\"") {
-    return true;
-  }
-  return false;
+bool PkbReadFacade::HasModifiesStatementRelationship(std::string statement_number, std::string variable) {
+  return this->pkb.modifies_store_->hasModifiesRelationBetweenStatementAndVariable(std::move(statement_number),
+                                                                                   std::move(variable));
 }
 
-
-//! Modifies Procedure API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
-  return {std::make_pair("execute", "x"), std::make_pair("execute", "a")};
+  return this->pkb.modifies_store_->retrieveProcedureVariablePairs();
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure_name) {
-  if (procedure_name == "\"execute\"") {
-    return {"x","a"};
-  }
-  return {};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure) {
+  return this->pkb.modifies_store_->retrieveAllVariablesModifiedByAProcedure(std::move(procedure));
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
-  if (var_name == "\"x\"") {
-    return {"execute"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string variable) {
+  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs_ =
+      this->pkb.modifies_store_->retrieveProcedureVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: procedure_variable_pairs_) {
+    if (p.second == variable) {
+      result.insert(p.first);
+    }
   }
-  if (var_name == "\"a\"") {
-    return {"execute"};
-  }
-  return {};
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresThatModify() {
-  return {"execute"};
+  return this->pkb.modifies_store_->retrieveAllProceduresThatModify();
 }
 
-bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
-  if (procedure_name == "\"execute\"" && var_name == "\"x\"") {
-    return true;
-  }
-  if (procedure_name == "\"execute\"" && var_name == "\"a\"") {
-    return true;
-  }
-  return false;
+bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure, std::string variable) {
+  return this->pkb.modifies_store_->hasModifiesRelationBetweenProcedureAndVariable(procedure, variable);
 }
 
 //! Follows API
@@ -202,7 +204,6 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 }
 
 //! Parent API
-
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
   if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
     return {std::make_pair("5","6"), std::make_pair("5","7")};
