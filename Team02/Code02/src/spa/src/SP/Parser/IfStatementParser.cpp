@@ -8,10 +8,19 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
                                  condition,
                                  "main");
   CheckStartOfIfStatement(line);
-  while (!tokens.empty() && !IsEndOfIfElseStatement(line)) {
+  while (!tokens.empty() && !IsEndOfThenStatement(line)) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
     if_stmt->AddThenStmtList(stmt);
+  }
+  if (IsEndOfThenStatement(line)) {
+    tokens.pop_front();
+  }
+
+  while (!tokens.empty() && !IsEndOfIfElseStatement(line)) {
+    auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
+    auto stmt = stmt_parser->ParseEntity(tokens);
+    if_stmt->AddElseStmtList(stmt);
   }
 
   if (IsEndOfIfElseStatement(line)) {
