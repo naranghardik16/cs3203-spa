@@ -61,7 +61,7 @@ template<typename K, typename V>
 std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToManyStore<K, V>::retrieveAll() {
   std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->backward_map_) {
-      result.insert(std::make_pair<K, V>(p.second, p.first));
+      result.insert(std::make_pair(p.second, p.first));
   }
   return result;
 }
