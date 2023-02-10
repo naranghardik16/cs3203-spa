@@ -4,6 +4,7 @@
 #include "ModifiesSClauseEvaluator.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool ModifiesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
@@ -37,8 +38,8 @@ std::shared_ptr<Result> ModifiesPClauseEvaluator::EvaluateClause(std::shared_ptr
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   //! Modifies Procedure
   if (is_first_arg_a_procedure_synonym) {
