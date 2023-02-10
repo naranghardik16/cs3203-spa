@@ -15,7 +15,7 @@ SingleConstraintSet StubPkbReadFacade::GetVariables() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetConstants() {
-  SingleConstraintSet set({"execute", "anya"});
+  SingleConstraintSet set({"22", "23", "24"});
   return set;
 }
 
@@ -25,16 +25,16 @@ SingleConstraintSet StubPkbReadFacade::GetProcedures() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetStatements() {
-  return {};
+  return {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 }
 
 SingleConstraintSet StubPkbReadFacade::GetReadStatements() {
-  SingleConstraintSet set({"4"});
+  SingleConstraintSet set({"1"});
   return set;
 }
 
 SingleConstraintSet StubPkbReadFacade::GetPrintStatements() {
-  SingleConstraintSet print_set({"1"});
+  SingleConstraintSet print_set({"4","9"});
   return print_set;
 }
 
@@ -44,15 +44,15 @@ SingleConstraintSet StubPkbReadFacade::GetCallStatements() {
 }
 
 SingleConstraintSet StubPkbReadFacade::GetWhileStatements() {
-  return {};
+  return {"8"};
 }
 
 SingleConstraintSet StubPkbReadFacade::GetIfStatements() {
-  return {};
+  return {"5"};
 }
 
 SingleConstraintSet StubPkbReadFacade::GetAssignStatements() {
-  SingleConstraintSet set({"2"});
+  SingleConstraintSet set({"2", "6", "7"});
   return set;
 }
 
@@ -160,14 +160,14 @@ PairConstraintSet StubPkbReadFacade::GetFollowPairs(StatementType statement_type
 
 
 SingleConstraintSet StubPkbReadFacade::GetStatementsFollowedBy(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "3" && statement_type == StatementType::ALL) {
+  if (statement_num == "3" && statement_type == StatementType::STATEMENT) {
     return {"1","2"};
   }
   return {};
 }
 
 SingleConstraintSet StubPkbReadFacade::GetStatementsFollowing(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "1" && statement_type == StatementType::ALL) {
+  if (statement_num == "1" && statement_type == StatementType::STATEMENT) {
     return {"2","3"};
   }
   if (statement_num == "1" && statement_type == StatementType::ASSIGN) {
@@ -211,3 +211,90 @@ bool StubPkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
 }
 
+//! Parent API
+
+PairConstraintSet StubPkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
+  if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
+    return {std::make_pair("5","6"), std::make_pair("5","7")};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "5" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::ASSIGN)) {
+    return {"6","7"};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreParents(StatementType statement_type) {
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreChildren(StatementType statement_type) {
+  if (statement_type == StatementType::ASSIGN) {
+    return {"6","7"};
+  }
+  return {};
+}
+
+bool StubPkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
+  if (statement_num == "5" && statement_num_child == "6") {
+    return true;
+  }
+  return false;
+}
+
+bool StubPkbReadFacade::IsAnyParentRelationshipPresent() {
+  return true;
+}
+
+PairConstraintSet StubPkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
+  if (statement_type == StatementType::IF && statement_type_descendant == StatementType::PRINT) {
+    return {std::make_pair("5","9")};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "9" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::IF)) {
+    return {"5"};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type) {
+  if (statement_num == "5" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::PRINT)) {
+    return {"9"};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreAncestors(StatementType statement_type) {
+  if (statement_type == StatementType::IF) {
+    return {"5"};
+  }
+  return {};
+}
+
+SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreDescendants(StatementType statement_type) {
+  if (statement_type == StatementType::PRINT) {
+    return {"9"};
+  }
+  return {};
+}
+
+bool StubPkbReadFacade::HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant) {
+  if (statement_num == "5" && statement_num_descendant == "9") {
+    return true;
+  }
+  return false;
+}
+
+bool StubPkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
+  return true;
+}

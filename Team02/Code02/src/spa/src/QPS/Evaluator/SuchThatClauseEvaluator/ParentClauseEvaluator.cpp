@@ -15,13 +15,13 @@ bool ParentClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFac
       return pkb->IsAnyParentRelationshipPresent();
     } else {
       //e.g. Parent(_,"5") --> Get all types of statements that "5" is child of
-      return !pkb->GetStatementThatIsParentOf(second_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementThatIsParentOf(second_arg_, StatementType::STATEMENT).empty();
     }
   } else {
     //! Must be an integer since the definition of Boolean constraint is no synonyms
     if (is_second_arg_a_wildcard) {
       //e.g. Parent("5", _) --> Get all types of statements that are child of"5"
-      return !pkb->GetStatementsThatAreChildrenOf(first_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementsThatAreChildrenOf(first_arg_, StatementType::STATEMENT).empty();
     } else {
       //e.g. Parent(5, 6) --> Check if 5 is parent of 6
       return pkb->HasParentChildRelationship(first_arg_, second_arg_);
