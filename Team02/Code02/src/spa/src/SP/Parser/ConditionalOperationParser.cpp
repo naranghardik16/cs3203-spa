@@ -1,10 +1,5 @@
 #include "ConditionalOperationParser.h"
 
-//Operation *ConditionalOperationParser::ParseEntity(Line &line) {
-//  Setup(line);
-//  return Parse();
-//}
-
 /*
 cond_expr: rel_expr | '!' '(' cond_expr ')' |
            '(' cond_expr ')' '&&' '(' cond_expr ')' |

@@ -1,20 +1,5 @@
 #include "ArithmeticOperationParser.h"
 
-//ArithmeticOperationParser::ArithmeticOperationParser(vector<Token *> &line) {
-//  line_ = line;
-//  GetNext();
-//}
-//ArithmeticOperationParser::ArithmeticOperationParser() : OperationParser() {}
-
-//Operation *ArithmeticOperationParser::ParseEntity(TokenStream &tokens) {
-//  return ParseEntity(tokens.front());
-//}
-
-//Operation *ArithmeticOperationParser::ParseEntity(Line &line) {
-//  Setup(line);
-//  return Parse();
-//}
-
 /*
 expr: expr '+' term | expr '-' term | term
  */
@@ -29,7 +14,6 @@ Expression *ArithmeticOperationParser::Parse() {
     arguments.second = right_node;
     root = new ArithmeticOperation(prev_token_value, arguments);
   }
-//  return dynamic_cast<ArithmeticOperation*>(root);
   return root;
 }
 

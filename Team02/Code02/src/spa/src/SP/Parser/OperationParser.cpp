@@ -28,10 +28,6 @@ ExpressionParser::Line *OperationParser::GetLine() {
   return &line_;
 }
 
-//void OperationParser::Setline() {
-//
-//}
-
 void OperationParser::InheritArgs(int *pos, ExpressionParser::Line line) {
   pos_ = pos;
   line_ = line;
@@ -59,39 +55,3 @@ Expression *OperationParser::ParseEntity(Line &line) {
   Setup(line);
   return Parse();
 }
-
-/*
-Operation *OperationParser::ParseEntity(Line &line) {
-  bool is_arithmetic = false;
-  bool is_logical = false;
-
-  // TODO: Re-design this code to break down the expression into sub-expressions
-  // each sub-expression will either be arithmetic or conditional or relational?
-  for (Token* token : line) {
-    auto ct = dynamic_cast<ArithmeticOperatorToken *>(token);
-    if (ct) {
-      is_arithmetic = true;
-      continue;
-    }
-    auto ct_2 = dynamic_cast<RelationalOperatorToken *>(token);
-    if (ct_2) {
-      is_logical = true;
-      continue;
-    }
-    auto ct_3 = dynamic_cast<ConditionalOperatorToken *>(token);
-    if (ct_3) {
-      is_logical = true;
-      continue;
-    }
-  }
-
-  Operation *result = nullptr;
-  if (is_arithmetic) {
-    ArithmeticOperationParser *aop = new ArithmeticOperationParser(line);
-    result = aop->Parse();
-  }
-
-
-  return result;
-}
- */

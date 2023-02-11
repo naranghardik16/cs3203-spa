@@ -1,11 +1,6 @@
 #pragma once
 #include "RelationalOperationParser.h"
 
-//Operation *RelationalOperationParser::ParseEntity(Line &line) {
-//  Setup(line);
-//  return Parse();
-//}
-
 /*
 rel_expr: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
           rel_factor '<' rel_factor | rel_factor '<=' rel_factor |

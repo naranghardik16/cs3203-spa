@@ -4,7 +4,6 @@
 #include "../ArithmeticOperatorToken.h"
 #include "../RelationalOperatorToken.h"
 #include "../ConditionalOperatorToken.h"
-//#include "ArithmeticOperationParser.h"
 
 
 class OperationParser : public ExpressionParser {
@@ -16,16 +15,14 @@ class OperationParser : public ExpressionParser {
   TokenType GetCurrentTokenType();
   string GetCurrentTokenValue();
   int* GetPos();
-//  void SetPos(int pos);
   void InheritArgs(int *pos, Line line);
   void UpdateCurrTokenWithUpdatedPos();
   Line *GetLine();
-//  void Setline(Line line);
   void GetNext();
  private:
   Line line_;
-  int starting_pos_value = 0;
-  int* pos_ = &starting_pos_value;
+  int starting_pos_value_ = 0;
+  int* pos_ = &starting_pos_value_;
   Token *curr_token_ = nullptr;
   string curr_token_value_;
   void Setup(Line &line);

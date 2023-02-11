@@ -12,8 +12,6 @@ class RelationalOperationParser : public OperationParser {
  public:
   RelationalOperationParser() = default;
   Expression *Parse() override;
-//  Operation *ParseEntity(TokenStream &tokens) override;
-//  Operation *ParseEntity(Line &line) override;
  private:
   Expression *Factor();
 };

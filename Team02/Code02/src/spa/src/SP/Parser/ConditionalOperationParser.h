@@ -10,9 +10,6 @@ using namespace std;
 
 class ConditionalOperationParser : public OperationParser {
  public:
-//  ConditionalOperationParser(vector<Token*> &line);
   ConditionalOperationParser() = default;
   Operation *Parse() override;
-//  Operation *ParseEntity(TokenStream &tokens) override;
-//  Operation *ParseEntity(Line &line) override;
 };

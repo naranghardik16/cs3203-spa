@@ -12,19 +12,11 @@ using namespace std;
 
 class ArithmeticOperationParser : public OperationParser {
  public:
-//  ArithmeticOperationParser(vector<Token*> &line);
   ArithmeticOperationParser() = default;
   Expression *Parse() override;
-//  Operation *ParseEntity(TokenStream &tokens) override;
-//  Operation *ParseEntity(Line &line) override;
  private:
-//  vector<Token*> line_;
   vector<TokenType> term_operators_ = { PLUS, MINUS };
   vector<TokenType> factor_operators_ = {MULTIPLY, DIV, MOD};
-//  int pos_ = 0;
-//  Token *curr_token_;
-//  string curr_token_value_;
-//  void GetNext();
   Expression *Term();
   Expression *Factor();
 };
