@@ -151,4 +151,53 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     ConditionalOperation *expected = new ConditionalOperation("rel_expr", cond_args);
     REQUIRE(actual->operator==(*expected));
   }
+  SECTION("Check if ! '(' cond_expr ')' (e.g. ! (x > y) ) parses correctly") {
+    Parser::Line expr_line{new ConditionalOperatorToken("!", NOT), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"),
+                           new RelationalOperatorToken(">", GT), new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "while");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    pair<Expression*, Expression*> rel_args;
+    rel_args.first = new Variable("x");
+    rel_args.second = new Variable("y");
+    RelationalOperation *rel = new RelationalOperation(">", rel_args);
+
+    pair<Expression*, Expression*> inner_cond_args;
+    inner_cond_args.first = rel;
+    ConditionalOperation *inner_cond_expr = new ConditionalOperation("rel_expr", inner_cond_args);
+
+    pair<Expression*, Expression*> root_cond_args;
+    root_cond_args.first = inner_cond_expr;
+    ConditionalOperation *root_cond_expr = new ConditionalOperation("!", root_cond_args);
+    REQUIRE(actual->operator==(*root_cond_expr));
+  }
+  SECTION("Check if '(' cond_expr ')' '&&' or '||' '(' cond_expr ')' (e.g. (x < y) && (y >= 100) ) parses correctly") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
+                           new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("||", OR),
+                           new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("y"), new RelationalOperatorToken(">=", GTE),
+                           new IntegerToken("100"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    pair<Expression*, Expression*> lhs_rel_args;
+    lhs_rel_args.first = new Variable("x");
+    lhs_rel_args.second = new Variable("y");
+    RelationalOperation *lhs_rel_expr = new RelationalOperation("<", lhs_rel_args);
+    pair<Expression*, Expression*> lhs_cond_args;
+    lhs_cond_args.first = lhs_rel_expr;
+    ConditionalOperation *lhs_cond_expr = new ConditionalOperation("rel_expr", lhs_cond_args);
+
+
+    pair<Expression*, Expression*> rhs_rel_args;
+    rhs_rel_args.first = new Variable("y");
+    rhs_rel_args.second = new Constant("100");
+    RelationalOperation *rhs_rel_expr = new RelationalOperation(">=", rhs_rel_args);
+    pair<Expression*, Expression*> rhs_cond_args;
+    rhs_cond_args.first = rhs_rel_expr;
+    ConditionalOperation *rhs_cond_expr = new ConditionalOperation("rel_expr", rhs_cond_args);
+
+    pair<Expression*, Expression*> root_cond_args;
+    root_cond_args.first = lhs_cond_expr;
+    root_cond_args.second = rhs_cond_expr;
+    ConditionalOperation *root_cond_expr = new ConditionalOperation("||", root_cond_args);
+    REQUIRE(actual->operator==(*root_cond_expr));
+  }
 }

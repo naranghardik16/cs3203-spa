@@ -50,18 +50,15 @@ Operation *ConditionalOperationParser::Parse() {
     }
 
   } else { // rel_expr
-    try {
-      RelationalOperationParser *relational_operation_parser = new RelationalOperationParser();
-      relational_operation_parser->InheritArgs(GetPos(), *GetLine());
-      auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
+    RelationalOperationParser *relational_operation_parser = new RelationalOperationParser();
+    relational_operation_parser->InheritArgs(GetPos(), *GetLine());
+    auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
 
-      if (rel_expr) {
-        pair<Expression*, Expression*> args;
-        args.first = rel_expr;
-        return new ConditionalOperation("rel_expr", args);
-      }
-    } catch (exception&) {
-      cout << "failed RelationalOperationParser";
+    if (rel_expr) {
+      pair<Expression*, Expression*> args;
+      args.first = rel_expr;
+      UpdateCurrTokenWithUpdatedPos();
+      return new ConditionalOperation("rel_expr", args);
     }
   }
 
