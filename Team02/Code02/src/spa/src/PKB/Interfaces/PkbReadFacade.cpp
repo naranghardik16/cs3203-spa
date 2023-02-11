@@ -224,7 +224,7 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return this->pkb.follows_store_->hasAnyFollowsRelation();
 }
 
-//! Parent API
+// TODO: Parent Relation
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
   if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
     return {std::make_pair("5","6"), std::make_pair("5","7")};
