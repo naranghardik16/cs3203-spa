@@ -45,7 +45,7 @@ Expression *ArithmeticOperationParser::Factor() {
     GetNext();
     term = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-      throw new SyntaxErrorException("Missing )");
+      throw SyntaxErrorException("Missing )");
     }
   } else if (GetCurrentTokenType() == INTEGER) {
     term = new Constant(GetCurrentTokenValue());

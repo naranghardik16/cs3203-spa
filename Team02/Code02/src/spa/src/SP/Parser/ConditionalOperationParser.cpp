@@ -12,7 +12,7 @@ Operation *ConditionalOperationParser::Parse() {
       GetNext();
       auto cond_expr = Parse();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-        throw new SyntaxErrorException("Missing )");
+        throw SyntaxErrorException("Missing )");
       }
       pair<Expression*, Expression*> args;
       args.first = cond_expr;
@@ -22,13 +22,13 @@ Operation *ConditionalOperationParser::Parse() {
     GetNext();
     auto left_cond_expr = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-      throw new SyntaxErrorException("Missing )");
+      throw SyntaxErrorException("Missing )");
     }
 
     GetNext();
     string op = GetCurrentTokenValue();
     if (!(GetCurrentTokenType() == AND || GetCurrentTokenType() == OR)) {
-      throw new SyntaxErrorException("Missing && or ||");
+      throw SyntaxErrorException("Missing && or ||");
     }
     GetNext();
 
@@ -36,7 +36,7 @@ Operation *ConditionalOperationParser::Parse() {
       GetNext();
       auto right_cond_expr = Parse();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-        throw new SyntaxErrorException("Missing )");
+        throw SyntaxErrorException("Missing )");
       }
       pair<Expression*, Expression*> args;
       args.first = left_cond_expr;
