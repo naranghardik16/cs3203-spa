@@ -201,6 +201,52 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
 }
 
+//! Follows* API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(StatementType type_1, StatementType type_2){
+  //TODO
+  return {{"1", "2"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::string stmt_num, StatementType stmt_type){
+  //TODO
+  return {"2", "3"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::string stmt_num, StatementType stmt_type) {
+  //TODO
+  return {"1", "2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(StatementType stmt_type){
+  //TODO
+  return {"1", "2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(StatementType stmt_type) {
+  //TODO
+  return {"2", "3"};
+}
+
+bool PkbReadFacade::HasFollowsStarRelationship(){
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::HasFollowsStar(std::string stmt_num) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::HasFollowsStarBy(std::string stmt_num) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::IsFollowsStar(std::string stmt_num_1, std::string stmt_num_2) {
+  //TODO
+  return true;
+}
+
 //! Parent API
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {

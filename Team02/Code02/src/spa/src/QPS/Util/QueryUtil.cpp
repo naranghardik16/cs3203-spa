@@ -180,21 +180,23 @@ bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expres
 /**
  * Returns a statement type enum based on a given synonym
  */
-StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& expression) {
-  if (IsIfSynonym(declaration, expression)) {
+StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& synonym) {
+  if (IsIfSynonym(declaration, synonym)) {
     return StatementType::IF;
-  } else if (IsReadSynonym(declaration, expression)) {
+  } else if (IsReadSynonym(declaration, synonym)) {
     return StatementType::READ;
-  } else if (IsPrintSynonym(declaration, expression)) {
+  } else if (IsPrintSynonym(declaration, synonym)) {
     return StatementType::PRINT;
-  } else if (IsCallSynonym(declaration, expression)) {
+  } else if (IsCallSynonym(declaration, synonym)) {
     return StatementType::CALL;
-  } else if (IsAssignSynonym(declaration, expression)) {
+  } else if (IsAssignSynonym(declaration, synonym)) {
     return StatementType::ASSIGN;
-  } else if (IsWhileSynonym(declaration, expression)){
+  } else if (IsWhileSynonym(declaration, synonym)){
     return StatementType::WHILE;
-  } else {
+  } else if (IsStatementSynonym(declaration, synonym)){
     return StatementType::STATEMENT;
+  } else {
+    return StatementType::UNK;
   }
 }
 

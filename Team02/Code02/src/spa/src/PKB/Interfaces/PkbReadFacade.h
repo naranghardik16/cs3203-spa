@@ -197,9 +197,9 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet GetStatementFollowing(std::string statement_num, StatementType statement_type);
 
   /**
-   * Returns the statement numbers of statements with followers
-   * These statements must be of the specified type
-   * @param statement_type is the constraint on the statements in the set
+   * Returns all s where Follow(s, _) holds, i.e. s has follower and s is of the specified type.
+   *
+   * @param statement_type Statement type of s
    * @return a set of statement numbers
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type);
@@ -225,6 +225,87 @@ class PkbReadFacade {
  * @return bool
  */
   virtual bool IsAnyFollowsRelationshipPresent();
+
+  //!API for FollowsStar
+
+  /**
+   * Returns all (s1, s2) pairs where Follows*(s1, s2) relationship holds and s1 is of type_1 and s2 is of type_2.
+   *
+   * @param type_1 Statement type of s1
+   * @param type_2 Statement type of s2
+   * @return a set of pairs {s1_stmt_num, s2_stmt_num}
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetFollowsStarPairs(StatementType type_1, StatementType type_2);
+
+  /**
+   * Returns all s where Follows*(stmt_num, s) holds for the given stmt_num and s is of the given statement type.
+   *
+   * @param stmt_num Statement number
+   * @param stmt_type Statement type of s
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetFollowsStar(std::string stmt_num, StatementType stmt_type);
+
+  /**
+   * Returns all s where Follows*(s, stmt_num) holds for the given stmt_num and s is of the given statement type.
+   *
+   * @param stmt_num Statement number
+   * @param stmt_type Statement type of s
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetFollowsStarBy(std::string stmt_num, StatementType stmt_type);
+
+  /**
+   * Return s1 for all Follows* (s1, s2) pairs where s1 of the given statement type.
+   * i.e. return the first value of all Follows* relationships in program.
+   *
+   * @param stmt_type Statement type of s1
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetFollowsStarFirst(StatementType stmt_type);
+
+  /**
+   * Return s2 for all Follows* (s1, s2) pairs where s2 of the given statement type.
+   * i.e. return the second value of all Follows* relationships in program.
+   *
+   * @param stmt_type Statement type of s2
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetFollowsStarSecond(StatementType stmt_type);
+
+  /**
+   * Check if there is any Follows* relationship in program.
+   *
+   * @return True if Follows* relationship exists in program, false otherwise
+   */
+  virtual bool HasFollowsStarRelationship();
+
+  /**
+   * Check if there exists any stmt s, where Follows*(stmt_num, s) holds for the given stmt_num.
+   * i.e. stmt_num appears as the first value in a Follows* relationship pair.
+   *
+   * @param stmt_num Statement number
+   * @return True is such s exists
+   */
+  virtual bool HasFollowsStar(std::string stmt_num);
+
+  /**
+   * Check if there exists any stmt s, where Follows*(s, stmt_num) holds for the given stmt_num.
+   * i.e. stmt_num appears as the second value in a Follows* relationship pair.
+   *
+   * @param stmt_num Statement number
+   * @return True is such s exists
+   */
+  virtual bool HasFollowsStarBy(std::string stmt_num);
+
+  /**
+   * Check if Follows*(stmt_num_1, string stmt_num_2) holds for the given two stmt_num.
+   *
+   * @param stmt_num_1 Statement number
+   * @param stmt_num_2 Statement number
+   * @return True is relationship holds.
+   */
+  virtual bool IsFollowsStar(std::string stmt_num_1, std::string stmt_num_2);
 
   //!API for Parent
 
