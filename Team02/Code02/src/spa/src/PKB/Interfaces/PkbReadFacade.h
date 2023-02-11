@@ -533,5 +533,23 @@ class PkbReadFacade {
  * @return bool
  */
   virtual bool IsAnyAncestorDescendantRelationshipPresent();
+
+  //!API for Pattern
+
+  /**
+   * Returns assign statements which match the given expr exactly.
+   *
+   * @param expr Expression
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(std::string expr);
+
+  /**
+   * Returns assign statements which contains the given sub_expr.
+   *
+   * @param sub_expr Subexpression
+   * @return a set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(std::string sub_expr);
 };
 

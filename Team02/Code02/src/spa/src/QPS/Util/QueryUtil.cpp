@@ -9,7 +9,7 @@
 * Checks if the expression is a variable synonym
 * */
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length()-1] == '_';
+  bool result = s[0] == '_' && s[s.length()-1] == '_' &&s.length() > 2;
   return result;
 }
 

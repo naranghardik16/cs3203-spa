@@ -16,4 +16,8 @@ class AssignPatternClauseEvaluator : public ClauseEvaluator {
   }
   std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb);
   bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb);
+
+  //Helper
+  std::shared_ptr<Result> JoinWithAssignWithExactExpression(std::shared_ptr<Result> r, std::shared_ptr<PkbReadFacade> pkb);
+  std::shared_ptr<Result> JoinWithAssignWithPartialExpression(std::shared_ptr<Result> r, std::shared_ptr<PkbReadFacade> pkb);
 };
