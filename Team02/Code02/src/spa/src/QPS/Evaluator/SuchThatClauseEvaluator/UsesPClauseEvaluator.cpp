@@ -8,13 +8,11 @@ bool UsesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   if (is_second_arg_a_wildcard) {
     //Example query: Uses("Main", _)
 
-    //TODO: PKB call
-    return true;
+    return pkb->HasProcUses(first_arg_);
   } else {
     //Example query: uses("Main", "count")
 
-    //TODO: PKB call
-    return true;
+    return pkb->IsProcUsing(first_arg_, second_arg_);
   }
 }
 
@@ -25,7 +23,9 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_synonym = declaration_map.count(first_arg_);
+
   bool is_second_arg_synonym = declaration_map.count(second_arg_);
+  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
 
   if (is_first_arg_synonym) {
     header.push_back(first_arg_);
@@ -40,15 +40,19 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(p, v)
 
-    //TODO: PKB call
-  } else if (is_first_arg_synonym) {
-    //Example query: Uses(p, _) or Uses(p, "x")
+    pair_constraint = pkb->GetProcUsesPair();
+  } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
+    //Example query: Uses(p, _)
 
-    //TODO: PKB call
+    single_constraint = pkb->GetProcUsesFirst();
+  } else if (is_first_arg_synonym && !is_second_arg_a_wildcard){
+    //Example query: Uses(p, "x")
+
+    single_constraint = pkb->GetProcUsing(second_arg_);
   } else {
     //Example query: Uses("Main", v)
 
-    //TODO: PKB call
+    single_constraint = pkb->GetProcUses(first_arg_);
   }
 
   if (!single_constraint.empty()) {

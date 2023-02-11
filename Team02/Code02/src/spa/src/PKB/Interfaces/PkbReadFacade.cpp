@@ -137,6 +137,70 @@ bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name,
   return false;
 }
 
+//! Uses Statement API
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetStmtUsesPair(StatementType statement_type) {
+  //TODO
+  return {{"1", "x"}, {"2", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUsesFirst(StatementType statement_type) {
+  //TODO
+  return {"1", "2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUses(std::string stmt_num) {
+  //TODO
+  return {"x", "y"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUsing(StatementType statement_type, std::string var_name) {
+  //TODO
+  return {"1"};
+}
+
+bool PkbReadFacade::HasStmtUses(std::string stmt_num) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::IsStmtUsing(std::string stmt_num, std::string var_name) {
+  //TODO
+  return true;
+}
+
+//! Uses Procedure API
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetProcUsesPair() {
+  //TODO
+  return {{"Main", "x"}, {"Main", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUsesFirst() {
+  //TODO
+  return {"Main"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUses(std::string proc_name) {
+  //TODO
+  return {"x", "y"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUsing(std::string var_name) {
+  //TODO
+  return {"Main"};
+}
+
+bool PkbReadFacade::HasProcUses(std::string proc_name) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::IsProcUsing(std::string proc_name, std::string var_name) {
+  //TODO
+  return true;
+}
+
 //! Follows API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
   if (statement_type == StatementType::READ && statement_type_follower == StatementType::ASSIGN) {
