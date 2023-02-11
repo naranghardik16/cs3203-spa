@@ -4,7 +4,6 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Util/PQLConstants.h"
 #include "General/StatementTypeEnum.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
 
 /*
 * Checks if the expression is a variable synonym
@@ -192,8 +191,10 @@ StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& e
     return StatementType::CALL;
   } else if (IsAssignSynonym(declaration, expression)) {
     return StatementType::ASSIGN;
-  } else {
+  } else if (IsWhileSynonym(declaration, expression)){
     return StatementType::WHILE;
+  } else {
+    return StatementType::STATEMENT;
   }
 }
 
