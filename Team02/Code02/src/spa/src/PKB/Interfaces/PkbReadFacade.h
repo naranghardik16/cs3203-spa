@@ -359,7 +359,8 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::PairConstraintSet GetFollowsStarPairs(StatementType type_1, StatementType type_2);
 
   /**
-   * Retrieves all s where Follows*(statement_num, s) holds for the given statement_num and s is of the given statement type.
+   * Retrieves all s where Follows*(statement_num, s) holds for the given statement_num and
+   * s is of the given statement type.
    *
    * @param statement_number - The specific statement.
    * @param statement_type - The constraint on the statements in the set.

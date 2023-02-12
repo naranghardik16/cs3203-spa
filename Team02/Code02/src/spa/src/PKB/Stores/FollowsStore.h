@@ -63,11 +63,22 @@ class FollowsStore {
                               PkbTypes::STATEMENT_NUMBER second_statement);
 
   /**
-   * Checks with the store if there are any follows or follows star relationships present in the store.
+   * Checks with the store if there are any follows relationships present in the store.
    *
    * @return True if there are non-zero number of relations in the store, false otherwise.
    */
   bool hasAnyFollowsRelation();
+
+  /**
+   * Checks with the store if there are any follows star relationships present in the store.
+   *
+   * @return True if there are non-zero number of relations in the store, false otherwise.
+   */
+  bool hasAnyFollowsStarRelation();
+
+  bool hasFollowsStar(PkbTypes::STATEMENT_NUMBER statement);
+
+  bool hasFollowsStarBy(PkbTypes::STATEMENT_NUMBER statement);
 
  private:
   OneToOneStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> follows_store_;

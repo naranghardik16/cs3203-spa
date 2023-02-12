@@ -279,7 +279,6 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatAreFol
   return result;
 }
 
-
 bool PkbReadFacade::HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
   return this->pkb.follows_store_->hasFollowsRelation(statement_num, statement_num_follower);
 }
@@ -290,7 +289,7 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 
 // Follows* API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(StatementType statement_type_1,
-                                                                            StatementType statement_type_2){
+                                                                            StatementType statement_type_2) {
   PkbCommunicationTypes::SingleConstraintSet
   statements_of_type_1 = this->pkb.statement_store_->getStatementsFromType(statement_type_1);
 
@@ -311,43 +310,94 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(Stat
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::string stmt_num, StatementType stmt_type){
-  return {"2", "3"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::string statement_number,
+                                                                         StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: follows_star_pairs_) {
+    if (statement_number == p.first && statements.count(p.second) > 0) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::string stmt_num, StatementType stmt_type) {
-  //TODO
-  return {"1", "2"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::string statement_number,
+                                                                           StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: follows_star_pairs_) {
+    if (statement_number == p.second && statements.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(StatementType stmt_type){
-  //TODO
-  return {"1", "2"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(StatementType statement_type){
+  PkbCommunicationTypes::SingleConstraintSet statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: follows_star_pairs_) {
+    if (statements.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(StatementType stmt_type) {
-  //TODO
-  return {"2", "3"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: follows_star_pairs_) {
+    if (statements.count(p.second) > 0) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
 bool PkbReadFacade::HasFollowsStarRelationship(){
-  //TODO
-  return true;
+  return this->pkb.follows_store_->hasAnyFollowsStarRelation();
 }
 
-bool PkbReadFacade::HasFollowsStar(std::string stmt_num) {
-  //TODO
-  return true;
+bool PkbReadFacade::HasFollowsStar(std::string statement_number) {
+  return this->pkb.follows_store_->hasFollowsStar(statement_number);
 }
 
-bool PkbReadFacade::HasFollowsStarBy(std::string stmt_num) {
-  //TODO
-  return true;
+bool PkbReadFacade::HasFollowsStarBy(std::string statement_number) {
+  return this->pkb.follows_store_->hasFollowsStarBy(statement_number);
 }
 
-bool PkbReadFacade::IsFollowsStar(std::string stmt_num_1, std::string stmt_num_2) {
-  //TODO
-  return true;
+bool PkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
+  return this->pkb.follows_store_->hasFollowsStarRelation(std::move(statement_number_1), std::move(statement_number_2));
 }
 
 // Parent API
