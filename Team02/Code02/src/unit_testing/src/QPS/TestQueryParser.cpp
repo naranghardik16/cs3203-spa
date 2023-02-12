@@ -165,6 +165,12 @@ TEST_CASE("Test Query Parser") {
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
   }
 
+  SECTION("Test invalid query with only Select keyword") {
+    std::string query("assign a; Select");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
   SECTION("Test invalid query with missing select statement") {
     std::string query("assign Select;Select such that Modifies(Select,\"count\") pattern Select(\"count\", _)");
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
