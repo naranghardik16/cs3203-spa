@@ -1,16 +1,16 @@
 #include "FollowsStore.h"
 
-FollowsStore::FollowsStore() {}
+FollowsStore::FollowsStore() = default;
 
-FollowsStore::~FollowsStore() {}
+FollowsStore::~FollowsStore() = default;
 
-void FollowsStore::addFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1,
-                                      PkbTypes::STATEMENT_NUMBER statement_number_2) {
-  this->follows_store_.insert(statement_number_1, statement_number_2);
-  this->follows_star_store_.insert(statement_number_1, statement_number_2);
+void FollowsStore::addFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement,
+                                      PkbTypes::STATEMENT_NUMBER second_statement) {
+  this->follows_store_.insert(first_statement, second_statement);
+  this->follows_star_store_.insert(first_statement, second_statement);
 
   std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> current =
-      std::make_pair(statement_number_1, statement_number_2);
+      std::make_pair(first_statement, second_statement);
 
   PkbTypes::STATEMENT_NUMBER v;
 
@@ -30,9 +30,14 @@ std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUM
   return this->follows_star_store_.retrieveAll();
 }
 
-bool FollowsStore::hasFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1_,
-                                      PkbTypes::STATEMENT_NUMBER statement_number_2_) {
-  return this->follows_store_.contains(statement_number_1_, statement_number_2_);
+bool FollowsStore::hasFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement,
+                                      PkbTypes::STATEMENT_NUMBER second_statement) {
+  return this->follows_store_.contains(std::move(first_statement), std::move(second_statement));
+}
+
+bool FollowsStore::hasFollowsStarRelation(PkbTypes::STATEMENT_NUMBER first_statement,
+                                      PkbTypes::STATEMENT_NUMBER second_statement) {
+  return this->follows_star_store_.contains(std::move(first_statement), std::move(second_statement));
 }
 
 bool FollowsStore::hasAnyFollowsRelation() {

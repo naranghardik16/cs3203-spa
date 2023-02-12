@@ -1,4 +1,3 @@
-
 template<typename K, typename V>
 ManyToManyStore<K, V>::ManyToManyStore() {};
 

@@ -1,6 +1,7 @@
 #pragma once
-#include "PKB/Types/PkbTypes.h"
+
 #include "PKB/PKB.h"
+#include "PKB/Types/PkbTypes.h"
 
 /**
  * Facade implementation consisting of write methods
@@ -11,7 +12,7 @@ class PkbWriteFacade {
   PKB& pkb;
 
  public:
-  PkbWriteFacade(PKB &pkb);
+  explicit PkbWriteFacade(PKB &pkb);
 
   ~PkbWriteFacade();
 
@@ -21,7 +22,7 @@ class PkbWriteFacade {
    * @param variable - the target variable to add into PKB
    * @return index to store variable index
    */
-  PkbTypes::INDEX AddVariable(PkbTypes::VARIABLE variable);
+  PkbTypes::INDEX AddVariable(PkbTypes::VARIABLE variable) const;
 
   /**
    *  Adds procedure into PKB
@@ -29,7 +30,7 @@ class PkbWriteFacade {
    * @param procedure - the target procedure to add into PKB
    * @return index to store procedure index
    */
-  PkbTypes::INDEX AddProcedure(PkbTypes::PROCEDURE procedure);
+  PkbTypes::INDEX AddProcedure(PkbTypes::PROCEDURE procedure) const;
 
   /**
    * Adds constant into PKB
@@ -37,11 +38,11 @@ class PkbWriteFacade {
    * @param constant - the target constant to add into PKB
    * @return index to store constant index
    */
-  PkbTypes::INDEX AddConstant(PkbTypes::CONSTANT constant);
+  PkbTypes::INDEX AddConstant(PkbTypes::CONSTANT constant) const;
 
-  void AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
+  void AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) const;
 
-  void AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
+  void AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const;
 
-  void AddFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER statement_number_2);
+  void AddFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER statement_number_2) const;
 };

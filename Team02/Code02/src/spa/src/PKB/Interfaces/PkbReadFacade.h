@@ -8,7 +8,7 @@
 #include "General/StatementTypeEnum.h"
 
 /**
- * Facade implementation consisting of Read only methods
+ * Facade implementation consisting of read-only methods
  * which acts as an interface between QPS and PKB
  */
 class PkbReadFacade {

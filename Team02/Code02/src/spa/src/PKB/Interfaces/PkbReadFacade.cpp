@@ -1,11 +1,12 @@
-#include "PkbReadFacade.h"
 #include <memory>
+
+#include "PkbReadFacade.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 
 PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
 
-PkbReadFacade::~PkbReadFacade() {}
+PkbReadFacade::~PkbReadFacade() = default;
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariables() {
   return this->pkb.entity_store_->getVariables();

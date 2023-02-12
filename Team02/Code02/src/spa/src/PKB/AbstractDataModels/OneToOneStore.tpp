@@ -1,4 +1,3 @@
-
 template<typename K, typename V>
 OneToOneStore<K, V>::OneToOneStore() {};
 
@@ -36,13 +35,13 @@ std::size_t OneToOneStore<K, V>::length() {
 
 template<typename K, typename V>
 V OneToOneStore<K, V>::retrieveFromKey(K key) {
-  if (!containsKey(key)) return "";
+  if (!containsKey(key)) return V();
   return this->forward_map_[key];
 }
 
 template<typename K, typename V>
 K OneToOneStore<K, V>::retrieveFromValue(V value) {
-  if (!containsValue(value)) return "";
+  if (!containsValue(value)) return K();
   return this->backward_map_[value];
 }
 
