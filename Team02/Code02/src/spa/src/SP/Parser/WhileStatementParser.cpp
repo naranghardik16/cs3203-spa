@@ -31,8 +31,17 @@ void WhileStatementParser::CheckStartOfLoopStatement(Line &line) const {
 }
 
 ConditionalOperation WhileStatementParser::ExtractCondition(Line &line) {
-  return ConditionalOperation("<",
-                              {new Variable("x"), new Constant("5")});
+  // remove "while (" and ") {" from the token line
+  vector<Token *> expression_tokens{line.begin() + 2, line.end() - 2};
+  auto expr_parser =
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, "if");
+  auto
+      condition = (expr_parser->ParseEntity(
+      expression_tokens));
+  if (!condition) {
+    throw SyntaxErrorException("Could not get a condition for if statement");
+  }
+  return *dynamic_cast<ConditionalOperation *>(condition);
 }
 
 bool WhileStatementParser::IsEndOfWhileStatement(Line &line) const {

@@ -32,16 +32,27 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
 }
 
 ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
-  return ConditionalOperation("<", {new Variable("x"), new Constant("5")});
+  // remove "if (" and ") then {" from the token line
+  vector<Token *> expression_tokens{line.begin() + 2, line.end() - 3};
+  auto expr_parser =
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, "if");
+  auto
+      condition = (expr_parser->ParseEntity(
+      expression_tokens));
+  if (!condition) {
+    throw SyntaxErrorException("Could not get a condition for if statement");
+  }
+  return *dynamic_cast<ConditionalOperation *>(condition);
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
   auto
-      itr = std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
-    return p->GetType() == TokenType::LEFT_BRACE;
-  });
+      itr_brace =
+      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+        return p->GetType() == TokenType::LEFT_BRACE;
+      });
 
-  if (itr != prev(line.end())) {
+  if (itr_brace != prev(line.end())) {
     throw SemanticErrorException("If Statement is missing a {");
   }
 

@@ -34,6 +34,6 @@ std::string ProcedureParser::ExtractProcName(Line &line) {
 bool ProcedureParser::IsProcedureEnd(Line &line) {
   return std::find_if(std::begin(line), std::end(line),
                       [&](Token *const p) {
-                        return p->GetType() == TokenType::RIGHT_PARENTHESIS;
+                        return p->GetType() == TokenType::RIGHT_BRACE;
                       }) != std::end(line);
 }
