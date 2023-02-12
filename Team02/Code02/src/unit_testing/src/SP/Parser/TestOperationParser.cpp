@@ -10,7 +10,7 @@
 #include "SP/Tokenizer/ArithmeticOperatorToken.h"
 
 TEST_CASE("Check if ArithmeticOperationParser works") {
-  SECTION("Check if arithmetic expression with only 2 operands and 1 (+ or -) operator (e.g., x + z) parses correctly") {
+  SECTION("Check if arithmetic expression with only 2 operands and 1 (+ or -) operator (e.g., 11 + x) parses correctly") {
     Parser::Line expr_line{new IntegerToken("11"), new ArithmeticOperatorToken("+", PLUS), new NameToken("x")};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
     auto actual = expr_parser->ParseEntity(expr_line);
@@ -134,29 +134,29 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
     ArithmeticOperation *root = new ArithmeticOperation("+", root_args);
     REQUIRE(actual->operator==(*root));
   }
-  SECTION("Check if arithmetic expression with missing ) [e.g. 2 * (x + 1 ] throws Syntax error") {
+  SECTION("Check if arithmetic expression with unbalanced () [e.g. 2 * (x + 1 ] throws Syntax error") {
     Parser::Line expr_line{new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY), new PunctuationToken("(", LEFT_PARENTHESIS),
                            new NameToken("x"), new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1")};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
-  SECTION("Check if arithmetic expression with unbalanced parenthesis [e.g. 2 * x) + 1 ] throws Syntax error") {
+  SECTION("Check if arithmetic expression with unbalanced () [e.g. 2 * x) + 1 ] throws Syntax error") {
     Parser::Line expr_line{new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY), new NameToken("x"),
                            new PunctuationToken(")", RIGHT_PARENTHESIS), new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1")};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
-  SECTION("Check if arithmetic expression with unbalanced parenthesis [e.g. (2 * x) + 1) ] throws Syntax error") {
+  SECTION("Check if arithmetic expression with unbalanced () [e.g. (2 * x) + 1) ] throws Syntax error") {
     Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY),
-                           new NameToken("x"), new PunctuationToken(")", RIGHT_PARENTHESIS),  new PunctuationToken("(", LEFT_PARENTHESIS),
-                           new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+                           new NameToken("x"), new PunctuationToken(")", RIGHT_PARENTHESIS),  new ArithmeticOperatorToken("+", PLUS),
+                           new IntegerToken("1"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
 }
 
 TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works") {
-  SECTION("Check if a single rel_expr (e.g. x == 1) parses correctly") {
+  SECTION("Check if rel_expr (e.g. x == 1) parses correctly") {
     Parser::Line expr_line{new NameToken("x"), new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("1")};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
     auto actual = expr_parser->ParseEntity(expr_line);
@@ -169,6 +169,16 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     cond_args.first = rel;
     ConditionalOperation *expected = new ConditionalOperation("rel_expr", cond_args);
     REQUIRE(actual->operator==(*expected));
+  }
+  SECTION("Check if rel_expr with missing rel_op (e.g. x y) throws syntax error") {
+    Parser::Line expr_line{new NameToken("x"), new NameToken("y")};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if rel_expr with missing RHS rel_factor (e.g. x != ) throws syntax error") {
+    Parser::Line expr_line{new NameToken("x"), new RelationalOperatorToken("!=", NE)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
   SECTION("Check if ! '(' cond_expr ')' (e.g. ! (x > y) ) parses correctly") {
     Parser::Line expr_line{new ConditionalOperatorToken("!", NOT), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"),
@@ -189,7 +199,26 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     ConditionalOperation *root_cond_expr = new ConditionalOperation("!", root_cond_args);
     REQUIRE(actual->operator==(*root_cond_expr));
   }
-  SECTION("Check if '(' cond_expr ')' '&&' or '||' '(' cond_expr ')' (e.g. (x < y) && (y >= 100) ) parses correctly") {
+  SECTION("Check if ! '(' cond_expr ')' (e.g. ! (x > y) ) parses correctly") {
+    Parser::Line expr_line{new ConditionalOperatorToken("!", NOT), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"),
+                           new RelationalOperatorToken(">", GT), new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "while");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    pair<Expression*, Expression*> rel_args;
+    rel_args.first = new Variable("x");
+    rel_args.second = new Variable("y");
+    RelationalOperation *rel = new RelationalOperation(">", rel_args);
+
+    pair<Expression*, Expression*> inner_cond_args;
+    inner_cond_args.first = rel;
+    ConditionalOperation *inner_cond_expr = new ConditionalOperation("rel_expr", inner_cond_args);
+
+    pair<Expression*, Expression*> root_cond_args;
+    root_cond_args.first = inner_cond_expr;
+    ConditionalOperation *root_cond_expr = new ConditionalOperation("!", root_cond_args);
+    REQUIRE(actual->operator==(*root_cond_expr));
+  }
+  SECTION("Check if '(' cond_expr ')' '&&' or '||' '(' cond_expr ')' (e.g. (x < y) || (y >= 100) ) parses correctly") {
     Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
                            new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("||", OR),
                            new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("y"), new RelationalOperatorToken(">=", GTE),
@@ -218,5 +247,33 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     root_cond_args.second = rhs_cond_expr;
     ConditionalOperation *root_cond_expr = new ConditionalOperation("||", root_cond_args);
     REQUIRE(actual->operator==(*root_cond_expr));
+  }
+  SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ] throws syntax error") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
+                           new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("&&", AND)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ( ] throws syntax error") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
+                           new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("&&", AND),
+                           new PunctuationToken("(", LEFT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && (z ] throws syntax error") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
+                           new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("&&", AND),
+                           new PunctuationToken("(", LEFT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if cond_expr with unbalanced () [e.g. (x < y) && (z <= 100))] throws syntax error") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
+                           new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS), new ConditionalOperatorToken("&&", AND),
+                           new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("z"), new RelationalOperatorToken("<=", LTE),
+                           new IntegerToken("100"), new PunctuationToken(")", RIGHT_PARENTHESIS), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
 }
