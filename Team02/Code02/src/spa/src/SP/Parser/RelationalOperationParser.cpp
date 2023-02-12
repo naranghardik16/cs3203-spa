@@ -16,6 +16,9 @@ Expression *RelationalOperationParser::Parse() {
   string op = GetCurrentTokenValue();
   GetNext();
   auto right_rel_factor = Factor();
+  if (!right_rel_factor) {
+    throw SyntaxErrorException("Missing RHS rel_factor");
+  }
   UpdateCurrTokenWithUpdatedPos();
   pair<Expression*, Expression*> args;
   args.first = left_rel_factor;
@@ -25,7 +28,7 @@ Expression *RelationalOperationParser::Parse() {
 
 Expression *RelationalOperationParser::Factor() {
   ArithmeticOperationParser *arithmetic_operation_parser = new ArithmeticOperationParser();
-  arithmetic_operation_parser->InheritArgs(GetPos(), *GetLine(), GetIsSubExpr());
+  arithmetic_operation_parser->InheritArgs(GetPos(), GetIsSubExpr(), GetIsProcessedCurrToken());
   arithmetic_operation_parser->SetIsSubExpr(true);
   return arithmetic_operation_parser->ParseEntity(*GetLine());
 }

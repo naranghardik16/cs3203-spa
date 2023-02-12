@@ -21,6 +21,7 @@ Operation *ConditionalOperationParser::Parse() {
     }
   } else if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
     GetNext();
+    ValidateEnoughTokensToProcess("");
     this->SetIsSubExpr(true);
     auto left_cond_expr = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
@@ -45,11 +46,13 @@ Operation *ConditionalOperationParser::Parse() {
       args.first = left_cond_expr;
       args.second = right_cond_expr;
       return new ConditionalOperation(op, args);
+    } else {
+      throw SyntaxErrorException("Missing (");
     }
 
   } else { // rel_expr
     RelationalOperationParser *relational_operation_parser = new RelationalOperationParser();
-    relational_operation_parser->InheritArgs(GetPos(), *GetLine(), GetIsSubExpr());
+    relational_operation_parser->InheritArgs(GetPos(),GetIsSubExpr(),GetIsProcessedCurrToken());
     auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
     this->SetIsSubExpr(false);
     if (rel_expr) {
