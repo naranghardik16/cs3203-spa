@@ -5,12 +5,12 @@
 
 #include "catch.hpp"
 #include <string>
-#include "SP/NameToken.h"
-#include "SP/PunctuationToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedure works") {
   Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
-                         new PunctuationToken("{", LEFT_PARENTHESIS)};
+                         new PunctuationToken("{", LEFT_BRACE)};
   Parser::Line stmt_line
       {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
        new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
@@ -34,7 +34,7 @@ TEST_CASE("Check if AssignStatementParser works") {
 
 TEST_CASE("Check if Parser works with non control flow statements") {
   Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
-                         new PunctuationToken("{", LEFT_PARENTHESIS)};
+                         new PunctuationToken("{", LEFT_BRACE)};
   Parser::Line stmt_line_var
       {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
        new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
@@ -45,7 +45,7 @@ TEST_CASE("Check if Parser works with non control flow statements") {
                               new PunctuationToken(";", SEMICOLON)};
   Parser::Line stmt_line_print{new NameToken("print"), new NameToken("x"),
                                new PunctuationToken(";", SEMICOLON)};
-  Parser::Line end_line{new PunctuationToken("}", RIGHT_PARENTHESIS)};
+  Parser::Line end_line{new PunctuationToken("}", RIGHT_BRACE)};
   Parser::TokenStream
       source
       {proc_line, stmt_line_var, stmt_line_const, stmt_line_read,

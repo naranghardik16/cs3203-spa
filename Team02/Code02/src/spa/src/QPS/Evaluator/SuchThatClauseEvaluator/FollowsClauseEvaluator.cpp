@@ -2,6 +2,7 @@
 #include "FollowsClauseEvaluator.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 
 bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
@@ -18,13 +19,13 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
       return pkb->IsAnyFollowsRelationshipPresent();
     } else {
       //e.g. Follows(_,"5") --> Get all types of statements that "5" follows
-      return !pkb->GetStatementsFollowedBy(second_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementFollowedBy(second_arg_, StatementType::STATEMENT).empty();
     }
   } else {
     //! Must be an integer since the definition of Boolean constraint is no synonyms
     if (is_second_arg_a_wildcard) {
       //e.g. Follows("5", _) --> Get all types of statements that follow "5"
-      return !pkb->GetStatementsFollowing(first_arg_, StatementType::ALL).empty();
+      return !pkb->GetStatementFollowing(first_arg_, StatementType::STATEMENT).empty();
     } else {
       //e.g. Follows(5, 6)
       return pkb->HasFollowsRelationship(first_arg_, second_arg_);
@@ -34,9 +35,7 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
 
 
 std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  auto syntax_pair = ClauseEvaluator::GetSyntaxPair();
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-
 
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
@@ -53,8 +52,8 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Follows(s, _) --> Get statements that have followers
@@ -64,14 +63,16 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
       pair_constraint = pkb->GetFollowPairs(QueryUtil::GetStatementType(declaration_map, first_arg_), QueryUtil::GetStatementType(declaration_map, second_arg_));
     } else {
       //e.g. Follows(a,"5") --> Get statement that 5 follows of type assignment
-      single_constraint = pkb->GetStatementsFollowedBy(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
+      single_constraint =
+          pkb->GetStatementFollowedBy(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
     }
   }
 
   //Second arg must be a synonym by rule of deciding non-boolean constraints
   if (is_first_arg_an_integer) {
     //e.g. Follows("5", a) --> Get statement that follow 5 of type assignment
-    single_constraint = pkb->GetStatementsFollowing(first_arg_, QueryUtil::GetStatementType(declaration_map, second_arg_));
+    single_constraint =
+        pkb->GetStatementFollowing(first_arg_, QueryUtil::GetStatementType(declaration_map, second_arg_));
   }
 
   //Second arg must be a synonym by rule of non-boolean constraints

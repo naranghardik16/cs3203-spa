@@ -1,32 +1,36 @@
 #pragma once
-#include "ModifiesStatementClauseEvaluator.h"
+#include "ModifiesSClauseEvaluator.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
-bool ModifiesStatementClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
+bool ModifiesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
+
   //! first_arg is stmtref: If first arg is wildcard then semantic error; If first arg is synonym then it is not considered boolean constraint
-  //! Based on rule of boolean constraint, the 2nd arg cannot be a synonym
+  //! So first arg must be int
+  //! Based on rule of boolean constraint, the 2nd arg cannot be a synonym so either wildcard or ident (since 2nd arg is entref)
+
   if (is_second_arg_a_wildcard) {
       //Modifies(5, _) -- does 5 modify any variables?
       return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
   } else {
-      //Modifies(5, "count") -- does 5 modify "count"?
-      return pkb->HasModifiesStatementRelationship(first_arg_, second_arg_);
+    //Modifies(5, "count") -- does 5 modify "count"?
+    return pkb->HasModifiesStatementRelationship(first_arg_, second_arg_);
   }
 }
 
-std::shared_ptr<Result> ModifiesStatementClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   //!Validated in validator as a statement synonym or its subset
-  bool is_first_arg_a_type_of_statement_synonym = declaration_map.count(first_arg_);
+  bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
 
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
   //!Validated in validator as a variable synonym
   bool is_second_arg_a_variable_synonym = declaration_map.count(second_arg_);
+  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   ResultHeader header;
   if (is_first_arg_a_type_of_statement_synonym) {
@@ -36,9 +40,10 @@ std::shared_ptr<Result> ModifiesStatementClauseEvaluator::EvaluateClause(std::sh
     header.push_back(second_arg_);
   }
 
-  SingleConstraintSet single_constraint;
-  PairConstraintSet pair_constraint;
+  PkbCommunicationTypes::SingleConstraintSet single_constraint;
+  PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
+  //! Modifies Statement
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Select s such that Modifies(s, _) / Select s1 such that Modifies(s1,_)
@@ -53,6 +58,7 @@ std::shared_ptr<Result> ModifiesStatementClauseEvaluator::EvaluateClause(std::sh
     }
   }
 
+  //Second arg must be a synonym to not be boolean constraint
   if (is_first_arg_an_integer) {
     //e.g.Select v such that Modifies(5,v)
     single_constraint = pkb->GetVariablesModifiedByStatement(first_arg_);
@@ -65,6 +71,7 @@ std::shared_ptr<Result> ModifiesStatementClauseEvaluator::EvaluateClause(std::sh
   if (!pair_constraint.empty()) {
     table = QueryUtil::ConvertPairSetToResultTableFormat(pair_constraint);
   }
+
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
   return result_ptr;

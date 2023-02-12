@@ -8,7 +8,7 @@ TEST_CASE("Testcases for Modifies Store") {
     modifies_store->addStatementModifyingVariable("2", "a");
     modifies_store->addStatementModifyingVariable("2", "b");
 
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::vector<std::string>({ "a", "b" }));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<std::string>({ "a", "b" }));
   }
 }
 

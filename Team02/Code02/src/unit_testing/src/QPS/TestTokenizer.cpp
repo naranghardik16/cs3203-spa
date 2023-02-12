@@ -215,10 +215,8 @@ TEST_CASE("Check if GetIndexListOfClauses works as expected") {
   }
 
   SECTION("InvalidCase_ReturnEmptyVector") {
-    std::string query_substr = "Select v";
-    auto index = tokenizer->GetIndexListOfClauses(query_substr);
-    std::vector<size_t> correct_vector = {};
-    REQUIRE(index == correct_vector);
+    std::string query_substr = "patterna(\"such that \",_) such that parent* (w, pattern )";
+    REQUIRE_THROWS_AS(tokenizer->GetIndexListOfClauses(query_substr), SyntaxErrorException);
   }
 }
 

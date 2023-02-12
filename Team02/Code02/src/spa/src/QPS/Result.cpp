@@ -8,12 +8,19 @@ void Result::JoinResult(std::shared_ptr<Result> result) {
   }
   InterceptResult intercept = FindIntercept(this->header_, result->header_);
   ResultTable temp;
+
+  for (auto &i : intercept.second) {
+    this->header_.push_back(result->header_[i]);
+  }
+
+  if (result->table_.empty() || this->table_.empty()) {
+    this->table_.clear();
+    return;
+  }
+
   for (auto &row : this->table_) {
     ResultTable join = FindMatch(row, result->table_, intercept);
     temp.insert(temp.end(), join.begin(), join.end());
-  }
-  for (auto &i : intercept.second) {
-    this->header_.push_back(result->header_[i]);
   }
   this->table_ = temp;
 }

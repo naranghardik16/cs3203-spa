@@ -1,13 +1,13 @@
 #pragma once
 #include "QPS/Evaluator/ClauseEvaluator.h"
 
-class ModifiesStatementClauseEvaluator : public ClauseEvaluator {
+class ModifiesSClauseEvaluator : public ClauseEvaluator {
  private:
   std::string relationship_reference_;
   std::string first_arg_;
   std::string second_arg_;
  public:
-  ModifiesStatementClauseEvaluator(Synonym s, Map d, SyntaxPair syntax_pair) : ClauseEvaluator(s, d, syntax_pair) {
+  ModifiesSClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
     relationship_reference_ = syntax_pair.first;
     first_arg_ =  syntax_pair.second.first;
     second_arg_ = syntax_pair.second.second;

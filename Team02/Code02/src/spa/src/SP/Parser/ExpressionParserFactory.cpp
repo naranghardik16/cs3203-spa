@@ -1,15 +1,25 @@
 #include "ExpressionParserFactory.h"
 
-ExpressionParser *ExpressionParserFactory::GetExpressionParser(Line &line) {
+ExpressionParser *ExpressionParserFactory::GetExpressionParser(Line &line, string statement_type) {
   if (CheckExpressionType(line, "variable")) {
     return new VariableParser();
   }
   if (CheckExpressionType(line, "constant")) {
     return new ConstantParser();
   }
-  if (CheckExpressionType(line, "operation")) {
-    return new OperationParser();
+
+  if (!CheckExpressionType(line, "operation")) {
+    return nullptr;
   }
+
+  if (statement_type == "assign") {
+    return new ArithmeticOperationParser();
+  }
+
+  if (statement_type == "if" || statement_type == "while") {
+    return new ConditionalOperationParser();
+  }
+
   return nullptr;
 }
 

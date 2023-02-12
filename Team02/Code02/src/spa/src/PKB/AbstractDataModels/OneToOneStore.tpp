@@ -1,7 +1,9 @@
-//#include "OneToOneStore.h"
 
-//template<typename K, typename V>
-//OneToOneStore<K, V>::~OneToOneStore() {};
+template<typename K, typename V>
+OneToOneStore<K, V>::OneToOneStore() {};
+
+template<typename K, typename V>
+OneToOneStore<K, V>::~OneToOneStore() {};
 
 template<typename K, typename V>
 void OneToOneStore<K, V>::insert(K key, V value) {
@@ -12,7 +14,20 @@ void OneToOneStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::contains(K key, V value) {
-  return this->forward_map_.count(key);
+  auto iter = this->forward_map_.find(key);
+  return iter != this->forward_map_.end() && iter->second == value;
+//  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToOneStore<K, V>::containsKey(K key) {
+  return this->forward_map_.find(key) != this->forward_map_.end();
+//  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToOneStore<K, V>::containsValue(V value) {
+  return this->backward_map_.count(value);
 }
 
 template<typename K, typename V>
@@ -31,10 +46,10 @@ K OneToOneStore<K, V>::retrieveFromValue(V value) {
 }
 
 template<typename K, typename V>
-std::vector<std::pair<K, V>> OneToOneStore<K, V>::retrieveAll() {
-  std::vector<std::pair<K, V>> result;
+std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToOneStore<K, V>::retrieveAll() {
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->forward_map_) {
-    result.push_back(std::make_pair<K, V>(p.first, p.second));
+    result.insert(std::make_pair<K, V>(p.first, p.second));
   }
   return result;
 }

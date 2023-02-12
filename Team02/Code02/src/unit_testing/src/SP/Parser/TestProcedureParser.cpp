@@ -4,10 +4,10 @@
 
 #include "catch.hpp"
 #include <string>
-#include "SP/NameToken.h"
-#include "SP/PunctuationToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedureEnd works") {
-  Parser::Line end_line{new PunctuationToken("}", RIGHT_PARENTHESIS)};
+  Parser::Line end_line{new PunctuationToken("}", RIGHT_BRACE)};
   REQUIRE(ProcedureParser::IsProcedureEnd(end_line) == true);
 }

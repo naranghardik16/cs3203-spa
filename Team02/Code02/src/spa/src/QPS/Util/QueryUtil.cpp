@@ -9,7 +9,7 @@
 * Checks if the expression is a variable synonym
 * */
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length()-1] == '_';
+  bool result = s[0] == '_' && s[s.length()-1] == '_' &&s.length() > 2;
   return result;
 }
 
@@ -152,6 +152,11 @@ bool QueryUtil::IsContainerStatementSynonym(Map &declaration, const std::string&
  * Checks if the synonym belongs to the category of a statement synonym
  */
 bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& expression) {
+  //check if synonym first
+  if (declaration.count(expression) == 0) {
+    return false;
+  }
+
   return !IsVariableSynonym(declaration, expression) && !IsConstantSynonym(declaration, expression)
   && !IsProcedureSynonym(declaration, expression);
 }
@@ -175,19 +180,23 @@ bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expres
 /**
  * Returns a statement type enum based on a given synonym
  */
-StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& expression) {
-  if (IsIfSynonym(declaration, expression)) {
+StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& synonym) {
+  if (IsIfSynonym(declaration, synonym)) {
     return StatementType::IF;
-  } else if (IsReadSynonym(declaration, expression)) {
+  } else if (IsReadSynonym(declaration, synonym)) {
     return StatementType::READ;
-  } else if (IsPrintSynonym(declaration, expression)) {
+  } else if (IsPrintSynonym(declaration, synonym)) {
     return StatementType::PRINT;
-  } else if (IsCallSynonym(declaration, expression)) {
+  } else if (IsCallSynonym(declaration, synonym)) {
     return StatementType::CALL;
-  } else if (IsAssignSynonym(declaration, expression)) {
+  } else if (IsAssignSynonym(declaration, synonym)) {
     return StatementType::ASSIGN;
-  } else {
+  } else if (IsWhileSynonym(declaration, synonym)){
     return StatementType::WHILE;
+  } else if (IsStatementSynonym(declaration, synonym)){
+    return StatementType::STATEMENT;
+  } else {
+    return StatementType::UNK;
   }
 }
 
@@ -221,7 +230,7 @@ std::vector<std::vector<std::string>> QueryUtil::ExtractFirstElementInTheVectors
 /**
  * Converts an unordered set to a ResultRow format
  */
-ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
+ResultTable QueryUtil::ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;
@@ -234,7 +243,7 @@ ResultTable QueryUtil::ConvertSetToResultTableFormat(SingleConstraintSet s) {
 /**
  * Converts an unordered set of pairs to a ResultRow format
  */
-ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PairConstraintSet s) {
+ResultTable QueryUtil::ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {
     std::vector<std::string> nested_vector;

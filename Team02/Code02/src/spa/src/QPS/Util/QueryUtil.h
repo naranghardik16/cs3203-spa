@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "General/StatementTypeEnum.h"
-#include "PKB/Interfaces/PkbReadFacade.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 class QueryUtil {
 
@@ -53,13 +53,13 @@ class QueryUtil {
 
   static bool IsCorrectSynonymType(Map &declaration, const std::string& expression, const std::string type);
 
-  static StatementType GetStatementType(Map &declaration, const std::string &expression);
+  static StatementType GetStatementType(Map &declaration, const std::string &synonym);
 
   static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractSecondElementInTheVectors(std::vector<std::vector<std::string>> v);
 
-  static ResultTable ConvertSetToResultTableFormat(SingleConstraintSet s);
-  static ResultTable ConvertPairSetToResultTableFormat(PairConstraintSet s);
+  static ResultTable ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s);
+  static ResultTable ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s);
 };
 

@@ -65,6 +65,7 @@ size_t QpsTokenizer::FindStartOfSubClauseIndex(const std::string& substr_after_s
 
 /*
  * Searches for the start of subclauses (e.g. such that, pattern) and returns their index
+ * Condition: statement is not empty and contains only the subclauses
  */
 std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& statement) {
   std::vector<size_t> index_list;
@@ -82,6 +83,12 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
 
   sort(index_list.begin(), index_list.end()); //sort ascending order
 
+  //! If there are subclauses, then we should have a sub-clause start index at 0 and not e.g. at index 5
+  if (index_list[0] > 0) {
+    throw SyntaxErrorException();
+  }
+
+
   return index_list;
 }
 
@@ -94,6 +101,7 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
 
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
+
     if (!QueryUtil::IsDesignEntity(design_entity)) {
       throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }
@@ -143,7 +151,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   //check for concrete syntax like ( , ) and keywords like such,that or pattern
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
-    throw SyntaxErrorException("There is syntax error in the clause");
+    throw SyntaxErrorException("There is syntax error with the subclauses");
   }
 
   std::string relationship = string_util::Trim(clause.substr(start_of_rel_ref_index,
@@ -157,7 +165,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   std::string remaining_clause = string_util::Trim(clause.substr(closing_bracket_index+1));
 
   if (!remaining_clause.empty()) {
-    throw SyntaxErrorException("There are extra characters after the end of the clause");
+    throw SyntaxErrorException("There is syntax error with the subclauses and remaining characters that remain unparsed");
   }
 
   SyntaxPair clause_syntax;

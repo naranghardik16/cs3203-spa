@@ -7,7 +7,7 @@
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "core/model/Program.h"
-#include "../Token.h"
+#include "SP/Tokenizer/Token.h"
 
 class Parser {
  public:
