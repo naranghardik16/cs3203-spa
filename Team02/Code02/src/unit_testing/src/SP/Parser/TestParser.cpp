@@ -5,8 +5,8 @@
 
 #include "catch.hpp"
 #include <string>
-#include "SP/NameToken.h"
-#include "SP/PunctuationToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedure works") {
   Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),

@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include <string>
 #include <sstream>
-#include "./SP/Tokenizer.h"
+#include "SP/Tokenizer/Tokenizer.h"
 #include "./SP/DesignExtractor/DesignExtractor.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/PKB.h"

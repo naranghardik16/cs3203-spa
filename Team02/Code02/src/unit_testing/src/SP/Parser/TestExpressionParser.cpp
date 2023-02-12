@@ -3,9 +3,9 @@
 
 #include "catch.hpp"
 #include <string>
-#include "SP/NameToken.h"
-#include "SP/IntegerToken.h"
-#include "SP/PunctuationToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/IntegerToken.h"
+#include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IntegerToken is parsed as a Constant Expression") {
   Parser::Line expr_line{new IntegerToken("11")};

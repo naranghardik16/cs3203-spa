@@ -3,7 +3,7 @@
 #include "OperationParser.h"
 #include "ArithmeticOperationParser.h"
 #include "../../core/model/RelationalOperation.h"
-#include "../Token.h"
+#include "SP/Tokenizer/Token.h"
 #include "../../General/SpaException/SyntaxErrorException.h"
 
 using namespace std;

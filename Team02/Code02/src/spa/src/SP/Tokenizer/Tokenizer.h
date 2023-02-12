@@ -13,7 +13,7 @@
 #include "ConditionalOperatorToken.h"
 #include "General/LexicalRuleValidator.h"
 #include "./General/StringUtil.h"
-#include "./Parser/Parser.h"
+#include "SP/Parser/Parser.h"
 #include "General/SpaException/SyntaxErrorException.h"
 
 

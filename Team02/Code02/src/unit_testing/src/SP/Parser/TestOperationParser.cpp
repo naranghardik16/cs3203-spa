@@ -4,10 +4,10 @@
 #include "SP/Parser/AssignStatementParser.h"
 
 #include <string>
-#include "SP/NameToken.h"
-#include "SP/IntegerToken.h"
-#include "SP/PunctuationToken.h"
-#include "SP/ArithmeticOperatorToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/IntegerToken.h"
+#include "SP/Tokenizer/PunctuationToken.h"
+#include "SP/Tokenizer/ArithmeticOperatorToken.h"
 
 TEST_CASE("Check if ArithmeticOperationParser works") {
   SECTION("Check if arithmetic expression with only 2 operands and 1 (+ or -) operator (e.g., x + z) parses correctly") {
@@ -133,6 +133,25 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
     root_args.second = root_right_subtree;
     ArithmeticOperation *root = new ArithmeticOperation("+", root_args);
     REQUIRE(actual->operator==(*root));
+  }
+  SECTION("Check if arithmetic expression with missing ) [e.g. 2 * (x + 1 ] throws Syntax error") {
+    Parser::Line expr_line{new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY), new PunctuationToken("(", LEFT_PARENTHESIS),
+                           new NameToken("x"), new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1")};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if arithmetic expression with unbalanced parenthesis [e.g. 2 * x) + 1 ] throws Syntax error") {
+    Parser::Line expr_line{new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY), new NameToken("x"),
+                           new PunctuationToken(")", RIGHT_PARENTHESIS), new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1")};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
+  SECTION("Check if arithmetic expression with unbalanced parenthesis [e.g. (2 * x) + 1) ] throws Syntax error") {
+    Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new IntegerToken("2"), new ArithmeticOperatorToken("*", MULTIPLY),
+                           new NameToken("x"), new PunctuationToken(")", RIGHT_PARENTHESIS),  new PunctuationToken("(", LEFT_PARENTHESIS),
+                           new ArithmeticOperatorToken("+", PLUS), new IntegerToken("1"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
 }
 

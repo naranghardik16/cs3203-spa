@@ -4,7 +4,7 @@
 #include "../../core/model/ArithmeticOperation.h"
 #include "../../core/model/Constant.h"
 #include "../../core/model/Variable.h"
-#include "../Token.h"
+#include "SP/Tokenizer/Token.h"
 #include "../../General/SpaException/SyntaxErrorException.h"
 
 using namespace std;

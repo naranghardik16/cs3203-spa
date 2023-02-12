@@ -4,7 +4,7 @@
 // must include <sstream> to use iss for istringstream
 #include <sstream>
 #include "./SP/Parser/Parser.h"
-#include "./SP/Tokenizer.h"
+#include "SP/Tokenizer/Tokenizer.h"
 
 using namespace std;
 

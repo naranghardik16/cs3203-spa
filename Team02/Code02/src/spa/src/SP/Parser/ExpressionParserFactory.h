@@ -5,8 +5,8 @@
 #include "ExpressionParser.h"
 #include "VariableParser.h"
 #include "ConditionalOperationParser.h"
-#include "../NameToken.h"
-#include "../IntegerToken.h"
+#include "SP/Tokenizer/NameToken.h"
+#include "SP/Tokenizer/IntegerToken.h"
 
 class ExpressionParserFactory {
   typedef std::vector<Token *> Line;
