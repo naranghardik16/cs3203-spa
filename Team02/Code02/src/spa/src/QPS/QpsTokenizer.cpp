@@ -13,9 +13,11 @@
 
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
 
-/*
+/*!
  * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
  * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+ * @param query_extra_whitespace_removed is the query with any duplicate white space removed
+ * @throws SyntaxErrorException if there is no Select statement or if there is no Select keyword in the Select statement
  */
 QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
   std::string delimiter = ";";
@@ -32,10 +34,6 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
   }
 
   std::string select_statement = string_util::Trim(temp);
-
-  if (declaration_statements.empty()) {
-    throw SyntaxErrorException("There is no declaration statement identified");
-  }
 
   if (select_statement.empty()) {
     throw SyntaxErrorException("There is no select statement identified");
@@ -75,7 +73,6 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
     index_list.push_back(such_that_index);
   }
 
-
   size_t pattern_index = FindStartOfSubClauseIndex(statement, pql_constants::kPatternRegex);
   if (pattern_index != std::string::npos) {
     index_list.push_back(pattern_index);
@@ -83,11 +80,14 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
 
   sort(index_list.begin(), index_list.end()); //sort ascending order
 
+  //! if index list is empty then the subclauses do not contain the valid subclause markers like "such that"
+  if (index_list.empty()) {
+    throw SyntaxErrorException("Tokenizer GetIndexListOfSubclauses: No valid subclauses could be parsed out");
+  }
   //! If there are subclauses, then we should have a sub-clause start index at 0 and not e.g. at index 5
   if (index_list[0] > 0) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("Tokenizer GetIndexListOfSubclauses: Invalid subclause present");
   }
-
 
   return index_list;
 }
@@ -139,6 +139,7 @@ std::string QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed
 /*
  * Extracts the entity (e.g. the relationship reference or the syn-assign), parameters in the relationship reference
  * from a such that clause or pattern clause.
+ * clause should be trimmed and have duplicate white spaces removed already
  * Throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found.
  * Returns an empty map if the clause is empty because it is optional to have a such that clause.
  */
@@ -148,7 +149,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   size_t comma_index = clause.find(pql_constants::kComma);
   size_t closing_bracket_index = clause.find_last_of(pql_constants::kClosingBracket);
 
-  //check for concrete syntax like ( , ) and keywords like such,that or pattern
+  //check for concrete syntax like ( , ) and keywords like such that or pattern
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
     throw SyntaxErrorException("There is syntax error with the subclauses");
