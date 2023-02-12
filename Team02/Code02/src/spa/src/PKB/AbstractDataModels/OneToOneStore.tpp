@@ -1,4 +1,3 @@
-
 template<typename K, typename V>
 OneToOneStore<K, V>::OneToOneStore() {};
 
@@ -21,8 +20,7 @@ bool OneToOneStore<K, V>::contains(K key, V value) {
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::containsKey(K key) {
-  return this->forward_map_.find(key) != this->forward_map_.end();
-//  return this->forward_map_.count(key);
+  return this->forward_map_.count(key);
 }
 
 template<typename K, typename V>
@@ -37,11 +35,13 @@ std::size_t OneToOneStore<K, V>::length() {
 
 template<typename K, typename V>
 V OneToOneStore<K, V>::retrieveFromKey(K key) {
+  if (!containsKey(key)) return V();
   return this->forward_map_[key];
 }
 
 template<typename K, typename V>
 K OneToOneStore<K, V>::retrieveFromValue(V value) {
+  if (!containsValue(value)) return K();
   return this->backward_map_[value];
 }
 
@@ -49,7 +49,7 @@ template<typename K, typename V>
 std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToOneStore<K, V>::retrieveAll() {
   std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->forward_map_) {
-    result.insert(std::make_pair<K, V>(p.first, p.second));
+    result.insert(std::make_pair(p.first, p.second));
   }
   return result;
 }

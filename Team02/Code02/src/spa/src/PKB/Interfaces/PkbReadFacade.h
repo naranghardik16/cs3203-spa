@@ -8,7 +8,7 @@
 #include "General/StatementTypeEnum.h"
 
 /**
- * Facade implementation consisting of Read only methods
+ * Facade implementation consisting of read-only methods
  * which acts as an interface between QPS and PKB
  */
 class PkbReadFacade {
@@ -113,7 +113,7 @@ class PkbReadFacade {
  * @param statement_type which is a constraint to filter the statements returned
  * @return a set of variable names
  */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable, StatementType statement_type);
 
 
   /**

@@ -1,26 +1,66 @@
 #pragma once
 
-#include <unordered_set>
 #include <string>
-#include "PKB/Types/PkbTypes.h"
+#include <unordered_set>
+
 #include "PKB/AbstractDataModels/OneToOneStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 class EntityStore {
  public:
-  EntityStore() = default ;
+  /**
+   * Constructor for Entity store.
+   */
+  EntityStore();
 
-//  ~EntityStore();
+  /**
+   * Destructor for Entity store.
+   */
+  ~EntityStore();
 
+  /**
+   * Adds a constant entity to the constant store.
+   *
+   * @param constant - The constant to be inserted.
+   * @return The index at which the inserted constant is mapped to.
+   */
   PkbTypes::INDEX addConstant(PkbTypes::CONSTANT constant);
 
+  /**
+   * Adds a variable entity to the variable store.
+   *
+   * @param variable - The variable to be inserted.
+   * @return The index at which the inserted variable is mapped to.
+   */
   PkbTypes::INDEX addVariable(PkbTypes::VARIABLE variable);
 
+  /**
+   * Adds a procedure entity to the procedure store.
+   *
+   * @param procedure - The procedure to be inserted.
+   * @return The index at which the inserted procedure is mapped to.
+   */
   PkbTypes::INDEX addProcedure(PkbTypes::PROCEDURE procedure);
 
+  /**
+   * Retrieves all the variable entities present in the entity store.
+   *
+   * @return Set of variable entities.
+   */
   std::unordered_set<PkbTypes::VARIABLE> getVariables();
 
+  /**
+   * Retrieves all the procedure entities present in the entity store.
+   *
+   * @return Set of procedure entities.
+   */
   std::unordered_set<PkbTypes::PROCEDURE> getProcedures();
 
+  /**
+   * Retrieves all the procedure entities present in the entity store.
+   *
+   * @return Set of procedure entities.
+   */
   std::unordered_set<PkbTypes::CONSTANT> getConstants();
 
  protected:
