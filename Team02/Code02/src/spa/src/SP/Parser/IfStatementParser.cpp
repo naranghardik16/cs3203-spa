@@ -8,22 +8,23 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
                                  condition,
                                  "main");
   CheckStartOfIfStatement(line);
-  while (!tokens.empty() && !IsEndOfThenStatement(line)) {
+  while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
     if_stmt->AddThenStmtList(stmt);
   }
-  if (IsEndOfThenStatement(line)) {
+
+  if (IsEndOfThenStatement(tokens.front())) {
     tokens.pop_front();
   }
 
-  while (!tokens.empty() && !IsEndOfIfElseStatement(line)) {
+  while (!tokens.empty() && !IsEndOfIfElseStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
     if_stmt->AddElseStmtList(stmt);
   }
 
-  if (IsEndOfIfElseStatement(line)) {
+  if (IsEndOfIfElseStatement(tokens.front())) {
     tokens.pop_front();
   }
 
@@ -37,15 +38,27 @@ ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
   auto
       itr = std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
-    return p->GetType() == TokenType::LEFT_PARENTHESIS;
+    return p->GetType() == TokenType::LEFT_BRACE;
   });
 
   if (itr != prev(line.end())) {
-    throw SemanticErrorException("While Statement does not start with {");
+    throw SemanticErrorException("If Statement is missing a {");
+  }
+
+  auto
+      itr_then =
+      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+        return p->GetValue() == "then";
+      });
+
+  if (itr_then != prev(prev(line.end()))) {
+    throw SemanticErrorException(
+        "If Statement is missing then or is not in correct position");
   }
 }
 
 bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
+
   return std::find_if(std::begin(line), std::end(line),
                       [&](Token *const p) {
                         return p->GetValue() == "else";
@@ -55,6 +68,6 @@ bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
 bool IfStatementParser::IsEndOfIfElseStatement(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
                       [&](Token *const p) {
-                        return p->GetType() == TokenType::RIGHT_PARENTHESIS;
+                        return p->GetType() == TokenType::RIGHT_BRACE;
                       }) != std::end(line);
 }

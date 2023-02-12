@@ -3,17 +3,21 @@
 StatementParser *StatementParserFactory::GetStatementParser(std::deque<
     StatementParserFactory::Line> &tokens) {
   auto line = tokens.front();
-  if (CheckStatementType(line, "=")) {
-    return new AssignStatementParser();
+  if (CheckStatementType(line, "if")) {
+    return new IfStatementParser();
   } else if (CheckStatementType(line, "print")) {
     return new PrintStatementParser();
   } else if (CheckStatementType(line, "read")) {
     return new ReadStatementParser();
   } else if (CheckStatementType(line, "while")) {
     return new WhileStatementParser();
-  } else if (CheckStatementType(line, "if")) {
-    return new IfStatementParser();
+  } else if (CheckStatementType(line, "=")) {
+    return new AssignStatementParser();
   }
+  for (auto token : line) {
+    cout << token->GetValue() << " ";
+  }
+  cout << endl;
   throw SemanticErrorException("Unknown Statement type");
 }
 bool StatementParserFactory::CheckStatementType(StatementParserFactory::Line &line,
