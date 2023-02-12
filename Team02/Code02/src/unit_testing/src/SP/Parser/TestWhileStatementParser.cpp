@@ -45,6 +45,7 @@ TEST_CASE("Check if IsEndOFWhileStatement is detected") {
 }
 
 TEST_CASE("Check if WhileStatementParser detects and parses statement list") {
+  auto dummy_prog = new Program();
   Parser::Line while_line_valid{
       new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS),
       new NameToken("x"), new PunctuationToken("<", LT),
