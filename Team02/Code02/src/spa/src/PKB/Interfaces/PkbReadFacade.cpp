@@ -172,7 +172,6 @@ bool PkbReadFacade::IsStmtUsing(std::string stmt_num, std::string var_name) {
 }
 
 //! Uses Procedure API
-
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetProcUsesPair() {
   //TODO
   return {{"Main", "x"}, {"Main", "y"}};
@@ -203,7 +202,7 @@ bool PkbReadFacade::IsProcUsing(std::string proc_name, std::string var_name) {
   return true;
 }
 
-
+// Follows API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
   return this->pkb.follows_store_->retrieveAllFollowsPairs();
 }
@@ -289,16 +288,30 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return this->pkb.follows_store_->hasAnyFollowsRelation();
 }
 
-// TODO: Parent Relation
+// Follows* API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(StatementType statement_type_1,
+                                                                            StatementType statement_type_2){
+  PkbCommunicationTypes::SingleConstraintSet
+  statements_of_type_1 = this->pkb.statement_store_->getStatementsFromType(statement_type_1);
 
-//! Follows* API
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(StatementType type_1, StatementType type_2){
-  //TODO
-  return {{"1", "2"}};
+  PkbCommunicationTypes::SingleConstraintSet
+      statements_of_type_2 = this->pkb.statement_store_->getStatementsFromType(statement_type_2);
+
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: follows_star_pairs_) {
+    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::string stmt_num, StatementType stmt_type){
-  //TODO
   return {"2", "3"};
 }
 
