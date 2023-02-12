@@ -41,6 +41,18 @@ bool FollowsStore::hasFollowsStarRelation(PkbTypes::STATEMENT_NUMBER first_state
 }
 
 bool FollowsStore::hasAnyFollowsRelation() {
-  return this->follows_store_.length() > 0 || this->follows_star_store_.length() > 0;
+  return this->follows_store_.length() > 0;
+}
+
+bool FollowsStore::hasAnyFollowsStarRelation() {
+  return this->follows_star_store_.length() > 0;
+}
+
+bool FollowsStore::hasFollowsStar(PkbTypes::STATEMENT_NUMBER statement) {
+  return !this->follows_star_store_.retrieveFromValue(statement).empty();
+}
+
+bool FollowsStore::hasFollowsStarBy(PkbTypes::STATEMENT_NUMBER statement) {
+  return !this->follows_star_store_.retrieveFromKey(statement).empty();
 }
 
