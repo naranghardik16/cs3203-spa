@@ -10,6 +10,9 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "Query.h"
 
+/**
+ * This is a facade to handle the parsing of queries by tokenizer and validators
+ */
 class QueryParser {
  public:
   std::shared_ptr<Query> ParseQuery(std::string query);

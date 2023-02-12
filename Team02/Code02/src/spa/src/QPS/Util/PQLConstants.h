@@ -2,6 +2,9 @@
 #include <iostream>
 #include <regex>
 
+/**
+ * Organises all constants that are used in QPS
+ */
 namespace pql_constants {
 
 const char kOpeningBracket = '(';
