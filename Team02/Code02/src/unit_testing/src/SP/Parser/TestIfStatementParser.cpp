@@ -25,7 +25,7 @@ TEST_CASE("Check if StartOfIfStatement is detected") {
   auto *if_parser = new IfStatementParser();
   SECTION("Check for validation of syntax of if statements") {
     REQUIRE_THROWS(if_parser->CheckStartOfIfStatement(if_line_no_then));
-  }SECTION("Check for a valid if statement") {
+  }SECTION("Check for a valid if statement start") {
     REQUIRE_NOTHROW(if_parser->CheckStartOfIfStatement(if_line_valid));
   }SECTION("Check throws for assign statement") {
     REQUIRE_THROWS(if_parser->CheckStartOfIfStatement(stmt_line));

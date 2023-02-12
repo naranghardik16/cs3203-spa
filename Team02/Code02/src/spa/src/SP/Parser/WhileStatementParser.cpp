@@ -22,7 +22,7 @@ WhileStatement *WhileStatementParser::ParseEntity(TokenStream &tokens) {
 void WhileStatementParser::CheckStartOfLoopStatement(Line &line) const {
   auto
       itr = std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
-    return p->GetType() == TokenType::LEFT_PARENTHESIS;
+    return p->GetType() == TokenType::LEFT_BRACE;
   });
 
   if (itr != prev(line.end())) {
@@ -38,6 +38,6 @@ ConditionalOperation WhileStatementParser::ExtractCondition(Line &line) {
 bool WhileStatementParser::IsEndOfWhileStatement(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
                       [&](Token *const p) {
-                        return p->GetType() == TokenType::RIGHT_PARENTHESIS;
+                        return p->GetType() == TokenType::RIGHT_BRACE;
                       }) != std::end(line);
 }

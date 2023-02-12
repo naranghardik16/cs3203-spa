@@ -14,7 +14,7 @@ file(GLOB srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.h")
 
-add_executable(unit_testing ${srcs} ${header})
+add_executable(unit_testing ${srcs} ${header} src/SP/Parser/TestWhileStatementParser.cpp)
 
 
 target_link_libraries(unit_testing spa)
