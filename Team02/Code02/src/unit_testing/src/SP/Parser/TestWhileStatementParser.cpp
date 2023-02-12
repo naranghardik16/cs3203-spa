@@ -67,9 +67,15 @@ TEST_CASE("Check if WhileStatementParser detects and parses statement list") {
   auto while_stmt = while_parser->ParseEntity(tokens);
   REQUIRE(while_stmt->GetStatementNumber() == 1);
   auto condition = while_stmt->GetCondition();
-  REQUIRE(condition == ConditionalOperation("<",
-                                            {new Variable("x"),
-                                             new Constant("5")}));
+  pair<Expression *, Expression *>
+      rel_args{new Variable("x"), new Constant("5")};
+  auto rel = new RelationalOperation("<", rel_args);
+
+  pair<Expression *, Expression *> cond_args{rel, nullptr};
+  auto
+      expected_condition_expr =
+      new ConditionalOperation("rel_expr", cond_args);
+  REQUIRE(condition.operator==(*expected_condition_expr));
   auto stmt_list = while_stmt->GetLoopStatements();
   REQUIRE(stmt_list[0]->GetStatementNumber() == 2);
   auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_list[0]);

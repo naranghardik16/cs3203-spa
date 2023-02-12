@@ -22,13 +22,37 @@ TEST_CASE("Check if StartOfIfStatement is detected") {
   Parser::Line stmt_line
       {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
        new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
-  auto *if_parser = new IfStatementParser();
+  auto if_parser = new IfStatementParser();
   SECTION("Check for validation of syntax of if statements") {
     REQUIRE_THROWS(if_parser->CheckStartOfIfStatement(if_line_no_then));
   }SECTION("Check for a valid if statement start") {
     REQUIRE_NOTHROW(if_parser->CheckStartOfIfStatement(if_line_valid));
   }SECTION("Check throws for assign statement") {
     REQUIRE_THROWS(if_parser->CheckStartOfIfStatement(stmt_line));
+  }
+}
+
+TEST_CASE("Check if ExtractCondition works") {
+  Parser::Line if_line_valid
+      {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
+       new NameToken("x"), new PunctuationToken(">", LT),
+       new IntegerToken("5"), new PunctuationToken(")", RIGHT_PARENTHESIS),
+       new NameToken("then"),
+       new PunctuationToken("{", LEFT_BRACE)};
+  try {
+    auto if_parser = new IfStatementParser();
+    auto condition = if_parser->ExtractCondition(if_line_valid);
+    pair<Expression *, Expression *>
+        rel_args{new Variable("x"), new Constant("5")};
+    auto rel = new RelationalOperation(">", rel_args);
+
+    pair<Expression *, Expression *> cond_args{rel, nullptr};
+    auto
+        expected_condition_expr =
+        new ConditionalOperation("rel_expr", cond_args);
+    REQUIRE(condition.operator==(*expected_condition_expr));
+  } catch (std::exception &e) {
+    cout << e.what() << endl;
   }
 }
 
