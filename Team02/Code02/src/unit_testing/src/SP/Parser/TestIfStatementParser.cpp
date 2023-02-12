@@ -74,6 +74,7 @@ TEST_CASE("Check if EndOfThenStatements is detected") {
 }
 
 TEST_CASE("Check if IfStatementParser detects then and else statements") {
+  auto prog = new Program();
   Parser::Line if_line_valid
       {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
        new NameToken("x"), new PunctuationToken("<", LT),
@@ -101,9 +102,15 @@ TEST_CASE("Check if IfStatementParser detects then and else statements") {
     auto if_stmt = if_parser->ParseEntity(tokens);
     REQUIRE(if_stmt->GetStatementNumber() == 1);
     auto condition = if_stmt->GetCondition();
-    REQUIRE(condition == ConditionalOperation("<",
-                                              {new Variable("x"),
-                                               new Constant("5")}));
+    pair<Expression *, Expression *>
+        rel_args{new Variable("x"), new Constant("5")};
+    auto rel = new RelationalOperation("<", rel_args);
+
+    pair<Expression *, Expression *> cond_args{rel, nullptr};
+    auto
+        expected_condition_expr =
+        new ConditionalOperation("rel_expr", cond_args);
+    REQUIRE(condition.operator==(*expected_condition_expr));
     auto then_stmts = if_stmt->GetThenStatements();
     REQUIRE(then_stmts[0]->GetStatementNumber() == 2);
     auto assign_stmt = dynamic_cast<AssignStatement *>(then_stmts[0]);
