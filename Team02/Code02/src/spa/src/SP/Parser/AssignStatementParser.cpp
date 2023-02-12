@@ -12,7 +12,7 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
   CheckEndOfStatement(line);
   vector<Token *> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
-      ExpressionParserFactory::GetExpressionParser(expression_tokens);
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, "assign");
   auto expression = expr_parser->ParseEntity(expression_tokens);
   assign_stmt->AddExpression(expression);
   return assign_stmt;

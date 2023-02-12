@@ -1,15 +1,13 @@
 #include "catch.hpp"
 #include <string>
 #include <sstream>
-#include "./SP/Tokenizer.h"
-#include "./SP/DesignExtractor/DesignExtractor.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
+#include "SP/SP.h"
 
 TEST_CASE("Check if SP works with PKB") {
   try {
-    Tokenizer *tokenizer = new Tokenizer();
     string input = "procedure main {\n"
                    "  flag = 1;\n"
                    "}\n"
@@ -23,14 +21,9 @@ TEST_CASE("Check if SP works with PKB") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *tokens = tokenizer->Tokenize(is);
-
-    Parser *parser = new Parser();
-    Program program = parser->ParseSource(*tokens);
-
     PKB *pkb = new PKB();
-    DesignExtractor *design_extractor = new DesignExtractor(pkb);
-    design_extractor->ExtractDesign(&program);
+    SP *sp = new SP();
+    sp->ProcessSIMPLE(is, pkb);
 
     PkbReadFacade *pkb_read_facade = new PkbReadFacade(*pkb);
     SECTION("Check if Accept(Procedure) works") {

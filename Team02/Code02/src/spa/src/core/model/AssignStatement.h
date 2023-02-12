@@ -3,7 +3,7 @@
 #include "Expression.h"
 #include "Variable.h"
 
-class AssignStatement : public Statement, public Entity {
+class AssignStatement : public Statement {
  public:
   AssignStatement(int statement_number, Variable var,
                   std::string in_scope_of_proc);
