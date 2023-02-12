@@ -1,6 +1,6 @@
 #include "Variable.h"
 
-Variable::Variable(std::string name) : Expression(name,
+Variable::Variable(std::string name) : Expression(std::move(name),
                                                   "variable") {}
 
 void Variable::Accept(ParserVisitor *visitor) {
