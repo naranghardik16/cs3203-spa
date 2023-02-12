@@ -53,7 +53,7 @@ class QueryUtil {
 
   static bool IsCorrectSynonymType(Map &declaration, const std::string& expression, const std::string type);
 
-  static StatementType GetStatementType(Map &declaration, const std::string &expression);
+  static StatementType GetStatementType(Map &declaration, const std::string &synonym);
 
   static std::unordered_set<std::string> ConvertToSet(std::vector<std::vector<std::string>> v);
   static std::vector<std::vector<std::string>> ExtractFirstElementInTheVectors(std::vector<std::vector<std::string>> v);

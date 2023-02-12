@@ -8,12 +8,11 @@ bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   if (is_second_arg_a_wildcard) {
     //Example query: Uses(5, _)
 
-    //TODO: PKB call
-    return true;
+    return pkb->HasStmtUses(first_arg_);
   } else {
     //Example query: uses(5, "count")
-    //TODO: PKB call
-    return true;
+
+    return pkb->IsStmtUsing(first_arg_, second_arg_);
   }
 }
 
@@ -24,7 +23,9 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_synonym = declaration_map.count(first_arg_);
+
   bool is_second_arg_synonym = declaration_map.count(second_arg_);
+  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
 
   if (is_first_arg_synonym) {
     header.push_back(first_arg_);
@@ -36,18 +37,24 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
+  StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
+
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(s, v)
 
-    //TODO: PKB call
-  } else if (is_first_arg_synonym) {
-    //Example query: Uses(s, _) or Uses(s, "x")
+    pair_constraint = pkb->GetStmtUsesPair(arg_1_type);
+  } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
+    //Example query: Uses(s, _)
 
-    //TODO: PKB call
+    single_constraint = pkb->GetStmtUsesFirst(arg_1_type);
+  } else if (is_first_arg_synonym) {
+    //Example query: Uses(s, "x")
+
+    single_constraint = pkb->GetStmtUsing(arg_1_type, second_arg_);
   } else {
     //Example query: Uses(1, v)
 
-    //TODO: PKB call
+    single_constraint = pkb->GetStmtUses(first_arg_);
   }
 
   if (!single_constraint.empty()) {
