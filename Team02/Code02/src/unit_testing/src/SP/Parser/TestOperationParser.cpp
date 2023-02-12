@@ -199,24 +199,10 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     ConditionalOperation *root_cond_expr = new ConditionalOperation("!", root_cond_args);
     REQUIRE(actual->operator==(*root_cond_expr));
   }
-  SECTION("Check if ! '(' cond_expr ')' (e.g. ! (x > y) ) parses correctly") {
-    Parser::Line expr_line{new ConditionalOperatorToken("!", NOT), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"),
-                           new RelationalOperatorToken(">", GT), new NameToken("y"), new PunctuationToken(")", RIGHT_PARENTHESIS)};
+  SECTION("Check if cond_expr with missing cond_expr after ! [e.g. ! ( ] throws syntax error") {
+    Parser::Line expr_line{new ConditionalOperatorToken("!", NOT), new PunctuationToken("(", LEFT_PARENTHESIS)};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "while");
-    auto actual = expr_parser->ParseEntity(expr_line);
-    pair<Expression*, Expression*> rel_args;
-    rel_args.first = new Variable("x");
-    rel_args.second = new Variable("y");
-    RelationalOperation *rel = new RelationalOperation(">", rel_args);
-
-    pair<Expression*, Expression*> inner_cond_args;
-    inner_cond_args.first = rel;
-    ConditionalOperation *inner_cond_expr = new ConditionalOperation("rel_expr", inner_cond_args);
-
-    pair<Expression*, Expression*> root_cond_args;
-    root_cond_args.first = inner_cond_expr;
-    ConditionalOperation *root_cond_expr = new ConditionalOperation("!", root_cond_args);
-    REQUIRE(actual->operator==(*root_cond_expr));
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
   SECTION("Check if '(' cond_expr ')' '&&' or '||' '(' cond_expr ')' (e.g. (x < y) || (y >= 100) ) parses correctly") {
     Parser::Line expr_line{new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("x"), new RelationalOperatorToken("<", LT),
