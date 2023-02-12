@@ -10,7 +10,7 @@ class Expression : public Entity {
   virtual void Accept(ParserVisitor *visitor) = 0;
   [[nodiscard]] std::string GetExpressionType() const;
   [[nodiscard]] std::string GetName() const;
-  bool operator==(const Expression &other) const;
+  virtual bool operator==(const Expression &other) const;
  private:
   std::string expression_type_;
   std::string name_;

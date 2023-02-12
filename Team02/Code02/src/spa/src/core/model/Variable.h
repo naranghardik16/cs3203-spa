@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Expression.h"
-#include "Entity.h"
 
-class Variable : public Expression, public Entity {
+class Variable : public Expression {
  public:
   Variable(std::string name);
   void Accept(ParserVisitor *visitor) override;
