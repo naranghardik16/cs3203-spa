@@ -55,4 +55,3 @@ Expression *ArithmeticOperationParser::Factor() {
   GetNext();
   return term;
 }
-

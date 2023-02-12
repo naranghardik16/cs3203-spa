@@ -10,6 +10,7 @@ Operation *ConditionalOperationParser::Parse() {
     GetNext();
     if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
       GetNext();
+      this->SetIsSubExpr(true);
       auto cond_expr = Parse();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
@@ -20,6 +21,7 @@ Operation *ConditionalOperationParser::Parse() {
     }
   } else if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
     GetNext();
+    this->SetIsSubExpr(true);
     auto left_cond_expr = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
       throw SyntaxErrorException("Missing )");
@@ -34,6 +36,7 @@ Operation *ConditionalOperationParser::Parse() {
 
     if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
       GetNext();
+      this->SetIsSubExpr(true);
       auto right_cond_expr = Parse();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
@@ -46,9 +49,9 @@ Operation *ConditionalOperationParser::Parse() {
 
   } else { // rel_expr
     RelationalOperationParser *relational_operation_parser = new RelationalOperationParser();
-    relational_operation_parser->InheritArgs(GetPos(), *GetLine());
+    relational_operation_parser->InheritArgs(GetPos(), *GetLine(), GetIsSubExpr());
     auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
-
+    this->SetIsSubExpr(false);
     if (rel_expr) {
       pair<Expression*, Expression*> args;
       args.first = rel_expr;

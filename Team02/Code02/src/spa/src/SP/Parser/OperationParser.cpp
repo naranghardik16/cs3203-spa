@@ -28,11 +28,12 @@ ExpressionParser::Line *OperationParser::GetLine() {
   return &line_;
 }
 
-void OperationParser::InheritArgs(int *pos, ExpressionParser::Line line) {
+void OperationParser::InheritArgs(int *pos, ExpressionParser::Line line, bool is_sub_expr) {
   pos_ = pos;
   line_ = line;
   curr_token_ = line_.at(*pos_ - 1);
   curr_token_value_ = curr_token_->GetValue();
+  is_sub_expr_ = is_sub_expr;
 }
 
 bool OperationParser::IsEndOfLine() {
@@ -53,5 +54,22 @@ Expression *OperationParser::ParseEntity(TokenStream &tokens) {
 
 Expression *OperationParser::ParseEntity(Line &line) {
   Setup(line);
-  return Parse();
+  Expression *result = Parse();
+  ValidateForBalancedParenthesis();
+  return result;
+}
+
+bool OperationParser::GetIsSubExpr() {
+  return is_sub_expr_;
+}
+
+void OperationParser::SetIsSubExpr(bool is_sub_expr) {
+  is_sub_expr_ = is_sub_expr;
+}
+
+
+void OperationParser::ValidateForBalancedParenthesis() {
+  if (!is_sub_expr_ && !IsEndOfLine()) {
+    throw SyntaxErrorException("Unbalanced parenthesis ()");
+  }
 }

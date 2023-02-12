@@ -25,6 +25,7 @@ Expression *RelationalOperationParser::Parse() {
 
 Expression *RelationalOperationParser::Factor() {
   ArithmeticOperationParser *arithmetic_operation_parser = new ArithmeticOperationParser();
-  arithmetic_operation_parser->InheritArgs(GetPos(), *GetLine());
+  arithmetic_operation_parser->InheritArgs(GetPos(), *GetLine(), GetIsSubExpr());
+  arithmetic_operation_parser->SetIsSubExpr(true);
   return arithmetic_operation_parser->ParseEntity(*GetLine());
 }
