@@ -1,4 +1,5 @@
 #include <catch.hpp>
+
 #include "PKB/Stores/ModifiesStore.h"
 
 TEST_CASE("Testcases for Modifies Store") {
