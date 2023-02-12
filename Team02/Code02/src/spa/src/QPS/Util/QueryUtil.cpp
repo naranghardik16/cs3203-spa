@@ -4,13 +4,12 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Util/PQLConstants.h"
 #include "General/StatementTypeEnum.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
 
 /*
 * Checks if the expression is a variable synonym
 * */
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length()-1] == '_';
+  bool result = s[0] == '_' && s[s.length()-1] == '_' &&s.length() > 2;
   return result;
 }
 
@@ -181,19 +180,23 @@ bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expres
 /**
  * Returns a statement type enum based on a given synonym
  */
-StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& expression) {
-  if (IsIfSynonym(declaration, expression)) {
+StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& synonym) {
+  if (IsIfSynonym(declaration, synonym)) {
     return StatementType::IF;
-  } else if (IsReadSynonym(declaration, expression)) {
+  } else if (IsReadSynonym(declaration, synonym)) {
     return StatementType::READ;
-  } else if (IsPrintSynonym(declaration, expression)) {
+  } else if (IsPrintSynonym(declaration, synonym)) {
     return StatementType::PRINT;
-  } else if (IsCallSynonym(declaration, expression)) {
+  } else if (IsCallSynonym(declaration, synonym)) {
     return StatementType::CALL;
-  } else if (IsAssignSynonym(declaration, expression)) {
+  } else if (IsAssignSynonym(declaration, synonym)) {
     return StatementType::ASSIGN;
-  } else {
+  } else if (IsWhileSynonym(declaration, synonym)){
     return StatementType::WHILE;
+  } else if (IsStatementSynonym(declaration, synonym)){
+    return StatementType::STATEMENT;
+  } else {
+    return StatementType::UNK;
   }
 }
 

@@ -9,21 +9,20 @@ bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRe
   if (is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
     //Example query: Follow*(_, _)
 
-    //TODO: PKB call
+    return pkb->HasFollowsStarRelationship();
   } else if (is_first_arg_a_wildcard && !is_second_arg_a_wildcard) {
     //Example query: Follow*(_, 1)
 
-    //TODO: PKB call
+    return pkb->HasFollowsStarBy(second_arg_);
   } else if (!is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
     //Example query: Follow*(1, _)
 
-    //TODO: PKB call
+    return pkb->HasFollowsStar(first_arg_);
   } else {
     //Example query: Follow*(1, 6)
 
-    //TODO: PKB call
+    return pkb->IsFollowsStar(first_arg_, second_arg_);
   }
-  return true;
 }
 
 std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
@@ -48,26 +47,29 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
+  StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
+  StatementType arg_2_type = QueryUtil::GetStatementType(declaration_map, second_arg_);
+
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Follows* (s,s)
 
-    //TODO: pkb call
+    pair_constraint = pkb->GetFollowsStarPairs(arg_1_type, arg_2_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
     //Example query: Follows* (s,_)
 
-    //TODO: pkb call
+    single_constraint = pkb->GetFollowsStarFirst(arg_1_type);
   } else if (is_first_arg_synonym) {
     //Example query: Follows* (s, 1)
 
-    //TODO: pkb call
+    single_constraint = pkb->GetFollowsStarBy(second_arg_, arg_1_type);
   } else if (is_first_arg_a_wildcard) {
     //Example query: Follows* (_, s)
 
-    //TODO: pkb call
+    single_constraint = pkb->GetFollowsStarSecond(arg_2_type);
   } else {
     //Example query: Follows* (1, s)
 
-    //TODO: pkb call
+    single_constraint = pkb->GetFollowsStar(first_arg_, arg_2_type);
   }
 
   if (!single_constraint.empty()) {
