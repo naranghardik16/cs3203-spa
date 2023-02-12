@@ -1,8 +1,8 @@
-#include <string>
 #include "StatementStore.h"
 
+StatementStore::StatementStore() = default;
 
-StatementStore::~StatementStore() {}
+StatementStore::~StatementStore() = default;
 
 void StatementStore::addStatementAndField(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::FIELD field) {
   this->statement_field_store.insert(statement_number, field);

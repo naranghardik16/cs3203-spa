@@ -22,7 +22,7 @@ bool PqlEvaluator::IsBooleanConstraint(const SyntaxPair& pair) {
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
-  std::shared_ptr<Result> evaluation_result = EvaluateTrivialSelectStatement();
+  std::shared_ptr<Result> evaluation_result = EvaluateBasicSelectStatement();
 
   //!Evaluate and remove all boolean constraints first
   for (int i=0; i<syntax_pair_list_.size();i++) {
@@ -58,7 +58,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   return results;
 }
 
-std::shared_ptr<Result> PqlEvaluator::EvaluateTrivialSelectStatement() {
+std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelectStatement() {
   ResultHeader header;
   header.push_back(synonym_);
   ResultTable table;
