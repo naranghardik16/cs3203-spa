@@ -1,11 +1,8 @@
-//#include "OneToManyStore.h"
+template<typename K, typename V>
+OneToManyStore<K, V>::OneToManyStore() {};
 
-
-//template<typename K, typename V>
-//OneToManyStore<K, V>::OneToManyStore() {};
-
-//template<typename K, typename V>
-//OneToManyStore<K, V>::~OneToManyStore() {};
+template<typename K, typename V>
+OneToManyStore<K, V>::~OneToManyStore() {};
 
 template<typename K, typename V>
 void OneToManyStore<K, V>::insert(K key, V value) {
@@ -16,11 +13,36 @@ void OneToManyStore<K, V>::insert(K key, V value) {
 
 template<typename K, typename V>
 bool OneToManyStore<K, V>::contains(K key, V value) {
-  return this->backward_map_.count(key) && this->backward_map_[key] == value;
+  auto iter = this->forward_map_.find(key);
+  if (iter == this->forward_map_.end()) {
+    return false;
+  }
+  return iter->second.count(value) > 0;
+//  return this->backward_map_.count(key) && this->backward_map_[key] == value;
+}
+
+template<typename K, typename V>
+bool OneToManyStore<K, V>::containsKey(K key) {
+  return this->forward_map_.count(key);
+}
+
+template<typename K, typename V>
+bool OneToManyStore<K, V>::containsValue(V value) {
+  return this->backward_map_.count(value);
 }
 
 template<typename K, typename V>
 std::size_t OneToManyStore<K, V>::length() {
+  return this->size;
+}
+
+template<typename K, typename V>
+std::size_t OneToManyStore<K, V>::numberOfKeys() {
+  return this->forward_map_.size();
+}
+
+template<typename K, typename V>
+std::size_t OneToManyStore<K, V>::numberOfValues() {
   return this->size;
 }
 
@@ -35,10 +57,10 @@ K OneToManyStore<K, V>::retrieveFromValue(V value) {
 }
 
 template<typename K, typename V>
-std::vector<std::pair<K, V>> OneToManyStore<K, V>::retrieveAll() {
-  std::vector<std::pair<K, V>> result;
+std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToManyStore<K, V>::retrieveAll() {
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
   for (auto p: this->backward_map_) {
-      result.push_back(std::make_pair<K, V>(p.second, p.first));
+      result.insert(std::make_pair(p.second, p.first));
   }
   return result;
 }

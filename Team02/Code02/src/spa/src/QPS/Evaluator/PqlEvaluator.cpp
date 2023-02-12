@@ -22,9 +22,7 @@ bool PqlEvaluator::IsBooleanConstraint(const SyntaxPair& pair) {
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
-  Map map_test = declaration_map_;
-
-  std::shared_ptr<Result> evaluation_result = EvaluateTrivialSelectStatement();
+  std::shared_ptr<Result> evaluation_result = EvaluateBasicSelectStatement();
 
   //!Evaluate and remove all boolean constraints first
   for (int i=0; i<syntax_pair_list_.size();i++) {
@@ -35,8 +33,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
       auto evaluator = clause->CreateClauseEvaluator(synonym_, declaration_map_);
       auto bool_output = evaluator->EvaluateBooleanConstraint(pkb_);
       if (bool_output == false) {
-        std::unordered_set<std::string> empty_set;
-        return empty_set;
+        return {};
       }
       syntax_pair_list_.erase(syntax_pair_list_.begin()+i);
     }
@@ -45,42 +42,46 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
   for (const auto &kClause : syntax_pair_list_) {
     auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_);
-    evaluation_result = evaluator->EvaluateClause(pkb_);
-    //store result into table
-    //get intersection if needed
+    std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
+
+    //get intersection
+    evaluation_result->JoinResult(intermediate_result);
+
+    //Whenever results become empty stop and return empty set
+    if (evaluation_result->table_.empty()) {
+      return {};
+    }
   }
 
-
-  ResultTable result_table = evaluation_result->GetResultTable();
-  auto results = QueryUtil::ConvertToSet(result_table);
+  std::unordered_set<std::string> results = evaluation_result->ProjectResult(synonym_);
 
   return results;
 }
 
-std::shared_ptr<Result> PqlEvaluator::EvaluateTrivialSelectStatement() {
+std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelectStatement() {
   ResultHeader header;
   header.push_back(synonym_);
   ResultTable table;
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetVariables());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetVariables());
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    table =  QueryUtil::ConvertSetToResultRowFormat(pkb_->GetConstants());
+    table =  QueryUtil::ConvertSetToResultTableFormat(pkb_->GetConstants());
   } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetAssignStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
   } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetIfStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
   } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetStatements());
   } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetWhileStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
   } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetPrintStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
   } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetReadStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
   } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetCallStatements());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
   } else  {
-    table = QueryUtil::ConvertSetToResultRowFormat(pkb_->GetProcedures());
+    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetProcedures());
   }
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;

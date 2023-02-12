@@ -20,8 +20,9 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/AbstractDataModels/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Types/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Clause/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/PatternClauseEvaluator/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/SuchThatClauseEvaluator/*.h")
 
-add_library(spa ${srcs} ${headers} src/QPS/Result.h)
+add_library(spa ${srcs} ${headers} src/QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.cpp src/QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.h)
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

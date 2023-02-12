@@ -13,10 +13,6 @@
 
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
 
-/*
- * Splits the query_extra_whitespace_removed into declarations and select statement then adds this values into a map.
- * Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
- */
 QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
   std::string delimiter = ";";
   std::vector<std::string> declaration_statements;
@@ -33,10 +29,6 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
 
   std::string select_statement = string_util::Trim(temp);
 
-  if (declaration_statements.empty()) {
-    throw SyntaxErrorException("There is no declaration statement identified");
-  }
-
   if (select_statement.empty()) {
     throw SyntaxErrorException("There is no select statement identified");
   }
@@ -51,21 +43,15 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
   return declaration_select_statement_pair;
 }
 
-/*
- * Finds the start of a clause using regex.
- */
-size_t QpsTokenizer::FindStartOfSubClauseIndex(const std::string& substr_after_synonym, const std::regex& rgx) {
+size_t QpsTokenizer::FindStartOfSubClauseIndex(const std::string& clause, const std::regex& rgx) {
   std::smatch match;
-  std::regex_search(substr_after_synonym, match, rgx);
+  std::regex_search(clause, match, rgx);
   if (match.empty()){
     return std::string::npos;
   }
-  return substr_after_synonym.find(match[0]);
+  return clause.find(match[0]);
 }
 
-/*
- * Searches for the start of subclauses (e.g. such that, pattern) and returns their index
- */
 std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& statement) {
   std::vector<size_t> index_list;
 
@@ -74,7 +60,6 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
     index_list.push_back(such_that_index);
   }
 
-
   size_t pattern_index = FindStartOfSubClauseIndex(statement, pql_constants::kPatternRegex);
   if (pattern_index != std::string::npos) {
     index_list.push_back(pattern_index);
@@ -82,18 +67,25 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
 
   sort(index_list.begin(), index_list.end()); //sort ascending order
 
+  //! if index list is empty then the subclauses do not contain the valid subclause markers like "such that"
+  if (index_list.empty()) {
+    throw SyntaxErrorException("Tokenizer GetIndexListOfSubclauses: No valid subclauses could be parsed out");
+  }
+  //! If there are subclauses, then we should have a sub-clause start index at 0 and not e.g. at index 5
+  if (index_list[0] > 0) {
+    throw SyntaxErrorException("Tokenizer GetIndexListOfSubclauses: Invalid subclause present");
+  }
+
   return index_list;
 }
 
-/*
- * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for further validation.
- */
 std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations) {
   std::unordered_map<std::string, std::string> synonym_to_design_entity_map;
   std::string design_entity;
 
   for (const std::string &kDeclaration : declarations) {
     design_entity = string_util::GetFirstWord(kDeclaration);
+
     if (!QueryUtil::IsDesignEntity(design_entity)) {
       throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }
@@ -115,9 +107,6 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
   return synonym_to_design_entity_map;
 }
 
-/*
- * Parses for the synonym in the clause and adds the synonym into the map.
- */
 std::string QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
   std::vector<std::string> synonym_vector;
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
@@ -128,22 +117,16 @@ std::string QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed
   return synonym;
 }
 
-/*
- * Extracts the entity (e.g. the relationship reference or the syn-assign), parameters in the relationship reference
- * from a such that clause or pattern clause.
- * Throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found.
- * Returns an empty map if the clause is empty because it is optional to have a such that clause.
- */
 SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause, const std::string& clause_start_indicator) {
   size_t start_of_rel_ref_index = clause.find(clause_start_indicator) + clause_start_indicator.length();
   size_t opening_bracket_index = clause.find(pql_constants::kOpeningBracket);
   size_t comma_index = clause.find(pql_constants::kComma);
   size_t closing_bracket_index = clause.find_last_of(pql_constants::kClosingBracket);
 
-  //check for concrete syntax like ( , ) and keywords like such,that or pattern
+  //check for concrete syntax like ( , ) and keywords like such that or pattern
   if ((start_of_rel_ref_index == std::string::npos) || (opening_bracket_index == std::string::npos) ||
       (comma_index == std::string::npos) || (closing_bracket_index == std::string::npos)) {
-    throw SyntaxErrorException("There is syntax error in the clause");
+    throw SyntaxErrorException("There is syntax error with the subclauses");
   }
 
   std::string relationship = string_util::Trim(clause.substr(start_of_rel_ref_index,
@@ -157,7 +140,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   std::string remaining_clause = string_util::Trim(clause.substr(closing_bracket_index+1));
 
   if (!remaining_clause.empty()) {
-    throw SyntaxErrorException("There are extra characters after the end of the clause");
+    throw SyntaxErrorException("There is syntax error with the subclauses and remaining characters that remain unparsed");
   }
 
   SyntaxPair clause_syntax;
@@ -170,9 +153,6 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   return clause_syntax;
 }
 
-/*
- * Parses for the such that clause and pattern clause in the clause and adds the synonym into the map.
- * */
 std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const std::string& statement) {
 
   std::string sub_clause;

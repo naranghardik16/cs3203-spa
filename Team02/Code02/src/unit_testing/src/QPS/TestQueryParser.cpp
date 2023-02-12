@@ -18,7 +18,7 @@ SyntaxPair CreateCorrectSyntaxPairParser(std::string entity, std::string first_p
 TEST_CASE("Test Query Parser") {
   auto qp = std::make_shared<QueryParser>();
 
-  SECTION("Test valid query") {
+  SECTION("Test valid query with random spacing") {
     std::string query("assign a;\nSelect a such that Uses(a, \"count\") pattern a(_,       _  \"  y\" _)");
     auto parser_output = qp->ParseQuery(query);
     auto synonym = parser_output->GetSynonym();
@@ -47,8 +47,8 @@ TEST_CASE("Test Query Parser") {
   }
 
 
-  SECTION("Test valid query") {
-    std::string query("assign a;\nSelect a pattern a (\"x\", _\"x\"_) such that Uses (a, \"x\")");
+  SECTION("Test valid query with 1 pattern and 1 such that with random spacing") {
+    std::string query("assign a;\nSelect   a pattern   a (  \"x\"   ,     _\"x\"_   )    such that      Uses   (      a,  \"x\" )  ");
     auto parser_output = qp->ParseQuery(query);
     auto synonym = parser_output->GetSynonym();
     auto declaration_map = parser_output->GetDeclarationMap();
@@ -74,9 +74,9 @@ TEST_CASE("Test Query Parser") {
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }
 
-  SECTION("Test valid query") {
+  SECTION("Test valid query with repeated terminal names") {
     std::string query
-        ("assign pattern; variable Select;\nSelect Select pattern pattern(Select, _\"x\"_) such that Uses(pattern, Select)");
+        ("    assign     pattern; variable      Select        ;\nSelect Select such that Uses(pattern, Select) pattern pattern(Select, _\"x\"_)");
     auto parser_output = qp->ParseQuery(query);
     auto synonym = parser_output->GetSynonym();
     auto declaration_map = parser_output->GetDeclarationMap();
@@ -88,8 +88,8 @@ TEST_CASE("Test Query Parser") {
     std::shared_ptr<ClauseSyntax>
         such_that_syntax_ptr = std::make_shared<SuchThatClauseSyntax>(such_that_syntax_pair);
     ClauseSyntaxPtrList correct_syntax_ptr_list;
-    correct_syntax_ptr_list.push_back(pattern_syntax_ptr);
     correct_syntax_ptr_list.push_back(such_that_syntax_ptr);
+    correct_syntax_ptr_list.push_back(pattern_syntax_ptr);
 
     for (int i = 0; i < clause_syntax_ptr_list.size(); i++) {
       REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
@@ -104,7 +104,7 @@ TEST_CASE("Test Query Parser") {
   }
 
 
-  SECTION("Test valid query") {
+  SECTION("Test valid query with a basic select statement") {
     std::string query("variable k; Select k");
     auto parser_output = qp->ParseQuery(query);
     auto synonym = parser_output->GetSynonym();
@@ -118,16 +118,96 @@ TEST_CASE("Test Query Parser") {
     REQUIRE(correct_synonym == synonym);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
-
   }
 
-  SECTION("Test invalid query") {
-    std::string query("variable v; Select a");
+
+  SECTION("Test invalid query with invalid such that") {
+    std::string query("assign a;Select assign suchthatModifies(assign,\"count\") pattern a(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query with invalid such that due to multiple extra characters") {
+    std::string query("assign a;Select assign such that Uses((assign,\"count\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;Select assign such that Uses(assign,\"count\"))";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;Select assign such that Uses(assign,\"count\"))";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;Select assign such that a Uses(assign,\"count\")";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+
+  SECTION("Test invalid query with invalid pattern") {
+    std::string query("assign a;Select assign such that Modifies(assign,\"count\") patterna(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with 2 syntactically invalid subclauses") {
+    std::string query("assign pattern;Select pattern such thatModifies(pattern,\"count\") patternpattern(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query with no declarations") {
+    std::string query("Select a");
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
   }
 
-  // test repeated terminal names
-  //test random spaces with modifies
+
+  SECTION("Test invalid query with no Select statement") {
+    std::string query("assign a;");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with only Select keyword") {
+    std::string query("assign a; Select");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query with missing select statement") {
+    std::string query("assign Select;Select such that Modifies(Select,\"count\") pattern Select(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;a such that Modifies(a,\"count\") pattern a(\"count\", _)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with missing synonym") {
+    std::string query("assign a;Select such that Modifies(a,\"count\") pattern a(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with syntactically wrong synonym") {
+    std::string query("assign 1a,b;Select 1a such that Follows*(1a,b) pattern a(\"count\", _)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with no declarations") {
+    std::string query("Select assign suchthat;Modifies(assign,\"count\") pattern a(\"count\", _);");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with syntactically invalid design entity") {
+    std::string query("statement s;Select s such that Parent*(s,\"count\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with no comma") {
+    std::string query("statement s s1;Select s such that Parent*(s,\"count\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query with extra characters at the end") {
+    std::string query("assign a;Select assign suchthat;Modifies(assign,\"count\") pattern a(\"count\", _);");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
 
   SECTION("Test invalid query") {
     std::string query("variables v; Select a");

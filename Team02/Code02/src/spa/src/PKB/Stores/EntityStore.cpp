@@ -1,24 +1,21 @@
 #include "EntityStore.h"
 
-#include <iostream>
+EntityStore::EntityStore() = default;
 
-//EntityStore::~EntityStore() {}
+EntityStore::~EntityStore() = default;
 
 PkbTypes::INDEX EntityStore::addVariable(PkbTypes::VARIABLE variable) {
-  PkbTypes::INDEX index = variable_store_.length() + 1;
-  variable_store_.insert(variable, index);
+  variable_store_.insert(std::move(variable), variable_store_.length() + 1);
   return 1;
 }
 
 PkbTypes::INDEX EntityStore::addProcedure(PkbTypes::PROCEDURE procedure) {
-  PkbTypes::INDEX index = procedure_store_.length() + 1;
-  procedure_store_.insert(procedure, index);
+  procedure_store_.insert(std::move(procedure), procedure_store_.length() + 1);
   return 1;
 }
 
 PkbTypes::INDEX EntityStore::addConstant(PkbTypes::CONSTANT constant) {
-  PkbTypes::INDEX index = constant_store_.length() + 1;
-  constant_store_.insert(constant, index);
+  constant_store_.insert(std::move(constant), constant_store_.length() + 1);
   return 1;
 }
 

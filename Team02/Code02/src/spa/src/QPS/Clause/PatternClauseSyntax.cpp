@@ -14,7 +14,7 @@ bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
 }
 
 std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
-  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(s, declaration_map, ClauseSyntax::GetSyntaxPair());
+  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   return eval;
 }
 
