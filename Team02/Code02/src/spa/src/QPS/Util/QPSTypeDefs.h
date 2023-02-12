@@ -4,8 +4,10 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
-// Forward declarations of classes if any
 
+/**
+ * Organises all type definitions that are used in QPS
+ */
 typedef std::vector<std::string> Declarations;
 typedef std::string SelectStatement;
 typedef std::pair<Declarations, SelectStatement> QueryStatementPair;

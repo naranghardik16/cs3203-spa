@@ -21,28 +21,16 @@ TEST_CASE("Test if the expression parser works as expected") {
   }
 
   SECTION("Invalid syntax") {
-    try {
-      spec = "_\"x\"";
-      output = ExpressionParser::ParseExpressionSpec(spec);
-    } catch (const SyntaxErrorException &e) {
-      REQUIRE(1);
+    spec = "";
+    REQUIRE_THROWS_AS(ExpressionParser::ParseExpressionSpec(spec), SyntaxErrorException);
 
-    }
+    spec = "_\"x\"";
+    REQUIRE_THROWS_AS(ExpressionParser::ParseExpressionSpec(spec), SyntaxErrorException);
 
-    try {
-      spec = "_x\"_";
-      output = ExpressionParser::ParseExpressionSpec(spec);
-    } catch (const SyntaxErrorException &e) {
+    spec = "_x\"_";
+    REQUIRE_THROWS_AS(ExpressionParser::ParseExpressionSpec(spec), SyntaxErrorException);
 
-      REQUIRE(1);
-    }
-
-
-    try {
-      spec = "_\"1x\"_";
-      output = ExpressionParser::ParseExpressionSpec(spec);
-    } catch (const SyntaxErrorException& e) {
-      REQUIRE(1);
-    }
+    spec = "_\"1x\"_";
+    REQUIRE_THROWS_AS(ExpressionParser::ParseExpressionSpec(spec), SyntaxErrorException);
   }
 }
