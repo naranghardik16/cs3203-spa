@@ -30,6 +30,21 @@ bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) 
 TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
   Tokenizer* tokenizer = new Tokenizer();
 
+  SECTION("Test if it works for variation of spacing between tokens") {
+    string input = "while (i>0&&i<=10) {";
+    std::istringstream is;
+    is.str(input);
+
+    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    Parser::TokenStream expected = {
+        {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
+         new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
+         new NameToken("i"), new RelationalOperatorToken("<=", LTE), new IntegerToken("10"),
+         new PunctuationToken(")", RIGHT_PARENTHESIS), new PunctuationToken("{", LEFT_BRACE)}
+    };
+    REQUIRE(CheckTokenStreamEquality(*actual, expected));
+  }
+
   SECTION("Test if it works for input with normal syntax + multiple spacing") {
     string input = "while (i > 0 && i <= 10) {\n"
                    "  x = x + z * 5 / 2;\n"
@@ -104,35 +119,4 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
 }
 
-/*
-TEST_CASE("Checks if SP Tokenizer::MatchOtherToken works as expected") {
-  string arithmetic_input = "x = x + z * 5 / 2;";
-  string conditional_and_relational_input = "while (i > 0 && i <= 10)";
-  Tokenizer* tokenizer = new Tokenizer();
-  int skip_index = 0;
-  SECTION("Test if it returns the ArithmeticOperatorToken with the correct ArithmeticOperatorType") {
-    Token *t = tokenizer->MatchOtherToken(6, arithmetic_input, &skip_index);
-    ArithmeticOperatorToken *aot = new ArithmeticOperatorToken("+", PLUS);
-    REQUIRE(t->Equals(*aot));
-  }
-
-  SECTION("Test if it returns the ConditionalOperatorToken with the correct ConditionalOperatorType") {
-    Token *t = tokenizer->MatchOtherToken(13, conditional_and_relational_input, &skip_index);
-    ConditionalOperatorToken *cot = new ConditionalOperatorToken("&&", AND);
-    REQUIRE(t->Equals(*cot));
-  }
-
-  SECTION("Test if it returns the RelationalOperatorToken with the correct RelationalOperatorType") {
-    Token *t = tokenizer->MatchOtherToken(18, conditional_and_relational_input, &skip_index);
-    RelationalOperatorToken *rot = new RelationalOperatorToken("<=", LTE);
-    REQUIRE(t->Equals(*rot));
-  }
-
-  SECTION("Test if it returns the PunctuationToken with the correct PunctuationType") {
-    Token *t = tokenizer->MatchOtherToken(6, conditional_and_relational_input, &skip_index);
-    PunctuationToken *pt = new PunctuationToken("(", LEFT_PARENTHESIS);
-    REQUIRE(t->Equals(*pt));
-  }
-}
-*/
 

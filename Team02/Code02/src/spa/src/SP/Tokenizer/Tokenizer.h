@@ -59,7 +59,7 @@ class Tokenizer {
 
   vector<string> SplitLines(istream & stream);
   Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
-  void FormNameOrInteger(int *start_index, int *end_index, int current_index);
+  void FormNameOrInteger(int *start_index, int current_index);
   Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
  public:
   Tokenizer();
