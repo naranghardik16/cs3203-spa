@@ -57,19 +57,18 @@ TEST_CASE("Check if ExtractCondition works") {
 }
 
 TEST_CASE("Check if EndOfThenStatements is detected") {
-  Parser::Line else_line{
-      new PunctuationToken("}", RIGHT_BRACE), new NameToken("else"),
-      new PunctuationToken("{", LEFT_BRACE)
+  Parser::Line end_of_then{
+      new PunctuationToken("}", RIGHT_BRACE)
   };
   Parser::Line else_line_invalid{
-      new PunctuationToken("}", RIGHT_BRACE),
+      new NameToken("else"),
       new PunctuationToken("{", LEFT_BRACE)
   };
   auto *if_parser = new IfStatementParser();
   SECTION("Check for validation of syntax of end of then statements") {
     REQUIRE(if_parser->IsEndOfThenStatement(else_line_invalid) == false);
   }SECTION("Check if start of else statement is detected") {
-    REQUIRE(if_parser->IsEndOfThenStatement(else_line) == true);
+    REQUIRE(if_parser->IsEndOfThenStatement(end_of_then) == true);
   }
 }
 
@@ -84,8 +83,9 @@ TEST_CASE("Check if IfStatementParser detects then and else statements") {
   Parser::Line then_stmt
       {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
        new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+  Parser::Line end_of_then{new PunctuationToken("}", RIGHT_BRACE)};
   Parser::Line else_line{
-      new PunctuationToken("}", RIGHT_BRACE), new NameToken("else"),
+      new NameToken("else"),
       new PunctuationToken("{", LEFT_BRACE)
   };
   Parser::Line else_stmt
@@ -97,7 +97,8 @@ TEST_CASE("Check if IfStatementParser detects then and else statements") {
 
   try {
     Parser::TokenStream
-        tokens{if_line_valid, then_stmt, else_line, else_stmt, end_line};
+        tokens
+        {if_line_valid, then_stmt, end_of_then, else_line, else_stmt, end_line};
     auto if_parser = new IfStatementParser();
     auto if_stmt = if_parser->ParseEntity(tokens);
     REQUIRE(if_stmt->GetStatementNumber() == 1);
