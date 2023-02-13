@@ -455,6 +455,83 @@ TEST_CASE("Test Uses Procedure Clause Evaluator") {
     std::unordered_set<std::string> correct_set({"2", "6", "7"});
     REQUIRE(eval_result == correct_set);
   }
+
+  SECTION("Uses(\"Main\", _), boolean check fails") {
+    std::string query = "assign a;Select a such that Uses(\"Main\",_)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(\"anya\", \"x\"), boolean check passes") {
+    std::string query = "assign a;Select a such that Uses(\"anya\",\"x\")";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(\"Main\", \"x\"), boolean check fails") {
+    std::string query = "assign a;Select a such that Uses(\"Main\",\"x\")";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(\"anya\", v)") {
+    std::string query = "variable v;Select v such that Uses(\"anya\",v)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"x", "y"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(p, _)") {
+    std::string query = "procedure p;Select p such that Uses(p,_)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"anya"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(p, \"x\")") {
+    std::string query = "procedure p;Select p such that Uses(p,\"x\")";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"anya"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Uses(p, v)") {
+    std::string query = "procedure p;variable v;Select p such that Uses(p,v)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"anya"});
+    REQUIRE(eval_result == correct_set);
+  }
 }
 
 TEST_CASE("Make sure Follows Clause Evaluator Works") {
