@@ -121,7 +121,8 @@ class PkbReadFacade {
    * @param statement_type - The type of statements required.
    * @return A set of variable names with the given constraints.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable,
+                                                                                   StatementType statement_type);
 
   /**
    * Retrieves the statements of a given statement type that have a Modifies relationship.
@@ -214,7 +215,8 @@ class PkbReadFacade {
    * @param variable - The variable to be checked for.
    * @return A set of statement numbers representing statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type,
+                                                                               std::string variable);
 
   /**
    * Checks if Uses(statement_number, v) holds for given statement_number and any variable v.

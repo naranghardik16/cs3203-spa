@@ -78,5 +78,15 @@ class PkbWriteFacade {
    * @param statement_number_1 - The statement number of the first statement in the follows relationship.
    * @param statement_number_2 - The statement number of the second statement in the follows relationship.
    */
-  void AddFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER statement_number_2) const;
+  void AddFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER
+  statement_number_2) const;
+
+  /**
+   * Adds a parent relationship between two statements into the PKB.
+   *
+   * @param statement_number_1 - The statement number of the first statement in the parent relationship.
+   * @param statement_number_2 - The statement number of the second statement in the parent relationship.
+   */
+  void AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER
+  statement_number_2) const;
 };
