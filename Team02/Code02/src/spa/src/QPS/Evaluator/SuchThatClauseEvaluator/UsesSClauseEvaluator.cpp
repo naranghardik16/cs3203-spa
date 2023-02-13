@@ -12,7 +12,7 @@ bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   } else {
     //Example query: uses(5, "count")
 
-    return pkb->IsStmtUsing(first_arg_, second_arg_);
+    return pkb->HasUsesStatementRelationship(first_arg_, second_arg_);
   }
 }
 
@@ -42,19 +42,19 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(s, v)
 
-    pair_constraint = pkb->GetStmtUsesPair(arg_1_type);
+    pair_constraint = pkb->GetUsesStatementVariablePairs(arg_1_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
     //Example query: Uses(s, _)
 
-    single_constraint = pkb->GetStmtUsesFirst(arg_1_type);
+    single_constraint = pkb->GetStatementsThatUses(arg_1_type);
   } else if (is_first_arg_synonym) {
     //Example query: Uses(s, "x")
 
-    single_constraint = pkb->GetStmtUsing(arg_1_type, second_arg_);
+    single_constraint = pkb->GetStatementsUsesVariable(arg_1_type, second_arg_);
   } else {
     //Example query: Uses(1, v)
 
-    single_constraint = pkb->GetStmtUses(first_arg_);
+    single_constraint = pkb->GetVariablesUsedByStatement(first_arg_);
   }
 
   if (!single_constraint.empty()) {
