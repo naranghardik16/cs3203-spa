@@ -40,19 +40,19 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(p, v)
 
-    pair_constraint = pkb->GetProcUsesPair();
+    pair_constraint = pkb->GetUsesProcedureVariablePairs();
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
     //Example query: Uses(p, _)
 
-    single_constraint = pkb->GetProcUsesFirst();
+    single_constraint = pkb->GetProceduresThatUse();
   } else if (is_first_arg_synonym && !is_second_arg_a_wildcard){
     //Example query: Uses(p, "x")
 
-    single_constraint = pkb->GetProcUsing(second_arg_);
+    single_constraint = pkb->GetProceduresUsesVariable(second_arg_);
   } else {
     //Example query: Uses("Main", v)
 
-    single_constraint = pkb->GetProcUses(first_arg_);
+    single_constraint = pkb->GetVariablesUsedByProcedure(first_arg_);
   }
 
   if (!single_constraint.empty()) {

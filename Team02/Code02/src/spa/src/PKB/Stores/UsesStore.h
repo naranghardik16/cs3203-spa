@@ -105,7 +105,4 @@ class UsesStore {
   ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE> uses_statement_variable_;
   ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::VARIABLE> uses_procedure_variable_;
 
-
-
-
 };
