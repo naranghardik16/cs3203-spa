@@ -267,6 +267,70 @@ bool StubPkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
 }
 
+//! Follows* API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowsStarPairs(StatementType statement_type_1,
+                                                                            StatementType statement_type_2) {
+  return {{"1", "2"}, {"1", "3"}, {"2", "3"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStar(std::string statement_number,
+                                                                         StatementType statement_type) {
+  if (statement_number == "1") {
+    return {"2", "3"};
+  } else if (statement_number == "2") {
+    return {"3"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarBy(std::string statement_number,
+                                                                           StatementType statement_type) {
+  if (statement_number == "2") {
+    return {"1"};
+  } else if (statement_number == "3") {
+    return {"1", "2"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarFirst(StatementType statement_type){
+  return {"1", "2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarSecond(StatementType statement_type) {
+  return {"2", "3"};
+}
+
+bool StubPkbReadFacade::HasFollowsStarRelationship(){
+  return true;
+}
+
+bool StubPkbReadFacade::HasFollowsStar(std::string statement_number) {
+  if (statement_number == "1" || statement_number == "2") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool StubPkbReadFacade::HasFollowsStarBy(std::string statement_number) {
+  if (statement_number == "2" || statement_number == "3") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool StubPkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
+  if (statement_number_1 == "1" && statement_number_2 == "2") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 //! Parent API
 
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {

@@ -64,6 +64,17 @@ class StubPkbReadFacade: public PkbReadFacade {
   bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) override;
   bool IsAnyFollowsRelationshipPresent() override;
 
+  //!API for FollowsStar
+  PkbCommunicationTypes::PairConstraintSet GetFollowsStarPairs(StatementType statement_type_1, StatementType statement_type_2) override;
+  PkbCommunicationTypes::SingleConstraintSet GetFollowsStar(std::string statement_number, StatementType statement_type) override;
+  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarBy(std::string statement_number, StatementType statement_type) override;
+  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarFirst(StatementType statement_type) override;
+  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarSecond(StatementType statement_type) override;
+  bool HasFollowsStarRelationship() override;
+  bool HasFollowsStar(std::string statement_number) override;
+  bool HasFollowsStarBy(std::string statement_number) override;
+  bool IsFollowsStar(std::string statement_number_1, std::string statement_number_2) override;
+
   //!API for Parent
   PkbCommunicationTypes::PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) override;
   PkbCommunicationTypes::SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) override;

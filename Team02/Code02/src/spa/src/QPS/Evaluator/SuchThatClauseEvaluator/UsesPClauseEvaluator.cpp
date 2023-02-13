@@ -25,7 +25,7 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   bool is_first_arg_synonym = declaration_map.count(first_arg_);
 
   bool is_second_arg_synonym = declaration_map.count(second_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
+  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
     header.push_back(first_arg_);
