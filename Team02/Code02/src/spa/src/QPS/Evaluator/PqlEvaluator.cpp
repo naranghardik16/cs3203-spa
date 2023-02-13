@@ -22,8 +22,8 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
 
     if (is_bool_constraint) {
       auto evaluator = clause->CreateClauseEvaluator(synonym_, declaration_map_);
-      auto bool_output = evaluator->EvaluateBooleanConstraint(pkb_);
-      if (bool_output == false) {
+      auto is_clause_true = evaluator->EvaluateBooleanConstraint(pkb_);
+      if (!is_clause_true) {
         return {};
       }
       syntax_pair_list_.erase(syntax_pair_list_.begin()+i);
