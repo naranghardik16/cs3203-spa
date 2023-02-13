@@ -6,6 +6,7 @@ PKB::PKB() {
   modifies_store_ = new ModifiesStore();
   follows_store_ = new FollowsStore();
   uses_store_ = new UsesStore();
+  parent_store_ = new ParentStore();
 }
 
 PKB::~PKB() = default;
