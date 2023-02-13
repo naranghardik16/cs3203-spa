@@ -1,0 +1,55 @@
+1 - (Valid Query) Modifies(IDENT, WILDCARD) returns true
+variable v;
+Select v such that Modifies("readPoint", _)
+x, z, a
+5000
+2 - (Valid Query) Modifies(IDENT, WILDCARD) returns false
+variable v;
+Select v such that Modifies("printResults", _)
+none
+5000
+3 - (Valid Query) Modifies(IDENT, IDENT) returns true
+variable v;
+Select v such that Modifies("q", "x")
+x, z, a
+5000
+4 - (Valid Query) Modifies(IDENT, IDENT) returns false
+variable v;
+Select v such that Modifies("q", "y")
+none
+5000
+5 - (Valid Query) Modifies(SYN, WILDCARD) with repeated terminal names
+procedure Select;
+Select Select such that Modifies(Select,_)
+q, readPoint
+5000
+6 - (Valid Query) Modifies(SYN, SYN)
+procedure p; variable v;
+Select p such that Modifies(p,v)
+q, readPoint
+5000
+7 - (Valid Query) Modifies(SYN, SYN) with irrelevant syn
+procedure p, p1; variable v;
+Select p such that Modifies(p1,v)
+q, readPoint, printResults
+5000
+8 - (Valid Query) Modifies(SYN, IDENT) with result
+procedure p, p1; variable v;
+Select p such that Modifies(p,"z")
+q
+5000
+9 - (Valid Query) Modifies(SYN, IDENT) with no result
+procedure p, p1; variable v;
+Select p such that Modifies(p,"y")
+none
+5000
+10 - (Valid Query) Modifies(IDENT, SYN) with result
+variable v;
+Select v such that Modifies("q", v)
+x, z, a
+5000
+11 - (Valid Query) Modifies(IDENT, SYN) with no results
+variable v;
+Select v such that Modifies("printResults", v)
+none
+5000
