@@ -12,7 +12,7 @@ bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   } else {
     //Example query: uses(5, "count")
 
-    return pkb->IsStmtUsing(first_arg_, second_arg_);
+    return pkb->HasUsesStatementRelationship(first_arg_, second_arg_);
   }
 }
 

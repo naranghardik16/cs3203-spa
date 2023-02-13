@@ -232,7 +232,7 @@ class PkbReadFacade {
    * @param variable - The variable to be checked for.
    * @return True if condition holds, false otherwise.
    */
-  virtual bool IsStmtUsing(std::string statement_number, std::string variable);
+  virtual bool HasUsesStatementRelationship(std::string statement_number, std::string variable);
 
   /**
    * Retrieves all (p, v) pairs where Uses(p, v) relationship holds.
@@ -282,7 +282,7 @@ class PkbReadFacade {
    * @param variable - The name of a variable
    * @return True if condition holds, false otherwise.
    */
-  virtual bool IsProcUsing(std::string procedure, std::string variable);
+  virtual bool HasUsesProcedureRelationship(std::string procedure, std::string variable);
 
   /**
    * Retrieves (statement number, statement number) pairs that have a Follows Relationship
