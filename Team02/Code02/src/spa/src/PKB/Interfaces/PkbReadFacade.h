@@ -217,15 +217,6 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable);
 
   /**
-   * Checks if Uses(statement_number, v) holds for given statement_number and any variable v.
-   * i.e. statement_number appears as the first value of a statement Uses relationship pair.
-   *
-   * @param statement_number Statement num of a statement.
-   * @return True if condition holds, false otherwise.
-   */
-  virtual bool HasStmtUses(std::string statement_number);
-
-  /**
    * Checks if Uses(statement_num, variable) holds for the given statement_num and variable.
    *
    * @param statement_number - The statement number representing the statement.
@@ -265,15 +256,6 @@ class PkbReadFacade {
    * @return A set of procedure names.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresUsesVariable(std::string variable);
-
-  /**
-   * Checks if Uses(procedure, v) holds for given procedure and any variable v
-   * i.e. procedure appears as the first value of a proc Uses relationship pair.
-   *
-   * @param procedure - The procedure.
-   * @return True if condition holds, false otherwise.
-   */
-  virtual bool HasProcUses(std::string procedure);
 
   /**
    * Checks if Uses(procedure, variable) holds for the given procedure and variable.

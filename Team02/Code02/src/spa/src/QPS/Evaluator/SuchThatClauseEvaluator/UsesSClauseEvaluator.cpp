@@ -8,7 +8,7 @@ bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   if (is_second_arg_a_wildcard) {
     //Example query: Uses(5, _)
 
-    return pkb->HasStmtUses(first_arg_);
+    return !pkb->GetVariablesUsedByStatement(first_arg_).empty();
   } else {
     //Example query: uses(5, "count")
 
