@@ -30,12 +30,4 @@ class PqlEvaluator {
    * @return Result class, which stores the evaluation information for handling in Evaluator
    */
   std::shared_ptr<Result> EvaluateBasicSelectStatement();
-
-  /**
-   * Checks if a clause has any synonyms in its arguments as if there are no synonyms then this clause will not have dependencies
-   * with other subclauses and can be handled in a simpler manner
-   * @param a SyntaxPair containing information about the arguments of the subclause
-   * @return true if the clause has no synonyms in its arguments
-   */
-  bool IsBooleanConstraint(const SyntaxPair& pair);
 };

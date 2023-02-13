@@ -1036,5 +1036,87 @@ TEST_CASE("Make sure ParentStar Clause Evaluator Works") {
     std::unordered_set<std::string> correct_set({"5"});
     REQUIRE(eval_result == correct_set);
   }
+}
 
+TEST_CASE("Test pattern evaluator") {
+  PKB pkb = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("pattern a(_, _)") {
+    std::string query = "assign a;Select a pattern a(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(v, _), Select a") {
+    std::string query = "assign a;variable v;Select a pattern a(v, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(v, _), Select v") {
+    std::string query = "assign a;variable v;Select v pattern a(v, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"a"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(\"a\", _)") {
+    std::string query = "assign a;Select a pattern a(\"a\", _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(_, _\"x\"_)") {
+    std::string query = "assign a;Select a pattern a(_, _\"x\"_)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(v, _\"x\"_), Select a") {
+    std::string query = "assign a; variable v;Select a pattern a(v, _\"x\"_)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern a(\"a\", _\"x\"_), Select v") {
+    std::string query = "assign a; variable v;Select a pattern a(\"a\", _\"x\"_)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
 }

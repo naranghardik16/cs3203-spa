@@ -418,3 +418,12 @@ bool StubPkbReadFacade::HasAncestorDescendantRelationship(std::string statement_
 bool StubPkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
   return true;
 }
+
+//! Pattern API
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExactExpression(std::string expr) {
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
+  return {"2"};
+}
