@@ -11,9 +11,11 @@ class ParentStore {
 
   void addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
 
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair> retrieveAllParentPairs();
+  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
+  retrieveAllParentPairs();
 
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair> retrieveAllParentStarPairs();
+  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
+  retrieveAllParentStarPairs();
 
   bool hasParentRelation(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
 
@@ -26,6 +28,22 @@ class ParentStore {
   bool hasParentStar(PkbTypes::STATEMENT_NUMBER statement);
 
   bool hasParentStarBy(PkbTypes::STATEMENT_NUMBER statement);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllParents();
+
+  PkbTypes::STATEMENT_NUMBER retrieveAllParents(PkbTypes::STATEMENT_NUMBER statement);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllChildren();
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllChildren(PkbTypes::STATEMENT_NUMBER statement);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllAncestors();
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllAncestors(PkbTypes::STATEMENT_NUMBER statement);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllDescendants();
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllDescendants(PkbTypes::STATEMENT_NUMBER statement);
 
  private:
   OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> parent_store_;

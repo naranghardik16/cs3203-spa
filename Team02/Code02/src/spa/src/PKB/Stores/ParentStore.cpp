@@ -59,5 +59,38 @@ bool ParentStore::hasParentStar(PkbTypes::STATEMENT_NUMBER statement) {
 
 bool ParentStore::hasParentStarBy(PkbTypes::STATEMENT_NUMBER statement) {
   return !this->parent_star_store_.retrieveFromKey(statement).empty();
-
 }
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllParents() {
+  return this->parent_store_.retrieveAllKeys();
+}
+
+PkbTypes::STATEMENT_NUMBER ParentStore::retrieveAllParents(PkbTypes::STATEMENT_NUMBER statement) {
+  return this->parent_store_.retrieveFromValue(statement);
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllChildren(PkbTypes::STATEMENT_NUMBER statement) {
+  return this->parent_store_.retrieveFromKey(statement);
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllChildren() {
+  return this->parent_store_.retrieveAllValues();
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllAncestors() {
+  return this->parent_star_store_.retrieveAllKeys();
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllAncestors(PkbTypes::STATEMENT_NUMBER statement) {
+  return this->parent_star_store_.retrieveFromValue(statement);
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllDescendants() {
+  return this->parent_star_store_.retrieveAllValues();
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllDescendants(PkbTypes::STATEMENT_NUMBER statement) {
+  return this->parent_star_store_.retrieveFromKey(statement);
+}
+
+
