@@ -11,6 +11,8 @@ class IfStatementParser : public StatementParser {
   IfStatement *ParseEntity(TokenStream &tokens) override;
   [[nodiscard]] ConditionalOperation ExtractCondition(Line &line);
   void CheckStartOfIfStatement(Line &line) const;
+  void CheckStartOfElseStatement(Line &line) const;
+  bool HasElseStatements(Line &line) const;
   bool IsEndOfThenStatement(Line &line) const;
   bool IsEndOfIfElseStatement(Line &line) const;
 };
