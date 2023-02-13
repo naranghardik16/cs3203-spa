@@ -1,0 +1,70 @@
+1 - (Valid Query) Parent(WILDCARD, WILDCARD) returns true
+read r;
+Select r such that Parent(_,_)
+1
+5000
+2 - (Valid Query) Parent(WILDCARD, INT) returns true
+read r;
+Select r such that Parent(_,3)
+1
+5000
+3 - (Valid Query) Parent(WILDCARD, INT) returns false
+read r;
+Select r such that Parent(_, 1)
+none
+5000
+4 - (Valid Query) Parent(INT, WILDCARD) returns true
+read r;
+Select r such that Parent(3, _)
+1
+5000
+5 - (Valid Query) Parent(INT, WILDCARD) returns false
+read r;
+Select r such that Parent(1, _)
+none
+5000
+6 - (Valid Query) Parent(INT, INT) returns true
+read r;
+Select r such that Parent(2, 3)
+1
+5000
+7 - (Valid Query) Parent(INT, INT) returns false
+read r;
+Select r such that Parent(1, 3)
+none
+5000
+8 - (Valid Query) Parent(SYN, wildcard)
+if i;
+Select i such that Parent(i, _)
+2
+5000
+9 - (Valid Query) Parent(SYN, SYN)
+while w; assign a;
+Select a such that Parent(w, a)
+4, 5
+5000
+10 - (Valid Query) Parent(SYN, INT) has result
+stmt s;
+Select s such that Parent(s, 3)
+2
+5000
+11 - (Valid Query) Parent(SYN, INT) has no result
+stmt s;
+Select s such that Parent(s, 9)
+none
+5000
+12 - (Valid Query) Parent(SYN, INT) with irrelevant synonym
+if i, i1;
+Select i such that Parent(i1, 3)
+2
+5000
+13 - (Valid Query) Parent(INT, SYN)
+assign a;
+Select a such that Parent(3, a)
+4, 5
+5000
+14 - (Valid Query) Parent(WILDCARD, SYN)
+assign a;
+Select a such that Parent(_, a)
+4, 5, 6, 7, 8
+5000
