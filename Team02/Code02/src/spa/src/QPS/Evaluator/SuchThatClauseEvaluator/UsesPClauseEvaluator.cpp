@@ -8,11 +8,11 @@ bool UsesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   if (is_second_arg_a_wildcard) {
     //Example query: Uses("Main", _)
 
-    return !pkb->GetVariablesModifiedByProcedure(first_arg_).empty();
+    return !pkb->GetVariablesUsedByProcedure(QueryUtil::GetIdent(first_arg_)).empty();
   } else {
     //Example query: uses("Main", "count")
 
-    return pkb->HasUsesProcedureRelationship(first_arg_, second_arg_);
+    return pkb->HasUsesProcedureRelationship(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
   }
 }
 
@@ -48,11 +48,11 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   } else if (is_first_arg_synonym && !is_second_arg_a_wildcard){
     //Example query: Uses(p, "x")
 
-    single_constraint = pkb->GetProceduresUsesVariable(second_arg_);
+    single_constraint = pkb->GetProceduresUsesVariable(QueryUtil::GetIdent(second_arg_));
   } else {
     //Example query: Uses("Main", v)
 
-    single_constraint = pkb->GetVariablesUsedByProcedure(first_arg_);
+    single_constraint = pkb->GetVariablesUsedByProcedure(QueryUtil::GetIdent(first_arg_));
   }
 
   if (!single_constraint.empty()) {

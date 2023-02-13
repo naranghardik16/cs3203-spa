@@ -41,6 +41,20 @@ class StubPkbReadFacade: public PkbReadFacade {
   PkbCommunicationTypes::SingleConstraintSet GetProceduresThatModify() override;
   bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) override;
 
+  //! API for Uses - Statement
+  PkbCommunicationTypes::PairConstraintSet GetUsesStatementVariablePairs(StatementType statement_type) override;
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatUses(StatementType statement_type) override;
+  PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByStatement(std::string statement_number) override;
+  PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable) override;
+  bool HasUsesStatementRelationship(std::string statement_number, std::string variable) override;
+
+  //! API for Uses - Procedure
+  PkbCommunicationTypes::PairConstraintSet GetUsesProcedureVariablePairs() override;
+  PkbCommunicationTypes::SingleConstraintSet GetProceduresThatUse() override;
+  PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByProcedure(std::string procedure) override;
+  PkbCommunicationTypes::SingleConstraintSet GetProceduresUsesVariable(std::string variable) override;
+  bool HasUsesProcedureRelationship(std::string procedure, std::string variable) override;
+
   //!API for Follows
   PkbCommunicationTypes::PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) override;
   PkbCommunicationTypes::SingleConstraintSet GetStatementFollowedBy(std::string statement_num, StatementType statement_type) override;

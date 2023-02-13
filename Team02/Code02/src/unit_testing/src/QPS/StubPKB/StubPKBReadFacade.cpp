@@ -148,6 +148,64 @@ bool StubPkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_n
   return false;
 }
 
+//! Uses Statement API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
+  return {{"2", "x"}, {"2", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
+  return {"2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByStatement(std::string statement_number) {
+  if (statement_number == "2") {
+    return {"x", "y"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
+  return {"2"};
+}
+
+bool StubPkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
+  if (statement_number == "2") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//! Uses Procedure API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesProcedureVariablePairs() {
+  return {{"anya", "x"}, {"anya", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresThatUse() {
+  return {"anya"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByProcedure(std::string procedure) {
+  if (procedure == "anya" ){
+    return {"x", "y"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresUsesVariable(std::string variable) {
+  return {"anya"};
+}
+
+bool StubPkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
+  if (procedure == "anya") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 //! Follows API
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
   if (statement_type == StatementType::READ && statement_type_follower == StatementType::ASSIGN) {

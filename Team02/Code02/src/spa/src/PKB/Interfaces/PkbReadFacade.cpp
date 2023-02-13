@@ -214,7 +214,6 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByProc
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresUsesVariable(std::string variable) {
-  //TODO
   PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs = this->pkb.uses_store_->retrieveProcedureVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
