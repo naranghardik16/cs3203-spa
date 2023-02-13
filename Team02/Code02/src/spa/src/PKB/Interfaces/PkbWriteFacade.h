@@ -40,9 +40,43 @@ class PkbWriteFacade {
    */
   PkbTypes::INDEX AddConstant(PkbTypes::CONSTANT constant) const;
 
+  /**
+   * Adds a statement number and the corresponding variable being used into the PKB.
+   *
+   * @param statement_number - The statement number to be added to the PKB.
+   * @param variable - The variable that is being used by the statement with the given statement number.
+   */
+  void AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) const;
+
+  /**
+   * Adds a procedure and the corresponding variable being used into the PKB.
+   *
+   * @param procedure - The procedure to be added to the PKB.
+   * @param variable - The variable that is being used within the given procedure.
+   */
+  void AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const;
+
+  /**
+   * Adds a statement number and its corresponding modifying variable into PKB.
+   *
+   * @param statement_number - The statement number to be added to the PKB.
+   * @param variable - The variable that is being modified by the statement with the given statement number.
+   */
   void AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) const;
 
+  /**
+   * Adds a procedure and its corresponding modifying variable into PKB.
+   *
+   * @param procedure - The procedure to be added to the PKB.
+   * @param variable - The variable that is being modified within the given procedure.
+   */
   void AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const;
 
+  /**
+   * Adds a follows relationship between two statements into the PKB.
+   *
+   * @param statement_number_1 - The statement number of the first statement in the follows relationship.
+   * @param statement_number_2 - The statement number of the second statement in the follows relationship.
+   */
   void AddFollowsRelation(PkbTypes::STATEMENT_NUMBER statement_number_1, PkbTypes::STATEMENT_NUMBER statement_number_2) const;
 };

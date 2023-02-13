@@ -19,6 +19,15 @@ PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) const {
   return pkb.entity_store_->addConstant(std::move(constant));
 }
 
+void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
+                                               PkbTypes::VARIABLE variable) const {
+  this->pkb.uses_store_->addStatementUsingVariable(std::move(statement_number), std::move(variable));
+}
+
+void PkbWriteFacade::AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const {
+  this->pkb.uses_store_->addProcedureUsingVariable(std::move(procedure), std::move(variable));
+}
+
 void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
                                                    PkbTypes::VARIABLE variable) const {
   this->pkb.modifies_store_->addStatementModifyingVariable(std::move(statement_number), std::move(variable));

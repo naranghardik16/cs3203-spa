@@ -185,7 +185,7 @@ class PkbReadFacade {
    * @param statement_type - The type of statement s.
    * @return A set of pairs (statement, variable).
    */
-  virtual PkbCommunicationTypes::PairConstraintSet GetStmtUsesPair(StatementType statement_type);
+  virtual PkbCommunicationTypes::PairConstraintSet GetUsesStatementVariablePairs(StatementType statement_type);
 
   /**
    * Retrieves all s where Uses(s, v) relationship holds and s is of given statement type
@@ -194,7 +194,7 @@ class PkbReadFacade {
    * @param statement_type - The type of statement s.
    * @return A set of statement numbers representing statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStmtUsesFirst(StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsThatUses(StatementType statement_type);
 
   /**
    * Retrieves all v where Uses(statement_num, v) relationship holds for given statement number
@@ -204,7 +204,7 @@ class PkbReadFacade {
    * @param statement_number - The statement to be checked for.
    * @return A set of variable names.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStmtUses(std::string statement_number);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByStatement(std::string statement_number);
 
   /**
    * Retrieves all s where Uses(s, variable) relationship holds for given variable
@@ -214,7 +214,7 @@ class PkbReadFacade {
    * @param variable - The variable to be checked for.
    * @return A set of statement numbers representing statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStmtUsing(StatementType statement_type, std::string variable);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable);
 
   /**
    * Checks if Uses(statement_number, v) holds for given statement_number and any variable v.
@@ -232,14 +232,14 @@ class PkbReadFacade {
    * @param variable - The variable to be checked for.
    * @return True if condition holds, false otherwise.
    */
-  virtual bool IsStmtUsing(std::string statement_number, std::string variable);
+  virtual bool HasUsesStatementRelationship(std::string statement_number, std::string variable);
 
   /**
    * Retrieves all (p, v) pairs where Uses(p, v) relationship holds.
    *
    * @return a set of pairs (procedure name, variable name)
    */
-  virtual PkbCommunicationTypes::PairConstraintSet GetProcUsesPair();
+  virtual PkbCommunicationTypes::PairConstraintSet GetUsesProcedureVariablePairs();
 
   /**
    * Retrieves all p where Uses(p, v) relationship holds
@@ -247,7 +247,7 @@ class PkbReadFacade {
    *
    * @return A set of procedures.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetProcUsesFirst();
+  virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresThatUse();
 
   /**
    * Retrieves all v where Uses(procedure, v) relationship holds for given procedure name
@@ -256,7 +256,7 @@ class PkbReadFacade {
    * @param procedure -  The name of a procedure.
    * @return A set of variable names.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetProcUses(std::string procedure);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByProcedure(std::string procedure);
 
   /**
    * Retrieves all p where Uses(p, variable) relationship holds for given variable name.
@@ -264,7 +264,7 @@ class PkbReadFacade {
    * @param variable - The variable.
    * @return A set of procedure names.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetProcUsing(std::string variable);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresUsesVariable(std::string variable);
 
   /**
    * Checks if Uses(procedure, v) holds for given procedure and any variable v
@@ -282,7 +282,7 @@ class PkbReadFacade {
    * @param variable - The name of a variable
    * @return True if condition holds, false otherwise.
    */
-  virtual bool IsProcUsing(std::string procedure, std::string variable);
+  virtual bool HasUsesProcedureRelationship(std::string procedure, std::string variable);
 
   /**
    * Retrieves (statement number, statement number) pairs that have a Follows Relationship

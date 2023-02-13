@@ -141,24 +141,55 @@ bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure, std:
 }
 
 //! Uses Statement API
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetStmtUsesPair(StatementType statement_type) {
-  //TODO
-  return {{"1", "x"}, {"2", "y"}};
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p : statement_variable_pairs_) {
+    if (statements_.count(p.first) > 0) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+//  return {{"1", "x"}, {"2", "y"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUsesFirst(StatementType statement_type) {
-  //TODO
-  return {"1", "2"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p : statement_variable_pairs_) {
+    if (statements_.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+  return result;
+//  return {"1", "2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUses(std::string stmt_num) {
-  //TODO
-  return {"x", "y"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByStatement(std::string statement_number) {
+  return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(std::move(statement_number));
+//  return {"x", "y"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStmtUsing(StatementType statement_type, std::string var_name) {
-  //TODO
-  return {"1"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto&p : statement_variable_pairs_) {
+    if (statements_.count(p.first) > 0 && p.second == variable) {
+      result.insert(p.first);
+    }
+  }
+  return result;
+//  return {"1"};
 }
 
 bool PkbReadFacade::HasStmtUses(std::string stmt_num) {
@@ -166,40 +197,50 @@ bool PkbReadFacade::HasStmtUses(std::string stmt_num) {
   return true;
 }
 
-bool PkbReadFacade::IsStmtUsing(std::string stmt_num, std::string var_name) {
-  //TODO
-  return true;
+bool PkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
+  return this->pkb.uses_store_->hasUsesRelationBetweenStatementAndVariable(std::move(statement_number), std::move(variable));
 }
 
 //! Uses Procedure API
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetProcUsesPair() {
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesProcedureVariablePairs() {
   //TODO
-  return {{"Main", "x"}, {"Main", "y"}};
+  return this->pkb.uses_store_->retrieveProcedureVariablePairs();
+//  return {{"Main", "x"}, {"Main", "y"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUsesFirst() {
-  //TODO
-  return {"Main"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresThatUse() {
+  return this->pkb.uses_store_->retrieveAllProceduresThatUse();
+//  return {"Main"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUses(std::string proc_name) {
-  //TODO
-  return {"x", "y"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByProcedure(std::string procedure) {
+  return this->pkb.uses_store_->retrieveAllVariablesUsedByAProcedure(std::move(procedure));
+//  return {"x", "y"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcUsing(std::string var_name) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresUsesVariable(std::string variable) {
   //TODO
-  return {"Main"};
+  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs_ = this->pkb.uses_store_->retrieveProcedureVariablePairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p : procedure_variable_pairs_) {
+    if (p.second == variable) {
+      result.insert(p.first);
+    }
+  }
+  return result;
+//  return {"Main"};
 }
 
-bool PkbReadFacade::HasProcUses(std::string proc_name) {
+bool PkbReadFacade::HasProcUses(std::string procedure) {
   //TODO
+
   return true;
 }
 
-bool PkbReadFacade::IsProcUsing(std::string proc_name, std::string var_name) {
-  //TODO
-  return true;
+bool PkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
+  return this->pkb.uses_store_->hasUsesRelationBetweenProcedureAndVariable(procedure, variable);
+
 }
 
 // Follows API
