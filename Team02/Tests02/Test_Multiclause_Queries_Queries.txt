@@ -1,26 +1,50 @@
-1 - 2 variables that are shared in both clauses/4 synonyms
+1 - 2 syn that are shared in both clauses/4 synonyms
 assign a; variable v;
-Select a such that Uses(a, v) pattern a(v,_"1"_);
-8
+Select a such that Uses(a, v) pattern a(v,_);
+8, 9
 5000
-2 - 1 variable that is shared between both clauses/3 synonyms
+2 - 1 syn that is shared between both clauses/3 synonyms
 assign a; variable v;
-Select a such that Uses(a, v) pattern a("i",_"5"_);
-3
+Select a such that Uses(a, v) pattern a("i",_);
+11
 5000
-3 - 1 variable that is shared between both clauses/2 synonyms
+3 - 1 syn that is shared between both clauses/2 synonyms
 assign a; variable v;
 Select a such that Uses(a, "i") pattern a("i",_);
 none
 5000
-4 - 0 variable that is shared between both clauses/2 synonyms
+4 - 0 syn that is shared between both clauses/2 synonyms
 assign Select,pattern; variable v;
 Select Select such that Uses(Select, "x") pattern pattern("z",_);
-6, 10
+none
 5000
-5 - 0 variable that is shared between both clauses/1 synonym
+5 - 0 syn that is shared between both clauses/1 synonym
 assign a; variable v;
 Select a such that Uses("Example", "i") pattern a("i",_"x"_);
 11
 5000
-
+6 - 2 syn that are shared in both clauses/4 synonyms
+assign a; variable v;
+Select a such that Modifies(a, v) pattern a(v,_"1"_);
+4, 8, 11
+5000
+7 - 1 syn that is shared between both clauses/3 synonyms
+assign a; variable v;
+Select a such that Modifies(a, v) pattern a("x",_);
+1, 6, 9, 10
+5000
+8 - 1 syn that is shared between both clauses/2 synonyms
+assign a; variable v;
+Select a such that Modifies(a, "i") pattern a("i",_);
+3, 11
+5000
+9 - 0 syn  that is shared between both clauses/2 synonyms
+assign Select,pattern; variable v;
+Select Select such that Modifies(Select, "x") pattern pattern("z",_"z"_);
+none
+5000
+10 - 0 syn  that is shared between both clauses/1 synonym
+assign a; variable v;
+Select a such that Modifies("Example", "i") pattern a("z",_"3"_);
+2
+5000
