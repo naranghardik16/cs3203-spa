@@ -111,6 +111,10 @@ bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expres
   return t == type;
 }
 
+std::string QueryUtil::GetIdent(const std::string& quoted_ident) {
+  return string_util::Trim(quoted_ident.substr(1, quoted_ident.length() - 2));
+}
+
 StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& synonym) {
   if (IsIfSynonym(declaration, synonym)) {
     return StatementType::IF;

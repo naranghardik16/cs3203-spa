@@ -24,6 +24,15 @@ bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   return false;
 }
 
+bool SuchThatClauseSyntax::IsBooleanClause(Map &declaration_map) {
+  auto first_arg = this->GetFirstParameter();
+  auto second_arg = this->GetSecondParameter();
+  bool is_first_arg_a_synonym = declaration_map.count(first_arg);
+  bool is_second_arg_a_synonym = declaration_map.count(second_arg);
+  bool has_synonym = is_first_arg_a_synonym || is_second_arg_a_synonym;
+  return !has_synonym;
+}
+
 std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
   std::shared_ptr<ClauseEvaluator> evaluator;
   std::string relationship_reference = ClauseSyntax::GetEntity();

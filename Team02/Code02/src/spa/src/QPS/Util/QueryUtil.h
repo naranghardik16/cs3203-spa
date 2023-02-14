@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "General/StatementTypeEnum.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
+#include "General/StringUtil.h"
 
 /*!
  * Abstracts out functions that are used throughout QPS when handling queries
@@ -166,6 +167,14 @@ class QueryUtil {
    * @return true if the expression is a valid statement-based design entity, else false
    */
   static bool IsATypeOfStatementSynonym(Map &declaration, const std::string& expression);
+
+  /**
+   * Get the IDENT inside quotations.
+   *
+   * @param quoted_ident Quoted IDENT
+   * @return The ident with quotations removed.
+   */
+  static std::string GetIdent(const std::string &quoted_ident);
 
   /**
    * Gets the statement type based on the design entity assigned to the synonym for accessing data in PKB

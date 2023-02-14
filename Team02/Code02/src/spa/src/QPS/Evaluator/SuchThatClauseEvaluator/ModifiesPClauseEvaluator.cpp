@@ -13,10 +13,10 @@ bool ModifiesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRead
   //! Based on rule of boolean constraint, the 2nd arg cannot be a synonym so either wildcard or ident (since 2nd arg is entref)
   if (is_second_arg_a_wildcard) {
       //Modifies("anya", _) -- does the procedure anya modify any variables?
-      return !pkb->GetVariablesModifiedByProcedure(first_arg_).empty();
+      return !pkb->GetVariablesModifiedByProcedure(QueryUtil::GetIdent(first_arg_)).empty();
   } else {
       //Modifies("anya", "count") -- does the procedure anya modify "count"?
-      return pkb->HasModifiesProcedureRelationship(first_arg_, second_arg_);
+      return pkb->HasModifiesProcedureRelationship(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
   }
 }
 
@@ -52,13 +52,13 @@ std::shared_ptr<Result> ModifiesPClauseEvaluator::EvaluateClause(std::shared_ptr
       pair_constraint = pkb->GetModifiesProcedureVariablePairs();
     } else {
       //e.g. Modifies(p,”count”) -- get procedures that modify count
-      single_constraint = pkb->GetProceduresModifiesVariable(second_arg_);
+      single_constraint = pkb->GetProceduresModifiesVariable(QueryUtil::GetIdent(second_arg_));
     }
   }
 
   if (is_first_arg_an_ident) {
     //e.g.Select v such that Modifies("anya",v)
-    single_constraint = pkb->GetVariablesModifiedByProcedure(first_arg_);
+    single_constraint = pkb->GetVariablesModifiedByProcedure(QueryUtil::GetIdent(first_arg_));
   }
 
   ResultTable table;

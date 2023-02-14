@@ -1,50 +1,196 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>autotester</name><parsing_time_taken>52.000000</parsing_time_taken>
+<name>autotester</name><parsing_time_taken>4.890000</parsing_time_taken>
 </info>
 <queries>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">1</id><querystr><![CDATA[variable x; Select x]]></querystr>
-<stuans>x,z,count,i,input,cenX,cenY</stuans>
-<correct>x,z,i,count,cenX,cenY,input</correct>
-<time_taken>107.000000</time_taken>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(WILDCARD, WILDCARD) returns true">1</id><querystr><![CDATA[read r; Select r such that Follows(_,_)]]></querystr>
+<stuans></stuans>
+<correct>1</correct>
+<time_taken>2.736000</time_taken>
+<failed>
+<missing>1</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(WILDCARD, INT) returns true">2</id><querystr><![CDATA[read r; Select r such that Follows(_,5)]]></querystr>
+<stuans></stuans>
+<correct>1</correct>
+<time_taken>2.503000</time_taken>
+<failed>
+<missing>1</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(WILDCARD, INT) returns false">3</id><querystr><![CDATA[read r; Select r such that Follows(_, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.410000</time_taken>
 <passed/>
 </query>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">2</id><querystr><![CDATA[procedure cenX;stmt s; Select cenX]]></querystr>
-<stuans>main,computeCentroid</stuans>
-<correct>main,computeCentroid</correct>
-<time_taken>176.000000</time_taken>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(INT, WILDCARD) returns true">4</id><querystr><![CDATA[read r; Select r such that Follows(1, _)]]></querystr>
+<stuans></stuans>
+<correct>1</correct>
+<time_taken>1.808000</time_taken>
+<failed>
+<missing>1</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(INT, WILDCARD) returns false">5</id><querystr><![CDATA[read r; Select r such that Follows(9, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.434000</time_taken>
 <passed/>
 </query>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">3</id><querystr><![CDATA[constant c; Select c]]></querystr>
-<stuans>2,3,5,10,15</stuans>
-<correct>2,3,5,10,15</correct>
-<time_taken>66.000000</time_taken>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(INT, INT) returns true">6</id><querystr><![CDATA[read r; Select r such that Follows(1, 2)]]></querystr>
+<stuans></stuans>
+<correct>1</correct>
+<time_taken>2.350000</time_taken>
+<failed>
+<missing>1</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(INT, INT) returns false">7</id><querystr><![CDATA[read r; Select r such that Follows(7, 8)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.357000</time_taken>
 <passed/>
 </query>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">4</id><querystr><![CDATA[abc c; Select c]]></querystr>
-<stuans>SyntaxError</stuans>
-<correct>SyntaxError</correct>
-<time_taken>44.000000</time_taken>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(SYN, wildcard)">8</id><querystr><![CDATA[if i; Select i such that Follows(i, _)]]></querystr>
+<stuans></stuans>
+<correct>2</correct>
+<time_taken>2.518000</time_taken>
+<failed>
+<missing>2</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(SYN, SYN)">9</id><querystr><![CDATA[if i; assign a; Select i such that Follows(i, a)]]></querystr>
+<stuans></stuans>
+<correct>9</correct>
+<time_taken>2.178000</time_taken>
+<failed>
+<missing>9</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(SYN, INT) has result">10</id><querystr><![CDATA[assign a, a1; Select a such that Follows(a,a1)]]></querystr>
+<stuans></stuans>
+<correct>4,6</correct>
+<time_taken>2.680000</time_taken>
+<failed>
+<missing>4,6</missing>
+<additional></additional>
+<summary>
+<expected>2</expected>
+<matched>0</matched>
+<missing>2</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(SYN, INT) has no result">11</id><querystr><![CDATA[assign a; Select a such that Follows(a,8)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.419000</time_taken>
 <passed/>
 </query>
 <query>
-<id ReturnTuple="1" CondNum="1" RelNum="0" comment="comment">5</id><querystr><![CDATA[variable c; stmt s; Select x]]></querystr>
-<stuans>SemanticError</stuans>
-<correct>SemanticError</correct>
-<time_taken>39.000000</time_taken>
-<passed/>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(SYN, INT) with irrelevant synonym">12</id><querystr><![CDATA[assign a; read r; Select a such that Follows(r, 2)]]></querystr>
+<stuans></stuans>
+<correct>4,5,6,7,8,9</correct>
+<time_taken>2.750000</time_taken>
+<failed>
+<missing>4,5,6,7,8,9</missing>
+<additional></additional>
+<summary>
+<expected>6</expected>
+<matched>0</matched>
+<missing>6</missing>
+<additional>0</additional>
+</summary>
+</failed>
 </query>
 <query>
-<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="comment">6</id><querystr><![CDATA[variable v;  Select v such that Modifies (1, v)]]></querystr>
-<stuans>x</stuans>
-<correct>x</correct>
-<time_taken>39.000000</time_taken>
-<passed/>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="(Valid Query) Follows(INT, SYN)">13</id><querystr><![CDATA[assign a; Select a such that Follows(2, a)]]></querystr>
+<stuans></stuans>
+<correct>9</correct>
+<time_taken>2.511000</time_taken>
+<failed>
+<missing>9</missing>
+<additional></additional>
+<summary>
+<expected>1</expected>
+<matched>0</matched>
+<missing>1</missing>
+<additional>0</additional>
+</summary>
+</failed>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="(Valid Query) Follows(WILDCARD, SYN)">14</id><querystr><![CDATA[assign a; Select a such that Follows(_, a)]]></querystr>
+<stuans></stuans>
+<correct>5,6,7,9</correct>
+<time_taken>2.658000</time_taken>
+<failed>
+<missing>5,6,7,9</missing>
+<additional></additional>
+<summary>
+<expected>4</expected>
+<matched>0</matched>
+<missing>4</missing>
+<additional>0</additional>
+</summary>
+</failed>
 </query>
 </queries>
 </test_results>

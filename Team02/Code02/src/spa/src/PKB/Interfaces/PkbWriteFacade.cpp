@@ -19,9 +19,20 @@ PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) const {
   return pkb.entity_store_->addConstant(std::move(constant));
 }
 
+void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
+                                               PkbTypes::VARIABLE variable) const {
+  this->pkb.uses_store_->addStatementUsingVariable(std::move(statement_number),
+                                                   std::move(variable));
+}
+
+void PkbWriteFacade::AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const {
+  this->pkb.uses_store_->addProcedureUsingVariable(std::move(procedure), std::move(variable));
+}
+
 void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
                                                    PkbTypes::VARIABLE variable) const {
-  this->pkb.modifies_store_->addStatementModifyingVariable(std::move(statement_number), std::move(variable));
+  this->pkb.modifies_store_->addStatementModifyingVariable(std::move(statement_number),
+                                                           std::move(variable));
 }
 
 void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const {
@@ -30,6 +41,17 @@ void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure
 
 void PkbWriteFacade::AddFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement,
                                         PkbTypes::STATEMENT_NUMBER second_statement) const {
-  this->pkb.follows_store_->addFollowsRelation(std::move(first_statement), std::move(second_statement));
+  this->pkb.follows_store_->addFollowsRelation(std::move(first_statement),
+                                               std::move(second_statement));
 }
+
+void PkbWriteFacade::AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_number_1,
+                                       PkbTypes::STATEMENT_NUMBER statement_number_2) const {
+  this->pkb.parent_store_->addParentRelation(std::move(statement_number_1),
+                                             std::move(statement_number_2));
+}
+
+
+
+
 
