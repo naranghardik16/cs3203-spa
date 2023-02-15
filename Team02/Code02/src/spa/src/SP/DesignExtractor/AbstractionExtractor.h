@@ -28,5 +28,6 @@ class AbstractionExtractor : public ParserVisitor {
   //TODO: Design Extractor should have one pkb and write_face
   PKB *pkb_;
   PkbWriteFacade *pkb_write_facade_;
-  void ProcessStatements(vector<Statement*> statements);
+  void ProcessStatements(vector<Statement*> statements, PkbTypes::STATEMENT_NUMBER parent);
+  void ExtractParent(Statement* child_stmt, PkbTypes::STATEMENT_NUMBER parent);
 };
