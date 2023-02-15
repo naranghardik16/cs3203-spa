@@ -300,8 +300,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatAreFol
   PkbCommunicationTypes::SingleConstraintSet result;
 
   for (const auto& p: follows_pairs) {
-    if (statements.count(p.first) > 0) {
-      result.insert(p.first);
+    if (statements.count(p.second) > 0) {
+      result.insert(p.second);
     }
   }
 
