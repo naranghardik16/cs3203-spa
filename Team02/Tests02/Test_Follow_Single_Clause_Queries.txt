@@ -41,7 +41,7 @@ Select i such that Follows(i, _)
 9 - (Valid Query) Follows(SYN, SYN)
 if i; assign a;
 Select i such that Follows(i, a)
-9
+2
 5000
 10 - (Valid Query) Follows(SYN, INT) has result
 assign a, a1;
