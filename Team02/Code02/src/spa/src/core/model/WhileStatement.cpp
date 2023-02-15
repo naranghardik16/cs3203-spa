@@ -13,7 +13,7 @@ void WhileStatement::AddStatement(Statement *stmt) {
 
 // TODO: implement accept for the visitor pattern
 void WhileStatement::Accept(ParserVisitor *visitor) {
-
+  visitor->VisitWhileStatement(this);
 }
 
 ConditionalOperation WhileStatement::GetCondition() const {

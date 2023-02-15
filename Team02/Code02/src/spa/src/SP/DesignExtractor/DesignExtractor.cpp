@@ -3,6 +3,7 @@
 
 DesignExtractor::DesignExtractor(PKB *pkb) {
   pkb_ = pkb;
+//  pkb_write_facade_ = new PkbWriteFacade(*pkb);
 }
 
 void DesignExtractor::ExtractDesign(Program *program) {
@@ -21,8 +22,13 @@ void DesignExtractor::ExtractDesign(Program *program) {
   for (Procedure *p : procedures) {
     p->Accept(abstraction_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
+    Statement* prev_stmt = nullptr;
     for (Statement *s : statements) {
+      if (prev_stmt != nullptr) {
+        abstraction_extractor->ExtractFollows(prev_stmt, s);
+      }
       s->Accept(abstraction_extractor);
+      prev_stmt = s;
     }
   }
 }
