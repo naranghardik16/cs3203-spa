@@ -12,7 +12,7 @@ StubPkbReadFacade::StubPkbReadFacade(PKB &pkb): PkbReadFacade(pkb) {}
 StubPkbReadFacade::~StubPkbReadFacade() {}
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariables() {
-  PkbCommunicationTypes::SingleConstraintSet var_set({"a", "x", "y"});
+  PkbCommunicationTypes::SingleConstraintSet var_set({"a", "x", "y", "g"});
   return var_set;
 }
 
@@ -65,7 +65,7 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatement
     return {std::make_pair("1", "x")};
   }
   if (statement_type == StatementType::ASSIGN) {
-    return {std::make_pair("2", "a")};
+    return {{"2", "a"}, {"6", "y"}, {"7", "y"}};
   }
   return {};
 }
@@ -150,6 +150,9 @@ bool StubPkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_n
 
 //! Uses Statement API
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
+  if (statement_type == StatementType::ASSIGN) {
+    return {{"2", "a"}, {"2", "y"}, {"6","g"}, {"7", "y"}};
+  }
   return {{"2", "x"}, {"2", "y"}};
 }
 
@@ -160,22 +163,33 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatU
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByStatement(std::string statement_number) {
   if (statement_number == "2") {
     return {"x", "y"};
-  } else {
-    return {};
   }
+
+  if (statement_number == "6") {
+    return {"g"};
+  }
+
+  return {};
+
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
+  if (statement_type == StatementType::ASSIGN && variable == "g") {
+    return {"6"};
+  }
   return {"2"};
 }
 
 bool StubPkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
   if (statement_number == "2") {
     return true;
-  } else {
-    return false;
   }
+  if (statement_number == "6" && variable == "g") {
+    return true;
+  }
+  return false;
 }
+
 
 //! Uses Procedure API
 PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesProcedureVariablePairs() {
@@ -425,5 +439,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExact
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
+  if (sub_expr == "_g_") {
+    return {"6"};
+  }
   return {"2"};
 }
