@@ -10,6 +10,7 @@ void StatementStore::addStatementAndField(PkbTypes::STATEMENT_NUMBER statement_n
 
 void StatementStore::addStatementForAType(StatementType statement_type, PkbTypes::STATEMENT_NUMBER statement_number) {
   this->type_statement_store.insert(statement_type, statement_number);
+  this->type_statement_store.insert(STATEMENT, statement_number);
 }
 
 StatementType StatementStore::getStatementTypeByNumber(PkbTypes::STATEMENT_NUMBER statement_number) {
