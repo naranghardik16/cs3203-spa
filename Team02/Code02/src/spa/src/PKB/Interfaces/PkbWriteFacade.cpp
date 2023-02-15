@@ -1,7 +1,9 @@
 #include <utility>
 
+#include "General/StatementTypeEnum.h"
 #include "PkbWriteFacade.h"
 #include "PKB/PKB.h"
+
 
 PkbWriteFacade::PkbWriteFacade(PKB& pkb): pkb(pkb) {}
 
@@ -23,6 +25,11 @@ void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statem
                                                PkbTypes::VARIABLE variable) const {
   this->pkb.uses_store_->addStatementUsingVariable(std::move(statement_number),
                                                    std::move(variable));
+}
+
+void PkbWriteFacade::AddStatementOfAType(PkbTypes::STATEMENT_NUMBER statement_number,
+                                         StatementType statement_type) const {
+  this->pkb.statement_store_->addStatementForAType(statement_type, statement_number);
 }
 
 void PkbWriteFacade::AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) const {
