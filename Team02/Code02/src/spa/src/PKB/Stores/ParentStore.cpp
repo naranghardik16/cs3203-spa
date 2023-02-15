@@ -7,7 +7,6 @@ ParentStore::~ParentStore() = default;
 void ParentStore::addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement,
                                     PkbTypes::STATEMENT_NUMBER second_statement) {
   this->parent_store_.insert(first_statement, second_statement);
-//  this->dfs(first_statement, second_statement);
   this->parent_star_store_.insert(first_statement, second_statement);
 
   std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> current =
@@ -23,7 +22,9 @@ void ParentStore::addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement,
       this->parent_star_store_.insert(current.first, c);
 
       std::unordered_set<PkbTypes::STATEMENT_NUMBER> grand_children = this->parent_store_.retrieveFromKey(c);
-      updated_children.insert(grand_children.begin(), grand_children.end());
+      if (!grand_children.empty()) {
+        updated_children.insert(grand_children.begin(), grand_children.end());
+      }
     }
     children = updated_children;
   }
