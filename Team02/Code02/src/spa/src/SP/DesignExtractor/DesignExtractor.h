@@ -7,7 +7,9 @@
 class DesignExtractor {
  private:
   PKB *pkb_;
+//  PkbWriteFacade *pkb_write_facade_;
  public:
   DesignExtractor(PKB *pkb);
   void ExtractDesign(Program *program);
+//  void ExtractFollows(Statement* prev_stmt, Statement* curr_stmt);
 };

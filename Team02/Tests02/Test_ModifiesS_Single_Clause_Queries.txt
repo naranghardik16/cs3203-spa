@@ -78,3 +78,13 @@ call c; variable v;
 Select c such that Modifies(c,"x")
 1
 5000
+18 - (Valid Query) Select variables with Modifies(INT, SYN)
+call c; variable v;
+Select v such that Modifies(1,v)
+x
+5000
+19 - (Valid Query) Select variables with Modifies(_, SYN)
+variable v;
+Select v such that Modifies(_,v)
+x, z
+5000

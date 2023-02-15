@@ -19,7 +19,7 @@ TEST_CASE("Check if PQLEvaluator works for basic select statements") {
     auto eval = std::make_shared<PqlEvaluator>(output, pkb_read_facade_);
 
     auto eval_result = eval->Evaluate();
-    std::unordered_set<std::string> correct_set({"a","x", "y"});
+    std::unordered_set<std::string> correct_set({"a","x", "y", "g"});
     REQUIRE(eval_result == correct_set);
   }
 
@@ -139,7 +139,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({"a","x", "y"});
+    std::unordered_set<std::string> correct_set({"a","x", "y", "g"});
     REQUIRE(eval_result == correct_set);
   }
 
@@ -176,7 +176,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
 
     auto eval_result = eval->Evaluate();
-    std::unordered_set<std::string> correct_set({"a","x", "y"});
+    std::unordered_set<std::string> correct_set({"a","x", "y", "g"});
     REQUIRE(eval_result == correct_set);
   }
 
@@ -435,7 +435,7 @@ TEST_CASE("Test Uses Statement Clause Evaluator") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
     auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({"2"});
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
     REQUIRE(eval_result == correct_set);
   }
 }
@@ -1061,7 +1061,7 @@ TEST_CASE("Test pattern evaluator") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
     auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({"2"});
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
     REQUIRE(eval_result == correct_set);
   }
 
@@ -1072,7 +1072,7 @@ TEST_CASE("Test pattern evaluator") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
     auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({"a"});
+    std::unordered_set<std::string> correct_set({"a", "y" });
     REQUIRE(eval_result == correct_set);
   }
 
@@ -1119,4 +1119,82 @@ TEST_CASE("Test pattern evaluator") {
     std::unordered_set<std::string> correct_set({"2"});
     REQUIRE(eval_result == correct_set);
   }
+}
+
+TEST_CASE("Multi-clause tests") {
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
+  auto qp = std::make_shared<QueryParser>();
+
+
+  //query = "assign a; variable v; Select v such that Uses(a, v) pattern a(_,_\"g\"_)";
+  std::string query = "assign a; variable v; Select v such that Uses(a, v) pattern a(\"a\",_)";
+  auto correct_output = qp->ParseQuery(query);
+  auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  auto eval_result = eval->Evaluate();
+  std::unordered_set<std::string> correct_set = {"a", "y"};
+  REQUIRE(eval_result == correct_set);
+
+
+  //2 syn that are shared in both clauses/4 synonyms
+  // {{"2", "x"}, {"2", "y"}}; --> uses(a,v); do for assign {{"2", "a"}, {"2", "y"}, {6,"g"}, {"7", "y"}}
+  //Get assign modifies var pairs --> ("2", "a"), ("6", "y"), ("7", "y")}; --> pattern a(v,_)
+
+  query = "assign a; variable v;Select a such that Uses(a, v) pattern a(v,_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set ={"2", "7"};
+  REQUIRE(eval_result == correct_set);
+
+  query = "assign a; variable v;Select v such that Uses(a, v) pattern a(v,_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set = {"a", "y"};
+  REQUIRE(eval_result == correct_set);
+
+  //1 syn that is shared between both clauses/3 synonyms
+  query = "assign a; variable v; Select a such that Uses(a, v) pattern a(_,_\"g\"_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set = {"6"};
+  REQUIRE(eval_result == correct_set);
+
+  //1 syn that is shared between both clauses/2 synonyms
+  //Uses(a, "g") --> return 6
+  //all assign --> 2,6,7
+  //pattern(_,_g_) --> 6
+
+  query = "assign a; variable v; Select a such that Uses(a, \"g\") pattern a(_, _\"g\"_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set = {"6"};
+  REQUIRE(eval_result == correct_set);
+
+  query = "assign a; variable v; Select v such that Uses(6, v) pattern a(_,_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set = {"g"};
+  REQUIRE(eval_result == correct_set);
+
+  // 0 syn that is shared between both clauses/1 synonyms
+  query = "assign Select,pattern; variable v; Select Select such that Uses(6, \"g\") pattern Select(_,_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set = {"2", "6", "7"};
+  REQUIRE(eval_result == correct_set);
+
+  //select all var
+  query = "assign Select,pattern; variable v; Select v such that Uses(6, \"g\") pattern Select(_,_)";
+  correct_output = qp->ParseQuery(query);
+  eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+  eval_result = eval->Evaluate();
+  correct_set =  {"a", "y", "x", "g"};
+  REQUIRE(eval_result == correct_set);
+
 }

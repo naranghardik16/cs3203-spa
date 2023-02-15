@@ -17,7 +17,7 @@ void IfStatement::AddElseStmtList(Statement *statement) {
 
 // TODO: Add logic for visitor
 void IfStatement::Accept(ParserVisitor *visitor) {
-
+  visitor->VisitIfStatement(this);
 }
 
 ConditionalOperation IfStatement::GetCondition() const {

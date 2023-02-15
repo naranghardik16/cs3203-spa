@@ -90,6 +90,9 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
       throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }
     std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
+    if (synonym_substring.empty()) {
+      throw SyntaxErrorException("Missing synonym in declaration");
+    }
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
       if (!QueryUtil::IsSynonym(kSynonym)) {
