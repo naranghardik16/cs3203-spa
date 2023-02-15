@@ -5,6 +5,10 @@ AbstractionExtractor::AbstractionExtractor(PKB *pkb) : pkb_(pkb) {
   pkb_write_facade_ = new PkbWriteFacade(*pkb);
 }
 
+void AbstractionExtractor::VisitArithmeticalOperation(ArithmeticOperation *arith_operation) {
+  // TODO:
+}
+
 void AbstractionExtractor::VisitAssignStatement(AssignStatement *assign_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(assign_statement->GetStatementNumber());
@@ -13,11 +17,16 @@ void AbstractionExtractor::VisitAssignStatement(AssignStatement *assign_statemen
                                                    assign_statement->GetVariable().GetName());
 }
 
+void AbstractionExtractor::VisitConditionalOperation(ConditionalOperation *cond_operation) {
+  // TODO:
+}
+
 void AbstractionExtractor::VisitPrintStatement(PrintStatement *print_statement) {
-  // TODO: Abstractions other than Modifies
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(print_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, PRINT);
+  pkb_write_facade_->AddStatementUsingVariable(stmt_number,
+                                               print_statement->GetVariable().GetName());
 }
 
 void AbstractionExtractor::VisitReadStatement(ReadStatement *read_statement) {
@@ -26,6 +35,10 @@ void AbstractionExtractor::VisitReadStatement(ReadStatement *read_statement) {
   pkb_write_facade_->AddStatementOfAType(stmt_number, READ);
   pkb_write_facade_->AddStatementModifyingVariable(stmt_number,
                                                    read_statement->GetVariable().GetName());
+}
+
+void AbstractionExtractor::VisitRelationalOperation(RelationalOperation *rel_operation) {
+  
 }
 
 void AbstractionExtractor::VisitIfStatement(IfStatement *if_statement) {
@@ -38,7 +51,8 @@ void AbstractionExtractor::VisitIfStatement(IfStatement *if_statement) {
   ProcessStatements(else_stmts, stmt_number);
 }
 
-void AbstractionExtractor::ProcessStatements(vector<Statement*> statements, PkbTypes::STATEMENT_NUMBER parent) {
+void AbstractionExtractor::ProcessStatements(const vector<Statement *> &statements,
+                                             PkbTypes::STATEMENT_NUMBER parent) {
   Statement *prev_stmt = nullptr;
   for (Statement *s : statements) {
     if (prev_stmt != nullptr) {
@@ -54,7 +68,9 @@ void AbstractionExtractor::VisitWhileStatement(WhileStatement *while_statement) 
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(while_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, WHILE);
-  WhileStatement::StmtListContainer statements = while_statement->GetLoopStatements();
+  // TODO: Add uses for conditionOperation
+  WhileStatement::StmtListContainer
+      statements = while_statement->GetLoopStatements();
   ProcessStatements(statements, stmt_number);
 }
 
@@ -70,7 +86,8 @@ void AbstractionExtractor::VisitVariable(Variable *variable) {
   // TODO:
 }
 
-void AbstractionExtractor::ExtractFollows(Statement* prev_stmt, Statement* curr_stmt) {
+void AbstractionExtractor::ExtractFollows(Statement *prev_stmt,
+                                          Statement *curr_stmt) {
   PkbTypes::STATEMENT_NUMBER
       prev_stmt_no = std::to_string(prev_stmt->GetStatementNumber());
   PkbTypes::STATEMENT_NUMBER
@@ -78,7 +95,8 @@ void AbstractionExtractor::ExtractFollows(Statement* prev_stmt, Statement* curr_
   pkb_write_facade_->AddFollowsRelation(prev_stmt_no, curr_stmt_no);
 }
 
-void AbstractionExtractor::ExtractParent(Statement* child_stmt, PkbTypes::STATEMENT_NUMBER parent) {
+void AbstractionExtractor::ExtractParent(Statement *child_stmt,
+                                         PkbTypes::STATEMENT_NUMBER parent) {
   PkbTypes::STATEMENT_NUMBER
       child_stmt_no = std::to_string(child_stmt->GetStatementNumber());
   pkb_write_facade_->AddParentRelation(parent, child_stmt_no);
