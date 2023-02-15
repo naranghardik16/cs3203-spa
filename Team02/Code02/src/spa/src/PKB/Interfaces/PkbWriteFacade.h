@@ -1,7 +1,9 @@
 #pragma once
 
+#include "General/StatementTypeEnum.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
+
 
 /**
  * Facade implementation consisting of write methods
@@ -47,6 +49,14 @@ class PkbWriteFacade {
    * @param variable - The variable that is being used by the statement with the given statement number.
    */
   void AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable) const;
+
+  /**
+   * Adds a statement number and the corresponding type of the statement.
+   *
+   * @param statement_number - The statement number representing the statement.
+   * @param statement_type - The type of the statement.
+   */
+  void AddStatementOfAType(PkbTypes::STATEMENT_NUMBER statement_number, StatementType statement_type) const;
 
   /**
    * Adds a procedure and the corresponding variable being used into the PKB.
