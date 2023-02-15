@@ -23,6 +23,7 @@ class OneToManyStore {
  private:
   std::unordered_map<K, std::unordered_set<V>> forward_map_;
   std::unordered_map<V, K> backward_map_;
+  std::unordered_set<K> key_set_;
   std::size_t size = 0;
 
  public:

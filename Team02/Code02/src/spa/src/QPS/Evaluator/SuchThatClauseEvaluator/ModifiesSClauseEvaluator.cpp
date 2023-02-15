@@ -17,7 +17,7 @@ bool ModifiesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRead
       return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
   } else {
     //Modifies(5, "count") -- does 5 modify "count"?
-    return pkb->HasModifiesStatementRelationship(first_arg_, second_arg_);
+    return pkb->HasModifiesStatementRelationship(first_arg_, QueryUtil::GetIdent(second_arg_));
   }
 }
 
@@ -54,7 +54,7 @@ std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr
       pair_constraint = pkb->GetModifiesStatementVariablePairs(QueryUtil::GetStatementType(declaration_map, first_arg_));
     } else {
       //e.g. Modifies(a,”count”) -- get assignments that modify count
-      single_constraint = pkb->GetStatementsModifiesVariable(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
+      single_constraint = pkb->GetStatementsModifiesVariable(QueryUtil::GetIdent(second_arg_), QueryUtil::GetStatementType(declaration_map, first_arg_));
     }
   }
 

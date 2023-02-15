@@ -41,6 +41,8 @@ class ClauseSyntax {
 
   virtual bool Equals(ClauseSyntax &other) = 0;
 
+  virtual bool IsBooleanClause(Map &declaration_map) = 0;
+
   /**
    * Creates ClauseEvaluators for evaluation of PQL queries using factory design pattern
    * @param s synonym that is to be selected

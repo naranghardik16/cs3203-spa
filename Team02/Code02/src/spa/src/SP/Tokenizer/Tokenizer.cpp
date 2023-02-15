@@ -49,12 +49,9 @@ Token* Tokenizer::MatchOtherToken(int first_char_index, string line, int* skip_i
   return NULL;
 }
 
-void Tokenizer::FormNameOrInteger(int *start_index, int *end_index, int current_index) {
-  if (*start_index != NOT_SET) {
-    *end_index = current_index;
-  } else {
+void Tokenizer::FormNameOrInteger(int *start_index, int current_index) {
+  if (*start_index == NOT_SET) {
     *start_index = current_index;
-    *end_index = current_index;
   }
 }
 
@@ -80,30 +77,30 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
   int skip_index = NOT_SET;
   int type = NOT_SET;
   int start_index = NOT_SET;
-  int end_index = NOT_SET;
   for (i = 0; i < lines.size(); i++) {
     for(string::size_type j = 0; j < lines[i].size(); j++) {
-      if ((j == skip_index) || (isspace(lines[i][j]) && type == NOT_SET)) {
+      char current_char = lines[i][j];
+      if ((j == skip_index) || (isspace(current_char) && type == NOT_SET)) {
         skip_index = NOT_SET;
         continue;
       }
 
-      if (lrv->IsLetter(lines[i][j])) {
+      if (lrv->IsLetter(current_char)) {
         type = NAME_TYPE;
-        FormNameOrInteger(&start_index, &end_index, j);
+        FormNameOrInteger(&start_index, j);
         continue;
-      } else if (lrv->IsDigit(lines[i][j])) {
+      } else if (lrv->IsDigit(current_char)) {
         type = INTEGER_TYPE;
-        FormNameOrInteger(&start_index, &end_index, j);
+        FormNameOrInteger(&start_index, j);
         continue;
       }
 
-      // only space and punctuation will be used as delimiter for name/integer
+      // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
       Token* current_token = MatchOtherToken(j, lines[i], &skip_index);
       Token* prev_token = NULL;
 
       // check if it is time to form the name/integer token
-      if (type != NOT_SET && (isspace(lines[i][j]) || (current_token != NULL && InstanceOf<PunctuationToken>(current_token)))) {
+      if (type != NOT_SET && (isspace(current_char) || (current_token != NULL && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(start_index, j - start_index), type);
       }
 
@@ -112,7 +109,6 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
         line_of_tokens.push_back(prev_token);
         type = NOT_SET;
         start_index = NOT_SET;
-        end_index = NOT_SET;
       } else if (type != NOT_SET && prev_token == NULL) {
         throw SyntaxErrorException(lines[i].substr(start_index, j - start_index) + " is an invalid token");
       }
@@ -120,7 +116,7 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
       if (current_token == NULL && prev_token != NULL) {
         continue;
       } else if (current_token == NULL) {
-        throw SyntaxErrorException(lines[i][j] + " is an invalid token");
+        throw SyntaxErrorException(current_char + " is an invalid token");
       }
 
       line_of_tokens.push_back(current_token);

@@ -82,10 +82,10 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifi
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) {
-  if (var_name == "\"x\"" && statement_type == StatementType::READ) {
+  if (var_name == "x" && statement_type == StatementType::READ) {
     return {"1"};
   }
-  if (var_name == "\"a\"" && statement_type == StatementType::ASSIGN) {
+  if (var_name == "a" && statement_type == StatementType::ASSIGN) {
     return {"2"};
   }
   return {};
@@ -102,10 +102,10 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatM
 }
 
 bool StubPkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
-  if (stmt_num == "1" && var_name == "\"x\"") {
+  if (stmt_num == "1" && var_name == "x") {
     return true;
   }
-  if (stmt_num == "2" && var_name == "\"a\"") {
+  if (stmt_num == "2" && var_name == "a") {
     return true;
   }
   return false;
@@ -118,17 +118,17 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesProcedure
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure_name) {
-  if (procedure_name == "\"execute\"") {
+  if (procedure_name == "execute") {
     return {"x","a"};
   }
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
-  if (var_name == "\"x\"") {
+  if (var_name == "x") {
     return {"execute"};
   }
-  if (var_name == "\"a\"") {
+  if (var_name == "a") {
     return {"execute"};
   }
   return {};
@@ -139,13 +139,71 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresThatM
 }
 
 bool StubPkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
-  if (procedure_name == "\"execute\"" && var_name == "\"x\"") {
+  if (procedure_name == "execute" && var_name == "x") {
     return true;
   }
-  if (procedure_name == "\"execute\"" && var_name == "\"a\"") {
+  if (procedure_name == "execute" && var_name == "a") {
     return true;
   }
   return false;
+}
+
+//! Uses Statement API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
+  return {{"2", "x"}, {"2", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
+  return {"2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByStatement(std::string statement_number) {
+  if (statement_number == "2") {
+    return {"x", "y"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
+  return {"2"};
+}
+
+bool StubPkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
+  if (statement_number == "2") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//! Uses Procedure API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesProcedureVariablePairs() {
+  return {{"anya", "x"}, {"anya", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresThatUse() {
+  return {"anya"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByProcedure(std::string procedure) {
+  if (procedure == "anya" ){
+    return {"x", "y"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresUsesVariable(std::string variable) {
+  return {"anya"};
+}
+
+bool StubPkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
+  if (procedure == "anya") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 //! Follows API
@@ -207,6 +265,70 @@ bool StubPkbReadFacade::HasFollowsRelationship(std::string statement_num, std::s
 
 bool StubPkbReadFacade::IsAnyFollowsRelationshipPresent() {
   return true;
+}
+
+//! Follows* API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowsStarPairs(StatementType statement_type_1,
+                                                                            StatementType statement_type_2) {
+  return {{"1", "2"}, {"1", "3"}, {"2", "3"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStar(std::string statement_number,
+                                                                         StatementType statement_type) {
+  if (statement_number == "1") {
+    return {"2", "3"};
+  } else if (statement_number == "2") {
+    return {"3"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarBy(std::string statement_number,
+                                                                           StatementType statement_type) {
+  if (statement_number == "2") {
+    return {"1"};
+  } else if (statement_number == "3") {
+    return {"1", "2"};
+  } else {
+    return {};
+  }
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarFirst(StatementType statement_type){
+  return {"1", "2"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarSecond(StatementType statement_type) {
+  return {"2", "3"};
+}
+
+bool StubPkbReadFacade::HasFollowsStarRelationship(){
+  return true;
+}
+
+bool StubPkbReadFacade::HasFollowsStar(std::string statement_number) {
+  if (statement_number == "1" || statement_number == "2") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool StubPkbReadFacade::HasFollowsStarBy(std::string statement_number) {
+  if (statement_number == "2" || statement_number == "3") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool StubPkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
+  if (statement_number_1 == "1" && statement_number_2 == "2") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 //! Parent API
@@ -295,4 +417,13 @@ bool StubPkbReadFacade::HasAncestorDescendantRelationship(std::string statement_
 
 bool StubPkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
   return true;
+}
+
+//! Pattern API
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExactExpression(std::string expr) {
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
+  return {"2"};
 }

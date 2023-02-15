@@ -49,15 +49,15 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignStatements() 
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
       this->pkb.modifies_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p: statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0) {
+  for (const auto& p: statement_variable_pairs) {
+    if (statements.count(p.first) > 0) {
       result.insert(p);
     }
   }
@@ -72,15 +72,15 @@ PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetStatementsModifiesVariable(std::string variable, StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
       this->pkb.modifies_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0 && p.second == variable) {
+  for (const auto& p: statement_variable_pairs) {
+    if (statements.count(p.first) > 0 && p.second == variable) {
       result.insert(p.first);
     }
   }
@@ -89,15 +89,15 @@ PkbReadFacade::GetStatementsModifiesVariable(std::string variable, StatementType
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatModify(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
       this->pkb.modifies_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0) {
+  for (const auto& p: statement_variable_pairs) {
+    if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
   }
@@ -119,11 +119,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesModifiedBy
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string variable) {
-  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs =
       this->pkb.modifies_store_->retrieveProcedureVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: procedure_variable_pairs_) {
+  for (const auto& p: procedure_variable_pairs) {
     if (p.second == variable) {
       result.insert(p.first);
     }
@@ -142,13 +142,13 @@ bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure, std:
 
 //! Uses Statement API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p : statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0) {
+  for (const auto& p : statement_variable_pairs) {
+    if (statements.count(p.first) > 0) {
       result.insert(p);
     }
   }
@@ -158,13 +158,13 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesStatementVariable
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p : statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0) {
+  for (const auto& p : statement_variable_pairs) {
+    if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
   }
@@ -178,23 +178,18 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByStat
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ = this->pkb.statement_store_->getStatementsFromType(statement_type);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs_ = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto&p : statement_variable_pairs_) {
-    if (statements_.count(p.first) > 0 && p.second == variable) {
+  for (const auto&p : statement_variable_pairs) {
+    if (statements.count(p.first) > 0 && p.second == variable) {
       result.insert(p.first);
     }
   }
   return result;
 //  return {"1"};
-}
-
-bool PkbReadFacade::HasStmtUses(std::string stmt_num) {
-  //TODO
-  return true;
 }
 
 bool PkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
@@ -219,23 +214,16 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByProc
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresUsesVariable(std::string variable) {
-  //TODO
-  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs_ = this->pkb.uses_store_->retrieveProcedureVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs = this->pkb.uses_store_->retrieveProcedureVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p : procedure_variable_pairs_) {
+  for (const auto& p : procedure_variable_pairs) {
     if (p.second == variable) {
       result.insert(p.first);
     }
   }
   return result;
 //  return {"Main"};
-}
-
-bool PkbReadFacade::HasProcUses(std::string procedure) {
-  //TODO
-
-  return true;
 }
 
 bool PkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
@@ -249,16 +237,16 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(Statement
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_pairs =
       this->pkb.follows_store_->retrieveAllFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_pairs_) {
-    if (statements_.count(p.first) > 0 && p.second == statement_num) {
+  for (const auto& p: follows_pairs) {
+    if (statements.count(p.first) > 0 && p.second == statement_num) {
       result.insert(p.first);
     }
   }
@@ -267,16 +255,16 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_pairs =
       this->pkb.follows_store_->retrieveAllFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_pairs_) {
-    if (statements_.count(p.second) > 0 && p.first == statement_num) {
+  for (const auto& p: follows_pairs) {
+    if (statements.count(p.second) > 0 && p.first == statement_num) {
       result.insert(p.second);
     }
   }
@@ -285,16 +273,16 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowing(
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsWithFollowers(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_pairs =
       this->pkb.follows_store_->retrieveAllFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_pairs_) {
-    if (statements_.count(p.second) > 0) {
+  for (const auto& p: follows_pairs) {
+    if (statements.count(p.second) > 0) {
       result.insert(p.second);
     }
   }
@@ -303,16 +291,16 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsWithFollo
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatAreFollowers(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_ =
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_pairs =
       this->pkb.follows_store_->retrieveAllFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_pairs_) {
-    if (statements_.count(p.first) > 0) {
+  for (const auto& p: follows_pairs) {
+    if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
   }
@@ -337,12 +325,12 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(Stat
   PkbCommunicationTypes::SingleConstraintSet
       statements_of_type_2 = this->pkb.statement_store_->getStatementsFromType(statement_type_2);
 
-  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
       this->pkb.follows_store_->retrieveAllFollowsStarPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
-  for (const auto& p: follows_star_pairs_) {
+  for (const auto& p: follows_star_pairs) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
       result.insert(p);
     }
@@ -356,12 +344,12 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::st
   PkbCommunicationTypes::SingleConstraintSet statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
       this->pkb.follows_store_->retrieveAllFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_star_pairs_) {
+  for (const auto& p: follows_star_pairs) {
     if (statement_number == p.first && statements.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -375,12 +363,12 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::
   PkbCommunicationTypes::SingleConstraintSet statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
       this->pkb.follows_store_->retrieveAllFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_star_pairs_) {
+  for (const auto& p: follows_star_pairs) {
     if (statement_number == p.second && statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -393,12 +381,12 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(St
   PkbCommunicationTypes::SingleConstraintSet statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
       this->pkb.follows_store_->retrieveAllFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_star_pairs_) {
+  for (const auto& p: follows_star_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -407,16 +395,17 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(St
   return result;
 }
 
+
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(StatementType statement_type) {
   PkbCommunicationTypes::SingleConstraintSet statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet follows_star_pairs_ =
+  PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
       this->pkb.follows_store_->retrieveAllFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
-  for (const auto& p: follows_star_pairs_) {
+  for (const auto& p: follows_star_pairs) {
     if (statements.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -438,94 +427,197 @@ bool PkbReadFacade::HasFollowsStarBy(std::string statement_number) {
 }
 
 bool PkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
-  return this->pkb.follows_store_->hasFollowsStarRelation(std::move(statement_number_1), std::move(statement_number_2));
+  return this->pkb.follows_store_->hasFollowsStarRelation(std::move(statement_number_1),
+                                                          std::move(statement_number_2));
 }
 
 // Parent API
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) {
-  if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
-    return {std::make_pair("5","6"), std::make_pair("5","7")};
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(StatementType statement_type,
+                                                                            StatementType statement_type_child) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type_for_parent =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type_for_child =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_child);
+
+  PkbCommunicationTypes::PairConstraintSet parent_child_pairs =
+      this->pkb.parent_store_->retrieveAllParentPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p: parent_child_pairs) {
+    if (statement_of_type_for_parent.count(p.first) > 0 &&
+    statement_of_type_for_child.count(p.second)) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) {
-  return {};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statement_number,
+                                                                                     StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet parents_of_specified_statement =
+      this->pkb.parent_store_->retrieveAllChildren(statement_number);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  result.insert(this->pkb.parent_store_->retrieveAllParents(statement_number));
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "5" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::ASSIGN)) {
-    return {"6","7"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildrenOf(std::string statement_number,
+                                                                                         StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet parents_of_specified_statement =
+      this->pkb.parent_store_->retrieveAllChildren(statement_number);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: parents_of_specified_statement) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreParents(StatementType statement_type) {
-  return {};
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.parent_store_->retrieveAllParents()) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreChildren(StatementType statement_type) {
-  if (statement_type == StatementType::ASSIGN) {
-    return {"6","7"};
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.parent_store_->retrieveAllChildren()) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-bool PkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
-  if (statement_num == "5" && statement_num_child == "6") {
-    return true;
-  }
-  return false;
+bool PkbReadFacade::HasParentChildRelationship(std::string statement_number,
+                                               std::string statement_number_child) {
+  return this->pkb.parent_store_->hasParentRelation(statement_number,
+                                                    statement_number_child);
 }
 
 bool PkbReadFacade::IsAnyParentRelationshipPresent() {
-  return true;
+  return this->pkb.parent_store_->hasAnyParentRelation();
 }
 
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
-  if (statement_type == StatementType::IF && statement_type_descendant == StatementType::PRINT) {
-    return {std::make_pair("5","9")};
+//!API for ParentStar
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type_for_parent =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type_for_child =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_descendant);
+
+  PkbCommunicationTypes::PairConstraintSet parent_child_pairs =
+      this->pkb.parent_store_->retrieveAllParentStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p: parent_child_pairs) {
+    if (statement_of_type_for_parent.count(p.first) > 0 &&
+        statement_of_type_for_child.count(p.second)) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "9" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::IF)) {
-    return {"5"};
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetStatementsThatAreAncestorOf(std::string statement_number, StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet parents_of_specified_statement =
+      this->pkb.parent_store_->retrieveAllAncestors(statement_number);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: parents_of_specified_statement) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type) {
-  if (statement_num == "5" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::PRINT)) {
-    return {"9"};
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetStatementsThatAreDescendantsOf(std::string statement_number, StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet parents_of_specified_statement =
+      this->pkb.parent_store_->retrieveAllDescendants(statement_number);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: parents_of_specified_statement) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreAncestors(StatementType statement_type) {
-  if (statement_type == StatementType::IF) {
-    return {"5"};
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.parent_store_->retrieveAllAncestors()) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatAreDescendants(StatementType statement_type) {
-  if (statement_type == StatementType::PRINT) {
-    return {"9"};
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetStatementsThatAreDescendants(StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.parent_store_->retrieveAllDescendants()) {
+    if (statement_of_type.count(p) > 0) {
+      result.insert(p);
+    }
   }
-  return {};
+
+  return result;
 }
 
-bool PkbReadFacade::HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant) {
-  if (statement_num == "5" && statement_num_descendant == "9") {
-    return true;
-  }
-  return false;
+bool PkbReadFacade::HasAncestorDescendantRelationship(std::string statement_number,
+                                                      std::string statement_number_descendant) {
+  return this->pkb.parent_store_->hasParentStarRelation(statement_number, statement_number_descendant);
 }
 
 bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
-  return true;
+  return this->pkb.parent_store_->hasAnyParentStarRelation();
 }
 
 //! Pattern API

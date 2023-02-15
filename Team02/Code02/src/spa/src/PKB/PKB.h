@@ -5,6 +5,8 @@
 #include "PKB/Stores/ModifiesStore.h"
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
+#include "PKB/Stores/ParentStore.h"
+
 
 class PKB {
  public:
@@ -27,6 +29,8 @@ class PKB {
    * Follows store that stores multi-variate follows relations among SIMPLE's entities.
    */
   FollowsStore *follows_store_;
+
+  ParentStore *parent_store_;
 
   UsesStore *uses_store_;
 

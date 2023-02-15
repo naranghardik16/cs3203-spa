@@ -8,6 +8,7 @@ template<typename K, typename V>
 void OneToManyStore<K, V>::insert(K key, V value) {
   this->forward_map_[key].insert(value);
   this->backward_map_[value] = key;
+  this->key_set_.insert(key);
   this->size++;
 }
 
@@ -67,11 +68,7 @@ std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToManyStore<K,
 
 template<typename K, typename V>
 std::unordered_set<K> OneToManyStore<K, V>::retrieveAllKeys() {
-  std::unordered_set<K> result;
-  for (auto p: this->forward_map_) {
-    result.insert(p.first);
-  }
-  return result;
+  return this->key_set_;
 }
 
 template<typename K, typename V>

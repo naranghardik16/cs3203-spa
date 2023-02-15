@@ -162,11 +162,13 @@ std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const s
   index_list = GetIndexListOfClauses(statement_trimmed);
 
   index_list.push_back(statement_trimmed.length());
+
   size_t start_index = 0;
   for (int i = 0; i < index_list.size()-1; i++) {
     size_t next_index = index_list[i+1];
     sub_clause = string_util::Trim(statement_trimmed.substr(start_index,next_index));
     start_index = next_index;
+
     if (FindStartOfSubClauseIndex(sub_clause, pql_constants::kPatternRegex) == 0) {
       SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause, pql_constants::kPatternStartIndicator);
       syntax.second.second = ExpressionParser::ParseExpressionSpec(syntax.second.second);
@@ -185,7 +187,7 @@ std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const s
 
       syntax_pair_list.push_back(such_that_syntax);
     } else {
-      continue;
+      throw SyntaxErrorException("There is an invalid subclause"); //e.g. Select a such that pattern a(_,_)
     }
   }
 

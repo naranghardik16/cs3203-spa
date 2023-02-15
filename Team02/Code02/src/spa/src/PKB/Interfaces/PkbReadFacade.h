@@ -121,7 +121,8 @@ class PkbReadFacade {
    * @param statement_type - The type of statements required.
    * @return A set of variable names with the given constraints.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable, StatementType statement_type);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string variable,
+                                                                                   StatementType statement_type);
 
   /**
    * Retrieves the statements of a given statement type that have a Modifies relationship.
@@ -214,16 +215,8 @@ class PkbReadFacade {
    * @param variable - The variable to be checked for.
    * @return A set of statement numbers representing statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable);
-
-  /**
-   * Checks if Uses(statement_number, v) holds for given statement_number and any variable v.
-   * i.e. statement_number appears as the first value of a statement Uses relationship pair.
-   *
-   * @param statement_number Statement num of a statement.
-   * @return True if condition holds, false otherwise.
-   */
-  virtual bool HasStmtUses(std::string statement_number);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type,
+                                                                               std::string variable);
 
   /**
    * Checks if Uses(statement_num, variable) holds for the given statement_num and variable.
@@ -265,15 +258,6 @@ class PkbReadFacade {
    * @return A set of procedure names.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetProceduresUsesVariable(std::string variable);
-
-  /**
-   * Checks if Uses(procedure, v) holds for given procedure and any variable v
-   * i.e. procedure appears as the first value of a proc Uses relationship pair.
-   *
-   * @param procedure - The procedure.
-   * @return True if condition holds, false otherwise.
-   */
-  virtual bool HasProcUses(std::string procedure);
 
   /**
    * Checks if Uses(procedure, variable) holds for the given procedure and variable.
