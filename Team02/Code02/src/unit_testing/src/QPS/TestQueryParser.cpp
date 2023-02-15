@@ -238,8 +238,12 @@ TEST_CASE("Test invalid queries") {
   }
 
   SECTION("Test invalid query with declaration problems") {
+
     //extra semicolon
     std::string query("assign a;;Select a");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "a assign a; variable v;\nSelect a";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
     //Missing syn
