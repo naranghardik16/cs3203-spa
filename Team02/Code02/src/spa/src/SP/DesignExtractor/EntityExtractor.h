@@ -6,6 +6,8 @@
 #include "core/model/AssignStatement.h"
 #include "core/model/PrintStatement.h"
 #include "core/model/ReadStatement.h"
+#include "core/model/IfStatement.h"
+#include "core/model/WhileStatement.h"
 
 class EntityExtractor : public ParserVisitor {
  private:
@@ -16,6 +18,8 @@ class EntityExtractor : public ParserVisitor {
   void VisitAssignStatement(AssignStatement *assign_statement) override;
   void VisitPrintStatement(PrintStatement *print_statement) override;
   void VisitReadStatement(ReadStatement *read_statement) override;
+  void VisitIfStatement(IfStatement *if_statement) override;
+  void VisitWhileStatement(WhileStatement *while_statement) override;
   void VisitProgram(Program *program);
   void VisitProcedure(Procedure *procedure) override;
   void VisitVariable(Variable *variable) override;

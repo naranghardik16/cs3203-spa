@@ -8,6 +8,8 @@
 class AssignStatement;
 class PrintStatement;
 class ReadStatement;
+class IfStatement;
+class WhileStatement;
 class Program;
 class Procedure;
 class Statement;
@@ -24,5 +26,7 @@ class ParserVisitor {
   virtual void VisitAssignStatement(AssignStatement *assign_statement) = 0;
   virtual void VisitPrintStatement(PrintStatement *print_statement) = 0;
   virtual void VisitReadStatement(ReadStatement *read_statement) = 0;
+  virtual void VisitIfStatement(IfStatement *if_statement) = 0;
+  virtual void VisitWhileStatement(WhileStatement *while_statement) = 0;
   void VisitExpression(Expression *expression);
 };

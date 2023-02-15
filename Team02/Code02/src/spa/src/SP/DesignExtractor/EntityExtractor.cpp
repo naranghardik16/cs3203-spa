@@ -21,6 +21,15 @@ void EntityExtractor::VisitReadStatement(ReadStatement *read_statement) {
   pkb_write_facade_->AddVariable(var_name);
 }
 
+void EntityExtractor::VisitIfStatement(IfStatement *if_statement) {
+  // TODO?
+}
+
+void EntityExtractor::VisitWhileStatement(WhileStatement *while_statement) {
+  // TODO?
+}
+
+
 void EntityExtractor::VisitProcedure(Procedure *procedure) {
   PkbTypes::PROCEDURE p = procedure->GetProcedureName();
   pkb_write_facade_->AddProcedure(p);
