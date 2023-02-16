@@ -1,7 +1,7 @@
-1 - (Valid Query) Select Modifies(INT, WILDCARD) is True
-assign assign;
-Select assign such that Modifies(3, _)
-3, 4
+1 - (Valid Query) Select Modifies(SYN, IDENT) with container statements
+if i;
+Select i such that Modifies(i,"z")
+2
 5000
 2 - (Valid Query) Select Modifies(INT, WILDCARD) is False
 assign assign;
@@ -43,10 +43,10 @@ assign a, a1; variable v;
 Select      a   such that       Modifies(a1 ,"z"    )
 3, 4
 5000
-10 - (Valid Query) Select Modifies(SYN, IDENT) with container statements
-if i;
-Select i such that Modifies(i,"z")
-2
+10 - (Valid Query) Select Modifies(INT, WILDCARD) is True
+assign assign;
+Select assign such that Modifies(3, _)
+3, 4
 5000
 11 - (Valid Query) Select variables with Modifies(INT, SYN)
 variable v;
