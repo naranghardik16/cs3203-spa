@@ -1,0 +1,45 @@
+1 - Select variables
+variable x;
+Select x
+number, sum, digit
+5000
+2 - Select constants
+constant c;
+Select c;
+0, 10, 100
+5000
+3 - Select procedure
+procedure p;
+Select p;
+sumDigits
+5000
+4 - Select if statements
+if i;
+Select i
+8, 10
+5000
+5 - Select assign statements
+assign a;
+Select a
+3, 5, 6, 14, 15
+5000
+6 - Select read statements
+read r;
+Select r
+1, 2
+5000
+7 - Select print statements
+print pn;
+Select pn
+9, 11, 13, 16
+5000
+8 - Select while statements
+while w;
+Select w
+4, 7, 12
+5000
+9 - Select statements
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
