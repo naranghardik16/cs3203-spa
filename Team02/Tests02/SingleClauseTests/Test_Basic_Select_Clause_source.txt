@@ -6,7 +6,7 @@ procedure sumDigits {
         digit = number % 10 + 10 * 10 / 10 - 10;
         sum = sum + digit;
         while (sum >= 100) {
-            if (number =< 10) then {
+            if (number <= 10) then {
                 print number;
             } else {
                 if ((digit > 10) || (sum < 10)) then {
