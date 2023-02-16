@@ -1,10 +1,120 @@
-1 - (Invalid Query) Select Modifies with undeclared synonym
+1 - undeclared synonym
 stmt s;
 Select a such that Modifies(s,a)
 SemanticError
 5000
-2 - (Invalid Query) Select Modifies with undeclared synonym
+2 - undeclared synonym
 stmt s;
-Select a such that Modifies(s,a)
+Select a such that Uses(s,a)
+SemanticError
+5000
+3 - undeclared synonym
+stmt s;
+Select a such that Follows(s,a)
+SemanticError
+5000
+4 - undeclared synonym
+stmt s;
+Select a such that Follows*(s,a)
+SemanticError
+5000
+5 - undeclared synonym
+stmt s;
+Select a such that Parent(s,a)
+SemanticError
+5000
+6 - undeclared synonym
+stmt s;
+Select a such that Parent*(s,a)
+SemanticError
+5000
+7 - repeated synonym
+stmt s, s1, s1;
+Select s such that Follows(s, s1)
+SemanticError
+5000
+8 - repeated synonym
+stmt s, s1; read s1;
+Select s such that Parent(s, s1)
+SemanticError
+5000
+9 - not assign synonym for pattern clause
+stmt s;
+Select s pattern s(_, _)
+SemanticError
+5000
+10 - arg_1 for Modifies is WILDCARD
+stmt s;
+Select s such that Modifies(_, _)
+SemanticError
+5000
+11 - arg_1 for Uses is WILDCARD
+stmt s;
+Select s such that Uses(_, _)
+SemanticError
+5000
+12 - arg_1 for Follows is not stmt synonym or its subset
+variable v;
+Select v such that Follows(v, 1)
+SemanticError
+5000
+13 - arg_2 for Follows is not stmt synonym or its subset
+variable v;
+Select v such that Follows(1, v)
+SemanticError
+5000
+14 - arg_1 for Follows* is not stmt synonym or its subset
+variable v;
+Select v such that Follows*(v, 1)
+SemanticError
+5000
+15 - arg_2 for Follows* is not stmt synonym or its subset
+variable v;
+Select v such that Follows*(1, v)
+SemanticError
+5000
+16 - arg_1 for Parent is not stmt synonym or its subset
+variable v;
+Select v such that Follows*(v, 1)
+SemanticError
+5000
+17 - arg_2 for Parent is not stmt synonym or its subset
+procedure v;
+Select v such that Follows*(1, v)
+SemanticError
+5000
+18 - arg_1 for Parent* is not stmt synonym or its subset
+constant v;
+Select v such that Follows*(v, 1)
+SemanticError
+5000
+19 - arg_2 for Parent* is not stmt synonym or its subset
+variable v;
+Select v such that Follows*(1, v)
+SemanticError
+5000
+20 - arg_1 for Uses is not stmt synonym or its subset, or procedure synonym
+variable v;
+Select v such that Uses(v, _)
+SemanticError
+5000
+21 - arg_1 for Modifies is not stmt synonym or its subset, or procedure synonym
+constant v;
+Select v such that Modifies(v, _)
+SemanticError
+5000
+22 - arg_2 for Uses is not variable synonym 
+stmt v;
+Select v such that Uses(1, v)
+SemanticError
+5000
+23 - arg_2 for Modifies is not variable synonym 
+read v;
+Select v such that Modifies(1, v)
+SemanticError
+5000
+24 - arg_1 for pattern is not variable synonym
+print v; assign a;
+Select v pattern a(v, _)
 SemanticError
 5000
