@@ -25,7 +25,7 @@ Select s such that Modifies(s, _)
 5000
 6 - (Valid Query) Select Modifies(SYN, WILDCARD) with irrelevant SYN
 assign a, a1; stmt s;
-Select a such that Modifies(s1,_)
+Select a such that Modifies(s,_)
 3, 4
 5000
 7 - (Valid Query) Select Modifies(SYN, SYN)
@@ -53,22 +53,17 @@ variable v;
 Select v such that Modifies(1,v)
 x
 5000
-12 - (Valid Query) Select variables with Modifies(_, SYN)
-variable v;
-Select v such that Modifies(_,v)
-x, z
+12 - (Valid Query) Random spacing
+            variable            v           ;
+            Select v         such           that Modifies(          1,          v)
+x
 5000
-13 - (Valid Query) Random spacing
-        variable            v ;
-    Select   v  such     that    Modifies           (_     ,       v       )
-x, z
-5000
-14 - (Valid Query) many declarations
+13 - (Valid Query) many declarations
 assign a; assign a1; print p1,p2,p3,p4,p5,p6; variable v;
-Select v such that Modifies(_,v)
-x, z
+Select v such that Modifies(1,v)
+x
 5000
-15 - (Valid Query) repeated terminal names
+14 - (Valid Query) repeated terminal names
 assign pattern; variable Select;
 Select pattern such that Modifies(pattern,Select)
 3, 4
