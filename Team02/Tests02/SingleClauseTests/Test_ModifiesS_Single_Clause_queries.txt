@@ -49,7 +49,7 @@ Select i such that Modifies(i,"z")
 2
 5000
 11 - (Valid Query) Select variables with Modifies(INT, SYN)
-call c; variable v;
+variable v;
 Select v such that Modifies(1,v)
 x
 5000
