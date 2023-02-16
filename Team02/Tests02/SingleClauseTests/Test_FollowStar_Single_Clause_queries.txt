@@ -39,7 +39,7 @@ Select ifs such that Follows*(ifs, p)
 none
 5000 
 9 - Follows*(SYN, INT) has result
-while w; 
+while w; constant c;
 Select c such that Follows*(w, 10)
 0, 1, 2, 3
 5000
