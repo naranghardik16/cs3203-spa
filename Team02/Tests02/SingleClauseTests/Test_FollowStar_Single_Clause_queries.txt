@@ -1,0 +1,80 @@
+1 - Follows*(WILDCARD, WILDCARD) return true
+read r;
+Select r such that Follows*(_, _)
+1, 2, 13
+5000
+2 - Follows*(WILDCARD, SYN) has result
+assign a;
+Select a such that Follows*(_, a)
+7, 8, 9, 15
+5000
+3 - Follows*(WILDCARD, SYN) has no result
+while w; 
+Select w such that Follows*(_, w)
+none
+5000
+4 - Follows*(_, INT) return true
+print p;
+Select p such that Follows*(_, 3) 
+3, 11, 12
+5000
+5 - Follows*(_, INT) return false
+print p;
+Select p such that Follows*(_, 1) 
+none
+5000
+6 - Follows*(SYN, WILDCARD) has result
+stmt s;
+Select s such that Follows*(s, _)
+1, 2, 3, 4, 5, 6, 8, 9, 10
+5000
+7 - Follows*(SYN, SYN) has result
+if ifs; stmt s;
+Select ifs such that Follows*(s, ifs)
+4, 10
+5000 
+8 - Follows*(SYN, SYN) has no result
+if ifs; print p;
+Select ifs such that Follows*(ifs, p)
+none
+5000 
+9 - Follows*(SYN, INT) has result
+while w; constant c;
+Select c such that Follows*(w, 10)
+0, 1, 2, 3
+5000
+10 - Follows*(SYN, INT) has no result
+while w; constant c;
+Select c such that Follows*(w, 4)
+none
+5000
+11 - Follows*(INT, WILDCARD) return true
+constant c;
+Select c such that Follows*(1, _)
+0, 1, 2, 3
+5000
+12 - Follows*(INT, WILDCARD) return false
+constant c;
+Select c such that Follows*(1, _)
+none
+5000
+13 - Follows*(INT, SYN) has result
+stmt s;
+Select s such that Follows*(5, s)
+8, 9, 10, 13
+5000
+14 - Follows*(INT, SYN) has no result
+print p;
+Select p such that Follows*(5, p)
+none
+5000
+15 - Follows*(INT, INT) return true
+if ifs;
+Select ifs such that Follows*(4, 15)
+4, 10
+5000
+16 - Follows*(INT, INT) return false
+if ifs;
+Select ifs such that Follows*(2, 1)
+none
+5000
