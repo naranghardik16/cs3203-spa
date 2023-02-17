@@ -10,4 +10,3 @@ enum StatementType {
   WHILE,
   STATEMENT
 };
-
