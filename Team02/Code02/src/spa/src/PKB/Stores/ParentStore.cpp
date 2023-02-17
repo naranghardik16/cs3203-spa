@@ -17,10 +17,6 @@ void ParentStore::addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement,
     for (const auto& p : parents) {
       std::unordered_set<PkbTypes::STATEMENT_NUMBER> grand_parents = this->parent_star_store_.retrieveFromValue(p);
       updated_parents.insert(grand_parents.begin(), grand_parents.end());
-<<<<<<< HEAD
-=======
-
->>>>>>> milestone1
       this->parent_star_store_.insert(p, second_statement);
     }
     parents = updated_parents;
