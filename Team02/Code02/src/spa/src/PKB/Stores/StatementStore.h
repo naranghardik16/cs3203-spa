@@ -6,15 +6,21 @@
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/Types/PkbTypes.h"
 
+/**
+ * @class StatementStore is a data storage component that maps statements to their types and fields.
+ * The class is designed to store statements in a way that makes it easy to retrieve their
+ * associated types and fields.
+ */
 class StatementStore {
  public:
   /**
-   * Constructor for Statement store.
+   * Default constructor for Statement store.
+   * Initializes the object of the class.
    */
   StatementStore();
 
   /**
-   * Destructor for Statement store.
+   * Default destructor for Statement store.
    */
   ~StatementStore();
 

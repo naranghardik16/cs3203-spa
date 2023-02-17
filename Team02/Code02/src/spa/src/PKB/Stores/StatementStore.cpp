@@ -17,6 +17,9 @@ StatementType StatementStore::getStatementTypeByNumber(PkbTypes::STATEMENT_NUMBE
 }
 
 std::unordered_set<PkbTypes::STATEMENT_NUMBER> StatementStore::getStatementsFromType(StatementType statement_type) {
+  if (statement_type == STATEMENT) {
+    return this->getAllStatements();
+  }
   return this->type_statement_store.retrieveFromKey(statement_type);
 }
 
@@ -31,5 +34,4 @@ std::unordered_set<PkbTypes::STATEMENT_NUMBER> StatementStore::getAllStatements(
 std::unordered_set<PkbTypes::FIELD> StatementStore::getFieldsForStatement(PkbTypes::STATEMENT_NUMBER statement_number) {
   return this->statement_field_store.retrieveFromKey(statement_number);
 }
-
 

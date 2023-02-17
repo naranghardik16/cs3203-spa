@@ -45,8 +45,8 @@ Select a such that Parent*(i, a)
 5000
 10 - (Valid Query) Parent*(SYN, INT) has result
 stmt s;
-Select s such that Parent*(s, 3)
-2
+Select s such that Parent*(s, 4)
+2, 3
 5000
 11 - (Valid Query) Parent*(SYN, INT) has no result
 stmt s;
@@ -59,12 +59,27 @@ Select i such that Parent*(i1, 5)
 2
 5000
 13 - (Valid Query) Parent*(INT, SYN)
-assign a;
-Select a such that Parent*(2, a)
-4, 5, 6, 7, 8
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7, 8
 5000
 14 - (Valid Query) Parent(WILDCARD, SYN)
 assign a;
 Select a such that Parent*(_, a)
+4, 5, 6, 7, 8
+5000
+15 - (Valid Query) Random spacing
+            assign  a        ;
+    Select   a such           that   Parent*        (   _   ,           a)
+4, 5, 6, 7, 8
+5000
+16 - (Valid Query) many declarations
+assign a; assign a1; print p1,p2,p3,p4,p5,p6; variable v; read r1;
+Select a such that Parent*(_, a)
+4, 5, 6, 7, 8
+5000
+17 - (Valid Query) repeated terminal names
+if pattern; assign Select;
+Select Select such that Parent*(pattern, Select)
 4, 5, 6, 7, 8
 5000

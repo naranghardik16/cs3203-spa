@@ -4,6 +4,8 @@
 #include "PKB/Stores/FollowsStore.h"
 #include "PKB/Stores/ModifiesStore.h"
 #include "PKB/Stores/StatementStore.h"
+#include "PKB/Stores/UsesStore.h"
+#include "PKB/Stores/ParentStore.h"
 
 class PKB {
  public:
@@ -27,6 +29,10 @@ class PKB {
    */
   FollowsStore *follows_store_;
 
+  ParentStore *parent_store_;
+
+  UsesStore *uses_store_;
+
   /**
    * Constructor for PKB.
    */
@@ -41,3 +47,11 @@ class PKB {
   friend class PkbReadFacade;
 };
 
+// x = 1
+// read x;
+// print x;
+// call proc;
+// while (x > 0)
+// if (x > 0)
+
+// stmt_no -> { x, >, 0 }

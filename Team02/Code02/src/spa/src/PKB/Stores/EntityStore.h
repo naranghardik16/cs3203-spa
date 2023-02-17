@@ -6,6 +6,10 @@
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/Types/PkbTypes.h"
 
+/**
+ * @class EntityStore
+ * Class to store the list of entities used in the SIMPLE program.
+ */
 class EntityStore {
  public:
   /**

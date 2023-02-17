@@ -7,6 +7,14 @@
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Util/PairHasherUtil.h"
 
+/**
+ * @class ModifiesStore
+ * Class representing the Modifies Store in the PKB.
+ *
+ * The ModifiesStore class is responsible for maintaining information about the Modifies relation in the PKB.
+ * The Modifies relation between a statement and a variable is represented as a ManyToMany relationship.
+ * The ModifiesStore class also maintains information about the Modifies relation between a procedure and a variable.
+ */
 class ModifiesStore {
  public:
   /**

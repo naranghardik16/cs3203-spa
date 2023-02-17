@@ -41,9 +41,9 @@ Select i such that Follows(i, _)
 9 - (Valid Query) Follows(SYN, SYN)
 if i; assign a;
 Select i such that Follows(i, a)
-9
+2
 5000
-10 - (Valid Query) Follows(SYN, INT) has result
+10 - (Valid Query) Follows(SYN, SYN) has result
 assign a, a1;
 Select a such that Follows(a,a1)
 4, 6
@@ -67,4 +67,19 @@ Select a such that Follows(2, a)
 assign a;
 Select a such that Follows(_, a)
 5, 6, 7, 9
+5000
+15 - (Valid Query) Random spacing
+assign              a;
+    Select     a    such    that    Follows(             _,          a           )
+5, 6, 7, 9
+5000
+16 - (Valid Query) many declarations
+assign a; assign a1; print p1,p2,p3,p4,p5,p6;
+Select a such that Follows(_, a)
+5, 6, 7, 9
+5000
+17 - (Valid Query) repeated terminal names
+assign pattern, Select;
+Select          pattern   such that         Follows(           pattern,    Select             )
+4, 6
 5000

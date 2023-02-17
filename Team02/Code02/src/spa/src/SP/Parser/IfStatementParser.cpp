@@ -18,6 +18,11 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
     tokens.pop_front();
   }
 
+  if (!HasElseStatements(tokens.front())) return if_stmt;
+
+  CheckStartOfElseStatement(tokens.front());
+  tokens.pop_front();
+
   while (!tokens.empty() && !IsEndOfIfElseStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
@@ -72,8 +77,29 @@ bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
 
   return std::find_if(std::begin(line), std::end(line),
                       [&](Token *const p) {
+                        return p->GetValue() == "}";
+                      }) != std::end(line);
+}
+
+bool IfStatementParser::HasElseStatements(Line &line) const {
+  return std::find_if(std::begin(line), std::end(line),
+                      [&](Token *const p) {
                         return p->GetValue() == "else";
                       }) != std::end(line);
+}
+
+void IfStatementParser::CheckStartOfElseStatement(Line &line) const {
+  if (line.size() != 2) {
+    throw SyntaxErrorException("Not a valid else statement");
+  }
+
+  if (line[0]->GetValue() != "else") {
+    throw SyntaxErrorException("Missing else statement");
+  }
+
+  if (line[1]->GetValue() != "{") {
+    throw SyntaxErrorException("Missing } at the start of else block");
+  }
 }
 
 bool IfStatementParser::IsEndOfIfElseStatement(Line &line) const {

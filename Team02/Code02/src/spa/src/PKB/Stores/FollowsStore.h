@@ -4,6 +4,15 @@
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 
+/**
+ * @class FollowsStore
+ * Class representing the Follows Store in PKB.
+ *
+ * The FollowsStore class is responsible for maintaining information about the Follows and Follows* relation in the PKB.
+ *
+ * Follows relation follows OneToOne mapping.
+ * Follows* relation follows ManyToMany mapping.
+ */
 class FollowsStore {
  public:
   /**
@@ -76,8 +85,20 @@ class FollowsStore {
    */
   bool hasAnyFollowsStarRelation();
 
+  /**
+   * Checks if there exists a follows* relationship with a statement as the first statement.
+   *
+   * @param statement - Statement to check if it has a follows star relationship as first statement.
+   * @return True if there is such a relationship, false otherwise.
+   */
   bool hasFollowsStar(PkbTypes::STATEMENT_NUMBER statement);
 
+  /**
+   * Checks if there exists a follows* relationship with a statement as the second statement.
+   *
+   * @param statement - Statement to check if it has a follows* relationship as second statement.
+   * @return True if there is such a relationship, false otherwise.
+   */
   bool hasFollowsStarBy(PkbTypes::STATEMENT_NUMBER statement);
 
  private:

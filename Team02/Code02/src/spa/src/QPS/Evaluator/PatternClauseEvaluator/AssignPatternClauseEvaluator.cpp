@@ -27,7 +27,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   } else if (is_arg_1_wildcard) {
     single_constraint = pkb->GetAssignStatements();
   } else {
-    single_constraint = pkb->GetStatementsModifiesVariable(first_arg_, StatementType::ASSIGN);
+    single_constraint = pkb->GetStatementsModifiesVariable(QueryUtil::GetIdent(first_arg_), StatementType::ASSIGN);
   }
 
   if (!single_constraint.empty()) {
