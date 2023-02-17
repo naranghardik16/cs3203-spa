@@ -50,26 +50,26 @@ TEST_CASE("Testcases for Modifies Store") {
   SECTION("Multiple statements modifying a single variable") {
     auto modifies_store = new ModifiesStore();
     modifies_store->addStatementModifyingVariable("2", "a");
-    modifies_store->addStatementModifyingVariable("2", "b");
     modifies_store->addStatementModifyingVariable("3", "a");
-    modifies_store->addStatementModifyingVariable("3", "c");
+
 
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") ==
-    std::unordered_set<std::string>({"a", "b"}));
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") ==
+        std::unordered_set<std::string>({"a"}));
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == true);
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "a") == true);
     REQUIRE_FALSE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "b") == true);
     REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
             PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({ std::make_pair("2", "a"),
-                                                              std::make_pair("2", "b"),
-                                                              std::make_pair("3", "a"),
-                                                              std::make_pair("3", "c") }));
+                                                              std::make_pair("3", "a")}));
 
   }
 
 
   // should adhere to the rule that a single statement cannot modify multiple variables
   SECTION("Multiple statements modifying a multiple variables") {
+
 
   }
 
