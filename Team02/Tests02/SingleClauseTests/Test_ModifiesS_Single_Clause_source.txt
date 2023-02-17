@@ -4,7 +4,3 @@ procedure q {
     z = x + 1; }
   else {
     x = z + x; } }
-
-procedure readPoint {
-  read x;
-  print z; }
