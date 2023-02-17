@@ -1,0 +1,22 @@
+procedure p {
+  read x;
+  read i;
+  print i;
+  if (x<0) then {
+    while (i>0) {
+      i = i - 1; }
+    print x;}
+  else {
+    z = 1; }}
+
+procedure q {
+  read q;
+  call r;
+}
+
+procedure r {
+  read q;
+  if (q < i) then {
+    print q;}
+  else {
+    print i;}}
