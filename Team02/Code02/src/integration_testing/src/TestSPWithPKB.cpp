@@ -79,3 +79,43 @@ TEST_CASE("Check if SP works with PKB") {
     cout << e.what();
   }
 }
+
+TEST_CASE("Check if Entity Extraction is correct") {
+  string input = "procedure main {\n"
+                 "  if (flag == 1) then {\n"
+                 "     count = 10;"
+                 "  } else {"
+                 "     count = 0;"
+                 "  }"
+                 "}\n";
+  std::istringstream is;
+  is.str(input);
+
+  PKB *pkb = new PKB();
+  SP *sp = new SP();
+  sp->ProcessSIMPLE(is, pkb);
+
+  PkbReadFacade *pkb_read_facade = new PkbReadFacade(*pkb);
+
+  SECTION("Check if the variable from if statement are added") {
+    auto var_store = pkb_read_facade->GetVariables();
+    vector<string> vars{"flag", "count"};
+    for (auto &var : vars) {
+      if (var_store.find(var) == var_store.end()) {
+        FAIL(var + " should be in the store");
+      }
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check if the constants from if statement are added") {
+    auto const_store = pkb_read_facade->GetConstants();
+    vector<string> constants{"1", "0", "10"};
+    for (auto &constant : constants) {
+      if (const_store.find(constant) == const_store.end()) {
+        FAIL(constant + " should be in the store");
+      }
+    }
+    SUCCEED();
+  }
+}

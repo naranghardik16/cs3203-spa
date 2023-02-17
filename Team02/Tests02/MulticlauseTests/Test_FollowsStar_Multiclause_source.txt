@@ -10,4 +10,5 @@ procedure Example {
     else {
       x = x + x; }
     x = z + i;
-    i = x - 1; } }
+    i = x - 1; }
+  print x;}

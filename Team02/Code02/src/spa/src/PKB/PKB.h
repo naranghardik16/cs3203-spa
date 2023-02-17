@@ -7,7 +7,6 @@
 #include "PKB/Stores/UsesStore.h"
 #include "PKB/Stores/ParentStore.h"
 
-
 class PKB {
  public:
   /**
@@ -48,3 +47,11 @@ class PKB {
   friend class PkbReadFacade;
 };
 
+// x = 1
+// read x;
+// print x;
+// call proc;
+// while (x > 0)
+// if (x > 0)
+
+// stmt_no -> { x, >, 0 }

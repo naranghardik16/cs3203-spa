@@ -146,6 +146,13 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
     throw SyntaxErrorException("There is syntax error with the subclauses and remaining characters that remain unparsed");
   }
 
+  if (QueryUtil::IsQuoted(first_parameter)) {
+    first_parameter = "\"" + string_util::Trim(first_parameter.substr(1, first_parameter.length() - 2)) + "\"";
+  }
+  if (QueryUtil::IsQuoted(second_parameter)) {
+    second_parameter = "\"" + string_util::Trim(second_parameter.substr(1, second_parameter.length() - 2)) + "\"";
+  }
+
   SyntaxPair clause_syntax;
   ParameterPair parameters;
   parameters.first = first_parameter;
