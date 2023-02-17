@@ -1,0 +1,49 @@
+1 - Uses(SYN, WILDCARD) - has result
+procedure p;
+Select p such that Uses(p, _)
+p, q, r
+5000
+2 - Uses(SYN, WILDCARD) - has result select irrelevant syn
+procedure p; read r;
+Select r such that Uses(p, _)
+1, 2, 9, 11
+5000
+3 - Uses(SYN, SYN) - has result select procedure
+procedure p; variable v;
+Select p such that Uses(p, v)
+p, q, r
+5000
+4 - Uses(SYN, SYN) - has result select variable
+procedure p; variable v;
+Select v such that Uses(p, v)
+x, i, q
+5000
+5 - Uses(SYN, IDENT) - has result
+procedure procedure; 
+Select procedure such that Uses(procedure, "q")
+q, r
+5000
+6 - Uses(SYN, IDENT) - has no result
+procedure procedure; 
+Select procedure such that Uses(procedure, "y")
+none
+5000
+7 - Uses(IDENT, WILDCARD) has result
+if ifs;
+Select ifs such that Uses("r", _)
+4, 12
+5000
+8 - Uses(IDENT, WILDCARD) has no result
+if ifs;
+Select ifs such that Uses("f", _)
+none
+5000
+9 - Uses(IDENT, SYN) has result
+variable v;
+Select v such that Uses("q", v)
+q, i
+5000
+10 - Uses(IDENT, IDENT) return true
+print p;
+Select p such that Uses("r", "i")
+3, 7, 13, 14

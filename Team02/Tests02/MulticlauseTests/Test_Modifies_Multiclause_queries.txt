@@ -43,3 +43,33 @@ assign a; variable v;
 Select v such that Modifies(11,"i") pattern a(v,_"2"_)
 x
 5000
+10 - Modifies return false, pattern has result
+assign a; variable v;
+Select a such that Modifies(1, "z") pattern a(v, _)
+none
+5000
+11 - Modifies return false, pattern has no result
+assign a; variable v;
+Select a such that Modifies(1, "z") pattern a("y", _)
+none
+5000
+12 - Modifies return true, pattern has no result
+assign a; variable v;
+Select a such that Modifies(9, "x") pattern a("y", _)
+none
+5000
+13 - Modifies has result, pattern has no result
+assign a; variable v;
+Select a such that Modifies(a, v) pattern a("y", _)
+none
+5000
+14 - Modifies has no result, pattern has no result
+assign a; variable v;
+Select a such that Modifies(a, "y") pattern a("y", _)
+none
+5000
+15 - Modifies has no result, pattern has result
+assign a; variable v;
+Select a such that Modifies(a, "y") pattern a("x", _)
+none
+5000
