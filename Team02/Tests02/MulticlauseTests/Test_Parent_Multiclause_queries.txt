@@ -1,11 +1,11 @@
 1 - 1 syn that are shared in both clauses/4 synonyms
 assign a; variable v; stmt s;
-Select s such that Parent(s, a) pattern a(v,_)
+Select s such that Parent(s,  a) pattern    a(   v,   _)
 4, 7, 8, 10, 12
 5000
 2 - 1 syn that is shared between both clauses/3 synonyms
 assign a; variable v; stmt s;
-Select a such that Parent(s, a) pattern a("digit",_)
+Select a such that Parent(s, a) pattern a("   digit",_)
 4, 7, 8, 10
 5000
 3 - 1 syn that is shared between both clauses/2 synonyms
@@ -14,42 +14,42 @@ Select a such that Parent(8, a) pattern a("number",_)
 none
 5000
 4 - 0 syn that is shared between both clauses/2 synonyms
-assign pattern; variable v; stmt Select;
+assign pattern; variable    v; stmt Select;
 Select Select such that Parent(Select, 13) pattern pattern("z",_)
 12
 5000
 5 - Parent return true, pattern has result
-assign a; variable v;
-Select a such that Parent(7, 14) pattern a(v, _)
+assign a; variable v    ;
+Select a    such that Parent(7, 14) pattern a(v, _)
 3, 5, 6, 9, 11, 13, 14, 15
 5000
 6 - Parent return true, pattern has no result
-assign a; variable v;
-Select a such that Parent(7, 14) pattern a("y", _)
+assign    a; variable v;
+Select    a such    that Parent(7, 14) pattern a("y", _)
 none
 5000
 7 - Parent return false, pattern has result
 assign a; variable v;
-Select a such that Parent(7, 9) pattern a(v, _)
+Select a    such that Parent(7,   9) pattern a(v, _)
 none
 5000
 8 - Parent return false, pattern has no result
 assign a; variable v;
-Select a such that Parent(10, 13) pattern a("y", _)
+Select a such that Parent(   10, 13) pattern a("y   ", _)
 none
 5000
 9 - Parent has result, pattern has no result
 assign a; variable v; stmt s;
-Select a such that Parent(s, a) pattern a("y", _)
+Select a such that Parent(s, a  ) pattern a("y  "   , _)
 none
 5000
 10 - Parent has no result, pattern has no result
 assign a; variable v;
-Select a such that Parent(1, a) pattern a("y", _)
+Select a such that Parent(  1, a) pattern   a   ("y", _)
 none
 5000
 11 - Parent has no result, pattern has result
 assign a; variable v;
-Select a such that Parent(2, a) pattern a("number", _)
+Select   a such that Parent   (2, a) pattern a("number", _)
 none
 5000
