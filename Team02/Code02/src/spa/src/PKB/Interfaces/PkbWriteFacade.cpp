@@ -26,7 +26,7 @@ void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statem
   this->pkb.uses_store_->addStatementUsingVariable(statement_number, variable);
 
   for (const auto& p: this->pkb.parent_store_->retrieveAllAncestors(statement_number)) {
-    this->pkb.modifies_store_->addStatementModifyingVariable(p, variable);
+    this->pkb.uses_store_->addStatementUsingVariable(p, variable);
   }
 }
 
