@@ -36,5 +36,5 @@ class AbstractionExtractor : public ParserVisitor {
   PkbWriteFacade *pkb_write_facade_;
   void ProcessStatements(const vector<Statement *> &statements,
                          PkbTypes::STATEMENT_NUMBER parent);
-  void ExtractParent(Statement *child_stmt, PkbTypes::STATEMENT_NUMBER parent);
+  void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, Statement *child_stmt);
 };
