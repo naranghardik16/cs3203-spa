@@ -30,13 +30,13 @@ Token* Tokenizer::MatchOtherToken(int first_char_index, string line, int* skip_i
     return new ConditionalOperatorToken(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
   }
 
-  if (regex_match(first_char, regex(CONDITIONAL_OPERATOR_RULE))) {
-    return new ConditionalOperatorToken(first_char, TOKEN_TYPES.find(first_char)->second);
-  }
-
   if (regex_match(first_and_second_char, regex(RELATIONAL_OPERATOR_RULE))) {
     *skip_index = first_char_index + 1;
     return new RelationalOperatorToken(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
+  }
+
+  if (regex_match(first_char, regex(CONDITIONAL_OPERATOR_RULE))) {
+    return new ConditionalOperatorToken(first_char, TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_char, regex(RELATIONAL_OPERATOR_RULE))) {
