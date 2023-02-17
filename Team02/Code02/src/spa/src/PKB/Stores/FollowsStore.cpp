@@ -18,8 +18,8 @@ void FollowsStore::addFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement
   while (!v.empty()) {
     std::unordered_set<PkbTypes::STATEMENT_NUMBER> updated_v;
     for (const auto& p: v) {
-      updated_v.insert(this->follows_star_store_.retrieveFromValue(p).begin(),
-                       this->follows_star_store_.retrieveFromValue(p).end());
+      auto arr = this->follows_star_store_.retrieveFromValue(p);
+      updated_v.insert(arr.begin(), arr.end());
       this->follows_star_store_.insert(p, second_statement);
     }
     v = updated_v;
