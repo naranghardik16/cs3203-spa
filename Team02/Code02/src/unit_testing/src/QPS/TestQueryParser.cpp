@@ -19,7 +19,7 @@ TEST_CASE("Test Valid Query Parser") {
   auto qp = std::make_shared<QueryParser>();
 
   SECTION("Test valid query with random spacing") {
-    std::string query("assign a;\nSelect a such that Uses(a, \"count\") pattern a(_,       _  \"  y     \" _)");
+    std::string query("assign a;\nSelect a such    that Uses(a, \"   count   \") pattern a(_,       _  \"  y     \" _)");
     auto parser_output = qp->ParseQuery(query);
     auto synonym = parser_output->GetSynonym();
     auto declaration_map = parser_output->GetDeclarationMap();

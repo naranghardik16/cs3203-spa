@@ -1,0 +1,23 @@
+procedure sumDigits {
+    read number;
+    read sum;
+    sum = 0;
+    while (number == 0) {
+        digit = number % 10 + 10 * 10 / 10 - 10;
+        sum = sum + digit;
+        while (sum >= 100) {
+            if (number <= 10) then {
+                sum = digit + number;
+            } else {
+                if ((digit > 10) || (sum < 10)) then {
+                    digit = 1;
+                } else {
+                    while ((digit != sum) && (digit <= sum)) {
+                        number = 2 + digit;
+                    }
+                }
+            }
+            number = number + 10;}
+        number = number / 10; }
+    print number;
+}
