@@ -4,7 +4,7 @@
 
 TEST_CASE("Testcases for Modifies Store") {
   SECTION("Basic Statement Number to Variable Mapping") {
-    ModifiesStore* modifies_store = new ModifiesStore();
+    auto modifies_store = new ModifiesStore();
 
     modifies_store->addStatementModifyingVariable("2", "a");
     modifies_store->addStatementModifyingVariable("2", "b");
@@ -14,7 +14,7 @@ TEST_CASE("Testcases for Modifies Store") {
   }
 
   SECTION("Empty Modifies store") {
-    ModifiesStore* modifies_store = new ModifiesStore();
+    auto modifies_store = new ModifiesStore();
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == false);
     REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "a") == false);
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<PkbTypes
@@ -26,10 +26,11 @@ TEST_CASE("Testcases for Modifies Store") {
   }
 
   SECTION("Single statement modifying a single variable") {
-    ModifiesStore* modifies_store = new ModifiesStore();
+    auto modifies_store = new ModifiesStore();
 
     modifies_store->addStatementModifyingVariable("2", "a");
     modifies_store->addStatementModifyingVariable("3", "b");
+
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<std::string>({"a"}));
     REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({"a"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({"b"}));
@@ -40,12 +41,29 @@ TEST_CASE("Testcases for Modifies Store") {
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "c") == false);
   }
 
-  // This will result in error according to Sumanth - why?
-  SECTION("Single statement modifying multiple variables") {
-
-  }
+//  Should throw error
+//  SECTION("Single statement modifying multiple variables") {
+//
+//
+//  }
 
   SECTION("Multiple statements modifying a single variable") {
+    auto modifies_store = new ModifiesStore();
+    modifies_store->addStatementModifyingVariable("2", "a");
+    modifies_store->addStatementModifyingVariable("2", "b");
+    modifies_store->addStatementModifyingVariable("3", "a");
+    modifies_store->addStatementModifyingVariable("3", "c");
+
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") ==
+    std::unordered_set<std::string>({"a", "b"}));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "a") == true);
+    REQUIRE_FALSE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "b") == true);
+    REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({ std::make_pair("2", "a"),
+                                                              std::make_pair("2", "b"),
+                                                              std::make_pair("3", "a"),
+                                                              std::make_pair("3", "c") }));
 
   }
 
