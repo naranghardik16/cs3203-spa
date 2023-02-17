@@ -139,7 +139,7 @@ TEST_CASE("Testcases for Modifies Store") {
 
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("anya")
     == std::unordered_set<std::string>({"a", "b", "e"}));
-    REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAStatement("bumblebee")
+    REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee")
     == std::unordered_set<std::string>({"c"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee")
     == std::unordered_set<std::string>({"c", "d"}));
@@ -156,6 +156,32 @@ TEST_CASE("Testcases for Modifies Store") {
   }
 
   SECTION("Multiple Procedures modifying single variable") {
+    auto modifies_store = new ModifiesStore();
+
+    modifies_store->addProcedureModifyingVariable("anya", "a");
+    modifies_store->addProcedureModifyingVariable("bumblebee", "a");
+    modifies_store->addProcedureModifyingVariable("megatron", "b");
+    modifies_store->addProcedureModifyingVariable("ironhide", "b");
+
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "a"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("bumblebee", "a"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("megatron", "b"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("ironhide", "b"));
+
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("anya") ==
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("megatron") ==
+        std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("ironhide") ==
+        std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
+            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+              std::make_pair("anya", "a"), std::make_pair("bumblebee", "a"),
+              std::make_pair("megatron", "b"),
+              std::make_pair("ironhide", "b")}));
+
 
   }
 
