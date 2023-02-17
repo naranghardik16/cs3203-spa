@@ -16,7 +16,7 @@ Select assign such that Modifies(3, "z")
 4 - (Valid Query) Select Modifies(INT, IDENT) is False
 assign assign;
 Select assign such that Modifies(2, "x")
-none
+3, 4
 5000
 5 - (Valid Query) Select Modifies(SYN, WILDCARD)
 stmt s;
