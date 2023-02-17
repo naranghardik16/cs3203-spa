@@ -7,35 +7,22 @@ ParentStore::~ParentStore() = default;
 void ParentStore::addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement,
                                     PkbTypes::STATEMENT_NUMBER second_statement) {
   this->parent_store_.insert(first_statement, second_statement);
-//  this->dfs(first_statement, second_statement);
   this->parent_star_store_.insert(first_statement, second_statement);
 
-  std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> current =
-      std::make_pair(first_statement, second_statement);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> parents =
+      this->parent_star_store_.retrieveFromValue(first_statement);
 
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> children =
-      this->parent_store_.retrieveFromKey(current.second);
+  while (!parents.empty()) {
+    std::unordered_set<PkbTypes::STATEMENT_NUMBER> updated_parents;
+    for (const auto& p : parents) {
+      std::unordered_set<PkbTypes::STATEMENT_NUMBER> grand_parents = this->parent_star_store_.retrieveFromValue(p);
+      updated_parents.insert(grand_parents.begin(), grand_parents.end());
 
-  while (!children.empty()) {
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER> updated_children;
-
-    for (const auto& c : children) {
-      this->parent_star_store_.insert(current.first, c);
-
-      std::unordered_set<PkbTypes::STATEMENT_NUMBER> grand_children = this->parent_store_.retrieveFromKey(c);
-      updated_children.insert(grand_children.begin(), grand_children.end());
+      this->parent_star_store_.insert(p, second_statement);
     }
-    children = updated_children;
+    parents = updated_parents;
   }
 }
-
-//void ParentStore::dfs(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement) {
-//  this->parent_star_store_.insert(first_statement, second_statement);
-//  std::unordered_set<PkbTypes::STATEMENT_NUMBER> children = this->parent_store_.retrieveFromKey(second_statement);
-//  for (const auto& child : children) {
-//    this->dfs(first_statement, child);
-//  }
-//}
 
 std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
     ParentStore::retrieveAllParentPairs() {
