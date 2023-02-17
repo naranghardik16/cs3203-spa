@@ -1,6 +1,5 @@
 #pragma once
 #include "Operation.h"
-#include <iostream>
 
 Operation::Operation(string name,
                      string type,

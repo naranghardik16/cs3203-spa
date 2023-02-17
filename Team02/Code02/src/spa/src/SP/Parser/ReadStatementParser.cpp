@@ -1,5 +1,4 @@
 #include "ReadStatementParser.h"
-#include <iostream>
 
 ReadStatement *ReadStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();

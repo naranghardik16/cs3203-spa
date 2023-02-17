@@ -1,6 +1,5 @@
 #pragma once
 #include "DesignExtractor.h"
-#include <iostream>
 
 DesignExtractor::DesignExtractor(PKB *pkb) {
   pkb_ = pkb;
