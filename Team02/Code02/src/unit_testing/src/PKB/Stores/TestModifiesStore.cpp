@@ -69,7 +69,40 @@ TEST_CASE("Testcases for Modifies Store") {
 
   // should adhere to the rule that a single statement cannot modify multiple variables
   SECTION("Multiple statements modifying a multiple variables") {
+    auto modifies_store = new ModifiesStore();
+    modifies_store->addStatementModifyingVariable("1", "a");
+    modifies_store->addStatementModifyingVariable("2", "b");
+    modifies_store->addStatementModifyingVariable("3", "c");
+    modifies_store->addStatementModifyingVariable("4", "d");
+    modifies_store->addStatementModifyingVariable("5", "a");
+    modifies_store->addStatementModifyingVariable("6", "b");
+    modifies_store->addStatementModifyingVariable("7", "c");
+    modifies_store->addStatementModifyingVariable("8", "d");
 
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("1", "a") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "b") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "c") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("4", "d") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("5", "a") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("6", "b") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("7", "c") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("8", "d") == true);
+
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("1") == std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({"c"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("4") == std::unordered_set<std::string>({"d"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("5") == std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("6") == std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("7") == std::unordered_set<std::string>({"c"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("8") == std::unordered_set<std::string>({"d"}));
+
+    REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+            PkbTypes::VARIABLE>,PairHasherUtil::hash_pair>(
+                { std::make_pair("1", "a"), std::make_pair("2", "b"),
+                  std::make_pair("3", "c"), std::make_pair("4", "d"),
+                  std::make_pair("5", "a"), std::make_pair("6", "b"),
+                  std::make_pair("7", "c"), std::make_pair("8", "d")}));
 
   }
 
