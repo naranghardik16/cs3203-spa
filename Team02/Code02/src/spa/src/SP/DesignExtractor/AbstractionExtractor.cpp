@@ -38,7 +38,7 @@ void AbstractionExtractor::VisitReadStatement(ReadStatement *read_statement) {
 }
 
 void AbstractionExtractor::VisitRelationalOperation(RelationalOperation *rel_operation) {
-  
+
 }
 
 void AbstractionExtractor::VisitIfStatement(IfStatement *if_statement) {
@@ -57,8 +57,8 @@ void AbstractionExtractor::ProcessStatements(const vector<Statement *> &statemen
   for (Statement *s : statements) {
     if (prev_stmt != nullptr) {
       this->ExtractFollows(prev_stmt, s);
-      this->ExtractParent(s, parent);
     }
+    this->ExtractParent(parent, s);
     s->Accept(this);
     prev_stmt = s;
   }
@@ -95,8 +95,9 @@ void AbstractionExtractor::ExtractFollows(Statement *prev_stmt,
   pkb_write_facade_->AddFollowsRelation(prev_stmt_no, curr_stmt_no);
 }
 
-void AbstractionExtractor::ExtractParent(Statement *child_stmt,
-                                         PkbTypes::STATEMENT_NUMBER parent) {
+void AbstractionExtractor::ExtractParent(PkbTypes::STATEMENT_NUMBER parent,
+                                         Statement *child_stmt
+) {
   PkbTypes::STATEMENT_NUMBER
       child_stmt_no = std::to_string(child_stmt->GetStatementNumber());
   pkb_write_facade_->AddParentRelation(parent, child_stmt_no);
