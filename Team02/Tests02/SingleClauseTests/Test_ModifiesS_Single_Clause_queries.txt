@@ -1,7 +1,7 @@
 1 - (Valid Query) Select Modifies(SYN, IDENT) with container statements
 if i;
 Select i such that Modifies(i,"z")
-2, 3
+2
 5000
 2 - (Valid Query) Select Modifies(INT, WILDCARD) is False
 assign assign;
