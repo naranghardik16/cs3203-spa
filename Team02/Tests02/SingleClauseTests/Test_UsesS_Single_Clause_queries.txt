@@ -1,0 +1,85 @@
+1 - Uses(SYN, WILDCARD) - has result
+stmt s;
+Select s such that Uses(s  , _)
+3, 4, 5, 6, 7
+5000
+2 - Uses(SYN, WILDCARD) - has result, select irrelevent syn
+stmt s; read     r;
+Select r such that Uses(s, _)
+1, 2
+5000
+3 - Uses(SYN, WILDCARD) - has no result
+read r;
+Select r such that Uses(r, _)
+none
+5000
+4 - Uses(SYN, SYN) - has result select stmt
+if     if; variable v;
+Select if such that Uses(if, v)
+4
+5000
+5 - Uses(SYN, SYN) - has result select variable
+if if;    variable v;
+Select   v such  that Uses(if, v)
+x, i
+5000
+6 - Uses(SYN, SYN) - has result select irrelevent syn
+if if; variable v; print p;
+Select p   such   that Uses(if, v)
+3, 7
+5000
+7 - Uses(SYN, SYN) - has no result
+read r; variable v;
+Select     r     such that Uses(r, v)
+none
+5000
+8 - Uses(SYN, IDENT) - has result
+if ifs;
+Select     ifs such that Uses     (ifs, "i")
+4
+5000
+9 - Uses(SYN, IDENT) - has result select irrelevent syn
+if ifs; read r;
+Select r such that Uses(ifs, "    i")
+1, 2
+5000
+10 - Uses(SYN, IDENT) - has no result
+if ifs; read r;
+Select     r such that    Uses(ifs, "z    ")
+none
+5000
+11 - Uses(INT, WILDCARD) - return true
+while w;
+Select w such      that Uses(      3, _)
+5
+5000
+12 - Uses(INT, WILDCARD) - return false
+while w;
+Select w    such that Uses(2, _     )
+none
+5000
+13 - Uses(INT, SYN) - has result
+variable print;
+Select print such that Uses(7, print)
+x
+5000
+14 - Uses(INT, SYN) - has result select irrelevent syn
+variable print; assign a;
+Select a such that Uses(7, print)
+6, 8
+5000
+15 - Uses(INT, SYN) - has no result
+variable print;
+Select print such that Uses(8, print)
+none
+5000
+16 - Uses(INT, IDENT) - return true
+if pattern;
+Select pattern such that Uses(5, "i")
+4
+5000
+17 - Uses(INT, IDENT) - return false
+if such;
+Select such such that Uses(7, "i")
+none
+5000

@@ -43,4 +43,33 @@ assign a; variable v;
 Select v such that Uses(_,"z") pattern a(_,v)
 x, z, i
 5000
-
+10 - Uses return false, pattern has result
+assign a; variable v;
+Select a such that Uses(1, "x") pattern a(v, _)
+none
+5000
+11 - Uses return false, pattern has no result
+assign a; variable v;
+Select a such that Uses(1, "x") pattern a("y", _)
+none
+5000
+12 - Uses return true, pattern has no result
+assign a; variable v;
+Select a such that Uses(9, "x") pattern a("y", _)
+none
+5000
+13 - Uses has result, pattern has no result
+assign a; variable v;
+Select a such that Uses(a, v) pattern a("y", _)
+none
+5000
+14 - Uses has no result, pattern has no result
+assign a; variable v;
+Select a such that Uses(a, "y") pattern a("y", _)
+none
+5000
+15 - Uses has no result, pattern has result
+assign a; variable v;
+Select a such that Uses(a, "y") pattern a("x", _)
+none
+5000
