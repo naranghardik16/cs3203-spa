@@ -75,8 +75,24 @@ TEST_CASE("Testcases for Modifies Store") {
 
 
   SECTION("Single Procedure modifying a single variable") {
+    auto modifies_store = new ModifiesStore();
 
+    modifies_store->addProcedureModifyingVariable("anya", "a");
+    modifies_store->addProcedureModifyingVariable("bumblebee", "b");
 
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("anya") ==
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee") ==
+    std::unordered_set<std::string>({"b"}));
+    REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee") ==
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee") ==
+    std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveProcedureVariablePairs() ==
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE , PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+          std::make_pair("anya", "a"), std::make_pair("bumblebee", "b") }));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "a") == true);
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("bumblebee", "c") == false);
   }
 
   SECTION("Single Procedure modifying multiple variables") {
