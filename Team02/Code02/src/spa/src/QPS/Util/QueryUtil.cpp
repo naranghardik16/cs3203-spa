@@ -11,7 +11,7 @@ bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
 }
 
 bool QueryUtil::IsQuoted(const std::string& s) {
-  return (s[0] == '"') && (s[s.length()-1] == '"');
+  return s.length() >= 2 && (s[0] == '"') && (s[s.length()-1] == '"');
 }
 
 bool QueryUtil::IsWildcard(const std::string& s) {
