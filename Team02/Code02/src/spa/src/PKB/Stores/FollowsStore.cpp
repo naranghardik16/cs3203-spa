@@ -55,10 +55,10 @@ bool FollowsStore::hasAnyFollowsStarRelation() {
 }
 
 bool FollowsStore::hasFollowsStar(PkbTypes::STATEMENT_NUMBER statement) {
-  return !this->follows_star_store_.retrieveFromValue(statement).empty();
+  return this->follows_star_store_.containsKey(statement);
 }
 
 bool FollowsStore::hasFollowsStarBy(PkbTypes::STATEMENT_NUMBER statement) {
-  return !this->follows_star_store_.retrieveFromKey(statement).empty();
+  return this->follows_star_store_.containsValue(statement);
 }
 
