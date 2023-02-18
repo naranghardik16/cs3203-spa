@@ -51,6 +51,9 @@ TEST_CASE("Testcases for Parent Store") {
   SECTION("Dependent Parent with Single Transitive Relationship") {
     auto parent_store = new ParentStore();
 
+    parent_store->addParentRelation("1", "2");
+    parent_store->addParentRelation("2", "3");
+
   }
 
   SECTION("Dependent Follows with Multiple Transitive Relationship") {
