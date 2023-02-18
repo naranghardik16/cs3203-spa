@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "TokenType.h"
+#include <memory>
 using namespace std;
 
 class Token {

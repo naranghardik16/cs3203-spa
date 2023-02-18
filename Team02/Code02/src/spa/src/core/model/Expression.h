@@ -2,6 +2,7 @@
 
 #include<string>
 #include "Entity.h"
+#include <optional>
 
 class Expression : public Entity {
  public:
