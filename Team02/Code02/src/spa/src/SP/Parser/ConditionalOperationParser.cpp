@@ -5,7 +5,7 @@ cond_expr: rel_expr | '!' '(' cond_expr ')' |
            '(' cond_expr ')' '&&' '(' cond_expr ')' |
            '(' cond_expr ')' '||' '(' cond_expr ')'
  */
-Operation *ConditionalOperationParser::Parse() {
+shared_ptr<Expression> ConditionalOperationParser::Parse() {
   if (GetCurrentTokenType() == NOT) {
     GetNext();
     if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
@@ -15,9 +15,9 @@ Operation *ConditionalOperationParser::Parse() {
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
       }
-      pair<Expression*, Expression*> args;
+      pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
       args.first = cond_expr;
-      return new ConditionalOperation("!", args);
+      return make_shared<ConditionalOperation>("!", args);
     }
   } else if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
     GetNext();
@@ -42,10 +42,10 @@ Operation *ConditionalOperationParser::Parse() {
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
       }
-      pair<Expression*, Expression*> args;
+      pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
       args.first = left_cond_expr;
       args.second = right_cond_expr;
-      return new ConditionalOperation(op, args);
+      return make_shared<ConditionalOperation>(op, args);
     } else {
       throw SyntaxErrorException("Missing (");
     }
@@ -56,10 +56,10 @@ Operation *ConditionalOperationParser::Parse() {
     auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
     this->SetIsSubExpr(false);
     if (rel_expr) {
-      pair<Expression*, Expression*> args;
+      pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
       args.first = rel_expr;
       UpdateCurrTokenWithUpdatedPos();
-      return new ConditionalOperation("rel_expr", args);
+      return make_shared<ConditionalOperation>("rel_expr", args);
     }
   }
 

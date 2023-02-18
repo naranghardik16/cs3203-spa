@@ -56,9 +56,9 @@ TEST_CASE("Check if Parser works with non control flow statements") {
 
     SECTION(
         "Check if the AssignStatement has correct fields with Variable expression") {
-      auto stmt_var = program.GetProcedureList()[0]->GetStatementList()[0];
+      auto stmt_var = program->GetProcedureList()[0]->GetStatementList()[0];
       auto stmt_type = stmt_var->GetStatementType();
-      auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_var);
+      auto assign_stmt = dynamic_pointer_cast<AssignStatement>(stmt_var);
       auto var = assign_stmt->GetVariable();
       auto expression = assign_stmt->GetExpression();
       REQUIRE(assign_stmt->GetStatementType() == "assign");
@@ -69,8 +69,8 @@ TEST_CASE("Check if Parser works with non control flow statements") {
 
     SECTION(
         "Check if the AssignStatement has correct fields with Constant expression") {
-      auto stmt_const = program.GetProcedureList()[0]->GetStatementList()[1];
-      auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_const);
+      auto stmt_const = program->GetProcedureList()[0]->GetStatementList()[1];
+      auto assign_stmt = dynamic_pointer_cast<AssignStatement>(stmt_const);
       auto expression = assign_stmt->GetExpression();
       REQUIRE(assign_stmt->GetStatementType() == "assign");
       REQUIRE(assign_stmt->GetStatementNumber() == 2);
@@ -78,8 +78,8 @@ TEST_CASE("Check if Parser works with non control flow statements") {
     }
 
     SECTION("Check if the ReadStatement has correct fields") {
-      auto stmt = program.GetProcedureList()[0]->GetStatementList()[2];
-      auto read_stmt = dynamic_cast<ReadStatement *>(stmt);
+      auto stmt = program->GetProcedureList()[0]->GetStatementList()[2];
+      auto read_stmt = dynamic_pointer_cast<ReadStatement>(stmt);
       auto var = read_stmt->GetVariable();
       REQUIRE(read_stmt->GetStatementType() == "read");
       REQUIRE(read_stmt->GetStatementNumber() == 3);
@@ -87,8 +87,8 @@ TEST_CASE("Check if Parser works with non control flow statements") {
     }
 
     SECTION("Check if the PrintStatement has correct fields") {
-      auto stmt = program.GetProcedureList()[0]->GetStatementList()[3];
-      auto print_stmt = dynamic_cast<PrintStatement *>(stmt);
+      auto stmt = program->GetProcedureList()[0]->GetStatementList()[3];
+      auto print_stmt = dynamic_pointer_cast<PrintStatement>(stmt);
       auto var = print_stmt->GetVariable();
       REQUIRE(print_stmt->GetStatementType() == "print");
       REQUIRE(print_stmt->GetStatementNumber() == 4);

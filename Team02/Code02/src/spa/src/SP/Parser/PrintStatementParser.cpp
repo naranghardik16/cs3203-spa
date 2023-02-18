@@ -1,12 +1,12 @@
 #include "PrintStatementParser.h"
 
-PrintStatement *PrintStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> PrintStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto print_stmt =
-      new PrintStatement(Program::GetAndIncreaseStatementNumber(), var, "main");
+      make_shared<PrintStatement>(Program::GetAndIncreaseStatementNumber(), var, "main");
   CheckEndOfStatement(line);
   return print_stmt;
 }

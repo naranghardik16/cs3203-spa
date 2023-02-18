@@ -8,19 +8,16 @@ WhileStatement::WhileStatement(int statement_number,
     std::move(in_scope_of_proc)), condition_(std::move(condition)) {}
 
 WhileStatement::~WhileStatement() noexcept {
-  for (auto stmt : loop_statements_) {
-    delete stmt;
-  }
   loop_statements_.clear();
 }
 
-void WhileStatement::AddStatement(Statement *stmt) {
+void WhileStatement::AddStatement(shared_ptr<Statement> stmt) {
   loop_statements_.push_back(stmt);
 }
 
 // TODO: implement accept for the visitor pattern
-void WhileStatement::Accept(ParserVisitor *visitor) {
-  visitor->VisitWhileStatement(this);
+void WhileStatement::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitWhileStatement(shared_from_this());
 }
 
 ConditionalOperation WhileStatement::GetCondition() const {

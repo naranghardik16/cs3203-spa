@@ -1,12 +1,12 @@
 #include "AssignStatementParser.h"
 
-AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto assign_stmt =
-      new AssignStatement(Program::GetAndIncreaseStatementNumber(),
+  make_shared<AssignStatement>(Program::GetAndIncreaseStatementNumber(),
                           var,
                           "main");
   CheckEndOfStatement(line);

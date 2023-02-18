@@ -8,8 +8,8 @@
 class IfStatementParser : public StatementParser {
  public:
   IfStatementParser() = default;
-  IfStatement *ParseEntity(TokenStream &tokens) override;
-  [[nodiscard]] ConditionalOperation ExtractCondition(Line &line);
+  shared_ptr<Statement> ParseEntity(TokenStream &tokens) override;
+  [[nodiscard]] shared_ptr<ConditionalOperation> ExtractCondition(Line &line);
   void CheckStartOfIfStatement(Line &line) const;
   void CheckStartOfElseStatement(Line &line) const;
   bool HasElseStatements(Line &line) const;

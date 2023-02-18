@@ -3,5 +3,5 @@
 
 class Entity {
  public:
-  virtual void Accept(ParserVisitor* visitor) = 0;
+  virtual void Accept(shared_ptr<ParserVisitor> visitor) = 0;
 };

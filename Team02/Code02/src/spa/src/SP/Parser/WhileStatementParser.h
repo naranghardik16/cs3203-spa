@@ -8,8 +8,8 @@
 class WhileStatementParser : public StatementParser {
  public:
   WhileStatementParser() = default;
-  WhileStatement *ParseEntity(TokenStream &tokens) override;
-  [[nodiscard]] ConditionalOperation ExtractCondition(Line &line);
+  shared_ptr<Statement> ParseEntity(TokenStream &tokens) override;
+  [[nodiscard]] shared_ptr<ConditionalOperation> ExtractCondition(Line &line);
   void CheckStartOfLoopStatement(Line &line) const;
   bool IsEndOfWhileStatement(Line &line) const;
 };

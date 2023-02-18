@@ -3,12 +3,11 @@
 #include "RelationalOperation.h"
 
 RelationalOperation::RelationalOperation(string name,
-                                         pair<Expression *,
-                                              Expression *> arguments)
+                                         pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments)
     : Operation(move(name), "relational", arguments) {}
 
-void RelationalOperation::Accept(ParserVisitor *visitor) {
-  visitor->VisitRelationalOperation(this);
+void RelationalOperation::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitRelationalOperation(shared_from_this());
 }
 
 bool RelationalOperation::operator==(const Expression &other) const {

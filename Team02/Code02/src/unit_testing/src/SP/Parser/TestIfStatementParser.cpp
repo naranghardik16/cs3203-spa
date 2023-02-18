@@ -42,15 +42,15 @@ TEST_CASE("Check if ExtractCondition works") {
   try {
     auto if_parser = new IfStatementParser();
     auto condition = if_parser->ExtractCondition(if_line_valid);
-    pair<Expression *, Expression *>
+    pair<shared_ptr<Expression>, shared_ptr<Expression>>
         rel_args{new Variable("x"), new Constant("5")};
     auto rel = new RelationalOperation(">", rel_args);
 
-    pair<Expression *, Expression *> cond_args{rel, nullptr};
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_args{rel, nullptr};
     auto
         expected_condition_expr =
-        new ConditionalOperation("rel_expr", cond_args);
-    REQUIRE(condition.operator==(*expected_condition_expr));
+        make_shared<ConditionalOperation>("rel_expr", cond_args);
+    REQUIRE(condition->operator==(*expected_condition_expr));
   } catch (std::exception &e) {
     cout << e.what() << endl;
   }
@@ -100,28 +100,28 @@ TEST_CASE("Check if IfStatementParser detects then and else statements") {
         tokens
         {if_line_valid, then_stmt, end_of_then, else_line, else_stmt, end_line};
     auto if_parser = new IfStatementParser();
-    auto if_stmt = if_parser->ParseEntity(tokens);
+    shared_ptr<IfStatement> if_stmt = dynamic_pointer_cast<IfStatement>(if_parser->ParseEntity(tokens));
     REQUIRE(if_stmt->GetStatementNumber() == 1);
     auto condition = if_stmt->GetCondition();
-    pair<Expression *, Expression *>
+    pair<shared_ptr<Expression>, shared_ptr<Expression>>
         rel_args{new Variable("x"), new Constant("5")};
-    auto rel = new RelationalOperation("<", rel_args);
+    auto rel = make_shared<RelationalOperation>("<", rel_args);
 
-    pair<Expression *, Expression *> cond_args{rel, nullptr};
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_args{rel, nullptr};
     auto
         expected_condition_expr =
-        new ConditionalOperation("rel_expr", cond_args);
+        make_shared<ConditionalOperation>("rel_expr", cond_args);
     REQUIRE(condition.operator==(*expected_condition_expr));
     auto then_stmts = if_stmt->GetThenStatements();
     REQUIRE(then_stmts[0]->GetStatementNumber() == 2);
-    auto assign_stmt = dynamic_cast<AssignStatement *>(then_stmts[0]);
-    auto print_stmt_wrong = dynamic_cast<PrintStatement *>(then_stmts[0]);
-    REQUIRE(assign_stmt != NULL);
-    REQUIRE(print_stmt_wrong == NULL);
+    auto assign_stmt = dynamic_pointer_cast<AssignStatement>(then_stmts[0]);
+    auto print_stmt_wrong = dynamic_pointer_cast<PrintStatement>(then_stmts[0]);
+    REQUIRE(assign_stmt != nullptr);
+    REQUIRE(print_stmt_wrong == nullptr);
     REQUIRE(assign_stmt->GetVariable() == Variable("x"));
     auto else_stmts = if_stmt->GetElseStatements();
-    assign_stmt = dynamic_cast<AssignStatement *>(else_stmts[0]);
-    REQUIRE(assign_stmt != NULL);
+    assign_stmt = dynamic_pointer_cast<AssignStatement>(else_stmts[0]);
+    REQUIRE(assign_stmt != nullptr);
     REQUIRE(assign_stmt->GetStatementNumber() == 3);
     REQUIRE(*(assign_stmt->GetExpression()) == (Variable("z")));
     SUCCEED();

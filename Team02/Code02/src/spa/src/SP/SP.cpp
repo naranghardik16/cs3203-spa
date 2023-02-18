@@ -2,16 +2,16 @@
 
 SP::SP() {};
 
-void SP::ProcessSIMPLE(istream &source, PKB *pkb) {
+void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
   try {
-    Tokenizer *tokenizer = new Tokenizer();
-    Parser::TokenStream *tokens = tokenizer->Tokenize(source);
+    shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
+    shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(source);
 
-    Parser *parser = new Parser();
-    Program program = parser->ParseSource(*tokens);
+    shared_ptr<Parser> parser = make_shared<Parser>();
+    shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-    DesignExtractor *design_extractor = new DesignExtractor(pkb);
-    design_extractor->ExtractDesign(&program);
+    shared_ptr<DesignExtractor> design_extractor = make_shared<DesignExtractor>(pkb);
+    design_extractor->ExtractDesign(program);
   } catch (SpaException *e) {
     cout << e->what();
   }

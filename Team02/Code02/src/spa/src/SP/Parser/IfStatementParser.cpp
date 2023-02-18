@@ -1,11 +1,11 @@
 #include "IfStatementParser.h"
 
-IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   auto condition = ExtractCondition(line);
-  auto if_stmt = new IfStatement(Program::GetAndIncreaseStatementNumber(),
-                                 condition,
+  auto if_stmt = make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
+                                 *condition,
                                  "main");
   CheckStartOfIfStatement(line);
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
@@ -36,7 +36,7 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
   return if_stmt;
 }
 
-ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
+shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line) {
   // remove "if (" and ") then {" from the token line
   vector<Token *> expression_tokens{line.begin() + 2, line.end() - 3};
   auto expr_parser =
@@ -47,7 +47,7 @@ ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
   if (!condition) {
     throw SyntaxErrorException("Could not get a condition for if statement");
   }
-  return *dynamic_cast<ConditionalOperation *>(condition);
+  return dynamic_pointer_cast<ConditionalOperation>(condition);
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {

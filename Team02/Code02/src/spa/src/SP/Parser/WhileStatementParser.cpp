@@ -1,11 +1,11 @@
 #include "WhileStatementParser.h"
 
-WhileStatement *WhileStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> WhileStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   auto condition = ExtractCondition(line);
-  auto while_stmt = new WhileStatement(Program::GetAndIncreaseStatementNumber(),
-                                       condition,
+  auto while_stmt = make_shared<WhileStatement>(Program::GetAndIncreaseStatementNumber(),
+                                       *condition,
                                        "main");
   CheckStartOfLoopStatement(line);
   while (!tokens.empty() && !IsEndOfWhileStatement(tokens.front())) {
@@ -30,7 +30,7 @@ void WhileStatementParser::CheckStartOfLoopStatement(Line &line) const {
   }
 }
 
-ConditionalOperation WhileStatementParser::ExtractCondition(Line &line) {
+shared_ptr<ConditionalOperation> WhileStatementParser::ExtractCondition(Line &line) {
   // remove "while (" and ") {" from the token line
   vector<Token *> expression_tokens{line.begin() + 2, line.end() - 2};
   auto expr_parser =
@@ -41,7 +41,7 @@ ConditionalOperation WhileStatementParser::ExtractCondition(Line &line) {
   if (!condition) {
     throw SyntaxErrorException("Could not get a condition for if statement");
   }
-  return *dynamic_cast<ConditionalOperation *>(condition);
+  return dynamic_pointer_cast<ConditionalOperation>(condition);
 }
 
 bool WhileStatementParser::IsEndOfWhileStatement(Line &line) const {

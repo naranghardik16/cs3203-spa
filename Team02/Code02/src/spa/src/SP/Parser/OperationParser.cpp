@@ -56,13 +56,13 @@ string OperationParser::GetCurrentTokenValue() {
   return curr_token_value_;
 }
 
-Expression *OperationParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Expression> OperationParser::ParseEntity(TokenStream &tokens) {
   return ParseEntity(tokens.front());
 }
 
-Expression *OperationParser::ParseEntity(Line &line) {
+shared_ptr<Expression> OperationParser::ParseEntity(Line &line) {
   Setup(line);
-  Expression *result = Parse();
+  shared_ptr<Expression> result = Parse();
   ValidateForBalancedParenthesis();
   return result;
 }
@@ -84,9 +84,6 @@ void OperationParser::ValidateForBalancedParenthesis() {
     return;
   }
   throw SyntaxErrorException("Unbalanced parenthesis ()");
-//  if (!is_sub_expr_ && !IsEndOfLine()) {
-//    throw SyntaxErrorException("Unbalanced parenthesis ()");
-//  }
 }
 
 void OperationParser::ValidateEnoughTokensToProcess(string err_msg) {

@@ -6,6 +6,6 @@
 class VariableParser : public ExpressionParser {
  public:
   VariableParser() = default;
-  Variable *ParseEntity(TokenStream &tokens) override;
-  Variable *ParseEntity(Line &line) override;
+  shared_ptr<Expression> ParseEntity(TokenStream &tokens) override;
+  shared_ptr<Expression> ParseEntity(Line &line) override;
 };

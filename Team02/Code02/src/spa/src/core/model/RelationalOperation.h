@@ -4,10 +4,10 @@
 
 using namespace std;
 
-class RelationalOperation : public Operation {
+class RelationalOperation : public Operation, public enable_shared_from_this<RelationalOperation> {
  public:
-  RelationalOperation(string name, pair<Expression*, Expression*> arguments);
-  void Accept(ParserVisitor *visitor) override;
+  RelationalOperation(string name, pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments);
+  void Accept(shared_ptr<ParserVisitor> visitor) override;
   bool operator==(const Expression &other) const override;
 };
 

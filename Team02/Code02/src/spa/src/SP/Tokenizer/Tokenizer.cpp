@@ -67,8 +67,8 @@ Token* Tokenizer::MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val,
   return NULL;
 }
 
-Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
-  Parser::TokenStream *token_stream = new Parser::TokenStream();
+shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
+  shared_ptr<Parser::TokenStream> token_stream = make_shared<Parser::TokenStream>();
   vector<Token*> line_of_tokens = {};
   LexicalRuleValidator *lrv = new LexicalRuleValidator();
 

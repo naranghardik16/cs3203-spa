@@ -63,7 +63,7 @@ class Tokenizer {
   Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
  public:
   Tokenizer();
-  Parser::TokenStream* Tokenize(istream &stream);
+  shared_ptr<Parser::TokenStream> Tokenize(istream &stream);
 };
 
 

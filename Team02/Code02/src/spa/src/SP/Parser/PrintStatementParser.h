@@ -6,7 +6,7 @@
 class PrintStatementParser : public StatementParser {
  public:
   PrintStatementParser() = default;
-  PrintStatement *ParseEntity(TokenStream &tokens) override;
+  shared_ptr<Statement> ParseEntity(TokenStream &tokens) override;
   [[nodiscard]] std::string ExtractVariableName(Line &line) const;
   void CheckEndOfStatement(Line &line) const;
 };

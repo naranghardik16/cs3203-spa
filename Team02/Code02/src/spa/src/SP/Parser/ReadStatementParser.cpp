@@ -1,12 +1,12 @@
 #include "ReadStatementParser.h"
 
-ReadStatement *ReadStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> ReadStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto read_stmt =
-      new ReadStatement(Program::GetAndIncreaseStatementNumber(), var,
+      make_shared<ReadStatement>(Program::GetAndIncreaseStatementNumber(), var,
                         "main");
   CheckEndOfStatement(line);
   return read_stmt;

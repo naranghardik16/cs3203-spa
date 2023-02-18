@@ -9,5 +9,5 @@ class EntityParser {
  public:
   typedef std::deque<std::vector<Token*>> TokenStream;
   typedef std::vector<Token*> Line;
-  virtual Entity *ParseEntity(TokenStream &tokens) = 0;
+  virtual shared_ptr<Entity> ParseEntity(TokenStream &tokens) = 0;
 };

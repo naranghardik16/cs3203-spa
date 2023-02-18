@@ -38,7 +38,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
         {new NameToken("abc123"), new PunctuationToken("=", SINGLE_EQUAL),  new IntegerToken("1"),
          new PunctuationToken(";", SEMICOLON)},
@@ -58,7 +58,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
         {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
          new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
@@ -76,7 +76,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
         {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
          new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
@@ -100,7 +100,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
         {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
          new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"), new PunctuationToken(")", RIGHT_PARENTHESIS),

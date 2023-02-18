@@ -65,22 +65,22 @@ TEST_CASE("Check if WhileStatementParser detects and parses statement list") {
   Parser::TokenStream
       tokens{while_line_valid, while_line_1, while_line_2, while_end_line};
   auto while_parser = new WhileStatementParser();
-  auto while_stmt = while_parser->ParseEntity(tokens);
+  shared_ptr<WhileStatement> while_stmt = dynamic_pointer_cast<WhileStatement>(while_parser->ParseEntity(tokens));
   REQUIRE(while_stmt->GetStatementNumber() == 1);
   auto condition = while_stmt->GetCondition();
-  pair<Expression *, Expression *>
+  pair<shared_ptr<Expression>, shared_ptr<Expression>>
       rel_args{new Variable("x"), new Constant("5")};
-  auto rel = new RelationalOperation("<", rel_args);
+  auto rel = make_shared<RelationalOperation>("<", rel_args);
 
-  pair<Expression *, Expression *> cond_args{rel, nullptr};
+  pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_args{rel, nullptr};
   auto
       expected_condition_expr =
       new ConditionalOperation("rel_expr", cond_args);
   REQUIRE(condition.operator==(*expected_condition_expr));
   auto stmt_list = while_stmt->GetLoopStatements();
   REQUIRE(stmt_list[0]->GetStatementNumber() == 2);
-  auto assign_stmt = dynamic_cast<AssignStatement *>(stmt_list[0]);
+  auto assign_stmt = dynamic_pointer_cast<AssignStatement>(stmt_list[0]);
   REQUIRE(assign_stmt->GetVariable() == Variable("x"));
-  assign_stmt = dynamic_cast<AssignStatement *>(stmt_list[1]);
+  assign_stmt = dynamic_pointer_cast<AssignStatement>(stmt_list[1]);
   REQUIRE(*(assign_stmt->GetExpression()) == Variable("z"));
 }

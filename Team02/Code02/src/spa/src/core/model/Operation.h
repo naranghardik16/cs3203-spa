@@ -10,6 +10,6 @@ class Operation : public Expression {
   ~Operation() = default;
   explicit Operation(string name,
                      string type,
-                     pair<Expression *, Expression *> arguments);
+                     pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments);
 };
 

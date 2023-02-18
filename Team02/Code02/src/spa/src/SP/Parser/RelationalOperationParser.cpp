@@ -6,7 +6,7 @@ rel_expr: rel_factor '>' rel_factor | rel_factor '>=' rel_factor |
           rel_factor '<' rel_factor | rel_factor '<=' rel_factor |
           rel_factor '==' rel_factor | rel_factor '!=' rel_factor
  */
-Expression *RelationalOperationParser::Parse() {
+shared_ptr<Expression> RelationalOperationParser::Parse() {
   auto left_rel_factor = Factor();
   UpdateCurrTokenWithUpdatedPos();
   unordered_set<TokenType> rel_ops = {LT, LTE, GT, GTE, DOUBLE_EQUALS, NE};
@@ -20,13 +20,13 @@ Expression *RelationalOperationParser::Parse() {
     throw SyntaxErrorException("Missing RHS rel_factor");
   }
   UpdateCurrTokenWithUpdatedPos();
-  pair<Expression*, Expression*> args;
+  pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
   args.first = left_rel_factor;
   args.second = right_rel_factor;
-  return new RelationalOperation(op, args);
+  return make_shared<RelationalOperation>(op, args);
 }
 
-Expression *RelationalOperationParser::Factor() {
+shared_ptr<Expression> RelationalOperationParser::Factor() {
   ArithmeticOperationParser *arithmetic_operation_parser = new ArithmeticOperationParser();
   arithmetic_operation_parser->InheritArgs(GetPos(), GetIsSubExpr(), GetIsProcessedCurrToken());
   arithmetic_operation_parser->SetIsSubExpr(true);

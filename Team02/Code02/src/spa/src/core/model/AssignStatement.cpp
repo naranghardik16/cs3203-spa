@@ -5,11 +5,7 @@ AssignStatement::AssignStatement(int statement_number, Variable var,
     : variable_(std::move(var)), expression_(),
       Statement(statement_number, "assign", std::move(in_scope_of_proc)) {}
 
-AssignStatement::~AssignStatement() noexcept {
-  delete expression_;
-}
-
-void AssignStatement::AddExpression(Expression *expression) {
+void AssignStatement::AddExpression(shared_ptr<Expression> expression) {
   expression_ = expression;
 }
 
@@ -17,11 +13,11 @@ Variable AssignStatement::GetVariable() const {
   return variable_;
 }
 
-Expression *AssignStatement::GetExpression() const {
+shared_ptr<Expression> AssignStatement::GetExpression() const {
   return expression_;
 }
 
-void AssignStatement::Accept(ParserVisitor *visitor) {
-  visitor->VisitAssignStatement(this);
+void AssignStatement::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitAssignStatement(shared_from_this());
   expression_->Accept(visitor);
 }

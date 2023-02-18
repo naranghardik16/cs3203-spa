@@ -8,5 +8,5 @@
 
 class StatementParser : public EntityParser<Statement> {
  public:
-  virtual Statement *ParseEntity(TokenStream &tokens) = 0;
+  virtual shared_ptr<Statement> ParseEntity(TokenStream &tokens) = 0;
 };

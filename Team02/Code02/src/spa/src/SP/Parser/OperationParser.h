@@ -11,8 +11,8 @@
 class OperationParser : public ExpressionParser {
  public:
   OperationParser() = default;
-  Expression *ParseEntity(TokenStream &tokens) override;
-  Expression *ParseEntity(Line &line) override;
+  shared_ptr<Expression> ParseEntity(TokenStream &tokens) override;
+  shared_ptr<Expression> ParseEntity(Line &line) override;
   bool IsEndOfLine();
   TokenType GetCurrentTokenType();
   string GetCurrentTokenValue();
@@ -36,7 +36,7 @@ class OperationParser : public ExpressionParser {
   bool is_processed_curr_token_value_ = false;
   bool* is_processed_curr_token_ = &is_processed_curr_token_value_;
   void Setup(Line &line);
-  virtual Expression *Parse() = 0;
+  virtual shared_ptr<Expression> Parse() = 0;
   void ValidateForBalancedParenthesis();
 };
 

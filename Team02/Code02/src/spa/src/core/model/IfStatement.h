@@ -3,16 +3,16 @@
 #include "Statement.h"
 #include "ConditionalOperation.h"
 
-class IfStatement : public Statement {
+class IfStatement : public Statement, public enable_shared_from_this<IfStatement> {
  public:
-  typedef std::vector<Statement *> StmtListContainer;
+  typedef std::vector<shared_ptr<Statement>> StmtListContainer;
   IfStatement(int statement_number,
-              ConditionalOperation &condition,
+              ConditionalOperation condition,
               std::string in_scope_of_proc);
   ~IfStatement() noexcept override;
-  void AddThenStmtList(Statement *statement);
-  void AddElseStmtList(Statement *statement);
-  void Accept(ParserVisitor *visitor) override;
+  void AddThenStmtList(shared_ptr<Statement> statement);
+  void AddElseStmtList(shared_ptr<Statement> statement);
+  void Accept(shared_ptr<ParserVisitor> visitor) override;
   [[nodiscard]] ConditionalOperation GetCondition() const;
   [[nodiscard]] StmtListContainer GetThenStatements() const;
   [[nodiscard]] StmtListContainer GetElseStatements() const;
