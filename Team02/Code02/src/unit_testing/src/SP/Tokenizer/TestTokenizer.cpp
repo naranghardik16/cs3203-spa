@@ -30,6 +30,29 @@ bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) 
 TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
   Tokenizer* tokenizer = new Tokenizer();
 
+  SECTION("Test if it valid tokens (e.g. abc123 for name token) are tokenized as expected") {
+    string input = "abc123 = 1;\n"
+                   "ABC123 = 2;\n"
+                   "a1b2 = 3;\n"
+                   "if (i == 0) then {";
+    std::istringstream is;
+    is.str(input);
+
+    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    Parser::TokenStream expected = {
+        {new NameToken("abc123"), new PunctuationToken("=", SINGLE_EQUAL),  new IntegerToken("1"),
+         new PunctuationToken(";", SEMICOLON)},
+        {new NameToken("ABC123"), new PunctuationToken("=", SINGLE_EQUAL),
+         new IntegerToken("2"), new PunctuationToken(";", SEMICOLON)},
+        {new NameToken("a1b2"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("3"),
+         new PunctuationToken(";", SEMICOLON)},
+        {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
+         new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"),
+         new PunctuationToken(")", RIGHT_PARENTHESIS), new NameToken("then"), new PunctuationToken("{", LEFT_BRACE)}
+    };
+    REQUIRE(CheckTokenStreamEquality(*actual, expected));
+  }
+
   SECTION("Test if it works for variation of spacing between tokens") {
     string input = "while (i>0&&i<=10) {";
     std::istringstream is;
@@ -96,7 +119,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
   SECTION("Test if it throws SyntaxError for invalid syntax input") {
 
     SECTION("Test invalid name token") {
-      string input = "token1= = 3;";
+      string input = "1abc = 3;";
       std::istringstream is;
       is.str(input);
       REQUIRE_THROWS_AS(tokenizer->Tokenize(is), SyntaxErrorException);
