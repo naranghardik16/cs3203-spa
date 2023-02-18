@@ -1,11 +1,15 @@
 #pragma once
 #include "Operation.h"
 
-Operation::Operation(string name, string type, pair<Expression*, Expression*> arguments) : Expression(move(name), type) {
+Operation::Operation(string name,
+                     string type,
+                     pair<Expression *, Expression *> arguments) : Expression(
+    move(name),
+    type) {
   arguments_ = arguments;
 }
 
-pair<Expression*, Expression*> Operation::GetArguments() const {
+pair<Expression *, Expression *> Operation::GetArguments() const {
   return arguments_;
 }
 

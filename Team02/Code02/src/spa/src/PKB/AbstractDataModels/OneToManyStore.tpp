@@ -19,17 +19,16 @@ bool OneToManyStore<K, V>::contains(K key, V value) {
     return false;
   }
   return iter->second.count(value) > 0;
-//  return this->backward_map_.count(key) && this->backward_map_[key] == value;
 }
 
 template<typename K, typename V>
 bool OneToManyStore<K, V>::containsKey(K key) {
-  return this->forward_map_.count(key);
+  return this->forward_map_.count(key) > 0;
 }
 
 template<typename K, typename V>
 bool OneToManyStore<K, V>::containsValue(V value) {
-  return this->backward_map_.count(value);
+  return this->backward_map_.count(value) > 0;
 }
 
 template<typename K, typename V>
@@ -49,11 +48,13 @@ std::size_t OneToManyStore<K, V>::numberOfValues() {
 
 template<typename K, typename V>
 std::unordered_set<V> OneToManyStore<K, V>::retrieveFromKey(K key) {
+  if (!this->containsKey(key)) return {};
   return this->forward_map_[key];
 }
 
 template<typename K, typename V>
 K OneToManyStore<K, V>::retrieveFromValue(V value) {
+  if (!this->containsValue(value)) return K();
   return this->backward_map_[value];
 }
 
@@ -75,7 +76,7 @@ template<typename K, typename V>
 std::unordered_set<V> OneToManyStore<K, V>::retrieveAllValues() {
   std::unordered_set<V> result;
   for (auto p: this->backward_map_) {
-    result.insert(p.first);
+      result.insert(p.first);
   }
   return result;
 }

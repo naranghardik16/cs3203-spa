@@ -9,6 +9,7 @@ class WhileStatement : public Statement {
   WhileStatement(int statement_number,
                  ConditionalOperation condition,
                  std::string in_scope_of_proc);
+  ~WhileStatement() noexcept override;
   void AddStatement(Statement *stmt);
   void Accept(ParserVisitor *visitor);
   [[nodiscard]] ConditionalOperation GetCondition() const;
