@@ -1,0 +1,170 @@
+1 - Select Modifies with invalid syntax
+stmt s; assign a;
+Select a suchthat Modifies(s,a)
+SyntaxError
+5000
+2 - Pattern with missing arguments
+assign a;
+Select a such that Modifies(a,_) pattern a(,)
+SyntaxError
+5000
+3 - Pattern with missing input
+assign a;
+Select a such that Modifies(a,"count") pattern
+SyntaxError
+5000
+4 - Pattern with bad formatting
+assign a;
+Select a such that Modifies(a,"count") patterna("count", _)
+SyntaxError
+5000
+5 - Pattern with bad invalid expression spec
+assign a;
+Select a pattern a("count","_1y_")
+SyntaxError
+5000
+6 - Pattern with bad invalid expression spec
+assign a;
+Select a pattern a("count","1y_")
+SyntaxError
+5000
+7 - Pattern with bad invalid expression spec
+assign a;
+Select a pattern a("count",_1y_")
+SyntaxError
+5000
+8 - Such That with bad formatting
+assign a;
+Select a suchthatModifies(a,"count") pattern a("count", _)
+SyntaxError
+5000
+9 - Incomplete clause is present
+assign a;
+Select a such that Modifies(a,"count") such that pattern a("count", _)
+SyntaxError
+5000
+10 - Invalid design entity in declaration
+variables v;
+Select a
+SyntaxError
+5000
+11 - Extra characters in the clause
+assign a;
+Select a such that Uses((a,"count");
+SyntaxError
+5000
+12 - Extra characters in the clause
+assign a;
+Select a such that Uses(a,"count"));
+SyntaxError
+5000
+13 - Extra characters in the clause
+assign a;
+Select a such that Uses(a,,"count");
+SyntaxError
+5000
+14 - Extra characters in the clause
+assign a;
+Select a such that Uses(a;"count");
+SyntaxError
+5000
+15 - extra invalid characters at end of clause
+assign a;
+Select a pattern a(_, _) such that
+SyntaxError
+5000
+16 - extra invalid characters at end of clause
+assign a;
+Select a pattern a(_, _);
+SyntaxError
+5000
+17 - Invalid declaration of subclause
+assign a;
+Select a such that Follo(1,3)
+SyntaxError
+5000
+18 - Extra arguments in subclause
+assign a;
+Select a such that Follows(1,3,5)
+SyntaxError
+5000
+19 - Use of IDENT in stmt reference
+assign a;
+Select a such that Follows("anya", 3)
+SyntaxError
+5000
+20 - Use of IDENT in stmt reference
+assign a;
+Select a such that Follows*("anya", 3)
+SyntaxError
+5000
+21 - Use of IDENT in stmt reference
+assign a;
+Select a such that Parent("anya", 3)
+SyntaxError
+5000
+22 - Use of IDENT in stmt reference
+assign a;
+Select a such that Parent*("anya", 3)
+SyntaxError
+5000
+23 - multiple invalid clauses
+assign a;
+Select a such thatParent*(1, 3) patterna("count", _)
+SyntaxError
+5000
+24 - No select statement
+assign a;
+
+SyntaxError
+5000
+25 - No select statement
+assign a;
+Select
+SyntaxError
+5000
+26 - No select keyword
+assign a; variable v;
+a such that Modifies(a,v)
+SyntaxError
+5000
+27 - extra characters at start of statement
+assign a; variable v;
+such that Select a such that Modifies(a,v)
+SyntaxError
+5000
+28 - extra characters at start of statement
+a assign a; variable v;
+Select a
+SyntaxError
+5000
+29 - missing synonym
+assign a; variable v;
+Select such that Modifies(a,v)
+SyntaxError
+5000
+30 - invalid synonym
+assign 1a,b;
+Select 1a such that Modifies(1a,v)
+SyntaxError
+5000]
+31 - invalid synonym
+assign 123,b;
+Select b such that Modifies(123,v)
+SyntaxError
+5000
+32 -- missing synonym in declaration
+assign a; stmt;
+Select a
+SyntaxError
+5000
+33 -- no comma in declaration
+assign a a1;
+Select a
+SyntaxError
+5000
+34 -- invalid IDENT
+assign a;
+Select a such that Modifies(a, "1")
+SyntaxError
+5000

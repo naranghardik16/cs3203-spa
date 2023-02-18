@@ -90,6 +90,9 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
       throw SyntaxErrorException("The design entity does not adhere to the lexical rules of design entity");
     }
     std::string synonym_substring = string_util::GetClauseAfterKeyword(kDeclaration, design_entity);
+    if (synonym_substring.empty()) {
+      throw SyntaxErrorException("Missing synonym in declaration");
+    }
     std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
     for (const std::string &kSynonym : synonym_list) {
       if (!QueryUtil::IsSynonym(kSynonym)) {
@@ -141,6 +144,13 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
 
   if (!remaining_clause.empty()) {
     throw SyntaxErrorException("There is syntax error with the subclauses and remaining characters that remain unparsed");
+  }
+
+  if (QueryUtil::IsQuoted(first_parameter)) {
+    first_parameter = "\"" + string_util::Trim(first_parameter.substr(1, first_parameter.length() - 2)) + "\"";
+  }
+  if (QueryUtil::IsQuoted(second_parameter)) {
+    second_parameter = "\"" + string_util::Trim(second_parameter.substr(1, second_parameter.length() - 2)) + "\"";
   }
 
   SyntaxPair clause_syntax;

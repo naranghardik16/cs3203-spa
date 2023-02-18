@@ -1,0 +1,11 @@
+procedure p {
+  read x;
+  if (x<0) then {
+    while (i>0) {
+      x = z * 3 + 2 * y;
+      i = i - 1; }
+    x = x + 1;
+    z = x + z; }
+  else {
+    z = 1; }
+  z = z + x + i; }

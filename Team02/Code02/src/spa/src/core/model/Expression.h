@@ -7,6 +7,7 @@ class Expression : public Entity {
  public:
   Expression() = default;
   explicit Expression(std::string name, std::string expression_type);
+  virtual ~Expression() = default;
   virtual void Accept(ParserVisitor *visitor) = 0;
   [[nodiscard]] std::string GetExpressionType() const;
   [[nodiscard]] std::string GetName() const;

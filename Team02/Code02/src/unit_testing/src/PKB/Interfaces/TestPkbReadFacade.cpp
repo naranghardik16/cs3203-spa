@@ -11,24 +11,31 @@ TEST_CASE("Testing PkbReadFacade") {
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
     pkb_write_facade_ = new PkbWriteFacade(pkb_);
-//    PkbTypes::VARIABLE test_var1_ = "a";
-//    PkbTypes::CONSTANT test_constant1_ = "5";
-//    PkbTypes::PROCEDURE test_procedure1_ = "Anya";
-//    REQUIRE(pkb_read_facade_->GetVariables() == std::unordered_set<std::string>({}));
-//    pkb_write_facade_->AddVariable(test_var1_);
-//    pkb_write_facade_->AddConstant(test_constant1_);
-//    pkb_write_facade_->AddProcedure(test_procedure1_);
-//    REQUIRE(pkb_read_facade_->GetVariables() == std::unordered_set<std::string>({test_var1_}));
-//    REQUIRE(pkb_read_facade_->GetConstants() == std::unordered_set<std::string>({test_constant1_}));
-//    REQUIRE(pkb_read_facade_->GetProcedures() == std::unordered_set<std::string>({test_procedure1_}));
-//
-    pkb_write_facade_->AddStatementModifyingVariable("1", "a");
-    std::vector<std::string> x = {"a"};
-    std::vector<std::vector<std::string>> r;
-    r.push_back(x);
-    //!TODO change the data type to unordered_set
-    REQUIRE(1);
-    //REQUIRE(pkb_read_facade_->GetVariablesModifiedByStatement("1") == r);
+
+    pkb_write_facade_->AddStatementOfAType("1", READ);
+    pkb_write_facade_->AddStatementOfAType("2", IF);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+
+    pkb_write_facade_->AddParentRelation("2", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+
+    pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+    pkb_write_facade_->AddStatementModifyingVariable("3", "z");
+    pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+
+    REQUIRE(pkb_read_facade_->GetVariablesModifiedByStatement("3")
+                == std::unordered_set<std::string>({"z"}));
+    REQUIRE(pkb_read_facade_->GetVariablesModifiedByStatement("2")
+                == std::unordered_set<std::string>({"z", "x"}));
+
+    REQUIRE(pkb_read_facade_->GetStatements()
+                == std::unordered_set<std::string>({"4", "2", "3", "1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatModify(STATEMENT)
+                == std::unordered_set<std::string>({"2", "3", "4", "1"}));
+
+    REQUIRE(pkb_read_facade_->GetStatementsModifiesVariable("z", IF)
+                == std::unordered_set<std::string>({"2"}));
   }
 
 }
