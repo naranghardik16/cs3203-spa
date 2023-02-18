@@ -16,6 +16,6 @@ bool ArithmeticOperation::operator==(const Expression &other) const {
   }
   auto casted_other = dynamic_cast<const ArithmeticOperation &>(other);
   return
-      this->GetArguments().first->operator==(*casted_other.GetArguments().first)
-          && this->GetArguments().second->operator==(*casted_other.GetArguments().second);
+      this->GetArguments()->first->operator==(*casted_other.GetArguments()->first)
+          && this->GetArguments()->second->operator==(*casted_other.GetArguments()->second);
 }

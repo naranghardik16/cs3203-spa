@@ -14,7 +14,7 @@ void EntityExtractor::ProcessStatements(const vector<Statement *> &statements) {
 
 void EntityExtractor::VisitArithmeticalOperation(ArithmeticOperation *arith_operation) {
   auto arguments = arith_operation->GetArguments();
-  auto &[lhs, rhs] = arguments;
+  auto &[lhs, rhs] = *arguments;
   if (lhs) {
     lhs->Accept(this);
   }
@@ -30,7 +30,7 @@ void EntityExtractor::VisitAssignStatement(AssignStatement *assign_statement) {
 
 void EntityExtractor::VisitConditionalOperation(ConditionalOperation *cond_operation) {
   auto arguments = cond_operation->GetArguments();
-  auto &[lhs, rhs] = arguments;
+  auto &[lhs, rhs] = *arguments;
   if (lhs) {
     lhs->Accept(this);
   }
@@ -46,7 +46,7 @@ void EntityExtractor::VisitPrintStatement(PrintStatement *print_statement) {
 
 void EntityExtractor::VisitRelationalOperation(RelationalOperation *rel_operation) {
   auto arguments = rel_operation->GetArguments();
-  auto &[lhs, rhs] = arguments;
+  auto &[lhs, rhs] = *arguments;
   if (lhs) {
     lhs->Accept(this);
   }
