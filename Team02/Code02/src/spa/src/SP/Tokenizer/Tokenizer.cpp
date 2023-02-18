@@ -89,11 +89,15 @@ Parser::TokenStream* Tokenizer::Tokenize(istream &stream) {
         type = NAME_TYPE;
         FormNameOrInteger(&start_index, j);
         continue;
+      } else if (type == NAME_TYPE && lrv->IsDigit(current_char)) {
+        FormNameOrInteger(&start_index, j);
+        continue;
       } else if (lrv->IsDigit(current_char)) {
         type = INTEGER_TYPE;
         FormNameOrInteger(&start_index, j);
         continue;
       }
+
 
       // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
       Token* current_token = MatchOtherToken(j, lines[i], &skip_index);
