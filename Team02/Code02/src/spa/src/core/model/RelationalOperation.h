@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class RelationalOperation : public Operation, public enable_shared_from_this<RelationalOperation> {
+class RelationalOperation : public Operation {
  public:
   RelationalOperation(string name, pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments);
   void Accept(shared_ptr<ParserVisitor> visitor) override;

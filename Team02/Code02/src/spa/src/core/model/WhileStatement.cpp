@@ -17,7 +17,7 @@ void WhileStatement::AddStatement(shared_ptr<Statement> stmt) {
 
 // TODO: implement accept for the visitor pattern
 void WhileStatement::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitWhileStatement(shared_from_this());
+  visitor->VisitWhileStatement(make_shared<WhileStatement>(*this));
 }
 
 ConditionalOperation WhileStatement::GetCondition() const {

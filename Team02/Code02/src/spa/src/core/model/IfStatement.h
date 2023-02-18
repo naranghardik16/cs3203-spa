@@ -3,7 +3,7 @@
 #include "Statement.h"
 #include "ConditionalOperation.h"
 
-class IfStatement : public Statement, public enable_shared_from_this<IfStatement> {
+class IfStatement : public Statement {
  public:
   typedef std::vector<shared_ptr<Statement>> StmtListContainer;
   IfStatement(int statement_number,

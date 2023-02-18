@@ -22,7 +22,7 @@ void IfStatement::AddElseStmtList(shared_ptr<Statement> statement) {
 
 // TODO: Add logic for visitor
 void IfStatement::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitIfStatement(shared_from_this());
+  visitor->VisitIfStatement(make_shared<IfStatement>(*this));
 }
 
 ConditionalOperation IfStatement::GetCondition() const {

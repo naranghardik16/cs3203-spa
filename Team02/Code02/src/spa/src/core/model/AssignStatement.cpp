@@ -18,6 +18,6 @@ shared_ptr<Expression> AssignStatement::GetExpression() const {
 }
 
 void AssignStatement::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitAssignStatement(shared_from_this());
+  visitor->VisitAssignStatement(make_shared<AssignStatement>(*this));
   expression_->Accept(visitor);
 }

@@ -2,7 +2,7 @@
 
 #include "Expression.h"
 
-class Constant : public Expression, public enable_shared_from_this<Constant> {
+class Constant : public Expression {
  public:
   explicit Constant(std::string name);
   void Accept(shared_ptr<ParserVisitor> visitor) override;

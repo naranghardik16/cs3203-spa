@@ -6,7 +6,7 @@ ConditionalOperation::ConditionalOperation(string name,
     : Operation(move(name), "conditional", arguments) {}
 
 void ConditionalOperation::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitConditionalOperation(shared_from_this());
+  visitor->VisitConditionalOperation(make_shared<ConditionalOperation>(*this));
 }
 
 bool ConditionalOperation::operator==(const Expression &other) const {

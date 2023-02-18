@@ -13,5 +13,5 @@ Variable ReadStatement::GetVariable() const {
 }
 
 void ReadStatement::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitReadStatement(shared_from_this());
+  visitor->VisitReadStatement(make_shared<ReadStatement>(*this));
 }

@@ -4,7 +4,7 @@
 #include "core/model/Statement.h"
 #include "Entity.h"
 
-class Procedure : public Entity, public enable_shared_from_this<Procedure> {
+class Procedure : public Entity {
  public:
   typedef std::vector<std::shared_ptr<Statement>> StmtListContainer;
   explicit Procedure(std::string proc_name);

@@ -6,7 +6,7 @@ ArithmeticOperation::ArithmeticOperation(string name,
     : Operation(move(name), "arithmetic", arguments) {}
 
 void ArithmeticOperation::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitArithmeticalOperation(shared_from_this());
+  visitor->VisitArithmeticalOperation(make_shared<ArithmeticOperation>(*this));
 }
 
 bool ArithmeticOperation::operator==(const Expression &other) const {

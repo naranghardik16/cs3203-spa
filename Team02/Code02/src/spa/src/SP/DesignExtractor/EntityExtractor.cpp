@@ -8,7 +8,7 @@ EntityExtractor::EntityExtractor(shared_ptr<PKB> pkb) {
 
 void EntityExtractor::ProcessStatements(const vector<shared_ptr<Statement>> &statements) {
   for (auto stmt : statements) {
-    stmt->Accept(shared_from_this());
+    stmt->Accept(make_shared<EntityExtractor>(*this));
   }
 }
 
@@ -16,10 +16,10 @@ void EntityExtractor::VisitArithmeticalOperation(shared_ptr<ArithmeticOperation>
   auto arguments = arith_operation->GetArguments();
   auto &[lhs, rhs] = *arguments;
   if (lhs) {
-    lhs->Accept(shared_from_this());
+    lhs->Accept(make_shared<EntityExtractor>(*this));
   }
   if (rhs) {
-    rhs->Accept(shared_from_this());
+    rhs->Accept(make_shared<EntityExtractor>(*this));
   }
 }
 
@@ -32,10 +32,10 @@ void EntityExtractor::VisitConditionalOperation(shared_ptr<ConditionalOperation>
   auto arguments = cond_operation->GetArguments();
   auto &[lhs, rhs] = *arguments;
   if (lhs) {
-    lhs->Accept(shared_from_this());
+    lhs->Accept(make_shared<EntityExtractor>(*this));
   }
   if (rhs) {
-    rhs->Accept(shared_from_this());
+    rhs->Accept(make_shared<EntityExtractor>(*this));
   }
 }
 
@@ -48,10 +48,10 @@ void EntityExtractor::VisitRelationalOperation(shared_ptr<RelationalOperation> r
   auto arguments = rel_operation->GetArguments();
   auto &[lhs, rhs] = *arguments;
   if (lhs) {
-    lhs->Accept(shared_from_this());
+    lhs->Accept(make_shared<EntityExtractor>(*this));
   }
   if (rhs) {
-    rhs->Accept(shared_from_this());
+    rhs->Accept(make_shared<EntityExtractor>(*this));
   }
 }
 
@@ -63,7 +63,7 @@ void EntityExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_statemen
 void EntityExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   // TODO?
   auto condition = if_statement->GetCondition();
-  condition.Accept(shared_from_this());
+  condition.Accept(make_shared<EntityExtractor>(*this));
   auto then_stmt_list = if_statement->GetThenStatements();
   auto else_stmt_list = if_statement->GetElseStatements();
   ProcessStatements(then_stmt_list);
@@ -73,7 +73,7 @@ void EntityExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
 void EntityExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
   // TODO?
   auto condition = while_statement->GetCondition();
-  condition.Accept(shared_from_this());
+  condition.Accept(make_shared<EntityExtractor>(*this));
   auto loop_stmt_list = while_statement->GetLoopStatements();
   ProcessStatements(loop_stmt_list);
 }

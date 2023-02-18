@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class ConditionalOperation : public Operation, public enable_shared_from_this<ConditionalOperation> {
+class ConditionalOperation : public Operation {
  public:
   ConditionalOperation(string name, pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments);
   void Accept(shared_ptr<ParserVisitor> visitor) override;

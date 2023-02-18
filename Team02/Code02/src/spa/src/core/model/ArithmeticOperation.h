@@ -4,7 +4,7 @@
 
 using namespace std;
 
-class ArithmeticOperation : public Operation, public enable_shared_from_this<ArithmeticOperation> {
+class ArithmeticOperation : public Operation {
  public:
   ArithmeticOperation(string name, pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments);
   void Accept(shared_ptr<ParserVisitor> visitor) override;

@@ -58,7 +58,7 @@ void AbstractionExtractor::ProcessStatements(const vector<shared_ptr<Statement>>
       this->ExtractFollows(prev_stmt, s);
     }
     this->ExtractParent(parent, s);
-    s->Accept(shared_from_this());
+    s->Accept(make_shared<AbstractionExtractor>(*this));
     prev_stmt = s;
   }
 }

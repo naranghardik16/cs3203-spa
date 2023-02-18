@@ -12,7 +12,7 @@
 #include "core/model/IfStatement.h"
 #include "core/model/WhileStatement.h"
 
-class AbstractionExtractor : public ParserVisitor, public enable_shared_from_this<AbstractionExtractor> {
+class AbstractionExtractor : public ParserVisitor {
  public:
   AbstractionExtractor(shared_ptr<PKB> pkb);
   void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override;

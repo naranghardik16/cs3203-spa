@@ -21,5 +21,5 @@ std::string Procedure::GetProcedureName() const {
 }
 
 void Procedure::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitProcedure(shared_from_this());
+  visitor->VisitProcedure(make_shared<Procedure>(*this));
 }

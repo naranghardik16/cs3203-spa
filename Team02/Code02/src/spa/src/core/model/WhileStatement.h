@@ -3,7 +3,7 @@
 #include "Statement.h"
 #include "ConditionalOperation.h"
 
-class WhileStatement : public Statement, public enable_shared_from_this<WhileStatement> {
+class WhileStatement : public Statement {
  public:
   typedef std::vector<shared_ptr<Statement>> StmtListContainer;
   WhileStatement(int statement_number,

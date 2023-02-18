@@ -7,7 +7,7 @@ RelationalOperation::RelationalOperation(string name,
     : Operation(move(name), "relational", arguments) {}
 
 void RelationalOperation::Accept(shared_ptr<ParserVisitor> visitor) {
-  visitor->VisitRelationalOperation(shared_from_this());
+  visitor->VisitRelationalOperation(make_shared<RelationalOperation>(*this));
 }
 
 bool RelationalOperation::operator==(const Expression &other) const {

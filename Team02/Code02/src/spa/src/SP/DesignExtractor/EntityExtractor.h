@@ -14,7 +14,7 @@
 
 using namespace std;
 
-class EntityExtractor : public ParserVisitor, public enable_shared_from_this<EntityExtractor> {
+class EntityExtractor : public ParserVisitor {
  public:
   typedef vector<shared_ptr<Statement>> StmtListContainer;
   EntityExtractor(shared_ptr<PKB> pkb);

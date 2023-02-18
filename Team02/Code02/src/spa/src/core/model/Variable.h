@@ -2,7 +2,7 @@
 
 #include "Expression.h"
 
-class Variable : public Expression, public enable_shared_from_this<Variable> {
+class Variable : public Expression {
  public:
   Variable(std::string name);
   void Accept(shared_ptr<ParserVisitor> visitor) override;
