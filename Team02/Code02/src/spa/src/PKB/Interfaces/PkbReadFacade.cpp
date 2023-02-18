@@ -169,7 +169,6 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatUses(
     }
   }
   return result;
-//  return {"1", "2"};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByStatement(std::string statement_number) {
@@ -456,14 +455,16 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(Stat
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatIsParentOf(std::string statement_number,
                                                                                      StatementType statement_type) {
-  PkbCommunicationTypes::SingleConstraintSet statement_of_type =
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::SingleConstraintSet parents_of_specified_statement =
-      this->pkb.parent_store_->retrieveAllChildren(statement_number);
-
   PkbCommunicationTypes::SingleConstraintSet result;
-  result.insert(this->pkb.parent_store_->retrieveAllParents(statement_number));
+  auto parent = this->pkb.parent_store_->retrieveAllParents(statement_number);
+
+  if (!parent.empty() && statements_of_type.count(parent)) {
+    result.insert(parent);
+  }
+
   return result;
 }
 
