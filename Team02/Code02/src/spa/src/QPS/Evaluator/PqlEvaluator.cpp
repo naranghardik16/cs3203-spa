@@ -54,25 +54,25 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelectStatement() {
   header.push_back(synonym_);
   ResultTable table;
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetVariables());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetVariables());
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    table =  QueryUtil::ConvertSetToResultTableFormat(pkb_->GetConstants());
+    table =  ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetConstants());
   } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
   } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
   } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetStatements());
   } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
   } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
   } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
   } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
   } else  {
-    table = QueryUtil::ConvertSetToResultTableFormat(pkb_->GetProcedures());
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetProcedures());
   }
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;

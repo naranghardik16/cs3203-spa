@@ -19,7 +19,7 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::string remaining_clause = string_util::Trim(trimmed_select_statement.substr(pql_constants::kSelectKeyword.length()));
   //Extract synonym -- throws a SyntaxErrorException if synonym does not adhere to synonym syntax
   Synonym synonym = tk->ParseSynonym(remaining_clause);
-  remaining_clause = string_util::GetClauseAfterKeyword(remaining_clause, synonym);
+  remaining_clause = string_util::GetSubStringAfterKeyword(remaining_clause, synonym);
 
   //create declaration map -- extracts all the design entities and synonyms first then checks for syntax
   //after checking for syntax, if there are repeated synonyms then semantic exception is thrown

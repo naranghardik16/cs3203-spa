@@ -17,7 +17,7 @@ std::vector<std::string> SplitStringByDelimiter(std::string s, const std::string
 
 std::string GetFirstWord(const std::string& s);
 
-std::string GetClauseAfterKeyword(const std::string& clause, const std::string& keyword);
+std::string GetSubStringAfterKeyword(const std::string& clause, const std::string& keyword);
 
 std::string RemoveExtraWhitespacesInString(const std::string &input);
 }

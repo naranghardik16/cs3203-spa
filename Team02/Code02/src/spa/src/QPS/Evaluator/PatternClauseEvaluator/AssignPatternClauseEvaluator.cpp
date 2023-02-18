@@ -31,10 +31,10 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   }
 
   if (!single_constraint.empty()) {
-    table = QueryUtil::ConvertSetToResultTableFormat(single_constraint);
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   }
   if (!pair_constraint.empty()) {
-    table = QueryUtil::ConvertPairSetToResultTableFormat(pair_constraint);
+    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
   }
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
@@ -54,7 +54,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
   ResultTable table;
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithPartialExpression(second_arg_);
-  table = QueryUtil::ConvertSetToResultTableFormat(single_constraint);
+  table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
   result_ptr->JoinResult(r);
@@ -68,7 +68,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExp
   ResultTable table;
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(second_arg_);
-  table = QueryUtil::ConvertSetToResultTableFormat(single_constraint);
+  table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
   result_ptr->JoinResult(r);
