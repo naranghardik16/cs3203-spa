@@ -7,6 +7,9 @@ PKB::PKB() {
   follows_store_ = new FollowsStore();
   uses_store_ = new UsesStore();
   parent_store_ = new ParentStore();
+  expression_store_ = new ExpressionStore();
+  control_flow_store_ = new ControlFlowStore();
+  assignment_store_ = new AssignmentStore();
 }
 
 PKB::~PKB() = default;

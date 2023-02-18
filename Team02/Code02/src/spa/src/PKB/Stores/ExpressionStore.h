@@ -11,18 +11,18 @@ class ExpressionStore {
 
   ~ExpressionStore();
 
-  void addExpression(Expression *expression);
+  void addExpression(std::shared_ptr<Expression> expression);
 
   std::unordered_set<PkbTypes::VARIABLE> retrieveVariablesOfTheExpression(
-      Expression *expression);
+      std::shared_ptr<Expression> expression);
 
   std::unordered_set<PkbTypes::CONSTANT> retrieveConstantsOfTheExpression(
-      Expression *expression);
+      std::shared_ptr<Expression> expression);
 
  private:
-  OneToManyStore<Expression *, PkbTypes::VARIABLE>
+  OneToManyStore<std::shared_ptr<Expression>, PkbTypes::VARIABLE>
       expression_to_variable_store_;
-  OneToManyStore<Expression *, PkbTypes::CONSTANT>
+  OneToManyStore<std::shared_ptr<Expression>, PkbTypes::CONSTANT>
       expression_to_constant_store_;
 };
 

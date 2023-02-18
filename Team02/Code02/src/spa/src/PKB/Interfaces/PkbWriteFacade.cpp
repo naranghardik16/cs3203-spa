@@ -65,7 +65,7 @@ void PkbWriteFacade::AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_numb
 }
 
 void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                         Expression* expression) {
+                                                         std::shared_ptr<Expression> expression) {
   this->pkb.assignment_store_->addAssignmentExpression(std::move(statement_number), expression);
   this->pkb.expression_store_->addExpression(expression);
 
@@ -80,7 +80,7 @@ void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUM
 }
 
 void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                Expression *expression) {
+                                                std::shared_ptr<Expression> expression) {
   this->pkb.control_flow_store_->addIfStatementAndCondition(std::move(statement_number), expression);
   this->pkb.expression_store_->addExpression(expression);
 
@@ -95,7 +95,7 @@ void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER state
 }
 
 void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                   Expression *expression) {
+                                                   std::shared_ptr<Expression> expression) {
   this->pkb.control_flow_store_->addWhileStatementAndCondition(std::move(statement_number), expression);
   this->pkb.expression_store_->addExpression(expression);
 

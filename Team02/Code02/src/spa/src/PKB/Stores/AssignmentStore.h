@@ -10,14 +10,14 @@ class AssignmentStore {
 
   ~AssignmentStore();
 
-  void addAssignmentExpression(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
+  void addAssignmentExpression(PkbTypes::STATEMENT_NUMBER statement_number, std::shared_ptr<Expression> expression);
 
-  Expression* retrieveAssignmentExpressionByStatementNumber(PkbTypes::STATEMENT_NUMBER statement_number);
+  std::shared_ptr<Expression> retrieveAssignmentExpressionByStatementNumber(PkbTypes::STATEMENT_NUMBER statement_number);
 
   std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-  retrieveAllStatementNumbersWhichContainExpression(Expression* expression);
+  retrieveAllStatementNumbersWhichContainExpression(std::shared_ptr<Expression> expression);
 
  private:
-  OneToOneStore<PkbTypes::STATEMENT_NUMBER, Expression*> assignment_store_;
+  OneToOneStore<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<Expression>> assignment_store_;
 };
 

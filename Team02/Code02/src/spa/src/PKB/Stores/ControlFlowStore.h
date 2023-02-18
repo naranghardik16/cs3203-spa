@@ -10,22 +10,22 @@ class ControlFlowStore {
 
   ~ControlFlowStore();
 
-  void addIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
+  void addIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, std::shared_ptr<Expression> expression);
 
-  void addWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
+  void addWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, std::shared_ptr<Expression> expression);
 
-  Expression* retrieveIfStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number);
+  std::shared_ptr<Expression> retrieveIfStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number);
 
-  Expression* retrieveWhileStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number);
-
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-  retrieveAllIfStatementsWithCondition(Expression* expression);
+  std::shared_ptr<Expression> retrieveWhileStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number);
 
   std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-  retrieveAllWhileStatementsWithCondition(Expression* expression);
+  retrieveAllIfStatementsWithCondition(std::shared_ptr<Expression> expression);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+  retrieveAllWhileStatementsWithCondition(std::shared_ptr<Expression> expression);
 
  private:
-  OneToOneStore<PkbTypes::STATEMENT_NUMBER, Expression*> if_store_;
-  OneToOneStore<PkbTypes::STATEMENT_NUMBER, Expression*> while_store_;
+  OneToOneStore<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<Expression>> if_store_;
+  OneToOneStore<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<Expression>> while_store_;
 };
 
