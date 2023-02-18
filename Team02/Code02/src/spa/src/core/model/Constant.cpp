@@ -6,3 +6,7 @@ Constant::Constant(std::string name) : Expression(std::move(name),
 void Constant::Accept(ParserVisitor *visitor) {
   visitor->VisitConstant(this);
 }
+
+bool Constant::IsLeafNodeExpression() {
+  return true;
+}
