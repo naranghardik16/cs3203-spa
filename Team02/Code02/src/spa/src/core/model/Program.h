@@ -7,7 +7,7 @@ class Program {
  public:
   typedef std::vector<Procedure *> ProcListContainer;
   Program();
-
+  ~Program();
   void AddToProcedureList(Procedure *proc);
   [[nodiscard]] ProcListContainer GetProcedureList();
   [[nodiscard]] static int GetAndIncreaseStatementNumber();

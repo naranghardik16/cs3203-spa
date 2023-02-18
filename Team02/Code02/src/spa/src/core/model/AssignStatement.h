@@ -7,8 +7,9 @@ class AssignStatement : public Statement {
  public:
   AssignStatement(int statement_number, Variable var,
                   std::string in_scope_of_proc);
+  ~AssignStatement() noexcept override;
   void AddExpression(Expression *expression);
-  void Accept(ParserVisitor *visitor);
+  void Accept(ParserVisitor *visitor) override;
   [[nodiscard]]Variable GetVariable() const;
   [[nodiscard]]Expression *GetExpression() const;
 
