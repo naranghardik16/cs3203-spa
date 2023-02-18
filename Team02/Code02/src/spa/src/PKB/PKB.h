@@ -11,6 +11,18 @@
 #include "PKB/Stores/ExpressionStore.h"
 
 class PKB {
+ public:
+  /**
+ * Constructor for PKB.
+ */
+  PKB();
+
+  /**
+   * Destructor for PKB.
+   */
+  ~PKB();
+
+ private:
   /**
    * Entity store that stores primitives of SIMPLE like variables, procedures and constants.
    */
@@ -56,25 +68,6 @@ class PKB {
    */
   ExpressionStore *expression_store_;
 
-  /**
-   * Constructor for PKB.
-   */
-  PKB();
-
-  /**
-   * Destructor for PKB.
-   */
-  ~PKB();
-
   friend class PkbWriteFacade;
   friend class PkbReadFacade;
 };
-
-// x = 1
-// read x;
-// print x;
-// call proc;
-// while (x > 0)
-// if (x > 0)
-
-// stmt_no -> { x, >, 0 }

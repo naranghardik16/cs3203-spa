@@ -1,5 +1,6 @@
 file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/AbstractDataModels/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.cpp"
@@ -14,6 +15,8 @@ file(GLOB srcs
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Util/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.h")
 
 add_executable(unit_testing ${srcs} ${header})

@@ -3,7 +3,7 @@
 //#include "./core/model/Procedure.h"
 //#include "./core/model/Statement.h"
 //#include "./core/model/Expression.h"
-#include "./PKB/Interfaces/PkbWriteFacade.h"
+//#include "./PKB/Interfaces/PkbWriteFacade.h"
 
 class ArithmeticOperation;
 class AssignStatement;
