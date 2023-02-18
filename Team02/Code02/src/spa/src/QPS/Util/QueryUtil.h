@@ -8,7 +8,7 @@
 #include "General/StringUtil.h"
 
 /*!
- * Abstracts out functions that are used throughout QPS when handling queries
+ * Abstracts out functions that are used in QPS when handling arguments in queries.
  */
 class QueryUtil {
 
@@ -183,19 +183,5 @@ class QueryUtil {
    * @return statement type of synonym
    */
   static StatementType GetStatementType(Map &declaration, const std::string &synonym);
-
-  /**
-   * Converts an unordered set of strings (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
-   * @param s which is an unordered set of strings
-   * @return the unordered set in ResultTable format
-   */
-  static ResultTable ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s);
-
-  /**
-   * Converts an unordered set of pairs (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
-   * @param s which is an unordered set of pairs
-   * @return  the unordered set in ResultTable format
-   */
-  static ResultTable ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s);
 };
 
