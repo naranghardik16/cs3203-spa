@@ -6,3 +6,7 @@ Variable::Variable(std::string name) : Expression(std::move(name),
 void Variable::Accept(ParserVisitor *visitor) {
   visitor->VisitVariable(this);
 }
+
+bool Variable::IsLeafNodeExpression() {
+  return true;
+}

@@ -15,3 +15,11 @@ std::string Expression::GetName() const {
 bool Expression::operator==(const Expression &other) const {
   return expression_type_ == other.expression_type_ && name_ == other.name_;
 }
+
+bool Expression::IsLeafNodeExpression() {
+  return false;
+}
+
+std::optional<Expression::PairOfArguments> Expression::GetArguments() const {
+  return arguments_;
+}
