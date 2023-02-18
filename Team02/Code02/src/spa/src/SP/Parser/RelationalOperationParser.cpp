@@ -1,4 +1,3 @@
-#pragma once
 #include "RelationalOperationParser.h"
 
 /*
@@ -27,7 +26,7 @@ shared_ptr<Expression> RelationalOperationParser::Parse() {
 }
 
 shared_ptr<Expression> RelationalOperationParser::Factor() {
-  ArithmeticOperationParser *arithmetic_operation_parser = new ArithmeticOperationParser();
+  shared_ptr<ArithmeticOperationParser> arithmetic_operation_parser = make_shared<ArithmeticOperationParser>();
   arithmetic_operation_parser->InheritArgs(GetPos(), GetIsSubExpr(), GetIsProcessedCurrToken());
   arithmetic_operation_parser->SetIsSubExpr(true);
   return arithmetic_operation_parser->ParseEntity(*GetLine());

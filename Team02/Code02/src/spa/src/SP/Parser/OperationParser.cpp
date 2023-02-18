@@ -27,15 +27,15 @@ void OperationParser::GetNext() {
   }
 }
 
-int* OperationParser::GetPos() {
+shared_ptr<int> OperationParser::GetPos() {
   return pos_;
 }
 
-ExpressionParser::Line *OperationParser::GetLine() {
-  return &line_;
+shared_ptr<ExpressionParser::Line> OperationParser::GetLine() {
+  return make_shared<ExpressionParser::Line>(line_);
 }
 
-void OperationParser::InheritArgs(int *pos, bool is_sub_expr, bool *is_processed_curr_token) {
+void OperationParser::InheritArgs(shared_ptr<int> pos, bool is_sub_expr, shared_ptr<bool> is_processed_curr_token) {
   is_inherit_args_ = true;
   pos_ = pos;
   is_sub_expr_ = is_sub_expr;
@@ -75,7 +75,7 @@ void OperationParser::SetIsSubExpr(bool is_sub_expr) {
   is_sub_expr_ = is_sub_expr;
 }
 
-bool* OperationParser::GetIsProcessedCurrToken() {
+shared_ptr<bool> OperationParser::GetIsProcessedCurrToken() {
   return is_processed_curr_token_;
 }
 

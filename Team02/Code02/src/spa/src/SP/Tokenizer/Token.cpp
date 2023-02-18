@@ -14,7 +14,7 @@ TokenType Token::GetType() {
   return type_;
 }
 
-bool Token::Equals(Token &other) {
+bool Token::Equals(shared_ptr<Token> other) {
   // make sure that the passed type is the same
-  return this->GetValue() == other.GetValue();
+  return this->GetValue() == other->GetValue();
 }

@@ -8,6 +8,6 @@
 #include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedureEnd works") {
-  Parser::Line end_line{new PunctuationToken("}", RIGHT_BRACE)};
+  Parser::Line end_line{make_shared<PunctuationToken>("}", RIGHT_BRACE)};
   REQUIRE(ProcedureParser::IsProcedureEnd(end_line) == true);
 }

@@ -14,7 +14,7 @@ shared_ptr<Statement> ReadStatementParser::ParseEntity(TokenStream &tokens) {
 
 std::string ReadStatementParser::ExtractVariableName(Line &line) const {
   auto print_keyword_itr =
-      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
         return p->GetValue() == "read";
       });
 

@@ -10,5 +10,5 @@ class Token {
   Token(string val, TokenType type);
   string GetValue();
   TokenType GetType();
-  virtual bool Equals(Token &other) = 0;
+  virtual bool Equals(shared_ptr<Token> other) = 0;
 };

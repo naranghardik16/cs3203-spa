@@ -3,9 +3,9 @@ using namespace std;
 
 ArithmeticOperatorToken::ArithmeticOperatorToken(string val, TokenType type) : Token(val, type) {}
 
-bool ArithmeticOperatorToken::Equals(Token &other) {
+bool ArithmeticOperatorToken::Equals(shared_ptr<Token> other) {
   // make sure that the passed type is the same
-  ArithmeticOperatorToken *aot = dynamic_cast<ArithmeticOperatorToken*>(&other);
+  shared_ptr<ArithmeticOperatorToken> aot = dynamic_pointer_cast<ArithmeticOperatorToken>(other);
   if (aot) {
     return this->GetType() == aot->GetType() && this->GetValue() == aot->GetValue();
   }

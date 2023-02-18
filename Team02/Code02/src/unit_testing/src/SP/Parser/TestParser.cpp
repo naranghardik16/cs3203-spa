@@ -9,21 +9,21 @@
 #include "SP/Tokenizer/PunctuationToken.h"
 
 TEST_CASE("Check if IsProcedure works") {
-  Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
-                         new PunctuationToken("{", LEFT_BRACE)};
+  Parser::Line proc_line{make_shared<NameToken>("procedure"), make_shared<NameToken>("main"),
+                         make_shared<PunctuationToken>("{", LEFT_BRACE)};
   Parser::Line stmt_line
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)};
   REQUIRE(Parser::IsProcedure(proc_line) == true);
   REQUIRE(Parser::IsProcedure(stmt_line) == false);
 }
 
 TEST_CASE("Check if AssignStatementParser works") {
   Parser::Line stmt_line
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)};
   Parser::TokenStream stmt_tokens{stmt_line};
-  auto parser = new AssignStatementParser();
+  auto parser = make_shared<AssignStatementParser>();
   try {
     auto stmt = parser->ParseEntity(stmt_tokens);
   } catch (SpaException &e) {
@@ -33,24 +33,24 @@ TEST_CASE("Check if AssignStatementParser works") {
 }
 
 TEST_CASE("Check if Parser works with non control flow statements") {
-  Parser::Line proc_line{new NameToken("procedure"), new NameToken("main"),
-                         new PunctuationToken("{", LEFT_BRACE)};
+  Parser::Line proc_line{make_shared<NameToken>("procedure"), make_shared<NameToken>("main"),
+                         make_shared<PunctuationToken>("{", LEFT_BRACE)};
   Parser::Line stmt_line_var
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)};
   Parser::Line stmt_line_const
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new IntegerToken("10"), new PunctuationToken(";", SEMICOLON)};
-  Parser::Line stmt_line_read{new NameToken("read"), new NameToken("z"),
-                              new PunctuationToken(";", SEMICOLON)};
-  Parser::Line stmt_line_print{new NameToken("print"), new NameToken("x"),
-                               new PunctuationToken(";", SEMICOLON)};
-  Parser::Line end_line{new PunctuationToken("}", RIGHT_BRACE)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<IntegerToken>("10"), make_shared<PunctuationToken>(";", SEMICOLON)};
+  Parser::Line stmt_line_read{make_shared<NameToken>("read"), make_shared<NameToken>("z"),
+                              make_shared<PunctuationToken>(";", SEMICOLON)};
+  Parser::Line stmt_line_print{make_shared<NameToken>("print"), make_shared<NameToken>("x"),
+                               make_shared<PunctuationToken>(";", SEMICOLON)};
+  Parser::Line end_line{make_shared<PunctuationToken>("}", RIGHT_BRACE)};
   Parser::TokenStream
       source
       {proc_line, stmt_line_var, stmt_line_const, stmt_line_read,
        stmt_line_print, end_line};
-  auto parser = new Parser();
+  auto parser = make_shared<Parser>();
   try {
     auto program = parser->ParseSource(source);
 
@@ -103,9 +103,9 @@ TEST_CASE("Check if Parser works with non control flow statements") {
 TEST_CASE(
     "Check if Parser throws Syntax Error for not starting with a procedure") {
   Parser::TokenStream invalid_proc_tokens
-      {{new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-        new NameToken("y"), new PunctuationToken(";", SEMICOLON)}};
-  auto parser = new Parser();
+      {{make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)}};
+  auto parser = make_shared<Parser>();
   try {
     auto program = parser->ParseSource(invalid_proc_tokens);
   } catch (SyntaxErrorException &e) {

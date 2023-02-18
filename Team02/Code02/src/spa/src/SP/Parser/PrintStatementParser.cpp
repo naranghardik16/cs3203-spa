@@ -13,7 +13,7 @@ shared_ptr<Statement> PrintStatementParser::ParseEntity(TokenStream &tokens) {
 
 std::string PrintStatementParser::ExtractVariableName(Line &line) const {
   auto print_keyword_itr =
-      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
         return p->GetValue() == "print";
       });
 

@@ -58,9 +58,9 @@ class Tokenizer {
   };
 
   vector<string> SplitLines(istream & stream);
-  Token* MatchOtherToken(int first_char_index, string line, int* skip_index);
-  void FormNameOrInteger(int *start_index, int current_index);
-  Token* MatchNameOrIntegerToken(LexicalRuleValidator *lrv, string val, int type);
+  shared_ptr<Token> MatchOtherToken(int first_char_index, string line, shared_ptr<int> skip_index);
+  void FormNameOrInteger(shared_ptr<int> start_index, int current_index);
+  shared_ptr<Token> MatchNameOrIntegerToken(shared_ptr<LexicalRuleValidator> lrv, string val, int type);
  public:
   Tokenizer();
   shared_ptr<Parser::TokenStream> Tokenize(istream &stream);

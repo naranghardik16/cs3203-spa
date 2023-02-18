@@ -10,10 +10,10 @@
 #include "WhileStatementParser.h"
 
 class StatementParserFactory {
-  typedef std::vector<Token *> Line;
+  typedef std::vector<shared_ptr<Token>> Line;
   typedef std::deque<Line> TokenStream;
  public:
-  static StatementParser *GetStatementParser(TokenStream &tokens);
+  static shared_ptr<StatementParser> GetStatementParser(TokenStream &tokens);
  private:
   static inline bool CheckStatementType(Line &line,
                                         std::string_view type_to_check);

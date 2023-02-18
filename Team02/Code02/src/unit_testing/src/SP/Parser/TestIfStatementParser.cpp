@@ -9,20 +9,20 @@
 
 TEST_CASE("Check if StartOfIfStatement is detected") {
   Parser::Line if_line_valid
-      {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
-       new NameToken("x"), new PunctuationToken("<", LT),
-       new IntegerToken("5"), new PunctuationToken(")", RIGHT_PARENTHESIS),
-       new NameToken("then"),
-       new PunctuationToken("{", LEFT_BRACE)};
+      {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+       make_shared<NameToken>("x"), make_shared<PunctuationToken>("<", LT),
+       make_shared<IntegerToken>("5"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+       make_shared<NameToken>("then"),
+       make_shared<PunctuationToken>("{", LEFT_BRACE)};
   Parser::Line if_line_no_then
-      {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
-       new NameToken("x"), new PunctuationToken("<", LT),
-       new IntegerToken("5"), new PunctuationToken(")", RIGHT_PARENTHESIS),
-       new PunctuationToken("{", LEFT_BRACE)};
+      {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+       make_shared<NameToken>("x"), make_shared<PunctuationToken>("<", LT),
+       make_shared<IntegerToken>("5"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+       make_shared<PunctuationToken>("{", LEFT_BRACE)};
   Parser::Line stmt_line
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
-  auto if_parser = new IfStatementParser();
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)};
+  auto if_parser = make_shared<IfStatementParser>();
   SECTION("Check for validation of syntax of if statements") {
     REQUIRE_THROWS(if_parser->CheckStartOfIfStatement(if_line_no_then));
   }SECTION("Check for a valid if statement start") {
@@ -34,17 +34,17 @@ TEST_CASE("Check if StartOfIfStatement is detected") {
 
 TEST_CASE("Check if ExtractCondition works") {
   Parser::Line if_line_valid
-      {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
-       new NameToken("x"), new PunctuationToken(">", LT),
-       new IntegerToken("5"), new PunctuationToken(")", RIGHT_PARENTHESIS),
-       new NameToken("then"),
-       new PunctuationToken("{", LEFT_BRACE)};
+      {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+       make_shared<NameToken>("x"), make_shared<PunctuationToken>(">", LT),
+       make_shared<IntegerToken>("5"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+       make_shared<NameToken>("then"),
+       make_shared<PunctuationToken>("{", LEFT_BRACE)};
   try {
-    auto if_parser = new IfStatementParser();
+    auto if_parser = make_shared<IfStatementParser>();
     auto condition = if_parser->ExtractCondition(if_line_valid);
     pair<shared_ptr<Expression>, shared_ptr<Expression>>
-        rel_args{new Variable("x"), new Constant("5")};
-    auto rel = new RelationalOperation(">", rel_args);
+        rel_args{make_shared<Variable>("x"), make_shared<Constant>("5")};
+    auto rel = make_shared<RelationalOperation>(">", rel_args);
 
     pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_args{rel, nullptr};
     auto
@@ -58,13 +58,13 @@ TEST_CASE("Check if ExtractCondition works") {
 
 TEST_CASE("Check if EndOfThenStatements is detected") {
   Parser::Line end_of_then{
-      new PunctuationToken("}", RIGHT_BRACE)
+      make_shared<PunctuationToken>("}", RIGHT_BRACE)
   };
   Parser::Line else_line_invalid{
-      new NameToken("else"),
-      new PunctuationToken("{", LEFT_BRACE)
+      make_shared<NameToken>("else"),
+      make_shared<PunctuationToken>("{", LEFT_BRACE)
   };
-  auto *if_parser = new IfStatementParser();
+  auto if_parser = make_shared<IfStatementParser>();
   SECTION("Check for validation of syntax of end of then statements") {
     REQUIRE(if_parser->IsEndOfThenStatement(else_line_invalid) == false);
   }SECTION("Check if start of else statement is detected") {
@@ -73,38 +73,38 @@ TEST_CASE("Check if EndOfThenStatements is detected") {
 }
 
 TEST_CASE("Check if IfStatementParser detects then and else statements") {
-  auto prog = new Program();
+  auto prog = make_shared<Program>();
   Parser::Line if_line_valid
-      {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS),
-       new NameToken("x"), new PunctuationToken("<", LT),
-       new IntegerToken("5"), new PunctuationToken(")", RIGHT_PARENTHESIS),
-       new NameToken("then"),
-       new PunctuationToken("{", LEFT_BRACE)};
+      {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+       make_shared<NameToken>("x"), make_shared<PunctuationToken>("<", LT),
+       make_shared<IntegerToken>("5"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+       make_shared<NameToken>("then"),
+       make_shared<PunctuationToken>("{", LEFT_BRACE)};
   Parser::Line then_stmt
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("y"), new PunctuationToken(";", SEMICOLON)};
-  Parser::Line end_of_then{new PunctuationToken("}", RIGHT_BRACE)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("y"), make_shared<PunctuationToken>(";", SEMICOLON)};
+  Parser::Line end_of_then{make_shared<PunctuationToken>("}", RIGHT_BRACE)};
   Parser::Line else_line{
-      new NameToken("else"),
-      new PunctuationToken("{", LEFT_BRACE)
+      make_shared<NameToken>("else"),
+      make_shared<PunctuationToken>("{", LEFT_BRACE)
   };
   Parser::Line else_stmt
-      {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL),
-       new NameToken("z"), new PunctuationToken(";", SEMICOLON)};
+      {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+       make_shared<NameToken>("z"), make_shared<PunctuationToken>(";", SEMICOLON)};
   Parser::Line end_line{
-      new PunctuationToken("}", RIGHT_BRACE)
+      make_shared<PunctuationToken>("}", RIGHT_BRACE)
   };
 
   try {
     Parser::TokenStream
         tokens
         {if_line_valid, then_stmt, end_of_then, else_line, else_stmt, end_line};
-    auto if_parser = new IfStatementParser();
+    auto if_parser = make_shared<IfStatementParser>();
     shared_ptr<IfStatement> if_stmt = dynamic_pointer_cast<IfStatement>(if_parser->ParseEntity(tokens));
     REQUIRE(if_stmt->GetStatementNumber() == 1);
     auto condition = if_stmt->GetCondition();
     pair<shared_ptr<Expression>, shared_ptr<Expression>>
-        rel_args{new Variable("x"), new Constant("5")};
+        rel_args{make_shared<Variable>("x"), make_shared<Constant>("5")};
     auto rel = make_shared<RelationalOperation>("<", rel_args);
 
     pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_args{rel, nullptr};

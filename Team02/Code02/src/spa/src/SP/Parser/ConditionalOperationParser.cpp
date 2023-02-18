@@ -51,7 +51,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     }
 
   } else { // rel_expr
-    RelationalOperationParser *relational_operation_parser = new RelationalOperationParser();
+    shared_ptr<RelationalOperationParser> relational_operation_parser = make_shared<RelationalOperationParser>();
     relational_operation_parser->InheritArgs(GetPos(),GetIsSubExpr(),GetIsProcessedCurrToken());
     auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
     this->SetIsSubExpr(false);
