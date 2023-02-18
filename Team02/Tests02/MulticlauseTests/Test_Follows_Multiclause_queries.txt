@@ -40,7 +40,7 @@ none
 5000
 9 - Follows has result, pattern has no result
 assign a; variable v;
-Select a such that Follows(a, _) pattern a("1", _"2"_)
+Select a such that Follows(a, _) pattern a("i", _"2"_)
 none
 5000
 10 - Follows has no result, pattern has no result

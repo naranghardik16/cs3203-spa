@@ -16,7 +16,7 @@ Select a such that Modifies(a, "i") pattern a("i",_)
 4 - 0 syn  that is shared between both clauses/2 synonyms
 assign Select,pattern; variable v;
 Select Select such that Modifies(Select, "x") pattern pattern("z",_"z"_)
-none
+1, 6, 9, 10
 5000
 5 - 0 syn  that is shared between both clauses/1 synonym
 assign a; variable v;
