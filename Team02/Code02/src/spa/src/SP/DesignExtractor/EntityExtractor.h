@@ -11,6 +11,7 @@
 #include "core/model/RelationalOperation.h"
 #include "core/model/IfStatement.h"
 #include "core/model/WhileStatement.h"
+#include "./PKB/Interfaces/PkbWriteFacade.h"
 
 using namespace std;
 

@@ -64,7 +64,48 @@ void PkbWriteFacade::AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_numb
                                              std::move(statement_number_2));
 }
 
+void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number,
+                                                         Expression* expression) {
+  this->pkb.assignment_store_->addAssignmentExpression(std::move(statement_number), expression);
+  this->pkb.expression_store_->addExpression(expression);
 
+  for (const auto& p: this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression)) {
+    this->pkb.uses_store_->addStatementUsingVariable(statement_number, p);
+    this->pkb.entity_store_->addVariable(p);
+  }
 
+  for (const auto& p: this->pkb.expression_store_->retrieveConstantsOfTheExpression(expression)) {
+    this->pkb.entity_store_->addConstant(p);
+  }
+}
 
+void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
+                                                Expression *expression) {
+  this->pkb.control_flow_store_->addIfStatementAndCondition(std::move(statement_number), expression);
+  this->pkb.expression_store_->addExpression(expression);
+
+  for (const auto& p: this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression)) {
+    this->pkb.uses_store_->addStatementUsingVariable(statement_number, p);
+    this->pkb.entity_store_->addVariable(p);
+  }
+
+  for (const auto& p: this->pkb.expression_store_->retrieveConstantsOfTheExpression(expression)) {
+    this->pkb.entity_store_->addConstant(p);
+  }
+}
+
+void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
+                                                   Expression *expression) {
+  this->pkb.control_flow_store_->addWhileStatementAndCondition(std::move(statement_number), expression);
+  this->pkb.expression_store_->addExpression(expression);
+
+  for (const auto& p: this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression)) {
+    this->pkb.uses_store_->addStatementUsingVariable(statement_number, p);
+    this->pkb.entity_store_->addVariable(p);
+  }
+
+  for (const auto& p: this->pkb.expression_store_->retrieveConstantsOfTheExpression(expression)) {
+    this->pkb.entity_store_->addConstant(p);
+  }
+}
 

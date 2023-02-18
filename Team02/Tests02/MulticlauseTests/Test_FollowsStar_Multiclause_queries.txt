@@ -1,17 +1,17 @@
 1 - 1 syn that are shared in both clauses/4 synonyms
 assign a1, a2; variable v;
-Select a2 such that Follows*(a1, a2) pattern a1(v,_)
-2, 3, 4, 10, 11
+Select a2 such that Follows*(a1, a2) pattern a1(v,_"5    "_)
+4
 5000
 2 - 1 syn that is shared between both clauses/3 synonyms
-assign a1, a2; variable v;
-Select a1 such that Follows*(a1, a2) pattern a1("i",_)
-3
+assign a; variable v; stmt s;
+Select s such that Follows*(s, a) pattern a("i",_" 1"_)
+6, 7, 10
 5000
 3 - 1 syn that is shared between both clauses/2 synonyms
-assign a1, a2; variable v;
-Select a2 such that Follows*(a1, 3) pattern a1("x",_)
-1, 2, 3, 4, 6, 8, 9, 10, 11
+assign a; variable v;
+Select a such that Follows*(a, 10) pattern a("x",_"   z   "_)
+6
 5000
 4 - 0 syn that is shared between both clauses/2 synonyms
 assign Select,pattern; variable v;
@@ -20,12 +20,12 @@ Select Select such that Follows*(Select, 3) pattern pattern("z",_)
 5000
 5 - Follows* return true, pattern has result
 assign a; variable v;
-Select a such that Follows*(1, 12) pattern a(v, _)
-1, 2, 3, 4, 6, 8, 9, 10, 11
+Select a such that Follows*(1, 12) pattern a(v, _"1"_)
+4, 8, 11
 5000
 6 - Follows* return true, pattern has no result
 assign a; variable v;
-Select a such that Follows*(7, 10) pattern a("y", _)
+Select a such that Follows*(7, 10) pattern a("y", _"1"_)
 none
 5000
 7 - Follows* return false, pattern has result
@@ -35,7 +35,7 @@ none
 5000
 8 - Follows* return false, pattern has no result
 assign a; variable v;
-Select a such that Follows*(6, 12) pattern a("y", _)
+Select a such that Follows*(6, 12) pattern a("z", _"2"_)
 none
 5000
 9 - Follows* has result, pattern has no result
@@ -50,6 +50,6 @@ none
 5000
 11 - Follows* has no result, pattern has result
 assign a; variable v;
-Select a such that Follows*(a, 8) pattern a("x", _)
+Select a such that Follows*(a, 8) pattern a("x", _"i"_)
 none
 5000

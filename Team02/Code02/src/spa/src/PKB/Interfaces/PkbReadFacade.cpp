@@ -182,13 +182,12 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVaria
   PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto&p : statement_variable_pairs) {
+  for (const auto& p : statement_variable_pairs) {
     if (statements.count(p.first) > 0 && p.second == variable) {
       result.insert(p.first);
     }
   }
   return result;
-//  return {"1"};
 }
 
 bool PkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {

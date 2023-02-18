@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "Entity.h"
 
 class Statement : public Entity {

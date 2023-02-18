@@ -6,9 +6,23 @@
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
 #include "PKB/Stores/ParentStore.h"
+#include "PKB/Stores/AssignmentStore.h"
+#include "PKB/Stores/ControlFlowStore.h"
+#include "PKB/Stores/ExpressionStore.h"
 
 class PKB {
  public:
+  /**
+ * Constructor for PKB.
+ */
+  PKB();
+
+  /**
+   * Destructor for PKB.
+   */
+  ~PKB();
+
+ private:
   /**
    * Entity store that stores primitives of SIMPLE like variables, procedures and constants.
    */
@@ -29,29 +43,31 @@ class PKB {
    */
   FollowsStore *follows_store_;
 
+  /**
+   * Parent store that stores multi-variate parent relation between SIMPLE's entities.
+   */
   ParentStore *parent_store_;
 
+  /**
+   * Uses store that stores multi-variate uses relation between SIMPLE's entities.
+   */
   UsesStore *uses_store_;
 
   /**
-   * Constructor for PKB.
+   * Control flow store that stores uni-variate association between if, while statements and their conditions.
    */
-  PKB();
+  ControlFlowStore *control_flow_store_;
 
   /**
-   * Destructor for PKB.
+   * Assignment store that stores uni-variate association between statement and expression.
    */
-  ~PKB();
+  AssignmentStore *assignment_store_;
+
+  /**
+   * Expression store that contains mappings between expressions and constants, variables it contains.
+   */
+  ExpressionStore *expression_store_;
 
   friend class PkbWriteFacade;
   friend class PkbReadFacade;
 };
-
-// x = 1
-// read x;
-// print x;
-// call proc;
-// while (x > 0)
-// if (x > 0)
-
-// stmt_no -> { x, >, 0 }

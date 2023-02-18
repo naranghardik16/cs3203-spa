@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_set>
 #include "OperationParser.h"
 #include "ArithmeticOperationParser.h"
 #include "../../core/model/RelationalOperation.h"

@@ -165,13 +165,13 @@ TEST_CASE(
                  "  if (flag == 1) then {\n"
                  "     count = 10;\n"
                  "     if (count == 20 ) then {\n"
-                 "         counta = 30;"
+                 "         count1 = 30;"
                  "     } else {\n"
-                 "         counta = 40 ; "
-                 "         if (counta == 50) then {\n"
-                 "              countb = 60; "
+                 "         count1 = 40 ; "
+                 "         if (count1 == 50) then {\n"
+                 "              count2 = 60; "
                  "         } else {"
-                 "               countb = 70;"
+                 "               count2 = 70;"
                  "         }"
                  "     }"
                  "  } else {"
@@ -190,7 +190,7 @@ TEST_CASE(
 
     SECTION("Check if the variable from if statements are added") {
       auto var_store = pkb_read_facade->GetVariables();
-      vector<string> vars{"flag", "count", "counta", "countb"};
+      vector<string> vars{"flag", "count", "count1", "count2"};
       vector<string> invalid_vars{"countz", "county", "countx"};
       for (auto &var : vars) {
         if (var_store.find(var) == var_store.end()) {
