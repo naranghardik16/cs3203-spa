@@ -26,4 +26,3 @@ file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_
 
 add_library(spa ${srcs} ${headers} src/QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.cpp src/QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.h)
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-

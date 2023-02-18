@@ -79,7 +79,7 @@ class StatementStore {
   std::unordered_set<PkbTypes::FIELD> getFieldsForStatement(PkbTypes::STATEMENT_NUMBER statement_number);
 
  protected:
-  OneToManyStore<StatementType, PkbTypes::STATEMENT_NUMBER> type_statement_store;
-  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::FIELD> statement_field_store;
+  OneToManyStore<StatementType, PkbTypes::STATEMENT_NUMBER> type_statement_store_;
+  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::FIELD> statement_field_store_;
 };
 
