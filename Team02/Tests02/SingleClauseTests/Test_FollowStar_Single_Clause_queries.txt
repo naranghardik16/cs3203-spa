@@ -55,7 +55,7 @@ Select c such that Follows*(1, _)
 5000
 12 - Follows*(INT, WILDCARD) return false
 constant c;
-Select c such that Follows*(1, _)
+Select c such that Follows*(_, 1)
 none
 5000
 13 - Follows*(INT, SYN) has result

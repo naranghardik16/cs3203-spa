@@ -15,17 +15,16 @@ template<typename K, typename V>
 bool OneToOneStore<K, V>::contains(K key, V value) {
   auto iter = this->forward_map_.find(key);
   return iter != this->forward_map_.end() && iter->second == value;
-//  return this->forward_map_.count(key);
 }
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::containsKey(K key) {
-  return this->forward_map_.count(key);
+  return this->forward_map_.count(key) > 0;
 }
 
 template<typename K, typename V>
 bool OneToOneStore<K, V>::containsValue(V value) {
-  return this->backward_map_.count(value);
+  return this->backward_map_.count(value) > 0;
 }
 
 template<typename K, typename V>

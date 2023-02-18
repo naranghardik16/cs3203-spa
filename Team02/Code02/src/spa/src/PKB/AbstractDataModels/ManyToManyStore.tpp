@@ -54,11 +54,13 @@ std::size_t ManyToManyStore<K, V>::numberOfValues() {
 
 template<typename K, typename V>
 std::unordered_set<V> ManyToManyStore<K, V>::retrieveFromKey(K key) {
+  if (!this->containsKey(key)) return {};
   return this->forward_map_[key];
 }
 
 template<typename K, typename V>
 std::unordered_set<K> ManyToManyStore<K, V>::retrieveFromValue(V value) {
+  if (!this->containsValue(value)) return {};
   return this->backward_map_[value];
 }
 
