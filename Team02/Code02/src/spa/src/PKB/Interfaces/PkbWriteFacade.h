@@ -3,7 +3,7 @@
 #include "General/StatementTypeEnum.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
-
+#include "core/model/Expression.h"
 
 /**
  * Facade implementation consisting of write methods
@@ -99,4 +99,10 @@ class PkbWriteFacade {
    */
   void AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_number_1,
                          PkbTypes::STATEMENT_NUMBER statement_number_2) const;
+
+  void AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
+
+  void AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
+
+  void AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number, Expression* expression);
 };
