@@ -6,7 +6,7 @@ ExpressionStore::ExpressionStore() = default;
 
 ExpressionStore::~ExpressionStore() = default;
 
-void ExpressionStore::addExpression(Expression* expression) {
+void ExpressionStore::addExpression(std::shared_ptr<Expression> expression) {
   for (const auto &p: ExpressionUtil::retrieveAllVariablesFromExpression(expression)) {
     this->expression_to_variable_store_.insert(expression, p);
   }
@@ -16,10 +16,10 @@ void ExpressionStore::addExpression(Expression* expression) {
   }
 }
 
-std::unordered_set<PkbTypes::VARIABLE> ExpressionStore::retrieveVariablesOfTheExpression(Expression* expression) {
+std::unordered_set<PkbTypes::VARIABLE> ExpressionStore::retrieveVariablesOfTheExpression(std::shared_ptr<Expression> expression) {
   return this->expression_to_variable_store_.retrieveFromKey(expression);
 }
 
-std::unordered_set<PkbTypes::CONSTANT> ExpressionStore::retrieveConstantsOfTheExpression(Expression *expression) {
+std::unordered_set<PkbTypes::CONSTANT> ExpressionStore::retrieveConstantsOfTheExpression(std::shared_ptr<Expression> expression) {
   return this->expression_to_constant_store_.retrieveFromKey(expression);
 }
