@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <memory>
 
 #include "PkbReadFacade.h"
@@ -625,6 +626,31 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithExactExpr
   return {"1", "2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
-  return {"1", "2"};
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialExpression(std::string sub_expression) {
+  PkbCommunicationTypes::SingleConstraintSet result;
+  if (sub_expression == "_") {
+    return this->GetAssignStatements();
+  }
+
+  sub_expression.erase(std::remove(sub_expression.begin(), sub_expression.end(), '_'), sub_expression.end());
+
+  if (this->GetVariables().count(sub_expression) > 0) {
+    for (const auto &p: this->GetAssignStatements()) {
+      auto expression = this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(p);
+      auto variables = this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
+      if (variables.count(sub_expression) > 0) {
+        result.insert(p);
+      }
+    }
+  } else if (this->GetConstants().count(sub_expression) > 0) {
+    for (const auto &p: this->GetAssignStatements()) {
+      auto expression = this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(p);
+      auto constants = this->pkb.expression_store_->retrieveConstantsOfTheExpression(expression);
+      if (constants.count(sub_expression) > 0) {
+        result.insert(p);
+      }
+    }
+  }
+
+  return result;
 }
