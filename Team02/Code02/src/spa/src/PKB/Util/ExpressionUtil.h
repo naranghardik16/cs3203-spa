@@ -1,29 +1,66 @@
 #pragma once
 
+#include <stack>
 #include <unordered_set>
 
-#include "PKB/Types/PkbTypes.h"
 #include "core/model/Expression.h"
+#include "PKB/Types/PkbTypes.h"
 
 class ExpressionUtil {
  public:
-  std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesFromExpression(Expression* expression) {
+  static std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesFromExpression(Expression* expression) {
     std::unordered_set<PkbTypes::VARIABLE> result;
-    if (expression->GetExpressionType() == "variable") {
-      result.insert(expression->GetName());
-    } else {
+    std::stack<Expression *> s;
+
+    s.push(expression);
+
+    while (!s.empty()) {
+      auto current = s.top();
+      s.pop();
+
+      if (!current) continue;
+
+      if (current->GetExpressionType() == "variable") {
+        result.insert(current->GetName());
+      } else {
+        auto children = current->GetArguments();
+
+        s.push(children->first);
+        s.push(children->second);
+      }
     }
 
-    return {};
+    return result;
   }
 
-  std::unordered_set<PkbTypes::CONSTANT> retrieveAllConstantsFromExpression(Expression* expression) {
-    std::unordered_set<PkbTypes::VARIABLE> result;
-    return {};
+  static std::unordered_set<PkbTypes::CONSTANT> retrieveAllConstantsFromExpression(Expression* expression) {
+    std::unordered_set<PkbTypes::CONSTANT> result;
+    std::stack<Expression *> s;
+
+    s.push(expression);
+
+    while (!s.empty()) {
+      auto current = s.top();
+      s.pop();
+
+      if (!current) continue;
+
+      if (current->GetExpressionType() == "constant") {
+        result.insert(current->GetName());
+      } else {
+        auto children = current->GetArguments();
+
+        s.push(children->first);
+        s.push(children->second);
+      }
+    }
+
+    return result;
   }
 
-  std::string flatten(Expression expression) {
-    return {};
-  }
+//  static std::string flatten(Expression expression) {
+//    return "";
+//  }
+
 };
 

@@ -4,6 +4,7 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/AbstractDataModels/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Util/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
