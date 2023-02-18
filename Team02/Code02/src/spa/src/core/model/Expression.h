@@ -1,6 +1,7 @@
 #pragma once
 
 #include<string>
+#include <optional>
 #include "Entity.h"
 
 class Expression : public Entity {
