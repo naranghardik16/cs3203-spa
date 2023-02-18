@@ -11,9 +11,9 @@
 
 class Parser {
  public:
-  typedef std::deque<std::vector<Token *>> TokenStream;
-  typedef std::vector<Token *> Line;
-  [[nodiscard]] Program ParseSource(TokenStream &token);
+  typedef std::deque<std::vector<shared_ptr<Token>>> TokenStream;
+  typedef std::vector<shared_ptr<Token>> Line;
+  [[nodiscard]] shared_ptr<Program> ParseSource(TokenStream &token);
   static bool IsStatement(Line &line);
   static bool IsProcedure(Line &line);
 

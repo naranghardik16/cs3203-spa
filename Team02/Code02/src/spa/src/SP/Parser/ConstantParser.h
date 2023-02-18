@@ -6,6 +6,6 @@
 class ConstantParser : public ExpressionParser {
  public:
   ConstantParser() = default;
-  Constant *ParseEntity(TokenStream &tokens) override;
-  Constant *ParseEntity(Line &line) override;
+  shared_ptr<Expression> ParseEntity(TokenStream &tokens) override;
+  shared_ptr<Expression> ParseEntity(Line &line) override;
 };

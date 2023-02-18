@@ -27,15 +27,15 @@ void OperationParser::GetNext() {
   }
 }
 
-int* OperationParser::GetPos() {
+shared_ptr<int> OperationParser::GetPos() {
   return pos_;
 }
 
-ExpressionParser::Line *OperationParser::GetLine() {
-  return &line_;
+shared_ptr<ExpressionParser::Line> OperationParser::GetLine() {
+  return make_shared<ExpressionParser::Line>(line_);
 }
 
-void OperationParser::InheritArgs(int *pos, bool is_sub_expr, bool *is_processed_curr_token) {
+void OperationParser::InheritArgs(shared_ptr<int> pos, bool is_sub_expr, shared_ptr<bool> is_processed_curr_token) {
   is_inherit_args_ = true;
   pos_ = pos;
   is_sub_expr_ = is_sub_expr;
@@ -56,13 +56,13 @@ string OperationParser::GetCurrentTokenValue() {
   return curr_token_value_;
 }
 
-Expression *OperationParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Expression> OperationParser::ParseEntity(TokenStream &tokens) {
   return ParseEntity(tokens.front());
 }
 
-Expression *OperationParser::ParseEntity(Line &line) {
+shared_ptr<Expression> OperationParser::ParseEntity(Line &line) {
   Setup(line);
-  Expression *result = Parse();
+  shared_ptr<Expression> result = Parse();
   ValidateForBalancedParenthesis();
   return result;
 }
@@ -75,7 +75,7 @@ void OperationParser::SetIsSubExpr(bool is_sub_expr) {
   is_sub_expr_ = is_sub_expr;
 }
 
-bool* OperationParser::GetIsProcessedCurrToken() {
+shared_ptr<bool> OperationParser::GetIsProcessedCurrToken() {
   return is_processed_curr_token_;
 }
 
@@ -84,9 +84,6 @@ void OperationParser::ValidateForBalancedParenthesis() {
     return;
   }
   throw SyntaxErrorException("Unbalanced parenthesis ()");
-//  if (!is_sub_expr_ && !IsEndOfLine()) {
-//    throw SyntaxErrorException("Unbalanced parenthesis ()");
-//  }
 }
 
 void OperationParser::ValidateEnoughTokensToProcess(string err_msg) {

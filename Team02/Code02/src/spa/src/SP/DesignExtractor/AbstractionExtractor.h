@@ -15,27 +15,26 @@
 
 class AbstractionExtractor : public ParserVisitor {
  public:
-  AbstractionExtractor(PKB *pkb);
-  void VisitArithmeticalOperation(ArithmeticOperation *arith_operation) override;
-  void VisitAssignStatement(AssignStatement *assign_statement) override;
-  void VisitConditionalOperation(ConditionalOperation *cond_operation) override;
-  void VisitPrintStatement(PrintStatement *print_statement) override;
-  void VisitReadStatement(ReadStatement *read_statement) override;
-  void VisitRelationalOperation(RelationalOperation *rel_operation) override;
-  void VisitIfStatement(IfStatement *if_statement) override;
-  void VisitWhileStatement(WhileStatement *while_statement) override;
-  void VisitProgram(Program *program);
-  void VisitProcedure(Procedure *procedure) override;
-  void VisitVariable(Variable *variable) override;
-  void VisitConstant(Constant *constant) override;
-  void VisitStatement(Statement *statement);
-  void VisitExpression(Expression *expression);
-  void ExtractFollows(Statement *prev_stmt, Statement *curr_stmt);
+  AbstractionExtractor(shared_ptr<PKB> pkb);
+  void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override;
+  void VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) override;
+  void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) override;
+  void VisitPrintStatement(shared_ptr<PrintStatement> print_statement) override;
+  void VisitReadStatement(shared_ptr<ReadStatement> read_statement) override;
+  void VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) override;
+  void VisitIfStatement(shared_ptr<IfStatement> if_statement) override;
+  void VisitWhileStatement(shared_ptr<WhileStatement> while_statement) override;
+  void VisitProgram(shared_ptr<Program> program);
+  void VisitProcedure(shared_ptr<Procedure> procedure) override;
+  void VisitVariable(shared_ptr<Variable> variable) override;
+  void VisitConstant(shared_ptr<Constant> constant) override;
+  void VisitStatement(shared_ptr<Statement> statement);
+  void VisitExpression(shared_ptr<Expression> expression);
+  void ExtractFollows(shared_ptr<Statement> prev_stmt, shared_ptr<Statement> curr_stmt);
  private:
-  //TODO: Design Extractor should have one pkb and write_face
-  PKB *pkb_;
-  PkbWriteFacade *pkb_write_facade_;
-  void ProcessStatements(const vector<Statement *> &statements,
+  shared_ptr<PKB> pkb_;
+  shared_ptr<PkbWriteFacade> pkb_write_facade_;
+  void ProcessStatements(const vector<shared_ptr<Statement>> &statements,
                          PkbTypes::STATEMENT_NUMBER parent);
-  void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, Statement *child_stmt);
+  void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, shared_ptr<Statement> child_stmt);
 };

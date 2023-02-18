@@ -7,7 +7,7 @@
 template<typename Entity>
 class EntityParser {
  public:
-  typedef std::deque<std::vector<Token*>> TokenStream;
-  typedef std::vector<Token*> Line;
-  virtual Entity *ParseEntity(TokenStream &tokens) = 0;
+  typedef std::deque<std::vector<shared_ptr<Token>>> TokenStream;
+  typedef std::vector<shared_ptr<Token>> Line;
+  virtual shared_ptr<Entity> ParseEntity(TokenStream &tokens) = 0;
 };

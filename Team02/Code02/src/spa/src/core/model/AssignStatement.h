@@ -7,13 +7,14 @@ class AssignStatement : public Statement {
  public:
   AssignStatement(int statement_number, Variable var,
                   std::string in_scope_of_proc);
-  ~AssignStatement() noexcept override;
-  void AddExpression(Expression *expression);
-  void Accept(ParserVisitor *visitor) override;
+//  ~AssignStatement() noexcept override;
+  virtual ~AssignStatement() = default;
+  void AddExpression(shared_ptr<Expression> expression);
+  void Accept(shared_ptr<ParserVisitor> visitor) override;
   [[nodiscard]]Variable GetVariable() const;
-  [[nodiscard]]Expression *GetExpression() const;
+  [[nodiscard]]shared_ptr<Expression> GetExpression() const;
 
  private:
   Variable variable_;
-  Expression *expression_;
+  shared_ptr<Expression> expression_;
 };

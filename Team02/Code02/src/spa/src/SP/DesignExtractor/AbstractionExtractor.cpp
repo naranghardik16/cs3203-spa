@@ -1,15 +1,14 @@
-#pragma once
 #include "AbstractionExtractor.h"
 
-AbstractionExtractor::AbstractionExtractor(PKB *pkb) : pkb_(pkb) {
-  pkb_write_facade_ = new PkbWriteFacade(*pkb);
+AbstractionExtractor::AbstractionExtractor(shared_ptr<PKB> pkb) : pkb_(pkb) {
+  pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb);
 }
 
-void AbstractionExtractor::VisitArithmeticalOperation(ArithmeticOperation *arith_operation) {
+void AbstractionExtractor::VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) {
   // TODO:
 }
 
-void AbstractionExtractor::VisitAssignStatement(AssignStatement *assign_statement) {
+void AbstractionExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(assign_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, ASSIGN);
@@ -17,11 +16,11 @@ void AbstractionExtractor::VisitAssignStatement(AssignStatement *assign_statemen
                                                    assign_statement->GetVariable().GetName());
 }
 
-void AbstractionExtractor::VisitConditionalOperation(ConditionalOperation *cond_operation) {
+void AbstractionExtractor::VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) {
   // TODO:
 }
 
-void AbstractionExtractor::VisitPrintStatement(PrintStatement *print_statement) {
+void AbstractionExtractor::VisitPrintStatement(shared_ptr<PrintStatement> print_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(print_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, PRINT);
@@ -29,7 +28,7 @@ void AbstractionExtractor::VisitPrintStatement(PrintStatement *print_statement) 
                                                print_statement->GetVariable().GetName());
 }
 
-void AbstractionExtractor::VisitReadStatement(ReadStatement *read_statement) {
+void AbstractionExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(read_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, READ);
@@ -37,11 +36,11 @@ void AbstractionExtractor::VisitReadStatement(ReadStatement *read_statement) {
                                                    read_statement->GetVariable().GetName());
 }
 
-void AbstractionExtractor::VisitRelationalOperation(RelationalOperation *rel_operation) {
+void AbstractionExtractor::VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) {
 
 }
 
-void AbstractionExtractor::VisitIfStatement(IfStatement *if_statement) {
+void AbstractionExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(if_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, IF);
@@ -51,20 +50,20 @@ void AbstractionExtractor::VisitIfStatement(IfStatement *if_statement) {
   ProcessStatements(else_stmts, stmt_number);
 }
 
-void AbstractionExtractor::ProcessStatements(const vector<Statement *> &statements,
+void AbstractionExtractor::ProcessStatements(const vector<shared_ptr<Statement>> &statements,
                                              PkbTypes::STATEMENT_NUMBER parent) {
-  Statement *prev_stmt = nullptr;
-  for (Statement *s : statements) {
+  shared_ptr<Statement> prev_stmt = nullptr;
+  for (shared_ptr<Statement> s : statements) {
     if (prev_stmt != nullptr) {
       this->ExtractFollows(prev_stmt, s);
     }
     this->ExtractParent(parent, s);
-    s->Accept(this);
+    s->Accept(make_shared<AbstractionExtractor>(*this));
     prev_stmt = s;
   }
 }
 
-void AbstractionExtractor::VisitWhileStatement(WhileStatement *while_statement) {
+void AbstractionExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(while_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, WHILE);
@@ -74,20 +73,20 @@ void AbstractionExtractor::VisitWhileStatement(WhileStatement *while_statement) 
   ProcessStatements(statements, stmt_number);
 }
 
-void AbstractionExtractor::VisitProcedure(Procedure *procedure) {
+void AbstractionExtractor::VisitProcedure(shared_ptr<Procedure> procedure) {
   // TODO:
 }
 
-void AbstractionExtractor::VisitConstant(Constant *constant) {
+void AbstractionExtractor::VisitConstant(shared_ptr<Constant> constant) {
   // TODO:
 }
 
-void AbstractionExtractor::VisitVariable(Variable *variable) {
+void AbstractionExtractor::VisitVariable(shared_ptr<Variable> variable) {
   // TODO:
 }
 
-void AbstractionExtractor::ExtractFollows(Statement *prev_stmt,
-                                          Statement *curr_stmt) {
+void AbstractionExtractor::ExtractFollows(shared_ptr<Statement> prev_stmt,
+                                          shared_ptr<Statement> curr_stmt) {
   PkbTypes::STATEMENT_NUMBER
       prev_stmt_no = std::to_string(prev_stmt->GetStatementNumber());
   PkbTypes::STATEMENT_NUMBER
@@ -96,7 +95,7 @@ void AbstractionExtractor::ExtractFollows(Statement *prev_stmt,
 }
 
 void AbstractionExtractor::ExtractParent(PkbTypes::STATEMENT_NUMBER parent,
-                                         Statement *child_stmt
+                                         shared_ptr<Statement> child_stmt
 ) {
   PkbTypes::STATEMENT_NUMBER
       child_stmt_no = std::to_string(child_stmt->GetStatementNumber());

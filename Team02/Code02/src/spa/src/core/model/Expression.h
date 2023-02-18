@@ -3,14 +3,15 @@
 #include<string>
 #include <optional>
 #include "Entity.h"
+#include <optional>
 
 class Expression : public Entity {
  public:
-  typedef std::pair<Expression *, Expression *> PairOfArguments;
+  typedef std::pair<shared_ptr<Expression>, shared_ptr<Expression>> PairOfArguments;
   Expression() = default;
   explicit Expression(std::string name, std::string expression_type);
   virtual ~Expression() = default;
-  virtual void Accept(ParserVisitor *visitor) = 0;
+  virtual void Accept(shared_ptr<ParserVisitor> visitor) = 0;
   [[nodiscard]] std::optional<PairOfArguments> GetArguments() const;
   virtual inline bool IsLeafNodeExpression();
   [[nodiscard]] std::string GetExpressionType() const;

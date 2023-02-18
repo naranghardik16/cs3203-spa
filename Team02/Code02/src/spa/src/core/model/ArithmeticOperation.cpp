@@ -2,12 +2,11 @@
 #include "ArithmeticOperation.h"
 
 ArithmeticOperation::ArithmeticOperation(string name,
-                                         pair<Expression *,
-                                              Expression *> arguments)
+                                         pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments)
     : Operation(move(name), "arithmetic", arguments) {}
 
-void ArithmeticOperation::Accept(ParserVisitor *visitor) {
-  visitor->VisitArithmeticalOperation(this);
+void ArithmeticOperation::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitArithmeticalOperation(make_shared<ArithmeticOperation>(*this));
 }
 
 bool ArithmeticOperation::operator==(const Expression &other) const {

@@ -12,7 +12,7 @@ using namespace std;
 class RelationalOperationParser : public OperationParser {
  public:
   RelationalOperationParser() = default;
-  Expression *Parse() override;
+  shared_ptr<Expression> Parse() override;
  private:
-  Expression *Factor();
+  shared_ptr<Expression> Factor();
 };

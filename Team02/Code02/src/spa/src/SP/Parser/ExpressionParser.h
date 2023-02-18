@@ -8,5 +8,5 @@
 
 class ExpressionParser : public EntityParser<Expression> {
  public:
-  virtual Expression *ParseEntity(Line &line) = 0;
+  virtual shared_ptr<Expression> ParseEntity(Line &line) = 0;
 };

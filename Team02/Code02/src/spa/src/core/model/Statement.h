@@ -10,7 +10,7 @@ class Statement : public Entity {
       std::string statement_type,
       std::string in_scope_of_proc);
   virtual ~Statement() = default;
-  virtual void Accept(ParserVisitor *visitor) = 0;
+  virtual void Accept(shared_ptr<ParserVisitor> visitor) = 0;
   [[nodiscard]] int GetStatementNumber() const;
   [[nodiscard]] std::string GetStatementType() const;
   [[nodiscard]] std::string GetInScopeOfPrc() const;

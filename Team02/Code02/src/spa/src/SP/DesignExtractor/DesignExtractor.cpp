@@ -1,28 +1,26 @@
-#pragma once
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor(PKB *pkb) {
+DesignExtractor::DesignExtractor(shared_ptr<PKB> pkb) {
   pkb_ = pkb;
-//  pkb_write_facade_ = new PkbWriteFacade(*pkb);
 }
 
-void DesignExtractor::ExtractDesign(Program *program) {
-  EntityExtractor *entity_extractor = new EntityExtractor(pkb_);
-  auto *abstraction_extractor = new AbstractionExtractor(pkb_);
+void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
+  shared_ptr<EntityExtractor> entity_extractor = make_shared<EntityExtractor>(pkb_);
+  shared_ptr<AbstractionExtractor> abstraction_extractor = make_shared<AbstractionExtractor>(pkb_);
   Program::ProcListContainer procedures = program->GetProcedureList();
 
-  for (Procedure *p : procedures) {
+  for (shared_ptr<Procedure> p : procedures) {
     p->Accept(entity_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
-    for (Statement *s : statements) {
+    for (shared_ptr<Statement> s : statements) {
       s->Accept(entity_extractor);
     }
   }
-  for (Procedure *p : procedures) {
+  for (shared_ptr<Procedure> p : procedures) {
     p->Accept(abstraction_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
-    Statement *prev_stmt = nullptr;
-    for (Statement *s : statements) {
+    shared_ptr<Statement> prev_stmt = nullptr;
+    for (shared_ptr<Statement> s : statements) {
       if (prev_stmt != nullptr) {
         abstraction_extractor->ExtractFollows(prev_stmt, s);
       }

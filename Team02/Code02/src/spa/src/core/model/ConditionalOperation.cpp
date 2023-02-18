@@ -2,12 +2,11 @@
 #include "ConditionalOperation.h"
 
 ConditionalOperation::ConditionalOperation(string name,
-                                           pair<Expression *,
-                                                Expression *> arguments)
+                                           pair<shared_ptr<Expression>, shared_ptr<Expression>> arguments)
     : Operation(move(name), "conditional", arguments) {}
 
-void ConditionalOperation::Accept(ParserVisitor *visitor) {
-  visitor->VisitConditionalOperation(this);
+void ConditionalOperation::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitConditionalOperation(make_shared<ConditionalOperation>(*this));
 }
 
 bool ConditionalOperation::operator==(const Expression &other) const {

@@ -5,5 +5,5 @@ using namespace std;
 class PunctuationToken : public Token {
  public:
   PunctuationToken(string val, TokenType type);
-  bool Equals(Token &other);
+  bool Equals(shared_ptr<Token> other);
 };

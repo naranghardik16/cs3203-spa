@@ -5,10 +5,10 @@
 
 class Program {
  public:
-  typedef std::vector<Procedure *> ProcListContainer;
+  typedef std::vector<shared_ptr<Procedure>> ProcListContainer;
   Program();
   ~Program();
-  void AddToProcedureList(Procedure *proc);
+  void AddToProcedureList(shared_ptr<Procedure> proc);
   [[nodiscard]] ProcListContainer GetProcedureList();
   [[nodiscard]] static int GetAndIncreaseStatementNumber();
 

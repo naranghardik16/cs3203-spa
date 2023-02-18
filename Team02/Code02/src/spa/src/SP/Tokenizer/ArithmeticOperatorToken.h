@@ -5,5 +5,5 @@ using namespace std;
 class ArithmeticOperatorToken : public Token {
  public:
   ArithmeticOperatorToken(string val, TokenType type);
-  bool Equals(Token &other);
+  bool Equals(shared_ptr<Token> other);
 };

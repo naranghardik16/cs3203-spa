@@ -18,7 +18,7 @@ bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) 
     }
 
     for (int j = 0; j < ts1[i].size(); j++) {
-      if (!ts1[i][j]->Equals(*ts2[i][j])) {
+      if (!ts1[i][j]->Equals(ts2[i][j])) {
         return false;
       }
     }
@@ -28,7 +28,7 @@ bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) 
 }
 
 TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
-  Tokenizer* tokenizer = new Tokenizer();
+  shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
 
   SECTION("Test if it valid tokens (e.g. abc123 for name token) are tokenized as expected") {
     string input = "abc123 = 1;\n"
@@ -38,17 +38,17 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("abc123"), new PunctuationToken("=", SINGLE_EQUAL),  new IntegerToken("1"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("ABC123"), new PunctuationToken("=", SINGLE_EQUAL),
-         new IntegerToken("2"), new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("a1b2"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("3"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
-         new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"),
-         new PunctuationToken(")", RIGHT_PARENTHESIS), new NameToken("then"), new PunctuationToken("{", LEFT_BRACE)}
+        {make_shared<NameToken>("abc123"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),  make_shared<IntegerToken>("1"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("ABC123"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<IntegerToken>("2"), make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("a1b2"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("3"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS), make_shared<IntegerToken>("0"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<NameToken>("then"), make_shared<PunctuationToken>("{", LEFT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -58,12 +58,12 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
-         new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
-         new NameToken("i"), new RelationalOperatorToken("<=", LTE), new IntegerToken("10"),
-         new PunctuationToken(")", RIGHT_PARENTHESIS), new PunctuationToken("{", LEFT_BRACE)}
+        {make_shared<NameToken>("while"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0"), make_shared<ConditionalOperatorToken>("&&", AND),
+         make_shared<NameToken>("i"), make_shared<RelationalOperatorToken>("<=", LTE), make_shared<IntegerToken>("10"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>("{", LEFT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -76,21 +76,21 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("while"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
-         new RelationalOperatorToken(">", GT), new IntegerToken("0"), new ConditionalOperatorToken("&&", AND),
-         new NameToken("i"), new RelationalOperatorToken("<=", LTE), new IntegerToken("10"),
-         new PunctuationToken(")", RIGHT_PARENTHESIS), new PunctuationToken("{", LEFT_BRACE)},
-        {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL), new NameToken("x"),
-         new ArithmeticOperatorToken("+", PLUS), new NameToken("z"), new ArithmeticOperatorToken("*", MULTIPLY),
-         new IntegerToken("5"), new ArithmeticOperatorToken("/", DIV), new IntegerToken("2"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("z"), new PunctuationToken("=", SINGLE_EQUAL), new PunctuationToken("(", LEFT_PARENTHESIS),
-         new IntegerToken("10"), new ArithmeticOperatorToken("-", MINUS), new NameToken("x"),
-         new PunctuationToken(")", RIGHT_PARENTHESIS), new ArithmeticOperatorToken("%", MOD), new IntegerToken("2"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new PunctuationToken("}", RIGHT_BRACE)}
+        {make_shared<NameToken>("while"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0"), make_shared<ConditionalOperatorToken>("&&", AND),
+         make_shared<NameToken>("i"), make_shared<RelationalOperatorToken>("<=", LTE), make_shared<IntegerToken>("10"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>("{", LEFT_BRACE)},
+        {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<NameToken>("x"),
+         make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<NameToken>("z"), make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+         make_shared<IntegerToken>("5"), make_shared<ArithmeticOperatorToken>("/", DIV), make_shared<IntegerToken>("2"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("z"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+         make_shared<IntegerToken>("10"), make_shared<ArithmeticOperatorToken>("-", MINUS), make_shared<NameToken>("x"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ArithmeticOperatorToken>("%", MOD), make_shared<IntegerToken>("2"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<PunctuationToken>("}", RIGHT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -100,18 +100,18 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     std::istringstream is;
     is.str(input);
 
-    Parser::TokenStream *actual = tokenizer->Tokenize(is);
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {new NameToken("if"), new PunctuationToken("(", LEFT_PARENTHESIS), new NameToken("i"),
-         new RelationalOperatorToken("==", DOUBLE_EQUALS), new IntegerToken("0"), new PunctuationToken(")", RIGHT_PARENTHESIS),
-         new PunctuationToken("{", LEFT_BRACE)},
-        {new NameToken("x"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("1"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("y"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("3"),
-         new PunctuationToken(";", SEMICOLON)},
-        {new NameToken("z"), new PunctuationToken("=", SINGLE_EQUAL), new IntegerToken("5"),
-        new PunctuationToken(";", SEMICOLON)},
-        {new PunctuationToken("}", RIGHT_BRACE)}
+        {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS), make_shared<IntegerToken>("0"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+         make_shared<PunctuationToken>("{", LEFT_BRACE)},
+        {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("1"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("y"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("3"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("z"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("5"),
+        make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<PunctuationToken>("}", RIGHT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }

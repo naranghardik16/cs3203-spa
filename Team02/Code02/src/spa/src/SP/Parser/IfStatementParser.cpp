@@ -1,11 +1,11 @@
 #include "IfStatementParser.h"
 
-IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   auto condition = ExtractCondition(line);
-  auto if_stmt = new IfStatement(Program::GetAndIncreaseStatementNumber(),
-                                 condition,
+  auto if_stmt = make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
+                                 *condition,
                                  "main");
   CheckStartOfIfStatement(line);
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
@@ -36,9 +36,9 @@ IfStatement *IfStatementParser::ParseEntity(TokenStream &tokens) {
   return if_stmt;
 }
 
-ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
+shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line) {
   // remove "if (" and ") then {" from the token line
-  vector<Token *> expression_tokens{line.begin() + 2, line.end() - 3};
+  vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 3};
   auto expr_parser =
       ExpressionParserFactory::GetExpressionParser(expression_tokens, "if");
   auto
@@ -47,13 +47,13 @@ ConditionalOperation IfStatementParser::ExtractCondition(Line &line) {
   if (!condition) {
     throw SyntaxErrorException("Could not get a condition for if statement");
   }
-  return *dynamic_cast<ConditionalOperation *>(condition);
+  return dynamic_pointer_cast<ConditionalOperation>(condition);
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
   auto
       itr_brace =
-      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
         return p->GetType() == TokenType::LEFT_BRACE;
       });
 
@@ -63,7 +63,7 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 
   auto
       itr_then =
-      std::find_if(std::begin(line), std::end(line), [&](Token *const p) {
+      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
         return p->GetValue() == "then";
       });
 
@@ -76,14 +76,14 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
 
   return std::find_if(std::begin(line), std::end(line),
-                      [&](Token *const p) {
+                      [&](shared_ptr<Token> const p) {
                         return p->GetValue() == "}";
                       }) != std::end(line);
 }
 
 bool IfStatementParser::HasElseStatements(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
-                      [&](Token *const p) {
+                      [&](shared_ptr<Token> const p) {
                         return p->GetValue() == "else";
                       }) != std::end(line);
 }
@@ -104,7 +104,7 @@ void IfStatementParser::CheckStartOfElseStatement(Line &line) const {
 
 bool IfStatementParser::IsEndOfIfElseStatement(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
-                      [&](Token *const p) {
+                      [&](shared_ptr<Token> const p) {
                         return p->GetType() == TokenType::RIGHT_BRACE;
                       }) != std::end(line);
 }

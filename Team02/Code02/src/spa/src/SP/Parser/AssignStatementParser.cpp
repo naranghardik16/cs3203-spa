@@ -1,16 +1,16 @@
 #include "AssignStatementParser.h"
 
-AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Statement> AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto assign_stmt =
-      new AssignStatement(Program::GetAndIncreaseStatementNumber(),
+  make_shared<AssignStatement>(Program::GetAndIncreaseStatementNumber(),
                           var,
                           "main");
   CheckEndOfStatement(line);
-  vector<Token *> expression_tokens{line.begin() + 2, line.end() - 1};
+  vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
       ExpressionParserFactory::GetExpressionParser(expression_tokens, "assign");
   auto expression = expr_parser->ParseEntity(expression_tokens);
@@ -20,7 +20,7 @@ AssignStatement *AssignStatementParser::ParseEntity(TokenStream &tokens) {
 
 std::string AssignStatementParser::ExtractVariableName(Line &line) const {
   auto assign_keyword_itr = std::find_if(std::begin(line), std::end(line),
-                                         [&](Token *const p) {
+                                         [&](shared_ptr<Token> const p) {
                                            return p->GetValue() == "=";
                                          });
 

@@ -14,7 +14,7 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
-  pkb_ = new PKB();
+  pkb_ = make_shared<PKB>();
 }
 
 // method for parsing the SIMPLE source
@@ -23,7 +23,7 @@ void TestWrapper::parse(std::string filename) {
   // ...rest of your code...
 
   std::ifstream source(filename);
-  SP *sp = new SP();
+  shared_ptr<SP> sp = make_shared<SP>();
   sp->ProcessSIMPLE(source, pkb_);
 }
 

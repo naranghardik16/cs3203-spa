@@ -11,32 +11,32 @@
 class OperationParser : public ExpressionParser {
  public:
   OperationParser() = default;
-  Expression *ParseEntity(TokenStream &tokens) override;
-  Expression *ParseEntity(Line &line) override;
+  shared_ptr<Expression> ParseEntity(TokenStream &tokens) override;
+  shared_ptr<Expression> ParseEntity(Line &line) override;
   bool IsEndOfLine();
   TokenType GetCurrentTokenType();
   string GetCurrentTokenValue();
-  int* GetPos();
-  void InheritArgs(int *pos, bool is_sub_expr, bool *is_processed_curr_token);
+  shared_ptr<int> GetPos();
+  void InheritArgs(shared_ptr<int> pos, bool is_sub_expr, shared_ptr<bool> is_processed_curr_token);
   void UpdateCurrTokenWithUpdatedPos();
-  Line *GetLine();
+  shared_ptr<Line> GetLine();
   void GetNext();
   bool GetIsSubExpr();
   void SetIsSubExpr(bool is_sub_expr);
-  bool* GetIsProcessedCurrToken();
+  shared_ptr<bool> GetIsProcessedCurrToken();
   void ValidateEnoughTokensToProcess(string err_msg);
  private:
   Line line_;
   bool is_inherit_args_ = false;
   int starting_pos_value_ = 0;
-  int* pos_ = &starting_pos_value_;
-  Token *curr_token_ = nullptr;
+  shared_ptr<int> pos_ = make_shared<int>(starting_pos_value_);
+  shared_ptr<Token> curr_token_ = nullptr;
   string curr_token_value_;
   bool is_sub_expr_ = false;
   bool is_processed_curr_token_value_ = false;
-  bool* is_processed_curr_token_ = &is_processed_curr_token_value_;
+  shared_ptr<bool> is_processed_curr_token_ = make_shared<bool>(is_processed_curr_token_value_);
   void Setup(Line &line);
-  virtual Expression *Parse() = 0;
+  virtual shared_ptr<Expression> Parse() = 0;
   void ValidateForBalancedParenthesis();
 };
 

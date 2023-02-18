@@ -5,6 +5,6 @@
 class Constant : public Expression {
  public:
   explicit Constant(std::string name);
-  void Accept(ParserVisitor *visitor) override;
+  void Accept(shared_ptr<ParserVisitor> visitor) override;
   inline bool IsLeafNodeExpression() override;
 };

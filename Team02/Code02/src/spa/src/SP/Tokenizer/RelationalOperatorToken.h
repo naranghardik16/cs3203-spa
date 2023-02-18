@@ -5,5 +5,5 @@ using namespace std;
 class RelationalOperatorToken : public Token {
  public:
   RelationalOperatorToken(string val, TokenType type);
-  bool Equals(Token &other);
+  bool Equals(shared_ptr<Token> other);
 };

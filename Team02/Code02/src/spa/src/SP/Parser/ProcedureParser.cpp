@@ -5,11 +5,11 @@
 inline const std::string kProcedure = "procedure";
 inline const std::string kEndProc = "}";
 
-Procedure *ProcedureParser::ParseEntity(TokenStream &tokens) {
+shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string proc_name = ExtractProcName(line);
-  auto proc = new Procedure(proc_name);
+  auto proc = make_shared<Procedure>(proc_name);
   line = tokens.front();
   while (!IsProcedureEnd(line)) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
@@ -33,7 +33,7 @@ std::string ProcedureParser::ExtractProcName(Line &line) {
 
 bool ProcedureParser::IsProcedureEnd(Line &line) {
   return std::find_if(std::begin(line), std::end(line),
-                      [&](Token *const p) {
+                      [&](shared_ptr<Token> const p) {
                         return p->GetType() == TokenType::RIGHT_BRACE;
                       }) != std::end(line);
 }

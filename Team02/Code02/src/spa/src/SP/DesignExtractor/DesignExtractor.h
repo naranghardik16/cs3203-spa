@@ -6,10 +6,8 @@
 
 class DesignExtractor {
  private:
-  PKB *pkb_;
-//  PkbWriteFacade *pkb_write_facade_;
+  shared_ptr<PKB> pkb_;
  public:
-  DesignExtractor(PKB *pkb);
-  void ExtractDesign(Program *program);
-//  void ExtractFollows(Statement* prev_stmt, Statement* curr_stmt);
+  DesignExtractor(shared_ptr<PKB> pkb);
+  void ExtractDesign(shared_ptr<Program> program);
 };

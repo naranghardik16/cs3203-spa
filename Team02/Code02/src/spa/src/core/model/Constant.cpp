@@ -3,8 +3,8 @@
 Constant::Constant(std::string name) : Expression(std::move(name),
                                                   "constant") {}
 
-void Constant::Accept(ParserVisitor *visitor) {
-  visitor->VisitConstant(this);
+void Constant::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitConstant(make_shared<Constant>(*this));
 }
 
 bool Constant::IsLeafNodeExpression() {
