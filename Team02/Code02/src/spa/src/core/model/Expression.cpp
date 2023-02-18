@@ -1,6 +1,5 @@
 #pragma once
 #include "Expression.h"
-#include "iostream"
 
 Expression::Expression(std::string name, std::string expression_type)
     : name_(name), expression_type_(std::move(expression_type)) {}

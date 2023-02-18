@@ -18,11 +18,10 @@ void DesignExtractor::ExtractDesign(Program *program) {
       s->Accept(entity_extractor);
     }
   }
-
   for (Procedure *p : procedures) {
     p->Accept(abstraction_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
-    Statement* prev_stmt = nullptr;
+    Statement *prev_stmt = nullptr;
     for (Statement *s : statements) {
       if (prev_stmt != nullptr) {
         abstraction_extractor->ExtractFollows(prev_stmt, s);
@@ -31,4 +30,5 @@ void DesignExtractor::ExtractDesign(Program *program) {
       prev_stmt = s;
     }
   }
+
 }

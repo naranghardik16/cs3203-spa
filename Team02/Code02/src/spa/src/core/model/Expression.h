@@ -8,6 +8,7 @@ class Expression : public Entity {
   typedef std::pair<Expression *, Expression *> PairOfArguments;
   Expression() = default;
   explicit Expression(std::string name, std::string expression_type);
+  virtual ~Expression() = default;
   virtual void Accept(ParserVisitor *visitor) = 0;
   [[nodiscard]] std::optional<PairOfArguments> GetArguments() const;
   virtual inline bool IsLeafNodeExpression();
