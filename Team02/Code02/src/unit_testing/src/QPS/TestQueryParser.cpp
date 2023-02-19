@@ -262,7 +262,7 @@ TEST_CASE("Test invalid queries") {
 
   SECTION("Test invalid query with no declarations") {
     std::string query("Select a");
-    REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
   }
 
   SECTION("Test invalid query_v is not stmt ref_throw semantic error") {
