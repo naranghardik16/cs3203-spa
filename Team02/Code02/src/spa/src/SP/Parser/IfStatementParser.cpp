@@ -71,17 +71,7 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
     throw SemanticErrorException("If Statement is missing a {");
   }
 
-  auto
-<<<<<<< HEAD
-      itr_then = prev(prev(line.end()));
-=======
-      itr_then =
-      std::find_if(std::begin(line),
-                   std::end(line),
-                   [&](shared_ptr<Token> const p) {
-                     return p->GetValue() == "then";
-                   });
->>>>>>> milestone1
+  auto itr_then = prev(prev(line.end()));
 
   if (itr_then->get()->GetValue() != "then") {
     throw SemanticErrorException(
