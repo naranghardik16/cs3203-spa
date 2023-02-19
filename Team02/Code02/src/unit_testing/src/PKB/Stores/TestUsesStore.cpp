@@ -91,6 +91,120 @@ TEST_CASE("Testcases for Uses Store") {
 
   }
 
+  SECTION("Single Procedure Using a single variable") {
+    auto uses_store = new UsesStore();
+
+    uses_store->addProcedureUsingVariable("anya", "a");
+    uses_store->addProcedureUsingVariable("bumblebee", "b");
+
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("anya") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee") ==
+        std::unordered_set<std::string>({"b"}));
+    REQUIRE_FALSE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee") ==
+        std::unordered_set<std::string>({"b"}));
+    REQUIRE(uses_store->retrieveProcedureVariablePairs() ==
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE , PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+                                                                                                               std::make_pair("anya", "a"), std::make_pair("bumblebee", "b") }));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("anya", "a") == true);
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("bumblebee", "c") == false);
+  }
+
+  SECTION("Single Procedure Using multiple variables") {
+    auto uses_store = new UsesStore();
+
+    uses_store->addProcedureUsingVariable("anya", "a");
+    uses_store->addProcedureUsingVariable("anya", "b");
+    uses_store->addProcedureUsingVariable("anya", "e");
+    uses_store->addProcedureUsingVariable("bumblebee", "c");
+    uses_store->addProcedureUsingVariable("bumblebee", "d");
+
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("anya")
+                == std::unordered_set<std::string>({"a", "b", "e"}));
+    REQUIRE_FALSE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee")
+                      == std::unordered_set<std::string>({"c"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee")
+                == std::unordered_set<std::string>({"c", "d"}));
+    REQUIRE(uses_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
+                                                                                             PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+                                                                                                                                                 std::make_pair("anya", "a"), std::make_pair("anya", "b"),
+                                                                                                                                                 std::make_pair("anya", "e"),
+                                                                                                                                                 std::make_pair("bumblebee", "c"), std::make_pair("bumblebee", "d")}));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("anya", "a") == true);
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("anya", "b") == true);
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("anya", "e") == true);
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("bumblebee", "c") == true);
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("bumblebee", "d") == true);
+  }
+
+  SECTION("Multiple Procedures Using single variable") {
+    auto uses_store = new UsesStore();
+
+    uses_store->addProcedureUsingVariable("anya", "a");
+    uses_store->addProcedureUsingVariable("bumblebee", "a");
+    uses_store->addProcedureUsingVariable("megatron", "a");
+    uses_store->addProcedureUsingVariable("ironhide", "a");
+
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("anya", "a"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("bumblebee", "a"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("megatron", "a"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("ironhide", "a"));
+
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("anya") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("bumblebee") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("megatron") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("ironhide") ==
+        std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
+                                                                                             PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+                                                                                                                                                 std::make_pair("anya", "a"), std::make_pair("bumblebee", "a"),
+                                                                                                                                                 std::make_pair("megatron", "a"),
+                                                                                                                                                 std::make_pair("ironhide", "a")}));
+  }
+
+  SECTION("Multiple Procedures Using multiple variables") {
+    auto uses_store = new UsesStore();
+
+    uses_store->addProcedureUsingVariable("Anya", "a");
+    uses_store->addProcedureUsingVariable("Bumblebee", "b");
+    uses_store->addProcedureUsingVariable("Megatron", "c");
+    uses_store->addProcedureUsingVariable("Ironhide", "d");
+    uses_store->addProcedureUsingVariable("Maya", "a");
+    uses_store->addProcedureUsingVariable("Sourabh", "b");
+    uses_store->addProcedureUsingVariable("Sumanth", "c");
+    uses_store->addProcedureUsingVariable("Hanhui", "d");
+
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Anya","a"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Bumblebee","b"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Megatron","c"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Ironhide","d"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Maya","a"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Sourabh","b"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Sumanth","c"));
+    REQUIRE(uses_store->hasUsesRelationBetweenProcedureAndVariable("Hanhui","d"));
+
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Anya") == std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Bumblebee") == std::unordered_set<std::string>({"b"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Megatron") == std::unordered_set<std::string>({"c"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Ironhide") == std::unordered_set<std::string>({"d"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Maya") == std::unordered_set<std::string>({"a"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Sourabh") == std::unordered_set<std::string>({"b"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Sumanth") == std::unordered_set<std::string>({"c"}));
+    REQUIRE(uses_store->retrieveAllVariablesUsedByAProcedure("Hanhui") == std::unordered_set<std::string>({"d"}));
+
+    REQUIRE(uses_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
+                                                                                             PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+                                                                                                                                                 std::make_pair("Anya", "a"), std::make_pair("Bumblebee", "b"),
+                                                                                                                                                 std::make_pair("Megatron", "c"), std::make_pair("Ironhide", "d"),
+                                                                                                                                                 std::make_pair("Maya", "a"), std::make_pair("Sourabh", "b"),
+                                                                                                                                                 std::make_pair("Sumanth", "c"), std::make_pair("Hanhui", "d")}));
+  }
+
 
 //  SECTION("Basic Statement Number to Variable Mapping") {
 //    UsesStore* uses_store = new UsesStore();
