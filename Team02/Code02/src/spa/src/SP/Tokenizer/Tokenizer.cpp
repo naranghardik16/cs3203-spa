@@ -12,45 +12,57 @@ vector<string> Tokenizer::SplitLines(istream &stream) {
   return lines;
 }
 
-shared_ptr<Token> Tokenizer::MatchOtherToken(int first_char_index, string line, shared_ptr<int> skip_index) {
+shared_ptr<Token> Tokenizer::MatchOtherToken(int first_char_index,
+                                             string line,
+                                             shared_ptr<int> skip_index) {
   string first_char = line.substr(first_char_index, 1);
   string first_and_second_char = line.substr(first_char_index, 2);
 
   if (regex_match(first_char, regex(ARITHMETIC_OPERATOR_RULE))) {
-    return make_shared<ArithmeticOperatorToken>(first_char, TOKEN_TYPES.find(first_char)->second);
+    return make_shared<ArithmeticOperatorToken>(first_char,
+                                                TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_and_second_char, regex(CONDITIONAL_OPERATOR_RULE))) {
     *skip_index = first_char_index + 1;
-    return make_shared<ConditionalOperatorToken>(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
+    return make_shared<ConditionalOperatorToken>(first_and_second_char,
+                                                 TOKEN_TYPES.find(
+                                                     first_and_second_char)->second);
   }
 
   if (regex_match(first_and_second_char, regex(RELATIONAL_OPERATOR_RULE))) {
     *skip_index = first_char_index + 1;
-    return make_shared<RelationalOperatorToken>(first_and_second_char, TOKEN_TYPES.find(first_and_second_char)->second);
+    return make_shared<RelationalOperatorToken>(first_and_second_char,
+                                                TOKEN_TYPES.find(
+                                                    first_and_second_char)->second);
   }
 
   if (regex_match(first_char, regex(CONDITIONAL_OPERATOR_RULE))) {
-    return make_shared<ConditionalOperatorToken>(first_char, TOKEN_TYPES.find(first_char)->second);
+    return make_shared<ConditionalOperatorToken>(first_char,
+                                                 TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_char, regex(RELATIONAL_OPERATOR_RULE))) {
-    return make_shared<RelationalOperatorToken>(first_char, TOKEN_TYPES.find(first_char)->second);
+    return make_shared<RelationalOperatorToken>(first_char,
+                                                TOKEN_TYPES.find(first_char)->second);
   }
 
   if (regex_match(first_char, regex(PUNCTUATION_OPERATOR_RULE))) {
-    return make_shared<PunctuationToken>(first_char, TOKEN_TYPES.find(first_char)->second);
+    return make_shared<PunctuationToken>(first_char,
+                                         TOKEN_TYPES.find(first_char)->second);
   }
   return nullptr;
 }
 
-void Tokenizer::FormNameOrInteger(shared_ptr<int> start_index, int current_index) {
+void Tokenizer::FormNameOrInteger(shared_ptr<int> start_index,
+                                  int current_index) {
   if (*start_index == NOT_SET) {
     *start_index = current_index;
   }
 }
 
-shared_ptr<Token> Tokenizer::MatchNameOrIntegerToken(shared_ptr<LexicalRuleValidator> lrv, string val, int type) {
+shared_ptr<Token> Tokenizer::MatchNameOrIntegerToken(shared_ptr<
+    LexicalRuleValidator> lrv, string val, int type) {
   if (type == NAME_TYPE && lrv->IsName(val)) {
     return make_shared<NameToken>(val);
   }
@@ -63,7 +75,8 @@ shared_ptr<Token> Tokenizer::MatchNameOrIntegerToken(shared_ptr<LexicalRuleValid
 }
 
 shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
-  shared_ptr<Parser::TokenStream> token_stream = make_shared<Parser::TokenStream>();
+  shared_ptr<Parser::TokenStream>
+      token_stream = make_shared<Parser::TokenStream>();
   vector<shared_ptr<Token>> line_of_tokens = {};
   shared_ptr<LexicalRuleValidator> lrv = make_shared<LexicalRuleValidator>();
 
@@ -73,7 +86,7 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
   int type = NOT_SET;
   shared_ptr<int> start_index = make_shared<int>(NOT_SET);
   for (i = 0; i < lines.size(); i++) {
-    for(string::size_type j = 0; j < lines[i].size(); j++) {
+    for (string::size_type j = 0; j < lines[i].size(); j++) {
       char current_char = lines[i][j];
       if ((j == *skip_index) || (isspace(current_char) && type == NOT_SET)) {
         skip_index = make_shared<int>(NOT_SET);
@@ -95,12 +108,18 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
 
 
       // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
-      shared_ptr<Token> current_token = MatchOtherToken(j, lines[i], skip_index);
+      shared_ptr<Token>
+          current_token = MatchOtherToken(j, lines[i], skip_index);
       shared_ptr<Token> prev_token = nullptr;
 
       // check if it is time to form the name/integer token
-      if (type != NOT_SET && (isspace(current_char) || (current_token != nullptr && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
-        prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index), type);
+      if (type != NOT_SET && (isspace(current_char) || (current_token != nullptr
+          && !(current_token->GetType() == NAME
+              || current_token->GetType() == INTEGER)))) {
+        prev_token = MatchNameOrIntegerToken(lrv,
+                                             lines[i].substr(*start_index,
+                                                             j - *start_index),
+                                             type);
       }
 
       // check if a name/integer token was formed
@@ -109,13 +128,16 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
         type = NOT_SET;
         start_index = make_shared<int>(NOT_SET);
       } else if (type != NOT_SET && prev_token == nullptr) {
-        throw SyntaxErrorException(lines[i].substr(*start_index, j - *start_index) + " is an invalid token");
+        throw SyntaxErrorException(
+            lines[i].substr(*start_index, j - *start_index)
+                + " is an invalid token");
       }
 
       if (current_token == nullptr && prev_token != nullptr) {
         continue;
       } else if (current_token == nullptr) {
-        throw SyntaxErrorException(current_char + " is an invalid token");
+        throw SyntaxErrorException(
+            current_char + std::string(" is an invalid token"));
       }
 
       line_of_tokens.push_back(current_token);
