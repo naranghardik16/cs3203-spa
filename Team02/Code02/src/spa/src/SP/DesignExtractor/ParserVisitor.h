@@ -1,8 +1,4 @@
 #pragma once
-//#include "./core/model/Program.h"
-//#include "./core/model/Procedure.h"
-//#include "./core/model/Statement.h"
-//#include "./core/model/Expression.h"
 #include <memory>
 
 class ArithmeticOperation;

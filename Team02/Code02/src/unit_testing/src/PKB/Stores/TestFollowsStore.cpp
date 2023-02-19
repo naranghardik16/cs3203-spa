@@ -2,7 +2,6 @@
 #include "PKB/Stores/FollowsStore.h"
 
 TEST_CASE("Testcases for Follows Store") {
-
   SECTION("Empty Follows Store") {
     auto follows_store = new FollowsStore();
     REQUIRE(follows_store->hasAnyFollowsRelation() == false);

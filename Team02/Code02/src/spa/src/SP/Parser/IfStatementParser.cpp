@@ -4,10 +4,15 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   auto condition = ExtractCondition(line);
-  auto if_stmt = make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
-                                 *condition,
-                                 "main");
+  auto if_stmt =
+      make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
+                               *condition,
+                               "main");
+
+  // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
+
+  // Parse and add statements in then block
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
@@ -53,9 +58,11 @@ shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line)
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
   auto
       itr_brace =
-      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetType() == TokenType::LEFT_BRACE;
-      });
+      std::find_if(std::begin(line),
+                   std::end(line),
+                   [&](shared_ptr<Token> const p) {
+                     return p->GetType() == TokenType::LEFT_BRACE;
+                   });
 
   if (itr_brace != prev(line.end())) {
     throw SemanticErrorException("If Statement is missing a {");
@@ -63,9 +70,11 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 
   auto
       itr_then =
-      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetValue() == "then";
-      });
+      std::find_if(std::begin(line),
+                   std::end(line),
+                   [&](shared_ptr<Token> const p) {
+                     return p->GetValue() == "then";
+                   });
 
   if (itr_then != prev(prev(line.end()))) {
     throw SemanticErrorException(

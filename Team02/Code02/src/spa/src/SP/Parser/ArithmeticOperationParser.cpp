@@ -1,5 +1,7 @@
 #include "ArithmeticOperationParser.h"
 
+// solution below adapted from https://dev.to/j0nimost/making-a-math-interpreter-parser-52j8
+
 /*
 expr: expr '+' term | expr '-' term | term
  */
