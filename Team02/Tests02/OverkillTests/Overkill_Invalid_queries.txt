@@ -1,0 +1,790 @@
+1 - Follows(v, _) - error
+variable v;
+Select v such that Follows(v, _)
+SemanticError
+5000
+2 - Follows(c, _) - error
+constant c;
+Select c such that Follows(c, _)
+SemanticError
+5000
+3 - Follows(proc, _) - error
+procedure proc;
+Select proc such that Follows(proc, _)
+SemanticError
+5000
+4 - Follows(_, v) - error
+variable v;
+Select v such that Follows(_, v)
+SemanticError
+5000
+5 - Follows(_, c) - error
+constant c;
+Select c such that Follows(_, c)
+SemanticError
+5000
+6 - Follows(_, proc) - error
+procedure proc;
+Select proc such that Follows(_, proc)
+SemanticError
+5000
+7 - Follows*(v, _) - error
+variable v;
+Select v such that Follows*(v, _)
+SemanticError
+5000
+8 - Follows*(c, _) - error
+constant c;
+Select c such that Follows*(c, _)
+SemanticError
+5000
+9 - Follows*(proc, _) - error
+procedure proc;
+Select proc such that Follows*(proc, _)
+SemanticError
+5000
+10 - Follows*(_, v) - error
+variable v;
+Select v such that Follows*(_, v)
+SemanticError
+5000
+11 - Follows*(_, c) - error
+constant c;
+Select c such that Follows*(_, c)
+SemanticError
+5000
+12 - Follows*(_, proc) - error
+procedure proc;
+Select proc such that Follows*(_, proc)
+SemanticError
+5000
+13 - Parent(v, _) - error
+variable v;
+Select v such that Parent(v, _)
+SemanticError
+5000
+14 - Parent(c, _) - error
+constant c;
+Select c such that Parent(c, _)
+SemanticError
+5000
+15 - Parent(proc, _) - error
+procedure proc;
+Select proc such that Parent(proc, _)
+SemanticError
+5000
+16 - Parent(_, v) - error
+variable v;
+Select v such that Parent(_, v)
+SemanticError
+5000
+17 - Parent(_, c) - error
+constant c;
+Select c such that Parent(_, c)
+SemanticError
+5000
+18 - Parent(_, proc) - error
+procedure proc;
+Select proc such that Parent(_, proc)
+SemanticError
+5000
+19 - Parent*(v, _) - error
+variable v;
+Select v such that Parent*(v, _)
+SemanticError
+5000
+20 - Parent*(c, _) - error
+constant c;
+Select c such that Parent*(c, _)
+SemanticError
+5000
+21 - Parent*(proc, _) - error
+procedure proc;
+Select proc such that Parent*(proc, _)
+SemanticError
+5000
+22 - Parent*(_, v) - error
+variable v;
+Select v such that Parent*(_, v)
+SemanticError
+5000
+23 - Parent*(_, c) - error
+constant c;
+Select c such that Parent*(_, c)
+SemanticError
+5000
+24 - Parent*(_, proc) - error
+procedure proc;
+Select proc such that Parent*(_, proc)
+SemanticError
+5000
+25 - RHS is not an expression //Syntactic error
+assign a; variable v;
+Select a pattern a(v,_"s1mp13P4773rn10 = (((31))) % s1mp13P4773rn11;"_)
+SyntaxError
+5000
+26 - Using partial expression as subpattern //Syntactic error
+assign a;
+Select a pattern a(_,_"% s1mp13P4773rn7"_)
+SyntaxError
+5000
+27 - Using operator as subpattern //Syntactic error
+assign a;
+Select a pattern a(_,_"%"_)
+SyntaxError
+5000
+28 - Using mismatching brackets in sub pattern //Syntactic error
+assign a;
+Select a pattern a(_,_"((29/(30+31))"_)
+SyntaxError
+5000
+29 - Pattern a(_,c)
+assign a; constant c;
+Select a pattern a(_,c)
+SyntaxError
+5000
+30 - Pattern a(s,_)
+assign a; stmt s;
+Select a pattern a(s,_)
+SemanticError
+5000
+31 - Pattern a(r,_)
+assign a; read r;
+Select a pattern a(r,_)
+SemanticError
+5000
+32 - Pattern a(pn,_)
+assign a; print pn;
+Select a pattern a(pn,_)
+SemanticError
+5000
+33 - Pattern a(a1,_)
+assign a; assign a1;
+Select a pattern a(a1,_)
+SemanticError
+5000
+34 - Pattern a(ifs,_)
+assign a; if ifs;
+Select a pattern a(ifs,_)
+SemanticError
+5000
+35 - Pattern a(w,_)
+assign a; while w;
+Select a pattern a(w,_)
+SemanticError
+5000
+36 - Pattern a(cl,_)
+assign a; call cl;
+Select a pattern a(cl,_)
+SemanticError
+5000
+37 - Pattern a(c,_)
+assign a; constant c;
+Select a pattern a(c,_)
+SemanticError
+5000
+38 - Pattern a(p,_) //Semantic error
+assign a; procedure p;
+Select a pattern a(p,_)
+SemanticError
+5000
+39 - Pattern a(_,s)
+assign a; stmt s;
+Select a pattern a(_,s)
+SyntaxError
+5000
+40 - Pattern a(_,r) //Syntactic error
+assign a; read r;
+Select a pattern a(_,r)
+SyntaxError
+5000
+41 - Pattern a(_,pn) //Syntactic error
+assign a; print pn;
+Select a pattern a(_,pn)
+SyntaxError
+5000
+42 - Pattern a(_,a1) //Syntactic error
+assign a; assign a1;
+Select a pattern a(_,a1)
+SyntaxError
+5000
+43 - Pattern a(_,ifs) //Syntactic error
+assign a; if ifs;
+Select a pattern a(_,ifs)
+SyntaxError
+5000
+44 - Pattern a(_,w) //Syntactic error
+assign a; while w;
+Select a pattern a(_,w)
+SyntaxError
+5000
+45 - Pattern a(_,cl) //Syntactic error
+assign a; call cl;
+Select a pattern a(_,cl)
+SyntaxError
+5000
+46 - Pattern a(_,v) //Syntactic error
+assign a; variable v;
+Select a pattern a(_,v)
+SyntaxError
+5000
+47 - Pattern a(_,p) //Syntactic error
+assign a;
+Select a pattern a(_,p)
+SyntaxError
+5000
+48 - Pattern a(_,_,_) //Syntactic Error
+assign a;
+Select a pattern a(_,_,_)
+SyntaxError
+5000
+49 - Empty full pattern //Syntactic Error
+assign a;
+Select a pattern a(_,"")
+SyntaxError
+5000
+50 - Invalid full pattern //Syntactic Error
+assign a;
+Select a pattern a(_,"_")
+SyntaxError
+5000
+51 - Empty full pattern //Syntactic Error
+assign a;
+Select a pattern a(_,_""_)
+SyntaxError
+5000
+52 - Invalid full pattern //Syntactic Error
+assign a;
+Select a pattern a(_,_"_"_)
+SyntaxError
+5000
+53 - Non assign syn pattern //Syntactic Error
+stmt s;
+Select s pattern s(_,_)
+SemanticError
+5000
+54 - Uses with invalid wildcard
+variable v;
+Select v such that Uses(_, v)
+SemanticError
+5000
+55 - Modifies with invalid wildcard
+variable v;
+Select v such that Modifies(_, v)
+SemanticError
+5000
+56 - Invalid case - Syntax error
+stmts s;
+Select s
+SyntaxError
+5000
+57 - Invalid case - Syntax error
+prints p;
+Select p
+SyntaxError
+5000
+58 - Invalid case - Syntax error
+red r;
+Select r
+SyntaxError
+5000
+59 - Invalid case - Syntax error
+whil w;
+Select w
+SyntaxError
+5000
+60 - Invalid case - Syntax error
+iff ifs;
+Select ifs
+SyntaxError
+5000
+61 - Invalid case - Syntax error
+var v;
+Select v
+SyntaxError
+5000
+62 - Invalid case - Syntax error
+prop p;
+Select p
+SyntaxError
+5000
+63 - Invalid case - Syntax error
+cost c;
+Select c
+SyntaxError
+5000
+64 - Invalid case - Case sensitive Uses
+stmt s; variable v;
+Select r such that uses(s,v)
+SyntaxError
+5000
+65 - Invalid case - Case sensitive Modify
+stmt s; variable v;
+Select r such that modifies(s,v)
+SyntaxError
+5000
+66 - Invalid case - Ends with semicolon
+stmt s; variable v;
+Select r such that modifies(s,v);
+SyntaxError
+5000
+67 - Undeclared synonym used in Select clause
+stmt s;
+Select s1
+SemanticError
+5000
+68 - Invalid use of entRef - Follows
+stmt s; variable v;
+Select v such that Follows(s, v)
+SemanticError
+5000
+69 - Invalid use of entRef - Follows*
+stmt s; variable v;
+Select v such that Follows*(s, v)
+SemanticError
+5000
+70 - Invalid use of entRef - Parent
+stmt s; variable v;
+Select v such that Parent(s, v)
+SemanticError
+5000
+71 - Invalid use of entRef - Parent*
+stmt s; variable v;
+Select v such that Parent(s, v)
+SemanticError
+5000
+72 - entRef and stmtRef are switched - ModifiesS
+stmt s; variable v;
+Select v such that Modifies(v, s)
+SemanticError
+5000
+73 - entRef and stmtRef are switched - UsesS
+stmt s; variable v;
+Select v such that Uses(v, s)
+SemanticError
+5000
+74 - Undeclared synonym in such that clause
+stmt s;
+Select s such that Follows(s1, s)
+SemanticError
+5000
+75 - Undeclared synonym in pattern-cl
+assign a; variable v;
+Select a pattern a(v1, _)
+SemanticError
+5000
+76 - Wrong capitalization in Select clause (lowercase)
+stmt s;
+select s
+SyntaxError
+5000
+77 - Wrong capitalization in Select clause (uppercase)
+stmt s;
+SELECT s
+SyntaxError
+5000
+78 - Wrong capitalization in Select clause (toggle case)
+stmt s;
+sElEcT s
+SyntaxError
+5000
+79 - Typo in Select clause
+stmt s;
+Slect s
+SyntaxError
+5000
+80 - Missing semicolon in declaration
+stmt s
+Select s
+SyntaxError
+5000
+81 - Extra semicolon in declaration
+stmt s;;
+Select s
+SyntaxError
+5000
+82 - Semicolon in select clause
+stmt s;
+Select s;
+SyntaxError
+5000
+83 - Incorrect delimiter between multiple declaration of the same type (space)
+stmt s var v;
+Select v
+SyntaxError
+5000
+84 - Incorrect delimiter between multiple declaration of the same type (comma)
+stmt s, var v;
+Select v
+SyntaxError
+5000
+85 - Incorrect delimiter between multiple declations of different types (space)
+stmt s1 stmt s2;
+Select s1
+SyntaxError
+5000
+86 - Incorrect delimiter between multiple declations of different types (comma)
+stmt s1, stmt s2;
+Select s1
+SyntaxError
+5000
+87 - Incorrect delimiter between Select and synonym
+stmt s;
+Select ; s
+SyntaxError
+5000
+88 - Incorrect delimiter between Select and synonym
+stmt s;
+Select;s
+SyntaxError
+5000
+89 - Incorrect synonym declaration (Contains _)
+stmt _s;
+Select _s
+SyntaxError
+5000
+90 - Incorrect synonym declaration (starts with a digit)
+stmt 1s;
+Select 1s
+SyntaxError
+5000
+91 - Missing declaration
+
+Select s
+SyntaxError
+5000
+92 - Missing declaration
+;
+Select s
+SyntaxError
+5000
+93 - Missing select-cl
+stmt s;
+
+SyntaxError
+5000
+94 - Incorrect delimiter between synonym and suchthat-cl (Comma)
+stmt s; variable v;
+Select s,such that Modifies(s, v)
+SyntaxError
+5000
+95 - Incorrect delimiter between synonym and suchthat-cl (Semicolon)
+stmt s; variable v;
+Select s;such that Modifies(s, v)
+SyntaxError
+5000
+96 - Typo in such that
+stmt s; variable v;
+Select s suchthat Modifies(s, v)
+SyntaxError
+5000
+97 - Typo in such that
+stmt s; variable v;
+Select s suh that Modifies(s, v)
+SyntaxError
+5000
+98 - Typo in such that (Incorrect case)
+stmt s; variable v;
+Select s Such That Modifies(s, v)
+SyntaxError
+5000
+99 - Missing such that when relRef is present
+stmt s; variable v;
+Select s Modifies(s, v)
+SyntaxError
+5000
+98 - such that present when relRef is absent
+stmt s; variable v;
+Select s such that
+SyntaxError
+5000
+99 - Extra bracket in relRef - Opening
+stmt s1, s2;
+Select s1 such that Follows((s1, s2)
+SyntaxError
+5000
+100 - Extra bracket in relRef - Closing
+stmt s1, s2;
+Select s1 such that Parent(s1, s2))
+SyntaxError
+5000
+101 - Extra bracket in relRef - Opening and closing
+stmt s; variable v;
+Select s such that Uses((s, v))
+SyntaxError
+5000
+102 - Wrong bracket in relRef - []
+stmt s1, s2;
+Select s1 such that Parent[s1, s2]
+SyntaxError
+5000
+103 - Wrong bracket in relRef - {}
+stmt s1, s2;
+Select s1 such that Follows{s1, s2}
+SyntaxError
+5000
+104 - Missing bracket in relRef - Opening
+stmt s1, s2;
+Select s1 such that Parent s1,s2)
+SyntaxError
+5000
+105 - Missing bracket in relRef - Closing
+stmt s1, s2;
+Select s1 such that Parent(s1, s2
+SyntaxError
+5000
+106 - Missing bracket in relRef - Opening and closing
+stmt s1, s2;
+Select s1 such that Parent s1, s2
+SyntaxError
+5000
+107 - Missing comma in relRef
+stmt s1, s2;
+Select s1 such that Follows(s1 s2)
+SyntaxError
+5000
+108 - Wrong delimiter in relRef
+stmt s1, s2;
+Select s1 such that Follows(s1; s2)
+SyntaxError
+5000
+109 - Incorrect stmtRef - Contains _ in synonym
+stmt s1, s2;
+Select s2 such that Follows(_s1, s2)
+SyntaxError
+5000
+110 - Incorrect stmtRef - IDENT enclosed in inverted commas
+stmt s1, s2;
+Select s1 such that Follows(s1, "2")
+SyntaxError
+5000
+111 - Incorrect entRef - Contains _ in synonym
+stmt s; variable v;
+Select s such that Uses(s, _v)
+SyntaxError
+5000
+112 - Incorrect entRef - Contains #
+stmt s; variable v;
+Select s such that Modifies(s, "#")
+SyntaxError
+5000
+113 - pattern used instead of such that
+stmt s1, s2;
+Select s1 pattern Parent(s1, s2)
+SyntaxError
+5000
+114 - Select is after such that
+stmt s1, s2;
+such that Parent*(s1, s2) Select s1
+SyntaxError
+5000
+115 - Missing synonym between Select and such that
+stmt s1, s2;
+Select such that Follows*(s1, s2)
+SyntaxError
+5000
+116 - Missing stmtRef - Modifies
+variable v;
+Select v such that Modifies(, v);
+SyntaxError
+5000
+117 - Missing stmtRef - Uses
+variable v;
+Select v such that Uses(, v);
+SyntaxError
+5000
+118 - Missing stmtRef - Follows (First arg)
+stmt s;
+Select v such that Follows(, s);
+SyntaxError
+5000
+119 - Missing stmtRef - Follows (Second arg)
+stmt s;
+Select v such that Follows(s, );
+SyntaxError
+5000
+120 - Missing stmtRef - Follows* (First arg)
+stmt s;
+Select v such that Follows*(, s);
+SyntaxError
+5000
+121 - Missing stmtRef - Follows* (Second arg)
+stmt s;
+Select v such that Follows*(s, );
+SyntaxError
+5000
+122 - Missing stmtRef - Parent (First arg)
+stmt s;
+Select v such that Parent(, s);
+SyntaxError
+5000
+123 - Missing stmtRef - Parent (Second arg)
+stmt s;
+Select v such that Parent(s, );
+SyntaxError
+5000
+124 - Missing stmtRef - Parent* (First arg)
+stmt s;
+Select v such that Parent*(, s);
+SyntaxError
+5000
+125 - Missing stmtRef - Parent* (Second arg)
+stmt s;
+Select v such that Parent*(s, );
+SyntaxError
+5000
+126 - 19.1 - Missing entRef - Modifies
+stmt s;
+Select s such that Modifies(s, )
+SyntaxError
+5000
+127 - Missing entRef - Uses
+stmt s;
+Select s such that Uses(s, )
+SyntaxError
+5000
+128 - Incorrect delimiter between synonym and pattern clause
+assign a; variable v;
+Select a;pattern a(v, _)
+SyntaxError
+5000
+129 - Typo in pattern
+assign a; variable v;
+Select a patern a(v, _)
+SyntaxError
+5000
+130 - Incorrect pattern casing - Title case
+assign a; variable v;
+Select a Pattern a(v, _)
+SyntaxError
+5000
+131 - Incorrect pattern casing - Upper case
+assign a; variable v;
+Select a PATTERN a(v, _)
+SyntaxError
+5000
+132 - Incorrect pattern casing - Toggle case
+assign a; variable v;
+Select a pAaTteRn a(v, _)
+SyntaxError
+5000
+133 - Missing syn-assign
+assign a; variable v;
+Select a pattern (v, _)
+SyntaxError
+5000
+134 - Extra brackets after syn-assign - Opening
+assign a; variable v;
+Select a pattern a((v, _)
+SyntaxError
+5000
+135 - Extra brackets after syn-assign - Closing
+assign a; variable v;
+Select a pattern a(v, _))
+SyntaxError
+5000
+136 - Extra brackets after syn-assign - Opening and Closing
+assign a; variable v;
+Select a pattern a((v, _))
+SyntaxError
+5000
+137 - after syn-assign - Opening
+assign a; variable v;
+Select a pattern a v, _)
+SyntaxError
+5000
+138 - Missing brackets after syn-assign - Closing
+assign a; variable v;
+Select a pattern a(v, _
+SyntaxError
+5000
+139 - Missing brackets after syn-assign - Opening and Closing
+assign a; variable v;
+Select a pattern a v, _
+SyntaxError
+5000
+140 - Incorrect brackets in syn-assing - []
+assign a; variable v;
+Select a pattern a[v, _]
+SyntaxError
+5000
+141 - Incorrect brackets in syn-assing - {}
+assign a; variable v;
+Select a pattern a{v, _}
+SyntaxError
+5000
+142 - Incorrect entRef - Contains _
+assign a; variable v;
+Select a pattern a(_v, _)
+SyntaxError
+5000
+143 - Incorrect entRef - Contains special characters
+assign a; variable v;
+Select a pattern a(v, "#")
+SyntaxError
+5000
+144 - Incorrect expression-spec - _ inside expr
+assign a; variable v;
+Select a pattern a(v, "_x_")
+SyntaxError
+5000
+145 - Incorrect expression-spec - _ _
+assign a; variable v;
+Select a pattern a(v, __)
+SyntaxError
+5000
+146 - Incorrect expression-spec - Missing inverted commas
+assign a; variable v;
+Select a pattern a(v, x)
+SyntaxError
+5000
+147 - Missing expression-spec
+assign a; variable v;
+Select a pattern a(v, )
+SyntaxError
+5000
+148 - Missing entRef
+assign a; variable v;
+Select a pattern a( , "x")
+SyntaxError
+5000
+149 - Incorrect delimiter between entRef and expression-spec - Semicolon
+assign a; variable v;
+Select a pattern a(v; "x")
+SyntaxError
+5000
+150 - Incorrect delimiter between entRef and expression-spec - Space
+assign a; variable v;
+Select a pattern a(v "x")
+SyntaxError
+5000
+151 - such that used instead of pattern
+assign a; variable v;
+Select a such that a(v, "x")
+SyntaxError
+5000
+152 - Select is after pattern
+assign a; variable v;
+pattern a(v, "x") Select a
+SyntaxError
+5000
+153 - Semicolon after pattern-cl
+assign a; variable v;
+Select a pattern a(v, "x");
+SyntaxError
+5000
+154 - Missing synonym between Select and pattern
+assign a; variable v;
+Select pattern a(v, "x")
+SyntaxError
+5000
+155 - Incorrect delimiter between synonym, suchthat-cl, pattern-cl
+assign a; stmt s; variable v;
+Select s, such that Modifies(s, v); pattern a(v, _)
+SyntaxError
+5000
+156 - such that in place of pattern and pattern in place of such that
+assign a; stmt s; variable v;
+Select s pattern Modifies(s, v) such that a(v, _)
+SyntaxError
+5000
