@@ -158,46 +158,6 @@ stmt s;
 Select s such that Modifies(s, "xDoNotExist")
 none
 5000
-33 - Invalid case - Syntax error
-stmts s;
-Select s
-
-5000
-34 - Invalid case - Syntax error
-prints p;
-Select p
-
-5000
-35 - Invalid case - Syntax error
-red r;
-Select r
-
-5000
-36 - Invalid case - Syntax error
-whil w;
-Select w
-
-5000
-37 - Invalid case - Syntax error
-iff ifs;
-Select ifs
-
-5000
-38 - Invalid case - Syntax error
-var v;
-Select v
-
-5000
-39 - Invalid case - Syntax error
-prop p;
-Select p
-
-5000
-40 - Invalid case - Syntax error
-cost c;
-Select c
-
-5000
 41 - Invalid case - Uses with read
 read r;
 Select r such that Uses(r,_)
@@ -206,20 +166,5 @@ Select r such that Uses(r,_)
 42 - Invalid case - Modifies with print
 print pn;
 Select pn such that Modifies(pn,_)
-
-5000
-43 - Invalid case - Case sensitive Uses
-stmt s; variable v;
-Select r such that uses(s,v)
-
-5000
-44 - Invalid case - Case sensitive Modify
-stmt s; variable v;
-Select r such that modifies(s,v)
-
-5000
-45 - Invalid case - Ends with semicolon
-stmt s; variable v;
-Select r such that modifies(s,v);
 
 5000
