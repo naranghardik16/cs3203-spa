@@ -15,6 +15,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
       }
+      GetNext();
       pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
       args.first = cond_expr;
       return make_shared<ConditionalOperation>("!", args);
@@ -24,6 +25,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     ValidateEnoughTokensToProcess();
     this->SetIsSubExpr(true);
     auto left_cond_expr = Parse();
+//    GetNext();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
       throw SyntaxErrorException("Missing )");
     }
@@ -39,6 +41,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
       GetNext();
       this->SetIsSubExpr(true);
       auto right_cond_expr = Parse();
+//      GetNext();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
       }

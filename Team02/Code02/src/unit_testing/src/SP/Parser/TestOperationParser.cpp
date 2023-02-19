@@ -234,6 +234,21 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     shared_ptr<ConditionalOperation> root_cond_expr = make_shared<ConditionalOperation>("||", root_cond_args);
     REQUIRE(actual->operator==(*root_cond_expr));
   }
+  SECTION("Check if '(' cond_expr ') '&&' or '||' '(' cond_expr ')' [e.g. (!(x!=1)) && (!(x==1))] parses correctly") {
+    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<ConditionalOperatorToken>("!", NOT),
+                           make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"),
+                           make_shared<RelationalOperatorToken>("!=", NE), make_shared<IntegerToken>("1"),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<ConditionalOperatorToken>("&&", AND), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<ConditionalOperatorToken>("!", NOT), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+                           make_shared<IntegerToken>("1"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)
+    };
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    REQUIRE(1 == 1);
+  }
   SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ] throws syntax error") {
     Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
                            make_shared<NameToken>("y"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ConditionalOperatorToken>("&&", AND)};
