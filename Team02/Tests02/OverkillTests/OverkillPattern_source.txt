@@ -1,0 +1,65 @@
+procedure Ass1gn0v3r104d {
+    while (B0B == b0b) {
+        b0b = B0B - 1024;
+        if (B0B == print) then {
+            B0B = b0b + 2048;
+            print read;
+        } else {
+            print B0B;
+            B0B = 1024 * 1024/if ;
+            read b0b;
+            if (B0B == b0b) then {
+                b0b = B0B + 1024;
+            } else {
+                print = read;
+                read print;
+                print = 1024 * 2048/if+20+21%23*24/25+26-27;
+            }
+            print read;
+            print = 20+21%23*24 - print;
+            print = 21%((((((23))))))*24;
+            print = 26-27+24/25;
+        }
+    }
+
+    if (1024 == Var2) then {
+        while(Var1 == Var2) {
+            Var1 = 1024/1024 - Var1;
+            read Var1;
+            Var2 = 1024/1024 - Var1;
+        }
+        Var1 = 1024/2048 * (Var1 - Var2 / 2048) % 1024;
+        if (1024 == 1024) then {
+            Var1 = 1024/2048 * ((Var1 - (Var2 / 2048))) % (1024);
+        } else {
+            Var1 = (Var2 / ((1024)));
+            while (Var1 == Var2) {
+                Var3 = Var2 / 1024 % 1024;
+                Var1 = (1024/2048 * (Var1 - Var2 / 2048) % 1024);
+                read Var1;
+            }
+        }
+    } else {
+        Var3 = ((((1024/(1024)))));
+        print Var3 ;
+        Var3 = Var3 - Var2;
+        read Var3;
+        Var3 = Var3 * Var3 - Var2;
+    }
+
+    if ((((24+25)*26)+27)-(28+(29/(30+31))) > 0) then {
+            s1mp13P4773rn11 = (((24+25)*26)+27)-(28+(29/(30+31))) % s1mp13P4773rn1;
+            s1mp13P4773rn1 = (((24+25)*26)+27) % s1mp13P4773rn2;
+            s1mp13P4773rn2 = (((24+25)*26)) % s1mp13P4773rn3;
+            s1mp13P4773rn3 = (((24+25))) % s1mp13P4773rn4;
+            s1mp13P4773rn4 = (((24))) % s1mp13P4773rn5;
+        } else {
+            s1mp13P4773rn5 = (((25))) % s1mp13P4773rn6;
+            s1mp13P4773rn6 = (28+(29/(30+31))) % s1mp13P4773rn7;
+            s1mp13P4773rn7 = ((29/(30+31))) % s1mp13P4773rn8;
+            s1mp13P4773rn8 = (((30+31))) % s1mp13P4773rn9;
+            s1mp13P4773rn9 = (((30))) % s1mp13P4773rn10;
+            s1mp13P4773rn10 = (((31))) % s1mp13P4773rn11;
+        }
+        read s1mp13P4773rn9;
+}

@@ -1,0 +1,225 @@
+1 - Select all statement
+stmt s;
+Select s
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55
+5000
+2 - Select all variable
+variable v;
+Select v
+A1pH3,chArlie,oSCar,X,x,x1c2v3b4,x411,y132,z,a,b,c,else,foo,bar,print,read,temp,then,tmp,var,while
+5000
+3 - Select all constant
+constant c;
+Select c
+0,1,2,3,4,6,8,11111111111111111111111111111,22222222222222222222222222222
+5000
+4 - Select all print
+print pn;
+Select pn
+22,47,50,51,52,53,54,55
+5000
+5 - Select all read
+read re;
+Select re
+11,39,40,45,49
+5000
+6 - Select all while
+while w;
+Select w
+14,16,18,21,25,29,37
+5000
+7 - Select all if
+if ifs;
+Select ifs
+13,20,30,43
+5000
+8 - Uses with invalid wildcard
+variable v;
+Select v such that Uses(_, v)
+
+5000
+9 - Uses with statement and wildcard
+stmt s;
+Select s such that Uses(s, _)
+4,5,6,9,12,13,14,15,16,17,18,19,20,21,22,24,25,26,27,29,30,31,32,33,34,35,37,38,41,42,43,44,46,47,48,50,51,52,53,54,55
+5000
+10 - Uses with assign and ident variable
+assign a;
+Select a such that Uses(a, "x")
+5,19,27
+5000
+11 - Uses with assign and synonym variable
+assign a; variable v;
+Select a such that Uses(a, v)
+4,5,6,9,12,15,17,19,24,26,27,31,32,33,34,35,38,41,42,44,46,48
+5000
+12 - Uses with ident assign and synonym variable
+variable v;
+Select v such that Uses(14, v)
+bar,foo,temp,tmp,X,chArlie
+5000
+13 - Uses with print and ident variable
+print pn; variable v;
+Select v such that Uses(pn, v)
+A1pH3,while,temp,read,print,var,foo,bar
+5000
+14 - Uses with if and ident variable
+if ifs;
+Select ifs such that Uses(ifs, "x")
+13,20
+5000
+15 - Uses with if and synonym variable
+if ifs; variable v;
+Select v such that Uses(ifs, v)
+A1pH3,chArlie,X,x,x411,z,a,c,foo,bar,print,read,temp,tmp,var,while
+5000
+16 - Uses with while and ident variable
+while w;
+Select w such that Uses(w, "X")
+14, 16
+5000
+17 - Uses with while and synonym variable
+while w; variable v;
+Select v such that Uses(w, v)
+A1pH3,chArlie,X,x,x411,z,c,foo,bar,print,read,temp,tmp,var,while
+5000
+18 - Uses with false clause
+stmt s;
+Select s such that Uses(6, "y132")
+none
+5000
+19 - Uses with true clause
+variable v;
+Select v such that Uses(6, "x411")
+A1pH3,chArlie,oSCar,X,x,x1c2v3b4,x411,y132,z,a,b,c,else,foo,bar,print,read,temp,then,tmp,var,while
+5000
+20 - Uses none
+stmt s;
+Select s such that Uses(s, "Z")
+none
+5000
+21 - Modifies with invalid wildcard
+variable v;
+Select v such that Modifies(_, v)
+
+5000
+22 - Modifies with statement and wildcard
+stmt s;
+Select s such that Modifies(s, _)
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,49
+5000
+23 - Modifies with assign and ident variable
+assign a;
+Select a such that Modifies(a, "x1c2v3b4")
+3
+5000
+24 - Modifies with assign and synonym variable
+assign a; variable v;
+Select a such that Modifies(a, v)
+1,2,3,4,5,6,7,8,9,10,12,15,17,19,23,24,26,27,28,31,32,33,34,35,36,38,41,42,44,46,48
+5000
+25 - Modifies with ident assign and synonym variable
+variable v;
+Select v such that Modifies(1, v)
+x411
+5000
+26 - Modifies with read and synonym variable
+read r; variable v;
+Select v such that Modifies(r, v)
+bar,read,print,while,temp
+5000
+27 - Modifies with if and ident variable
+if ifs;
+Select ifs such that Modifies(ifs, "x")
+13,20
+5000
+28 - Modifies with if and ident variable - none
+if ifs;
+Select ifs such that Modifies(ifs, "x411")
+none
+5000
+29 - Modifies with if and ident variable
+if ifs; variable v;
+Select v such that Modifies(ifs, v)
+oSCar,x,b,c,a,var,bar,foo,while,read,print,temp,else,then
+5000
+30 - Modifies with while and ident variable
+while w;
+Select w such that Modifies(w, "x")
+18
+5000
+31 - Modifies with while and synonym variable
+variable v; while w;
+Select v such that Modifies(w, v)
+oSCar,x,b,c,var,bar,foo,while,read,print,temp,else,then
+5000
+32 - Modifies none
+stmt s;
+Select s such that Modifies(s, "xDoNotExist")
+none
+5000
+33 - Invalid case - Syntax error
+stmts s;
+Select s
+
+5000
+34 - Invalid case - Syntax error
+prints p;
+Select p
+
+5000
+35 - Invalid case - Syntax error
+red r;
+Select r
+
+5000
+36 - Invalid case - Syntax error
+whil w;
+Select w
+
+5000
+37 - Invalid case - Syntax error
+iff ifs;
+Select ifs
+
+5000
+38 - Invalid case - Syntax error
+var v;
+Select v
+
+5000
+39 - Invalid case - Syntax error
+prop p;
+Select p
+
+5000
+40 - Invalid case - Syntax error
+cost c;
+Select c
+
+5000
+41 - Invalid case - Uses with read
+read r;
+Select r such that Uses(r,_)
+
+5000
+42 - Invalid case - Modifies with print
+print pn;
+Select pn such that Modifies(pn,_)
+
+5000
+43 - Invalid case - Case sensitive Uses
+stmt s; variable v;
+Select r such that uses(s,v)
+
+5000
+44 - Invalid case - Case sensitive Modify
+stmt s; variable v;
+Select r such that modifies(s,v)
+
+5000
+45 - Invalid case - Ends with semicolon
+stmt s; variable v;
+Select r such that modifies(s,v);
+
+5000

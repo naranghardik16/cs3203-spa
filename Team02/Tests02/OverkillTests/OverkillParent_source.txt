@@ -1,0 +1,113 @@
+procedure n3IwWwIwM {
+	procedure = procedure + 1;
+	procedure = procedure - 1;
+	if ((a * b * c == 1) && (if % else % then <= 2)) then {
+		print = 98 * 20 + 2;
+		while (((and * two) >= 1) || ( 1 <= (and * two))) {
+			read read;
+			if (0 == 0) then {
+				print print;
+				while (bob == builder) {
+					try = catch + 1;
+				}
+			} else {
+				read reader;
+				while (while + 1 == while + 1) {
+					while = while * while;
+				}
+			}
+		}
+	} else {
+		print x;
+	}
+
+	read a;
+	while ((b+1) <= (c * 80)) {
+		d = e / (99 * f);
+        while  ( ( (3 * 3 * 3) > (4 * 4 * 4) ) && ( (1 == 1) && (( 1 > ( 1 * e2 / (3 + 4 )) ) && ( (a + b + c) <= 10 )))) {
+			print g;
+			if (((i < 1) || (j == 2)) || (k > 3)) then {
+				print y;
+				while ((10 * 10) < 100) {
+					print x;
+				}
+				print y;
+			} else {
+				m = n + 5 / p;
+			}
+			y = y / 4;
+		}
+		z = 2 + r * (3 * 4);
+	}
+	print q;
+
+	procedure = (i + i + i) / (i * i * i);
+	if (!( (3 * then * 5) < (r * pi * 0) )) then {
+		read = read;
+		if ((2 / 10 * 1) < 10) then {
+			print one;
+			if ((30 * 40 * 50) == 100) then {
+				print x;
+				if ((10 % 10) < (2 % 2)) then {
+					if = 10;
+				} else {
+					if = 10;
+				}
+				print y;
+			} else {
+				print x;
+			}
+			read x;
+		} else {
+			PROCEDURE = PROCEDURE * WHILE;
+			i10 = 789 * 987 * i10;
+		}
+		Read = Read;
+	} else {
+		print y;
+		if ((0 * 1 * 2) > (3 * 2 * 1)) then {
+			IF = IF * THEN * ELSE;
+			i1 = i1 * 5;
+		} else {
+			if (1 == 1) then {
+				print y;
+			} else {
+				print z;
+			}
+		}
+		print y;
+	}
+
+	a = 10 * 20;
+	while (( 2 * a / b % c + d) >= 1) {
+		b = a * 10;
+		if (a != b) then {
+			c = c + b;
+			while (!(!(!(!(a == 0))))) {
+				print x;
+				if ( (d == 4) && ( (c == 3) && ((a == 1) || (b == 2)) ) ) then {
+					print x1;
+				} else {
+					print x2;
+				}
+				print x;
+			}
+			print x;
+		} else {
+			read x;
+			while ((!((a == b) || (c == d))) && (b ==c )) {
+				read x;
+				if ((1 == a ) && (a == 1)) then {
+					print x3;
+				} else {
+					print x4;
+				}
+				read x;
+			}
+			read x;
+		}
+		c = b * 10;
+	}
+	d = 20 * 30;
+
+}

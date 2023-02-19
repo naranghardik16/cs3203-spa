@@ -1,0 +1,71 @@
+procedure procedure {
+  x411 = 2;
+  y132 = 2 + 2;
+  x1c2v3b4 = 2 / 2;
+
+  x = y132 * 2;
+  x = 3 % x;  x = 2 * 2 + 3 % 1 - x411 / 2;
+  var = 2;
+  foo = 4;
+  bar = foo - 4 + 3 * 2;
+  X=1;
+    read bar ;
+   	bar= foo   ;
+   if (a <
+   bar) then{
+      while (bar > temp) {
+           oSCar  = 1 * bar + tmp;
+           while (!(tmp / tmp == bar * bar)) {
+             oSCar = X - (bar + foo *
+             chArlie); }}
+   	while ((!(x!=1)) && (!(x == 1))) {
+           x = x + 1;
+           if (foo==0) then {
+             while (bar== 3){
+               print A1pH3;
+               b = 0;
+               c = x411    + z + A1pH3; }}
+           else {
+               while (c>1) {
+                              c = c -1;}
+               x = x+ 1; }}}
+   else{
+   	a= 2;}
+  while (foo < bar) {
+    if (var > 0) then {
+      var = var + 22222222222222222222222222222;
+      bar = bar + 11111111111111111111111111111;
+      var = var - 22222222222222222222222222222;
+    } else {
+      foo = foo + 1;
+      var = var - 1;
+      while = 8;
+      while (while > 1) {
+        while = 3 * 2 + while / 2 - 6;
+        read read;
+        read print;
+        then
+        =
+        read
+        ;
+        else =
+        print;
+        if (while != 0) then {
+          temp = while * 2 - 2;
+          read while;
+          while = foo - bar * var + 3 * 2;
+          print while;
+          while = (temp + 2) / 2;
+        } else {
+          read temp;
+          print temp;
+        }
+        print read;
+        print print;
+      }
+    }
+  }
+  print var;
+  print foo;
+  print bar;
+}
