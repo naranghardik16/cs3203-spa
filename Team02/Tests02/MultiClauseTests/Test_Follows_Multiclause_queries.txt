@@ -1,0 +1,55 @@
+1 - 1 syn that are shared in both clauses/4 synonyms
+assign a1, a2; variable v;
+Select a2 such that Follows(a1, a2) pattern a1(v,_"3"_)
+3
+5000
+2 - 1 syn that is shared between both clauses/3 synonyms
+assign a1, a2; variable v;
+Select a1 such that Follows(a1, a2) pattern a1("i",_)
+3
+5000
+3 - 1 syn that is shared between both clauses/2 synonyms
+assign a; variable v;
+Select a such that Follows(a, 11) pattern a("x",_"  z"_)
+10
+5000
+4 - 0 syn that is shared between both clauses/2 synonyms
+assign Select,pattern; variable v;
+Select Select such that Follows(Select, 3) pattern pattern("z",_)
+2
+5000
+5 - Follows return true, pattern has result
+assign a; variable v;
+Select a such that Follows(7, 10) pattern a(v, _" x "_)
+9, 11
+5000
+6 - Follows return true, pattern has no result
+assign a; variable v;
+Select a such that Follows(1, 2) pattern a(v, _" y "_)
+none
+5000
+7 - Follows return false, pattern has result
+assign a; variable v;
+Select a such that Follows(5, 6) pattern a("i", _)
+none
+5000
+8 - Follows return false, pattern has no result
+assign a; variable v;
+Select a such that Follows(7, 8) pattern a("i", _"2"_)
+none
+5000
+9 - Follows has result, pattern has no result
+assign a; variable v;
+Select a such that Follows(a, _) pattern a("i", _"2"_)
+none
+5000
+10 - Follows has no result, pattern has no result
+assign a; variable v;
+Select a such that Follows(a, 8) pattern a("y", _)
+none
+5000
+11 - Follows has no result, pattern has result
+assign a; variable v;
+Select a such that Follows(a, 8) pattern a("x", _"2"_)
+none
+5000

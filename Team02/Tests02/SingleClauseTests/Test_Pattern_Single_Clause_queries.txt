@@ -1,0 +1,80 @@
+1 - pattern a(WILDCARD, WILDCARD) has result 
+assign a;
+Select a pattern a(_, _)
+4, 5, 6, 7, 8, 9
+5000
+2 - pattern a(WILDCARD, WILDCARD) has result select irrelevant syn
+assign a;read r;
+Select r pattern a(_, _)
+1
+5000
+3 - pattern a(WILDCARD, WILDCARD) has result but select irrelevant syn which has no result
+assign a;print p;
+Select p pattern a(_, _)
+none
+5000
+4 - pattern a(WILDCARD, SUBEXPR) has result
+assign a;
+Select a pattern a(_, _"1"_)
+5, 6, 8
+5000
+5 - pattern a(WILDCARD, SUBEXPR) has result select irrelevant syn
+if ifs;assign a;
+Select ifs pattern a(_, _"x"_)
+2
+5000
+6 - pattern a(WILDCARD, SUBEXPR) has no result
+assign a;
+Select a pattern a(_, _"a"_)
+none
+5000
+7 - pattern a(SYN, WILDCARD) has result keyword as SYN name
+assign pattern; variable Select;
+Select Select pattern pattern(Select, _)
+x, i, z
+5000
+8 - pattern a(SYN, WILDCARD) has result keyword as SYN name select irrelevant syn
+assign pattern; variable Select; while while;
+Select while pattern pattern(Select, _)
+3
+5000
+9 - pattern a(SYN, SUBEXPR) has result
+assign pattern; variable Select;
+Select Select pattern pattern(Select, _"x"_)
+x, z
+5000
+10 - pattern a(SYN, SUBEXPR) has result select irrelevant syn
+assign pattern; variable Select; read read;
+Select read pattern pattern(Select, _"x"_)
+1
+5000
+11 - pattern a(SYN, SUBEXPR) has no result
+assign pattern; variable Select;
+Select Select pattern pattern(Select, _"a"_)
+none
+5000
+12 - pattern a(VARNAME, WILDCARD) has result
+assign pattern;
+Select pattern pattern pattern("x", _)
+4, 6
+5000
+13 - pattern a(VARNAME, WILDCARD) has result select irrelevant syn
+assign pattern; if ifs;
+Select ifs pattern pattern("x", _)
+2
+5000
+14 - pattern a(VARNAME, WILDCARD) has no result
+assign pattern;
+Select pattern pattern pattern("a", _)
+none
+5000
+15 - pattern a(VARNAME, SUBEXPR) has result
+assign pattern;
+Select pattern pattern pattern("x", _"1"_)
+6
+5000
+16 - pattern a(VARNAME, SUBEXPR) has no result
+assign pattern;
+Select pattern pattern pattern("x", _"4"_)
+none
+5000

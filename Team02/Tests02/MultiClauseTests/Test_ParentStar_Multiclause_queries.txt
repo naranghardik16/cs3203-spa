@@ -1,0 +1,60 @@
+1 - 1 syn that is shared in both clauses/4 synonyms total
+assign a; variable v; while w;
+Select a such that Parent*(w, a) pattern a(v,_"digit"_)
+6, 9, 13
+5000
+2 - 1 syn that is shared between both clauses/3 synonyms total
+assign a; variable v; if i;
+Select a such that Parent*(i, a) pattern a("digit",_)
+11
+5000
+3 - 1 syn that is shared between both clauses/2 synonyms total
+assign a; variable v;
+Select a such that Parent*(4, a) pattern a(_,_)
+5, 6, 9, 11, 13, 14, 15
+5000
+4 - 1 syn that is shared between both clauses/2 synonyms total
+assign a; variable v;
+Select a such that Parent*(a,_) pattern a("digit",_)
+none
+5000
+5 - 0 syn  that is shared between both clauses/3 synonym total
+assign a; variable v; while w,w1;
+Select a such that Parent*(w, w1) pattern a("number",_"10"_)
+14, 15
+5000
+6 - 0 syn  that is shared between both clauses/2 synonym total
+assign a; variable v; while w; if i; stmt s;
+Select s such that Parent*(s,_) pattern a("number",_"10"_)
+4, 7, 8, 10, 12
+5000
+7 - 0 syn  that is shared between both clauses/2 synonym total
+assign a; variable v; while w; if i; stmt s;
+Select s such that Parent*(_,s) pattern a("number",_"10"_)
+5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+5000
+8 - 0 syn  that is shared between both clauses/2 synonym total -- i in i nesting
+assign a; variable v; while w; if i, i1; stmt s;
+Select i such that Parent*(i,i1) pattern a("digit",_"1"_)
+8
+5000
+9 - 0 syn  that is shared between both clauses/2 synonym total -- w in i nesting
+assign a; variable v; while w; if i; stmt s;
+Select w such that Parent*(i,w) pattern a("digit",_"1"_)
+12
+5000
+10 - 0 syn  that is shared between both clauses/2 synonym total -- i in w nesting
+assign a; variable v; while w; if i; stmt s;
+Select w such that Parent*(w,i) pattern a("digit",_"1"_)
+4, 7
+5000
+11 - 0 syn  that is shared between both clauses/2 synonym total -- w in w nesting
+assign a; variable v; while w, w1; if i; stmt s;
+Select w1 such that Parent*(w,w1) pattern a("digit",_"1"_)
+7, 12
+5000
+12 - 0 syn  that is shared between both clauses/1 synonym total
+assign a; variable v; while w; if i; stmt s;
+Select a such that Parent*(4,13) pattern a("digit",_"1"_)
+11
+5000
