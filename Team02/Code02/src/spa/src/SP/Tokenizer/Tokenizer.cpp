@@ -44,7 +44,7 @@ shared_ptr<Token> Tokenizer::MatchOtherToken(int first_char_index, string line, 
   return nullptr;
 }
 
-void Tokenizer::FormNameOrInteger(shared_ptr<int> start_index, int current_index) {
+void Tokenizer::CombineNameOrInteger(shared_ptr<int> start_index, int current_index) {
   if (*start_index == NOT_SET) {
     *start_index = current_index;
   }
@@ -82,23 +82,22 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
 
       if (lrv->IsLetter(current_char)) {
         type = NAME_TYPE;
-        FormNameOrInteger(start_index, j);
+        CombineNameOrInteger(start_index, j);
         continue;
       } else if (type == NAME_TYPE && lrv->IsDigit(current_char)) {
-        FormNameOrInteger(start_index, j);
+        CombineNameOrInteger(start_index, j);
         continue;
       } else if (lrv->IsDigit(current_char)) {
         type = INTEGER_TYPE;
-        FormNameOrInteger(start_index, j);
+        CombineNameOrInteger(start_index, j);
         continue;
       }
 
-
-      // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
       shared_ptr<Token> current_token = MatchOtherToken(j, lines[i], skip_index);
       shared_ptr<Token> prev_token = nullptr;
 
       // check if it is time to form the name/integer token
+      // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
       if (type != NOT_SET && (isspace(current_char) || (current_token != nullptr && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index), type);
       }

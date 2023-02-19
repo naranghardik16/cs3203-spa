@@ -21,7 +21,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     }
   } else if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
     GetNext();
-    ValidateEnoughTokensToProcess("");
+    ValidateEnoughTokensToProcess();
     this->SetIsSubExpr(true);
     auto left_cond_expr = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
