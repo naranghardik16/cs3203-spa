@@ -571,7 +571,7 @@ SyntaxError
 113 - pattern used instead of such that
 stmt s1, s2;
 Select s1 pattern Parent(s1, s2)
-SemanticError
+SyntaxError
 5000
 114 - Select is after such that
 stmt s1, s2;
