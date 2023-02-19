@@ -2,15 +2,14 @@
 
 #include "ProcedureParser.h"
 
-inline const std::string kProcedure = "procedure";
-inline const std::string kEndProc = "}";
-
 shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   std::string proc_name = ExtractProcName(line);
   auto proc = make_shared<Procedure>(proc_name);
   line = tokens.front();
+
+  // Adding Statements of a Procedure
   while (!IsProcedureEnd(line)) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
@@ -32,6 +31,7 @@ std::string ProcedureParser::ExtractProcName(Line &line) {
 }
 
 bool ProcedureParser::IsProcedureEnd(Line &line) {
+  // Check if the current line contains '}'
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
                         return p->GetType() == TokenType::RIGHT_BRACE;
