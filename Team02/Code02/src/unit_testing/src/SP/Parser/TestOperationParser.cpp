@@ -247,7 +247,57 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     };
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
     auto actual = expr_parser->ParseEntity(expr_line);
-    REQUIRE(1 == 1);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> lhs_nested_cond_rel_args;
+    lhs_nested_cond_rel_args.first = make_shared<Variable>("x");
+    lhs_nested_cond_rel_args.second = make_shared<Constant>("1");
+    shared_ptr<RelationalOperation> rel = make_shared<RelationalOperation>("!=", lhs_nested_cond_rel_args);
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> lhs_nested_cond_args;
+    lhs_nested_cond_args.first = rel;
+    shared_ptr<ConditionalOperation> lhs_nested_cond_expr = make_shared<ConditionalOperation>("rel_expr", lhs_nested_cond_args);
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> lhs_root_cond_args;
+    lhs_root_cond_args.first = lhs_nested_cond_expr;
+    shared_ptr<ConditionalOperation> lhs_root_cond_expr = make_shared<ConditionalOperation>("!", lhs_root_cond_args);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> rhs_nested_cond_rel_args;
+    rhs_nested_cond_rel_args.first = make_shared<Variable>("x");
+    rhs_nested_cond_rel_args.second = make_shared<Constant>("1");
+    rel = make_shared<RelationalOperation>("==", rhs_nested_cond_rel_args);
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> rhs_nested_cond_args;
+    rhs_nested_cond_args.first = rel;
+    shared_ptr<ConditionalOperation> rhs_nested_cond_expr = make_shared<ConditionalOperation>("rel_expr", rhs_nested_cond_args);
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> rhs_root_cond_args;
+    rhs_root_cond_args.first = rhs_nested_cond_expr;
+    shared_ptr<ConditionalOperation> rhs_root_cond_expr = make_shared<ConditionalOperation>("!", rhs_root_cond_args);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> root_cond_args;
+    root_cond_args.first = lhs_root_cond_expr;
+    root_cond_args.second = rhs_root_cond_expr;
+    shared_ptr<ConditionalOperation> root_cond_expr = make_shared<ConditionalOperation>("&&", root_cond_args);
+
+    REQUIRE(actual->operator==(*root_cond_expr));
+  }
+  SECTION("Check if cond_expr with rel_factor (var_name) 'any rel_op' rel_factor (expr) (e.g. x > 1 + 2) parses correctly") {
+    Parser::Line expr_line{make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>(">", GT),
+                           make_shared<IntegerToken>("1"), make_shared<ArithmeticOperatorToken>("+", PLUS),
+                           make_shared<IntegerToken>("2")};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "while");
+    auto actual = expr_parser->ParseEntity(expr_line);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> expr_args;
+    expr_args.first = make_shared<Constant>("1");
+    expr_args.second = make_shared<Constant>("2");
+    shared_ptr<ArithmeticOperation> expr = make_shared<ArithmeticOperation>("+", expr_args);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> rel_args;
+    rel_args.first = make_shared<Variable>("x");
+    rel_args.second = expr;
+    shared_ptr<RelationalOperation> rel_expr = make_shared<RelationalOperation>(">", rel_args);
+
+    pair<shared_ptr<Expression>, shared_ptr<Expression>> cond_expr_args;
+    cond_expr_args.first = rel_expr;
+    shared_ptr<ConditionalOperation> root_cond_expr = make_shared<ConditionalOperation>("rel_expr", cond_expr_args);
+    REQUIRE(actual->operator==(*root_cond_expr));
   }
   SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ] throws syntax error") {
     Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
