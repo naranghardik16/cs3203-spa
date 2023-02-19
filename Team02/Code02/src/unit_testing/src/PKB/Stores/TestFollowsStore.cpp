@@ -3,7 +3,7 @@
 
 TEST_CASE("Testcases for Follows Store") {
   SECTION("Basic Statement Number to Variable Mapping") {
-    FollowsStore* follows_store = new FollowsStore();
+    auto follows_store = new FollowsStore();
 
     follows_store->addFollowsRelation("1", "2");
     follows_store->addFollowsRelation("2", "3");
