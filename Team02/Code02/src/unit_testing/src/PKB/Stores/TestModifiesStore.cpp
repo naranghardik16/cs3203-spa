@@ -59,7 +59,7 @@ TEST_CASE("Testcases for Modifies Store") {
 
 
   // should adhere to the rule that a single statement cannot modify multiple variables
-  SECTION("Multiple statements modifying a multiple variables") {
+  SECTION("Multiple statements modifying multiple variables") {
     auto modifies_store = new ModifiesStore();
     modifies_store->addStatementModifyingVariable("1", "a");
     modifies_store->addStatementModifyingVariable("2", "b");
