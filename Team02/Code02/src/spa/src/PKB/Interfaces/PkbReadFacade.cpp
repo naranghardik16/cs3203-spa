@@ -232,7 +232,24 @@ bool PkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::str
 
 // Follows API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
-  return this->pkb.follows_store_->retrieveAllFollowsPairs();
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_of_type_1 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_of_type_2 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_follower);
+
+  PkbCommunicationTypes::PairConstraintSet follows_pairs =
+      this->pkb.follows_store_->retrieveAllFollowsPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: follows_pairs) {
+    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
@@ -281,8 +298,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsWithFollo
   PkbCommunicationTypes::SingleConstraintSet result;
 
   for (const auto& p: follows_pairs) {
-    if (statements.count(p.second) > 0) {
-      result.insert(p.second);
+    if (statements.count(p.first) > 0) {
+      result.insert(p.first);
     }
   }
 
@@ -445,7 +462,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetParentChildPairs(Stat
   PkbCommunicationTypes::PairConstraintSet result;
   for (const auto& p: parent_child_pairs) {
     if (statement_of_type_for_parent.count(p.first) > 0 &&
-    statement_of_type_for_child.count(p.second)) {
+    statement_of_type_for_child.count(p.second) > 0) {
       result.insert(p);
     }
   }

@@ -343,6 +343,7 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
                            make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("z"), make_shared<RelationalOperatorToken>("<=", LTE),
                            make_shared<IntegerToken>("100"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    auto expr = expr_parser->ParseEntity(expr_line);
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
 }

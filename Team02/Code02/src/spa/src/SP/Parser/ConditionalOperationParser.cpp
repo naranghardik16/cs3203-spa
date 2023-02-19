@@ -63,7 +63,9 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
       GetNext();
       this->SetIsSubExpr(true);
       auto right_cond_expr = Parse();
-//      GetNext();
+      if (*(GetPos().get()) < static_cast<int>(GetLine().get()->size())) {
+        GetNext();
+      }
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
         throw SyntaxErrorException("Missing )");
       }
