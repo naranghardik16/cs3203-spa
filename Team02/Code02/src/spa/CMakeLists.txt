@@ -1,5 +1,4 @@
 file(GLOB srcs
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.cpp"
@@ -21,8 +20,6 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
 
 file(GLOB headers
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.h"

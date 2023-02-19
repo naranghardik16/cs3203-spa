@@ -14,10 +14,6 @@ shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::dequ
   } else if (CheckKeywordType(line, "read", false)) {
     return make_shared<ReadStatementParser>();
   }
-  for (auto token : line) {
-    cout << token->GetValue() << " ";
-  }
-  cout << endl;
   throw SemanticErrorException("Unknown Statement type");
 }
 
@@ -48,5 +44,6 @@ bool StatementParserFactory::CheckAssignmentType(Line &line) {
                    [&](shared_ptr<Token> const p) {
                      return p->GetValue() == "=";
                    });
+
   return entity_itr != std::end(line);
 }

@@ -13,8 +13,6 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
 
 file(GLOB headers
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Util/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.h")

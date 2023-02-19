@@ -8,7 +8,10 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
                                *condition,
                                "main");
+  // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
+
+  // Parse and add statements in then block
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
@@ -68,8 +71,7 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
     throw SemanticErrorException("If Statement is missing a {");
   }
 
-  auto
-      itr_then = prev(prev(line.end()));
+  auto itr_then = prev(prev(line.end()));
 
   if (itr_then->get()->GetValue() != "then") {
     throw SemanticErrorException(
