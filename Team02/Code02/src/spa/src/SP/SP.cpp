@@ -12,7 +12,7 @@ void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
 
     shared_ptr<DesignExtractor> design_extractor = make_shared<DesignExtractor>(pkb);
     design_extractor->ExtractDesign(program);
-  } catch (SpaException *e) {
-    cout << e->what();
+  } catch (SpaException& e) {
+    cout << e.what() << endl;
   }
 }

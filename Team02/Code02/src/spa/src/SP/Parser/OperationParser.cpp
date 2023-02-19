@@ -86,7 +86,7 @@ void OperationParser::ValidateForBalancedParenthesis() {
   throw SyntaxErrorException("Unbalanced parenthesis ()");
 }
 
-void OperationParser::ValidateEnoughTokensToProcess(string err_msg) {
+void OperationParser::ValidateEnoughTokensToProcess() {
   if (*is_processed_curr_token_) {
     throw SyntaxErrorException("Insufficient tokens to process");
   }

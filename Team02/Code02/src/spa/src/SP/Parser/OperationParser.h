@@ -24,7 +24,7 @@ class OperationParser : public ExpressionParser {
   bool GetIsSubExpr();
   void SetIsSubExpr(bool is_sub_expr);
   shared_ptr<bool> GetIsProcessedCurrToken();
-  void ValidateEnoughTokensToProcess(string err_msg);
+  void ValidateEnoughTokensToProcess();
  private:
   Line line_;
   bool is_inherit_args_ = false;
