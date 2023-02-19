@@ -29,6 +29,9 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
 
   std::string select_statement = string_util::Trim(temp);
 
+  if (declaration_statements.empty()) {
+    throw SyntaxErrorException("No declarations");
+  }
   if (select_statement.empty()) {
     throw SyntaxErrorException("There is no select statement identified");
   }
