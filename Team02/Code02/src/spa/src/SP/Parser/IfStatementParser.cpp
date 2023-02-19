@@ -8,7 +8,10 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
                                *condition,
                                "main");
+  // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
+
+  // Parse and add statements in then block
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
     auto stmt = stmt_parser->ParseEntity(tokens);
@@ -69,7 +72,16 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
   }
 
   auto
+<<<<<<< HEAD
       itr_then = prev(prev(line.end()));
+=======
+      itr_then =
+      std::find_if(std::begin(line),
+                   std::end(line),
+                   [&](shared_ptr<Token> const p) {
+                     return p->GetValue() == "then";
+                   });
+>>>>>>> milestone1
 
   if (itr_then->get()->GetValue() != "then") {
     throw SemanticErrorException(

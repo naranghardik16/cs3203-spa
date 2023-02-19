@@ -8,7 +8,7 @@ class Procedure : public Entity {
  public:
   typedef std::vector<std::shared_ptr<Statement>> StmtListContainer;
   explicit Procedure(std::string proc_name);
-  ~Procedure();
+  ~Procedure() noexcept;
   void AddToStatementList(shared_ptr<Statement> stmt);
   void Accept(shared_ptr<ParserVisitor> visitor) override;
   [[nodiscard]] StmtListContainer GetStatementList() const;

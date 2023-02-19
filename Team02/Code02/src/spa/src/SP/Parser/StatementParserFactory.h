@@ -9,6 +9,10 @@
 #include "ReadStatementParser.h"
 #include "WhileStatementParser.h"
 
+/**
+ * Factory class for getting the appropriate Statement Parser
+ * depending on the tokens.
+ */
 class StatementParserFactory {
   typedef std::vector<shared_ptr<Token>> Line;
   typedef std::deque<Line> TokenStream;

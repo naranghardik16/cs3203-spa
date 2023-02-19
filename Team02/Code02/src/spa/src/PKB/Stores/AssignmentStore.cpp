@@ -22,7 +22,7 @@ std::unordered_set<PkbTypes::STATEMENT_NUMBER>
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> result;
 
   for (const auto &p: this->assignment_store_.retrieveAll()) {
-    if (p.second == expression) {
+    if (p.second->operator==(*expression)) {
       result.insert(p.first);
     }
   }
