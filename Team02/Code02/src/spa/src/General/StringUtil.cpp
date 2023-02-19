@@ -67,7 +67,7 @@ std::string string_util::GetFirstWord(const std::string& s) {
 /*
  * Gets the trimmed substring after the first keyword found in a clause.
  */
-std::string string_util::GetClauseAfterKeyword(const std::string& clause, const std::string& keyword) {
+std::string string_util::GetSubStringAfterKeyword(const std::string& clause, const std::string& keyword) {
   size_t new_start_index = clause.find(keyword) + keyword.length();
   return Trim(clause.substr(new_start_index,clause.length() - 1));
 }

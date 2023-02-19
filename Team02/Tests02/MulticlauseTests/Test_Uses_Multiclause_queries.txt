@@ -31,7 +31,7 @@ z
 7 - var syn that is shared between both clauses/3 synonyms total
 assign a; variable v;
 Select v such that Uses(7,v) pattern a(v,_"x"_)
-x, i
+x
 5000
 8 - var syn that is shared between both clauses/4 synonyms total
 assign a; variable v; while w;
@@ -41,7 +41,7 @@ z, i
 9 - var syn that is not shared between both clauses
 assign a; variable v;
 Select v such that Uses(6," z ") pattern a(v,_"1"_)
-4, 8, 11
+a, z, i
 5000
 10 - Uses return false, pattern has result
 assign a; variable v;

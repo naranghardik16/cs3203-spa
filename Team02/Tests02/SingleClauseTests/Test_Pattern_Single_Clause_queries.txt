@@ -34,7 +34,7 @@ Select Select pattern pattern(Select, _)
 x, i, z
 5000
 8 - pattern a(SYN, WILDCARD) has result keyword as SYN name select irrelevant syn
-assign pattern; variable Select; while while
+assign pattern; variable Select; while while;
 Select while pattern pattern(Select, _)
 3
 5000
@@ -44,7 +44,7 @@ Select Select pattern pattern(Select, _"x"_)
 x, z
 5000
 10 - pattern a(SYN, SUBEXPR) has result select irrelevant syn
-assign pattern; variable Select; read read
+assign pattern; variable Select; read read;
 Select read pattern pattern(Select, _"x"_)
 1
 5000
@@ -56,12 +56,12 @@ none
 12 - pattern a(VARNAME, WILDCARD) has result
 assign pattern;
 Select pattern pattern pattern("x", _)
-4, 5
+4, 6
 5000
 13 - pattern a(VARNAME, WILDCARD) has result select irrelevant syn
 assign pattern; if ifs;
 Select ifs pattern pattern("x", _)
-3
+2
 5000
 14 - pattern a(VARNAME, WILDCARD) has no result
 assign pattern;

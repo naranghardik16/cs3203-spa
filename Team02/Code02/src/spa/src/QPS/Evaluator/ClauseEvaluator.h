@@ -26,6 +26,20 @@ class ClauseEvaluator {
   Map GetDeclarationMap();
 
   /**
+ * Converts an unordered set of strings (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
+ * @param s which is an unordered set of strings
+ * @return the unordered set in ResultTable format
+ */
+  static ResultTable ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s);
+
+  /**
+   * Converts an unordered set of pairs (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
+   * @param s which is an unordered set of pairs
+   * @return  the unordered set in ResultTable format
+   */
+  static ResultTable ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s);
+
+  /**
    * Evaluates non-boolean constraints by interacting with PKB
    * @param pkb which stores data about information from the SIMPLE program
    * @return a Result class containing information about the evaluation for further handling

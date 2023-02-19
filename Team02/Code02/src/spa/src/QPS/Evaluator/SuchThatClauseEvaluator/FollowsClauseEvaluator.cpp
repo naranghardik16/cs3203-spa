@@ -83,10 +83,10 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
 
   ResultTable table;
   if (!single_constraint.empty()) {
-    table = QueryUtil::ConvertSetToResultTableFormat(single_constraint);
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   }
   if (!pair_constraint.empty()) {
-    table = QueryUtil::ConvertPairSetToResultTableFormat(pair_constraint);
+    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
   }
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);

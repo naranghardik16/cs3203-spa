@@ -106,11 +106,11 @@ class PkbWriteFacade {
                          PkbTypes::STATEMENT_NUMBER statement_number_2) const;
 
   void AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number,
-                                           Expression *expression);
+                                           std::shared_ptr<Expression> expression);
 
   void AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                  Expression *expression);
+                                  std::shared_ptr<Expression> expression);
 
   void AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                     Expression *expression);
+                                     std::shared_ptr<Expression> expression);
 };
