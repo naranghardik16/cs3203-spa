@@ -168,26 +168,85 @@ TEST_CASE("Testcases for Parent Store") {
     parent_store->addParentRelation("10", "12");
     parent_store->addParentRelation("12", "13");
 
+    REQUIRE(parent_store->hasParentStarRelation("1", "2") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "3") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "4") == true);
+    REQUIRE(parent_store->hasParentStarRelation("4", "5") == true);
+    REQUIRE(parent_store->hasParentStarRelation("5", "6") == true);
+    REQUIRE(parent_store->hasParentStarRelation("5", "7") == true);
+    REQUIRE(parent_store->hasParentStarRelation("5", "8") == true);
+    REQUIRE(parent_store->hasParentStarRelation("5", "9") == true);
+    REQUIRE(parent_store->hasParentStarRelation("10", "11") == true);
+    REQUIRE(parent_store->hasParentStarRelation("10", "12") == true);
+    REQUIRE(parent_store->hasParentStarRelation("12", "13") == true);
 
-  }
+    REQUIRE(parent_store->hasParentStarRelation("1", "5") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "6") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "7") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "8") == true);
+    REQUIRE(parent_store->hasParentStarRelation("1", "9") == true);
+    REQUIRE(parent_store->hasParentStarRelation("4", "6") == true);
+    REQUIRE(parent_store->hasParentStarRelation("4", "7") == true);
+    REQUIRE(parent_store->hasParentStarRelation("4", "8") == true);
+    REQUIRE(parent_store->hasParentStarRelation("4", "9") == true);
+    REQUIRE(parent_store->hasParentStarRelation("10", "13") == true);
 
-  SECTION("Basic Mapping") {
-    auto* parent_store = new ParentStore();
-
-    parent_store->addParentRelation("2", "3");
-    parent_store->addParentRelation("2", "4");
-
-//    REQUIRE(parent_store->retrieveAllParentPairs() ==
-//    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
-//        PairHasherUtil::hash_pair>({ std::make_pair("1", "2"), std::make_pair("1", "4"),
-//                                     std::make_pair("1", "5"), std::make_pair("2", "3") }));
-
-    REQUIRE(parent_store->retrieveAllParentStarPairs() ==
-        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
-                           PairHasherUtil::hash_pair>({ std::make_pair("2", "3"), std::make_pair("2", "4") }));
-
-    REQUIRE(parent_store->retrieveAllAncestors("3") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
-
+    REQUIRE(parent_store->hasAnyParentStarRelation() == true);
+    REQUIRE(parent_store->retrieveAllAncestors() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "1", "4", "5", "10", "12"}));
+    REQUIRE(parent_store->retrieveAllAncestors("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "1", "4" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("2") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("3") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("4") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "4", "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("6") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "5", "4", "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("7") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "5", "4", "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("8") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "5", "4", "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("9") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {  "5", "4", "1" }) );
+    REQUIRE(parent_store->retrieveAllAncestors("11") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"10"}) );
+    REQUIRE(parent_store->retrieveAllAncestors("12") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"10"}) );
+    REQUIRE(parent_store->retrieveAllAncestors("13") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"12", "10"}) );
+    REQUIRE(parent_store->retrieveAllDescendants() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13"}));
+    REQUIRE(parent_store->retrieveAllDescendants("1") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "2", "3", "4", "5", "6", "7", "8", "9"}));
+    REQUIRE(parent_store->retrieveAllDescendants("2") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("3") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("4") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "5", "6", "7", "8", "9" }));
+    REQUIRE(parent_store->retrieveAllDescendants("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+      "6", "7", "8", "9"
+    }));
+    REQUIRE(parent_store->retrieveAllDescendants("6") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("7") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("8") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("9") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("10") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "11", "12", "13"}));
+    REQUIRE(parent_store->retrieveAllDescendants("11") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { }));
+    REQUIRE(parent_store->retrieveAllDescendants("12") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        { "13" }));
+    REQUIRE(parent_store->retrieveAllDescendants("13") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {  }));
   }
 }
 
