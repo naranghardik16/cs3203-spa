@@ -2,7 +2,7 @@
 #include "Expression.h"
 
 Expression::Expression(std::string name, std::string expression_type)
-    : name_(name), expression_type_(std::move(expression_type)) {}
+    : name_(std::move(name)), expression_type_(std::move(expression_type)) {}
 
 std::string Expression::GetExpressionType() const {
   return expression_type_;
@@ -14,10 +14,6 @@ std::string Expression::GetName() const {
 
 bool Expression::operator==(const Expression &other) const {
   return expression_type_ == other.expression_type_ && name_ == other.name_;
-}
-
-bool Expression::IsLeafNodeExpression() {
-  return false;
 }
 
 std::optional<Expression::PairOfArguments> Expression::GetArguments() const {
