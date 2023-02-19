@@ -9,7 +9,6 @@ AbstractWrapper *WrapperFactory::createWrapper() {
 // Do not modify the following line
 volatile bool AbstractWrapper::GlobalStop = false;
 
-
 // a default constructor
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
@@ -33,6 +32,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string> &results) {
   // ...code to evaluate query...
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
-  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb_);
+  std::shared_ptr<PkbReadFacade>
+      pkb_read = std::make_shared<PkbReadFacade>(*pkb_);
   Qps::ProcessQuery(query, results, pkb_read);
 }
