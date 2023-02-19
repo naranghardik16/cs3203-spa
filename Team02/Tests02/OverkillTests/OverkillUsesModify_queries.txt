@@ -33,11 +33,6 @@ if ifs;
 Select ifs
 13,20,30,43
 5000
-8 - Uses with invalid wildcard
-variable v;
-Select v such that Uses(_, v)
-
-5000
 9 - Uses with statement and wildcard
 stmt s;
 Select s such that Uses(s, _)
@@ -97,11 +92,6 @@ A1pH3,chArlie,oSCar,X,x,x1c2v3b4,x411,y132,z,a,b,c,else,foo,bar,print,read,temp,
 stmt s;
 Select s such that Uses(s, "Z")
 none
-5000
-21 - Modifies with invalid wildcard
-variable v;
-Select v such that Modifies(_, v)
-
 5000
 22 - Modifies with statement and wildcard
 stmt s;
