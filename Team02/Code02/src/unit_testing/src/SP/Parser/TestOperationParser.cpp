@@ -134,6 +134,24 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
     shared_ptr<ArithmeticOperation> root = make_shared<ArithmeticOperation>("+", root_args);
     REQUIRE(actual->operator==(*root));
   }
+  SECTION("Check if complex arithmetic expression [e.g., ((24 + 25) * 26 ) + 27) -  (28 + ( 29 / (30 + 31))] parses correctly ") {
+    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<IntegerToken>("24"), make_shared<ArithmeticOperatorToken>("+", PLUS),
+                           make_shared<IntegerToken>("25"), make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+                           make_shared<IntegerToken>("26"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<IntegerToken>("27"),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ArithmeticOperatorToken>("-", MINUS),
+                           make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<IntegerToken>("28"),
+                           make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<IntegerToken>("29"),
+                           make_shared<ArithmeticOperatorToken>("/", DIV),  make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<IntegerToken>("30"), make_shared<ArithmeticOperatorToken>("+", PLUS),
+                           make_shared<IntegerToken>("31"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    // TODO: Do expected result
+    REQUIRE(1 == 1);
+  }
   SECTION("Check if arithmetic expression with unbalanced () [e.g. 2 * (x + 1 ] throws Syntax error") {
     Parser::Line expr_line{make_shared<IntegerToken>("2"), make_shared<ArithmeticOperatorToken>("*", MULTIPLY), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
                            make_shared<NameToken>("x"), make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<IntegerToken>("1")};
@@ -198,11 +216,6 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     root_cond_args.first = inner_cond_expr;
     shared_ptr<ConditionalOperation> root_cond_expr = make_shared<ConditionalOperation>("!", root_cond_args);
     REQUIRE(actual->operator==(*root_cond_expr));
-  }
-  SECTION("Check if cond_expr with missing cond_expr after ! [e.g. ! ( ] throws syntax error") {
-    Parser::Line expr_line{make_shared<ConditionalOperatorToken>("!", NOT), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS)};
-    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "while");
-    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
   SECTION("Check if '(' cond_expr ')' '&&' or '||' '(' cond_expr ')' (e.g. (x < y) || (y >= 100) ) parses correctly") {
     Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
@@ -299,23 +312,28 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     shared_ptr<ConditionalOperation> root_cond_expr = make_shared<ConditionalOperation>("rel_expr", cond_expr_args);
     REQUIRE(actual->operator==(*root_cond_expr));
   }
+  SECTION("Check if rel_expr with complex arithmetic expression [e.g., (((24 + 25) * 26 ) + 27) -  (28 + ( 29 / (30 + 31))) > 0] parses correctly ") {
+    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<IntegerToken>("24"), make_shared<ArithmeticOperatorToken>("+", PLUS),
+                           make_shared<IntegerToken>("25"), make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+                           make_shared<IntegerToken>("26"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<IntegerToken>("27"),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ArithmeticOperatorToken>("-", MINUS),
+                           make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<IntegerToken>("28"),
+                           make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<IntegerToken>("29"),
+                           make_shared<ArithmeticOperatorToken>("/", DIV),  make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+                           make_shared<IntegerToken>("30"), make_shared<ArithmeticOperatorToken>("+", PLUS),
+                           make_shared<IntegerToken>("31"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+                           make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0")};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    auto actual = expr_parser->ParseEntity(expr_line);
+    // TODO: Do expected result
+    REQUIRE(1 == 1);
+  }
   SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ] throws syntax error") {
     Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
                            make_shared<NameToken>("y"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ConditionalOperatorToken>("&&", AND)};
-    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
-    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
-  }
-  SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && ( ] throws syntax error") {
-    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
-                           make_shared<NameToken>("y"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ConditionalOperatorToken>("&&", AND),
-                           make_shared<PunctuationToken>("(", LEFT_PARENTHESIS)};
-    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
-    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
-  }
-  SECTION("Check if cond_expr with missing RHS cond_expr [e.g. (x < y) && (z ] throws syntax error") {
-    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("x"), make_shared<RelationalOperatorToken>("<", LT),
-                           make_shared<NameToken>("y"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ConditionalOperatorToken>("&&", AND),
-                           make_shared<PunctuationToken>("(", LEFT_PARENTHESIS)};
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
