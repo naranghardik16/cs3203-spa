@@ -14,19 +14,21 @@
 > 6. Please rename every reference of `00` (ie. `Team00/Code00`) to your own team number. Since the `.gitignore` is configured to ignore libs, remember to force add the autotester libs back to the repository by running `git add -f Team*/Code*/lib/` after you rename.
 
 ## Target Environment
-
-Item | Version
--|-
-OS | Windows 10
-Toolchain | Microsoft Visual Studio Enterprise 2019 Version 16.11.0
-C++ Standard | C++17
+| Item | Version |
+| --- | --- |
+| OS | macOS |
+| Toolchain | CLion |
+| C++ Standard | C++17 |
 
 ### Additional Build Instructions
-
 No additional instructions required.
 
 # Team Members
-
-Name | Mobile | Email | Development OS/Toolchain
--:|:-:|:-|-|
-John Doe | 99887766 | john@doe.com | Windows 10/Visual Studio 2019
+| Name | Mobile (Singapore) | Email | Development OS/Toolchain |
+| --- |--------------------| --- | --- |
+| Hardik Narang | 83087184           | hardiknarang@u.nus.edu | macOS/CLion |
+| Sourabh Raj Jaiswal | 96111624           | sourabh.jaiswal@u.nus.edu | macOS/CLion |
+| Sumanth Yalamarty | 89442247           | sumanthyalamarty@u.nus.edu | macOS/CLion |
+| Yong Kai Qi | 83002861           | kaiqi.yong@u.nus.edu | macOS/CLion |
+| Wu HanHui | 93750639           | e0544273@u.nus.edu | Windows 11/CLion |
+| Isabel Teo Jing Lin | 97808264           | e0563890@u.nus.edu | Windows OS/CLion |

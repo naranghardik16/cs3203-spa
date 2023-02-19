@@ -52,7 +52,8 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("*", root_args);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) == std::unordered_set<std::string>({ "x", "y", "z" }));
+    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) ==
+    std::unordered_set<std::string>({ "x", "y", "z" }));
     REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) == std::unordered_set<std::string>({ }));
   }
 
