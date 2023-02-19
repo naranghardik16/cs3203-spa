@@ -87,6 +87,7 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
   for (i = 0; i < lines.size(); i++) {
     for (string::size_type j = 0; j < lines[i].size(); j++) {
       char current_char = lines[i][j];
+      bool is_continue = false;
       if ((j == *skip_index) || (isspace(current_char) && type == NOT_SET)) {
         skip_index = make_shared<int>(NOT_SET);
         continue;
@@ -95,13 +96,17 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
       if (lrv->IsLetter(current_char)) {
         type = NAME_TYPE;
         CombineNameOrInteger(start_index, j);
-        continue;
+        is_continue = true;
       } else if (type == NAME_TYPE && lrv->IsDigit(current_char)) {
         CombineNameOrInteger(start_index, j);
-        continue;
+        is_continue = true;
       } else if (lrv->IsDigit(current_char)) {
         type = INTEGER_TYPE;
         CombineNameOrInteger(start_index, j);
+        is_continue = true;
+      }
+
+      if (is_continue && j < lines[i].size() - 1) {
         continue;
       }
 
@@ -110,8 +115,13 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
 
       // check if it is time to form the name/integer token
       // non-alphanumeric character (e.g. space, punctuation, operations) will be used as delimiter for name/integer
-      if (type != NOT_SET && (isspace(current_char) || (current_token != nullptr && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
+      // else if it is the end of the line it will also be extracted for name/integer
+      if (type != NOT_SET &&
+          (isspace(current_char)
+          || (current_token != nullptr && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index), type);
+      } else if (type != NOT_SET && j == lines[i].size() - 1) {
+        prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index + 1), type);
       }
 
       // check if a name/integer token was formed

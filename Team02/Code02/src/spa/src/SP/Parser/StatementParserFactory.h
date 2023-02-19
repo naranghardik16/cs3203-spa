@@ -19,7 +19,9 @@ class StatementParserFactory {
  public:
   static shared_ptr<StatementParser> GetStatementParser(TokenStream &tokens);
  private:
-  static inline bool CheckStatementType(Line &line,
-                                        std::string_view type_to_check);
+  static bool CheckAssignmentType(Line &line);
+  static bool CheckKeywordType(Line &line,
+                               std::string_view type_to_check,
+                               bool has_parenthesis);
 
 };

@@ -8,7 +8,6 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
                                *condition,
                                "main");
-
   // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
 
@@ -56,6 +55,10 @@ shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line)
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
+  if (line.size() < 2) {
+    throw SyntaxErrorException("Invalid length for if then statement");
+  }
+
   auto
       itr_brace =
       std::find_if(std::begin(line),
@@ -68,15 +71,9 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
     throw SemanticErrorException("If Statement is missing a {");
   }
 
-  auto
-      itr_then =
-      std::find_if(std::begin(line),
-                   std::end(line),
-                   [&](shared_ptr<Token> const p) {
-                     return p->GetValue() == "then";
-                   });
+  auto itr_then = prev(prev(line.end()));
 
-  if (itr_then != prev(prev(line.end()))) {
+  if (itr_then->get()->GetValue() != "then") {
     throw SemanticErrorException(
         "If Statement is missing then or is not in correct position");
   }

@@ -53,7 +53,7 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
 
-  SECTION("Test if it works for variation of spacing between tokens") {
+  SECTION("Test if it works for variation of spacing between tokens -- 1") {
     string input = "while (i>0&&i<=10) {";
     std::istringstream is;
     is.str(input);
@@ -64,6 +64,30 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
          make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0"), make_shared<ConditionalOperatorToken>("&&", AND),
          make_shared<NameToken>("i"), make_shared<RelationalOperatorToken>("<=", LTE), make_shared<IntegerToken>("10"),
          make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>("{", LEFT_BRACE)}
+    };
+    REQUIRE(CheckTokenStreamEquality(*actual, expected));
+  }
+
+  SECTION("Test if it works for variation of spacing between tokens -- 2") {
+    string input = "  read print;"
+                   "  then  "
+                   "  = "
+                   "  read  "
+                   "  ; "
+                   "  else  "
+                   "  = "
+                   "  print "
+                   "  ; ";
+    std::istringstream is;
+    is.str(input);
+
+    shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
+    Parser::TokenStream expected = {
+        {make_shared<NameToken>("read"), make_shared<NameToken>("print"), make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("then"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<NameToken>("read"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("else"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<NameToken>("print"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
