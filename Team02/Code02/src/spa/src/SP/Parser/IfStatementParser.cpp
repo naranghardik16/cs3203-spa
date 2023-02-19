@@ -4,9 +4,10 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
   auto condition = ExtractCondition(line);
-  auto if_stmt = make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
-                                 *condition,
-                                 "main");
+  auto if_stmt =
+      make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
+                               *condition,
+                               "main");
   CheckStartOfIfStatement(line);
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
@@ -51,23 +52,26 @@ shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line)
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
+  if (line.size() < 2) {
+    throw SyntaxErrorException("Invalid length for if then statement");
+  }
+
   auto
       itr_brace =
-      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetType() == TokenType::LEFT_BRACE;
-      });
+      std::find_if(std::begin(line),
+                   std::end(line),
+                   [&](shared_ptr<Token> const p) {
+                     return p->GetType() == TokenType::LEFT_BRACE;
+                   });
 
   if (itr_brace != prev(line.end())) {
     throw SemanticErrorException("If Statement is missing a {");
   }
 
   auto
-      itr_then =
-      std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetValue() == "then";
-      });
+      itr_then = prev(prev(line.end()));
 
-  if (itr_then != prev(prev(line.end()))) {
+  if (itr_then->get()->GetValue() != "then") {
     throw SemanticErrorException(
         "If Statement is missing then or is not in correct position");
   }

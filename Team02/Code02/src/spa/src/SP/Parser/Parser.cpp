@@ -16,7 +16,8 @@ shared_ptr<Program> Parser::ParseSource(TokenStream &tokens) {
       program->AddToProcedureList(proc);
     } catch (SyntaxErrorException &e) {
       throw SyntaxErrorException(e.what());
-    } catch (const SemanticErrorException &e) {
+    } catch (SemanticErrorException &e) {
+      throw SemanticErrorException(e.what());
     }
   }
   return program;
