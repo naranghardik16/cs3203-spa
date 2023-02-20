@@ -6,12 +6,12 @@ from typing import List
 """
 This code took reference from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
 """
-def MakePathSuitableForOS(path):
+def MakePathSuitableForOS(command):
     if os.name == WINDOWS_OS_NAME:
-        path = path.replace('/', '\\')
+        command = command.replace('/', '\\')
     if os.name == MAC_OS_NAME:
-        path = path.replace('\\', '/')
-    return path
+        command = command.replace('\\', '/')
+    return command
 
 WINDOWS_OS_NAME = 'nt'
 MAC_OS_NAME = 'posix'
@@ -112,10 +112,13 @@ def Execute():
             continue
 
     print(test_report)
-    move_xsl_file_to_results = "cp analysis.xsl ./Result"
+    copy_command = "cp"
+    if os.name == WINDOWS_OS_NAME:
+        copy_command = "copy"
+    move_xsl_file_to_results = MakePathSuitableForOS(copy_command + " analysis.xsl ./Result")
+
     start_python_host_command = "python -m http.server 8000"
     os.system(move_xsl_file_to_results)
     os.system(start_python_host_command)
-    print("Python host has started. Autotester run is complete.")
 
 Execute()
