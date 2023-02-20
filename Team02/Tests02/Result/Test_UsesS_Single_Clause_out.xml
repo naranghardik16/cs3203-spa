@@ -1,126 +1,126 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>Tests02</name><parsing_time_taken>4.067000</parsing_time_taken>
+<name>Tests02</name><parsing_time_taken>4.113000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(SYN, WILDCARD) - has result">1</id><querystr><![CDATA[stmt s; Select s such that Uses(s  , _)]]></querystr>
 <stuans>6,5,7,4,3</stuans>
 <correct>3,4,5,6,7</correct>
-<time_taken>2.731000</time_taken>
+<time_taken>3.152000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(SYN, WILDCARD) - has result, select irrelevent syn">2</id><querystr><![CDATA[stmt s; read     r; Select r such that Uses(s, _)]]></querystr>
 <stuans>2,1</stuans>
 <correct>1,2</correct>
-<time_taken>2.210000</time_taken>
+<time_taken>2.212000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(SYN, WILDCARD) - has no result">3</id><querystr><![CDATA[read r; Select r such that Uses(r, _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.460000</time_taken>
+<time_taken>1.783000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has result select stmt">4</id><querystr><![CDATA[if     if; variable v; Select if such that Uses(if, v)]]></querystr>
 <stuans>4</stuans>
 <correct>4</correct>
-<time_taken>3.901000</time_taken>
+<time_taken>2.224000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has result select variable">5</id><querystr><![CDATA[if if;    variable v; Select   v such  that Uses(if, v)]]></querystr>
 <stuans>i,x</stuans>
 <correct>x,i</correct>
-<time_taken>3.623000</time_taken>
+<time_taken>2.038000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has result select irrelevent syn">6</id><querystr><![CDATA[if if; variable v; print p; Select p   such   that Uses(if, v)]]></querystr>
 <stuans>7,3</stuans>
 <correct>3,7</correct>
-<time_taken>2.690000</time_taken>
+<time_taken>2.144000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has no result">7</id><querystr><![CDATA[read r; variable v; Select     r     such that Uses(r, v)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.370000</time_taken>
+<time_taken>1.878000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, IDENT) - has result">8</id><querystr><![CDATA[if ifs; Select     ifs such that Uses     (ifs, "i")]]></querystr>
 <stuans>4</stuans>
 <correct>4</correct>
-<time_taken>2.630000</time_taken>
+<time_taken>2.897000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, IDENT) - has result select irrelevent syn">9</id><querystr><![CDATA[if ifs; read r; Select r such that Uses(ifs, "    i")]]></querystr>
 <stuans>2,1</stuans>
 <correct>1,2</correct>
-<time_taken>3.072000</time_taken>
+<time_taken>2.727000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, IDENT) - has no result">10</id><querystr><![CDATA[if ifs; read r; Select     r such that    Uses(ifs, "z    ")]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.480000</time_taken>
+<time_taken>2.153000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(INT, WILDCARD) - return true">11</id><querystr><![CDATA[while w; Select w such      that Uses(      3, _)]]></querystr>
 <stuans>5</stuans>
 <correct>5</correct>
-<time_taken>2.387000</time_taken>
+<time_taken>1.898000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(INT, WILDCARD) - return false">12</id><querystr><![CDATA[while w; Select w    such that Uses(2, _     )]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.695000</time_taken>
+<time_taken>1.989000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(INT, SYN) - has result">13</id><querystr><![CDATA[variable print; Select print such that Uses(7, print)]]></querystr>
 <stuans>x</stuans>
 <correct>x</correct>
-<time_taken>2.745000</time_taken>
+<time_taken>2.209000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(INT, SYN) - has result select irrelevent syn">14</id><querystr><![CDATA[variable print; assign a; Select a such that Uses(7, print)]]></querystr>
 <stuans>8,6</stuans>
 <correct>6,8</correct>
-<time_taken>2.744000</time_taken>
+<time_taken>2.245000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(INT, SYN) - has no result">15</id><querystr><![CDATA[variable print; Select print such that Uses(8, print)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.662000</time_taken>
+<time_taken>2.923000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" Pattern="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(INT, IDENT) - return true">16</id><querystr><![CDATA[if pattern; Select pattern such that Uses(5, "i")]]></querystr>
 <stuans>4</stuans>
 <correct>4</correct>
-<time_taken>2.905000</time_taken>
+<time_taken>2.311000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="2" CondNum="4" RelNum="1" comment="Uses(INT, IDENT) - return false">17</id><querystr><![CDATA[if such; Select such such that Uses(7, "i")]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.335000</time_taken>
+<time_taken>2.077000</time_taken>
 <passed/>
 </query>
 </queries>

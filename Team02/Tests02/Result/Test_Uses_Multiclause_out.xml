@@ -1,112 +1,112 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>Tests02</name><parsing_time_taken>6.005000</parsing_time_taken>
+<name>Tests02</name><parsing_time_taken>6.350000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="2 syn that are shared in both clauses/4 synonyms">1</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(a, v) pattern a(v,_" 1"_)]]></querystr>
 <stuans>8</stuans>
 <correct>8</correct>
-<time_taken>3.056000</time_taken>
+<time_taken>4.492000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="1 syn that is shared between both clauses/3 synonyms">2</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(a, v) pattern a("i", _" 5"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.627000</time_taken>
+<time_taken>3.752000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="1 syn that is shared between both clauses/2 synonyms">3</id><querystr><![CDATA[assign a; variable v; stmt s; Select s such that Uses(s, v) pattern a(v,_"   z   "_)]]></querystr>
 <stuans>11,9,6,5,7,10,8</stuans>
 <correct>5,6,7,8,9,10,11</correct>
-<time_taken>3.732000</time_taken>
+<time_taken>3.636000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="2" SuchThat="1" CondNum="6" RelNum="1" comment="0 syn that is shared between both clauses/2 synonyms">4</id><querystr><![CDATA[assign pattern; variable v; if ifs; Select ifs such that Uses(ifs, "x") pattern pattern("z",_)]]></querystr>
 <stuans>7</stuans>
 <correct>7</correct>
-<time_taken>3.183000</time_taken>
+<time_taken>3.094000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="0 syn that is shared between both clauses/1 synonym">5</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(5, "i") pattern a("i",_"x"_)]]></querystr>
 <stuans>11</stuans>
 <correct>11</correct>
-<time_taken>2.601000</time_taken>
+<time_taken>2.484000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="var syn that is shared in both clauses/4 synonyms total">6</id><querystr><![CDATA[assign a; variable v; Select v such that Uses(a, v) pattern a(v,_  " 1 "   _)]]></querystr>
 <stuans>z</stuans>
 <correct>z</correct>
-<time_taken>4.424000</time_taken>
+<time_taken>2.754000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is shared between both clauses/3 synonyms total">7</id><querystr><![CDATA[assign a; variable v; Select v such that Uses(7,v) pattern a(v,_"x"_)]]></querystr>
 <stuans>x</stuans>
 <correct>x</correct>
-<time_taken>3.504000</time_taken>
+<time_taken>2.587000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="2" Uses="1" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="var syn that is shared between both clauses/4 synonyms total">8</id><querystr><![CDATA[assign a; variable v; while w; Select v such that Uses(w, v) pattern a(v,_"1 " _)]]></querystr>
 <stuans>i,z</stuans>
 <correct>z,i</correct>
-<time_taken>3.921000</time_taken>
+<time_taken>3.306000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is not shared between both clauses">9</id><querystr><![CDATA[assign a; variable v; Select v such that Uses(6," z ") pattern a(v,_"1"_)]]></querystr>
 <stuans>a,i,z</stuans>
 <correct>a,z,i</correct>
-<time_taken>2.599000</time_taken>
+<time_taken>2.922000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses return false, pattern has result">10</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(1, "x") pattern a(v, _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.222000</time_taken>
+<time_taken>2.274000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses return false, pattern has no result">11</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(1, "x") pattern a("a", _"2"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.026000</time_taken>
+<time_taken>2.517000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses return true, pattern has no result">12</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(9, "x") pattern a("x", _"3"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.615000</time_taken>
+<time_taken>2.625000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses has result, pattern has no result">13</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(a, v) pattern a("i", _"3"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.200000</time_taken>
+<time_taken>3.036000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses has no result, pattern has no result">14</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(a, "y") pattern a("y", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.815000</time_taken>
+<time_taken>2.690000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Uses has no result, pattern has result">15</id><querystr><![CDATA[assign a; variable v; Select a such that Uses(a, "y") pattern a("x", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.519000</time_taken>
+<time_taken>2.959000</time_taken>
 <passed/>
 </query>
 </queries>

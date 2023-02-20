@@ -111,7 +111,9 @@ def Execute():
             continue
 
     print(test_report)
+    move_xsl_file_to_results = "cp analysis.xsl ./Result"
     start_python_host_command = "python -m http.server 8000"
+    os.system(move_xsl_file_to_results)
     os.system(start_python_host_command)
     print("Python host has started. Autotester run is complete.")
 

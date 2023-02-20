@@ -1,84 +1,84 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>Tests02</name><parsing_time_taken>10.984000</parsing_time_taken>
+<name>Tests02</name><parsing_time_taken>11.653000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="2" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="1 syn that are shared in both clauses/4 synonyms">1</id><querystr><![CDATA[assign a; variable v; stmt s; Select s such that Parent(s,  a) pattern    a(   v,   _"digit "_)]]></querystr>
 <stuans>12,8,4</stuans>
 <correct>4,8,12</correct>
-<time_taken>3.913000</time_taken>
+<time_taken>3.482000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="1 syn that is shared between both clauses/3 synonyms">2</id><querystr><![CDATA[assign a; variable v; stmt s; Select a such that Parent(s, a) pattern a("   digit",_"number"_)]]></querystr>
 <stuans>5</stuans>
 <correct>5</correct>
-<time_taken>3.092000</time_taken>
+<time_taken>3.724000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="2" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="1 syn that is shared between both clauses/2 synonyms">3</id><querystr><![CDATA[assign a; variable v; Select a such that Parent(8, a) pattern a(_, _"number"_)]]></querystr>
 <stuans>9</stuans>
 <correct>9</correct>
-<time_taken>2.714000</time_taken>
+<time_taken>3.532000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="2" SuchThat="1" CondNum="6" RelNum="1" comment="0 syn that is shared between both clauses/2 synonyms">4</id><querystr><![CDATA[assign pattern; variable    v; stmt Select; Select Select such that Parent(Select, 13) pattern pattern("sum",_"digit"_)]]></querystr>
 <stuans>12</stuans>
 <correct>12</correct>
-<time_taken>4.384000</time_taken>
+<time_taken>3.388000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="2" Pattern="1" SuchThat="1" CondNum="6" RelNum="1" comment="Parent return true, pattern has result">5</id><querystr><![CDATA[assign a; variable v    ; Select a    such that Parent(7, 14) pattern a(v, _" 10  "_)]]></querystr>
 <stuans>14,5,15</stuans>
 <correct>5,14,15</correct>
-<time_taken>2.808000</time_taken>
+<time_taken>2.695000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent return true, pattern has no result">6</id><querystr><![CDATA[assign    a; variable v; Select    a such    that Parent(7, 14) pattern a("sum", _"1"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.560000</time_taken>
+<time_taken>3.165000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent return false, pattern has result">7</id><querystr><![CDATA[assign a; variable v; Select a    such that Parent(7,   9) pattern a(v, _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.358000</time_taken>
+<time_taken>2.228000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent return false, pattern has no result">8</id><querystr><![CDATA[assign a; variable v; Select a such that Parent(   10, 13) pattern a("y   ", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.571000</time_taken>
+<time_taken>2.312000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent has result, pattern has no result">9</id><querystr><![CDATA[assign a; variable v; stmt s; Select a such that Parent(s, a  ) pattern a("number"   , _"sum"_)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.465000</time_taken>
+<time_taken>3.492000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent has no result, pattern has no result">10</id><querystr><![CDATA[assign a; variable v; Select a such that Parent(  1, a) pattern   a   ("y", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.237000</time_taken>
+<time_taken>2.820000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Parent="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Parent has no result, pattern has result">11</id><querystr><![CDATA[assign a; variable v; Select   a such that Parent   (2, a) pattern a("number", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.686000</time_taken>
+<time_taken>2.614000</time_taken>
 <passed/>
 </query>
 </queries>

@@ -1,14 +1,14 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>Tests02</name><parsing_time_taken>6.510000</parsing_time_taken>
+<name>Tests02</name><parsing_time_taken>5.803000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(SYN, WILDCARD) - has result">1</id><querystr><![CDATA[procedure p; Select p such that Uses(p, _)]]></querystr>
 <stuans></stuans>
 <correct>p,q,r</correct>
-<time_taken>2.622000</time_taken>
+<time_taken>2.673000</time_taken>
 <failed>
 <missing>p,q,r</missing>
 <additional></additional>
@@ -24,7 +24,7 @@
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(SYN, WILDCARD) - has result select irrelevant syn">2</id><querystr><![CDATA[procedure p; read r; Select r such that Uses(p, _)]]></querystr>
 <stuans></stuans>
 <correct>1,2,9,11</correct>
-<time_taken>2.650000</time_taken>
+<time_taken>2.683000</time_taken>
 <failed>
 <missing>1,11,2,9</missing>
 <additional></additional>
@@ -40,7 +40,7 @@
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has result select procedure">3</id><querystr><![CDATA[procedure p; variable v; Select p such that Uses(p, v)]]></querystr>
 <stuans></stuans>
 <correct>p,q,r</correct>
-<time_taken>2.404000</time_taken>
+<time_taken>2.272000</time_taken>
 <failed>
 <missing>p,q,r</missing>
 <additional></additional>
@@ -56,7 +56,7 @@
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, SYN) - has result select variable">4</id><querystr><![CDATA[procedure p; variable v; Select v such that Uses(p, v)]]></querystr>
 <stuans></stuans>
 <correct>x,i,q</correct>
-<time_taken>2.689000</time_taken>
+<time_taken>2.088000</time_taken>
 <failed>
 <missing>i,q,x</missing>
 <additional></additional>
@@ -88,14 +88,14 @@
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(SYN, IDENT) - has no result">6</id><querystr><![CDATA[procedure procedure;  Select procedure such that Uses(procedure, "y")]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>2.496000</time_taken>
+<time_taken>2.402000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(IDENT, WILDCARD) has result">7</id><querystr><![CDATA[if ifs; Select ifs such that Uses("r", _)]]></querystr>
 <stuans></stuans>
 <correct>4,12</correct>
-<time_taken>2.214000</time_taken>
+<time_taken>1.774000</time_taken>
 <failed>
 <missing>12,4</missing>
 <additional></additional>
@@ -111,14 +111,14 @@
 <id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="Uses(IDENT, WILDCARD) has no result">8</id><querystr><![CDATA[if ifs; Select ifs such that Uses("f", _)]]></querystr>
 <stuans></stuans>
 <correct></correct>
-<time_taken>3.402000</time_taken>
+<time_taken>1.852000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(IDENT, SYN) has result">9</id><querystr><![CDATA[variable v; Select v such that Uses("q", v)]]></querystr>
 <stuans></stuans>
 <correct>q,i</correct>
-<time_taken>2.043000</time_taken>
+<time_taken>1.923000</time_taken>
 <failed>
 <missing>i,q</missing>
 <additional></additional>
@@ -134,7 +134,7 @@
 <id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Uses(IDENT, IDENT) return true">10</id><querystr><![CDATA[print p; Select p such that Uses("r", "i")]]></querystr>
 <stuans></stuans>
 <correct>3,7,13,14</correct>
-<time_taken>2.065000</time_taken>
+<time_taken>2.010000</time_taken>
 <failed>
 <missing>13,14,3,7</missing>
 <additional></additional>
