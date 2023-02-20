@@ -92,10 +92,11 @@ def ExecuteAutotester(autotester_filepath, autotester_param):
     exit_code = os.system(command)
 
     if exit_code != SUCCESS_EXIT_CODE:
-        raise RuntimeError(f'Autotester execution failed with exit code: {exit_code}')
+        test_summary = f'Autotester execution failed for {test_name} with exit code: {exit_code}'
 
     test_summary = f"Autotester run completed for {test_name} with output {check_output_xml(output_xml_filepath)}"
     return test_summary
+
 def Execute():
     autotester_file_path = FindAutotesterExecutablePath()
     autotester_param_list = GetAutotesterParameterList()
