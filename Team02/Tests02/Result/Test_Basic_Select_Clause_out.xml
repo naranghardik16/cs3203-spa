@@ -1,0 +1,71 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>10.340000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select variables">1</id><querystr><![CDATA[variable x; Select x]]></querystr>
+<stuans>sum,digit,number</stuans>
+<correct>number,sum,digit</correct>
+<time_taken>1.542000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select constants">2</id><querystr><![CDATA[constant c; Select c]]></querystr>
+<stuans>100,10,0</stuans>
+<correct>0,10,100</correct>
+<time_taken>1.164000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select procedure">3</id><querystr><![CDATA[procedure p; Select p]]></querystr>
+<stuans>sumDigits</stuans>
+<correct>sumDigits</correct>
+<time_taken>1.199000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select if statements">4</id><querystr><![CDATA[if i; Select i]]></querystr>
+<stuans>10,8</stuans>
+<correct>8,10</correct>
+<time_taken>1.529000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select assign statements">5</id><querystr><![CDATA[assign a; Select a]]></querystr>
+<stuans>15,14,6,5,3</stuans>
+<correct>3,5,6,14,15</correct>
+<time_taken>1.573000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select read statements">6</id><querystr><![CDATA[read r; Select r]]></querystr>
+<stuans>2,1</stuans>
+<correct>1,2</correct>
+<time_taken>0.997000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select print statements">7</id><querystr><![CDATA[print pn; Select pn]]></querystr>
+<stuans>16,13,11,9</stuans>
+<correct>9,11,13,16</correct>
+<time_taken>1.117000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select while statements">8</id><querystr><![CDATA[while w; Select w]]></querystr>
+<stuans>12,7,4</stuans>
+<correct>4,7,12</correct>
+<time_taken>1.091000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Select statements">9</id><querystr><![CDATA[stmt s; Select s]]></querystr>
+<stuans>15,12,13,11,16,2,9,14,6,1,5,7,10,8,4,3</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16</correct>
+<time_taken>1.168000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

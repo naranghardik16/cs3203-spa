@@ -1,0 +1,120 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>5.637000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, WILDCARD) has result">1</id><querystr><![CDATA[assign a; Select a pattern a(_, _)]]></querystr>
+<stuans>9,6,5,7,8,4</stuans>
+<correct>4,5,6,7,8,9</correct>
+<time_taken>2.314000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, WILDCARD) has result select irrelevant syn">2</id><querystr><![CDATA[assign a;read r; Select r pattern a(_, _)]]></querystr>
+<stuans>1</stuans>
+<correct>1</correct>
+<time_taken>1.708000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, WILDCARD) has result but select irrelevant syn which has no result">3</id><querystr><![CDATA[assign a;print p; Select p pattern a(_, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.576000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, SUBEXPR) has result">4</id><querystr><![CDATA[assign a; Select a pattern a(_, _"1"_)]]></querystr>
+<stuans>6,5,8</stuans>
+<correct>5,6,8</correct>
+<time_taken>2.069000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, SUBEXPR) has result select irrelevant syn">5</id><querystr><![CDATA[if ifs;assign a; Select ifs pattern a(_, _"x"_)]]></querystr>
+<stuans>2</stuans>
+<correct>2</correct>
+<time_taken>1.895000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="pattern a(WILDCARD, SUBEXPR) has no result">6</id><querystr><![CDATA[assign a; Select a pattern a(_, _"a"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.532000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(SYN, WILDCARD) has result keyword as SYN name">7</id><querystr><![CDATA[assign pattern; variable Select; Select Select pattern pattern(Select, _)]]></querystr>
+<stuans>i,z,x</stuans>
+<correct>x,i,z</correct>
+<time_taken>2.357000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(SYN, WILDCARD) has result keyword as SYN name select irrelevant syn">8</id><querystr><![CDATA[assign pattern; variable Select; while while; Select while pattern pattern(Select, _)]]></querystr>
+<stuans>3</stuans>
+<correct>3</correct>
+<time_taken>3.033000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(SYN, SUBEXPR) has result">9</id><querystr><![CDATA[assign pattern; variable Select; Select Select pattern pattern(Select, _"x"_)]]></querystr>
+<stuans>z,x</stuans>
+<correct>x,z</correct>
+<time_taken>2.967000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(SYN, SUBEXPR) has result select irrelevant syn">10</id><querystr><![CDATA[assign pattern; variable Select; read read; Select read pattern pattern(Select, _"x"_)]]></querystr>
+<stuans>1</stuans>
+<correct>1</correct>
+<time_taken>2.622000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(SYN, SUBEXPR) has no result">11</id><querystr><![CDATA[assign pattern; variable Select; Select Select pattern pattern(Select, _"a"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.425000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="3" CondNum="5" RelNum="0" comment="pattern a(VARNAME, WILDCARD) has result">12</id><querystr><![CDATA[assign pattern; Select pattern pattern pattern("x", _)]]></querystr>
+<stuans>6,4</stuans>
+<correct>4,6</correct>
+<time_taken>2.184000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="2" CondNum="4" RelNum="0" comment="pattern a(VARNAME, WILDCARD) has result select irrelevant syn">13</id><querystr><![CDATA[assign pattern; if ifs; Select ifs pattern pattern("x", _)]]></querystr>
+<stuans>2</stuans>
+<correct>2</correct>
+<time_taken>1.907000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="3" CondNum="5" RelNum="0" comment="pattern a(VARNAME, WILDCARD) has no result">14</id><querystr><![CDATA[assign pattern; Select pattern pattern pattern("a", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.854000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="3" CondNum="5" RelNum="0" comment="pattern a(VARNAME, SUBEXPR) has result">15</id><querystr><![CDATA[assign pattern; Select pattern pattern pattern("x", _"1"_)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>2.072000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="3" CondNum="5" RelNum="0" comment="pattern a(VARNAME, SUBEXPR) has no result">16</id><querystr><![CDATA[assign pattern; Select pattern pattern pattern("x", _"4"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.840000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

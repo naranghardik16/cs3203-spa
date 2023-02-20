@@ -1,0 +1,113 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>6.099000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="2 syn that are shared in both clauses/4 synonyms">1</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, v) pattern a(v,_"1"_)]]></querystr>
+<stuans>11,8,4</stuans>
+<correct>4,8,11</correct>
+<time_taken>3.291000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="1 syn that is shared between both clauses/3 synonyms">2</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, v) pattern a("x",_)]]></querystr>
+<stuans>9,6,10,1</stuans>
+<correct>1,6,9,10</correct>
+<time_taken>2.556000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="1 syn that is shared between both clauses/2 synonyms">3</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, "i") pattern a("i",_)]]></querystr>
+<stuans>11,3</stuans>
+<correct>3,11</correct>
+<time_taken>3.256000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="2" SuchThat="1" CondNum="6" RelNum="1" comment="0 syn  that is shared between both clauses/2 synonyms">4</id><querystr><![CDATA[assign Select,pattern; variable v; Select Select such that Modifies(Select, "x") pattern pattern("z",_"z"_)]]></querystr>
+<stuans>9,6,10,1</stuans>
+<correct>1,6,9,10</correct>
+<time_taken>3.915000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="0 syn  that is shared between both clauses/1 synonym">5</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(11, "i") pattern a("z",_"3"_)]]></querystr>
+<stuans>2</stuans>
+<correct>2</correct>
+<time_taken>2.706000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is shared in both clauses/4 synonyms total/2 syn shared">6</id><querystr><![CDATA[assign a; variable v; Select v such that Modifies(a, v) pattern a(v,_"1"_)]]></querystr>
+<stuans>a,i,z</stuans>
+<correct>a,z,i</correct>
+<time_taken>3.025000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is shared between both clauses/3 synonyms total/1 syn shared">7</id><querystr><![CDATA[assign a; variable v; read r; Select v such that Modifies(r,v) pattern a(v,_"a"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.677000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is shared between both clauses/2 synonyms total/0 syn shared">8</id><querystr><![CDATA[assign a; variable v; Select v such that Modifies(8,v) pattern a(_,_"i"_)]]></querystr>
+<stuans>z</stuans>
+<correct>z</correct>
+<time_taken>2.863000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="var syn that is not shared between both clauses">9</id><querystr><![CDATA[assign a; variable v; Select v such that Modifies(11,"i") pattern a(v,_"2"_)]]></querystr>
+<stuans>x</stuans>
+<correct>x</correct>
+<time_taken>3.839000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies return false, pattern has result">10</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(1, "z") pattern a(v, _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.497000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies return false, pattern has no result">11</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(1, "z") pattern a("y", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.301000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies return true, pattern has no result">12</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(9, "x") pattern a("y", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.363000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies has result, pattern has no result">13</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, v) pattern a("y", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.379000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies has no result, pattern has no result">14</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, "y") pattern a("y", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.734000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Modifies has no result, pattern has result">15</id><querystr><![CDATA[assign a; variable v; Select a such that Modifies(a, "y") pattern a("x", _)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.892000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

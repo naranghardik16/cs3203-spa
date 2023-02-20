@@ -1,0 +1,246 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>3.407000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Modifies="1" CondNum="2" RelNum="1" comment="Select Modifies with invalid syntax">1</id><querystr><![CDATA[stmt s; assign a; Select a suchthat Modifies(s,a)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.898000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="1" CondNum="5" RelNum="1" comment="Pattern with missing arguments">2</id><querystr><![CDATA[assign a; Select a such that Modifies(a,_) pattern a(,)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.268000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" Pattern="1" SuchThat="1" CondNum="4" RelNum="1" comment="Pattern with missing input">3</id><querystr><![CDATA[assign a; Select a such that Modifies(a,"count") pattern]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>4.303000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Pattern with bad formatting">4</id><querystr><![CDATA[assign a; Select a such that Modifies(a,"count") patterna("count", _)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.469000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="Pattern with bad invalid expression spec">5</id><querystr><![CDATA[assign a; Select a pattern a("count","_1y_")]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.156000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="Pattern with bad invalid expression spec">6</id><querystr><![CDATA[assign a; Select a pattern a("count","1y_")]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.910000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="Pattern with bad invalid expression spec">7</id><querystr><![CDATA[assign a; Select a pattern a("count",_1y_")]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.838000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="Such That with bad formatting">8</id><querystr><![CDATA[assign a; Select a suchthatModifies(a,"count") pattern a("count", _)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.982000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" Pattern="1" SuchThat="2" CondNum="6" RelNum="1" comment="Incomplete clause is present">9</id><querystr><![CDATA[assign a; Select a such that Modifies(a,"count") such that pattern a("count", _)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>3.681000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="Invalid design entity in declaration">10</id><querystr><![CDATA[variables v; Select a]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.686000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Extra characters in the clause">11</id><querystr><![CDATA[assign a; Select a such that Uses((a,"count");]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.887000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Extra characters in the clause">12</id><querystr><![CDATA[assign a; Select a such that Uses(a,"count"));]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.754000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Extra characters in the clause">13</id><querystr><![CDATA[assign a; Select a such that Uses(a,,"count");]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.367000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="Extra characters in the clause">14</id><querystr><![CDATA[assign a; Select a such that Uses(a;"count");]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.201000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" SuchThat="1" CondNum="5" RelNum="0" comment="extra invalid characters at end of clause">15</id><querystr><![CDATA[assign a; Select a pattern a(_, _) such that]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.092000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="extra invalid characters at end of clause">16</id><querystr><![CDATA[assign a; Select a pattern a(_, _);]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.127000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" SuchThat="1" CondNum="2" RelNum="0" comment="Invalid declaration of subclause">17</id><querystr><![CDATA[assign a; Select a such that Follo(1,3)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.209000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="Extra arguments in subclause">18</id><querystr><![CDATA[assign a; Select a such that Follows(1,3,5)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.742000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="Use of IDENT in stmt reference">19</id><querystr><![CDATA[assign a; Select a such that Follows("anya", 3)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>3.114000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Use of IDENT in stmt reference">20</id><querystr><![CDATA[assign a; Select a such that Follows*("anya", 3)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>3.304000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Parent="1" SuchThat="1" CondNum="3" RelNum="1" comment="Use of IDENT in stmt reference">21</id><querystr><![CDATA[assign a; Select a such that Parent("anya", 3)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.244000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Parentstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Use of IDENT in stmt reference">22</id><querystr><![CDATA[assign a; Select a such that Parent*("anya", 3)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.197000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" SuchThat="1" CondNum="3" RelNum="0" comment="multiple invalid clauses">23</id><querystr><![CDATA[assign a; Select a such thatParent*(1, 3) patterna("count", _)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.431000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="No select statement">24</id><querystr><![CDATA[assign a; ]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.787000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="No select statement">25</id><querystr><![CDATA[assign a; Select]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.007000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="No select keyword">26</id><querystr><![CDATA[assign a; variable v; a such that Modifies(a,v)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.793000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="2" CondNum="4" RelNum="1" comment="extra characters at start of statement">27</id><querystr><![CDATA[assign a; variable v; such that Select a such that Modifies(a,v)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.494000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="extra characters at start of statement">28</id><querystr><![CDATA[a assign a; variable v; Select a]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.291000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="missing synonym">29</id><querystr><![CDATA[assign a; variable v; Select such that Modifies(a,v)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.722000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="invalid synonym">30</id><querystr><![CDATA[assign 1a,b; Select 1a such that Modifies(1a,v)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.367000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="invalid synonym">31</id><querystr><![CDATA[assign 123,b; Select b such that Modifies(123,v)]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.647000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="- missing synonym in declaration">32</id><querystr><![CDATA[assign a; stmt; Select a]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>2.401000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" CondNum="1" RelNum="0" comment="- no comma in declaration">33</id><querystr><![CDATA[assign a a1; Select a]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.870000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="- invalid IDENT">34</id><querystr><![CDATA[assign a; Select a such that Modifies(a, "1")]]></querystr>
+<stuans>SyntaxError</stuans>
+<correct>SyntaxError</correct>
+<time_taken>1.916000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>

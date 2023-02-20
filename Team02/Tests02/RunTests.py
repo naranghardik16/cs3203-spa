@@ -1,6 +1,7 @@
 import os
 import glob
 from collections import Counter
+from typing import List
 
 """
 This code took reference from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
@@ -20,12 +21,17 @@ SUCCESS_TAG = '<passed/>'
 OUTPUT_DIRECTORY = MakePathSuitableForOS(os.getcwd() + "\\Result")
 
 def FindAutotesterExecutablePath():
-    search_for_autotester_file_path = os.getcwd()[:-8] + "/Code02/**/autotester.exe"
-    files = glob.glob(search_for_autotester_file_path, recursive=True)
-    if len(files) == 0:
-        raise Exception("Unable to find autotester.exe in Code02 folder")
-    autotester_file_path = files[0]
-    return autotester_file_path
+    results: List[str] = list()
+    file_name = 'autotester.exe' if os.name == WINDOWS_OS_NAME else 'autotester'
+    for root, dirs, files in os.walk(os.path.dirname(os.getcwd())):
+        if file_name in files:
+            results.append(os.path.join(root, file_name))
+
+    if len(results) == 0:
+        raise Exception(f'Unable to find {file_name} in `Code02/` folder')
+
+    # defaulting to return the first file in the possible results
+    return results[0]
 
 def MakeResultDirectory():
     isExist = os.path.exists(OUTPUT_DIRECTORY)
@@ -51,9 +57,12 @@ def GetAutotesterParameterList():
         query_test_name = query_file_name[:-11]
         assert source_test_name == query_test_name, f"Source file name is {source_test_name} while query file name is {query_test_name}"
 
-        test_name = source_file_name[source_file_name.rfind("\\")+1:-10]
+        backslash_char = "\\"
+        x = backslash_char if os.name == WINDOWS_OS_NAME else '/'
 
-        output_file_name = f"{OUTPUT_DIRECTORY}\\{test_name}out.xml"
+        test_name = source_file_name[source_file_name.rfind(x)+1:-10]
+
+        output_file_name = f"{OUTPUT_DIRECTORY}{x}{test_name}out.xml"
         autotester_parameter_list.append([source_file_name, query_file_name, output_file_name, test_name])
 
     return autotester_parameter_list

@@ -1,0 +1,176 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>3.387000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">1</id><querystr><![CDATA[stmt s; Select a such that Modifies(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.263000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">2</id><querystr><![CDATA[stmt s; Select a such that Uses(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.306000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">3</id><querystr><![CDATA[stmt s; Select a such that Follows(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.678000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">4</id><querystr><![CDATA[stmt s; Select a such that Follows*(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.732000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Parent="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">5</id><querystr><![CDATA[stmt s; Select a such that Parent(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.607000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Parentstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="undeclared synonym">6</id><querystr><![CDATA[stmt s; Select a such that Parent*(s,a)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.015000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="repeated synonym">7</id><querystr><![CDATA[stmt s, s1, s1; Select s such that Follows(s, s1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.872000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Parent="1" SuchThat="1" CondNum="3" RelNum="1" comment="repeated synonym">8</id><querystr><![CDATA[stmt s, s1; read s1; Select s such that Parent(s, s1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.915000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Pattern="1" CondNum="4" RelNum="0" comment="not assign synonym for pattern clause">9</id><querystr><![CDATA[stmt s; Select s pattern s(_, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.580000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="arg_1 for Modifies is WILDCARD">10</id><querystr><![CDATA[stmt s; Select s such that Modifies(_, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.723000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="2" Uses="1" SuchThat="1" CondNum="5" RelNum="1" comment="arg_1 for Uses is WILDCARD">11</id><querystr><![CDATA[stmt s; Select s such that Uses(_, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.743000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_1 for Follows is not stmt synonym or its subset">12</id><querystr><![CDATA[variable v; Select v such that Follows(v, 1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.885000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Follows="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Follows is not stmt synonym or its subset">13</id><querystr><![CDATA[variable v; Select v such that Follows(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.354000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_1 for Follows* is not stmt synonym or its subset">14</id><querystr><![CDATA[variable v; Select v such that Follows*(v, 1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.263000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Follows* is not stmt synonym or its subset">15</id><querystr><![CDATA[variable v; Select v such that Follows*(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.166000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_1 for Parent is not stmt synonym or its subset">16</id><querystr><![CDATA[variable v; Select v such that Follows*(v, 1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.070000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Parent is not stmt synonym or its subset">17</id><querystr><![CDATA[procedure v; Select v such that Follows*(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.760000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_1 for Parent* is not stmt synonym or its subset">18</id><querystr><![CDATA[constant v; Select v such that Follows*(v, 1)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.989000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Parent* is not stmt synonym or its subset">19</id><querystr><![CDATA[variable v; Select v such that Follows*(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.967000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Uses="1" SuchThat="1" CondNum="4" RelNum="1" comment="arg_1 for Uses is not stmt synonym or its subset, or procedure synonym">20</id><querystr><![CDATA[variable v; Select v such that Uses(v, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.761000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="arg_1 for Modifies is not stmt synonym or its subset, or procedure synonym">21</id><querystr><![CDATA[constant v; Select v such that Modifies(v, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.237000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Uses="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Uses is not variable synonym">22</id><querystr><![CDATA[stmt v; Select v such that Uses(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.405000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Modifies="1" SuchThat="1" CondNum="3" RelNum="1" comment="arg_2 for Modifies is not variable synonym">23</id><querystr><![CDATA[read v; Select v such that Modifies(1, v)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>2.283000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" UnnamedVar="1" Pattern="1" CondNum="3" RelNum="0" comment="arg_1 for pattern is not variable synonym">24</id><querystr><![CDATA[print v; assign a; Select v pattern a(v, _)]]></querystr>
+<stuans>SemanticError</stuans>
+<correct>SemanticError</correct>
+<time_taken>1.966000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>
