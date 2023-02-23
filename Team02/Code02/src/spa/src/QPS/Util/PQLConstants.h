@@ -7,10 +7,13 @@
  */
 namespace pql_constants {
 
+const char kTupleOpeningBracket = '<';
+const char kTupleClosingBracket = '>';
 const char kOpeningBracket = '(';
 const char kClosingBracket = ')';
 const char kComma = ',';
 
+const std::string kSelectBoolean = "BOOLEAN";
 const std::string kSuchThatStartIndicator = "such that ";
 const std::string kPatternStartIndicator = "pattern ";
 const std::string kSelectKeyword = "Select";

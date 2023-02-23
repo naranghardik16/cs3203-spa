@@ -114,14 +114,61 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
 }
 
 SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
-  SelectedSynonymTuple synonym_vector;
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
-  std::string synonym = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
-  if (!QueryUtil::IsSynonym(synonym)) {
-    throw SyntaxErrorException("There is syntax error due to the synonym not adhering to synonym lexical rules.");
+  std::string first_word = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
+  char first_char = first_word[0];
+  SelectedSynonymTuple synonym_vector;
+  //! BOOLEAN case
+  if ((first_word == pql_constants::kSelectBoolean)) {
+    synonym_vector = {};
+  } else if (first_char == pql_constants::kTupleOpeningBracket) {
+    //! Multiple elem case
+    synonym_vector = ParseForMultipleSynonyms(trimmed_select_keyword_removed_clause);
+  } else {
+    //! Single elem case -- synonym should be the first word e.g. Select a
+    synonym_vector = {first_word};
   }
-  synonym_vector.push_back(synonym);
+
+  //TODO to directly pass to validator to validate instead of looping and checking declaration map
+  //SelectSynonymSyntaxValidator->validate(synonym_tuple)
+  //SelectSynonymSemanticValidator->validate(synonym_tuple)
+  if (!synonym_vector.empty()) {
+    for (auto synonym : synonym_vector) {
+      if (!QueryUtil::IsSynonym(synonym)) {
+        throw SyntaxErrorException();
+      }
+    }
+  }
   return synonym_vector;
+}
+
+SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause) {
+  SelectedSynonymTuple synonym_vector;
+  size_t closing_tuple_bracket_index = trimmed_select_keyword_removed_clause.find(pql_constants::kTupleClosingBracket);
+  if (closing_tuple_bracket_index == std::string::npos) {
+    throw SyntaxErrorException("No closing bracket for tuple");
+  }
+  // condition to run this function is that < is at index 0
+  std::string synonyms_seperated_by_comma_substr = string_util::Trim(trimmed_select_keyword_removed_clause.substr(1,
+                                                                                                                  closing_tuple_bracket_index-1));
+  synonym_vector = string_util::SplitStringByDelimiter(synonyms_seperated_by_comma_substr, ",");
+  return synonym_vector;
+}
+
+std::string QpsTokenizer::GetRemainingClauseAfterSynonym(std::string select_keyword_removed_clause) {
+  std::string end_of_syn_marker;
+  std::string first_word = string_util::GetFirstWord(select_keyword_removed_clause);
+  char first_char = first_word[0];
+  if (first_word == pql_constants::kSelectBoolean) {
+    end_of_syn_marker = pql_constants::kSelectBoolean;
+  } else if (first_char == pql_constants::kTupleOpeningBracket) {
+    //! Multiple elem case
+    end_of_syn_marker.append(1, pql_constants::kTupleClosingBracket);
+  } else {
+    //! Single elem case -- synonym should be the first word e.g. Select a
+    end_of_syn_marker = first_word;
+  }
+  return string_util::GetSubStringAfterKeyword(select_keyword_removed_clause, end_of_syn_marker);
 }
 
 SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause, const std::string& clause_start_indicator) {

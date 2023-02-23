@@ -33,12 +33,12 @@ class QpsTokenizer {
   QueryLinesPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   /**
-   * Parses for the synonym in the clause
-   * @param clause with extra white space removed and has the Select keyword removed
+   * Parses for the synonym in the trimmed_select_keyword_removed_clause
+   * @param trimmed_select_keyword_removed_clause with extra white space removed and has the Select keyword removed
    * @throws SyntaxErrorException if the synonym does not adhere to the lexical rules of being a synonym
    * @return synonym
    */
-  SelectedSynonymTuple ParseSynonym(const std::string& clause);
+  SelectedSynonymTuple ParseSynonym(const std::string& trimmed_select_keyword_removed_clause);
 
   /**
    * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for semantic validation
@@ -87,4 +87,6 @@ class QpsTokenizer {
   */
   SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause,const std::string& clause_start_indicator);
 
+  SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
+  string GetRemainingClauseAfterSynonym(std::string clause);
 };

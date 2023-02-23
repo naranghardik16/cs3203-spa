@@ -166,23 +166,35 @@ TEST_CASE("Check if SplitQuery works") {
 }
 
 TEST_CASE("Test if ParseSynonym works") {
-  SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
-    std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    try {
-      auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
-    } catch (const SyntaxErrorException &e) {
-      REQUIRE(true);
-    }
+  SECTION("Valid_MultipleSyn_WithSpaces") {
+    std::string select_keyword_removed_query = "  < a     , w     , if      , if1       > such that Calls (\"Second\", \"Third\")";
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    SelectedSynonymTuple correct_tuple = {"a", "w", "if", "if1"};
+    REQUIRE(synonym_tuple == correct_tuple);
+  }
+
+  SECTION("Valid_MultipleSyn") {
+    std::string select_keyword_removed_query = "<a, w, if, if1> such that Calls (\"Second\", \"Third\")";
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    SelectedSynonymTuple correct_tuple = {"a", "w", "if", "if1"};
+    REQUIRE(synonym_tuple == correct_tuple);
+  }
+
+  SECTION("Valid_BOOLEAN_Syn") {
+    std::string select_keyword_removed_query = "BOOLEAN such that Parent* (w, a)";
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    REQUIRE(synonym_tuple.empty());
   }
 
   SECTION("ValidSynonym_ReturnString") {
     std::string select_keyword_removed_query = "Select such that Parent* (w, a) pattern a (\"count\", _)";
-    try {
-      auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
-      REQUIRE(synonym_tuple[0] == "Select");
-    } catch (const SyntaxErrorException &e) {
-      REQUIRE(false);
-    }
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    REQUIRE(synonym_tuple[0] == "Select");
+  }
+
+  SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
+    std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tokenizer->ParseSynonym(select_keyword_removed_query), SyntaxErrorException);
   }
 }
 
