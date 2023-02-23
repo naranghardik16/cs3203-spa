@@ -19,7 +19,7 @@ class Result {
    * Both of the table should not be empty, else nothing will happen.
    */
   void JoinResult(std::shared_ptr<Result> result);
-  std::unordered_set<std::string> ProjectResult(Synonym synonym);
+  std::unordered_set<std::string> ProjectResult(SelectedSynonymTuple synonym);
 
   //!Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);

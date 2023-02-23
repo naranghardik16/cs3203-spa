@@ -10,7 +10,8 @@
  */
 typedef std::vector<std::string> Declarations;
 typedef std::string SelectStatement;
-typedef std::pair<Declarations, SelectStatement> QueryStatementPair;
+typedef std::vector<std::string> SelectedSynonymTuple;
+typedef std::pair<Declarations, SelectStatement> QueryLinesPair;
 
 typedef std::string Synonym;
 typedef std::string DesignEntity;

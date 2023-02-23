@@ -17,7 +17,7 @@ bool PatternClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return false;
 }
 
-std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
+std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
   std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   return eval;
 }

@@ -30,7 +30,7 @@ class QpsTokenizer {
  * @param query_extra_whitespace_removed is the query with any duplicate white space removed
  * @throws SyntaxErrorException if there is no Select statement or if there is no Select keyword in the Select statement
  */
-  QueryStatementPair SplitQuery(const std::string& query_extra_whitespace_removed);
+  QueryLinesPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   /**
    * Parses for the synonym in the clause
@@ -38,7 +38,7 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the synonym does not adhere to the lexical rules of being a synonym
    * @return synonym
    */
-  std::string ParseSynonym(const std::string& clause);
+  SelectedSynonymTuple ParseSynonym(const std::string& clause);
 
   /**
    * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for semantic validation

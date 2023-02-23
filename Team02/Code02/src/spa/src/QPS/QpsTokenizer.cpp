@@ -13,7 +13,7 @@
 
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
 
-QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
+QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
   std::string delimiter = ";";
   std::vector<std::string> declaration_statements;
   std::string declaration;
@@ -40,7 +40,7 @@ QueryStatementPair QpsTokenizer::SplitQuery(const std::string& query_extra_white
     throw SyntaxErrorException("There is no Select keyword in the Select statement");
   }
 
-  QueryStatementPair declaration_select_statement_pair;
+  QueryLinesPair declaration_select_statement_pair;
   declaration_select_statement_pair.first = declaration_statements;
   declaration_select_statement_pair.second = select_statement;
   return declaration_select_statement_pair;
@@ -113,14 +113,15 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
   return synonym_to_design_entity_map;
 }
 
-std::string QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
-  std::vector<std::string> synonym_vector;
+SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
+  SelectedSynonymTuple synonym_vector;
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
   std::string synonym = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
   if (!QueryUtil::IsSynonym(synonym)) {
     throw SyntaxErrorException("There is syntax error due to the synonym not adhering to synonym lexical rules.");
   }
-  return synonym;
+  synonym_vector.push_back(synonym);
+  return synonym_vector;
 }
 
 SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause, const std::string& clause_start_indicator) {

@@ -21,7 +21,7 @@ TEST_CASE("Test Valid Query Parser") {
   SECTION("Test valid query with random spacing") {
     std::string query("assign a;\nSelect a such    that Uses(a, \"   count   \") pattern a(_,       _  \"  y     \" _)");
     auto parser_output = qp->ParseQuery(query);
-    auto synonym = parser_output->GetSynonym();
+    auto synonym_tuple = parser_output->GetSynonymTuple();
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
@@ -39,9 +39,9 @@ TEST_CASE("Test Valid Query Parser") {
     }
 
     Map correct_declaration_map = {{"a", "assign"}};
-    Synonym correct_synonym = "a";
+    SelectedSynonymTuple correct_synonym_tuple = {"a"};
 
-    REQUIRE(correct_synonym == synonym);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }
@@ -50,7 +50,7 @@ TEST_CASE("Test Valid Query Parser") {
     std::string query
         ("assign a;\nSelect   a pattern   a (  \"x\"   ,     _\"x\"_   )    such that      Uses   (      a,  \"x\" )  ");
     auto parser_output = qp->ParseQuery(query);
-    auto synonym = parser_output->GetSynonym();
+    auto synonym_tuple = parser_output->GetSynonymTuple();
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
@@ -67,9 +67,9 @@ TEST_CASE("Test Valid Query Parser") {
     }
 
     Map correct_declaration_map = {{"a", "assign"}};
-    Synonym correct_synonym = "a";
+    SelectedSynonymTuple correct_synonym_tuple = {"a"};
 
-    REQUIRE(correct_synonym == synonym);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }
@@ -78,7 +78,7 @@ TEST_CASE("Test Valid Query Parser") {
     std::string query
         ("    assign     pattern; variable      Select        ;\nSelect Select such that Uses(pattern, Select) pattern pattern(Select, _\"x\"_)");
     auto parser_output = qp->ParseQuery(query);
-    auto synonym = parser_output->GetSynonym();
+    auto synonym_tuple = parser_output->GetSynonymTuple();
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
@@ -96,9 +96,9 @@ TEST_CASE("Test Valid Query Parser") {
     }
 
     Map correct_declaration_map = {{"pattern", "assign"}, {"Select", "variable"}};
-    Synonym correct_synonym = "Select";
+    SelectedSynonymTuple correct_synonym_tuple = {"Select"};
 
-    REQUIRE(correct_synonym == synonym);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }
@@ -111,15 +111,15 @@ TEST_CASE("Test Valid Query Parser") {
   SECTION("Test valid query with a basic select statement") {
     std::string query("variable k; Select k");
     auto parser_output = qp->ParseQuery(query);
-    auto synonym = parser_output->GetSynonym();
+    auto synonym_tuple = parser_output->GetSynonymTuple();
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
     ClauseSyntaxPtrList correct_clause_syntax_ptr_list = {};
     Map correct_declaration_map = {{"k", "variable"}};
-    Synonym correct_synonym = "k";
+    SelectedSynonymTuple correct_synonym_tuple = {"k"};
     REQUIRE(correct_clause_syntax_ptr_list == clause_syntax_ptr_list);
-    REQUIRE(correct_synonym == synonym);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }

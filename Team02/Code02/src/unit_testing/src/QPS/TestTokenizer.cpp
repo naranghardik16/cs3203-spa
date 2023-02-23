@@ -169,7 +169,7 @@ TEST_CASE("Test if ParseSynonym works") {
   SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
     std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
     try {
-      auto synonym = tokenizer->ParseSynonym(select_keyword_removed_query);
+      auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
     } catch (const SyntaxErrorException &e) {
       REQUIRE(true);
     }
@@ -178,8 +178,8 @@ TEST_CASE("Test if ParseSynonym works") {
   SECTION("ValidSynonym_ReturnString") {
     std::string select_keyword_removed_query = "Select such that Parent* (w, a) pattern a (\"count\", _)";
     try {
-      auto synonym = tokenizer->ParseSynonym(select_keyword_removed_query);
-      REQUIRE(synonym == "Select");
+      auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+      REQUIRE(synonym_tuple[0] == "Select");
     } catch (const SyntaxErrorException &e) {
       REQUIRE(false);
     }
