@@ -1,0 +1,120 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>Tests02</name><parsing_time_taken>8.851000</parsing_time_taken>
+</info>
+<queries>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="2" SuchThat="1" CondNum="5" RelNum="1" comment="Follows*(WILDCARD, WILDCARD) return true">1</id><querystr><![CDATA[read r; Select r such that Follows*(_, _)]]></querystr>
+<stuans>13,2,1</stuans>
+<correct>1,2,13</correct>
+<time_taken>2.120000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(WILDCARD, SYN) has result">2</id><querystr><![CDATA[assign a; Select a such that Follows*(_, a)]]></querystr>
+<stuans>15,9,8,7</stuans>
+<correct>7,8,9,15</correct>
+<time_taken>3.149000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(WILDCARD, SYN) has no result">3</id><querystr><![CDATA[while w;  Select w such that Follows*(_, w)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.283000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(_, INT) return true">4</id><querystr><![CDATA[print p; Select p such that Follows*(_, 3) ]]></querystr>
+<stuans>12,11,3</stuans>
+<correct>3,11,12</correct>
+<time_taken>2.333000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(_, INT) return false">5</id><querystr><![CDATA[print p; Select p such that Follows*(_, 1) ]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.892000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(SYN, WILDCARD) has result">6</id><querystr><![CDATA[stmt s; Select s such that Follows*(s, _)]]></querystr>
+<stuans>6,9,5,2,1,10,8,4,3</stuans>
+<correct>1,2,3,4,5,6,8,9,10</correct>
+<time_taken>1.951000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(SYN, SYN) has result">7</id><querystr><![CDATA[if ifs; stmt s; Select ifs such that Follows*(s, ifs)]]></querystr>
+<stuans>10,4</stuans>
+<correct>4,10</correct>
+<time_taken>2.372000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(SYN, SYN) has no result">8</id><querystr><![CDATA[if ifs; print p; Select ifs such that Follows*(ifs, p)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.022000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(SYN, INT) has result">9</id><querystr><![CDATA[while w; constant c; Select c such that Follows*(w, 10)]]></querystr>
+<stuans>1,2,3,0</stuans>
+<correct>0,1,2,3</correct>
+<time_taken>2.185000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(SYN, INT) has no result">10</id><querystr><![CDATA[while w; constant c; Select c such that Follows*(w, 4)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.032000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(INT, WILDCARD) return true">11</id><querystr><![CDATA[constant c; Select c such that Follows*(1, _)]]></querystr>
+<stuans>1,2,3,0</stuans>
+<correct>0,1,2,3</correct>
+<time_taken>2.176000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" UnnamedVar="1" SuchThat="1" CondNum="4" RelNum="1" comment="Follows*(INT, WILDCARD) return false">12</id><querystr><![CDATA[constant c; Select c such that Follows*(_, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>2.216000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(INT, SYN) has result">13</id><querystr><![CDATA[stmt s; Select s such that Follows*(5, s)]]></querystr>
+<stuans>13,9,10,8</stuans>
+<correct>8,9,10,13</correct>
+<time_taken>2.213000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(INT, SYN) has no result">14</id><querystr><![CDATA[print p; Select p such that Follows*(5, p)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.793000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(INT, INT) return true">15</id><querystr><![CDATA[if ifs; Select ifs such that Follows*(4, 15)]]></querystr>
+<stuans>10,4</stuans>
+<correct>4,10</correct>
+<time_taken>1.709000</time_taken>
+<passed/>
+</query>
+<query>
+<id ReturnTuple="1" Followsstar="1" SuchThat="1" CondNum="3" RelNum="1" comment="Follows*(INT, INT) return false">16</id><querystr><![CDATA[if ifs; Select ifs such that Follows*(2, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>1.844000</time_taken>
+<passed/>
+</query>
+</queries>
+</test_results>
