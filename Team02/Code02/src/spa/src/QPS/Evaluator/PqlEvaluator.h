@@ -11,9 +11,10 @@
  */
 class PqlEvaluator {
  private:
-  Synonym synonym_;
+  SelectedSynonymTuple synonym_tuple_;
   Map declaration_map_;
-  ClauseSyntaxPtrList syntax_pair_list_;
+  ClauseSyntaxPtrList syntax_list_;
+  bool is_return_empty_set;
   std::shared_ptr<PkbReadFacade> pkb_;
 
  public:
@@ -29,5 +30,9 @@ class PqlEvaluator {
    * Evaluates a basic Select statement without subclauses
    * @return Result class, which stores the evaluation information for handling in Evaluator
    */
-  std::shared_ptr<Result> EvaluateBasicSelectStatement();
+  std::shared_ptr<Result> EvaluateBasicSelect(Synonym synonym);
+  unordered_set<string> GetFinalEvaluationResult(shared_ptr<Result> clause_evaluation_result);
+  shared_ptr<Result> GetClauseEvaluationResult();
+  void EvaluateBooleanConstraints();
+  shared_ptr<Result> EvaluateSelectStatementWithoutClauses();
 };

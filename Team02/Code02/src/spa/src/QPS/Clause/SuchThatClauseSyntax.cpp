@@ -33,7 +33,7 @@ bool SuchThatClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return !has_synonym;
 }
 
-std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
+std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
   std::shared_ptr<ClauseEvaluator> evaluator;
   std::string relationship_reference = ClauseSyntax::GetEntity();
   if (relationship_reference == pql_constants::kPqlFollowsRel) {
