@@ -53,6 +53,8 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelectStatement() {
   ResultHeader header;
   header.push_back(synonym_);
   ResultTable table;
+  // S3 (Major): OCP - Not using polymorphism and code does not allow extensibility
+  // without modifications
   if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
     table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetVariables());
   } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
