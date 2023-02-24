@@ -6,6 +6,7 @@
 #include "QPS/Util/PQLConstants.h"
 #include "QPS/Clause/SuchThatClauseSyntax.h"
 #include "QPS/Clause/PatternClauseSyntax.h"
+#include "QPS/Clause/WithClauseSyntax.h"
 
 auto tokenizer = std::make_shared<QpsTokenizer>();
 
@@ -15,6 +16,30 @@ SyntaxPair CreateCorrectSyntaxPair(std::string entity, std::string first_paramet
   syntax.first = entity;
   syntax.second = parameter_pair;
   return syntax;
+}
+
+TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
+  std::string statement = "such that Parent* (w, a) and Modifies (60, s) pattern a(\"x\", _) with a.stmt# = s.stmt#";
+  SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent*", "w", "a");
+  SyntaxPair correct_next_syntax = CreateCorrectSyntaxPair("Modifies", "60", "s");
+  SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("a", "\"x\"", "_");
+  SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "a.stmt#", "s.stmt#");
+  std::shared_ptr<ClauseSyntax>
+      parent_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent_syntax);
+  std::shared_ptr<ClauseSyntax>
+      next_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_next_syntax);
+  std::shared_ptr<ClauseSyntax>
+      pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+  std::shared_ptr<ClauseSyntax>
+      with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+  std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {parent_clause_ptr,  next_clause_ptr, pattern_clause_ptr, with_clause_ptr};
+
+  auto vector = tokenizer->ParseSubClauses(statement);
+
+  for (int i = 0; i < vector.size(); i++) {
+    REQUIRE(vector[i]->Equals(*correct_vector[i]));
+  }
+
 }
 
 
@@ -61,59 +86,70 @@ TEST_CASE("Check if ParseSubClauses works as expected") {
   }
 }
 
+TEST_CASE("Check if ExtractAbstractSyntaxFromWithClause works as expected") {
+  SECTION("Test on With_Clause_AttrRef_Int") {
+    std::string clause = "s1.stmt#=10";
+    SyntaxPair correct_syntax = CreateCorrectSyntaxPair("", "s1.stmt#", "10");
+    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromWithClause(clause);
+
+    REQUIRE(correct_syntax == syntax);
+  }
+}
+
 TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
   SECTION("Test on Pattern Clause_ReturnSyntaxPair") {
-    std::string clause = "pattern a (\"count\", _)";
+    std::string clause = "a (\"count\", _)";
     SyntaxPair correct_syntax = CreateCorrectSyntaxPair("a", "\"count\"", "_");
-    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause, pql_constants::kPatternRegex);
+    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause);
+
     REQUIRE(correct_syntax == syntax);
   }
 
   SECTION("Test on Such That Clause_ReturnSyntaxPair") {
-    std::string clause = "such that Uses (a, v)";
+    std::string clause = "Uses (a, v)";
     SyntaxPair correct_syntax = CreateCorrectSyntaxPair("Uses", "a", "v");
-    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause, pql_constants::kSuchThatRegex);
+    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause);
     REQUIRE(correct_syntax == syntax);
   }
 
   SECTION("Test on clause with extra brackets_ReturnSyntaxPair") {
-    std::string clause = "pattern a (\"(count)\", _)";
+    std::string clause = "a (\"(count)\", _)";
     SyntaxPair correct_syntax = CreateCorrectSyntaxPair("a", "\"(count)\"", "_");
-    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause, pql_constants::kPatternRegex);
+    SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause);
     REQUIRE(correct_syntax == syntax);
   }
 
   SECTION("Test on empty clause_ThrowSyntaxErrorException") {
     std::string clause = "";
     try {
-      SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause, pql_constants::kSuchThatRegex);
+      SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(true);
     }
   }
 
   SECTION("Test on invalid clause with extra characters_ThrowSyntaxErrorException") {
-    std::string clause ="such that Uses (a, v) a";
+    std::string clause ="Uses (a, v) a";
     try {
-      SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause, pql_constants::kSuchThatRegex);
+      SyntaxPair syntax = tokenizer->ExtractAbstractSyntaxFromClause(clause);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(true);
     }
   }
 
   SECTION("Test on invalid pattern clause with invalid concrete syntax_ThrowSyntaxErrorException") {
-    std::string invalid_pattern_clause = "pattern a (\"count\" _)"; //invalid clause without comma
+    std::string invalid_pattern_clause = "a (\"count\" _)"; //invalid clause without comma
     try {
-         auto pair  = tokenizer->ExtractAbstractSyntaxFromClause(invalid_pattern_clause, pql_constants::kPatternRegex);
+         auto pair  = tokenizer->ExtractAbstractSyntaxFromClause(invalid_pattern_clause);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(1);
     }
   }
 
   SECTION("Test on invalid such that clause with invalid concrete syntax_ThrowSyntaxErrorException") {
-    std::string invalid_such_that_clause = "such that a, v)"; //invalid clause without (
+    std::string invalid_such_that_clause = "a, v)"; //invalid clause without (
     try {
-      auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause, pql_constants::kSuchThatRegex);
+      auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(1);
     }
@@ -121,9 +157,9 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
 
 
   SECTION("Test on clause with missing abstract syntax_ThrowSyntaxErrorException") {
-    std::string invalid_such_that_clause = "such that (,)"; //checks will be done by validator to throw exception
+    std::string invalid_such_that_clause = "(,)"; //checks will be done by validator to throw exception
     try {
-      auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause, pql_constants::kSuchThatRegex);
+      auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause);
     } catch (const SyntaxErrorException& e) {
       REQUIRE(1);
     }

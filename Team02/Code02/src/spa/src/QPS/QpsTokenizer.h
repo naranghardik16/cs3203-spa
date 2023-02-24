@@ -78,11 +78,15 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found or if there are extra characters after the subclause
    * @return a SyntaxPair which contains the entity and the arguments
   */
-  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause,const std::regex& rgx);
+  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause);
 
   SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
   string GetRemainingClauseAfterSynonym(std::string clause);
   size_t FindStartOfSubClauseStart(const string &clause, const regex &rgx);
   size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
-  SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause, const regex &rgx);
+  SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause);
+  shared_ptr<ClauseSyntax> MakePatternClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
 };
