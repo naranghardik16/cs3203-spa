@@ -38,7 +38,7 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the synonym does not adhere to the lexical rules of being a synonym
    * @return synonym
    */
-  SelectedSynonymTuple ParseSynonym(const std::string& trimmed_select_keyword_removed_clause);
+  SelectedSynonymTuple ParseSynonym(const std::string& trimmed_select_keyword_removed_clause, Map declaration_map);
 
   /**
    * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for semantic validation

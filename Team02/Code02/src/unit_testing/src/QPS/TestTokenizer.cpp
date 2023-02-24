@@ -203,34 +203,39 @@ TEST_CASE("Check if SplitQuery works") {
 
 TEST_CASE("Test if ParseSynonym works") {
   SECTION("Valid_MultipleSyn_WithSpaces") {
+    Map map = {};
     std::string select_keyword_removed_query = "  < a     , w     , if      , if1       > such that Calls (\"Second\", \"Third\")";
-    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query, map);
     SelectedSynonymTuple correct_tuple = {"a", "w", "if", "if1"};
     REQUIRE(synonym_tuple == correct_tuple);
   }
 
   SECTION("Valid_MultipleSyn") {
+    Map map = {};
     std::string select_keyword_removed_query = "<a, w, if, if1> such that Calls (\"Second\", \"Third\")";
-    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query, map);
     SelectedSynonymTuple correct_tuple = {"a", "w", "if", "if1"};
     REQUIRE(synonym_tuple == correct_tuple);
   }
 
   SECTION("Valid_BOOLEAN_Syn") {
+    Map map = {};
     std::string select_keyword_removed_query = "BOOLEAN such that Parent* (w, a)";
-    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query, map);
     REQUIRE(synonym_tuple.empty());
   }
 
   SECTION("ValidSynonym_ReturnString") {
+    Map map = {};
     std::string select_keyword_removed_query = "Select such that Parent* (w, a) pattern a (\"count\", _)";
-    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query);
+    auto synonym_tuple = tokenizer->ParseSynonym(select_keyword_removed_query, map);
     REQUIRE(synonym_tuple[0] == "Select");
   }
 
   SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
+    Map map = {};
     std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tokenizer->ParseSynonym(select_keyword_removed_query), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tokenizer->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
   }
 }
 

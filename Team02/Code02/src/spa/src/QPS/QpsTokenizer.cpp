@@ -138,13 +138,13 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
   return synonym_to_design_entity_map;
 }
 
-SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause) {
+SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause, Map declaration_map) {
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
   std::string first_word = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
   char first_char = first_word[0];
   SelectedSynonymTuple synonym_vector;
   //! BOOLEAN case
-  if ((first_word == pql_constants::kSelectBoolean)) {
+  if ((first_word == pql_constants::kSelectBoolean) && (declaration_map.find(first_word) == declaration_map.end())) {
     synonym_vector = {};
   } else if (first_char == pql_constants::kTupleOpeningBracket) {
     //! Multiple elem case
