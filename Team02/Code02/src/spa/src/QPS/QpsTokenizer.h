@@ -65,15 +65,8 @@ class QpsTokenizer {
  * @param rgx which is the regex of the start of subclause indicator to find
  * @return index of start of subclause if there is a match, else returns npos
  */
-  size_t FindStartOfSubClauseIndex(const std::string& clause, const std::regex& rgx);
+  std::vector<size_t> FindIndexesOfClauseStart(const std::string& clause, const std::regex& rgx);
 
-  /**
-   * Searches for the start of subclauses (e.g. such that, pattern) and returns their index
-   * Helper function to parse subclauses
-   * @param statement which is not empty and contains only the subclauses
-   * @throws SyntaxErrorException if there are no indexes found or if the first index is not 0
-   * @return a vector of subclause start index to parse the subclauses
-   */
   std::vector<size_t> GetIndexListOfClauses(const std::string& statement);
 
   /**
@@ -85,8 +78,11 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found or if there are extra characters after the subclause
    * @return a SyntaxPair which contains the entity and the arguments
   */
-  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause,const std::string& clause_start_indicator);
+  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause,const std::regex& rgx);
 
   SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
   string GetRemainingClauseAfterSynonym(std::string clause);
+  size_t FindStartOfSubClauseStart(const string &clause, const regex &rgx);
+  size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
+  SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause, const regex &rgx);
 };
