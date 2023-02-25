@@ -7,12 +7,13 @@
  */
 namespace pql_constants {
 
-const char kTupleOpeningBracket = '<';
-const char kTupleClosingBracket = '>';
-const char kOpeningBracket = '(';
-const char kClosingBracket = ')';
-const char kComma = ',';
-const char kEqual = '=';
+const std::string kTupleOpeningBracket = "<";
+const std::string kTupleClosingBracket = ">";
+const std::string kOpeningBracket = "(";
+const std::string kClosingBracket = ")";
+const std::string kComma = ",";
+const std::string kEqual = "=";
+const std::string kSemicolon = ";";
 
 const std::string kSelectBoolean = "BOOLEAN";
 const std::string kSelectKeyword = "Select";
@@ -21,8 +22,8 @@ const std::string kSelectKeyword = "Select";
 const std::regex kSuchThatRegex("such that [A-Za-z]");
 // next token should be a syn-assign, which starts with a letter rather than , or ) e.g. (pattern, pattern)
 const std::regex kPatternRegex("pattern [A-Za-z]");
-const std::regex kWithRegex("with [A-Za-z]");
-const std::regex kAndRegex("and [A-Za-z]");
+const std::regex kWithRegex("with [A-Za-z0-9\"]");
+const std::regex kAndRegex("and [A-Za-z0-9\"]");
 
 const std::string kPqlStatementEntity = "stmt";
 const std::string kPqlReadEntity = "read";

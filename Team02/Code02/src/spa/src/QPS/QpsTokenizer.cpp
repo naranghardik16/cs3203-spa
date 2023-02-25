@@ -14,7 +14,7 @@
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
 
 QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
-  std::string delimiter = ";";
+  std::string delimiter = pql_constants::kSemicolon;
   std::vector<std::string> declaration_statements;
   std::string declaration;
 
@@ -85,8 +85,8 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
   auto with_index_list = FindIndexesOfClauseStart(statement, pql_constants::kWithRegex);
   auto and_index_list = FindIndexesOfClauseStart(statement, pql_constants::kAndRegex);
 
-  // preallocate memory
   std::vector<size_t> index_list;
+  // preallocate memory
   index_list.reserve(such_that_index_list.size() + pattern_index_list.size() + with_index_list.size() + and_index_list.size());
   index_list.insert(index_list.end(), such_that_index_list.begin(), such_that_index_list.end());
   index_list.insert(index_list.end(), pattern_index_list.begin(), pattern_index_list.end());
@@ -141,12 +141,11 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
 SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keyword_removed_clause, Map declaration_map) {
   std::string trimmed_select_keyword_removed_clause = string_util::Trim(select_keyword_removed_clause);
   std::string first_word = string_util::GetFirstWord(trimmed_select_keyword_removed_clause);
-  char first_char = first_word[0];
   SelectedSynonymTuple synonym_vector;
   //! BOOLEAN case
   if ((first_word == pql_constants::kSelectBoolean) && (declaration_map.find(first_word) == declaration_map.end())) {
     synonym_vector = {};
-  } else if (first_char == pql_constants::kTupleOpeningBracket) {
+  } else if (first_word.substr(0,1) == pql_constants::kTupleOpeningBracket) {
     //! Multiple elem case
     synonym_vector = ParseForMultipleSynonyms(trimmed_select_keyword_removed_clause);
   } else {
@@ -160,7 +159,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& select_keywor
   if (!synonym_vector.empty()) {
     for (auto synonym : synonym_vector) {
       if (!QueryUtil::IsSynonym(synonym)) {
-        throw SyntaxErrorException();
+        throw SyntaxErrorException("Not a synonym");
       }
     }
   }
@@ -176,19 +175,18 @@ SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(std::string trimmed_
   // condition to run this function is that < is at index 0
   std::string synonyms_seperated_by_comma_substr = string_util::Trim(trimmed_select_keyword_removed_clause.substr(1,
                                                                                                                   closing_tuple_bracket_index-1));
-  synonym_vector = string_util::SplitStringByDelimiter(synonyms_seperated_by_comma_substr, ",");
+  synonym_vector = string_util::SplitStringByDelimiter(synonyms_seperated_by_comma_substr, pql_constants::kComma);
   return synonym_vector;
 }
 
 std::string QpsTokenizer::GetRemainingClauseAfterSynonym(std::string select_keyword_removed_clause) {
   std::string end_of_syn_marker;
   std::string first_word = string_util::GetFirstWord(select_keyword_removed_clause);
-  char first_char = first_word[0];
   if (first_word == pql_constants::kSelectBoolean) {
     end_of_syn_marker = pql_constants::kSelectBoolean;
-  } else if (first_char == pql_constants::kTupleOpeningBracket) {
+  } else if (first_word.substr(0,1) == pql_constants::kTupleOpeningBracket) {
     //! Multiple elem case
-    end_of_syn_marker.append(1, pql_constants::kTupleClosingBracket);
+    end_of_syn_marker = pql_constants::kTupleClosingBracket;
   } else {
     //! Single elem case -- synonym should be the first word e.g. Select a
     end_of_syn_marker = first_word;
@@ -198,6 +196,30 @@ std::string QpsTokenizer::GetRemainingClauseAfterSynonym(std::string select_keyw
 
 std::string QpsTokenizer::ProcessIDENT(std::string parameter) {
     return "\"" + string_util::Trim(parameter.substr(1, parameter.length() - 2)) + "\"";
+}
+
+ParameterVector QpsTokenizer::ParseParameters(std::string parameters_substr) {
+  ParameterVector parameters;
+  Parameter parameter = "";
+//auto test_vec = string_util::SplitStringByDelimiter(parameters_substr, pql_constants::kComma);
+  size_t delimiter_index = parameters_substr.find(pql_constants::kComma);
+  while (delimiter_index != std::string::npos) {
+    parameter = string_util::Trim(parameters_substr.substr(0, delimiter_index));
+    if (QueryUtil::IsQuoted(parameter)) {
+      parameter = ProcessIDENT(parameter);
+    }
+    parameters.push_back(parameter);
+    parameters_substr.erase(0, delimiter_index + pql_constants::kComma.length());
+    delimiter_index = parameters_substr.find(pql_constants::kComma);
+  }
+
+  parameter = string_util::Trim(parameters_substr);
+  if (QueryUtil::IsQuoted(parameter)) {
+    parameter = ProcessIDENT(parameter);
+  }
+  parameters.push_back(parameter);
+
+  return parameters;
 }
 
 SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause) {
@@ -213,11 +235,9 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
 
   std::string relationship = string_util::Trim(clause.substr(0,
                                                              opening_bracket_index));
-  std::string first_parameter = string_util::Trim(clause.substr(opening_bracket_index+1,
+  std::string parameters_substr = string_util::Trim(clause.substr(opening_bracket_index+1,closing_bracket_index-(opening_bracket_index+1)));
 
-                                                                comma_index - (opening_bracket_index+1)));
-  std::string second_parameter = string_util::Trim(clause.substr(comma_index+1,
-                                                                 closing_bracket_index-(comma_index+1)));
+  auto parameters = ParseParameters(parameters_substr);
 
   std::string remaining_clause = string_util::Trim(clause.substr(closing_bracket_index+1));
 
@@ -225,20 +245,9 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
     throw SyntaxErrorException("There is syntax error with the subclauses and remaining characters that remain unparsed");
   }
 
-  if (QueryUtil::IsQuoted(first_parameter)) {
-    first_parameter = "\"" + string_util::Trim(first_parameter.substr(1, first_parameter.length() - 2)) + "\"";
-  }
-  if (QueryUtil::IsQuoted(second_parameter)) {
-    second_parameter = "\"" + string_util::Trim(second_parameter.substr(1, second_parameter.length() - 2)) + "\"";
-  }
-
   SyntaxPair clause_syntax;
-  ParameterVector parameters;
-  parameters.push_back(first_parameter);
-  parameters.push_back(second_parameter);
   clause_syntax.first = relationship;
   clause_syntax.second = parameters;
-
   return clause_syntax;
 }
 
@@ -272,6 +281,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromWithClause(const std::string& 
 }
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string sub_clause) {
+
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
   syntax.second[1] = ExpressionParser::ParseExpressionSpec(syntax.second[1]);
   std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
@@ -301,6 +311,7 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(std::string sub
 }
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeAndClauseSyntax(std::string sub_clause, std::string previous_sub_clause) {
+
   if (FindStartOfSubClauseStart(previous_sub_clause, pql_constants::kPatternRegex) == 0) {
     return MakePatternClauseSyntax(sub_clause);
   } else if (FindStartOfSubClauseStart(previous_sub_clause, pql_constants::kSuchThatRegex) == 0) {
@@ -321,30 +332,34 @@ std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const s
   index_list.push_back(statement_trimmed.length());
 
   size_t start_index = 0;
+  std::string previous_sub_clause;
+  std::string processed_sub_clause;
   for (int i = 0; i < index_list.size()-1; i++) {
     size_t next_index = index_list[i+1];
     sub_clause = string_util::Trim(statement_trimmed.substr(start_index,next_index-start_index));
     start_index = next_index;
 
     if (FindStartOfSubClauseStart(sub_clause, pql_constants::kPatternRegex) == 0) {
-      sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kPatternRegex));
-      auto pattern_syntax = MakePatternClauseSyntax(sub_clause);
+      previous_sub_clause = sub_clause;
+      processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kPatternRegex));
+      auto pattern_syntax = MakePatternClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(pattern_syntax);
     } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kSuchThatRegex) == 0) {
-      sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kSuchThatRegex));
-      auto such_that_syntax = MakeSuchThatClauseSyntax(sub_clause);
+      previous_sub_clause = sub_clause;
+      processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kSuchThatRegex));
+      auto such_that_syntax = MakeSuchThatClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(such_that_syntax);
     } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kWithRegex) == 0) {
-      sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kWithRegex));
-      auto with_syntax = MakeWithClauseSyntax(sub_clause);
+      previous_sub_clause = sub_clause;
+      processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kWithRegex));
+      auto with_syntax = MakeWithClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(with_syntax);
     } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kAndRegex) == 0) {
-      sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kAndRegex));
-      if (i==0) {
+      processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kAndRegex));
+      if (previous_sub_clause.empty()) {
         throw SyntaxErrorException("The first clause cannot be an and clause");
       }
-      std::string previous_subclause = string_util::Trim(statement_trimmed.substr(index_list[i-1],index_list[i]));
-      auto and_syntax = MakeAndClauseSyntax(sub_clause, previous_subclause);
+      auto and_syntax = MakeAndClauseSyntax(processed_sub_clause, previous_sub_clause);
       syntax_pair_list.push_back(and_syntax);
     } else {
       throw SyntaxErrorException("There is an invalid subclause"); //e.g. such that pattern a(_,_)

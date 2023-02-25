@@ -15,7 +15,109 @@ SyntaxPair CreateCorrectSyntaxPairParser(std::string entity, std::string first_p
   return syntax;
 }
 
-TEST_CASE("Test Valid Query Parser") {
+
+TEST_CASE("Test Invalid Multi Clause") {
+  auto qp = std::make_shared<QueryParser>();
+  SECTION("extra with_syntax error") {
+    std::string query("assign a; while w; Select a such that Parent* (w, a) with and Modifies (a, \"x\") and such that Modifies (a, \"y\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("extra and_syntax error") {
+    std::string query("assign a; while w; Select a and such that Parent* (w, a) and Modifies (a, \"x\") such that Modifies (a, \"y\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("extra such that_syntax error") {
+    std::string query("assign a; while w; Select a such that Parent* (w, a) such that such that Modifies (a, \"x\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("extra pattern_syntax error") {
+    std::string query("assign a; while w; Select a such that Parent* (w, a) such that Modifies (a, \"x\") pattern ");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("extra characters_syntax error") {
+    //extra char at end
+    std::string query("assign a; while w; Select a such that Parent* (w, a) such that Modifies (a, \"x\") and ");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //extra )
+    query = "assign a; while w; Select a such that Parent* (w, a)) such that Modifies (a, \"x\")";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //extra <
+    query = "assign a; while w; Select a <such that Parent* (w, a) such that Modifies (a, \"x\")";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+  }
+
+}
+
+TEST_CASE("Test Invalid And Clause") {
+  auto qp = std::make_shared<QueryParser>();
+  SECTION("And with such that_syntax error") {
+    std::string query("assign a; while w; Select a such that Parent* (w, a) and Modifies (a, \"x\") and such that Modifies (a, \"y\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("And with pattern_Throw syntax error") {
+    std::string query("assign a; while w; Select a such that Parent* (w, a) and pattern a (\"x\", _) such that Modifies (a, \"y\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("And with different clause_Throw syntax error") {
+    //pattern + and such that
+    std::string query("assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Modifies (a, \"x\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //pattern + and with
+    query = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and a.stmt#=w.stmt#";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //such that + and pattern
+    query = "assign a; while w; Select a such that Parent* (w, a) and a(\"x\", _)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //such that + and with
+    query = "assign a; while w; Select a such that Parent* (w, a) and a.stmt#=w.stmt#";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //with + and pattern
+    query = "assign a; while w; Select a such that Parent* (w, a) with a.stmt#=w.stmt# and pattern a (\"x\", _)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //with + and such that
+    query = "assign a; while w; Select a such that Parent* (w, a) with a.stmt#=w.stmt# and Parent* (w, a)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("And with no previous clause_Throw syntax error") {
+    std::string query("assign a; while w; Select a and Modifies (a, \"x\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("And with extra character_Throw syntax error") {
+    std::string query("assign a; while w; Select a such that Modifies (a, \"x\") and 1 Modifies (a, \"x\")");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+    /* only when validator is done
+    query="procedure p; Select p with p.procName=\"x\" and 1 5=6";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query="procedure p;Select p with p.procName=\"x\" and \"x\" \"x\"=6";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query="procedure p; Select p with p.procName=\"x\" and = s.stmt#=6";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query="procedure p;Select p with p.procName=\"x\" and s.stmt#=6 5=6";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+     */
+  }
+}
+
+TEST_CASE("Test Valid Simple Query Parser") {
   auto qp = std::make_shared<QueryParser>();
 
   SECTION("Test valid query with a basic select statement in tuple") {
