@@ -8,10 +8,10 @@
 #include "QPS/Clause/SuchThatClauseSyntax.h"
 
 SyntaxPair CreateCorrectSyntaxPairParser(std::string entity, std::string first_parameter, std::string second_parameter) {
-  auto parameter_pair = std::pair<std::string, std::string>(first_parameter, second_parameter);
+  ParameterVector parameter_vec = {first_parameter, second_parameter};
   SyntaxPair syntax;
   syntax.first = entity;
-  syntax.second = parameter_pair;
+  syntax.second = parameter_vec;
   return syntax;
 }
 

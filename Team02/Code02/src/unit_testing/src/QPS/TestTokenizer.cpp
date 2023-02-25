@@ -11,35 +11,58 @@
 auto tokenizer = std::make_shared<QpsTokenizer>();
 
 SyntaxPair CreateCorrectSyntaxPair(std::string entity, std::string first_parameter, std::string second_parameter) {
-  auto parameter_pair = std::pair<std::string, std::string>(first_parameter, second_parameter);
+  ParameterVector parameter_vector = {first_parameter, second_parameter};
   SyntaxPair syntax;
   syntax.first = entity;
-  syntax.second = parameter_pair;
+  syntax.second = parameter_vector;
   return syntax;
 }
 
 TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
-  std::string statement = "such that Parent* (w, a) and Modifies (60, s) pattern a(\"x\", _) with a.stmt# = s.stmt#";
-  SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent*", "w", "a");
-  SyntaxPair correct_next_syntax = CreateCorrectSyntaxPair("Modifies", "60", "s");
-  SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("a", "\"x\"", "_");
-  SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "a.stmt#", "s.stmt#");
-  std::shared_ptr<ClauseSyntax>
-      parent_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent_syntax);
-  std::shared_ptr<ClauseSyntax>
-      next_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_next_syntax);
-  std::shared_ptr<ClauseSyntax>
-      pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
-  std::shared_ptr<ClauseSyntax>
-      with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
-  std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {parent_clause_ptr,  next_clause_ptr, pattern_clause_ptr, with_clause_ptr};
+  SECTION("Valid Query: And + With clauses") {
+    std::string statement = "such that Parent* (w, a) and Modifies (60, s) pattern a(\"x\", _) with a.stmt# = s.stmt#";
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent*", "w", "a");
+    SyntaxPair correct_next_syntax = CreateCorrectSyntaxPair("Modifies", "60", "s");
+    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("a", "\"x\"", "_");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "a.stmt#", "s.stmt#");
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        next_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_next_syntax);
+    std::shared_ptr<ClauseSyntax>
+        pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {parent_clause_ptr, next_clause_ptr, pattern_clause_ptr, with_clause_ptr};
 
-  auto vector = tokenizer->ParseSubClauses(statement);
+    auto vector = tokenizer->ParseSubClauses(statement);
 
-  for (int i = 0; i < vector.size(); i++) {
-    REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    for (int i = 0; i < vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
   }
 
+  SECTION("Valid Query: And + With clauses + random spacing") {
+    std::string statement = "such           that     Parent*    (w,      c) and Parent    (w,      c) with       c.procName =   p.procName";
+    SyntaxPair correct_parentT_syntax = CreateCorrectSyntaxPair("Parent*", "w", "c");
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent", "w", "c");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName", "p.procName");
+    std::shared_ptr<ClauseSyntax>
+        parentT_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parentT_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {parentT_clause_ptr, parent_clause_ptr, with_clause_ptr};
+
+    auto vector = tokenizer->ParseSubClauses(statement);
+
+    for (int i = 0; i < vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+  }
 }
 
 

@@ -196,6 +196,10 @@ std::string QpsTokenizer::GetRemainingClauseAfterSynonym(std::string select_keyw
   return string_util::GetSubStringAfterKeyword(select_keyword_removed_clause, end_of_syn_marker);
 }
 
+std::string QpsTokenizer::ProcessIDENT(std::string parameter) {
+    return "\"" + string_util::Trim(parameter.substr(1, parameter.length() - 2)) + "\"";
+}
+
 SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clause) {
   size_t opening_bracket_index = clause.find(pql_constants::kOpeningBracket);
   size_t comma_index = clause.find(pql_constants::kComma);
@@ -229,9 +233,9 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   }
 
   SyntaxPair clause_syntax;
-  ParameterPair parameters;
-  parameters.first = first_parameter;
-  parameters.second = second_parameter;
+  ParameterVector parameters;
+  parameters.push_back(first_parameter);
+  parameters.push_back(second_parameter);
   clause_syntax.first = relationship;
   clause_syntax.second = parameters;
 
@@ -258,9 +262,9 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromWithClause(const std::string& 
   }
 
   SyntaxPair clause_syntax;
-  ParameterPair parameters;
-  parameters.first = first_parameter;
-  parameters.second = second_parameter;
+  ParameterVector parameters;
+  parameters.push_back(first_parameter);
+  parameters.push_back(second_parameter);
   clause_syntax.first = "";
   clause_syntax.second = parameters;
 
@@ -269,7 +273,7 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromWithClause(const std::string& 
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string sub_clause) {
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
-  syntax.second.second = ExpressionParser::ParseExpressionSpec(syntax.second.second);
+  syntax.second[1] = ExpressionParser::ParseExpressionSpec(syntax.second[1]);
   std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
 
   syntax_validator_->ValidatePatternClauseSyntax(pattern_syntax);

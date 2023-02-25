@@ -89,4 +89,6 @@ class QpsTokenizer {
   shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(string sub_clause);
   shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
   shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
+  pair<string, string> ProcessIDENT(string first_parameter, string second_parameter);
+  string ProcessIDENT(string parameter);
 };

@@ -10,11 +10,15 @@ std::string ClauseSyntax::GetEntity() {
 }
 
 std::string ClauseSyntax::GetFirstParameter() {
-  return pair_.second.first;
+  return pair_.second[0];
 }
 
 std::string ClauseSyntax::GetSecondParameter() {
-  return pair_.second.second;
+  return pair_.second[1];
+}
+
+std::string ClauseSyntax::GetThirdParameter() {
+  return pair_.second[2];
 }
 
 SyntaxPair ClauseSyntax::GetSyntaxPair() {
