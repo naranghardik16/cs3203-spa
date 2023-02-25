@@ -2,6 +2,7 @@
 #include "QPS/Util/QueryUtil.h"
 #include "PqlEvaluator.h"
 #include "QPS/Clause/ClauseSyntax.h"
+#include "QPS/Evaluator/DesignEntityGetter.h"
 #include <stdexcept>
 #include <utility>
 
@@ -92,28 +93,9 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
 std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelect(Synonym synonym) {
   ResultHeader header;
   header.push_back(synonym);
-  ResultTable table;
-  if (QueryUtil::IsVariableSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetVariables());
-  } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym)) {
-    table =  ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetConstants());
-  } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
-  } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
-  } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
-  } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
-  } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
-  } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
-  } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetStatements());
-  } else  {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetProcedures());
-  }
+  ResultTable table = ClauseEvaluator::ConvertSetToResultTableFormat(
+      DesignEntityGetter::GetEntitySet(pkb_, declaration_map_[synonym]));
+
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
 }
