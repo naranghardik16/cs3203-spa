@@ -1,0 +1,70 @@
+1 - select constant
+constant c;
+Select c with c.value=10
+10
+5000
+2 - select constant -- swap args
+constant c;
+Select c with 10=c.value
+10
+5000
+3 - select var
+variable v;
+Select v with v.varName="number"
+number
+5000
+4 - select var swap args
+variable v;
+Select v with "number"=v.varName
+number
+5000
+5 - select read var
+read r;
+Select r with r.varName="number"
+1
+5000
+6 - select read var swap args
+read r;
+Select r with "number"=r.varName
+1
+5000
+7- select print var
+print p;
+Select p with p.varName="number"
+16
+5000
+8 - select print var - swap args
+print p;
+Select p with "number"=p.varName
+16
+5000
+9 - select proc name
+procedure p;
+Select p with p.procName="NonExistent"
+none
+5000
+10 - select stmt num
+stmt s;
+Select s with s.stmt#=4
+4
+5000
+11 - select stmt num -- swap args
+stmt s;
+Select s with 4=s.stmt#
+4
+5000
+12 - with attrref = attrref -- int
+stmt s;constant c;
+Select s with s.stmt#=c.value
+2, 10
+5000
+13 - with attrref = attrref -- ident
+variable v;print p;
+Select v with v.varName=p.varName
+number
+5000
+14 - with attrref = attrref -- ident (proc)
+variable v;procedure p;
+Select v with v.varName=p.procName
+none
+5000
