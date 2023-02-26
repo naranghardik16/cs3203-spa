@@ -137,7 +137,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({"a","x", "y", "g"});
+    std::unordered_set<std::string> correct_set({"a", "x", "y", "g"});
     REQUIRE(eval_result == correct_set);
   }
 
@@ -219,14 +219,14 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   //e.g. Modifies(read,”count”) -- get read statements that modify count
   //stub->GetStatementsModifiesVariable("count", READType) --> return {}
   SECTION("STMT-SYN, IDENT, Returns a empty set") {
-    std::string query = "read read;Select read such that Modifies(read,\"count\")";
-    auto correct_output = qp->ParseQuery(query);
+      std::string query = "read read;Select read such that Modifies(read,\"count\")";
+      auto correct_output = qp->ParseQuery(query);
 
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
-    auto eval_result = eval->Evaluate();
+      auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+      auto eval_result = eval->Evaluate();
 
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
+      std::unordered_set<std::string> correct_set({});
+      REQUIRE(eval_result == correct_set);
   }
 
   //e.g. Modifies(c, "x") -- get call statements that modify x

@@ -33,12 +33,12 @@ class QpsTokenizer {
   QueryLinesPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   /**
-   * Parses for the synonym in the trimmed_select_keyword_removed_clause
-   * @param trimmed_select_keyword_removed_clause with extra white space removed and has the Select keyword removed
+   * Parses for the synonym in the syn_substring
+   * @param syn_substring with extra white space removed and has the Select keyword removed
    * @throws SyntaxErrorException if the synonym does not adhere to the lexical rules of being a synonym
    * @return synonym
    */
-  SelectedSynonymTuple ParseSynonym(const std::string& trimmed_select_keyword_removed_clause, Map declaration_map);
+  SelectedSynonymTuple ParseSynonym(const std::string& syn_substring, Map declaration_map);
 
   /**
    * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for semantic validation
@@ -81,7 +81,7 @@ class QpsTokenizer {
   SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause);
 
   SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
-  string GetRemainingClauseAfterSynonym(std::string clause);
+  string GetSubclauseSubstring(std::string select_keyword_removed_clause);
   size_t FindStartOfSubClauseStart(const string &clause, const regex &rgx);
   size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
   SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause);
@@ -89,4 +89,11 @@ class QpsTokenizer {
   shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(string sub_clause);
   shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
   shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
+  pair<string, string> ProcessIDENT(string first_parameter, string second_parameter);
+  string ParseIDENT(string parameter);
+  ParameterVector ParseParameters(string parameters_substr);
+  size_t GetIndexWhereSubClausesStart(const string &clause, const regex &rgx);
+  string GetSynonymSubstring(string select_keyword_removed_clause);
+  size_t GetIndexWhereSubClausesStart(const string &clause);
+  string ParseAttrRef(string attr_ref);
 };

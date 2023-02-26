@@ -79,5 +79,5 @@ std::string string_util::GetSubStringAfterKeyword(const std::string& clause, con
 std::string string_util::RemoveExtraWhitespacesInString(const std::string& input) {
   std::string output;
   std::unique_copy(input.begin(), input.end(), std::back_insert_iterator<std::string>(output),[](char a,char b){ return std::isspace(a) && std::isspace(b);});
-  return output;
+  return Trim(output);
 }

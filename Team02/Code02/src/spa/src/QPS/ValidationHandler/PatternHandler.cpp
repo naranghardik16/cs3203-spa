@@ -6,7 +6,7 @@ void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string arg_2(clause->GetSecondParameter());
 
   if (!QueryUtil::IsSynonym(syn_assign) || !QueryUtil::IsEntRef(arg_1)) {
-    throw SyntaxErrorException();
+    throw SyntaxErrorException("First argument is not assign synonym or entity reference");
   }
 
   return;

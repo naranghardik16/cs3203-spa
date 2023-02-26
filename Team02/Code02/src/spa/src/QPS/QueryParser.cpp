@@ -17,17 +17,18 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::string trimmed_select_statement = declaration_select_pair.second;
   std::string remaining_clause = string_util::Trim(trimmed_select_statement.substr(pql_constants::kSelectKeyword.length()));
 
-  SelectedSynonymTuple synonym_tuple = tk->ParseSynonym(remaining_clause, declaration_map);
-  remaining_clause = tk->GetRemainingClauseAfterSynonym(remaining_clause);
+  std::string syn_substring = tk->GetSynonymSubstring(remaining_clause);
+  SelectedSynonymTuple synonym_tuple = tk->ParseSynonym(syn_substring, declaration_map);
 
+  std::string clause_substring = tk->GetSubclauseSubstring(remaining_clause);
   ClauseSyntaxPtrList syntax_pair_list;
-  if (!remaining_clause.empty()) {
-    syntax_pair_list = tk->ParseSubClauses(remaining_clause);
+  if (!clause_substring.empty()) {
+    syntax_pair_list = tk->ParseSubClauses(clause_substring);
   }
 
   //TODO to remove because will pass to validator in ParseSynonym to validate
   for (auto synonym : synonym_tuple) {
-    if (declaration_map.find(synonym) == declaration_map.end()) {
+    if (declaration_map.find(synonym) == declaration_map.end() && !QueryUtil::IsAttrRef(synonym)) {
       throw SemanticErrorException();
     }
   }

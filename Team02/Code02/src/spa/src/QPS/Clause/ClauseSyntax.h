@@ -34,6 +34,12 @@ class ClauseSyntax {
   std::string GetSecondParameter();
 
   /**
+* Returns the third argument in the subclause
+* @return third argument as a string
+*/
+  std::string GetThirdParameter();
+
+  /**
    * Returns the whole SyntaxPair
    * @return SyntaxPair stored as attribute
    */
