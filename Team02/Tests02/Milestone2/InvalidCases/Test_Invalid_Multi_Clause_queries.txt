@@ -1,0 +1,80 @@
+1 - and + such that
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and such that Parent* (1, a)
+SyntaxError
+5000
+2 - and + pattern
+assign a; while w;
+Select a such that Parent* (w, a) and pattern a ("x", _) such that Parent*(1, a)
+SyntaxError
+5000
+3 - and + with
+assign a; while w;
+Select a such that Parent* (w, a) with a.stmt#=w.stmt# and with a.stmt#=6
+SyntaxError
+5000
+4 - pattern + and such that
+assign a; while w;
+Select a such that Parent* (w, a) pattern a ("x", _) and Parent*(1, a)
+SyntaxError
+5000
+4 - pattern + and with
+assign a; while w;
+Select a such that Parent* (w, a) pattern a ("x", _) and a.stmt#=6
+SyntaxError
+5000
+5 - such that + and pattern
+assign a; while w;
+Select a such that Parent* (w, a) and a ("x", _)
+SyntaxError
+5000
+6 - such that + and with
+assign a; while w;
+Select a such that Parent* (w, a) and a.stmt#=6
+SyntaxError
+5000
+7 - with + and such that
+assign a; while w;
+Select a with a.stmt#=6 and Parent* (w, a)
+SyntaxError
+5000
+8 - with + and pattern
+assign a; while w;
+Select a with a.stmt#=6 and a("x", _)
+SyntaxError
+5000
+9 - extra ;
+assign a; while w;
+Select a such that Parent* (w, a) ; and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+10 - extra >
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and <Parent*(1, a)
+SyntaxError
+5000
+11 - extra char at end
+assign a; while w;
+Select a such that Parent* (w, a) and Modifies (a, "x") and Parent*(1, a) and
+SyntaxError
+5000
+12 - extra clause markers - and
+assign a; while w;
+Select a such that Parent* (w, a) such that and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+13 - extra clause markers - pattern
+assign a; while w;
+Select a such that Parent* (w, a) pattern and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+14 - extra clause markers - such that
+assign a; while w;
+Select a such that such that Parent* (w, a) and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+15 - extra clause markers - with
+assign a; while w;
+Select a such that with Parent* (w, a) and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000

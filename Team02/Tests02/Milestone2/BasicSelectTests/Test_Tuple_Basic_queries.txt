@@ -1,0 +1,50 @@
+1 - select procedure tuples of different syn
+procedure p, q;
+Select <p, q>
+sumDigits sumDigits
+5000
+2 - select tuples of same syn
+procedure p, p;
+Select <p, p>
+sumDigits sumDigits
+5000
+3 - select tuples of different syn
+read r; while w;
+Select <r, w>
+1 4,1 7,1 12,2 4,2 7,2 12
+5000
+4 - select tuples of different syn
+read r; while w;
+Select <r, w>
+1 4,1 7,1 12,2 4,2 7,2 12
+5000
+5 - select tuples with one boolean clause that evaluates to true
+read r; while w;assign a;
+Select <r, w> pattern a(_,_)
+1 4,1 7,1 12,2 4,2 7,2 12
+5000
+6 - select tuples with one non-boolean clause with result
+read r; while w;if i;
+Select <r, w> such that Parent(i, w)
+1 12
+5000
+8 - select tuples with multi clause with result
+read r; while w,w1;if i;
+Select <r, w> such that Parent*(w, w1) and Parent(w,i)
+1 7
+5000
+9 - select tuples with one boolean clause that evaluates to false
+read r; while w;
+Select <r, w> such that Parent(7,9)
+none
+5000
+10 - select tuples with one non-boolean clause with no result
+read r; while w;
+Select <r, w> such that Modifies(r,"v")
+none
+5000
+11 - select tuples with multi clause with no result
+read r; while w;
+Select <r, w> such that Parent(1,a) and Parent(7,9)
+none
+5000

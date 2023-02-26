@@ -1,0 +1,45 @@
+1 - no declarations and no constraints
+
+Select BOOLEAN
+TRUE
+5000
+2 - returns true based on boolean constraint
+
+Select BOOLEAN such that Follows(_,_)
+TRUE
+5000
+3 - returns true based on non-empty evaluation result
+if i; assign a;
+Select BOOLEAN such that Follows(i, a)
+TRUE
+5000
+4 - returns false based on boolean constraint
+
+Select BOOLEAN such that Follows(9, _)
+FALSE
+5000
+5 - returns false based on empty evaluation result
+assign a;
+Select BOOLEAN such that Follows(a,8)
+FALSE
+5000
+6 - returns true based on multi-clause evaluation result
+assign a;
+Select BOOLEAN such that Follows(_, a) and Follows(2, a)
+TRUE
+5000
+7 - returns false based on multi-clause evaluation result
+assign a;
+Select BOOLEAN such that Follows(a,8) and Follows(2, a)
+FALSE
+5000
+8 - returns true based on multi-clause evaluation result with boolean constraint
+assign a;
+Select BOOLEAN such that Follows(_, a) and Follows(2, a) and Follows(_,_)
+TRUE
+5000
+9 - returns true based on multi-clause evaluation result with boolean constraint
+assign a;
+Select BOOLEAN such that Follows(_, a) and Follows(2, a) and Follows(_, 1)
+TRUE
+5000

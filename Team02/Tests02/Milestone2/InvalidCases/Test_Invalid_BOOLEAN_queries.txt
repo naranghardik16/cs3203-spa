@@ -1,0 +1,26 @@
+1 - extra character after BOOLEAN
+
+Select BOOLEAN <
+SyntaxError
+5000
+2 - wrong casing of BOOLEAN
+
+Select BOOLEAn
+SyntaxError
+5000
+3 - misspelling of BOOLEAN
+
+Select BOOLEANs
+SyntaxError
+5000
+4 - extra character before BOOLEAN
+
+Select <BOOLEAN
+SyntaxError
+5000
+5 - undeclared BOOLEAN syn in tuple
+
+Select <BOOLEAN>
+SemanticError
+5000
+

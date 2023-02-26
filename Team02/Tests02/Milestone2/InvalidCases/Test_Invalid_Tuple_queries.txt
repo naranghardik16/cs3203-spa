@@ -1,0 +1,36 @@
+1 - extra >
+assign a; while w;
+Select <a,w>> such that Parent* (w, a)
+SyntaxError
+5000
+2 - extra <
+assign a; while w;
+Select <<a,w> such that Parent* (w, a)
+SyntaxError
+5000
+3 - extra ,
+assign a; while w;
+Select <a,,w> such that Parent* (w, a)
+SyntaxError
+5000
+4 - no ,
+assign a; while w;
+Select <a w> such that Parent* (w, a)
+SyntaxError
+5000
+5 - no <
+assign a; while w;
+Select a,w> such that Parent* (w, a)
+SyntaxError
+5000
+6 - no >
+assign a; while w;
+Select <a,w such that Parent* (w, a)
+SyntaxError
+5000
+7 - no < or >
+assign a; while w;
+Select a,w such that Parent* (w, a)
+SyntaxError
+5000
+

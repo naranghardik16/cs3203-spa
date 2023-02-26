@@ -39,7 +39,7 @@ def MakeResultDirectory():
         os.makedirs(OUTPUT_DIRECTORY)
 def GetAutotesterParameterList():
     current_directory = os.getcwd()
-    test_name_list = glob.glob(current_directory + "/*/*.txt")
+    test_name_list = glob.glob(current_directory + "/*/*/*.txt")
     source_test_name_list = list(filter(lambda filename : filename.endswith("source.txt"), test_name_list))
     query_test_name_list = list(filter(lambda filename : filename.endswith("queries.txt"), test_name_list))
 
