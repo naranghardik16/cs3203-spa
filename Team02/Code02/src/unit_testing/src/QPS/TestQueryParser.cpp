@@ -120,6 +120,27 @@ TEST_CASE("Test Invalid And Clause") {
 TEST_CASE("Test Valid Simple Query Parser") {
   auto qp = std::make_shared<QueryParser>();
 
+  SECTION("Attr-ref as synonym") {
+    try {
+      std::string query = "assign Select; Select Select  . stmt#";
+      auto parser_output = qp->ParseQuery(query);
+      auto synonym_tuple = parser_output->GetSynonymTuple();
+      SelectedSynonymTuple correct_synonym_tuple = {"Select.stmt#"};
+      REQUIRE(correct_synonym_tuple == synonym_tuple);
+    } catch (SyntaxErrorException e) {
+      std::cout << e.what();
+    }
+  }
+
+
+  SECTION("Repeated terminal name -- SELECT") {
+    std::string query = "assign Select; Select Select";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    SelectedSynonymTuple correct_synonym_tuple = {"Select"};
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+  }
+
   SECTION("Test valid query with basic BOOLEAN - no declarations") {
     std::string query("Select BOOLEAN");
     auto parser_output = qp->ParseQuery(query);
@@ -130,6 +151,64 @@ TEST_CASE("Test Valid Simple Query Parser") {
     ClauseSyntaxPtrList correct_clause_syntax_ptr_list = {};
     Map correct_declaration_map = {};
     SelectedSynonymTuple correct_synonym_tuple = {};
+    REQUIRE(correct_clause_syntax_ptr_list == clause_syntax_ptr_list);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+    REQUIRE_NOTHROW(qp->ParseQuery(query));
+  }
+
+  SECTION("Valid_MultipleSyn_WithSpaces") {
+    std::string query("assign a; while w; if if, if1;variable v; Select <  a  .  stmt#   , w  .  stmt#   , if  .  stmt#     , if1  .  stmt#      > such that Modifies(a,v)");
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
+
+    ClauseSyntaxPtrList correct_syntax_ptr_list = {};
+    SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Modifies", "a", "v");
+    std::shared_ptr<ClauseSyntax> such_that_syntax_ptr = std::make_shared<SuchThatClauseSyntax>(such_that_syntax_pair);
+    correct_syntax_ptr_list.push_back(such_that_syntax_ptr);
+    Map correct_declaration_map = {{"a", "assign"}, {"w","while"}, {"if", "if"}, {"if1", "if"}, {"v", "variable"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"a.stmt#", "w.stmt#", "if.stmt#", "if1.stmt#"};
+    for (int i = 0; i < correct_syntax_ptr_list.size(); i++) {
+      REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+    REQUIRE_NOTHROW(qp->ParseQuery(query));
+  }
+
+  SECTION("Valid_BOOLEAN with clause") {
+    std::string query = "while w; assign a;Select BOOLEAN such that Parent* (w, a)";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
+
+    ClauseSyntaxPtrList correct_syntax_ptr_list = {};
+    SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Parent*", "w", "a");
+    std::shared_ptr<ClauseSyntax> such_that_syntax_ptr = std::make_shared<SuchThatClauseSyntax>(such_that_syntax_pair);
+    correct_syntax_ptr_list.push_back(such_that_syntax_ptr);
+    Map correct_declaration_map = {{"a", "assign"}, {"w", "while"}};
+    SelectedSynonymTuple correct_synonym_tuple = {};
+    for (int i = 0; i < correct_syntax_ptr_list.size(); i++) {
+      REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+    REQUIRE_NOTHROW(qp->ParseQuery(query));
+  }
+
+  SECTION("repeated terminal names -- BOOLEAN") {
+    std::string query = "assign BOOLEAN; Select BOOLEAN";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
+
+    ClauseSyntaxPtrList correct_clause_syntax_ptr_list = {};
+    Map correct_declaration_map = {{"BOOLEAN", "assign"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"BOOLEAN"};
     REQUIRE(correct_clause_syntax_ptr_list == clause_syntax_ptr_list);
     REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
@@ -191,10 +270,12 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    ClauseSyntaxPtrList correct_clause_syntax_ptr_list = {};
+    ClauseSyntaxPtrList correct_syntax_ptr_list = {};
     Map correct_declaration_map = {{"v", "variable"}, {"a", "assign"}};
     SelectedSynonymTuple correct_synonym_tuple = {"a", "v"};
-    REQUIRE(correct_clause_syntax_ptr_list == clause_syntax_ptr_list);
+    for (int i = 0; i < correct_syntax_ptr_list.size(); i++) {
+      REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
+    }
     REQUIRE(correct_synonym_tuple == synonym_tuple);
     REQUIRE(declaration_map == correct_declaration_map);
     REQUIRE_NOTHROW(qp->ParseQuery(query));
@@ -296,8 +377,12 @@ TEST_CASE("Test invalid queries") {
   auto qp = std::make_shared<QueryParser>();
 
   SECTION("Test invalid Multiple Syn Select Synonym Tuple") {
+    //Extra closing bracket
+    std::string query = "assign a;variable v;Select <a,v>> such that Parent* (w, a) pattern a(\"x\", _)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
     //No comma
-    std::string query = "assign a;variable v;while w;Select < a v w > such that Parent* (w, a) pattern a(\"x\", _)";
+    query = "assign a;variable v;while w;Select < a v w > such that Parent* (w, a) pattern a(\"x\", _)";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
     //No opening bracket
@@ -314,10 +399,6 @@ TEST_CASE("Test invalid queries") {
 
     //Extra opening bracket
     query = "assign a;variable v;Select < < a , v > such that Parent* (w, a) pattern a(\"x\", _)";
-    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
-
-    //Extra closing bracket
-    query = "assign a;variable v;Select <a,v>> such that Parent* (w, a) pattern a(\"x\", _)";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
     //Wrong placement of bracket

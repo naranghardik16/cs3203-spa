@@ -183,5 +183,6 @@ class QueryUtil {
    * @return statement type of synonym
    */
   static StatementType GetStatementType(Map &declaration, const std::string &synonym);
+  static bool IsAttrRef(const std::string &s);
 };
 

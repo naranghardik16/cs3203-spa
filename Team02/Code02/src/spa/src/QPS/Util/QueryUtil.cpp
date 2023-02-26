@@ -19,6 +19,16 @@ bool QueryUtil::IsWildcard(const std::string& s) {
 }
 
 
+bool QueryUtil::IsAttrRef(const std::string& s) {
+  if (s.find(pql_constants::kFullStop) != std::string::npos) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+
 bool QueryUtil::IsSynonym(const std::string& s) {
   return LexicalRuleValidator::IsIdent(s);
 }

@@ -14,6 +14,7 @@ const std::string kClosingBracket = ")";
 const std::string kComma = ",";
 const std::string kEqual = "=";
 const std::string kSemicolon = ";";
+const std::string kFullStop = ".";
 
 const std::string kSelectBoolean = "BOOLEAN";
 const std::string kSelectKeyword = "Select";
