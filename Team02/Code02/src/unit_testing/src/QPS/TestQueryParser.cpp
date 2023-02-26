@@ -120,6 +120,22 @@ TEST_CASE("Test Invalid And Clause") {
 TEST_CASE("Test Valid Simple Query Parser") {
   auto qp = std::make_shared<QueryParser>();
 
+  SECTION("Test valid query with basic BOOLEAN - no declarations") {
+    std::string query("Select BOOLEAN");
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
+
+    ClauseSyntaxPtrList correct_clause_syntax_ptr_list = {};
+    Map correct_declaration_map = {};
+    SelectedSynonymTuple correct_synonym_tuple = {};
+    REQUIRE(correct_clause_syntax_ptr_list == clause_syntax_ptr_list);
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+    REQUIRE_NOTHROW(qp->ParseQuery(query));
+  }
+
   SECTION("Test valid query with a basic select statement in tuple") {
     std::string query("variable k; Select <k>");
     auto parser_output = qp->ParseQuery(query);
@@ -168,7 +184,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     REQUIRE_NOTHROW(qp->ParseQuery(query));
   }
 
-  SECTION("Test valid query with a basic select BOOLEAN statement") {
+  SECTION("Test valid query with a basic select tuple statement") {
     std::string query("variable v; assign a; Select <a,v>");
     auto parser_output = qp->ParseQuery(query);
     auto synonym_tuple = parser_output->GetSynonymTuple();
@@ -442,7 +458,7 @@ TEST_CASE("Test invalid queries") {
 
   SECTION("Test invalid query with no declarations") {
     std::string query("Select a");
-    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
   }
 
   SECTION("Test invalid query_v is not stmt ref_throw semantic error") {

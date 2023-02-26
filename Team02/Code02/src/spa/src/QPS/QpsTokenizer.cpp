@@ -29,9 +29,6 @@ QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespac
 
   std::string select_statement = string_util::Trim(temp);
 
-  if (declaration_statements.empty()) {
-    throw SyntaxErrorException("No declarations");
-  }
   if (select_statement.empty()) {
     throw SyntaxErrorException("There is no select statement identified");
   }
@@ -108,7 +105,7 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
 }
 
 std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations) {
-  std::unordered_map<std::string, std::string> synonym_to_design_entity_map;
+  std::unordered_map<std::string, std::string> synonym_to_design_entity_map = {};
   std::string design_entity;
 
   for (const std::string &kDeclaration : declarations) {
