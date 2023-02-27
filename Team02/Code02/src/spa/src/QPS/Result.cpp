@@ -27,6 +27,9 @@ void Result::JoinResult(std::shared_ptr<Result> result) {
 
 std::unordered_set<std::string> Result::ProjectResult(SelectedSynonymTuple synonym_tuple) {
   //TODO To patch for synonym tuple
+  if (synonym_tuple.empty()) {
+    return {"TRUE"};
+  }
   auto synonym = synonym_tuple[0];
   auto it = std::find(this->header_.begin(), this->header_.end(), synonym);
   int index = it - this->header_.begin();
