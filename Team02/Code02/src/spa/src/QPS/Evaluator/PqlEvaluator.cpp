@@ -22,6 +22,9 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   }
 
   if (syntax_list_.size() == 0) {
+    if (synonym_tuple_.empty()) {
+      return {"True"};
+    }
     auto evaluation_result = EvaluateSelectStatementWithoutClauses();
     return evaluation_result->ProjectResult(synonym_tuple_);
   }

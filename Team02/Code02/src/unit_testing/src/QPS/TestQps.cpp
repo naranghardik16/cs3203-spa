@@ -8,6 +8,16 @@ TEST_CASE("Test Qps") {
   std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(pkb);
   std::list<std::string> results;
 
+  SECTION("Test valid query - SELECT BOOLEAN") {
+    results.clear();
+    REQUIRE(results.size() == 0);
+
+    std::string query = "Select BOOLEAN";
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    REQUIRE(results.front() == "True");
+  }
+
   SECTION("Test invalid query - wrong select keyword") {
     results.clear();
     REQUIRE(results.size() == 0);
@@ -47,4 +57,5 @@ TEST_CASE("Test Qps") {
 
     REQUIRE(results.front() == "SemanticError");
   }
+
 }
