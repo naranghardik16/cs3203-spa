@@ -15,6 +15,7 @@ TEST_CASE("Check if PQLEvaluator works for basic select statements") {
   SECTION("Test on variable synonym") {
     std::string query = "variable v;Select v";
     auto output = qp->ParseQuery(query);
+
     auto eval = std::make_shared<PqlEvaluator>(output, pkb_read_facade_);
     auto eval_result = eval->Evaluate();
     std::unordered_set<std::string> correct_set({"a","x", "y", "g"});

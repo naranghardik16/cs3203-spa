@@ -17,18 +17,20 @@ void SemanticValidator::ValidateSelectSemantics(SelectedSynonymTuple &synonym_ve
     }
 
     //check attrRef, if synonym declared
-    std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(syn);
-    auto it = declaration_.find(token_lst[0]);
-    if (it == declaration_.end()) {
-      has_semantic_error_ = true;
-      break;
-    }
+    if (QueryUtil::IsAttrRef(syn)) {
+      std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(syn);
+      auto it = declaration_.find(token_lst[0]);
+      if (it == declaration_.end()) {
+        has_semantic_error_ = true;
+        break;
+      }
 
-    //check attrRef, if attr name is valid for the design entity
-    auto attr_name = pql_constants::kEntityToAttrName.at(it->second);
-    if (attr_name.find(token_lst[1]) == attr_name.end()) {
-      has_semantic_error_ = true;
-      break;
+      //check attrRef, if attr name is valid for the design entity
+      auto attr_name = pql_constants::kEntityToAttrName.at(it->second);
+      if (attr_name.find(token_lst[1]) == attr_name.end()) {
+        has_semantic_error_ = true;
+        break;
+      }
     }
   }
 }
