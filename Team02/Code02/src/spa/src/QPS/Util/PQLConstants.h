@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <regex>
+#include <unordered_map>
 
 /**
  * Organises all constants that are used in QPS
@@ -44,9 +45,28 @@ const std::string kPqlParentStarRel = "Parent*";
 const std::string kPqlUsesRel = "Uses";
 const std::string kPqlModifiesRel = "Modifies";
 
+const std::string kProcName = "procName";
+const std::string kVarname = "varName";
+const std::string kValue = "value";
+const std::string kStmtNo = "stmt#";
+
 const std::unordered_set<std::string> kRelRefs({kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel, kPqlUsesRel, kPqlModifiesRel});
 const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
 const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel});
 const std::unordered_set<std::string> kStmtProcToStmtRel({kPqlUsesRel, kPqlModifiesRel});
 const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity, kPqlProcedureEntity});
+const std::unordered_set<std::string> kAttrName({kProcName, kVarname, kValue, kStmtNo});
+
+const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityToAttrName {
+    {kPqlProcedureEntity, {kProcName}},
+    {kPqlVariableEntity, {kVarname}},
+    {kPqlConstantEntity, {kValue}},
+    {kPqlStatementEntity, {kStmtNo}},
+    {kPqlReadEntity, {kStmtNo, kVarname}},
+    {kPqlPrintEntity, {kStmtNo, kVarname}},
+    {kPqlWhileEntity, {kStmtNo}},
+    {kPqlIfEntity, {kStmtNo}},
+    {kPqlCallEntity, {kStmtNo, kProcName}},
+    {kPqlAssignEntity, {kStmtNo}}
+};
 }

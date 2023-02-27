@@ -431,11 +431,220 @@ TEST_CASE("Check if SplitQuery works") {
 }
 
 TEST_CASE("Test if ParseSynonym works") {
+  Map declaration{{"a", "assign"}, {"v" , "variable"}, {"proc", "procedure"},
+                  {"r", "read"}, {"p", "print"}, {"ca", "call"}, {"i", "if"},
+                  {"w", "while"}, {"c", "constant"}, {"s", "stmt"}};
 
   SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tokenizer->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+  }
+
+  SECTION("InvalidAttrNameInRef_ThrowsSyntaxErrorException") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "r.varname      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+  }
+
+  SECTION("InvalidSynInRef_ThrowsSyntaxErrorException") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "1r.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+  }
+
+  SECTION("InvalidAttrRef_ThrowsSyntaxErrorException") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "r.varName.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+  }
+
+  SECTION("BOOLEANInTupleNotDeclared_HasSemanticError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<BOOLEAN>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("InvalidAttrForSyn_HasSemanticError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<c.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("BOOLEANNotInTuple_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "BOOLEAN      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("NoCloseBracket_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<r.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("read.varName_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<r.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("read.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<r.stmt#> such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("print.varName_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<p.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("print.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<p.stmt#> such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("procedure.procName_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<proc.procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("variable.varName_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<v.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("constant.value_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<c.value>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("statement.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<s.stmt#>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("while.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<w.stmt#>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("if.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<i.stmt#>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("call.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<ca.stmt#>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("call.procName_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<ca.procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("assign.stmt#_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<a.stmt#>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("MultipleAttrRef_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<a.stmt#,c.value,ca.procName,r.varName,p.varName,v.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("SpaceInAttrRef_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "<a.   stmt#,c   .value,     ca   .   procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
+  SECTION("SpaceInAttrRef_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "a.   stmt# such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
 }
 

@@ -1,4 +1,3 @@
-#pragma once
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 #include "QPS/Util/QPSTypeDefs.h"
@@ -20,14 +19,13 @@ bool QueryUtil::IsWildcard(const std::string& s) {
 
 
 bool QueryUtil::IsAttrRef(const std::string& s) {
-  if (s.find(pql_constants::kFullStop) != std::string::npos) {
-    return true;
-  } else {
+  std::vector<std::string> token_lst = SplitAttrRef(s);
+
+  if (token_lst.size() != 2 || !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
     return false;
   }
+  return true;
 }
-
-
 
 bool QueryUtil::IsSynonym(const std::string& s) {
   return LexicalRuleValidator::IsIdent(s);
@@ -145,4 +143,13 @@ StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& s
   }
 }
 
+std::vector<std::string> QueryUtil::SplitAttrRef(const std::string &s) {
+  std::stringstream attr_ref(s);
+  std::vector<std::string> token_lst;
 
+  for (std::string token; std::getline(attr_ref, token, '.'); ) {
+    token_lst.push_back(token);
+  }
+
+  return token_lst;
+}
