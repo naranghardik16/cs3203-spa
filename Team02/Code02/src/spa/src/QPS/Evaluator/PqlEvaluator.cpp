@@ -15,16 +15,16 @@ PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::sha
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
-  //! Process boolean constraints first
+  if (synonym_tuple_.empty()) {
+    return EvaluateBooleanQuery();
+  }
+
   EvaluateBooleanConstraints();
   if (is_return_empty_set) {
     return {};
   }
 
   if (syntax_list_.size() == 0) {
-    if (synonym_tuple_.empty()) {
-      return {"True"};
-    }
     auto evaluation_result = EvaluateSelectStatementWithoutClauses();
     return evaluation_result->ProjectResult(synonym_tuple_);
   }
@@ -35,6 +35,27 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   }
 
   return GetFinalEvaluationResult(clause_evaluation_result);
+}
+
+
+std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
+  if (syntax_list_.size() == 0) {
+    return {"TRUE"};
+  }
+
+  EvaluateBooleanConstraints();
+  if (is_return_empty_set) {
+    return {"FALSE"};
+  }
+  if (syntax_list_.size() == 0) {
+    return {"TRUE"};
+  }
+
+  auto clause_evaluation_result = GetClauseEvaluationResult();
+  if (is_return_empty_set) {
+    return {"FALSE"};
+  }
+  return {"TRUE"};
 }
 
 void PqlEvaluator::EvaluateBooleanConstraints() {

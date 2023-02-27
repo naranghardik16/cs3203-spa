@@ -35,4 +35,5 @@ class PqlEvaluator {
   shared_ptr<Result> GetClauseEvaluationResult();
   void EvaluateBooleanConstraints();
   shared_ptr<Result> EvaluateSelectStatementWithoutClauses();
+  unordered_set<string> EvaluateBooleanQuery();
 };
