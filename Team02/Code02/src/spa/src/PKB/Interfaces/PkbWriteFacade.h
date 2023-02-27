@@ -105,12 +105,30 @@ class PkbWriteFacade {
   void AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_number_1,
                          PkbTypes::STATEMENT_NUMBER statement_number_2) const;
 
+  /**
+   * Adds an assignment statement and its expression into the PKB.
+   *
+   * @param statement_number - The statement number of the assignment statement.
+   * @param expression - A shared pointer to the Expression object of the expression.
+   */
   void AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number,
                                            std::shared_ptr<Expression> expression);
 
+  /**
+   * Adds an if statement and its condition into the PKB.
+   *
+   * @param statement_number - The statement number of the if statement.
+   * @param expression - A shared pointer to the Expression object of the expression.
+   */
   void AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                   std::shared_ptr<Expression> expression);
 
+  /**
+   * Adds a while statement and its condition into the PKB.
+   *
+   * @param statement_number - The statement number of the while statement.
+   * @param expression - A shared pointer to the Expression object of the expression.
+   */
   void AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                      std::shared_ptr<Expression> expression);
 };
