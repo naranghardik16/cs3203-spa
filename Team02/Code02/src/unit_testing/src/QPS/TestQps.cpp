@@ -15,7 +15,7 @@ TEST_CASE("Test Qps") {
     std::string query = "Select BOOLEAN";
     Qps::ProcessQuery(query, results, pkb_read);
 
-    REQUIRE(results.front() == "True");
+    REQUIRE(results.front() == "TRUE");
   }
 
   SECTION("Test invalid query - wrong select keyword") {
