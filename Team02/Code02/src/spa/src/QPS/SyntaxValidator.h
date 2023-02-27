@@ -7,8 +7,9 @@
 #include "ValidationHandler/PatternHandler.h"
 #include "QPS/Clause/ClauseSyntax.h"
 
-class ClauseSyntaxValidator{
+class SyntaxValidator{
  public:
+  void ValidateSelectSyntax(SelectedSynonymTuple &synonym_vector);
   void ValidateSuchThatClauseSyntax(std::shared_ptr<ClauseSyntax> clause);
   void ValidatePatternClauseSyntax(std::shared_ptr<ClauseSyntax> clause);
 };

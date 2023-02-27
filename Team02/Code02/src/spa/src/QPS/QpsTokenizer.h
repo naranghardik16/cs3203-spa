@@ -9,18 +9,18 @@
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Clause/ClauseSyntax.h"
 #include "QPS/Util/QPSTypeDefs.h"
-#include "QPS/ClauseSyntaxValidator.h"
-#include "QPS/ClauseSemanticValidator.h"
+#include "QPS/SyntaxValidator.h"
+#include "QPS/SemanticValidator.h"
 
 /*!
  * The tokenizer handles the parsing of the query
- * It works with ClauseSyntaxValidator and ClauseSemanticValidator to complete validation of the query
+ * It works with SyntaxValidator and SemanticValidator to complete validation of the query
  */
 class QpsTokenizer {
 
  public:
-  std::shared_ptr<ClauseSyntaxValidator> syntax_validator_;
-  std::shared_ptr<ClauseSemanticValidator> semantic_validator_;
+  std::shared_ptr<SyntaxValidator> syntax_validator_;
+  std::shared_ptr<SemanticValidator> semantic_validator_;
 
   QpsTokenizer();
 

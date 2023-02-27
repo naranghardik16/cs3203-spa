@@ -11,7 +11,7 @@
 #include "ExpressionParser.h"
 #include "QPS/Clause/WithClauseSyntax.h"
 
-QpsTokenizer::QpsTokenizer() : syntax_validator_(new ClauseSyntaxValidator()), semantic_validator_(new ClauseSemanticValidator()){}
+QpsTokenizer::QpsTokenizer() : syntax_validator_(new SyntaxValidator()), semantic_validator_(new SemanticValidator()){}
 
 QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
   std::string delimiter = pql_constants::kSemicolon;
@@ -195,16 +195,8 @@ SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& clause_with_s
     synonym_vector = ParseSingleSynonym(clause_with_select_removed);
   }
 
-  //TODO to directly pass to validator to validate instead of looping and checking declaration map
-  //SelectSynonymSyntaxValidator->validate(synonym_tuple)
-  //SelectSynonymSemanticValidator->validate(synonym_tuple)
-  if (!synonym_vector.empty()) {
-    for (auto syn : synonym_vector) {
-      if (!QueryUtil::IsSynonym(syn) && !QueryUtil::IsAttrRef(syn)) {
-        throw SyntaxErrorException("Not a valid syn or attr-ref");
-      }
-    }
-  }
+  syntax_validator_->ValidateSelectSyntax(synonym_vector);
+  semantic_validator_->ValidateSelectSemantics(synonym_vector);
 
   return synonym_vector;
 }
@@ -246,7 +238,7 @@ SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(std::string trimmed_
 
   for (int i = 0; i < synonym_vector.size(); i++) {
     auto synonym = synonym_vector[i];
-    if (QueryUtil::IsAttrRef(synonym)) {
+    if (synonym.find(pql_constants::kFullStop) != std::string::npos) {
       synonym_vector[i] = ParseAttrRef(synonym);
     }
   }

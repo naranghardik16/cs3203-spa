@@ -1,5 +1,8 @@
 #pragma once
+
 #include <string>
+#include <sstream>
+#include <vector>
 #include "QPSTypeDefs.h"
 #include <unordered_set>
 #include <unordered_map>
@@ -184,5 +187,7 @@ class QueryUtil {
    */
   static StatementType GetStatementType(Map &declaration, const std::string &synonym);
   static bool IsAttrRef(const std::string &s);
+
+  static std::vector<std::string> SplitAttrRef(const std::string &s);
 };
 
