@@ -6,6 +6,7 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Clause/PatternClauseSyntax.h"
 #include "QPS/Clause/SuchThatClauseSyntax.h"
+#include "QPS/Clause/WithClauseSyntax.h"
 
 SyntaxPair CreateCorrectSyntaxPairParser(std::string entity, std::string first_parameter, std::string second_parameter) {
   ParameterVector parameter_vec = {first_parameter, second_parameter};
@@ -15,6 +16,13 @@ SyntaxPair CreateCorrectSyntaxPairParser(std::string entity, std::string first_p
   return syntax;
 }
 
+SyntaxPair CreateCorrectThreeArgSyntaxPairParser(std::string entity, std::string first_parameter, std::string second_parameter, std::string third_parameter) {
+  ParameterVector parameter_vector = {first_parameter, second_parameter, third_parameter};
+  SyntaxPair syntax;
+  syntax.first = entity;
+  syntax.second = parameter_vector;
+  return syntax;
+}
 
 TEST_CASE("Test Invalid Multi Clause") {
   auto qp = std::make_shared<QueryParser>();
@@ -119,6 +127,164 @@ TEST_CASE("Test Invalid And Clause") {
 
 TEST_CASE("Test Valid Simple Query Parser") {
   auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Multi clause query with BOOLEAN") {
+    std::string query = "assign with, Parent; while w; Select BOOLEAN pattern Parent(_,_) and with(_,_) with Parent.stmt#=with.stmt# and 6 = 5 such that Parent(w,Parent)";
+    auto parser_output = qp->ParseQuery(query);
+
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_if_syntax = CreateCorrectSyntaxPairParser("Parent", "_", "_");
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPairParser("with", "_", "_");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPairParser("", "Parent.stmt#", "with.stmt#");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "6", "5");
+    SyntaxPair correct_parent2_syntax = CreateCorrectSyntaxPairParser("Parent", "w", "Parent");
+    std::shared_ptr<ClauseSyntax>
+        pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_if_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent2_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent2_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {pattern_clause_ptr, parent_clause_ptr, with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
+    Map correct_declaration_map = {{"Parent", "assign"},{"with", "assign"}, {"w","while"}};
+    SelectedSynonymTuple correct_synonym_tuple = {};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
+  SECTION("Multi clause query with BOOLEAN as syn") {
+    std::string query = "assign with, BOOLEAN; while w; Select BOOLEAN pattern BOOLEAN(_,_) and with(_,_) with BOOLEAN.stmt#=with.stmt# and 6 = 5 such that Parent(w,BOOLEAN)";
+    auto parser_output = qp->ParseQuery(query);
+
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_if_syntax = CreateCorrectSyntaxPairParser("BOOLEAN", "_", "_");
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPairParser("with", "_", "_");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPairParser("", "BOOLEAN.stmt#", "with.stmt#");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "6", "5");
+    SyntaxPair correct_parent2_syntax = CreateCorrectSyntaxPairParser("Parent", "w", "BOOLEAN");
+    std::shared_ptr<ClauseSyntax>
+        pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_if_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent2_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent2_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {pattern_clause_ptr, parent_clause_ptr, with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
+    Map correct_declaration_map = {{"BOOLEAN", "assign"},{"with", "assign"}, {"w","while"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"BOOLEAN"};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
+  SECTION("Multi clause query with tuple") {
+    std::string query = "assign with, Parent; while w; Select < pattern . stmt#, w . stmt#, Parent > pattern Parent(_,_) and with(_,_) with Parent.stmt#=with.stmt# and 6 = 5 such that Parent(w,Parent)";
+    auto parser_output = qp->ParseQuery(query);
+
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_if_syntax = CreateCorrectSyntaxPairParser("Parent", "_", "_");
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPairParser("with", "_", "_");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPairParser("", "Parent.stmt#", "with.stmt#");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "6", "5");
+    SyntaxPair correct_parent2_syntax = CreateCorrectSyntaxPairParser("Parent", "w", "Parent");
+    std::shared_ptr<ClauseSyntax>
+        pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_if_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent2_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent2_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {pattern_clause_ptr, parent_clause_ptr, with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
+    Map correct_declaration_map = {{"Parent", "assign"},{"with", "assign"}, {"w","while"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"pattern.stmt#", "w.stmt#", "Parent"};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
+
+  SECTION("Multi clause query with attr-ref") {
+    std::string query = "assign with, Parent; while w; Select pattern . stmt# pattern Parent(_,_) and with(_,_) with Parent.stmt#=with.stmt# and 6 = 5 such that Parent(w,Parent)";
+    auto parser_output = qp->ParseQuery(query);
+
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_if_syntax = CreateCorrectSyntaxPairParser("Parent", "_", "_");
+    SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPairParser("with", "_", "_");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPairParser("", "Parent.stmt#", "with.stmt#");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "6", "5");
+    SyntaxPair correct_parent2_syntax = CreateCorrectSyntaxPairParser("Parent", "w", "Parent");
+    std::shared_ptr<ClauseSyntax>
+        pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_if_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_parent_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        parent2_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent2_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>>
+        correct_vector = {pattern_clause_ptr, parent_clause_ptr, with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
+    Map correct_declaration_map = {{"Parent", "assign"},{"with", "assign"}, {"w","while"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"pattern.stmt#"};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
+  SECTION("Attr-ref as synonym with repeated terminal names") {
+    std::string query = "assign pattern; Select    pattern  . stmt# pattern pattern(_,_)";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
+
+    ClauseSyntaxPtrList correct_syntax_ptr_list = {};
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("pattern", "_", "_");
+    std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
+    correct_syntax_ptr_list.push_back(pattern_syntax_ptr);
+    Map correct_declaration_map = {{"pattern", "assign"},};
+    SelectedSynonymTuple correct_synonym_tuple = {"pattern.stmt#"};
+    for (int i = 0; i < correct_syntax_ptr_list.size(); i++) {
+      REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
 
   SECTION("Valid_MultipleSyn_WithSpaces") {
     std::string query("assign a; while w; if if, if1;variable v; Select <  a  .  stmt#   , w  .  stmt#   , if  .  stmt#     , if1  .  stmt#      > such that Modifies(a,v)");
@@ -411,6 +577,19 @@ TEST_CASE("Test Valid Simple Query Parser") {
 
 TEST_CASE("Test invalid queries") {
   auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Test invalid attrRef as synonym queries") {
+    //no full stop
+    std::string query = "stmt s;Select s stmt# such that Follows(5,5)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    //wrong character
+    query = "stmt s;Select s,stmt# such that Follows(5,5)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+
+
+  }
 
   SECTION("Test invalid Boolean queries") {
     //Extra character at the end

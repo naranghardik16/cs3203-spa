@@ -166,7 +166,14 @@ SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring)
   std::string attrName;
   auto first_char = clause_after_first_word.substr(0, 1);
   if (first_char == pql_constants::kFullStop) {
-    attrName = string_util::Trim(clause_after_first_word.substr(1));
+    // might contain more clauses at the end
+    std::string attrName_substr = string_util::Trim(clause_after_first_word.substr(1));
+    std::string first_word = string_util::GetFirstWord(attrName_substr);
+    if (first_word.empty()) {
+      attrName = string_util::Trim(clause_after_first_word.substr(1));
+    } else {
+      attrName = first_word;
+    }
     synonym_vector = {syn + "." + attrName};
   } else {
     synonym_vector = {syn};

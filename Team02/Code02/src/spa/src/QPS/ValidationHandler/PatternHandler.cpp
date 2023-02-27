@@ -23,10 +23,10 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
 
   //If arg_1 is synonym, check if it is declared and is 'variable' entity
   if (QueryUtil::IsSynonym(arg_1) && declaration.find(syn_assign) == declaration.end()) {
-    throw SemanticErrorException();
+    throw SemanticErrorException(arg_1 + "is a synonym that is not declared");
   }
   if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlVariableEntity) {
-    throw SemanticErrorException();
+    throw SemanticErrorException(arg_1 + "is not a variable entity");
   }
 
   return;
