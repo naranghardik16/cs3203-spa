@@ -8,6 +8,9 @@
 /**
  * @class ExpressionStore
  * Class representing Expression store in PKB.
+ *
+ * The ExpressionStore class is responsible for storing all expressions in PKB and provides methods for querying
+ * variables and constants used in a particular expression.
  */
 class ExpressionStore {
  public:
