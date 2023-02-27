@@ -17,10 +17,9 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::string trimmed_select_statement = declaration_select_pair.second;
   std::string remaining_clause = string_util::Trim(trimmed_select_statement.substr(pql_constants::kSelectKeyword.length()));
 
-  std::string syn_substring = tk->GetSynonymSubstring(remaining_clause);
-  SelectedSynonymTuple synonym_tuple = tk->ParseSynonym(syn_substring, declaration_map);
+  SelectedSynonymTuple synonym_tuple = tk->ParseSynonym(remaining_clause, declaration_map);
 
-  std::string clause_substring = tk->GetSubclauseSubstring(remaining_clause);
+  std::string clause_substring = tk->GetSubclauseString(remaining_clause, synonym_tuple);
   ClauseSyntaxPtrList syntax_pair_list;
   if (!clause_substring.empty()) {
     syntax_pair_list = tk->ParseSubClauses(clause_substring);
