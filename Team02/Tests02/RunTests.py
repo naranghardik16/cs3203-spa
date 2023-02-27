@@ -37,9 +37,9 @@ def MakeResultDirectory():
     isExist = os.path.exists(OUTPUT_DIRECTORY)
     if not isExist:
         os.makedirs(OUTPUT_DIRECTORY)
-def GetAutotesterParameterList():
+def GetAutotesterParameterList(folder_to_test_in):
     current_directory = os.getcwd()
-    test_name_list = glob.glob(current_directory + "/*/*/*.txt")
+    test_name_list = glob.glob(current_directory + f"/{folder_to_test_in}/*/*.txt")
     source_test_name_list = list(filter(lambda filename : filename.endswith("source.txt"), test_name_list))
     query_test_name_list = list(filter(lambda filename : filename.endswith("queries.txt"), test_name_list))
 
@@ -97,9 +97,9 @@ def ExecuteAutotester(autotester_filepath, autotester_param):
     test_summary = f"Autotester run completed for {test_name} with output {check_output_xml(output_xml_filepath)}"
     return test_summary
 
-def Execute():
+def Execute(folder_to_test_in):
     autotester_file_path = FindAutotesterExecutablePath()
-    autotester_param_list = GetAutotesterParameterList()
+    autotester_param_list = GetAutotesterParameterList(folder_to_test_in)
     MakeResultDirectory()
 
     test_report = ""
@@ -121,4 +121,6 @@ def Execute():
     os.system(move_xsl_file_to_results)
     os.system(start_python_host_command)
 
-Execute()
+#if test all then put *
+folder_to_test_in = "Milestone2"
+Execute(folder_to_test_in)

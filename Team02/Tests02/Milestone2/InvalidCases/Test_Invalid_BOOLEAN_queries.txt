@@ -6,14 +6,14 @@ SyntaxError
 2 - wrong casing of BOOLEAN
 
 Select BOOLEAn
-SyntaxError
+SemanticError
 5000
 3 - misspelling of BOOLEAN
 
 Select BOOLEANs
-SyntaxError
+SemanticError
 5000
-4 - extra character before BOOLEAN
+4 - extra < character before BOOLEAN
 
 Select <BOOLEAN
 SyntaxError
@@ -23,4 +23,18 @@ SyntaxError
 Select <BOOLEAN>
 SemanticError
 5000
+6 - extra ; before BOOLEAN
 
+Select ;BOOLEAN
+SyntaxError
+5000
+7 - extra letter before BOOLEAN
+
+Select a BOOLEAN
+SyntaxError
+5000
+8 - extra clause indicator before BOOLEAN
+
+Select pattern BOOLEAN
+SyntaxError
+5000
