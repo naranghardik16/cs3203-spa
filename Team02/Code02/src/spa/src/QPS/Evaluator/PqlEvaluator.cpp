@@ -52,7 +52,7 @@ std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
   }
 
   auto clause_evaluation_result = GetClauseEvaluationResult();
-  if (is_return_empty_set) {
+  if (is_return_empty_set || clause_evaluation_result->table_.empty()) {
     return {"FALSE"};
   }
   return {"TRUE"};
