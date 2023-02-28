@@ -38,8 +38,8 @@ assign a;
 Select BOOLEAN such that Follows(_, a) and Follows(2, a) and Follows(_,_)
 TRUE
 5000
-9 - returns true based on multi-clause evaluation result with boolean constraint
+9 - returns false based on multi-clause evaluation result with boolean constraint
 assign a;
 Select BOOLEAN such that Follows(_, a) and Follows(2, a) and Follows(_, 1)
-TRUE
+FALSE
 5000

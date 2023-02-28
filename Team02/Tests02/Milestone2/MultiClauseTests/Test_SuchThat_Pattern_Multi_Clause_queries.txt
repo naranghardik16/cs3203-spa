@@ -5,6 +5,6 @@ Select s such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern
 5000
 2 - pattern AND AND
 assign a; variable v; stmt s;
-Select s pattern a(v,_"digit "_) and a(v,_"2"_) such that Modifies(s,v)
+Select a pattern a(v,_"digit "_) and a(v,_"2"_) such that Modifies(a,v)
 13
 5000
