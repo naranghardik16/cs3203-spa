@@ -94,6 +94,5 @@ class QpsTokenizer {
   string ParseAttrRef(string attr_ref);
   SelectedSynonymTuple ParseSingleSynonym(string clause_after_syn);
   string GetSubclauseString(string clause_with_select_removed, SelectedSynonymTuple syn_vector);
-  string GetAttrName(string attr_ref);
-  string GetSynonymFromAttrRef(string attr_ref);
+  string GetAttrName(string attrRef);
 };

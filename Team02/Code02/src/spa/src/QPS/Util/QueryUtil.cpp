@@ -152,3 +152,4 @@ std::vector<std::string> QueryUtil::SplitAttrRef(const std::string &s) {
 
   return token_lst;
 }
+
