@@ -9,11 +9,17 @@ bool WithClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacad
   bool is_first_arg_an_attr_ref = QueryUtil::IsAttrRef(first_arg_);
   bool is_second_arg_an_attr_ref = QueryUtil::IsAttrRef(second_arg_);
 
-  //The only case where 2 attr-refs are in a Boolean constraint is when they mismatch e.g. v.varName = s.stmt#
   if (is_first_arg_an_attr_ref && is_second_arg_an_attr_ref) {
+    //e.g. p.procName = a.stmt#
+    return false;
+  } else if(is_first_arg_an_attr_ref) {
+    //e.g. p.procName = 5, a.stmt# = "v"
+    return false;
+  } else if (is_second_arg_an_attr_ref) {
+    //e.g. p.procName = 5, a.stmt# = "v"
     return false;
   } else {
-    //with "5"=""v"", with ""v""="5", with "5"="6", with ""v""=""y""
+    //e.g. 5=5, v=6, 6=v
     return first_arg_ == second_arg_;
   }
 }

@@ -23,13 +23,22 @@ bool WithClauseSyntax::IsBooleanClause(Map &declaration_map) {
   bool is_second_arg_an_attr_ref = QueryUtil::IsAttrRef(second_arg);
 
   if (is_first_arg_an_attr_ref && is_second_arg_an_attr_ref) {
+    //e.g. p.procName = c.value
     if (QueryUtil::IsMismatchingAttrRef(first_arg, second_arg)) {
+      return true;
+    } else {
       return false;
     }
+  } else if (is_first_arg_an_attr_ref) {
+    //e.g. p.procName = 5, a.stmt# = "v"
+    return QueryUtil::IsTrivialAttrRefWithNoResult(first_arg, second_arg);
+  } else if (is_second_arg_an_attr_ref) {
+    //e.g. p.procName = 5, a.stmt# = "v"
+    return QueryUtil::IsTrivialAttrRefWithNoResult(second_arg, first_arg);
+  } else {
+    // 5 = 6, v = 5 -- no synonym present
+    return true;
   }
-
-  bool has_attr_ref = is_first_arg_an_attr_ref || is_second_arg_an_attr_ref;
-  return !has_attr_ref;
 }
 
 std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {

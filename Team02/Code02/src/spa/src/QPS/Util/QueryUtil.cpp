@@ -164,6 +164,7 @@ std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
   return token_lst[0];
 }
 
+
 bool QueryUtil::IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_2) {
   auto attr_name_1 = GetAttrNameFromAttrRef(attrRef_1);
   auto attr_name_2 = GetAttrNameFromAttrRef(attrRef_2);
@@ -182,3 +183,21 @@ bool QueryUtil::IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_
     return true;
   }
 }
+
+bool QueryUtil::IsTrivialAttrRefWithNoResult(std::string attrRef, std::string comparison_value) {
+  auto attr_name = GetAttrNameFromAttrRef(attrRef);
+
+  bool is_attr_name_return_int = ((attr_name == pql_constants::kStmtNo) || (attr_name == pql_constants::kValue));
+  //either IDENT or INT
+  //e.g. a.stmt# = ""v""
+  bool is_comparison_value_int = LexicalRuleValidator::IsInteger(comparison_value);
+  if (is_attr_name_return_int) {
+    return is_comparison_value_int;
+  } else {
+    //attr_name return ident -- e.g. procName or varName which must follow the NAME lexical rule and cannot be an integer
+    //e.g. p.procName = "5"
+    return !is_comparison_value_int;
+  }
+}
+
+
