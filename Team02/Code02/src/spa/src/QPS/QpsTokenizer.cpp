@@ -159,17 +159,27 @@ std::string QpsTokenizer::ParseAttrRef(std::string attr_ref) {
 
 SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring) {
   SelectedSynonymTuple synonym_vector;
-
-  std::string syn = string_util::GetFirstWord(syn_substring);
+  std::string temp;
+  for (auto c : syn_substring) {
+    if (c == '.') {
+      break;
+    } else if (std::isspace(c)) {
+      break;
+    } else {
+      temp += c;
+    }
+  }
+  std::string syn = temp;
   std::string clause_after_first_word = string_util::GetSubStringAfterKeyword(syn_substring, syn);
 
   std::string attrName;
   auto first_char = clause_after_first_word.substr(0, 1);
   if (first_char == pql_constants::kFullStop) {
-    // might contain more clauses at the end
+    // remove the dot
     std::string attrName_substr = string_util::Trim(clause_after_first_word.substr(1));
     std::string first_word = string_util::GetFirstWord(attrName_substr);
     if (first_word.empty()) {
+      // case where there is no clause substring
       attrName = string_util::Trim(clause_after_first_word.substr(1));
     } else {
       attrName = first_word;
@@ -309,12 +319,18 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromWithClause(const std::string& 
 
   std::string first_parameter = string_util::Trim(clause.substr(0,equal_index));
   std::string second_parameter = string_util::Trim(clause.substr(equal_index+1));
-
   if (QueryUtil::IsQuoted(first_parameter)) {
     first_parameter = "\"" + string_util::Trim(first_parameter.substr(1, first_parameter.length() - 2)) + "\"";
   }
   if (QueryUtil::IsQuoted(second_parameter)) {
     second_parameter = "\"" + string_util::Trim(second_parameter.substr(1, second_parameter.length() - 2)) + "\"";
+  }
+
+  if (QueryUtil::IsAttrRef(first_parameter)) {
+    first_parameter = ParseAttrRef(first_parameter);
+  }
+  if (QueryUtil::IsAttrRef(second_parameter)) {
+    second_parameter = ParseAttrRef(second_parameter);
   }
 
   SyntaxPair clause_syntax;

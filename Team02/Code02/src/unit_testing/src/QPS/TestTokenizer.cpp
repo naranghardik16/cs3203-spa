@@ -134,7 +134,7 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
 
   SECTION ("ATTRREF = ATTRREF") {
     std::string statement = "with     c.    procName =      p.procName";
-    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c. procName", "p.procName");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName", "p.procName");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with_clause_ptr};
 
@@ -435,6 +435,15 @@ TEST_CASE("Test if ParseSynonym works") {
                   {"r", "read"}, {"p", "print"}, {"ca", "call"}, {"i", "if"},
                   {"w", "while"}, {"c", "constant"}, {"s", "stmt"}};
 
+  SECTION("SpaceInAttrRef_NoError") {
+    auto tk = std::make_shared<QpsTokenizer>();
+    tk->semantic_validator_->declaration_ = declaration;
+    Map map = {};
+    std::string select_keyword_removed_query = "a.   stmt# such  that   Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
+    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
+  }
+
   SECTION("InvalidSynonym_ThrowsSyntaxErrorException") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
@@ -634,15 +643,6 @@ TEST_CASE("Test if ParseSynonym works") {
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "<a.   stmt#,c   .value,     ca   .   procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
-    REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
-  }
-
-  SECTION("SpaceInAttrRef_NoError") {
-    auto tk = std::make_shared<QpsTokenizer>();
-    tk->semantic_validator_->declaration_ = declaration;
-    Map map = {};
-    std::string select_keyword_removed_query = "a.   stmt# such  that   Parent* (w, a) pattern a (\"count\", _)";
     REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
