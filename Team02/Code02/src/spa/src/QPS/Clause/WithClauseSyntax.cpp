@@ -15,7 +15,21 @@ bool WithClauseSyntax::Equals(ClauseSyntax &other) {
 }
 
 bool WithClauseSyntax::IsBooleanClause(Map &declaration_map) {
-  return false;
+  auto first_arg = this->GetFirstParameter();
+  auto second_arg = this->GetSecondParameter();
+
+  //If not, the only case left is int or ident
+  bool is_first_arg_an_attr_ref = QueryUtil::IsAttrRef(first_arg);
+  bool is_second_arg_an_attr_ref = QueryUtil::IsAttrRef(second_arg);
+
+  if (is_first_arg_an_attr_ref && is_second_arg_an_attr_ref) {
+    if (QueryUtil::IsMismatchingAttrRef(first_arg, second_arg)) {
+      return false;
+    }
+  }
+
+  bool has_attr_ref = is_first_arg_an_attr_ref || is_second_arg_an_attr_ref;
+  return !has_attr_ref;
 }
 
 std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {

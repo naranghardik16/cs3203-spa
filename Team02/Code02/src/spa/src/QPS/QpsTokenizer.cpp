@@ -148,11 +148,6 @@ std::string QpsTokenizer::ParseAttrRef(std::string attrRef) {
   return token_lst[0] + "." + token_lst[1];
 }
 
-std::string QpsTokenizer::GetAttrName(std::string attrRef) {
-  auto token_lst = QueryUtil::SplitAttrRef(attrRef);
-  return token_lst[1];
-}
-
 
 SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& clause_with_select_removed, Map declaration_map) {
   std::string first_word = string_util::GetFirstWord(clause_with_select_removed);
@@ -245,7 +240,7 @@ std::string QpsTokenizer::GetSubclauseString(std::string clause_with_select_remo
   } else {
     auto syn = syn_vector[0];
     if (QueryUtil::IsAttrRef(syn)) {
-      auto attrName = GetAttrName(syn);
+      auto attrName = QueryUtil::GetAttrNameFromAttrRef(syn);
       index_start = clause_with_select_removed.find(attrName) + attrName.size();
     } else {
       index_start = clause_with_select_removed.find(syn) + syn.size();

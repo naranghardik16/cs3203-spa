@@ -153,3 +153,32 @@ std::vector<std::string> QueryUtil::SplitAttrRef(const std::string &s) {
   return token_lst;
 }
 
+
+std::string QueryUtil::GetAttrNameFromAttrRef(std::string attrRef) {
+  auto token_lst = SplitAttrRef(attrRef);
+  return token_lst[1];
+}
+
+std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
+  auto token_lst = SplitAttrRef(attrRef);
+  return token_lst[0];
+}
+
+bool QueryUtil::IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_2) {
+  auto attr_name_1 = GetAttrNameFromAttrRef(attrRef_1);
+  auto attr_name_2 = GetAttrNameFromAttrRef(attrRef_2);
+
+  bool is_attr_name_1_return_int = ((attr_name_1 == pql_constants::kStmtNo) || (attr_name_1 == pql_constants::kValue));
+  bool is_attr_name_2_return_int = ((attr_name_2 == pql_constants::kStmtNo) || (attr_name_2 == pql_constants::kValue));
+  bool both_return_int = is_attr_name_1_return_int && is_attr_name_2_return_int;
+
+  bool is_attr_name_1_return_ident = ((attr_name_1 == pql_constants::kProcName) || (attr_name_1 == pql_constants::kVarname));
+  bool is_attr_name_2_return_ident = ((attr_name_2 == pql_constants::kProcName) || (attr_name_2 == pql_constants::kVarname));
+  bool both_return_ident = is_attr_name_1_return_ident && is_attr_name_2_return_ident;
+
+  if (!both_return_ident && !both_return_int) {
+    return false;
+  } else {
+    return true;
+  }
+}
