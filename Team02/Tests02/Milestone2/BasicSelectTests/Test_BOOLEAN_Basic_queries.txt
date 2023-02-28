@@ -1,9 +1,4 @@
-1 - returns false based on empty evaluation result
-assign a;
-Select BOOLEAN such that Follows(a,8)
-FALSE
-5000
-5 - no declarations and no constraints
+1 - no declarations and no constraints
 
 Select BOOLEAN
 TRUE
@@ -21,6 +16,11 @@ TRUE
 4 - returns false based on boolean constraint
 
 Select BOOLEAN such that Follows(9, _)
+FALSE
+5000
+5 - returns false based on empty evaluation result
+assign a;
+Select BOOLEAN such that Follows(a,8)
 FALSE
 5000
 6 - returns true based on multi-clause evaluation result
