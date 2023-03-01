@@ -565,6 +565,13 @@ class PkbReadFacade {
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(std::string sub_expression);
 
+  /**
+   * Retrieves call statements and the procedure it calls.
+   *
+   * @return A set of pairs (call stmt#, procedure name)
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetCallProcedurePair();
+
  private:
   PKB& pkb;
 };
