@@ -8,6 +8,7 @@
 #include "ValidationHandler/StmtProcToVarHandler.h"
 #include "ValidationHandler/PatternHandler.h"
 #include "QPS/Util/QPSTypeDefs.h"
+#include "QPS/ValidationHandler/WithHandler.h"
 
 class SemanticValidator {
  public:
@@ -17,7 +18,5 @@ class SemanticValidator {
   void ValidateSelectSemantics(SelectedSynonymTuple &synonym_vector);
   void ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidatePatternClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
-
- private:
-
+  void ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
 };

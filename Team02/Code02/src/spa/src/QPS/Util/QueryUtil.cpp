@@ -20,7 +20,7 @@ bool QueryUtil::IsWildcard(const std::string& s) {
 
 bool QueryUtil::IsAttrRef(const std::string& s) {
   std::vector<std::string> token_lst = SplitAttrRef(s);
-  if (token_lst.size() != 2 ||  !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
+  if (token_lst.size() != 2 || !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
     return false;
   }
   return true;
@@ -163,43 +163,3 @@ std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
   auto token_lst = SplitAttrRef(attrRef);
   return token_lst[0];
 }
-
-
-bool QueryUtil::IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_2) {
-  auto attr_name_1 = GetAttrNameFromAttrRef(attrRef_1);
-  auto attr_name_2 = GetAttrNameFromAttrRef(attrRef_2);
-
-  bool is_attr_name_1_return_int = ((attr_name_1 == pql_constants::kStmtNo) || (attr_name_1 == pql_constants::kValue));
-  bool is_attr_name_2_return_int = ((attr_name_2 == pql_constants::kStmtNo) || (attr_name_2 == pql_constants::kValue));
-  bool both_return_int = is_attr_name_1_return_int && is_attr_name_2_return_int;
-
-  bool is_attr_name_1_return_ident = ((attr_name_1 == pql_constants::kProcName) || (attr_name_1 == pql_constants::kVarname));
-  bool is_attr_name_2_return_ident = ((attr_name_2 == pql_constants::kProcName) || (attr_name_2 == pql_constants::kVarname));
-  bool both_return_ident = is_attr_name_1_return_ident && is_attr_name_2_return_ident;
-
-  if (both_return_ident) {
-    return false;
-  } else if (both_return_int) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-bool QueryUtil::IsTrivialAttrRefWithNoResult(std::string attrRef, std::string comparison_value) {
-  auto attr_name = GetAttrNameFromAttrRef(attrRef);
-
-  bool is_attr_name_return_int = ((attr_name == pql_constants::kStmtNo) || (attr_name == pql_constants::kValue));
-  //either IDENT or INT
-  //e.g. a.stmt# = ""v""
-  bool is_comparison_value_int = LexicalRuleValidator::IsInteger(comparison_value);
-  if (is_attr_name_return_int) {
-    return is_comparison_value_int;
-  } else {
-    //attr_name return ident -- e.g. procName or varName which must follow the NAME lexical rule and cannot be an integer
-    //e.g. p.procName = "5"
-    return !is_comparison_value_int;
-  }
-}
-
-

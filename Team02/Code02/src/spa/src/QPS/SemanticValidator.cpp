@@ -66,3 +66,17 @@ void SemanticValidator::ValidatePatternClauseSemantic(std::shared_ptr<ClauseSynt
     has_semantic_error_ = true;
   }
 }
+
+void SemanticValidator::ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax> clause) {
+  if (has_semantic_error_) {
+    return;
+  }
+
+  try {
+    std::shared_ptr<WithHandler> handler = std::make_shared<WithHandler>();
+
+    handler->HandleSemantic(clause, declaration_);
+  } catch (const SemanticErrorException& e) {
+    has_semantic_error_ = true;
+  }
+}
