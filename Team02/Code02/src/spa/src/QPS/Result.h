@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <sstream>
 #include "QPS/Util/QPSTypeDefs.h"
 
 /*!

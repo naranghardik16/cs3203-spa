@@ -36,11 +36,11 @@ std::unordered_set<std::string> Result::ProjectResult(SelectedSynonymTuple synon
   }
 
   for (auto &row : this->table_) {
-    std::string result;
-    for (auto &index : index_lst) {
-      result += row[index] + " ";
+    std::stringstream result;
+    for (int i = 0; i < index_lst.size(); ++i) {
+      result << ( i ? " " : "" ) << row[index_lst[i]];
     }
-    output.insert(result.substr(0, result.length() - 1));
+    output.insert(result.str());
   }
   return output;
 }
