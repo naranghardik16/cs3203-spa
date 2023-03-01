@@ -165,18 +165,6 @@ SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& clause_with_s
   syntax_validator_->ValidateSelectSyntax(synonym_vector);
   semantic_validator_->ValidateSelectSemantics(synonym_vector);
 
-  //! remove trivial attr name
-  for (int i = 0; i < synonym_vector.size(); ++i) {
-    auto token_lst = QueryUtil::SplitAttrRef(synonym_vector.at(i));
-    if (token_lst.size() == 2) {
-      bool is_trivial_attr_name = (token_lst[1] == pql_constants::kStmtNo) || (token_lst[1] == pql_constants::kValue) ||
-          (declaration_map[token_lst[0]] == pql_constants::kPqlProcedureEntity) ||
-          (declaration_map[token_lst[0]] == pql_constants::kPqlVariableEntity);
-      if (is_trivial_attr_name) {
-        synonym_vector.at(i) = token_lst[0];
-      }
-    }
-  }
   return synonym_vector;
 
 }

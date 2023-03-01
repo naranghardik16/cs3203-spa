@@ -339,6 +339,12 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto synonym_tuple = parser_output->GetSynonymTuple();
     SelectedSynonymTuple correct_synonym_tuple = {"Select.stmt#"};
     REQUIRE(correct_synonym_tuple == synonym_tuple);
+
+    query = "assign Select; Select Select.stmt#";
+    parser_output = qp->ParseQuery(query);
+    synonym_tuple = parser_output->GetSynonymTuple();
+    correct_synonym_tuple = {"Select.stmt#"};
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
   }
 
   SECTION("Repeated terminal name") {

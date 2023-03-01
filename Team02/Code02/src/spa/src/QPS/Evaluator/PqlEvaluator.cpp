@@ -8,6 +8,18 @@
 
 PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
   synonym_tuple_ = parser_output->GetSynonymTuple();
+  //! remove trivial attr name e.g. r.stmt# is same as r
+  for (int i = 0; i < synonym_tuple_.size(); ++i) {
+    auto token_lst = QueryUtil::SplitAttrRef(synonym_tuple_.at(i));
+    if (token_lst.size() == 2) {
+      bool is_trivial_attr_name = (token_lst[1] == pql_constants::kStmtNo) || (token_lst[1] == pql_constants::kValue) ||
+          (declaration_map_[token_lst[0]] == pql_constants::kPqlProcedureEntity) ||
+          (declaration_map_[token_lst[0]] == pql_constants::kPqlVariableEntity);
+      if (is_trivial_attr_name) {
+        synonym_tuple_.at(i) = token_lst[0];
+      }
+    }
+  }
   syntax_list_ = parser_output->GetClauseSyntaxPtrList();
   declaration_map_ = parser_output->GetDeclarationMap();
   is_return_empty_set_ = false;
