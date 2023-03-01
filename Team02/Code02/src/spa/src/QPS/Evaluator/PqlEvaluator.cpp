@@ -117,8 +117,11 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
 std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelect(Synonym synonym) {
   ResultHeader header;
   header.push_back(synonym);
-  ResultTable table = ClauseEvaluator::ConvertSetToResultTableFormat(
-      DesignEntityGetter::GetEntitySet(pkb_, declaration_map_[synonym]));
+
+  std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(synonym);
+  std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
+
+  ResultTable table = DesignEntityGetter::GetEntitySet(pkb_, declaration_map_[token_lst[0]] + attr_name);
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
