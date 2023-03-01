@@ -20,6 +20,7 @@ class Result {
    */
   void JoinResult(std::shared_ptr<Result> result);
   std::unordered_set<std::string> ProjectResult(SelectedSynonymTuple synonym);
+  std::unordered_set<std::string> ProjectResultForBoolean();
 
   //!Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
