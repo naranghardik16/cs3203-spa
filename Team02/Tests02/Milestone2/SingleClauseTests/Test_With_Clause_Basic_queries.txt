@@ -100,7 +100,7 @@ none
 5000
 21 - with attrref = int -- procName = int
 constant c; procedure p;
-Select p with 5=p.procName
+Select p with 5=p   .   procName
 none
 5000
 22 - with attrref = int -- stmt# = ident
@@ -125,7 +125,7 @@ Select r with 5=6
 5000
 26 - with ident=ident is true
 read r;
-Select r with "x"="x"
+Select r with "     x    "=" x    "
 1,2
 5000
 27 - with ident=ident is false
