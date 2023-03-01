@@ -36,4 +36,6 @@ class PqlEvaluator {
   void EvaluateBooleanConstraints();
   shared_ptr<Result> EvaluateSelectStatementWithoutClauses();
   unordered_set<string> EvaluateBooleanQuery();
+  void AdjustTrivialAttrRef();
+  bool IsTrivialAttrRef(vector<string> attr_ref_token_lst);
 };

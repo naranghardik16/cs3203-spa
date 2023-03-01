@@ -124,6 +124,24 @@ TEST_CASE("Check if PQLEvaluator works for basic select statements") {
 }
 
 
+TEST_CASE("Basic Evaluation of Attr-ref") {
+  auto qp = std::make_shared<QueryParser>();
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
+
+  SECTION("INT, WILDCARD, Return True from PKB so get all variables") {
+    std::string query = "variable x;Select x.varName";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"a", "x", "y", "g"});
+    REQUIRE(eval_result == correct_set);
+
+  }
+}
+
 TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   auto qp = std::make_shared<QueryParser>();
   PKB pkb_ = PKB();
