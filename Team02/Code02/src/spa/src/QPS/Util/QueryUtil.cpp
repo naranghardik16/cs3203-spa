@@ -177,7 +177,9 @@ bool QueryUtil::IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_
   bool is_attr_name_2_return_ident = ((attr_name_2 == pql_constants::kProcName) || (attr_name_2 == pql_constants::kVarname));
   bool both_return_ident = is_attr_name_1_return_ident && is_attr_name_2_return_ident;
 
-  if (!both_return_ident && !both_return_int) {
+  if (both_return_ident) {
+    return false;
+  } else if (both_return_int) {
     return false;
   } else {
     return true;
