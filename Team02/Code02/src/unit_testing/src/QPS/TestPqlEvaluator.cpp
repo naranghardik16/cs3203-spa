@@ -1248,8 +1248,19 @@ TEST_CASE("Test With Clause Evaluator") {
     REQUIRE(eval_result == correct_set);
   }
 
-  SECTION("Test Boolean case -- INT = IDENT") {
-    std::string query = "assign a;Select a with 5=\"x\"";
+  SECTION("Test Boolean case -- IDENT = IDENT") {
+    std::string query = "assign a;Select a with \"x\"=\"x\"";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Test Boolean case -- IDENT != IDENT") {
+    std::string query = "assign a;Select a with \"y\"=\"x\"";
     auto correct_output = qp->ParseQuery(query);
 
     auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
