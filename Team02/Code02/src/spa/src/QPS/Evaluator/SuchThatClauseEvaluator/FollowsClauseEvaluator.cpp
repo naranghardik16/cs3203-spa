@@ -11,8 +11,6 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
   bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
-  ResultTable table;
-
   if (is_first_arg_a_wildcard) {
     if (is_second_arg_a_wildcard) {
       //e.g. Follows(_,_) -- return all Follows relationships between statements

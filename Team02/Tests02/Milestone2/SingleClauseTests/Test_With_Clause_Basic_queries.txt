@@ -68,3 +68,73 @@ variable v;procedure p;
 Select v with v.varName=p.procName
 none
 5000
+15 - with attrref = attrref -- ident (proc)
+variable v;procedure p;
+Select v with v .varName =    p       .procName
+none
+5000
+16 - with attrref = attrref -- mismatch varName with stmt#
+variable v;stmt s;
+Select v    with    s.        stmt# =   v.        varName
+none
+5000
+17 - with attrref = attrref -- mismatch procName with stmt#
+stmt s; procedure p;
+Select p with p .procName=s. stmt#
+none
+5000
+18 - with attrref = attrref -- mismatch procName with value
+constant c; procedure p;
+Select p with c. value=p    .procName
+none
+5000
+19 - with attrref = attrref -- mismatch varName with value
+constant c; variable v;
+Select v                    with                           c.value=v.varName
+none
+5000
+20 - with attrref = int -- varName = int
+constant c; variable v;
+Select v with v.varName = 5
+none
+5000
+21 - with attrref = int -- procName = int
+constant c; procedure p;
+Select p with 5=p   .   procName
+none
+5000
+22 - with attrref = int -- stmt# = ident
+read r;
+Select r with r.stmt# = "x"
+none
+5000
+23 - with attrref = int -- value = ident
+constant c;
+Select c with "x"=c.value
+none
+5000
+24 - with int = int is true
+read r;
+Select r with 5=5
+1,2
+5000
+25 - with int = int is false
+read r;
+Select r with 5=6
+
+5000
+26 - with ident=ident is true
+read r;
+Select r with "     x    "=" x    "
+1,2
+5000
+27 - with ident=ident is false
+read r;
+Select r with "x"="y"
+
+5000
+28 - with int=ident
+read r;
+Select r        with       "x"   =  5
+
+5000
