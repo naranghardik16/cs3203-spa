@@ -191,7 +191,5 @@ class QueryUtil {
   static std::vector<std::string> SplitAttrRef(const std::string &s);
   static std::string GetAttrNameFromAttrRef(std::string attrRef);
   static std::string GetSynonymFromAttrRef(std::string attrRef);
-  static bool IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_2);
-  static bool IsTrivialAttrRefWithNoResult(std::string attrRef, std::string comparison_value);
 };
 
