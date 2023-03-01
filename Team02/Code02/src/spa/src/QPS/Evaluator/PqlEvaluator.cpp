@@ -102,10 +102,11 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
 
   auto first_syn = synonym_tuple_[0];
   evaluation_result = EvaluateBasicSelect(first_syn);
+  auto &header = evaluation_result->header_;
 
   for (int i = 1; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
-    if (std::find(synonym_tuple_.begin(), synonym_tuple_.end(), synonym) == synonym_tuple_.end()) {
+    if (std::find(header.begin(), header.end(), synonym) == header.end()) {
       auto initial_result = EvaluateBasicSelect(synonym);
       evaluation_result->JoinResult(initial_result);
     }
