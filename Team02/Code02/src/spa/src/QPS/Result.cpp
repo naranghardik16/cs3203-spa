@@ -26,15 +26,31 @@ void Result::JoinResult(std::shared_ptr<Result> result) {
 }
 
 std::unordered_set<std::string> Result::ProjectResult(SelectedSynonymTuple synonym_tuple) {
-  //TODO To patch for synonym tuple
-  auto synonym = synonym_tuple[0];
-  auto it = std::find(this->header_.begin(), this->header_.end(), synonym);
-  int index = it - this->header_.begin();
   std::unordered_set<std::string> output;
+
+  std::vector<int> index_lst;
+  for (auto &syn : synonym_tuple) {
+    auto it = std::find(this->header_.begin(), this->header_.end(), syn);
+    int index = it - this->header_.begin();
+    index_lst.push_back(index);
+  }
+
   for (auto &row : this->table_) {
-    output.insert(row[index]);
+    std::stringstream result;
+    for (int i = 0; i < index_lst.size(); ++i) {
+      result << ( i ? " " : "" ) << row[index_lst[i]];
+    }
+    output.insert(result.str());
   }
   return output;
+}
+
+std::unordered_set<std::string> Result::ProjectResultForBoolean() {
+  if (!this->table_.empty()) {
+    return { "TRUE" };
+  } else {
+    return { "FALSE" };
+  }
 }
 
 InterceptResult Result::FindIntercept(ResultHeader &r_1, ResultHeader &r_2) {
@@ -44,7 +60,7 @@ InterceptResult Result::FindIntercept(ResultHeader &r_1, ResultHeader &r_2) {
     auto it = std::find(r_1.begin(), r_1.end(), r_2[i]);
     if (it != r_1.end()) {
       int index = it - r_1.begin();
-      intercept.push_back({index, i});
+      intercept.emplace_back(index, i);
     } else {
       non_intercept.push_back(i);
     }

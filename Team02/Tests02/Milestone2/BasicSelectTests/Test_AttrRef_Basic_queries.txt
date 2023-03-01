@@ -46,7 +46,7 @@ Select s.stmt#
 10 - Select attr_ref in tuples -- stmt#
 read r; print p;
 Select <r.stmt#, p.stmt#>
-1 16, 2 16
+1 16, 2 16, 1 9, 2 9, 1 11, 2 11, 1 13, 2 13
 5000
 11 - Select attr_ref in tuples -- varName
 read r;

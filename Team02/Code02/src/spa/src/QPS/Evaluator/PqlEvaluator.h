@@ -14,7 +14,7 @@ class PqlEvaluator {
   SelectedSynonymTuple synonym_tuple_;
   Map declaration_map_;
   ClauseSyntaxPtrList syntax_list_;
-  bool is_return_empty_set;
+  bool is_return_empty_set_;
   std::shared_ptr<PkbReadFacade> pkb_;
 
  public:
@@ -31,7 +31,7 @@ class PqlEvaluator {
    * @return Result class, which stores the evaluation information for handling in Evaluator
    */
   std::shared_ptr<Result> EvaluateBasicSelect(Synonym synonym);
-  unordered_set<string> GetFinalEvaluationResult(shared_ptr<Result> clause_evaluation_result);
+  unordered_set<string> GetFinalEvaluationResult(shared_ptr<Result>& clause_evaluation_result);
   shared_ptr<Result> GetClauseEvaluationResult();
   void EvaluateBooleanConstraints();
   shared_ptr<Result> EvaluateSelectStatementWithoutClauses();

@@ -1,4 +1,3 @@
-//#pragma once
 #include "QueryParser.h"
 #include "QPS/Util/PQLConstants.h"
 #include "Query.h"
@@ -23,13 +22,6 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   ClauseSyntaxPtrList syntax_pair_list;
   if (!clause_substring.empty()) {
     syntax_pair_list = tk->ParseSubClauses(clause_substring);
-  }
-
-  //TODO to remove because will pass to validator in ParseSynonym to validate
-  for (auto synonym : synonym_tuple) {
-    if (declaration_map.find(synonym) == declaration_map.end() && !QueryUtil::IsAttrRef(synonym)) {
-      throw SemanticErrorException();
-    }
   }
 
   if (tk->semantic_validator_->has_semantic_error_) {
