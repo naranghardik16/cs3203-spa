@@ -47,7 +47,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
     return {};
   }
 
-  if (syntax_list_.size() == 0) {
+  if (syntax_list_.empty()) {
     auto evaluation_result = EvaluateSelectStatementWithoutClauses();
     return evaluation_result->ProjectResult(synonym_tuple_);
   }
@@ -124,34 +124,18 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
   std::shared_ptr<Result> evaluation_result;
 
   auto first_syn = synonym_tuple_[0];
-  evaluation_result = EvaluateBasicSelect(first_syn);
+  evaluation_result = DesignEntityGetter::EvaluateBasicSelect(first_syn, pkb_, declaration_map_);
   auto &header = evaluation_result->header_;
 
   for (int i = 1; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
     if (std::find(header.begin(), header.end(), synonym) == header.end()) {
-      auto initial_result = EvaluateBasicSelect(synonym);
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
   }
 
   return evaluation_result;
-}
-
-std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelect(Synonym synonym) {
-  std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(synonym);
-  std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
-
-  ResultHeader header;
-  header.push_back(token_lst[0]);
-  if (token_lst.size() == 2) {
-    header.push_back(synonym);
-  }
-
-  ResultTable table = DesignEntityGetter::GetEntitySet(pkb_, declaration_map_[token_lst[0]] + attr_name);
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
 }
 
 std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_ptr<Result>& clause_evaluation_result) {
@@ -165,7 +149,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_pt
   for (int i = 0; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
     if (std::find(header.begin(), header.end(), synonym) == header.end()) {
-      auto initial_result = EvaluateBasicSelect(synonym);
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       clause_evaluation_result->JoinResult(initial_result);
     }
   }

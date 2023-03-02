@@ -83,3 +83,19 @@ std::unordered_map<std::string, GetterFunc> DesignEntityGetter::getter_map_ = {
 ResultTable DesignEntityGetter::GetEntitySet(const std::shared_ptr<PkbReadFacade> &pkb, const std::string& entity) {
   return getter_map_[entity](pkb);
 }
+
+std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& synonym, const std::shared_ptr<PkbReadFacade> &pkb, Map declaration_map) {
+  std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(synonym);
+  std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
+
+  ResultHeader header;
+  header.push_back(token_lst[0]);
+  if (token_lst.size() == 2) {
+    header.push_back(synonym);
+  }
+
+  ResultTable table = DesignEntityGetter::GetEntitySet(pkb, declaration_map[token_lst[0]] + attr_name);
+
+  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+  return result_ptr;
+}
