@@ -13,6 +13,19 @@ PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::sha
   syntax_list_ = parser_output->GetClauseSyntaxPtrList();
   is_return_empty_set_ = false;
   pkb_ = std::move(pkb);
+
+  //! remove trivial attr name
+  for (int i = 0; i < synonym_tuple_.size(); ++i) {
+    auto token_lst = QueryUtil::SplitAttrRef(synonym_tuple_.at(i));
+    if (token_lst.size() == 2) {
+      bool is_trivial_attr_name = (token_lst[1] == pql_constants::kStmtNo) || (token_lst[1] == pql_constants::kValue) ||
+          (declaration_map_[token_lst[0]] == pql_constants::kPqlProcedureEntity) ||
+          (declaration_map_[token_lst[0]] == pql_constants::kPqlVariableEntity);
+      if (is_trivial_attr_name) {
+        synonym_tuple_.at(i) = token_lst[0];
+      }
+    }
+  }
 }
 
 void PqlEvaluator::AdjustTrivialAttrRef() {

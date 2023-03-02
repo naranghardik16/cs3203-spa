@@ -13,14 +13,17 @@ bool QueryUtil::IsQuoted(const std::string& s) {
   return s.length() >= 2 && (s[0] == '"') && (s[s.length()-1] == '"');
 }
 
+bool QueryUtil::IsQuotedIdent(const std::string &s) {
+  return (s[0] == '"' && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2)) && s[s.length()-1] == '"');
+}
+
 bool QueryUtil::IsWildcard(const std::string& s) {
   return s == "_";
 }
 
-
 bool QueryUtil::IsAttrRef(const std::string& s) {
   std::vector<std::string> token_lst = SplitAttrRef(s);
-  if (token_lst.size() != 2 ||  !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
+  if (token_lst.size() != 2 || !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
     return false;
   }
   return true;
@@ -35,8 +38,11 @@ bool QueryUtil::IsStmtRef(const std::string& s) {
 }
 
 bool QueryUtil::IsEntRef(const std::string& s) {
-  bool is_ident_in_quotation = (s[0] == '"' && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2)) && s[s.length()-1] == '"');
-  return (IsWildcard(s) || IsSynonym(s) || is_ident_in_quotation);
+  return (IsWildcard(s) || IsSynonym(s) || IsQuotedIdent(s));
+}
+
+bool QueryUtil::IsRef(const std::string &s) {
+  return IsQuotedIdent(s) || LexicalRuleValidator::IsInteger(s) || IsAttrRef(s);
 }
 
 bool QueryUtil::IsDesignEntity(const std::string& s) {
@@ -163,7 +169,3 @@ std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
   auto token_lst = SplitAttrRef(attrRef);
   return token_lst[0];
 }
-
-
-
-

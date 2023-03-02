@@ -166,9 +166,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& clause_with_s
   semantic_validator_->ValidateSelectSemantics(synonym_vector);
 
   return synonym_vector;
-
 }
-
 
 SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring) {
   SelectedSynonymTuple synonym_vector;
@@ -358,8 +356,8 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeSuchThatClauseSyntax(std::string
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(std::string sub_clause) {
   SyntaxPair syntax = ExtractAbstractSyntaxFromWithClause(sub_clause);
   std::shared_ptr<ClauseSyntax> with_syntax = std::make_shared<WithClauseSyntax>(syntax);
-  //syntax_validator_->ValidateWithClauseSyntax(with_syntax);
-  //semantic_validator_->ValidateWithClauseSemantic(with_syntax);
+  syntax_validator_->ValidateWithClauseSyntax(with_syntax);
+  semantic_validator_->ValidateWithClauseSemantic(with_syntax);
   return with_syntax;
 }
 

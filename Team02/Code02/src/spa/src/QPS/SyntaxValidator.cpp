@@ -23,3 +23,9 @@ void SyntaxValidator::ValidatePatternClauseSyntax(std::shared_ptr<ClauseSyntax> 
 
   handler->HandleSyntax(clause);
 }
+
+void SyntaxValidator::ValidateWithClauseSyntax(std::shared_ptr<ClauseSyntax> clause) {
+  std::shared_ptr<WithHandler> handler = std::make_shared<WithHandler>();
+
+  handler->HandleSyntax(clause);
+}
