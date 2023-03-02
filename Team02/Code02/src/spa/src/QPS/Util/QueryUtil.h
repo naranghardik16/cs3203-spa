@@ -47,6 +47,13 @@ class QueryUtil {
   static bool IsEntRef(const std::string& s);
 
   /**
+   * Validates if given string fulfills the lexical rules to be ref for attribute comparison
+   * @param s is the input string
+   * @return True if string fulfills rules
+   */
+  static bool IsRef(const std::string& s);
+
+  /**
    * Validates if a string belongs to any design entity
    * @param s is the input string
    * @return True if string is a design entity, else false
@@ -59,6 +66,13 @@ class QueryUtil {
    * @return True if string is in quotation marks, else false
    */
   static bool IsQuoted(const std::string& s);
+
+  /**
+   * Checks if a string is quoted ident
+   * @param s is the input string
+   * @return True if string is a quoted ident
+   */
+  static bool IsQuotedIdent(const std::string& s);
 
   /**
    * Checks if a string is a relationship reference
@@ -191,7 +205,4 @@ class QueryUtil {
   static std::vector<std::string> SplitAttrRef(const std::string &s);
   static std::string GetAttrNameFromAttrRef(std::string attrRef);
   static std::string GetSynonymFromAttrRef(std::string attrRef);
-  static bool IsMismatchingAttrRef(std::string attrRef_1, std::string attrRef_2);
-  static bool IsTrivialAttrRefWithNoResult(std::string attrRef, std::string comparison_value);
 };
-
