@@ -9,4 +9,8 @@
 class StatementParser : public EntityParser<Statement> {
  public:
   virtual shared_ptr<Statement> ParseEntity(TokenStream &tokens) = 0;
+  string GetProcName();
+  void SetProcName(string proc_name);
+ private:
+  string proc_name_;
 };

@@ -7,7 +7,7 @@ shared_ptr<Statement> ReadStatementParser::ParseEntity(TokenStream &tokens) {
   Variable var(var_name);
   auto read_stmt =
       make_shared<ReadStatement>(Program::GetAndIncreaseStatementNumber(), var,
-                        "main");
+                                 GetProcName());
   CheckEndOfStatement(line);
   return read_stmt;
 }
@@ -19,11 +19,15 @@ std::string ReadStatementParser::ExtractVariableName(Line &line) const {
       });
 
   if (print_keyword_itr != line.begin()) {
-    throw SyntaxErrorException("Read statement should start with print keyword");
+    throw SyntaxErrorException("Read statement should start with read keyword");
   }
 
   if (line.size() < 2) {
     throw SyntaxErrorException("Read statement does not have a variable");
+  }
+
+  if (line[1]->GetType() != NAME) {
+    throw SyntaxErrorException("var_name should be a NAME");
   }
 
   return line[1]->GetValue();
@@ -32,10 +36,10 @@ std::string ReadStatementParser::ExtractVariableName(Line &line) const {
 
 void ReadStatementParser::CheckEndOfStatement(Line &line) const {
   if ((*prev(line.end()))->GetValue() != ";") {
-    throw SyntaxErrorException("AssignStatement does not end with ;");
+    throw SyntaxErrorException("ReadStatement does not end with ;");
   }
 
   if (line.size() > 3) {
-    throw SyntaxErrorException("Too many tokens in a PrintStatement");
+    throw SyntaxErrorException("Too many tokens in a ReadStatement");
   }
 }
