@@ -7,10 +7,10 @@
 #include <utility>
 
 PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
+  declaration_map_ = parser_output->GetDeclarationMap();
   synonym_tuple_ = parser_output->GetSynonymTuple();
   AdjustTrivialAttrRef();
   syntax_list_ = parser_output->GetClauseSyntaxPtrList();
-  declaration_map_ = parser_output->GetDeclarationMap();
   is_return_empty_set_ = false;
   pkb_ = std::move(pkb);
 }
@@ -32,7 +32,7 @@ bool PqlEvaluator::IsTrivialAttrRef(std::vector<string> attr_ref_token_lst) {
   //! remove trivial attr name e.g. r.stmt# is same as r except for c.procName, read.varName and print.varName
   bool is_call_proc_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlCallEntity) && (attr_ref_token_lst[1] == pql_constants::kProcName);
   bool is_read_var_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlReadEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
-  bool is_print_var_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlVariableEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  bool is_print_var_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
   return !is_call_proc_name_attr_ref && !is_read_var_name_attr_ref && !is_print_var_name_attr_ref;
 }
 
