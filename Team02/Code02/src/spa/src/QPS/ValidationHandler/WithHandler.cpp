@@ -4,11 +4,11 @@ void WithHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 
-  if (!LexicalRuleValidator::IsIdent(arg_1) && !LexicalRuleValidator::IsInteger(arg_1) && !QueryUtil::IsAttrRef(arg_1)) {
+  if (!QueryUtil::IsRef(arg_1)) {
     throw SyntaxErrorException("Argument 1 is not a valid ref: " + arg_1);
   }
 
-  if (!LexicalRuleValidator::IsIdent(arg_2) && !LexicalRuleValidator::IsInteger(arg_2) && !QueryUtil::IsAttrRef(arg_2)) {
+  if (!QueryUtil::IsRef(arg_2)) {
     throw SyntaxErrorException("Argument 2 is not a valid ref: " + arg_2);
   }
 }
@@ -44,7 +44,7 @@ void WithHandler::CheckAttrRef(std::string &ref, Map &declaration) {
 }
 
 std::string WithHandler::GetAttrType(std::string &ref) {
-  if (LexicalRuleValidator::IsIdent(ref)) {
+  if (QueryUtil::IsQuotedIdent(ref)) {
     return "STR";
   }
   if (LexicalRuleValidator::IsInteger(ref)) {
