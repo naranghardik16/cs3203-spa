@@ -53,7 +53,7 @@ stmt s;
 Select s with 4=s.stmt#
 4
 5000
-12 - with attrref = attrref -- int
+1 - with attrref = attrref -- int
 stmt s;constant c;
 Select s with s.stmt#=c.value
 2, 10
@@ -65,60 +65,55 @@ number
 5000
 14 - with attrref = attrref -- ident (proc)
 variable v;procedure p;
-Select v with v.varName=p.procName
-none
-5000
-15 - with attrref = attrref -- ident (proc)
-variable v;procedure p;
 Select v with v .varName =    p       .procName
-none
+sumDigits
 5000
-16 - with attrref = attrref -- mismatch varName with stmt#
+15 - with attrref = attrref -- mismatch varName with stmt#
 variable v;stmt s;
 Select v    with    s.        stmt# =   v.        varName
-none
+SemanticError
 5000
-17 - with attrref = attrref -- mismatch procName with stmt#
+16 - with attrref = attrref -- mismatch procName with stmt#
 stmt s; procedure p;
 Select p with p .procName=s. stmt#
-none
+SemanticError
 5000
-18 - with attrref = attrref -- mismatch procName with value
+17 - with attrref = attrref -- mismatch procName with value
 constant c; procedure p;
 Select p with c. value=p    .procName
-none
+SemanticError
 5000
-19 - with attrref = attrref -- mismatch varName with value
+18 - with attrref = attrref -- mismatch varName with value
 constant c; variable v;
 Select v                    with                           c.value=v.varName
-none
+SemanticError
 5000
-20 - with attrref = int -- varName = int
+19 - with attrref = int -- varName = int
 constant c; variable v;
 Select v with v.varName = 5
-none
+SemanticError
 5000
-21 - with attrref = int -- procName = int
+20 - with attrref = int -- procName = int
 constant c; procedure p;
 Select p with 5=p   .   procName
-none
+SemanticError
 5000
-22 - with attrref = int -- stmt# = ident
+21 - with attrref = int -- stmt# = ident
 read r;
 Select r with r.stmt# = "x"
-none
+SemanticError
 5000
-23 - with attrref = int -- value = ident
+22 - with attrref = int -- value = ident
 constant c;
 Select c with "x"=c.value
-none
+SemanticError
 5000
-24 - with int = int is true
+23 - with int = int is true
 read r;
 Select r with 5=5
 1,2
 5000
-25 - with int = int is false
+24 - with int = int is false
 read r;
 Select r with 5=6
 

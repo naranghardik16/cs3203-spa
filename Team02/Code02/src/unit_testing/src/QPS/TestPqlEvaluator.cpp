@@ -124,6 +124,24 @@ TEST_CASE("Check if PQLEvaluator works for basic select statements") {
 }
 
 
+TEST_CASE("Basic Evaluation of Attr-ref") {
+  auto qp = std::make_shared<QueryParser>();
+  PKB pkb_ = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
+
+  SECTION("INT, WILDCARD, Return True from PKB so get all variables") {
+    std::string query = "variable x;Select x.varName";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade_);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"a", "x", "y", "g"});
+    REQUIRE(eval_result == correct_set);
+
+  }
+}
+
 TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   auto qp = std::make_shared<QueryParser>();
   PKB pkb_ = PKB();
@@ -1226,28 +1244,6 @@ TEST_CASE("Test With Clause Evaluator") {
     REQUIRE(eval_result == correct_set);
   }
 
-  SECTION("Test Boolean case -- INT = IDENT") {
-    std::string query = "assign a;Select a with 5=\"x\"";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-  }
-
-  SECTION("Test Boolean case -- IDENT = INT") {
-    std::string query = "assign a;Select a with \"x\"=5";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-  }
-
   SECTION("Test Boolean case -- IDENT = IDENT") {
     std::string query = "assign a;Select a with \"x\"=\"x\"";
     auto correct_output = qp->ParseQuery(query);
@@ -1270,137 +1266,4 @@ TEST_CASE("Test With Clause Evaluator") {
     REQUIRE(eval_result == correct_set);
   }
 
-  SECTION("Test Boolean case -- ident return value attrName = .value") {
-    std::string query = "procedure p; constant c; assign a; Select a with p.procName = c.value";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-
-    query = "variable v; constant c; assign a; Select a with v.varName = c.value";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "read r; constant c;  assign a; Select a with r.varName = c.value";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "print p; constant c;  assign a; Select a with p.varName = c.value";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-  }
-
-  SECTION("Test Boolean case -- ident return value attrName = .stmt#") {
-    std::string query = "procedure p; assign a; Select a with p.procName = a.stmt#";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-
-    query = "variable v; assign a; Select a with v.varName = a.stmt#";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "read r; assign a; Select a with r.varName = a.stmt#";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "print p; assign a; Select a with p.varName = a.stmt#";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-  }
-
-  SECTION("Test Boolean case -- attr-ref that returns IDENT = int") {
-    std::string query = "procedure p; assign a; Select a with p.procName = 5";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-
-    query = "variable v; assign a; Select a with v.varName = 5";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "read r; assign a; Select a with r.varName = 5";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-
-    query = "print p; assign a; Select a with p.varName = 5";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-  }
-
-  SECTION("Test Boolean case -- attr-ref that returns INT = IDENT") {
-    std::string query = "procedure p; assign a; Select a with \"x\"=a.stmt#";
-    auto correct_output = qp->ParseQuery(query);
-
-    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    auto eval_result = eval->Evaluate();
-
-    std::unordered_set<std::string> correct_set({});
-    REQUIRE(eval_result == correct_set);
-
-    query = "assign a; Select a with a.stmt#=\"x\"";
-    correct_output = qp->ParseQuery(query);
-
-    eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
-    eval_result = eval->Evaluate();
-
-    correct_set = {};
-    REQUIRE(eval_result == correct_set);
-  }
 }

@@ -7,25 +7,35 @@
 #include <utility>
 
 PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
-  synonym_tuple_ = parser_output->GetSynonymTuple();
-  syntax_list_ = parser_output->GetClauseSyntaxPtrList();
   declaration_map_ = parser_output->GetDeclarationMap();
+  synonym_tuple_ = parser_output->GetSynonymTuple();
+  AdjustTrivialAttrRef();
+  syntax_list_ = parser_output->GetClauseSyntaxPtrList();
   is_return_empty_set_ = false;
   pkb_ = std::move(pkb);
+}
 
-  //! remove trivial attr name
+void PqlEvaluator::AdjustTrivialAttrRef() {
+  //! remove trivial attr name e.g. r.stmt# is same as r
   for (int i = 0; i < synonym_tuple_.size(); ++i) {
     auto token_lst = QueryUtil::SplitAttrRef(synonym_tuple_.at(i));
     if (token_lst.size() == 2) {
-      bool is_trivial_attr_name = (token_lst[1] == pql_constants::kStmtNo) || (token_lst[1] == pql_constants::kValue) ||
-          (declaration_map_[token_lst[0]] == pql_constants::kPqlProcedureEntity) ||
-          (declaration_map_[token_lst[0]] == pql_constants::kPqlVariableEntity);
+      bool is_trivial_attr_name = IsTrivialAttrRef(token_lst);
       if (is_trivial_attr_name) {
         synonym_tuple_.at(i) = token_lst[0];
       }
     }
   }
 }
+
+bool PqlEvaluator::IsTrivialAttrRef(std::vector<string> attr_ref_token_lst) {
+  //! remove trivial attr name e.g. r.stmt# is same as r except for c.procName, read.varName and print.varName
+  bool is_call_proc_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlCallEntity) && (attr_ref_token_lst[1] == pql_constants::kProcName);
+  bool is_read_var_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlReadEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  bool is_print_var_name_attr_ref = (declaration_map_[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  return !is_call_proc_name_attr_ref && !is_read_var_name_attr_ref && !is_print_var_name_attr_ref;
+}
+
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   if (synonym_tuple_.empty()) {
@@ -37,7 +47,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
     return {};
   }
 
-  if (syntax_list_.size() == 0) {
+  if (syntax_list_.empty()) {
     auto evaluation_result = EvaluateSelectStatementWithoutClauses();
     return evaluation_result->ProjectResult(synonym_tuple_);
   }
@@ -114,34 +124,18 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
   std::shared_ptr<Result> evaluation_result;
 
   auto first_syn = synonym_tuple_[0];
-  evaluation_result = EvaluateBasicSelect(first_syn);
+  evaluation_result = DesignEntityGetter::EvaluateBasicSelect(first_syn, pkb_, declaration_map_);
   auto &header = evaluation_result->header_;
 
   for (int i = 1; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
     if (std::find(header.begin(), header.end(), synonym) == header.end()) {
-      auto initial_result = EvaluateBasicSelect(synonym);
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
   }
 
   return evaluation_result;
-}
-
-std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelect(Synonym synonym) {
-  std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(synonym);
-  std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
-
-  ResultHeader header;
-  header.push_back(token_lst[0]);
-  if (token_lst.size() == 2) {
-    header.push_back(synonym);
-  }
-
-  ResultTable table = DesignEntityGetter::GetEntitySet(pkb_, declaration_map_[token_lst[0]] + attr_name);
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
 }
 
 std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_ptr<Result>& clause_evaluation_result) {
@@ -155,7 +149,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_pt
   for (int i = 0; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
     if (std::find(header.begin(), header.end(), synonym) == header.end()) {
-      auto initial_result = EvaluateBasicSelect(synonym);
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       clause_evaluation_result->JoinResult(initial_result);
     }
   }
