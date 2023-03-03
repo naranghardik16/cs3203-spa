@@ -117,7 +117,7 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
 
   for (int i = 1; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
-    if (std::find(header.begin(), header.end(), synonym) == header.end()) {
+    if (header.count(synonym) == 0) {
       auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
@@ -136,7 +136,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_pt
   auto &header = clause_evaluation_result->header_;
   for (int i = 0; i < synonym_tuple_.size(); i++) {
     auto synonym = synonym_tuple_[i];
-    if (std::find(header.begin(), header.end(), synonym) == header.end()) {
+    if (header.count(synonym) == 0) {
       auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
       clause_evaluation_result->JoinResult(initial_result);
     }

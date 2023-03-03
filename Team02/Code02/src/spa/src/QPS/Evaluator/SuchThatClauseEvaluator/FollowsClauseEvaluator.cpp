@@ -44,10 +44,10 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
 
   ResultHeader header;
   if (is_first_arg_a_type_of_statement_synonym) {
-    header.push_back(first_arg_);
+    header[first_arg_] = header.size();
   }
   if (is_second_arg_a_type_of_statement_synonym) {
-    header.push_back(second_arg_);
+    header[second_arg_] = header.size();
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;

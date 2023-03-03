@@ -38,10 +38,10 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
-    header.push_back(first_arg_);
+    header[first_arg_] = header.size();
   }
   if (is_second_arg_synonym) {
-    header.push_back(second_arg_);
+    header[second_arg_] = header.size();
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;

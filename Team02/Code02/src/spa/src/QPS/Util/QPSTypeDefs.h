@@ -25,9 +25,9 @@ class ClauseSyntax;
 typedef std::vector<std::shared_ptr<ClauseSyntax>> ClauseSyntaxPtrList;
 
 
-typedef std::vector<std::string> ResultHeader;
+typedef std::unordered_map<std::string, int> ResultHeader;
 typedef std::vector<std::string> ResultRow;
 typedef std::vector<std::vector<std::string>> ResultTable;
 typedef std::vector<std::pair<int, int>> Intercept;
-typedef std::vector<int> NonIntercept;
+typedef std::vector<std::pair<std::string, int>> NonIntercept;
 typedef std::pair<Intercept, NonIntercept> InterceptResult;

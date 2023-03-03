@@ -89,9 +89,9 @@ std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& s
   std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
 
   ResultHeader header;
-  header.push_back(token_lst[0]);
+  header[token_lst[0]] = header.size();
   if (token_lst.size() == 2) {
-    header.push_back(synonym);
+    header[synonym] = header.size();
   }
 
   ResultTable table = DesignEntityGetter::GetEntitySet(pkb, declaration_map[token_lst[0]] + attr_name);
