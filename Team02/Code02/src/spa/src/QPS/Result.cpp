@@ -1,8 +1,8 @@
 #include "Result.h"
 
-Result::Result(ResultHeader header, ResultTable table) : header_(header), table_(table) {}
+Result::Result(ResultHeader header, ResultTable table) : header_(std::move(header)), table_(std::move(table)) {}
 
-void Result::JoinResult(std::shared_ptr<Result> result) {
+void Result::JoinResult(const std::shared_ptr<Result>& result) {
   if (result->header_.empty() || this->header_.empty()) {
     return;
   }
@@ -25,12 +25,12 @@ void Result::JoinResult(std::shared_ptr<Result> result) {
   this->table_ = temp;
 }
 
-std::unordered_set<std::string> Result::ProjectResult(SelectedSynonymTuple synonym_tuple) {
+std::unordered_set<std::string> Result::ProjectResult(const SelectedSynonymTuple& synonym_tuple) {
   std::unordered_set<std::string> output;
 
   std::vector<int> index_lst;
-  for (auto &syn : synonym_tuple) {
-    auto it = std::find(this->header_.begin(), this->header_.end(), syn);
+  for (auto &kSyn : synonym_tuple) {
+    auto it = std::find(this->header_.begin(), this->header_.end(), kSyn);
     int index = it - this->header_.begin();
     index_lst.push_back(index);
   }

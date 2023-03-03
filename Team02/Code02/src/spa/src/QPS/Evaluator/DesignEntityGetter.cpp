@@ -84,7 +84,7 @@ ResultTable DesignEntityGetter::GetEntitySet(const std::shared_ptr<PkbReadFacade
   return getter_map_[entity](pkb);
 }
 
-std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& synonym, const std::shared_ptr<PkbReadFacade> &pkb, Map declaration_map) {
+std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& synonym, const std::shared_ptr<PkbReadFacade> &pkb, Map &declaration_map) {
   std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(synonym);
   std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
 
@@ -98,4 +98,19 @@ std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& s
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
+}
+
+std::shared_ptr<Result> DesignEntityGetter::GetIntersectionOfTwoAttr(
+    const Synonym &syn_1, const Synonym &syn_2, const std::shared_ptr<PkbReadFacade> &pkb, Map &declaration_map) {
+  auto result_1 = EvaluateBasicSelect(syn_1, pkb, declaration_map);
+  auto result_2 = EvaluateBasicSelect(syn_2, pkb, declaration_map);
+
+  int index = result_2->header_.size() == 1 ? 0 : 1;
+  result_2->header_.push_back(syn_1);
+
+  for (auto &row : result_2->table_) {
+    row.push_back(row[index]);
+  }
+  result_1->JoinResult(result_2);
+  return result_1;
 }
