@@ -34,10 +34,10 @@ std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr
 
   ResultHeader header;
   if (is_first_arg_a_type_of_statement_synonym) {
-    header[first_arg_] = header.size();
+    header[first_arg_] = (int) header.size();
   }
   if (is_second_arg_a_variable_synonym) {
-    header[second_arg_] = header.size();
+    header[second_arg_] = (int) header.size();
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;

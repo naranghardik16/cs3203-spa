@@ -21,7 +21,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_arg_1_synonym) {
-    header[first_arg_] = header.size();
+    header[first_arg_] = (int) header.size();
 
     pair_constraint = pkb->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
   } else if (is_arg_1_wildcard) {

@@ -106,7 +106,7 @@ std::shared_ptr<Result> DesignEntityGetter::GetIntersectionOfTwoAttr(
   auto result_2 = EvaluateBasicSelect(syn_2, pkb, declaration_map);
 
   int index = result_2->header_.size() == 1 ? 0 : 1;
-  result_2->header_.push_back(syn_1);
+  result_2->header_[syn_1] = result_2->header_.size();
 
   for (auto &row : result_2->table_) {
     row.push_back(row[index]);

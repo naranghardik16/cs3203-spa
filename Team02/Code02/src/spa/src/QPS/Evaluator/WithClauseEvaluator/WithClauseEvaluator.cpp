@@ -24,19 +24,6 @@ bool WithClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacad
   return first_arg_ == second_arg_;
 }
 
-std::vector<std::string> WithClauseEvaluator::Intersection(std::vector<std::string> v1,
-                                      std::vector<std::string> v2){
-  std::vector<std::string> v3;
-
-  std::sort(v1.begin(), v1.end());
-  std::sort(v2.begin(), v2.end());
-
-  std::set_intersection(v1.begin(),v1.end(),
-                        v2.begin(),v2.end(),
-                        back_inserter(v3));
-  return v3;
-}
-
 std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
   //Check before processing because trivial attr-refs will be adjusted e.g. r.stmt#-->r
@@ -57,18 +44,17 @@ std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause(std::shared_ptr<PkbR
   } else if (is_first_arg_a_type_of_attr_ref) {
     //Need to evaluate to know if the second arg is present and can constraint e.g. p.procName = "NonExistent"
     auto first_arg_evaluation_result = DesignEntityGetter::EvaluateBasicSelect(first_arg_, pkb, declaration_map);
-    header.push_back(first_arg_);
+    header[first_arg_] = (int) header.size();
     table = {{second_arg_}};
     std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, table);
     first_arg_evaluation_result->JoinResult(filter_result);
     return first_arg_evaluation_result;
   } else {
     auto second_arg_evaluation_result = DesignEntityGetter::EvaluateBasicSelect(second_arg_, pkb, declaration_map);
-    header.push_back(second_arg_);
+    header[second_arg_] = (int) header.size();
     table = {{first_arg_}};
     std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, table);
     second_arg_evaluation_result->JoinResult(filter_result);
     return second_arg_evaluation_result;
   }
 }
-
