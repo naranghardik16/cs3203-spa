@@ -171,7 +171,7 @@ std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
 }
 
 
-std::string QueryUtil::AdjustTrivialAttrRefValue(Synonym syn, Map &declaration_map) {
+std::string QueryUtil::AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &declaration_map) {
   auto token_lst = QueryUtil::SplitAttrRef(syn);
   if (token_lst.size() == 2) {
     bool is_trivial_attr_name = IsTrivialAttrRef(token_lst, declaration_map);

@@ -19,7 +19,9 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
    * 4    print x;}
    *    else {
    * 5    while (x > 0) {
-   * 6      x = x - 1;}}}
+   * 6      x = x - 1;}}
+   * 7 print test
+   * }
    */
   pkb_write->AddProcedure("test");
   pkb_write->AddStatementOfAType("1", StatementType::READ);
@@ -28,8 +30,10 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
   pkb_write->AddStatementOfAType("4", StatementType::PRINT);
   pkb_write->AddStatementOfAType("5", StatementType::WHILE);
   pkb_write->AddStatementOfAType("6", StatementType::ASSIGN);
+  pkb_write->AddStatementOfAType("7", StatementType::PRINT);
   pkb_write->AddVariable("x");
   pkb_write->AddVariable("y");
+  pkb_write->AddVariable("test");
   pkb_write->AddConstant("0");
   pkb_write->AddConstant("1");
   pkb_write->AddFollowsRelation("1", "2");
@@ -47,6 +51,118 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
   pkb_write->AddStatementUsingVariable("4", "x");
   pkb_write->AddStatementUsingVariable("5", "x");
   pkb_write->AddStatementUsingVariable("6", "x");
+  pkb_write->AddStatementUsingVariable("7", "test");
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- both special case") {
+    std::string query = "print p; read r; Select p with p.varName = r.varName";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"4"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- both special case (swap args)") {
+    std::string query = "print p; read r; Select p with r.varName = p.varName";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"4"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- returns result") {
+    std::string query = "stmt s; constant c; Select s.stmt# with s.stmt# = c.value";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"1"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- returns result (swap args)") {
+    std::string query = "stmt s; constant c; Select s.stmt# with c.value = s.stmt#";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"1"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- selecting for varName") {
+    std::string query = "print pn; procedure proc; Select pn with pn.varName = proc.procName";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"7"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- selecting for varName -- swap args") {
+    std::string query = "print pn; procedure proc; Select pn with proc.procName = pn.varName";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"7"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = attr_ref -- does not return result") {
+    std::string query = "print p; read r; Select r with p.stmt# = r.stmt#";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic get relationship -- with attr_ref = int -- select varName from print") {
+    std::string query = "print p; Select p.stmt# with p.varName=\"x\"";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"4"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic  get relationship -- with attr_ref = int -- return result") {
+    std::string query = "print p; Select p with 4=p.stmt#";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"4"};
+    REQUIRE(results == expected_results);
+  }
+
+
+  SECTION("Test basic get relationship -- with attr_ref = int -- select varName from print") {
+    std::string query = "print p; Select p.varName with p.stmt#=4";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{"x"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test basic  get relationship -- with attr_ref = int -- return none ") {
+    std::string query = "print p; Select p with p.stmt#=1";
+    std::list<std::string> results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
 
   SECTION("Test basic get procedure") {
     std::string query = "procedure p; Select p";
@@ -64,7 +180,7 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    std::list<std::string> expected_results{"x", "y"};
+    std::list<std::string> expected_results{"test","x", "y"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -86,7 +202,7 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    std::list<std::string> expected_results{"1", "2", "3", "4", "5", "6"};
+    std::list<std::string> expected_results{"1", "2", "3", "4", "5", "6", "7"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -119,7 +235,7 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    std::list<std::string> expected_results{"4"};
+    std::list<std::string> expected_results{"4", "7"};
     results.sort();
     REQUIRE(results == expected_results);
   }

@@ -18,7 +18,7 @@ PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::sha
 void PqlEvaluator::AdjustTrivialAttrRefs() {
   //! remove trivial attr name e.g. r.stmt# is same as r
   for (int i = 0; i < synonym_tuple_.size(); ++i) {
-    synonym_tuple_.at(i) = QueryUtil::AdjustTrivialAttrRefValue(synonym_tuple_[i], declaration_map_);
+    synonym_tuple_.at(i) = QueryUtil::AdjustSynonymWithTrivialAttrRefValue(synonym_tuple_[i], declaration_map_);
   }
 }
 
