@@ -10,7 +10,7 @@ void Result::JoinResult(const std::shared_ptr<Result>& result) {
   ResultTable temp;
 
   for (auto &i : intercept.second) {
-    this->header_[i.first] = this->header_.size();
+    this->header_[i.first] = (int) this->header_.size();
   }
 
   if (result->table_.empty() || this->table_.empty()) {

@@ -48,8 +48,8 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   }
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialExpression(std::shared_ptr<Result> r,
-                                                                                          std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialExpression(const std::shared_ptr<Result>& r,
+                                                                                          const std::shared_ptr<PkbReadFacade>& pkb) {
   ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
@@ -62,8 +62,8 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
   return result_ptr;
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(std::shared_ptr<Result> r,
-                                                                                        std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(const std::shared_ptr<Result>& r,
+                                                                                        const std::shared_ptr<PkbReadFacade>& pkb) {
   ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
