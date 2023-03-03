@@ -30,6 +30,6 @@ class DesignEntityGetter {
 
  public:
   static ResultTable GetEntitySet(const std::shared_ptr<PkbReadFacade> &pkb, const std::string &entity);
-  static std::shared_ptr<Result> EvaluateBasicSelect(const Synonym& synonym, const std::shared_ptr<PkbReadFacade> &pkb, Map declaration_map);
-
+  static std::shared_ptr<Result> EvaluateBasicSelect(const Synonym& synonym, const std::shared_ptr<PkbReadFacade> &pkb, Map &declaration_map);
+  static std::shared_ptr<Result> GetIntersectionOfTwoAttr(const Synonym& syn_1, const Synonym& syn_2, const std::shared_ptr<PkbReadFacade> &pkb, Map &declaration_map);
 };

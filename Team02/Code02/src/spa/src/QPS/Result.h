@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <utility>
 #include "QPS/Util/QPSTypeDefs.h"
 
 /*!
@@ -19,8 +20,8 @@ class Result {
    * Join two result on intercepting header. Result will be store in the calling object.
    * Both of the table should not be empty, else nothing will happen.
    */
-  void JoinResult(std::shared_ptr<Result> result);
-  std::unordered_set<std::string> ProjectResult(SelectedSynonymTuple synonym);
+  void JoinResult(const std::shared_ptr<Result>& result);
+  std::unordered_set<std::string> ProjectResult(const SelectedSynonymTuple& synonym);
   std::unordered_set<std::string> ProjectResultForBoolean();
 
   //!Helper function

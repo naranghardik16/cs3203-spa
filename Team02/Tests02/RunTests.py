@@ -122,5 +122,5 @@ def Execute(folder_to_test_in):
     os.system(start_python_host_command)
 
 #if test all then put *
-folder_to_test_in = "Milestone2"
+folder_to_test_in = "Milestone1"
 Execute(folder_to_test_in)

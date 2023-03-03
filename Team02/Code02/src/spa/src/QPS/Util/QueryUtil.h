@@ -205,4 +205,6 @@ class QueryUtil {
   static std::vector<std::string> SplitAttrRef(const std::string &s);
   static std::string GetAttrNameFromAttrRef(std::string attrRef);
   static std::string GetSynonymFromAttrRef(std::string attrRef);
+  static bool IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Map &declaration_map);
+  static std::string AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &declaration_map);
 };
