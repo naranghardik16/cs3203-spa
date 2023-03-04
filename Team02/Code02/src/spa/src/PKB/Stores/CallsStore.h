@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PKB/Types/PkbTypes.h"
+#include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 
