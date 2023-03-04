@@ -297,12 +297,20 @@ TEST_CASE("Check if modifies are extracted correctly") {
                  "            count = count + 1;\n"
                  "            cenX = cenX + x;\n"
                  "            cenY = cenY + y;\n"
-                 "            call readPoint;\n"
+                 "            if (x == 1) then {\n"
+                 "                call readPoint;"
+                 "            } else {"
+                 "                z = 1;"
+                 "            }\n"
                  "         }\n"
                  "        if (count == 0) then {\n"
                  "            flag = 1;\n"
                  "        } else {\n"
-                 "            cenX = cenX / count;\n"
+                 "            cenX = cenX / count;"
+                 "            while (count == 0) {"
+                 "                call readPoint;"
+                 "                count = 1;"
+                 "            }\n"
                  "            cenY = cenY / count;\n"
                  "        }\n"
                  "        normSq = cenX * cenX + cenY * cenY;\n"
@@ -331,22 +339,34 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("15", "count"),
         make_pair("16", "cenX"),
         make_pair("17", "cenY"),
+        make_pair("20", "z"), //new
         // Modifies(s, v)
         make_pair("14", "count"),
         make_pair("14", "cenX"),
         make_pair("14", "cenY"),
         make_pair("14", "x"),
         make_pair("14", "y"),
+        make_pair("14", "z"), //new
+        make_pair("18", "x"), //new
+        make_pair("18", "y"), //new
+        make_pair("18", "z"), //new
         // Modifies(a, v)
-        make_pair("20", "flag"),
-        make_pair("21", "cenX"),
-        make_pair("22", "cenY"),
+        make_pair("22", "flag"),
+        make_pair("23", "cenX"),
+        make_pair("26", "count"), //new
+        make_pair("27", "cenY"),
         // Modifies(s, v)
-        make_pair("19", "flag"),
-        make_pair("19", "cenX"),
-        make_pair("19", "cenY"),
+        make_pair("21", "flag"),
+        make_pair("21", "cenX"),
+        make_pair("21", "cenY"),
+        make_pair("21", "x"), //new
+        make_pair("21", "y"), //new
+        make_pair("21", "count"), //new
+        make_pair("24", "x"), //new
+        make_pair("24", "y"),  //new
+        make_pair("24", "count"), //new
         // Modifies(a, v)
-        make_pair("23", "normSq"),
+        make_pair("28", "normSq"),
         // Modifies(c, v)
         make_pair("2", "count"),
         make_pair("2", "cenX"),
@@ -357,9 +377,12 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("2", "y"),
         make_pair("13", "x"),
         make_pair("13", "y"),
-        make_pair("18", "x"),
-        make_pair("18", "y")
+        make_pair("19", "x"),
+        make_pair("19", "y"),
+        make_pair("25", "x"), //new
+        make_pair("25", "y") //new
     };
+    auto pairs = pkb_read_facade->GetModifiesStatementVariablePairs(STATEMENT);
     for (pair<string, string> pp : expected_modifies_s_pairs) {
       if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first, pp.second)) {
         FAIL();
