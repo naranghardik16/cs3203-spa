@@ -19,6 +19,8 @@ void AbstractionExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assi
                                                    assign_statement->GetVariable().GetName());
   pkb_write_facade_->AddAssignmentStatementAndExpression(stmt_number,
                                                          expression);
+  pkb_write_facade_->AddProcedureModifyingVariable(assign_statement->GetInScopeOfPrc(),
+                                                   assign_statement->GetVariable().GetName());
 }
 
 void AbstractionExtractor::VisitConditionalOperation(shared_ptr<
@@ -39,6 +41,8 @@ void AbstractionExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_sta
       stmt_number = std::to_string(read_statement->GetStatementNumber());
   pkb_write_facade_->AddStatementOfAType(stmt_number, READ);
   pkb_write_facade_->AddStatementModifyingVariable(stmt_number,
+                                                   read_statement->GetVariable().GetName());
+  pkb_write_facade_->AddProcedureModifyingVariable(read_statement->GetInScopeOfPrc(),
                                                    read_statement->GetVariable().GetName());
 }
 
