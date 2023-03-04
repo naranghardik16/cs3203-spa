@@ -3,7 +3,12 @@
 Result::Result(ResultHeader header, ResultTable table) : header_(std::move(header)), table_(std::move(table)) {}
 
 void Result::JoinResult(const std::shared_ptr<Result>& result) {
-  if (result->header_.empty() || this->header_.empty()) {
+  if (this->header_.empty()) {
+    this->header_ = result->header_;
+    this->table_ = result->table_;
+    return;
+  }
+  if (result->header_.empty()) {
     return;
   }
   InterceptResult intercept = FindIntercept(this->header_, result->header_);

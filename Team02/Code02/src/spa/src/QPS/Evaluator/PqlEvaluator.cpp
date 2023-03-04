@@ -1,10 +1,4 @@
-#pragma once
-#include "QPS/Util/QueryUtil.h"
 #include "PqlEvaluator.h"
-#include "QPS/Clause/ClauseSyntax.h"
-#include "QPS/Evaluator/DesignEntityGetter.h"
-#include <stdexcept>
-#include <utility>
 
 PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
   declaration_map_ = parser_output->GetDeclarationMap();
@@ -47,7 +41,7 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
 
 
 std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
-  if (syntax_list_.size() == 0) {
+  if (syntax_list_.empty()) {
     return {"TRUE"};
   }
 
@@ -55,7 +49,7 @@ std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
   if (is_return_empty_set_) {
     return {"FALSE"};
   }
-  if (syntax_list_.size() == 0) {
+  if (syntax_list_.empty()) {
     return {"TRUE"};
   }
 
@@ -87,12 +81,10 @@ void PqlEvaluator::EvaluateBooleanConstraints() {
 }
 
 std::shared_ptr<Result> PqlEvaluator::GetClauseEvaluationResult() {
-  std::shared_ptr<Result> clause_evaluation_result;
-  auto first_clause = syntax_list_[0];
-  clause_evaluation_result = first_clause->CreateClauseEvaluator(declaration_map_)->EvaluateClause(pkb_);
+  std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
+
   //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
-  for (int i = 1; i < syntax_list_.size(); i++) {
-    auto kClause = syntax_list_[i];
+  for (const auto& kClause : syntax_list_) {
     auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
     std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
 
@@ -109,16 +101,11 @@ std::shared_ptr<Result> PqlEvaluator::GetClauseEvaluationResult() {
 }
 
 std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
-  std::shared_ptr<Result> evaluation_result;
+  std::shared_ptr<Result> evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
 
-  auto first_syn = synonym_tuple_[0];
-  evaluation_result = DesignEntityGetter::EvaluateBasicSelect(first_syn, pkb_, declaration_map_);
-  auto &header = evaluation_result->header_;
-
-  for (int i = 1; i < synonym_tuple_.size(); i++) {
-    auto synonym = synonym_tuple_[i];
-    if (header.count(synonym) == 0) {
-      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
+  for (const auto& kSynonym : synonym_tuple_) {
+    if (evaluation_result->header_.count(kSynonym) == 0) {
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
   }
@@ -134,10 +121,9 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_pt
 
   //only add the remaining selected synonym values into table if it is not already present in the header
   auto &header = clause_evaluation_result->header_;
-  for (int i = 0; i < synonym_tuple_.size(); i++) {
-    auto synonym = synonym_tuple_[i];
-    if (header.count(synonym) == 0) {
-      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(synonym, pkb_, declaration_map_);
+  for (const auto& kSynonym : synonym_tuple_) {
+    if (header.count(kSynonym) == 0) {
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
       clause_evaluation_result->JoinResult(initial_result);
     }
   }

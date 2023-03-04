@@ -118,8 +118,10 @@ TEST_CASE("Test Result - Join result") {
                         {"1", "2", "2"}};
     std::shared_ptr<Result> r_2 = std::make_shared<Result>(header_2, table_2);
 
-    ResultHeader expected_header{};
-    ResultTable expected_table{};
+    ResultHeader expected_header{{"a", 0}, {"b", 1}, {"c", 2}};
+    ResultTable expected_table{{"1", "2", "4"},
+                               {"1", "2", "3"},
+                               {"1", "2", "2"}};
     r_1->JoinResult(r_2);
 
     REQUIRE(r_1->header_ == expected_header);

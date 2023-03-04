@@ -89,9 +89,9 @@ std::shared_ptr<Result> DesignEntityGetter::EvaluateBasicSelect(const Synonym& s
   std::string attr_name = token_lst.size() == 1 ? "" : token_lst[1];
 
   ResultHeader header;
-  header[token_lst[0]] = header.size();
+  header[token_lst[0]] = (int) header.size();
   if (token_lst.size() == 2) {
-    header[synonym] = header.size();
+    header[synonym] = (int) header.size();
   }
 
   ResultTable table = DesignEntityGetter::GetEntitySet(pkb, declaration_map[token_lst[0]] + attr_name);
@@ -106,7 +106,7 @@ std::shared_ptr<Result> DesignEntityGetter::GetIntersectionOfTwoAttr(
   auto result_2 = EvaluateBasicSelect(syn_2, pkb, declaration_map);
 
   int index = result_2->header_.size() == 1 ? 0 : 1;
-  result_2->header_[syn_1] = result_2->header_.size();
+  result_2->header_[syn_1] = (int) result_2->header_.size();
 
   for (auto &row : result_2->table_) {
     row.push_back(row[index]);
