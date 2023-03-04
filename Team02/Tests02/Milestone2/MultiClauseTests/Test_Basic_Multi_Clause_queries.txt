@@ -3,19 +3,19 @@ read r; print p;
 Select r.varName with p.varName = r.varName and 5=5 and "x"="x" and p.varName = "number"
 number
 5000
-2 - with pattern such that with
+2 - pattern AND AND
 assign a; variable v; stmt s;
-Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_) with 5=5 and s.stmt=c.value
+Select a pattern a(v,_"digit "_) and a(v,_"4"_) such that Modifies(a,v)
+13
+5000
+3 - with pattern such that with
+assign a; variable v; stmt s;constant c;
+Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_) with 5=5 and s.stmt#=c.value
 4
 5000
-3 - such that AND AND
+4 - such that AND AND
 assign a; variable v; stmt s;
 Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_)
 4, 8
-5000
-4 - pattern AND AND
-assign a; variable v; stmt s;
-Select a pattern a(v,_"digit "_) and a(v,_"2"_) such that Modifies(a,v)
-13
 5000
 
