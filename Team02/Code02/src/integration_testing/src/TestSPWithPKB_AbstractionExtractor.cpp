@@ -250,24 +250,23 @@ TEST_CASE("Check if calls/* are extracted correctly") {
     };
     for (pair<string, string> pp : expected_call_pairs) {
       // TODO: Update with PKB retrieve calls relationship method
-//      if (!pkb_read_facade->HasParentChildRelationship(pp.first, pp.second)) {
-//        FAIL();
-//      }
+      if (!pkb_read_facade->HasCallsRelation(pp.first, pp.second)) {
+        FAIL();
+      }
     }
     SUCCEED();
   }
 
-  SECTION("Check that all calls pair are present") {
+  SECTION("Check that all calls* pair are present") {
     vector<pair<string, string>> expected_call_pairs = {
         make_pair("First","Second"),
         make_pair("Second", "Third"),
         make_pair("First", "Third")
     };
     for (pair<string, string> pp : expected_call_pairs) {
-      // TODO: Update with PKB retrieve calls* relationship method
-//      if (!pkb_read_facade->HasParentChildRelationship(pp.first, pp.second)) {
-//        FAIL();
-//      }
+      if (!pkb_read_facade->HasCallsStarRelation(pp.first, pp.second)) {
+        FAIL();
+      }
     }
     SUCCEED();
   }
