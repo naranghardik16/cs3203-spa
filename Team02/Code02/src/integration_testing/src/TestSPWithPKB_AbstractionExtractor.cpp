@@ -339,32 +339,32 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("15", "count"),
         make_pair("16", "cenX"),
         make_pair("17", "cenY"),
-        make_pair("20", "z"), //new
+        make_pair("20", "z"),
         // Modifies(s, v)
         make_pair("14", "count"),
         make_pair("14", "cenX"),
         make_pair("14", "cenY"),
         make_pair("14", "x"),
         make_pair("14", "y"),
-        make_pair("14", "z"), //new
-        make_pair("18", "x"), //new
-        make_pair("18", "y"), //new
-        make_pair("18", "z"), //new
+        make_pair("14", "z"),
+        make_pair("18", "x"),
+        make_pair("18", "y"),
+        make_pair("18", "z"),
         // Modifies(a, v)
         make_pair("22", "flag"),
         make_pair("23", "cenX"),
-        make_pair("26", "count"), //new
+        make_pair("26", "count"),
         make_pair("27", "cenY"),
         // Modifies(s, v)
         make_pair("21", "flag"),
         make_pair("21", "cenX"),
         make_pair("21", "cenY"),
-        make_pair("21", "x"), //new
-        make_pair("21", "y"), //new
-        make_pair("21", "count"), //new
-        make_pair("24", "x"), //new
-        make_pair("24", "y"),  //new
-        make_pair("24", "count"), //new
+        make_pair("21", "x"),
+        make_pair("21", "y"),
+        make_pair("21", "count"),
+        make_pair("24", "x"),
+        make_pair("24", "y"),
+        make_pair("24", "count"),
         // Modifies(a, v)
         make_pair("28", "normSq"),
         // Modifies(c, v)
@@ -379,8 +379,8 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("13", "y"),
         make_pair("19", "x"),
         make_pair("19", "y"),
-        make_pair("25", "x"), //new
-        make_pair("25", "y") //new
+        make_pair("25", "x"),
+        make_pair("25", "y")
     };
     auto pairs = pkb_read_facade->GetModifiesStatementVariablePairs(STATEMENT);
     for (pair<string, string> pp : expected_modifies_s_pairs) {
