@@ -741,3 +741,16 @@ PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE proce
   return result;
 }
 
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsPairs() {
+  return this->pkb.calls_store_->retrieveAllCallsPairs();
+}
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsStarPairs() {
+  return this->pkb.calls_store_->retrieveAllCallsStarPairs();
+}
+
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure) {
+  return this->pkb.calls_store_->retrieveCallStatementsFromAProcedure(procedure);
+}
+

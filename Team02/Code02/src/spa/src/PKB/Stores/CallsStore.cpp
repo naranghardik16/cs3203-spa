@@ -24,12 +24,12 @@ void CallsStore::addCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes
 
 void CallsStore::addCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number,
                                                  PkbTypes::PROCEDURE procedure) {
-  this->call_to_procedure_store_.insert(statement_number, procedure);
+  this->procedure_to_call_store_.insert(procedure, statement_number);
 }
 
 std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
 CallsStore::retrieveAllCallStatementToProcedurePairs() {
-  return this->call_to_procedure_store_.retrieveAll();
+  return this->procedure_to_call_store_.retrieveAll();
 }
 
 std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
@@ -64,5 +64,10 @@ bool CallsStore::hasCallsStar(PkbTypes::PROCEDURE procedure) {
 
 bool CallsStore::hasCallsStarBy(PkbTypes::PROCEDURE procedure) {
   return !this->calls_star_store_.retrieveFromKey(procedure).empty();
+}
+
+std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    CallsStore::retrieveCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure) {
+  return this->procedure_to_call_store_.retrieveFromKey(procedure);
 }
 
