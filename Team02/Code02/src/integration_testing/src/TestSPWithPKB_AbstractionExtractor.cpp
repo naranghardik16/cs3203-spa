@@ -207,3 +207,193 @@ TEST_CASE("Check if parent/* are extracted correctly") {
     SUCCEED();
   }
 }
+
+TEST_CASE("Check if calls/* are extracted correctly") {
+  string input = "procedure First {"
+                 "read x;"
+                 "read z;"
+                 "call Second; }"
+                 ""
+                 "procedure Second {"
+                 "    x = 0;"
+                 "    i = 5;"
+                 "    while (i!=0) {"
+                 "        x = x + 2*y;"
+                 "        call Third;"
+                 "        i = i - 1; }"
+                 "    if (x==1) then {"
+                 "        x = x+1; }"
+                 "    else {"
+                 "        z = 1; }"
+                 "    z = z + x + i;"
+                 "    y = z + 2;"
+                 "    x = x * y + z; }"
+                 ""
+                 "procedure Third {"
+                 "    z = 5;"
+                 "    v = z;"
+                 "    print v; }";
+  std::istringstream is;
+  is.str(input);
+
+  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<SP> sp = make_shared<SP>();
+  sp->ProcessSIMPLE(is, pkb);
+
+  shared_ptr<PkbReadFacade>
+      pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+
+  SECTION("Check that all calls pair are present") {
+    vector<pair<string, string>> expected_call_pairs = {
+        make_pair("First","Second"),
+        make_pair("Second", "Third")
+    };
+    for (pair<string, string> pp : expected_call_pairs) {
+      // TODO: Update with PKB retrieve calls relationship method
+//      if (!pkb_read_facade->HasParentChildRelationship(pp.first, pp.second)) {
+//        FAIL();
+//      }
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check that all calls pair are present") {
+    vector<pair<string, string>> expected_call_pairs = {
+        make_pair("First","Second"),
+        make_pair("Second", "Third"),
+        make_pair("First", "Third")
+    };
+    for (pair<string, string> pp : expected_call_pairs) {
+      // TODO: Update with PKB retrieve calls* relationship method
+//      if (!pkb_read_facade->HasParentChildRelationship(pp.first, pp.second)) {
+//        FAIL();
+//      }
+    }
+    SUCCEED();
+  }
+}
+
+TEST_CASE("Check if modifies are extracted correctly") {
+  string input = "    procedure main {\n"
+                 "        flag = 0;\n"
+                 "        call computeCentroid;\n"
+                 "        call printResults;\n"
+                 "    }\n"
+                 "    procedure readPoint {\n"
+                 "        read x;\n"
+                 "        read y;\n"
+                 "    }\n"
+                 "    procedure printResults {\n"
+                 "        print flag;\n"
+                 "        print cenX;\n"
+                 "        print cenY;\n"
+                 "        print normSq;\n"
+                 "    }\n"
+                 "    procedure computeCentroid {\n"
+                 "        count = 0;\n"
+                 "        cenX = 0;\n"
+                 "        cenY = 0;\n"
+                 "        call readPoint;\n"
+                 "        while ((x != 0) && (y != 0)) {\n"
+                 "            count = count + 1;\n"
+                 "            cenX = cenX + x;\n"
+                 "            cenY = cenY + y;\n"
+                 "            call readPoint;\n"
+                 "         }\n"
+                 "        if (count == 0) then {\n"
+                 "            flag = 1;\n"
+                 "        } else {\n"
+                 "            cenX = cenX / count;\n"
+                 "            cenY = cenY / count;\n"
+                 "        }\n"
+                 "        normSq = cenX * cenX + cenY * cenY;\n"
+                 "    }";
+  std::istringstream is;
+  is.str(input);
+
+  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<SP> sp = make_shared<SP>();
+  sp->ProcessSIMPLE(is, pkb);
+
+  shared_ptr<PkbReadFacade>
+      pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+
+  SECTION("Check that all modifiesS pair are present") {
+    vector<pair<string, string>> expected_modifies_s_pairs = {
+        // Modifies(a, v)
+        make_pair("1","flag"),
+        // Modifies(re, v)
+        make_pair("4", "x"),
+        make_pair("5", "y"),
+        // Modifies(a, v)
+        make_pair("10", "count"),
+        make_pair("11", "cenX"),
+        make_pair("12", "cenY"),
+        make_pair("15", "count"),
+        make_pair("16", "cenX"),
+        make_pair("17", "cenY"),
+        // Modifies(s, v)
+        make_pair("14", "count"),
+        make_pair("14", "cenX"),
+        make_pair("14", "cenY"),
+        make_pair("14", "x"),
+        make_pair("14", "y"),
+        // Modifies(a, v)
+        make_pair("20", "flag"),
+        make_pair("21", "cenX"),
+        make_pair("22", "cenY"),
+        // Modifies(s, v)
+        make_pair("19", "flag"),
+        make_pair("19", "cenX"),
+        make_pair("19", "cenY"),
+        // Modifies(a, v)
+        make_pair("23", "normSq"),
+        // Modifies(c, v)
+        make_pair("2", "count"),
+        make_pair("2", "cenX"),
+        make_pair("2", "cenY"),
+        make_pair("2", "flag"),
+        make_pair("2", "normSq"),
+        make_pair("2", "x"),
+        make_pair("2", "y"),
+        make_pair("13", "x"),
+        make_pair("13", "y"),
+        make_pair("18", "x"),
+        make_pair("18", "y")
+    };
+    for (pair<string, string> pp : expected_modifies_s_pairs) {
+      if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check that all modifiesP pair are present") {
+    vector<pair<string, string>> expected_modifies_p_pairs = {
+        make_pair("main", "flag"),
+        make_pair("main", "count"),
+        make_pair("main", "cenX"),
+        make_pair("main", "cenY"),
+        make_pair("main", "normSq"),
+        make_pair("main", "x"),
+        make_pair("main", "y"),
+        make_pair("readPoint", "x"),
+        make_pair("readPoint", "y"),
+        make_pair("computeCentroid", "count"),
+        make_pair("computeCentroid", "cenX"),
+        make_pair("computeCentroid", "cenY"),
+        make_pair("computeCentroid", "x"),
+        make_pair("computeCentroid", "y"),
+        make_pair("computeCentroid", "flag"),
+        make_pair("computeCentroid", "normSq"),
+    };
+    for (pair<string, string> pp : expected_modifies_p_pairs) {
+      if (!pkb_read_facade->HasModifiesProcedureRelationship(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
+
+}
