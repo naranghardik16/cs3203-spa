@@ -1,6 +1,6 @@
 1 - extra >
 assign a; while w;
-Select <a,w>> such that Parent* (w, a)
+Select <a,w>    > such that Parent* (w, a)
 SyntaxError
 5000
 2 - extra <
@@ -31,6 +31,16 @@ SyntaxError
 7 - no < or >
 assign a; while w;
 Select a,w such that Parent* (w, a)
+SyntaxError
+5000
+8 - extra character with random spacing
+assign a; while w;
+Select <    a   ,  w >    > such that Parent* (w, a)
+SyntaxError
+5000
+9 - extra character with random spacing
+assign a; while w;
+Select <    <a   ,  w> such that Parent* (w, a)
 SyntaxError
 5000
 
