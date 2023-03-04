@@ -58,14 +58,19 @@ stmt s;constant c;
 Select s with s.stmt#=c.value
 1, 2, 10
 5000
-13 - with attrref = attrref -- ident
+13 - with attrref = attrref -- int -- swap args
+stmt s;constant c;
+Select s with c .value=s. stmt#
+1, 2, 10
+5000
+14 - with attrref = attrref -- ident
 variable v;procedure p;
 Select v with v.varName=p.procName
 sumDigits
 5000
-14 - with attrref = attrref -- ident (proc)
+15 - with attrref = attrref -- add random spacing
 variable v;procedure p;
-Select v with v .varName =    p       .procName
+Select v with p       .procName = v .varName
 sumDigits
 5000
 15 - with attrref = attrref -- mismatch varName with stmt#
@@ -141,5 +146,15 @@ Select p with p.varName = r.varName
 30 - with special case attr_ref = special case attr_ref
 read r; print p;
 Select r.varName with p.varName = r.varName
+number
+5000
+31 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select r with p.varName = r.varName
+1
+5000
+32 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select p.varName with p.varName = r.varName
 number
 5000

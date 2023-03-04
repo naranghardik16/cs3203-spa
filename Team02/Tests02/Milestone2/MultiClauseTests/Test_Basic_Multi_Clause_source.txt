@@ -13,7 +13,7 @@ procedure sumDigits {
                     digit = 1;
                 } else {
                     while ((digit != sum) && (digit <= sum)) {
-                        number = 2 + digit;
+                        number = 4 + digit;
                     }
                 }
             }

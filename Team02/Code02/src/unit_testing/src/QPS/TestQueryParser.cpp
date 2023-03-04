@@ -128,6 +128,36 @@ TEST_CASE("Test Invalid And Clause") {
 
 TEST_CASE("Test multi-clause queries") {
   auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Multi clause -- chain of withs") {
+    std::string query = "read r; print p;Select r.varName with p.varName = r.varName and 5=5 and \"x\"=\"x\" and p.varName = \"number\"";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_with1_syntax = CreateCorrectSyntaxPairParser("", "p.varName", "r.varName");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "5", "5");
+    SyntaxPair correct_with3_syntax = CreateCorrectSyntaxPairParser("", "\"x\"", "\"x\"");
+    SyntaxPair correct_with4_syntax = CreateCorrectSyntaxPairParser("", "p.varName", "\"number\"");
+    std::shared_ptr<ClauseSyntax>
+        with1_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with1_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with3_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with3_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with4_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with4_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with1_clause_ptr,with2_clause_ptr, with3_clause_ptr,with4_clause_ptr,};
+    Map correct_declaration_map = {{"r", "read"},{"p", "print"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"r.varName"};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
   SECTION("Multi clause query with tuple") {
     std::string query = "assign with, Parent; while w; Select < with. stmt#, w . stmt#, Parent > pattern Parent(_,_) and with(_,_) with Parent.stmt#=with.stmt# and 6 = 5 such that Parent(w,Parent)";
     auto parser_output = qp->ParseQuery(query);
