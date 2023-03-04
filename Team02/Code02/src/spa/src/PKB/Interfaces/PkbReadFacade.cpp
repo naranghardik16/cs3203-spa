@@ -754,3 +754,11 @@ PkbReadFacade::GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure)
   return this->pkb.calls_store_->retrieveCallStatementsFromAProcedure(procedure);
 }
 
+bool PkbReadFacade::HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->pkb.calls_store_->hasCallsRelation(caller_procedure, callee_procedure);
+}
+
+bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
+}
+
