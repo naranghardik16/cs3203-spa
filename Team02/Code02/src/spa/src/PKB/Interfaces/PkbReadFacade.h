@@ -631,6 +631,24 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet
   GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
 
+  /**
+   * Checks whether there exists a Calls relation between the specified procedures.
+   *
+   * @param caller_procedure - The specified caller procedure.
+   * @param callee_procedure - The specified callee procedure.
+   * @return True if such a relation exists, false otherwise.
+   */
+  virtual bool HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+
+  /**
+   * Checks whether there exists a Calls Star relation between the specified procedures.
+   *
+   * @param caller_procedure - The specified caller procedure.
+   * @param callee_procedure - The specified callee procedure.
+   * @return True if such a relation exists, false otherwise.
+   */
+  virtual bool HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+
  private:
   PKB& pkb;
 };

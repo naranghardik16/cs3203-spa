@@ -71,3 +71,11 @@ std::unordered_set<PkbTypes::STATEMENT_NUMBER>
   return this->procedure_to_call_store_.retrieveFromKey(procedure);
 }
 
+bool CallsStore::hasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->calls_store_.contains(caller_procedure, callee_procedure);
+}
+
+bool CallsStore::hasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->calls_star_store_.contains(caller_procedure, callee_procedure);
+}
+
