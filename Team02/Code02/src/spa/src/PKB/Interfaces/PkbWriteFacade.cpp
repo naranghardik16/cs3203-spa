@@ -132,3 +132,8 @@ void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER st
   }
 }
 
+
+void PkbWriteFacade::AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  this->pkb.calls_store_->addCallsRelation(caller_procedure, callee_procedure);
+}
+
