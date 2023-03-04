@@ -671,7 +671,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialEx
 
   return result;
 }
+
+//! Calls API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
-  //TODO
-  return {{"1" , "Main"}};
+  return this->pkb.calls_store_->retrieveAllCallsPairs();
 }

@@ -10,6 +10,7 @@ PKB::PKB() {
   expression_store_ = new ExpressionStore();
   control_flow_store_ = new ControlFlowStore();
   assignment_store_ = new AssignmentStore();
+  calls_store_ = new CallsStore();
 }
 
 PKB::~PKB() = default;
