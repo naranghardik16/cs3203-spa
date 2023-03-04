@@ -68,8 +68,9 @@ std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
 
 void PqlEvaluator::EvaluateBooleanConstraints() {
   //!Evaluate and remove all boolean constraints first
-  for (int i=0; i<syntax_list_.size(); i++) {
-    auto clause = syntax_list_[i];
+
+  for (auto iter = syntax_list_.begin(); iter != syntax_list_.end(); ) {
+    auto clause = *iter;
     auto is_bool_constraint = clause->IsBooleanClause(declaration_map_);
 
     if (is_bool_constraint) {
@@ -78,7 +79,9 @@ void PqlEvaluator::EvaluateBooleanConstraints() {
       if (!is_clause_true) {
         is_return_empty_set_ = true;
       }
-      syntax_list_.erase(syntax_list_.begin() + i);
+      iter = syntax_list_.erase(iter);
+    } else {
+      ++iter;
     }
   }
 }
