@@ -38,3 +38,38 @@ SyntaxError
 Select pattern BOOLEAN
 SyntaxError
 5000
+9 - extra characters in a larger query
+assign a; while w;
+Select <    BOOLEAN such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+10 - extra characters in a larger query
+assign a; while w;
+Select <BOOLEAN such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+11 - extra characters in a larger query
+assign a; while w; variable Boolean;
+Select BOOLEAN  > such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+12 - extra characters in a larger query
+assign a; while w; variable Boolean;
+Select BOOLEAN> such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+13 - extra characters in a larger query
+assign a; while w; variable Boolean;
+Select  BOOLEAN ;    such that Modifies (a, "x") and Parent* (w, a)
+SyntaxError
+5000
+14 - misspelling in a larger query
+assign a; while w; variable Boolean;
+Select      BOOLEANN  such that Modifies (a, "x") and Parent* (w, a)
+SemanticError
+5000
+15 - misspelling in a larger query
+assign a; while w; variable Boolean;
+Select BBOOLEAN such that Modifies (a, "x") and Parent* (w, a)
+SemanticError
+5000

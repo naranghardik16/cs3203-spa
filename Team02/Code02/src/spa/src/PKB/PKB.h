@@ -1,14 +1,15 @@
 #pragma once
 
+#include "PKB/Stores/AssignmentStore.h"
+#include "PKB/Stores/CallsStore.h"
+#include "PKB/Stores/ControlFlowStore.h"
 #include "PKB/Stores/EntityStore.h"
+#include "PKB/Stores/ExpressionStore.h"
 #include "PKB/Stores/FollowsStore.h"
 #include "PKB/Stores/ModifiesStore.h"
+#include "PKB/Stores/ParentStore.h"
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
-#include "PKB/Stores/ParentStore.h"
-#include "PKB/Stores/AssignmentStore.h"
-#include "PKB/Stores/ControlFlowStore.h"
-#include "PKB/Stores/ExpressionStore.h"
 
 class PKB {
  public:
@@ -67,6 +68,11 @@ class PKB {
    * Expression store that contains mappings between expressions and constants, variables it contains.
    */
   ExpressionStore *expression_store_;
+
+  /**
+   * Uses store that stores multi-variate calls relation between SIMPLE's entities.
+   */
+  CallsStore *calls_store_;
 
   friend class PkbWriteFacade;
   friend class PkbReadFacade;

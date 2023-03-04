@@ -6,7 +6,7 @@ bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<Pkb
 }
 
 std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{syn_assign_};
+  ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
@@ -21,7 +21,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_arg_1_synonym) {
-    header.push_back(first_arg_);
+    header[first_arg_] = (int) header.size();
 
     pair_constraint = pkb->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
   } else if (is_arg_1_wildcard) {
@@ -48,9 +48,9 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   }
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialExpression(std::shared_ptr<Result> r,
-                                                                                          std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{syn_assign_};
+std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialExpression(const std::shared_ptr<Result>& r,
+                                                                                          const std::shared_ptr<PkbReadFacade>& pkb) {
+  ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithPartialExpression(second_arg_);
@@ -62,9 +62,9 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
   return result_ptr;
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(std::shared_ptr<Result> r,
-                                                                                        std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{syn_assign_};
+std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(const std::shared_ptr<Result>& r,
+                                                                                        const std::shared_ptr<PkbReadFacade>& pkb) {
+  ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(second_arg_);

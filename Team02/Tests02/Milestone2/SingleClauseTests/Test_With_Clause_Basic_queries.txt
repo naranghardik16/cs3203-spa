@@ -53,19 +53,24 @@ stmt s;
 Select s with 4=s.stmt#
 4
 5000
-1 - with attrref = attrref -- int
+12 - with attrref = attrref -- int
 stmt s;constant c;
 Select s with s.stmt#=c.value
-2, 10
+1, 2, 10
 5000
-13 - with attrref = attrref -- ident
-variable v;print p;
-Select v with v.varName=p.varName
-number
+13 - with attrref = attrref -- int -- swap args
+stmt s;constant c;
+Select s with c .value=s. stmt#
+1, 2, 10
 5000
-14 - with attrref = attrref -- ident (proc)
+14 - with attrref = attrref -- ident
 variable v;procedure p;
-Select v with v .varName =    p       .procName
+Select v with v.varName=p.procName
+sumDigits
+5000
+15 - with attrref = attrref -- add random spacing
+variable v;procedure p;
+Select v with p       .procName = v .varName
 sumDigits
 5000
 15 - with attrref = attrref -- mismatch varName with stmt#
@@ -131,5 +136,25 @@ Select r with "x"="y"
 28 - with int=ident
 read r;
 Select r        with       "x"   =  5
-
+SemanticError
+5000
+29 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select p with p.varName = r.varName
+16
+5000
+30 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select r.varName with p.varName = r.varName
+number
+5000
+31 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select r with p.varName = r.varName
+1
+5000
+32 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select p.varName with p.varName = r.varName
+number
 5000
