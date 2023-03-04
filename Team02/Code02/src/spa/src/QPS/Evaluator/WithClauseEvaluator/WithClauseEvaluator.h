@@ -1,5 +1,7 @@
 #pragma once
 #include "QPS/Evaluator/ClauseEvaluator.h"
+#include "QPS/Evaluator/DesignEntityGetter.h"
+#include <algorithm>
 
 class WithClauseEvaluator : public ClauseEvaluator {
  private:
@@ -12,5 +14,7 @@ class WithClauseEvaluator : public ClauseEvaluator {
   }
   std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb);
   bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb);
+  Synonym ProcessArgumentForEvaluation(Synonym syn, Map &declaration_map);
+  vector<string> Intersection(vector<string> v1, vector<string> v2);
 };
 

@@ -169,3 +169,23 @@ std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
   auto token_lst = SplitAttrRef(attrRef);
   return token_lst[0];
 }
+
+
+std::string QueryUtil::AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &declaration_map) {
+  auto token_lst = QueryUtil::SplitAttrRef(syn);
+  if (token_lst.size() == 2) {
+    bool is_trivial_attr_name = IsTrivialAttrRef(token_lst, declaration_map);
+    if (is_trivial_attr_name) {
+      return token_lst[0];
+    }
+  }
+  return syn;
+}
+
+bool QueryUtil::IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Map &declaration_map) {
+  //! remove trivial attr name e.g. r.stmt# is same as r except for c.procName, read.varName and print.varName
+  bool is_call_proc_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlCallEntity) && (attr_ref_token_lst[1] == pql_constants::kProcName);
+  bool is_read_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlReadEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  bool is_print_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  return !is_call_proc_name_attr_ref && !is_read_var_name_attr_ref && !is_print_var_name_attr_ref;
+}
