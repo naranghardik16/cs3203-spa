@@ -622,6 +622,15 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::PairConstraintSet
   GetAllCallsStarPairs();
 
+  /**
+   * Retrieves all the statements that call the specified procedure.
+   *
+   * @param procedure - The specified procedure.
+   * @return A set of statements that call this procedure.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet
+  GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
+
  private:
   PKB& pkb;
 };
