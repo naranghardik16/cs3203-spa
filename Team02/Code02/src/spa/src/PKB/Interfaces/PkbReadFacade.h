@@ -606,6 +606,22 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::PairConstraintSet
   GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
 
+  /**
+   * Retrieves all calls pairs stored in PKB.
+   *
+   * @return An unordered set of all the calls pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsPairs();
+
+  /**
+   * Retrieves all the calls star pairs stored in PKB.
+   *
+   * @return An unordered set of all the calls star pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairs();
+
  private:
   PKB& pkb;
 };
