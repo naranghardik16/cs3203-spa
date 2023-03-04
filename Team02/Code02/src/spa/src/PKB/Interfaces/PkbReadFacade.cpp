@@ -674,5 +674,70 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialEx
 
 //! Calls API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
-  return this->pkb.calls_store_->retrieveAllCallsPairs();
+  return this->pkb.calls_store_->retrieveAllCallStatementToProcedurePairs();
 }
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_pairs =
+      this->pkb.calls_store_->retrieveAllCallsPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_pairs) {
+    if (p.first == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
+      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_star_pairs) {
+    if (p.first == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_pairs =
+      this->pkb.calls_store_->retrieveAllCallsPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_pairs) {
+    if (p.second == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
+      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_star_pairs) {
+    if (p.second == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
