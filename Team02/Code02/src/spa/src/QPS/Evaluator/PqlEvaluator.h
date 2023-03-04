@@ -1,9 +1,14 @@
 #pragma once
+
 #include "QPS/Query.h"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/Result.h"
+#include "QPS/Clause/ClauseSyntax.h"
+#include "QPS/Evaluator/DesignEntityGetter.h"
+#include "QPS/Util/QueryUtil.h"
+#include <utility>
 #include <memory>
 
 /**
