@@ -13,4 +13,5 @@ string CallStatement::GetProcedureName() const {
 }
 
 void CallStatement::Accept(shared_ptr<ParserVisitor> visitor) {
+  visitor->VisitCallStatement(make_shared<CallStatement>(*this));
 }

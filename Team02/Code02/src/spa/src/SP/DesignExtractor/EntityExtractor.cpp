@@ -60,6 +60,10 @@ void EntityExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_statemen
   pkb_write_facade_->AddVariable(var_name);
 }
 
+void EntityExtractor::VisitCallStatement(shared_ptr<CallStatement> call_statement) {
+  // TODO?
+}
+
 void EntityExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   // TODO?
   auto condition = if_statement->GetCondition();

@@ -8,6 +8,7 @@
 #include "core/model/ConditionalOperation.h"
 #include "core/model/PrintStatement.h"
 #include "core/model/ReadStatement.h"
+#include "core/model/CallStatement.h"
 #include "core/model/RelationalOperation.h"
 #include "core/model/IfStatement.h"
 #include "core/model/WhileStatement.h"
@@ -24,6 +25,7 @@ class EntityExtractor : public ParserVisitor {
   void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) override;
   void VisitPrintStatement(shared_ptr<PrintStatement> print_statement) override;
   void VisitReadStatement(shared_ptr<ReadStatement> read_statement) override;
+  void VisitCallStatement(shared_ptr<CallStatement> call_statement) override;
   void VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) override;
   void VisitIfStatement(shared_ptr<IfStatement> if_statement) override;
   void VisitWhileStatement(shared_ptr<WhileStatement> while_statement) override;

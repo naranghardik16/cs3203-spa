@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include "Statement.h"
 #include "Procedure.h"
