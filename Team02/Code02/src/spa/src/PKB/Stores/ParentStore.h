@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PKB/Types//PkbTypes.h"
+#include "PKB/Types/PkbTypes.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 
@@ -162,5 +162,4 @@ class ParentStore {
   OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> parent_store_;
   // Stores the Parent* relation ManyToMany mapping between two statements.
   ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> parent_star_store_;
-  void dfs(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
 };

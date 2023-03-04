@@ -572,6 +572,40 @@ class PkbReadFacade {
    */
   virtual PkbCommunicationTypes::PairConstraintSet GetCallProcedurePair();
 
+  /**
+   * Retrieves all the calls pairs where the caller procedure matches the specified procedure.
+   *
+   * @param procedure - The specified caller procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls star pairs where the caller procedure matches the specified procedure.
+   *
+   * @param procedure - The specified caller procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls pairs where the callee procedure matches the specified procedure.
+   *
+   * @param procedure - The specified callee procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls star pairs where the callee procedure matches the specified procedure.
+   *
+   * @param procedure - The specified callee procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
+
  private:
   PKB& pkb;
 };

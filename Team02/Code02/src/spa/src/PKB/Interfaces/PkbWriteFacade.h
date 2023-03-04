@@ -131,4 +131,21 @@ class PkbWriteFacade {
    */
   void AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                      std::shared_ptr<Expression> expression);
+
+   /**
+    * Adds calls relation to the PKB.
+    *
+    * @param caller_procedure - The caller procedure.
+    * @param callee_procedure - The callee procedure.
+    */
+   void AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+
+   /**
+    * Add calls statement to procedure name mapping to PKB.
+    *
+    * @param statement_number - The statement number associated with the call statement.
+    * @param procedure - The procedure being called as a part of that statement.
+    */
+   void AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::PROCEDURE procedure);
 };
+
