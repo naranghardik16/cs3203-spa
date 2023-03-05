@@ -1,8 +1,8 @@
-#pragma once
 #include "ClauseSyntax.h"
 
 ClauseSyntax::ClauseSyntax(SyntaxPair pair) {
   pair_ = pair;
+  expr_ = nullptr;
 }
 
 std::string ClauseSyntax::GetEntity() {
@@ -27,6 +27,14 @@ SyntaxPair ClauseSyntax::GetSyntaxPair() {
 
 ParameterVector ClauseSyntax::GetParameters() {
   return pair_.second;
+}
+
+std::shared_ptr<Expression> ClauseSyntax::GetExpression() {
+  return expr_;
+}
+
+void ClauseSyntax::SetExpression(std::shared_ptr<Expression> expr) {
+  expr_ = std::move(expr);
 }
 
 bool ClauseSyntax::Equals(ClauseSyntax &other) {

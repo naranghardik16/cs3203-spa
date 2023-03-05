@@ -1,7 +1,6 @@
-#pragma once
 #include "PatternClauseSyntax.h"
 
-PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same

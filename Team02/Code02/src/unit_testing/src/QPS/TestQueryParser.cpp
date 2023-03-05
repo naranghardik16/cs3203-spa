@@ -78,7 +78,7 @@ TEST_CASE("Test Invalid And Clause") {
   SECTION("And with different clause_Throw syntax error") {
     //pattern + and such that
     std::string query("assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Modifies (a, \"x\")");
-    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
 
     //pattern + and with
     query = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and a.stmt#=w.stmt#";
@@ -552,7 +552,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "_", "_y_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "_", "_ \" y \" _");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "a", "\"count\"");
     std::shared_ptr<ClauseSyntax>
@@ -561,6 +561,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     correct_syntax_ptr_list.push_back(such_that_syntax_ptr);
     correct_syntax_ptr_list.push_back(pattern_syntax_ptr);
 
+    std::string s = clause_syntax_ptr_list[1]->GetSecondParameter();
     for (int i = 0; i < clause_syntax_ptr_list.size(); i++) {
       REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
     }
@@ -581,7 +582,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "\"x\"", "_x_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "\"x\"", "_\"x\"_");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "a", "\"x\"");
     std::shared_ptr<ClauseSyntax> such_that_syntax_ptr = std::make_shared<SuchThatClauseSyntax>(such_that_syntax_pair);
@@ -609,7 +610,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("pattern", "Select", "_x_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("pattern", "Select", "_\"x\"_");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "pattern", "Select");
     std::shared_ptr<ClauseSyntax>

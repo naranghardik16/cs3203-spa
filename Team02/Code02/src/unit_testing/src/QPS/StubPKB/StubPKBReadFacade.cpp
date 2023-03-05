@@ -439,7 +439,7 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExact
 }
 
 PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
-  if (sub_expr == "_g_") {
+  if (sub_expr == "_\"g\"_") {
     return {"6"};
   }
   return {"2"};

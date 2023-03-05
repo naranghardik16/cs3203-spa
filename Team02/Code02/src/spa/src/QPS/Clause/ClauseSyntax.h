@@ -2,6 +2,8 @@
 
 #include <string>
 #include <memory>
+#include <utility>
+#include "core/model/Expression.h"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/Evaluator/ClauseEvaluator.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
@@ -12,6 +14,7 @@
 class ClauseSyntax {
  private:
   SyntaxPair pair_;
+  std::shared_ptr<Expression> expr_;
  public:
   explicit ClauseSyntax(SyntaxPair pair);
 
@@ -50,6 +53,18 @@ class ClauseSyntax {
    * @return Vector of parameters
    */
   ParameterVector GetParameters();
+
+  /**
+   * Returns the expression pointer. Only not null for assign pattern clause when there is expr-spec.
+   * @return The expression
+   */
+  std::shared_ptr<Expression> GetExpression();
+
+  /**
+   * Set the expression for assign pattern clause.
+   * @param expr The parsed expression
+   */
+  void SetExpression(std::shared_ptr<Expression> expr);
 
   virtual bool Equals(ClauseSyntax &other) = 0;
 
