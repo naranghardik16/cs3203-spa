@@ -65,7 +65,79 @@ TEST_CASE("Testcases for Calls Store") {
             {std::make_pair("procedure3", "4"),
              std::make_pair("procedure4", "10")}));
   }
-//  std::make_pair("caller_procedure1", "callee_procedure1"),
-//      std::make_pair("caller_procedure2", "callee_procedure2"),
 
+  SECTION("Test CallsStar Relation") {
+    auto calls_star_store = new CallsStore();
+
+    calls_star_store->addCallsRelation("proc1", "proc2");
+    calls_star_store->addCallsRelation("proc1", "proc3");
+    calls_star_store->addCallsRelation("proc1", "proc4");
+    calls_star_store->addCallsRelation("proc4", "proc5");
+    calls_star_store->addCallsRelation("proc5", "proc6");
+    calls_star_store->addCallsRelation("proc5", "proc7");
+    calls_star_store->addCallsRelation("proc5", "proc8");
+    calls_star_store->addCallsRelation("proc5", "proc9");
+    calls_star_store->addCallsRelation("proc10", "proc11");
+    calls_star_store->addCallsRelation("proc10", "proc12");
+    calls_star_store->addCallsRelation("proc12", "proc13");
+
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc2") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc3") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc4") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc4", "proc5") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc5", "proc6") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc5", "proc7") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc5", "proc8") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc5", "proc9") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc10", "proc11") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc10", "proc12") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc12", "proc13") == true);
+
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc5") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc6") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc7") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc8") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc9") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc4", "proc6") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc4", "proc7") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc4", "proc8") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc4", "proc9") == true);
+    REQUIRE(calls_star_store->hasCallsStarRelation("proc10", "proc13") == true);
+
+    REQUIRE(calls_star_store->hasAnyCallsStarRelation() == true);
+    REQUIRE_FALSE(calls_star_store->hasCallsStar("proc1") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc2") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc3") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc4") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc5") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc6") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc7") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc8") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc9") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc11") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc12") == true);
+    REQUIRE(calls_star_store->hasCallsStar("proc13") == true);
+
+    REQUIRE(calls_star_store->hasCallsStarBy("proc1") == true);
+    REQUIRE(calls_star_store->hasCallsStarBy("proc4") == true);
+    REQUIRE(calls_star_store->hasCallsStarBy("proc5") == true);
+    REQUIRE(calls_star_store->hasCallsStarBy("proc10") == true);
+    REQUIRE(calls_star_store->hasCallsStarBy("proc12") == true);
+    REQUIRE_FALSE(calls_star_store->hasCallsStarBy("proc2") == true);
+
+    REQUIRE(calls_star_store->retrieveAllCallsStarPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
+              std::make_pair("proc1", "proc2"), std::make_pair("proc1", "proc3"),
+              std::make_pair("proc1", "proc4"), std::make_pair("proc4", "proc5"),
+              std::make_pair("proc5", "proc6"), std::make_pair("proc5", "proc7"),
+              std::make_pair("proc5", "proc8"), std::make_pair("proc5", "proc9"),
+              std::make_pair("proc10", "proc11"), std::make_pair("proc10", "proc12"),
+              std::make_pair("proc12", "proc13"), std::make_pair("proc1", "proc5"),
+              std::make_pair("proc1", "proc6"), std::make_pair("proc1", "proc7"),
+              std::make_pair("proc1", "proc8"), std::make_pair("proc1", "proc9"),
+              std::make_pair("proc4", "proc6"), std::make_pair("proc4", "proc7"),
+              std::make_pair("proc4", "proc8"), std::make_pair("proc4", "proc9"),
+              std::make_pair("proc10", "proc13")
+    }));
+  }
 }
