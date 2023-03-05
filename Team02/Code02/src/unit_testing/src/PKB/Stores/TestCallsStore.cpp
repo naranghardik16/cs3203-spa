@@ -140,4 +140,49 @@ TEST_CASE("Testcases for Calls Store") {
               std::make_pair("proc10", "proc13")
     }));
   }
+
+  SECTION("Dependent Calls with Single Transitive Relationship") {
+    auto calls_store = new CallsStore();
+
+    calls_store->addCallsRelation("proc1", "proc2");
+    calls_store->addCallsRelation("proc1", "proc3");
+    calls_store->addCallsRelation("proc3", "proc4");
+
+    REQUIRE(calls_store->hasCallsRelation("proc1", "proc2") == true);
+    REQUIRE(calls_store->hasCallsRelation("proc1", "proc3") == true);
+    REQUIRE(calls_store->hasCallsRelation("proc3", "proc4") == true);
+
+    REQUIRE(calls_store->hasAnyCallsRelation() == true);
+
+    REQUIRE(calls_store->retrieveAllCallsPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
+
+              std::make_pair("proc1", "proc2"), std::make_pair("proc1", "proc3"),
+              std::make_pair("proc3", "proc4")
+
+    }));
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
