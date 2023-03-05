@@ -1,10 +1,18 @@
 #pragma once
+
 #include <string>
+#include <sstream>
+#include "SP/Tokenizer/Tokenizer.h"
+#include "QPS/Util/QueryUtil.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "General/LexicalRuleValidator.h"
+#include "General/StringUtil.h"
 
 /*!
- * ExpressionParser is used to parse expression specifications in Pattern clauses for PQL
+ * ExpressionParser is used to parse expression specifications in Pattern clauses for PQL.
+ * Make Use of SP tokenizer and parser.
  */
-class ExpressionParser {
+class ExpressionSpecParser {
  public:
 
   /*!

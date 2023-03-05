@@ -1,6 +1,10 @@
 #include "WithHandler.h"
 
 void WithHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
+  if (clause->GetParameters().size() != 2) {
+    throw SyntaxErrorException("Invalid number of argument");
+  }
+
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 

@@ -1,32 +1,48 @@
 #include "PatternHandler.h"
 
 void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
-  std::string syn_assign(clause->GetEntity());
-  std::string arg_1(clause->GetFirstParameter());
-  std::string arg_2(clause->GetSecondParameter());
+  std::string syn(clause->GetEntity());
+  ParameterVector args(clause->GetParameters());
 
-  if (!QueryUtil::IsSynonym(syn_assign) || !QueryUtil::IsEntRef(arg_1)) {
-    throw SyntaxErrorException("First argument is not assign synonym or entity reference");
+  if (args.size() != 2 && args.size() != 3) {
+    throw SyntaxErrorException("Invalid number of argument");
   }
 
-  return;
+  if (!QueryUtil::IsSynonym(syn) || !QueryUtil::IsEntRef(args[0])) {
+    throw SyntaxErrorException("Invalid synonym or entity reference");
+  }
+
+  if (args.size() == 2) {
+
+  }
+
+  if (args.size() == 3 && !QueryUtil::IsWildcard(args[1]) && !QueryUtil::IsWildcard(args[2])) {
+    throw SyntaxErrorException("Invalid if pattern syntax");
+  }
 }
 
 void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
-  std::string syn_assign(clause->GetEntity());
-  std::string arg_1(clause->GetFirstParameter());
+  std::string syn(clause->GetEntity());
+  ParameterVector args(clause->GetParameters());
 
-  //Check if syn_assign is declared and is 'assign' entity
-  if (declaration.find(syn_assign) == declaration.end() || declaration[syn_assign] != pql_constants::kPqlAssignEntity) {
+  //Check if syn is declared and is correct entity
+  if (declaration.find(syn) == declaration.end()) {
+    throw SemanticErrorException();
+  }
+  if (args.size() == 2 && declaration[syn] != pql_constants::kPqlAssignEntity && declaration[syn] != pql_constants::kPqlWhileEntity) {
+    throw SemanticErrorException();
+  }
+  if (args.size() == 3 && declaration[syn] != pql_constants::kPqlIfEntity) {
     throw SemanticErrorException();
   }
 
   //If arg_1 is synonym, check if it is declared and is 'variable' entity
-  if (QueryUtil::IsSynonym(arg_1) && declaration.find(syn_assign) == declaration.end()) {
-    throw SemanticErrorException(arg_1 + "is a synonym that is not declared");
+  bool is_syn = QueryUtil::IsSynonym(args[0]);
+  if (is_syn && declaration.find(args[0]) == declaration.end()) {
+    throw SemanticErrorException(args[0] + "is a synonym that is not declared");
   }
-  if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlVariableEntity) {
-    throw SemanticErrorException(arg_1 + "is not a variable entity");
+  if (is_syn && declaration[args[0]] != pql_constants::kPqlVariableEntity) {
+    throw SemanticErrorException(args[0] + "is not a variable entity");
   }
 
   return;

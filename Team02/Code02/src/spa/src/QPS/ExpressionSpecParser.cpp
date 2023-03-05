@@ -1,12 +1,9 @@
-#pragma once
-#include "ExpressionParser.h"
-#include "QPS/Util/QueryUtil.h"
-#include "General/SpaException/SyntaxErrorException.h"
-#include "General/LexicalRuleValidator.h"
-#include "General/StringUtil.h"
+#include "ExpressionSpecParser.h"
 
-std::string ExpressionParser::ParseExpressionSpec(std::string expression_spec) {
-  //TODO: milestone 1  - only handle partial matching or wildcard and only handle constant matching and variable matching
+std::string ExpressionSpecParser::ParseExpressionSpec(std::string expression_spec) {
+  std::istringstream s1("number % 10 + 10 * 10 / 10 - 10;");
+  std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
+
   if (expression_spec == "_") {
     return expression_spec;
   }
@@ -16,7 +13,6 @@ std::string ExpressionParser::ParseExpressionSpec(std::string expression_spec) {
   bool is_partial_match = QueryUtil::IsPartialMatchExpressionSpecification(expression_spec);
   if (is_partial_match) {
     expr = string_util::Trim(expression_spec.substr(1, expression_spec.length() - 2));
-
   } else {
     throw SyntaxErrorException("Wrong usage of _ in expression specification " + expression_spec);
   }

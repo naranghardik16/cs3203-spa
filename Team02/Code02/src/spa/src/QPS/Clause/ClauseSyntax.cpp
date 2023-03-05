@@ -25,6 +25,10 @@ SyntaxPair ClauseSyntax::GetSyntaxPair() {
   return pair_;
 }
 
+ParameterVector ClauseSyntax::GetParameters() {
+  return pair_.second;
+}
+
 bool ClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
   return this->GetEntity() == other.GetEntity() && this->GetFirstParameter() == other.GetFirstParameter() &&

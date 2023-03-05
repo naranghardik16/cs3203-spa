@@ -45,6 +45,12 @@ class ClauseSyntax {
    */
   SyntaxPair GetSyntaxPair();
 
+  /**
+   * Returns the parameters of the clause
+   * @return Vector of parameters
+   */
+  ParameterVector GetParameters();
+
   virtual bool Equals(ClauseSyntax &other) = 0;
 
   virtual bool IsBooleanClause(Map &declaration_map) = 0;
