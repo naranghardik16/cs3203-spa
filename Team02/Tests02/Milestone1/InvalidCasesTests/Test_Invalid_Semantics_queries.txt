@@ -115,6 +115,6 @@ SemanticError
 5000
 24 - arg_1 for pattern is not variable synonym
 print v; assign a;
-Select v pattern a(x, _)
+Select v pattern a(v, _)
 SemanticError
 5000
