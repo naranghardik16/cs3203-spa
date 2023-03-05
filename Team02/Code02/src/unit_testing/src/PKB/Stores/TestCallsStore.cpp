@@ -164,25 +164,31 @@ TEST_CASE("Testcases for Calls Store") {
 
   }
 
+  SECTION("Test OneToMany Calls Relation with statements and procedure") {
+    auto calls_store = new CallsStore();
 
+    calls_store->addCallStatementToProcedureName("4", "proc1");
+    calls_store->addCallStatementToProcedureName("5", "proc1");
+    calls_store->addCallStatementToProcedureName("6", "proc2");
+    calls_store->addCallStatementToProcedureName("7", "proc2");
+    calls_store->addCallStatementToProcedureName("8", "proc3");
+    calls_store->addCallStatementToProcedureName("9", "proc3");
 
+  REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc1") == std::unordered_set
+      <PkbTypes::STATEMENT_NUMBER>({"4", "5"}));
+  REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc2") == std::unordered_set
+      <PkbTypes::STATEMENT_NUMBER>({"6", "7"}));
+  REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc3") ==
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8","9"}));
 
+  REQUIRE(calls_store->retrieveAllCallStatementToProcedurePairs() == std::unordered_set<std::pair<PkbTypes::
+  STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
+    std::make_pair("proc1", "4"), std::make_pair("proc1", "5"),
+    std::make_pair("proc2", "6"), std::make_pair("proc2", "7"),
+                   std::make_pair("proc3", "8"), std::make_pair("proc3", "9")
+  }));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 
 
 }
