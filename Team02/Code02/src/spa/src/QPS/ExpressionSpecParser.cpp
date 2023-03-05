@@ -1,36 +1,37 @@
 #include "ExpressionSpecParser.h"
 
-std::string ExpressionSpecParser::ParseExpressionSpec(std::string expression_spec) {
-  std::istringstream s1("number % 10 + 10 * 10 / 10 - 10;");
-  std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
-
+std::shared_ptr<Expression> ExpressionSpecParser::ParseExpressionSpec(const std::string& expression_spec) {
   if (expression_spec == "_") {
-    return expression_spec;
+    return nullptr;
   }
 
-  std::string expr;
-
-  bool is_partial_match = QueryUtil::IsPartialMatchExpressionSpecification(expression_spec);
-  if (is_partial_match) {
-    expr = string_util::Trim(expression_spec.substr(1, expression_spec.length() - 2));
-  } else {
-    throw SyntaxErrorException("Wrong usage of _ in expression specification " + expression_spec);
+  std::string expr = expression_spec;
+  if (QueryUtil::IsPartialMatchExpressionSpecification(expr)) {
+    expr = string_util::Trim(expr.substr(1, expr.length() - 2));
+  }
+  if (!QueryUtil::IsQuoted(expr)) {
+    throw SyntaxErrorException();
   }
 
-  bool is_quoted = QueryUtil::IsQuoted(expr);
-
-  if (is_quoted) {
-      expr = string_util::Trim(expr.substr(1, expr.length()-2));
-  } else {
-    throw SyntaxErrorException("Wrong usage of quotation in expression specification " + expression_spec);
+  expr = string_util::Trim(expr.substr(1, expr.length()-2));
+  if (expr.empty()) {
+    throw SyntaxErrorException();
   }
+  std::istringstream str(expr + ";");
+  std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
+  std::shared_ptr<Parser::TokenStream> tokens = tk->Tokenize(str);
+  std::shared_ptr<ArithmeticOperationParser> parser = std::make_shared<ArithmeticOperationParser>();
 
-  if ((!LexicalRuleValidator::IsInteger(expr)) &&
-  (!LexicalRuleValidator::IsIdent(expr))) {
-
-    throw SyntaxErrorException("Expression Specification does not adhere to the lexical rules of being a factor "
-    + expression_spec);
+  if (tokens->size() != 1) {
+    throw SyntaxErrorException();
   }
-
-  return "_" + expr + "_"; //e.g. if _ "     y " _ --> return "_y_"
+  vector<shared_ptr<Token>> expression_tokens{tokens->front().begin(), tokens->front().end() - 1};
+  if (expression_tokens.size() == 1 && expression_tokens[0]->GetType() == LEFT_PARENTHESIS) {
+    throw SyntaxErrorException();
+  }
+  std::shared_ptr<Expression> expression = parser->ParseEntity(expression_tokens);
+  if (!expression) {
+    throw SyntaxErrorException();
+  }
+  return expression;
 }

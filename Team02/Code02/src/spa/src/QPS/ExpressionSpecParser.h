@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include "SP/Tokenizer/Tokenizer.h"
+#include "SP/Parser/ArithmeticOperationParser.h"
 #include "QPS/Util/QueryUtil.h"
 #include "General/SpaException/SyntaxErrorException.h"
 #include "General/LexicalRuleValidator.h"
@@ -21,5 +22,5 @@ class ExpressionSpecParser {
    * @param expression_spec which is either a wildcard or a partial match with only a factor inside
    * @throws SyntaxErrorException if the expression specification flouts lexical rules
    */
-  static std::string ParseExpressionSpec(std::string expression_spec);
+  static std::shared_ptr<Expression> ParseExpressionSpec(const std::string& expression_spec);
 };
