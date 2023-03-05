@@ -7,6 +7,7 @@
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
+#include "core/model/Expression.h"
 
 /**
  * Facade implementation consisting of read-only methods
@@ -549,13 +550,14 @@ class PkbReadFacade {
    */
   virtual bool IsAnyAncestorDescendantRelationshipPresent();
 
+  //!API for pattern
   /**
    * Retrieves assign statements which match the given expression exactly.
    *
    * @param expression - The expression.
    * @return A set of statement numbers.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(std::string expression);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expression);
 
   /**
    * Retrieves assign statements which contains the given sub_expression.
@@ -563,8 +565,55 @@ class PkbReadFacade {
    * @param sub_expression - The sub expression.
    * @return A set of statement numbers representing the statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(std::string sub_expression);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expression);
 
+  /**
+   * Retrieves if statements and condition variable pairs (stmt number, variable). Where variables are used in the
+   * condition statement.
+   *
+   * @return A set of pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetIfConditionVariablePair();
+
+  /**
+   * Retrieves if statements that uses the given variable in its conditions.
+   *
+   * @param var_name Name of the variable.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetIfWithConditionVariable(const std::string &var_name);
+
+  /**
+   * Retrieves if statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   *
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetIfThatHasConditionVariable();
+
+  /**
+   * Retrieves while statements and condition variable pairs (stmt number, variable). Where variables are used in the
+   * condition statement.
+   *
+   * @return A set of pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair();
+
+  /**
+   * Retrieves while statements that uses the given variable in its conditions.
+   *
+   * @param var_name Name of the variable.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name);
+
+  /**
+   * Retrieves while statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   *
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable();
+
+  //!APi for call
   /**
    * Retrieves call statements and the procedure it calls.
    *
