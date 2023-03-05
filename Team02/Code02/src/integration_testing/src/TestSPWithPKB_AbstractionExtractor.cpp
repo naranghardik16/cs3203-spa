@@ -382,7 +382,6 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("25", "x"),
         make_pair("25", "y")
     };
-    auto pairs = pkb_read_facade->GetModifiesStatementVariablePairs(STATEMENT);
     for (pair<string, string> pp : expected_modifies_s_pairs) {
       if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first, pp.second)) {
         FAIL();
@@ -417,5 +416,164 @@ TEST_CASE("Check if modifies are extracted correctly") {
     }
     SUCCEED();
   }
+}
 
+TEST_CASE("Check if uses are extracted correctly") {
+  string input = "    procedure main {\n"
+                 "        flag = 0;\n"
+                 "        call computeCentroid;\n"
+                 "        call printResults;\n"
+                 "    }\n"
+                 "    procedure readPoint {\n"
+                 "        read x;\n"
+                 "        read y;\n"
+                 "    }\n"
+                 "    procedure printResults {\n"
+                 "        print flag;\n"
+                 "        print cenX;\n"
+                 "        print cenY;\n"
+                 "        print normSq;\n"
+                 "    }\n"
+                 "    procedure computeCentroid {\n"
+                 "        count = 0;\n"
+                 "        cenX = 0;\n"
+                 "        cenY = 0;\n"
+                 "        call readPoint;\n"
+                 "        while ((x != 0) && (y != 0)) {\n"
+                 "            count = count + 1;\n"
+                 "            cenX = cenX + x;\n"
+                 "            cenY = cenY + y;\n"
+                 "            if (x == 1) then {\n"
+                 "                call printResults;"
+                 "            } else {"
+                 "                z = 1;"
+                 "            }\n"
+                 "         }\n"
+                 "        if (count == 0) then {\n"
+                 "            flag = 1;\n"
+                 "        } else {\n"
+                 "            cenX = cenX / count;"
+                 "            while (count == 0) {"
+                 "                call printResults;"
+                 "                count = 1;"
+                 "            }\n"
+                 "            cenY = cenY / count;\n"
+                 "        }\n"
+                 "        normSq = cenX * cenX + cenY * cenY;\n"
+                 "    }";
+  std::istringstream is;
+  is.str(input);
+
+  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<SP> sp = make_shared<SP>();
+  sp->ProcessSIMPLE(is, pkb);
+
+  shared_ptr<PkbReadFacade>
+      pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+  SECTION("Check that all usesS pair are present") {
+    vector<pair<string, string>> expected_uses_s_pairs = {
+        // Uses(c, v)
+        make_pair("2", "flag"),
+        make_pair("2", "cenX"),
+        make_pair("2", "cenY"),
+        make_pair("2", "normSq"),
+        make_pair("2", "count"),
+        make_pair("2", "x"),
+        make_pair("2", "y"),
+        make_pair("3", "flag"),
+        make_pair("3", "cenX"),
+        make_pair("3", "cenY"),
+        make_pair("3", "normSq"),
+        // Uses(pn, v)
+        make_pair("6", "flag"),
+        make_pair("7", "cenX"),
+        make_pair("8", "cenY"),
+        make_pair("9", "normSq"),
+        // Uses(a, v)
+        make_pair("15", "count"),
+        make_pair("16", "cenX"),
+        make_pair("16", "x"),
+        make_pair("17", "cenY"),
+        make_pair("17", "y"),
+        // Uses(c, v)
+        make_pair("19", "flag"),
+        make_pair("19", "cenX"),
+        make_pair("19", "cenY"),
+        make_pair("19", "normSq"),
+        // Uses(s, v)
+        make_pair("18", "x"),
+        make_pair("18", "flag"),
+        make_pair("18", "cenX"),
+        make_pair("18", "cenY"),
+        make_pair("18", "normSq"),
+        make_pair("14", "x"),
+        make_pair("14", "y"),
+        make_pair("14", "count"),
+        make_pair("14", "cenX"),
+        make_pair("14", "cenY"),
+        make_pair("14", "flag"),
+        make_pair("14", "normSq"),
+        // Uses(a, v)
+        make_pair("23", "cenX"),
+        make_pair("23", "count"),
+        make_pair("27", "cenY"),
+        make_pair("27", "count"),
+        // Uses(c, v)
+        make_pair("25", "flag"),
+        make_pair("25", "cenX"),
+        make_pair("25", "cenY"),
+        make_pair("25", "normSq"),
+        // Uses(s, v)
+        make_pair("24", "count"),
+        make_pair("24", "flag"),
+        make_pair("24", "cenX"),
+        make_pair("24", "cenY"),
+        make_pair("24", "normSq"),
+        make_pair("21", "count"),
+        make_pair("21", "cenX"),
+        make_pair("21", "cenY"),
+        make_pair("21", "flag"),
+        make_pair("21", "normSq"),
+        // Uses(a, v)
+        make_pair("28", "cenX"),
+        make_pair("28", "cenY"),
+    };
+    auto pairs = pkb_read_facade->GetUsesStatementVariablePairs(STATEMENT);
+    for (pair<string, string> pp : expected_uses_s_pairs) {
+      if (!pkb_read_facade->HasUsesStatementRelationship(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check that all usesS pair are present") {
+    vector<pair<string, string>> expected_uses_p_pairs = {
+        make_pair("printResults", "flag"),
+        make_pair("printResults", "cenX"),
+        make_pair("printResults", "cenY"),
+        make_pair("printResults", "normSq"),
+        make_pair("computeCentroid", "count"),
+        make_pair("computeCentroid", "x"),
+        make_pair("computeCentroid", "y"),
+        make_pair("computeCentroid", "flag"),
+        make_pair("computeCentroid", "cenX"),
+        make_pair("computeCentroid", "cenY"),
+        make_pair("computeCentroid", "normSq"),
+        make_pair("main", "count"),
+        make_pair("main", "x"),
+        make_pair("main", "y"),
+        make_pair("main", "flag"),
+        make_pair("main", "cenX"),
+        make_pair("main", "cenY"),
+        make_pair("main", "normSq"),
+    };
+    auto pairs = pkb_read_facade->GetUsesProcedureVariablePairs();
+    for (pair<string, string> pp : expected_uses_p_pairs) {
+      if (!pkb_read_facade->HasUsesProcedureRelationship(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
 }
