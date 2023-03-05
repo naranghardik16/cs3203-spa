@@ -11,14 +11,14 @@ void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   if (!QueryUtil::IsSynonym(syn) || !QueryUtil::IsEntRef(args[0])) {
     throw SyntaxErrorException("Invalid synonym or entity reference");
   }
-
   if (args.size() == 2) {
-
+    clause->SetExpression(ExpressionSpecParser::ParseExpressionSpec(args[1]));
   }
-
-  if (args.size() == 3 && !QueryUtil::IsWildcard(args[1]) && !QueryUtil::IsWildcard(args[2])) {
+  if (args.size() == 3 && (!QueryUtil::IsWildcard(args[1]) || !QueryUtil::IsWildcard(args[2]))) {
     throw SyntaxErrorException("Invalid if pattern syntax");
   }
+
+  return;
 }
 
 void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) {
@@ -29,8 +29,15 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   if (declaration.find(syn) == declaration.end()) {
     throw SemanticErrorException();
   }
-  if (args.size() == 2 && declaration[syn] != pql_constants::kPqlAssignEntity && declaration[syn] != pql_constants::kPqlWhileEntity) {
-    throw SemanticErrorException();
+
+  if (args.size() == 2) {
+    bool is_arg_2_wildcard = QueryUtil::IsWildcard(args[1]);
+    if (!is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity) {
+      throw SemanticErrorException();
+    }
+    if (is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity && declaration[syn] != pql_constants::kPqlWhileEntity) {
+      throw SemanticErrorException();
+    }
   }
   if (args.size() == 3 && declaration[syn] != pql_constants::kPqlIfEntity) {
     throw SemanticErrorException();

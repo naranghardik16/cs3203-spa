@@ -321,10 +321,8 @@ ParameterVector QpsTokenizer::ParseParameters(std::string parameters_substr) {
 }
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string sub_clause) {
-
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
   std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
-  pattern_syntax->SetExpression(ExpressionSpecParser::ParseExpressionSpec(syntax.second[1]));
 
   syntax_validator_->ValidatePatternClauseSyntax(pattern_syntax);
   semantic_validator_->ValidatePatternClauseSemantic(pattern_syntax);

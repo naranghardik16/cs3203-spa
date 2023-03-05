@@ -18,7 +18,6 @@
 #include "Clause/SuchThatClauseSyntax.h"
 #include "Clause/PatternClauseSyntax.h"
 #include "QPS/Util/QueryUtil.h"
-#include "ExpressionSpecParser.h"
 #include "QPS/Clause/WithClauseSyntax.h"
 
 /*!
