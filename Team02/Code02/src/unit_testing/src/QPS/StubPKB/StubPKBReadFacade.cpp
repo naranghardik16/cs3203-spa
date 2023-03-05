@@ -434,12 +434,12 @@ bool StubPkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 }
 
 //! Pattern API
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExactExpression(std::string expr) {
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) {
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(std::string sub_expr) {
-  if (sub_expr == "_\"g\"_") {
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expr) {
+  if (sub_expr->GetName() == "g") {
     return {"6"};
   }
   return {"2"};
