@@ -444,3 +444,33 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithParti
   }
   return {"2"};
 }
+
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetIfConditionVariablePair() {
+  return {{"4", "x"}, {"4", "y"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfWithConditionVariable(const std::string &var_name) {
+  if (var_name == "x") {
+    return {"4"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfThatHasConditionVariable() {
+  return {"4"};
+}
+
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetWhileConditionVariablePair() {
+  return {{"6", "x"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileWithConditionVariable(const std::string &var_name) {
+  if (var_name == "x") {
+    return {"6"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileThatHasConditionVariable() {
+  return {"6"};
+}

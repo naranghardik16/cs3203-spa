@@ -1,11 +1,5 @@
 #include "ModifiesPClauseEvaluator.h"
 
-#pragma once
-#include "ModifiesSClauseEvaluator.h"
-#include "General/LexicalRuleValidator.h"
-#include "QPS/Util/QueryUtil.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
-
 bool ModifiesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);

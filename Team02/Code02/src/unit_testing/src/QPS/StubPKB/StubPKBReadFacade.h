@@ -82,7 +82,7 @@ class StubPkbReadFacade: public PkbReadFacade {
   PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type) override;
   PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type) override;
   bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child) override;
-  bool IsAnyParentRelationshipPresent();
+  bool IsAnyParentRelationshipPresent() override;
 
   //!API for ParentStar
   PkbCommunicationTypes::PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) override;
@@ -96,4 +96,10 @@ class StubPkbReadFacade: public PkbReadFacade {
   //!API for pattern
   PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) override;
   PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expr) override;
+  PkbCommunicationTypes::PairConstraintSet GetIfConditionVariablePair() override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfWithConditionVariable(const std::string &var_name) override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfThatHasConditionVariable() override;
+  PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair() override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name) override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable() override;
 };

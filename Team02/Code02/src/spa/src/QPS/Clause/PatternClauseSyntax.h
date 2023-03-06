@@ -1,7 +1,10 @@
 #pragma once
 
 #include "ClauseSyntax.h"
+#include "QPS/Util/PQLConstants.h"
 #include "QPS/Evaluator/PatternClauseEvaluator/AssignPatternClauseEvaluator.h"
+#include "QPS/Evaluator/PatternClauseEvaluator/IfPatternClauseEvaluator.h"
+#include "QPS/Evaluator/PatternClauseEvaluator/WhilePatternClauseEvaluator.h"
 
 class PatternClauseSyntax : public ClauseSyntax {
  public:
