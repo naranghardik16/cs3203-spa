@@ -78,7 +78,7 @@ TEST_CASE("Test Invalid And Clause") {
   SECTION("And with different clause_Throw syntax error") {
     //pattern + and such that
     std::string query("assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and Modifies (a, \"x\")");
-    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
 
     //pattern + and with
     query = "assign a; while w; Select a such that Parent* (w, a) pattern a (\"x\", _) and a.stmt#=w.stmt#";
@@ -128,6 +128,36 @@ TEST_CASE("Test Invalid And Clause") {
 
 TEST_CASE("Test multi-clause queries") {
   auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Multi clause -- chain of withs") {
+    std::string query = "read r; print p;Select r.varName with p.varName = r.varName and 5=5 and \"x\"=\"x\" and p.varName = \"number\"";
+    auto parser_output = qp->ParseQuery(query);
+    auto synonym_tuple = parser_output->GetSynonymTuple();
+    auto declaration_map = parser_output->GetDeclarationMap();
+    auto vector = parser_output->GetClauseSyntaxPtrList();
+
+    SyntaxPair correct_with1_syntax = CreateCorrectSyntaxPairParser("", "p.varName", "r.varName");
+    SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPairParser("", "5", "5");
+    SyntaxPair correct_with3_syntax = CreateCorrectSyntaxPairParser("", "\"x\"", "\"x\"");
+    SyntaxPair correct_with4_syntax = CreateCorrectSyntaxPairParser("", "p.varName", "\"number\"");
+    std::shared_ptr<ClauseSyntax>
+        with1_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with1_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with2_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with2_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with3_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with3_syntax);
+    std::shared_ptr<ClauseSyntax>
+        with4_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with4_syntax);
+    std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with1_clause_ptr,with2_clause_ptr, with3_clause_ptr,with4_clause_ptr,};
+    Map correct_declaration_map = {{"r", "read"},{"p", "print"}};
+    SelectedSynonymTuple correct_synonym_tuple = {"r.varName"};
+    for (int i = 0; i < correct_vector.size(); i++) {
+      REQUIRE(vector[i]->Equals(*correct_vector[i]));
+    }
+    REQUIRE(correct_synonym_tuple == synonym_tuple);
+    REQUIRE(declaration_map == correct_declaration_map);
+  }
+
   SECTION("Multi clause query with tuple") {
     std::string query = "assign with, Parent; while w; Select < with. stmt#, w . stmt#, Parent > pattern Parent(_,_) and with(_,_) with Parent.stmt#=with.stmt# and 6 = 5 such that Parent(w,Parent)";
     auto parser_output = qp->ParseQuery(query);
@@ -522,7 +552,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "_", "_y_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "_", "_ \" y \" _");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "a", "\"count\"");
     std::shared_ptr<ClauseSyntax>
@@ -531,6 +561,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     correct_syntax_ptr_list.push_back(such_that_syntax_ptr);
     correct_syntax_ptr_list.push_back(pattern_syntax_ptr);
 
+    std::string s = clause_syntax_ptr_list[1]->GetSecondParameter();
     for (int i = 0; i < clause_syntax_ptr_list.size(); i++) {
       REQUIRE(clause_syntax_ptr_list[i]->Equals(*correct_syntax_ptr_list[i]));
     }
@@ -551,7 +582,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "\"x\"", "_x_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("a", "\"x\"", "_\"x\"_");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "a", "\"x\"");
     std::shared_ptr<ClauseSyntax> such_that_syntax_ptr = std::make_shared<SuchThatClauseSyntax>(such_that_syntax_pair);
@@ -579,7 +610,7 @@ TEST_CASE("Test Valid Simple Query Parser") {
     auto declaration_map = parser_output->GetDeclarationMap();
     auto clause_syntax_ptr_list = parser_output->GetClauseSyntaxPtrList();
 
-    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("pattern", "Select", "_x_");
+    SyntaxPair pattern_syntax_pair = CreateCorrectSyntaxPairParser("pattern", "Select", "_\"x\"_");
     std::shared_ptr<ClauseSyntax> pattern_syntax_ptr = std::make_shared<PatternClauseSyntax>(pattern_syntax_pair);
     SyntaxPair such_that_syntax_pair = CreateCorrectSyntaxPairParser("Uses", "pattern", "Select");
     std::shared_ptr<ClauseSyntax>

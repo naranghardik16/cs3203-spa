@@ -6,7 +6,7 @@ shared_ptr<Statement> PrintStatementParser::ParseEntity(TokenStream &tokens) {
   std::string var_name = ExtractVariableName(line);
   Variable var(var_name);
   auto print_stmt =
-      make_shared<PrintStatement>(Program::GetAndIncreaseStatementNumber(), var, "main");
+      make_shared<PrintStatement>(Program::GetAndIncreaseStatementNumber(), var, GetProcName());
   CheckEndOfStatement(line);
   return print_stmt;
 }
@@ -25,13 +25,17 @@ std::string PrintStatementParser::ExtractVariableName(Line &line) const {
     throw SyntaxErrorException("Print statement does not have a variable");
   }
 
+  if (line[1]->GetType() != NAME) {
+    throw SyntaxErrorException("var_name should be a NAME");
+  }
+
   return line[1]->GetValue();
 
 }
 
 void PrintStatementParser::CheckEndOfStatement(Line &line) const {
   if ((*prev(line.end()))->GetValue() != ";") {
-    throw SyntaxErrorException("AssignStatement does not end with ;");
+    throw SyntaxErrorException("PrintStatement does not end with ;");
   }
 
   if (line.size() > 3) {

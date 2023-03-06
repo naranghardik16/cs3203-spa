@@ -1,0 +1,6 @@
+procedure q {
+  read x;
+  if (x==1) then {
+    z = x + 1; }
+  else {
+    x = z + x; } }

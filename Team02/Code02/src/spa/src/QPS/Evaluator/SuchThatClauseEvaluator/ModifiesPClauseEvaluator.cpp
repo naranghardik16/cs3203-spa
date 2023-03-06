@@ -32,10 +32,10 @@ std::shared_ptr<Result> ModifiesPClauseEvaluator::EvaluateClause(std::shared_ptr
 
   ResultHeader header;
   if (is_first_arg_a_procedure_synonym) {
-    header.push_back(first_arg_);
+    header[first_arg_] = (int) header.size();
   }
   if (is_second_arg_a_variable_synonym) {
-    header.push_back(second_arg_);
+    header[second_arg_] = (int) header.size();
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;

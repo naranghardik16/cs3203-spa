@@ -639,39 +639,133 @@ bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 }
 
 //! Pattern API
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithExactExpression(std::string expr) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) {
+  //todo
   return {"1", "2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialExpression(std::string sub_expression) {
-  PkbCommunicationTypes::SingleConstraintSet result;
-  if (sub_expression == "_") {
-    return this->GetAssignStatements();
-  }
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expression) {
+  //todo
+  return {"1"};
+}
 
-  sub_expression.erase(std::remove(sub_expression.begin(), sub_expression.end(), '_'), sub_expression.end());
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetIfConditionVariablePair() {
+  //todo
+  return {};
+}
 
-  if (this->GetVariables().count(sub_expression) > 0) {
-    for (const auto &p: this->GetAssignStatements()) {
-      auto expression = this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(p);
-      auto variables = this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
-      if (variables.count(sub_expression) > 0) {
-        result.insert(p);
-      }
-    }
-  } else if (this->GetConstants().count(sub_expression) > 0) {
-    for (const auto &p: this->GetAssignStatements()) {
-      auto expression = this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(p);
-      auto constants = this->pkb.expression_store_->retrieveConstantsOfTheExpression(expression);
-      if (constants.count(sub_expression) > 0) {
-        result.insert(p);
-      }
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfWithConditionVariable(const std::string &var_name) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfThatHasConditionVariable() {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetWhileConditionVariablePair() {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileWithConditionVariable(const std::string &var_name) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditionVariable() {
+  //todo
+  return {};
+}
+
+//! Calls API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
+  return this->pkb.calls_store_->retrieveAllCallStatementToProcedurePairs();
+}
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_pairs =
+      this->pkb.calls_store_->retrieveAllCallsPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_pairs) {
+    if (p.first == procedure) {
+      result.insert(p);
     }
   }
 
   return result;
 }
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
-  //TODO
-  return {{"1" , "Main"}};
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
+      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_star_pairs) {
+    if (p.first == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_pairs =
+      this->pkb.calls_store_->retrieveAllCallsPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_pairs) {
+    if (p.second == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+  PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
+      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+
+  PkbCommunicationTypes::PairConstraintSet result;
+
+  for (const auto& p: calls_star_pairs) {
+    if (p.second == procedure) {
+      result.insert(p);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsPairs() {
+  return this->pkb.calls_store_->retrieveAllCallsPairs();
+}
+
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsStarPairs() {
+  return this->pkb.calls_store_->retrieveAllCallsStarPairs();
+}
+
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure) {
+  return this->pkb.calls_store_->retrieveCallStatementsFromAProcedure(procedure);
+}
+
+bool PkbReadFacade::HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->pkb.calls_store_->hasCallsRelation(caller_procedure, callee_procedure);
+}
+
+bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
+  return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
+}
+

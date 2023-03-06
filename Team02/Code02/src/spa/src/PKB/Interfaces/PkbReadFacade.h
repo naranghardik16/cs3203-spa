@@ -7,6 +7,7 @@
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
+#include "core/model/Expression.h"
 
 /**
  * Facade implementation consisting of read-only methods
@@ -549,13 +550,14 @@ class PkbReadFacade {
    */
   virtual bool IsAnyAncestorDescendantRelationshipPresent();
 
+  //!API for pattern
   /**
    * Retrieves assign statements which match the given expression exactly.
    *
    * @param expression - The expression.
    * @return A set of statement numbers.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(std::string expression);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expression);
 
   /**
    * Retrieves assign statements which contains the given sub_expression.
@@ -563,14 +565,138 @@ class PkbReadFacade {
    * @param sub_expression - The sub expression.
    * @return A set of statement numbers representing the statements.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(std::string sub_expression);
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expression);
 
+  /**
+   * Retrieves if statements and condition variable pairs (stmt number, variable). Where variables are used in the
+   * condition statement.
+   *
+   * @return A set of pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetIfConditionVariablePair();
+
+  /**
+   * Retrieves if statements that uses the given variable in its conditions.
+   *
+   * @param var_name Name of the variable.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetIfWithConditionVariable(const std::string &var_name);
+
+  /**
+   * Retrieves if statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   *
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetIfThatHasConditionVariable();
+
+  /**
+   * Retrieves while statements and condition variable pairs (stmt number, variable). Where variables are used in the
+   * condition statement.
+   *
+   * @return A set of pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair();
+
+  /**
+   * Retrieves while statements that uses the given variable in its conditions.
+   *
+   * @param var_name Name of the variable.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name);
+
+  /**
+   * Retrieves while statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   *
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable();
+
+  //!APi for call
   /**
    * Retrieves call statements and the procedure it calls.
    *
    * @return A set of pairs (call stmt#, procedure name)
    */
   virtual PkbCommunicationTypes::PairConstraintSet GetCallProcedurePair();
+
+  /**
+   * Retrieves all the calls pairs where the caller procedure matches the specified procedure.
+   *
+   * @param procedure - The specified caller procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls star pairs where the caller procedure matches the specified procedure.
+   *
+   * @param procedure - The specified caller procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls pairs where the callee procedure matches the specified procedure.
+   *
+   * @param procedure - The specified callee procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all the calls star pairs where the callee procedure matches the specified procedure.
+   *
+   * @param procedure - The specified callee procedure.
+   * @return
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Retrieves all calls pairs stored in PKB.
+   *
+   * @return An unordered set of all the calls pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsPairs();
+
+  /**
+   * Retrieves all the calls star pairs stored in PKB.
+   *
+   * @return An unordered set of all the calls star pairs.
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet
+  GetAllCallsStarPairs();
+
+  /**
+   * Retrieves all the statements that call the specified procedure.
+   *
+   * @param procedure - The specified procedure.
+   * @return A set of statements that call this procedure.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet
+  GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
+
+  /**
+   * Checks whether there exists a Calls relation between the specified procedures.
+   *
+   * @param caller_procedure - The specified caller procedure.
+   * @param callee_procedure - The specified callee procedure.
+   * @return True if such a relation exists, false otherwise.
+   */
+  virtual bool HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+
+  /**
+   * Checks whether there exists a Calls Star relation between the specified procedures.
+   *
+   * @param caller_procedure - The specified caller procedure.
+   * @param callee_procedure - The specified callee procedure.
+   * @return True if such a relation exists, false otherwise.
+   */
+  virtual bool HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
 
  private:
   PKB& pkb;

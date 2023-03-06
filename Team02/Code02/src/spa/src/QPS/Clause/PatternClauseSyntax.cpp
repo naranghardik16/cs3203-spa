@@ -1,7 +1,6 @@
-#pragma once
 #include "PatternClauseSyntax.h"
 
-PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
@@ -18,7 +17,7 @@ bool PatternClauseSyntax::IsBooleanClause(Map &declaration_map) {
 }
 
 std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
-  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), ClauseSyntax::GetExpression());
   return eval;
 }
 
