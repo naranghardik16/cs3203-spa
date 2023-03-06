@@ -704,7 +704,7 @@ class PkbReadFacade {
    * @param expression - The expression to retrieve the variables from.
    * @return A set of variables that belong to the expression.
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet retrieveAllVariablesFromOfExpression(std::shared_ptr<Expression> expression);
+  virtual PkbCommunicationTypes::SingleConstraintSet RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression);
 
  private:
   PKB& pkb;
