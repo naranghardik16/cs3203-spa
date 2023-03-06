@@ -18,4 +18,18 @@ assign a; variable v; stmt s;
 Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_)
 4, 8
 5000
-
+5 - only boolean -- true
+assign a; variable v;
+Select BOOLEAN with 5=5 and "x"="x" such that Parent(_,5) and Uses(6,"digit") pattern a("digit",_) and a(_,_"number"_)
+TRUE
+5000
+6 - tuples with multiclause
+read r; print p; while w,w1; if if; assign a;
+Select <r, r.varName, p, a> such that Parent(w,if) and Parent*(if,w1) and Parent(w1,a) with r.varName=p.varName pattern a(_,_"4"_)
+1 number 16 13
+5000
+7 - only boolean -- false
+assign a; variable v;
+Select BOOLEAN with 5=5 and "y"="x" such that Parent(_,5) and Uses(6,"digit") pattern a("digit",_) and a(_,_"number"_)
+FALSE
+5000

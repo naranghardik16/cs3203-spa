@@ -53,7 +53,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
   ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithPartialExpression(second_arg_);
+  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithPartialExpression(expression_);
   table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
@@ -67,7 +67,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExp
   ResultHeader header{{syn_assign_, 0}};
   ResultTable table;
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(second_arg_);
+  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(expression_);
   table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
 
