@@ -773,3 +773,73 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::RetrieveAllVariablesOf
   return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
 }
 
+PkbCommunicationTypes::PairConstraintSet  PkbReadFacade::GetAffectsPairs() {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedBy(std::string stmt_num) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffecting(std::string stmt_num) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffected() {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAffect() {
+  //TODO
+  return {};
+}
+
+bool PkbReadFacade::HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::IsThereAnyAffectsRelationship() {
+  //TODO
+  return true;
+}
+
+
+PkbCommunicationTypes::PairConstraintSet  PkbReadFacade::GetAffectsStarPairs() {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedIndirectlyBy(std::string stmt_num) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsIndirectlyAffecting(std::string stmt_num) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffectedIndirectly() {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatIndirectlyAffect() {
+  //TODO
+  return {};
+}
+
+bool PkbReadFacade::HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
+  //TODO
+  return true;
+}
+
+bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
+  //TODO
+  return true;
+}

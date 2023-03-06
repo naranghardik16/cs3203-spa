@@ -706,6 +706,112 @@ class PkbReadFacade {
    */
   virtual PkbCommunicationTypes::SingleConstraintSet RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression);
 
+  //! Affects API
+
+  /**
+   * Retrieves all pairs of assign statements with an Affects relationship.
+   *
+   * @return A set of pairs with format of pairs being <assign_that_affects, assign_that_is_affected>
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAffectsPairs();
+
+  /**
+   * Retrieves all assign statements that are affected by the specified statement.
+   *
+   * @param stmt_num - the statement that is affecting
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedBy(std::string stmt_num);
+
+  /**
+   * Retrieves all assign statements that are affecting the specified statement.
+   *
+   * @param stmt_num - the statement that is affected
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffecting(std::string stmt_num);
+
+  /**
+   * Retrieves all assigns that are affected by any other assign statement
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffected();
+
+  /**
+   * Retrieves all assigns that affect any another assign
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffect();
+
+  /**
+   * Checks if two statements have an Affects relationship
+   * @param stmt_num - statement that affects
+   * @param stmt_num_being_affected - statement that is affected
+   * @return True if there is an Affects relationship else False
+   */
+  virtual bool HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected);
+
+  /**
+   * Checks if there is any Affects Relationship present between any assign statements.
+   * @return True is there is Affects Relationship stored, else False
+   */
+  virtual bool IsThereAnyAffectsRelationship();
+
+  //! AffectsStar API
+
+  /**
+   * Retrieves all pairs of assign statements with an AffectsStar relationship.
+   *
+   * @return A set of pairs with format of pairs being <assign_that_affects_star, assign_that_is_affected>
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAffectsStarPairs();
+
+  /**
+   * Retrieves all assign statements that are indirectly affected by the specified statement.
+   *
+   * @param stmt_num - the statement that is affecting indirectly
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedIndirectlyBy(std::string stmt_num);
+
+  /**
+   * Retrieves all assign statements that are indirectly affecting the specified statement.
+   *
+   * @param stmt_num - the statement that is affected
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsIndirectlyAffecting(std::string stmt_num);
+
+  /**
+   * Retrieves all assigns that are affected indirectly by any other assign statement
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffectedIndirectly();
+
+  /**
+   * Retrieves all assigns that indirectly affect any another assign
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatIndirectlyAffect();
+
+  /**
+   * Checks if two statements have an Affects Star relationship
+   * @param stmt_num - statement that affects indirectly
+   * @param stmt_num_being_affected - statement that is affected
+   * @return True if there is an Affects relationship else False
+   */
+  virtual bool HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected);
+
+  /**
+   * Checks if there is any AffectsStars Relationship present between any assign statements.
+   * @return True is there is AffectsStars Relationship stored, else False
+   */
+  virtual bool IsThereAnyAffectsStarRelationship();
+
  private:
   PKB& pkb;
 };
