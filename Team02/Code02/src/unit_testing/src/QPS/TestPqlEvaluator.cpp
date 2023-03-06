@@ -1136,6 +1136,72 @@ TEST_CASE("Test pattern evaluator") {
     std::unordered_set<std::string> correct_set({"2"});
     REQUIRE(eval_result == correct_set);
   }
+
+  SECTION("pattern if(v, _, _)") {
+    std::string query = "if ifs; variable v;Select v pattern ifs(v, _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"x", "y"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern if(\"x\", _, _)") {
+    std::string query = "if ifs; Select ifs pattern ifs(\"x\", _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern if(_, _, _)") {
+    std::string query = "if ifs; Select ifs pattern ifs(_, _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(v, _)") {
+    std::string query = "while w; variable v;Select v pattern w(v, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"x"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(\"x\", _)") {
+    std::string query = "while w; Select w pattern w(\"x\", _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"6"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(_, _)") {
+    std::string query = "while w; Select w pattern w(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"6"});
+    REQUIRE(eval_result == correct_set);
+  }
 }
 
 TEST_CASE("Multi-clause tests") {
