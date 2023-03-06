@@ -1,0 +1,105 @@
+1 - Calls*(_,_) is true
+procedure p;
+Select p.procName such that Calls*(_,_)
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
+5000
+2 - Calls*(_,IDENT) is true
+procedure p;procedure q;
+Select <p.procName,q> such that Calls*(_,"Sixth")
+First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth, Seventh Seventh
+5000
+3 - Calls*(_,IDENT) is false
+procedure p;procedure q;
+Select <p.procName,q> such that Calls*("Sixth",_)
+
+5000
+4 - Calls*(IDENT,_) is true
+procedure p;
+Select BOOLEAN such that Calls*("First",_)
+TRUE
+5000
+5 - Calls*(IDENT,_) is false
+procedure p;
+Select BOOLEAN such that Calls*("Fourth",_)
+FALSE
+5000
+6 - Calls*(IDENT,IDENT) is true
+procedure p;
+Select p such that Calls*("First","Sixth")
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
+5000
+7 - Calls*(IDENT,IDENT) is false
+procedure p;
+Select p such that Calls*("Sixth","Third")
+
+5000
+8 - Calls*(_,PROC-SYN) has result
+procedure p;
+Select p such that Calls*(_,p)
+Second, Third, Fourth, Fifth, Sixth
+5000
+9 - Calls*(_,PROC-SYN) has no result
+procedure p;
+Select p such that Calls*(_,p) and Calls*(_,"First")
+
+5000
+10 - Calls*(IDENT,PROC-SYN) has result
+procedure p;
+Select p.procName such that Calls*("Second",p)
+Third, Fourth, Fifth, Sixth
+5000
+11 - Calls*(IDENT,PROC-SYN) has no result
+procedure p;
+Select p.procName such that Calls*("Seventh",p)
+
+5000
+12 - Calls*(PROC-SYN,_) has result
+procedure p;
+Select p.procName such that Calls*(p,_)
+First, Second, Third, Fifth
+5000
+13 - Calls*(PROC-SYN,_) has no result
+procedure p;
+Select p.procName such that Calls*(p,_) and Calls*("Sixth",_)
+
+5000
+14 - Calls*(PROC-SYN,IDENT) has result
+procedure p;
+Select p.procName such that Calls*(p,"Sixth")
+First, Second, Third, Fifth
+5000
+15 - Calls*(PROC-SYN,IDENT) has no result
+procedure p;
+Select p.procName such that Calls*(p, "Seventh")
+
+5000
+16 - Calls*(PROC-SYN,PROC-SYN) has result
+procedure p,q;
+Select <p,q> such that Calls*(p, q) with p.procName = "First"
+First Second, First Third, First Fourth, First Fifth, First Sixth
+5000
+17 - Calls*(PROC-SYN,PROC-SYN) has result
+procedure p,q;
+Select <p,q> such that Calls*(p, q) with q.procName = "Third"
+First Third, Second Third
+5000
+18 - Calls*(PROC-SYN,PROC-SYN) has result
+procedure p,q;
+Select <p.procName,q.procName> such that Calls*(p, q) with p.procName = "Second"
+Second Third, Second Fourth, Second Fifth, Second Sixth
+5000
+19 - Calls*(PROC-SYN,PROC-SYN has result -- only indirect calls case
+procedure p,q,z;
+Select <p,z> such that Calls(p, q) and Calls*(q,z)
+First Third, First Fourth, First Fifth, First Sixth, Second Fourth, Second Fifth, Third Sixth
+5000
+20 - Calls*(PROC-SYN,PROC-SYN has no result
+procedure p,q;
+Select <p.procName,q.procName> such that Calls*(p, q) with p.procName = "Sixth"
+
+5000
+21 - Calls*(PROC-SYN,PROC-SYN) with irrelevant syns in clauses
+procedure p,q,z
+Select z such that Calls*(p, q) with q.procName = "Third"
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
+5000
