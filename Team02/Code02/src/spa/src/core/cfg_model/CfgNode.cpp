@@ -15,3 +15,15 @@ void CfgNode::AddStmt(int stmt_number) {
 void CfgNode::AddParent(const std::shared_ptr<CfgNode> &node) {
   parent_nodes_.emplace_back(node);
 }
+
+std::vector<int> CfgNode::GetNodeStmts() {
+  return node_stmts_;
+}
+
+CfgNode::BoolToCfgNodeMap CfgNode::GetNodeTrans() {
+  return node_trans_;
+}
+
+CfgNode::CfgNodeContainer CfgNode::GetParentNodes() {
+  return parent_nodes_;
+}

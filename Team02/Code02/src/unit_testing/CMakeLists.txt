@@ -9,6 +9,7 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Cfg/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
 
