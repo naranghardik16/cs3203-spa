@@ -247,6 +247,44 @@ TEST_CASE("Testing PkbReadFacade") {
         <PkbTypes::PROCEDURE,PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
           std::make_pair("proc10", "proc13"), std::make_pair("proc12", "proc13"),
           }));
+
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc2") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc3") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc4") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc4", "proc5") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc5", "proc6") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc5", "proc7") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc5", "proc8") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc5", "proc9") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc10", "proc11") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc10", "proc12") == true);
+    REQUIRE(pkb_read_facade_->HasCallsRelation("proc12", "proc13") == true);
+
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc2") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc3") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc4") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc5") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc5", "proc6") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc5", "proc7") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc5", "proc9") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc10", "proc11") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc10", "proc12") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc12", "proc13") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc5", "proc8") == true);
+
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc5") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc6") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc7") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc8") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc1", "proc9") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc6") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc7") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc8") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc9") == true);
+    REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc10", "proc13") == true);
+
+
+
   }
 }
 
