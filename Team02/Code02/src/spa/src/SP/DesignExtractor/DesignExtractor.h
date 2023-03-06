@@ -2,6 +2,7 @@
 #include "./core/model/Program.h"
 #include "EntityExtractor.h"
 #include "AbstractionExtractor.h"
+#include "CfgExtractor.h"
 #include "./PKB/PKB.h"
 
 class DesignExtractor {

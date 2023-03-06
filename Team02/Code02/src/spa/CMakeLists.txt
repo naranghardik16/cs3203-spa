@@ -1,5 +1,6 @@
 file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/cfg_model/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/*.cpp"
@@ -22,6 +23,7 @@ file(GLOB srcs
 
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/cfg_model/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/*.h"
