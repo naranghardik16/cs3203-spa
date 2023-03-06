@@ -16,10 +16,10 @@ class AssignPatternClauseEvaluator : public ClauseEvaluator {
     syn_assign_ = syntax_pair.first;
     first_arg_ =  syntax_pair.second[0];
     second_arg_ = syntax_pair.second[1];
-    expression_ = expr;
+    expression_ = std::move(expr);
   }
-  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb);
-  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb);
+  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) override;
+  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) override;
 
   //Helper
   std::shared_ptr<Result> JoinWithAssignWithExactExpression(const std::shared_ptr<Result>& r, const std::shared_ptr<PkbReadFacade>& pkb);

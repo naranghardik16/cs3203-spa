@@ -1,5 +1,4 @@
 #include "UsesPClauseEvaluator.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool UsesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();

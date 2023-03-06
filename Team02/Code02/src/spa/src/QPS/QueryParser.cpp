@@ -1,6 +1,4 @@
 #include "QueryParser.h"
-#include "QPS/Util/PQLConstants.h"
-#include "Query.h"
 
 std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::shared_ptr<QpsTokenizer> tk = std::make_shared<QpsTokenizer>();

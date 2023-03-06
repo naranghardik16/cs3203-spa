@@ -1,4 +1,3 @@
-#pragma once
 #include "QPS/Query.h"
 
 SelectedSynonymTuple Query::GetSynonymTuple() {

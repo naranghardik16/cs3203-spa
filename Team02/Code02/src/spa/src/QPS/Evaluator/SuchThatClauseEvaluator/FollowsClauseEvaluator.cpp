@@ -1,9 +1,4 @@
-#pragma once
 #include "FollowsClauseEvaluator.h"
-#include "General/LexicalRuleValidator.h"
-#include "QPS/Util/QueryUtil.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
-
 
 bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();

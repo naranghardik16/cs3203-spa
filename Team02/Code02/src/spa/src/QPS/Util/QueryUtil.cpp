@@ -1,8 +1,4 @@
-#include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
-#include "QPS/Util/QPSTypeDefs.h"
-#include "QPS/Util/PQLConstants.h"
-#include "General/StatementTypeEnum.h"
 
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
   bool result = s[0] == '_' && s[s.length() - 1] == '_' && s.length() > 2;

@@ -1,16 +1,4 @@
-#pragma once
 #include "SuchThatClauseSyntax.h"
-#include <utility>
-#include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesSClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/UsesSClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/UsesPClauseEvaluator.h"
-#include "QPS/Util/PQLConstants.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/ParentStarClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/ParentClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsStarClauseEvaluator.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsClauseEvaluator.h"
-#include "QPS/Util/QueryUtil.h"
-#include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.h"
 
 SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
