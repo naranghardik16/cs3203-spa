@@ -8,7 +8,7 @@ shared_ptr<Statement> AssignStatementParser::ParseEntity(TokenStream &tokens) {
   auto assign_stmt =
   make_shared<AssignStatement>(Program::GetAndIncreaseStatementNumber(),
                           var,
-                          "main");
+                               GetProcName());
   CheckEndOfStatement(line);
   vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
@@ -34,6 +34,11 @@ std::string AssignStatementParser::ExtractVariableName(Line &line) const {
   if (!valid_lhs_variable) {
     throw SyntaxErrorException("Multiple expressions in lhs of assign");
   }
+
+  if (line[0]->GetType() != NAME) {
+    throw SyntaxErrorException("var_name should be a NAME");
+  }
+
   return line[0]->GetValue();
 }
 

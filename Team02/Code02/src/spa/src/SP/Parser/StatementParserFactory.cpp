@@ -13,6 +13,8 @@ shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::dequ
     return make_shared<PrintStatementParser>();
   } else if (CheckKeywordType(line, "read", false)) {
     return make_shared<ReadStatementParser>();
+  } else if (CheckKeywordType(line, "call", false)) {
+    return make_shared<CallStatementParser>();
   }
   throw SemanticErrorException("Unknown Statement type");
 }
