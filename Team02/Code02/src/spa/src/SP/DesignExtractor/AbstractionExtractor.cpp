@@ -41,6 +41,7 @@ void AbstractionExtractor::VisitConditionalOperation(shared_ptr<
 
 void AbstractionExtractor::VisitPrintStatement(shared_ptr<PrintStatement> print_statement) {
   if (*is_extract_indirect_modifies_and_uses_) {
+    ExtractIndirectUses(print_statement->GetVariable().GetName(), print_statement->GetInScopeOfPrc());
     return;
   }
 
@@ -189,6 +190,27 @@ void AbstractionExtractor::ExtractIndirectModifiesFromCallStatements(PkbTypes::P
     auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
     for (auto ancestor_stmt_no : ancestors) {
       pkb_write_facade_->AddStatementModifyingVariable(ancestor_stmt_no, variable);
+    }
+  }
+}
+
+void AbstractionExtractor::ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc) {
+  auto callers = pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee(stmt_proc);
+  for (pair<string, string> c : callers) {
+    pkb_write_facade_->AddProcedureUsingVariable(c.first, variable);
+    ExtractIndirectUsesFromCallStatements(c.first, variable);
+  }
+  ExtractIndirectUsesFromCallStatements(stmt_proc, variable);
+}
+
+void AbstractionExtractor::ExtractIndirectUsesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable) {
+  // gets all the call statements that called the procedure where procedure = curr_proc
+  auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
+  for (auto call_stmt_no : call_stmts) {
+    pkb_write_facade_->AddStatementUsingVariable(call_stmt_no, variable);
+    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
+    for (auto ancestor_stmt_no : ancestors) {
+      pkb_write_facade_->AddStatementUsingVariable(ancestor_stmt_no, variable);
     }
   }
 }
