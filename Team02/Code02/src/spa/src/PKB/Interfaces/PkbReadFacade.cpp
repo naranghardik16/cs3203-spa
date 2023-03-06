@@ -769,3 +769,7 @@ bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, P
   return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
 }
 
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::retrieveAllVariablesFromOfExpression(std::shared_ptr<Expression> expression) {
+  return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
+}
+
