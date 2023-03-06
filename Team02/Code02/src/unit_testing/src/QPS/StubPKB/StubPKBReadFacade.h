@@ -94,6 +94,6 @@ class StubPkbReadFacade: public PkbReadFacade {
   bool IsAnyAncestorDescendantRelationshipPresent() override;
 
   //!API for pattern
-  PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(std::string expr) override;
-  PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(std::string sub_expr) override;
+  PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) override;
+  PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expr) override;
 };

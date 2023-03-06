@@ -1,15 +1,4 @@
-#pragma once
 #include "QpsTokenizer.h"
-#include "General/StringUtil.h"
-#include <utility>
-#include "General/SpaException/SyntaxErrorException.h"
-#include "QPS/Util/PQLConstants.h"
-#include "Clause/SuchThatClauseSyntax.h"
-#include "Clause/PatternClauseSyntax.h"
-#include "QPS/Util/QPSTypeDefs.h"
-#include "QPS/Util/QueryUtil.h"
-#include "ExpressionParser.h"
-#include "QPS/Clause/WithClauseSyntax.h"
 
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new SyntaxValidator()), semantic_validator_(new SemanticValidator()){}
 
@@ -332,9 +321,7 @@ ParameterVector QpsTokenizer::ParseParameters(std::string parameters_substr) {
 }
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string sub_clause) {
-
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
-  syntax.second[1] = ExpressionParser::ParseExpressionSpec(syntax.second[1]);
   std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
 
   syntax_validator_->ValidatePatternClauseSyntax(pattern_syntax);

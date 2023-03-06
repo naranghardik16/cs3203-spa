@@ -5,7 +5,7 @@
 #include "General/StatementTypeEnum.h"
 
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length()-1] == '_' &&s.length() > 2;
+  bool result = s[0] == '_' && s[s.length() - 1] == '_' && s.length() > 2;
   return result;
 }
 

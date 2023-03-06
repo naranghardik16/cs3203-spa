@@ -1,9 +1,11 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 #include <regex>
 #include <string>
 #include <memory>
+#include <utility>
 #include <unordered_map>
 #include "General/StringUtil.h"
 #include "General/LexicalRuleValidator.h"
@@ -11,6 +13,12 @@
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/SyntaxValidator.h"
 #include "QPS/SemanticValidator.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "QPS/Util/PQLConstants.h"
+#include "Clause/SuchThatClauseSyntax.h"
+#include "Clause/PatternClauseSyntax.h"
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Clause/WithClauseSyntax.h"
 
 /*!
  * The tokenizer handles the parsing of the query

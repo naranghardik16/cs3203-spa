@@ -2,6 +2,7 @@
 
 #include "Handler.h"
 #include "General/LexicalRuleValidator.h"
+#include "QPS/ExpressionSpecParser.h"
 
 class PatternHandler : public Handler {
  public:
