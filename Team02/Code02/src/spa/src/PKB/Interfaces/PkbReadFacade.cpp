@@ -679,6 +679,10 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditi
   return {};
 }
 
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression) {
+  return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
+}
+
 //! Calls API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
   return this->pkb.calls_store_->retrieveAllCallStatementToProcedurePairs();
@@ -732,6 +736,8 @@ PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure
   return result;
 }
 
+
+
 PkbCommunicationTypes::PairConstraintSet
 PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
@@ -769,8 +775,56 @@ bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, P
   return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression) {
-  return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+  //TODO
+  return {};
+}
+
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallers() {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallees() {
+  //TODO
+  return {};
+}
+
+bool PkbReadFacade::IsThereAnyCallsRelationship() {
+  return true;
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE procedure) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE procedure) {
+  //TODO
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallersStar() {
+  //TODO
+  return {};
+}
+
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCalleesStar() {
+  //TODO
+  return {};
+}
+
+
+bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
+  //TODO
+  return true;
 }
 
 PkbCommunicationTypes::PairConstraintSet  PkbReadFacade::GetAffectsPairs() {
@@ -814,22 +868,22 @@ PkbCommunicationTypes::PairConstraintSet  PkbReadFacade::GetAffectsStarPairs() {
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedIndirectlyBy(std::string stmt_num) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedStarBy(std::string stmt_num) {
   //TODO
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsIndirectlyAffecting(std::string stmt_num) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectingStar(std::string stmt_num) {
   //TODO
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffectedIndirectly() {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffectedStar() {
   //TODO
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatIndirectlyAffect() {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAffectStar() {
   //TODO
   return {};
 }
