@@ -39,28 +39,31 @@ void CfgExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   auto else_cfg_node = make_shared<CfgNode>();
   auto end_cfg_node = make_shared<CfgNode>();
 
-  AddTransitionAndUpdate(if_cfg_node, true);
+  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+    AddTransitionAndUpdate(if_cfg_node, true);
+  } else {
+    if_cfg_node = cur_cfg_node_;
+  }
 
   AddCfgForStmt(stmt_number);
 
   auto then_stmts = if_statement->GetThenStatements();
   auto else_stmts = if_statement->GetElseStatements();
 
+  // Create the CFG nodes for then statements
   AddTransitionAndUpdate(then_cfg_node, true);
-
   ProcessStatements(then_stmts);
 
-  then_cfg_node = cur_cfg_node_;
+  // Create dummy node for end of if else
   AddTransitionAndUpdate(end_cfg_node, true);
+
+  // Create the CFG nodes for else statements
   cur_cfg_node_ = if_cfg_node;
   AddTransitionAndUpdate(else_cfg_node, false);
-
   ProcessStatements(else_stmts);
 
-  else_cfg_node = cur_cfg_node_;
+  // Add transition to the dummy node at the end
   AddTransitionAndUpdate(end_cfg_node, true);
-  then_cfg_node = end_cfg_node;
-  else_cfg_node = end_cfg_node;
 
 }
 
