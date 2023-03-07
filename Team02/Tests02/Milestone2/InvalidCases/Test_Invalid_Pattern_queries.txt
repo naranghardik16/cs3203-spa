@@ -1,0 +1,165 @@
+1 - invalid expr
+assign a; variable v;
+Select a pattern a( v, "  x  + ")
+SyntaxError
+5000
+2 - invalid arg1 syn
+assign a; variable v;
+Select a pattern a( 1v, "  x ")
+SyntaxError
+5000
+3 - invalid syn
+assign a; variable v;
+Select a pattern 1a( v, "  x  ")
+SyntaxError
+5000
+4 - arg1 is int
+assign a; variable v;
+Select a pattern a( 1, "  x  ")
+SyntaxError
+5000
+5 - invalid ident
+assign a; variable v;
+Select a pattern a( "1x", "  x  ")
+SyntaxError
+5000
+6 - invalid name in expr
+assign a; variable v;
+Select a pattern a( v, "  1x  ")
+SyntaxError
+5000
+7 - invalid int in expr
+assign a; variable v;
+Select a pattern a( v, "  01  ")
+SyntaxError
+5000
+8 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, __)
+SyntaxError
+5000
+9 - empty expr
+assign a; variable v;
+Select a pattern a( v, _""_)
+SyntaxError
+5000
+10 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, _"x")
+SyntaxError
+5000
+11 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, "x" _)
+SyntaxError
+5000
+12 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, """)
+SyntaxError
+5000
+13 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, _" ((2) "_)
+SyntaxError
+5000
+14 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, _" (2)) "_)
+SyntaxError
+5000
+15 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, _" ((((((((((((((x/1)/2)/3)/4)/5) "_)
+SyntaxError
+5000
+16 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, " x) ")
+SyntaxError
+5000
+17 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, " x + ")
+SyntaxError
+5000
+18 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, " 2(3 + 4) ")
+SyntaxError
+5000
+19 - invalid expression spec
+assign a; variable v;
+Select a pattern a( v, " (3 + 4); ")
+SyntaxError
+5000
+20 - invalid if pattern syntax
+if i; variable v;
+Select i pattern i( v, " x ", _)
+SyntaxError
+5000
+21 - invalid if pattern syntax
+if i; variable v;
+Select i pattern i( v, _, " x " )
+SyntaxError
+5000
+22 - invalid pattern syntax, extra args
+if i; variable v;
+Select i pattern i( v, _, _, _)
+SyntaxError
+5000
+23 - invalid if pattern syntax
+if i; variable v;
+Select i pattern i( v, _, 1 )
+SyntaxError
+5000
+24 - invalid if pattern syntax
+if i; variable v;
+Select i pattern i( v, 1, _)
+SyntaxError
+5000
+25 - invalid if pattern syntax
+if i; variable v;
+Select i pattern i( "x, _, _)
+SyntaxError
+5000
+26 - semantic error, syn not declared
+variable v;
+Select v pattern i( v, _, _)
+SemanticError
+5000
+27 - semantic error, syn not declared
+if i;
+Select i pattern i( v, _, _)
+SemanticError
+5000
+28 - smantic error, syn not if entity
+assign i; variable v;
+Select i pattern i( v, _, _)
+SemanticError
+5000
+29 - smantic error, syn not assign entity
+while w; variable v;
+Select w pattern w( v, "x")
+SemanticError
+5000
+30 - smantic error, syn not declared
+while w; variable v;
+Select w pattern w( v, _) and Uses("x", _)
+SemanticError
+5000
+31 - smantic error, syn not assign/while entity
+stmt s; variable v;
+Select s pattern s( v, _)
+SemanticError
+5000
+32 - smantic error, arg1 not variable entity
+assign a; print v;
+Select a pattern a( v, _)
+SemanticError
+5000
+33 - syntax error
+assign a; variable v;
+Select a pattern a( v, _) and Uses(1, _)
+SyntaxError
+5000

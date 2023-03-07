@@ -5,13 +5,13 @@
 #include "QPS/Util/QueryUtil.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 
-class ModifiesSClauseEvaluator : public ClauseEvaluator {
+class CallsStarClauseEvaluator : public ClauseEvaluator {
  private:
   std::string relationship_reference_;
   std::string first_arg_;
   std::string second_arg_;
  public:
-  ModifiesSClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
+  CallsStarClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
     relationship_reference_ = syntax_pair.first;
     first_arg_ =  syntax_pair.second[0];
     second_arg_ = syntax_pair.second[1];

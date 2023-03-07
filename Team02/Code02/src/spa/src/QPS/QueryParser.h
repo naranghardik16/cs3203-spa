@@ -9,6 +9,7 @@
 #include "General/SpaException/SemanticErrorException.h"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "Query.h"
+#include "QPS/Util/PQLConstants.h"
 
 /**
  * This is a facade to handle the parsing of queries by tokenizer and validators

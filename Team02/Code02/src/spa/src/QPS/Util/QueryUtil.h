@@ -3,12 +3,14 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include "QPSTypeDefs.h"
 #include <unordered_set>
 #include <unordered_map>
 #include "General/StatementTypeEnum.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "General/StringUtil.h"
+#include "QPS/Util/QPSTypeDefs.h"
+#include "QPS/Util/PQLConstants.h"
+#include "General/LexicalRuleValidator.h"
 
 /*!
  * Abstracts out functions that are used in QPS when handling arguments in queries.

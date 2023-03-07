@@ -613,6 +613,15 @@ class PkbReadFacade {
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable();
 
+  /**
+ * Retrieves all the variables of a particular expression in the expression store.
+ *
+ * @param expression - The expression to retrieve the variables from.
+ * @return A set of variables that belong to the expression.
+ */
+  virtual PkbCommunicationTypes::SingleConstraintSet RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression);
+
+
   //!APi for call
   /**
    * Retrieves call statements and the procedure it calls.
@@ -656,10 +665,20 @@ class PkbReadFacade {
   GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
 
   /**
-   * Retrieves all calls pairs stored in PKB.
+   * Retrieves all the statements that call the specified procedure.
    *
-   * @return An unordered set of all the calls pairs.
+   * @param procedure - The specified procedure.
+   * @return A set of statements that call this procedure.
    */
+  virtual PkbCommunicationTypes::SingleConstraintSet
+  GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
+
+  //! QPS-PKB Calls API
+  /**
+ * Retrieves all calls pairs stored in PKB.
+ *
+ * @return An unordered set of all the calls pairs.
+ */
   virtual PkbCommunicationTypes::PairConstraintSet
   GetAllCallsPairs();
 
@@ -670,15 +689,6 @@ class PkbReadFacade {
    */
   virtual PkbCommunicationTypes::PairConstraintSet
   GetAllCallsStarPairs();
-
-  /**
-   * Retrieves all the statements that call the specified procedure.
-   *
-   * @param procedure - The specified procedure.
-   * @return A set of statements that call this procedure.
-   */
-  virtual PkbCommunicationTypes::SingleConstraintSet
-  GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
 
   /**
    * Checks whether there exists a Calls relation between the specified procedures.
@@ -699,12 +709,188 @@ class PkbReadFacade {
   virtual bool HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
 
   /**
-   * Retrieves all the variables of a particular expression in the expression store.
+  * Retrieves all procedures that are being called by the specified procedure.
+  *
+  * @param procedure - The specified caller procedure
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure);
+
+  /**
+  * Retrieves all procedures that call a specified procedure
+  *
+  * @param procedure - The specified procedure being called
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure);
+
+
+  /**
+  * Retrieves all procedures that are callers in a Calls relationship
+  *
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresThatAreCallers();
+
+  /**
+  * Retrieves all procedures that are callees in a Calls relationship
+  *
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresThatAreCallees();
+
+  /**
+   * Checks if there are any Calls relatioship present.
    *
-   * @param expression - The expression to retrieve the variables from.
-   * @return A set of variables that belong to the expression.
+   * @return True is there is a Calls relationship present
    */
-  virtual PkbCommunicationTypes::SingleConstraintSet RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression);
+  virtual bool IsThereAnyCallsRelationship();
+
+
+  /**
+  * Retrieves all procedures that are being called directly or indirectly by the specified procedure.
+  *
+  * @param procedure - The specified caller procedure that is the caller in a CallsStar relationship
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE procedure);
+
+  /**
+  * Retrieves all procedures that directly or indirectly call a specified procedure
+  *
+  * @param procedure - The specified procedure being called
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE procedure);
+
+
+  /**
+  * Retrieves all procedures that are callers in a CallsStar relationship
+  *
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresThatAreCallersStar();
+
+  /**
+  * Retrieves all procedures that are callees in a CallsStar relationship
+  *
+  * @return a set of procedure names
+  */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllProceduresThatAreCalleesStar();
+
+  /**
+   * Checks if there are any CallsStar relatioship present.
+   *
+   * @return True is there is a CallsStar relationship present
+   */
+  virtual bool IsThereAnyCallsStarRelationship();
+
+
+  //! Affects API
+
+  /**
+   * Retrieves all pairs of assign statements with an Affects relationship.
+   *
+   * @return A set of pairs with format of pairs being <assign_that_affects, assign_that_is_affected>
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAffectsPairs();
+
+  /**
+   * Retrieves all assign statements that are affected by the specified statement.
+   *
+   * @param stmt_num - the statement that is affecting
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedBy(std::string stmt_num);
+
+  /**
+   * Retrieves all assign statements that are affecting the specified statement.
+   *
+   * @param stmt_num - the statement that is affected
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffecting(std::string stmt_num);
+
+  /**
+   * Retrieves all assigns that are affected by any other assign statement
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffected();
+
+  /**
+   * Retrieves all assigns that affect any another assign
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffect();
+
+  /**
+   * Checks if two statements have an Affects relationship
+   * @param stmt_num - statement that affects
+   * @param stmt_num_being_affected - statement that is affected
+   * @return True if there is an Affects relationship else False
+   */
+  virtual bool HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected);
+
+  /**
+   * Checks if there is any Affects Relationship present between any assign statements.
+   * @return True is there is Affects Relationship stored, else False
+   */
+  virtual bool IsThereAnyAffectsRelationship();
+
+  //! AffectsStar API
+
+  /**
+   * Retrieves all pairs of assign statements with an AffectsStar relationship.
+   *
+   * @return A set of pairs with format of pairs being <assign_that_affects_star, assign_that_is_affected>
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetAffectsStarPairs();
+
+  /**
+   * Retrieves all assign statements that are directly or indirectly affected by the specified statement.
+   *
+   * @param stmt_num - the statement that is affecting indirectly
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedStarBy(std::string stmt_num);
+
+  /**
+   * Retrieves all assign statements that are indirectly affecting the specified statement.
+   *
+   * @param stmt_num - the statement that is affected
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectingStar(std::string stmt_num);
+
+  /**
+   * Retrieves all assigns that are affected directly or indirectly by any other assign statement
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffectedStar();
+
+  /**
+   * Retrieves all assigns that directly or indirectly affect any another assign
+   *
+   * @return A set of statement numbers
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffectStar();
+
+  /**
+   * Checks if two statements have an Affects Star relationship
+   * @param stmt_num - statement that affects indirectly
+   * @param stmt_num_being_affected - statement that is affected
+   * @return True if there is an Affects relationship else False
+   */
+  virtual bool HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected);
+
+  /**
+   * Checks if there is any AffectsStars Relationship present between any assign statements.
+   * @return True is there is AffectsStars Relationship stored, else False
+   */
+  virtual bool IsThereAnyAffectsStarRelationship();
 
  private:
   PKB& pkb;

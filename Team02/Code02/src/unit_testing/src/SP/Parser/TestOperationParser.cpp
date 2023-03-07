@@ -171,6 +171,12 @@ TEST_CASE("Check if ArithmeticOperationParser works") {
     auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
+  SECTION("Check if arithmetic expression with unbalanced () [e.g. ((2+x) ] throws Syntax error") {
+    Parser::Line expr_line{make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<IntegerToken>("2"),
+                           make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<NameToken>("x"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)};
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "assign");
+    REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
+  }
 }
 
 TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works") {

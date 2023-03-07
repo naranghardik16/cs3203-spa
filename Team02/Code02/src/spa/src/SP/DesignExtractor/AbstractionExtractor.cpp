@@ -12,14 +12,20 @@ void AbstractionExtractor::VisitArithmeticalOperation(shared_ptr<
 }
 
 void AbstractionExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) {
+  auto expression = assign_statement->GetExpression();
+
   if (*is_extract_indirect_modifies_and_uses_) {
     ExtractIndirectModifies(assign_statement->GetVariable().GetName(), assign_statement->GetInScopeOfPrc());
+    for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(expression)) {
+      // for direct uses
+      pkb_write_facade_->AddProcedureUsingVariable(assign_statement->GetInScopeOfPrc(), variable);
+      ExtractIndirectUses(variable, assign_statement->GetInScopeOfPrc());
+    }
     return;
   }
 
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(assign_statement->GetStatementNumber());
-  auto expression = assign_statement->GetExpression();
 
   pkb_write_facade_->AddStatementOfAType(stmt_number, ASSIGN);
   pkb_write_facade_->AddStatementModifyingVariable(stmt_number,
@@ -28,7 +34,6 @@ void AbstractionExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assi
                                                          expression);
   pkb_write_facade_->AddProcedureModifyingVariable(assign_statement->GetInScopeOfPrc(),
                                                    assign_statement->GetVariable().GetName());
-
 }
 
 void AbstractionExtractor::VisitConditionalOperation(shared_ptr<
@@ -41,6 +46,9 @@ void AbstractionExtractor::VisitConditionalOperation(shared_ptr<
 
 void AbstractionExtractor::VisitPrintStatement(shared_ptr<PrintStatement> print_statement) {
   if (*is_extract_indirect_modifies_and_uses_) {
+    // for direct uses
+    pkb_write_facade_->AddProcedureUsingVariable(print_statement->GetInScopeOfPrc(), print_statement->GetVariable().GetName());
+    ExtractIndirectUses(print_statement->GetVariable().GetName(), print_statement->GetInScopeOfPrc());
     return;
   }
 
@@ -88,15 +96,17 @@ void AbstractionExtractor::VisitRelationalOperation(shared_ptr<
 void AbstractionExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(if_statement->GetStatementNumber());
-  auto condition = if_statement->GetCondition();
+  auto condition = make_shared<ConditionalOperation>(if_statement->GetCondition());
   if (! *is_extract_indirect_modifies_and_uses_) {
     pkb_write_facade_->AddStatementOfAType(stmt_number, IF);
-    pkb_write_facade_->AddIfStatementAndCondition(stmt_number,
-                                                  make_shared<ConditionalOperation>(
-                                                      condition));
+    pkb_write_facade_->AddIfStatementAndCondition(stmt_number,condition);
   }
 
-
+  for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
+    // for direct uses
+    pkb_write_facade_->AddProcedureUsingVariable(if_statement->GetInScopeOfPrc(), variable);
+    ExtractIndirectUses(variable, if_statement->GetInScopeOfPrc());
+  }
   IfStatement::StmtListContainer then_stmts = if_statement->GetThenStatements();
   ProcessStatements(then_stmts, stmt_number);
   IfStatement::StmtListContainer else_stmts = if_statement->GetElseStatements();
@@ -126,17 +136,19 @@ void AbstractionExtractor::ProcessStatements(const vector<shared_ptr<Statement>>
 void AbstractionExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(while_statement->GetStatementNumber());
-  auto condition = while_statement->GetCondition();
+  auto condition = make_shared<
+      ConditionalOperation>(while_statement->GetCondition());
   if (! *is_extract_indirect_modifies_and_uses_) {
     pkb_write_facade_->AddStatementOfAType(stmt_number, WHILE);
     // TODO: Add uses for conditionOperation
-    pkb_write_facade_->AddWhileStatementAndCondition(stmt_number,
-                                                     make_shared<
-                                                         ConditionalOperation>(
-                                                         condition));
+    pkb_write_facade_->AddWhileStatementAndCondition(stmt_number,condition);
   }
 
-
+  for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
+    // for direct uses
+    pkb_write_facade_->AddProcedureUsingVariable(while_statement->GetInScopeOfPrc(), variable);
+    ExtractIndirectUses(variable, while_statement->GetInScopeOfPrc());
+  }
   WhileStatement::StmtListContainer
       statements = while_statement->GetLoopStatements();
   ProcessStatements(statements, stmt_number);
@@ -189,6 +201,27 @@ void AbstractionExtractor::ExtractIndirectModifiesFromCallStatements(PkbTypes::P
     auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
     for (auto ancestor_stmt_no : ancestors) {
       pkb_write_facade_->AddStatementModifyingVariable(ancestor_stmt_no, variable);
+    }
+  }
+}
+
+void AbstractionExtractor::ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc) {
+  auto callers = pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee(stmt_proc);
+  for (pair<string, string> c : callers) {
+    pkb_write_facade_->AddProcedureUsingVariable(c.first, variable);
+    ExtractIndirectUsesFromCallStatements(c.first, variable);
+  }
+  ExtractIndirectUsesFromCallStatements(stmt_proc, variable);
+}
+
+void AbstractionExtractor::ExtractIndirectUsesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable) {
+  // gets all the call statements that called the procedure where procedure = curr_proc
+  auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
+  for (auto call_stmt_no : call_stmts) {
+    pkb_write_facade_->AddStatementUsingVariable(call_stmt_no, variable);
+    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
+    for (auto ancestor_stmt_no : ancestors) {
+      pkb_write_facade_->AddStatementUsingVariable(ancestor_stmt_no, variable);
     }
   }
 }

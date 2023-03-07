@@ -17,8 +17,15 @@ bool PatternClauseSyntax::IsBooleanClause(Map &declaration_map) {
 }
 
 std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
-  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), ClauseSyntax::GetExpression());
+  std::string syn = declaration_map.at(ClauseSyntax::GetEntity());
+  std::shared_ptr<ClauseEvaluator> eval;
+  if (syn == pql_constants::kPqlAssignEntity) {
+    eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), ClauseSyntax::GetExpression());
+  } else if (syn == pql_constants::kPqlIfEntity) {
+    eval = std::make_shared<IfPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else {
+    eval = std::make_shared<WhilePatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  }
+
   return eval;
 }
-
-

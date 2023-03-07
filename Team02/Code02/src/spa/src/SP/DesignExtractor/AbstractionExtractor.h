@@ -47,4 +47,5 @@ class AbstractionExtractor : public ParserVisitor {
                          PkbTypes::STATEMENT_NUMBER parent);
   void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, shared_ptr<Statement> child_stmt);
   void ExtractIndirectModifiesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
+  void ExtractIndirectUsesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
 };
