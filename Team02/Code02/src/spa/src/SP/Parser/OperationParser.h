@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stack>
+#include <unordered_map>
 #include "ExpressionParser.h"
 #include "core/model/Operation.h"
 #include "SP/Tokenizer/ArithmeticOperatorToken.h"
@@ -16,6 +17,7 @@ class OperationParser : public ExpressionParser {
   bool IsEndOfLine();
   TokenType GetCurrentTokenType();
   string GetCurrentTokenValue();
+  int GetCurrentTokenPos();
   shared_ptr<int> GetPos();
   void InheritArgs(shared_ptr<int> pos, bool is_sub_expr, shared_ptr<bool> is_processed_curr_token);
   void UpdateCurrTokenWithUpdatedPos();
@@ -25,6 +27,7 @@ class OperationParser : public ExpressionParser {
   void SetIsSubExpr(bool is_sub_expr);
   shared_ptr<bool> GetIsProcessedCurrToken();
   void ValidateEnoughTokensToProcess();
+  void AddParenthesis(TokenType type, string val, int token_pos);
  private:
   Line line_;
   bool is_inherit_args_ = false;
@@ -38,6 +41,8 @@ class OperationParser : public ExpressionParser {
   void Setup(Line &line);
   virtual shared_ptr<Expression> Parse() = 0;
   void ValidateForBalancedParenthesis();
+  stack<string> parentheses_container_;
+  unordered_map<int, string> parentheses_pos_mappings_;
 };
 
 

@@ -88,14 +88,14 @@ TEST_CASE("Test PatternHandler HandleSyntax") {
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p))))))))))))))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p))))))))))))))\""}}});
+  SECTION("Test valid clause syntax - arg_2(\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\")") {
+    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15))))))))))))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15))))))))))))\""}}});
+  SECTION("Test valid clause syntax - arg_2(\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\")") {
+    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
