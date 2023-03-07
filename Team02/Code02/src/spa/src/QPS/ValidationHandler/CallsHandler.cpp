@@ -30,10 +30,10 @@ void CallsHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &dec
 
   //Check if synonym is procedure synonym
   if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlProcedureEntity) {
-    throw SemanticErrorException("The synonym is not assign statement synonym");
+    throw SemanticErrorException("The synonym is not procedure synonym");
   }
   if (QueryUtil::IsSynonym(arg_2) && declaration[arg_2] != pql_constants::kPqlProcedureEntity) {
-    throw SemanticErrorException("The synonym is not assign statement synonym");
+    throw SemanticErrorException("The synonym is not procedure synonym");
   }
 
   return;
