@@ -7,18 +7,18 @@ bool CallsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   if (is_first_arg_a_wildcard) {
     if (is_second_arg_a_wildcard) {
       //Calls(_, _) : check if there are any calls relationship present
-      return true;
+      return pkb->IsThereAnyCallsRelationship();
     } else {
       //Calls(_, “First”) : get procedures that call the procedure First
-      return true;
+      return !pkb->GetAllProceduresWithSpecifiedCallee(QueryUtil::GetIdent(second_arg_)).empty();
     }
   } else {
     if (is_second_arg_a_wildcard) {
       //Calls("First", _) : check if "First" calls any other procedures
-      return true;
+      return !pkb->GetAllProceduresWithSpecifiedCaller(QueryUtil::GetIdent(first_arg_)).empty();
     } else {
       //Calls("First", "Second") : check if First calls Second
-      return true;
+      return pkb->HasCallsRelation(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
     }
   }
 }
@@ -47,24 +47,24 @@ std::shared_ptr<Result> CallsClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   if (is_first_arg_a_procedure_synonym) {
     if (is_second_arg_a_wildcard) {
       // Calls(p, _) --> Get procedures that call another procedure
-      single_constraint = {};
+      single_constraint = pkb->GetAllProceduresThatAreCallers();
     } else if (is_second_arg_a_procedure_synonym) {
       // Calls(p,q)
-      pair_constraint = {};
+      pair_constraint = pkb->GetAllCallsPairs();
     } else {
       //Calls(p, “first”) -- get procedures that call "First"
-      single_constraint = {};
+      single_constraint = pkb->GetAllProceduresWithSpecifiedCallee(QueryUtil::GetIdent(second_arg_));
     }
   }
 
   if (is_first_arg_an_ident) {
     //e.g.Calls(”first”, p) --> get procedures called by "First"
-    single_constraint = {};
+    single_constraint = pkb->GetAllProceduresWithSpecifiedCaller(QueryUtil::GetIdent(first_arg_));
   }
 
   if (is_first_arg_a_wildcard) {
     //e.g.Calls(_, p) --> get all procedures that are called
-    single_constraint = {};
+    single_constraint =  pkb->GetAllProceduresThatAreCallees();
   }
 
   ResultTable table;
