@@ -1,6 +1,7 @@
 #include "SuchThatClauseSyntax.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/AffectsClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/AffectsStarClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/CallsClauseEvaluator.h"
 
 SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
@@ -52,8 +53,8 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
     evaluator = std::make_shared<AffectsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlAffectsStarRel) {
     evaluator = std::make_shared<AffectsStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
-  } else {
-
+  } else if (relationship_reference == pql_constants::kPqlCallsRel) {
+    evaluator = std::make_shared<CallsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   }
   return evaluator;
 }
