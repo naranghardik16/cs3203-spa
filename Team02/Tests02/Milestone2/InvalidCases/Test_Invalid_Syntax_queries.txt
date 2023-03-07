@@ -1,0 +1,70 @@
+1 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls( p1, " 1x ")
+SyntaxError
+5000
+2 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls*( " x x ", p1)
+SyntaxError
+5000
+3 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls( 1, p1)
+SyntaxError
+5000
+4 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls*( p1, 2)
+SyntaxError
+5000
+5 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls*( 5y, p1)
+SyntaxError
+5000
+6 - invalid entRel
+procedure p1, p2;
+Select p1 such that Calls*( p1, 1x)
+SyntaxError
+5000
+7 - invalid stmtRel
+assign a1, a2;
+Select a1 such that Affects( a1, " x ")
+SyntaxError
+5000
+8 - invalid entRel
+assign a1, a2;
+Select a1 such that Affects*( " x ", a1)
+SyntaxError
+5000
+9 - invalid entRel
+assign a1, a2;
+Select a1 such that Affects*( 5y, a1)
+SyntaxError
+5000
+10 - invalid entRel
+assign a1, a2;
+Select a1 such that Affects*( a1, 1x)
+SyntaxError
+5000
+11 - invalid stmtRel
+assign a1, a2;
+Select a1 such that Nexts( a1, " x ")
+SyntaxError
+5000
+12 - invalid entRel
+assign a1, a2;
+Select a1 such that Nexts*( " x ", a1)
+SyntaxError
+5000
+13 - invalid entRel
+assign a1, a2;
+Select a1 such that Nexts( 5y, a1)
+SyntaxError
+5000
+14 - invalid entRel
+assign a1, a2;
+Select a1 such that Nexts*( a1, 1x)
+SyntaxError
+5000
