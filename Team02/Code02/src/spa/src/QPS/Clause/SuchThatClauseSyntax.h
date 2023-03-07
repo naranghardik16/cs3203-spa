@@ -12,6 +12,10 @@
 #include "QPS/Evaluator/SuchThatClauseEvaluator/FollowsClauseEvaluator.h"
 #include "QPS/Util/QueryUtil.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/ModifiesPClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/AffectsClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/AffectsStarClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/CallsClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/CallsStarClauseEvaluator.h"
 
 class SuchThatClauseSyntax : public ClauseSyntax {
  public:

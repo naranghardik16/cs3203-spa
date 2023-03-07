@@ -39,13 +39,23 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
     } else {
       evaluator = std::make_shared<UsesSClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
     }
-  } else {
+  } else if (relationship_reference == pql_constants::kPqlModifiesRel) {
     if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())
     || QueryUtil::IsQuoted(ClauseSyntax::GetFirstParameter())) {
       evaluator = std::make_shared<ModifiesPClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
     } else {
       evaluator = std::make_shared<ModifiesSClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
     }
+  } else if (relationship_reference == pql_constants::kPqlAffectsRel) {
+    evaluator = std::make_shared<AffectsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else if (relationship_reference == pql_constants::kPqlAffectsStarRel) {
+    evaluator = std::make_shared<AffectsStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else if (relationship_reference == pql_constants::kPqlCallsRel) {
+    evaluator = std::make_shared<CallsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else if (relationship_reference == pql_constants::kPqlCallsStarRel) {
+    evaluator = std::make_shared<CallsStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else {
+
   }
   return evaluator;
 }
