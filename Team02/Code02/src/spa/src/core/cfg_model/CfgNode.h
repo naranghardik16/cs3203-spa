@@ -16,6 +16,7 @@ class CfgNode {
   BoolToCfgNodeMap GetNodeTrans();
   std::vector<int> GetNodeStmts();
   CfgNodeContainer GetParentNodes();
+  std::string GetStringRepresentation();
 
  private:
   BoolToCfgNodeMap node_trans_;
