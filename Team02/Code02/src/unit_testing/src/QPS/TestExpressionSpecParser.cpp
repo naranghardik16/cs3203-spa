@@ -64,8 +64,8 @@ TEST_CASE("Test ExpressionSpecParser") {
     REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"2 * (3 + 4) / (5 - 6) + 7 % 2 - 8 * (9 - 10) + 11\""));
     REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"(((((((((((1 / 2) / 3) / 4) / 5) / 6) / 7) / 8) / 9) / 10) / 11) / 12)\""));
     REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"(((x * (x + y)) * (x + (x + y))) + ((y * (x + y)) * (y + (x + y)))) / ((x + y) * (x + y))\""));
-    REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p))))))))))))))\""));
-    REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15))))))))))))\""));
+    REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\""));
+    REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\""));
     REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"((((((1 + 2) * 3) / 4) - 5) * 6) + 7) - (((8 - 9) * 10) / ((11 * 12) + 13))\""));
     REQUIRE_NOTHROW(ExpressionSpecParser::ParseExpressionSpec("\"(((2 + 3) * 4) / ((5 - 6) * (7 + 8))) - (((9 - 10) * 11) + ((12 * 13) / (14 + 15)))\""));
   }

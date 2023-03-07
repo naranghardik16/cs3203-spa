@@ -56,6 +56,10 @@ string OperationParser::GetCurrentTokenValue() {
   return curr_token_value_;
 }
 
+int OperationParser::GetCurrentTokenPos() {
+  return (*pos_) - 1;
+}
+
 shared_ptr<Expression> OperationParser::ParseEntity(TokenStream &tokens) {
   return ParseEntity(tokens.front());
 }
@@ -79,8 +83,22 @@ shared_ptr<bool> OperationParser::GetIsProcessedCurrToken() {
   return is_processed_curr_token_;
 }
 
+void OperationParser::AddParenthesis(TokenType type, string val, int token_pos) {
+  if (parentheses_pos_mappings_.find(token_pos) != parentheses_pos_mappings_.end()) {
+    // found i.e., added before --> don't add again
+    return;
+  }
+
+  parentheses_pos_mappings_[token_pos] = val;
+  if (type == LEFT_PARENTHESIS) {
+    parentheses_container_.push(val);
+  } else if (type == RIGHT_PARENTHESIS) {
+    parentheses_container_.pop();
+  }
+}
+
 void OperationParser::ValidateForBalancedParenthesis() {
-  if (is_sub_expr_ || (IsEndOfLine() && *is_processed_curr_token_)) {
+  if (is_sub_expr_ || (IsEndOfLine() && *is_processed_curr_token_ && parentheses_container_.empty())) {
     return;
   }
   throw SyntaxErrorException("Unbalanced parenthesis ()");
