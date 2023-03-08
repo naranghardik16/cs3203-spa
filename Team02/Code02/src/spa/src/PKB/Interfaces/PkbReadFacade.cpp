@@ -958,3 +958,101 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
   //TODO
   return true;
 }
+
+// Next API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextPairs(StatementType statement_type_1,
+                                                                         StatementType statement_type_2) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNext(std::string statement_number,
+                                                                      StatementType statement_type) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextBy(std::string statement_number,
+                                                                        StatementType statement_type) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextFirst(StatementType statement_type){
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(StatementType statement_type) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextRelationship(){
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNext(std::string statement_number) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextBy(std::string statement_number) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::IsNext(std::string statement_number_1, std::string statement_number_2) {
+  //todo
+  return {};
+}
+
+// Next* API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextStarPairs(StatementType statement_type_1,
+                                                                            StatementType statement_type_2) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStar(std::string statement_number,
+                                                                         StatementType statement_type) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarBy(std::string statement_number,
+                                                                           StatementType statement_type) {
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(StatementType statement_type){
+  //todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(StatementType statement_type) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStarRelationship(){
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStar(std::string statement_number) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStarBy(std::string statement_number) {
+  //todo
+  return {};
+}
+
+bool PkbReadFacade::IsNextStar(std::string statement_number_1, std::string statement_number_2) {
+  //todo
+  return {};
+}

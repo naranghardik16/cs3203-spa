@@ -54,8 +54,10 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
     evaluator = std::make_shared<CallsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   } else if (relationship_reference == pql_constants::kPqlCallsStarRel) {
     evaluator = std::make_shared<CallsStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
-  } else {
-
+  } else if (relationship_reference == pql_constants::kPqlNextRel) {
+    evaluator = std::make_shared<NextClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else if (relationship_reference == pql_constants::kPqlNextStarRel) {
+    evaluator = std::make_shared<NextStarClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   }
   return evaluator;
 }

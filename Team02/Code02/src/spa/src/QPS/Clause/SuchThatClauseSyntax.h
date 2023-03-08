@@ -16,6 +16,8 @@
 #include "QPS/Evaluator/SuchThatClauseEvaluator/AffectsStarClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/CallsClauseEvaluator.h"
 #include "QPS/Evaluator/SuchThatClauseEvaluator/CallsStarClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/NextClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/NextStarClauseEvaluator.h"
 
 class SuchThatClauseSyntax : public ClauseSyntax {
  public:
