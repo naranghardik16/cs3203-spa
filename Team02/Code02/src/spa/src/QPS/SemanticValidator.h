@@ -9,6 +9,8 @@
 #include "ValidationHandler/PatternHandler.h"
 #include "QPS/Util/QPSTypeDefs.h"
 #include "QPS/ValidationHandler/WithHandler.h"
+#include "QPS/ValidationHandler/AffectsHandler.h"
+#include "QPS/ValidationHandler/CallsHandler.h"
 
 class SemanticValidator {
  public:

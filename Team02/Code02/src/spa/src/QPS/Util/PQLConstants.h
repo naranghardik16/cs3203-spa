@@ -56,11 +56,23 @@ const std::string kVarname = "varName";
 const std::string kValue = "value";
 const std::string kStmtNo = "stmt#";
 
-const std::unordered_set<std::string> kRelRefs({kPqlNextRel, kPqlNextStarRel, kPqlAffectsRel, kPqlAffectsStarRel, kPqlCallsRel, kPqlCallsStarRel, kPqlAffectsStarRel,kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel, kPqlUsesRel, kPqlModifiesRel});
-const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
-const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel, kPqlParentRel, kPqlParentStarRel});
+const std::unordered_set<std::string> kRelRefs({kPqlNextRel, kPqlNextStarRel,
+                                                    kPqlAffectsRel, kPqlAffectsStarRel,
+                                                    kPqlCallsRel, kPqlCallsStarRel,
+                                                    kPqlFollowsRel, kPqlFollowsStarRel,
+                                                    kPqlParentRel, kPqlParentStarRel,
+                                                    kPqlUsesRel, kPqlModifiesRel});
+const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPqlReadEntity,
+                                                            kPqlPrintEntity, kPqlAssignEntity,
+                                                            kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
+const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel,
+                                                          kPqlParentRel, kPqlParentStarRel,
+                                                          kPqlNextRel, kPqlNextStarRel});
 const std::unordered_set<std::string> kStmtProcToStmtRel({kPqlUsesRel, kPqlModifiesRel});
-const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity, kPqlAssignEntity, kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity, kPqlProcedureEntity});
+const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity,
+                                                            kPqlPrintEntity, kPqlAssignEntity,
+                                                            kPqlIfEntity, kPqlWhileEntity,
+                                                            kPqlCallEntity, kPqlProcedureEntity});
 const std::unordered_set<std::string> kAttrName({kProcName, kVarname, kValue, kStmtNo});
 
 const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityToAttrName {
