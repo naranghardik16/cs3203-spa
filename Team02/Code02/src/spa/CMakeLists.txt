@@ -19,7 +19,8 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.cpp")
 
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
@@ -42,7 +43,8 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.h")
 
 add_library(spa ${srcs} ${headers})
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
