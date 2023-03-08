@@ -1,12 +1,12 @@
 1 - Calls*(_,_) is true
 procedure p;
 Select p.procName such that Calls*(_,_)
-First, Second, Third, Fourth, Fifth, Sixth, Seventh
+First, Second, Third, Fourth, Fifth, Sixth
 5000
 2 - Calls*(_,IDENT) is true
 procedure p;procedure q;
 Select <p.procName,q> such that Calls*(_,"Sixth")
-First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth, Seventh Seventh
+First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth, Fifth First,Fifth Fourth,Fifth Second,Fifth Sixth,Fifth Third,First Fifth,First Fourth,First Second,First Sixth,First Third,Fourth Fifth,Fourth First,Fourth Second,Fourth Sixth,Fourth Third,Second Fifth,Second First,Second Fourth,Second Sixth,Second Third,Sixth Fifth,Sixth First,Sixth Fourth,Sixth Second,Sixth Third,Third Fifth,Third First,Third Fourth,Third Second,Third Sixth
 5000
 3 - Calls*(_,IDENT) is false
 procedure p;procedure q;
@@ -26,7 +26,7 @@ FALSE
 6 - Calls*(IDENT,IDENT) is true
 procedure p;
 Select p such that Calls*("First","Sixth")
-First, Second, Third, Fourth, Fifth, Sixth, Seventh
+First, Second, Third, Fourth, Fifth, Sixth
 5000
 7 - Calls*(IDENT,IDENT) is false
 procedure p;
@@ -91,7 +91,7 @@ Second Third, Second Fourth, Second Fifth, Second Sixth
 19 - Calls*(PROC-SYN,PROC-SYN has result -- only indirect calls case
 procedure p,q,z;
 Select <p,z> such that Calls(p, q) and Calls*(q,z)
-First Third, First Fourth, First Fifth, First Sixth, Second Fourth, Second Fifth, Third Sixth
+First Third, First Fourth, First Fifth, First Sixth, Second Fourth, Second Fifth, Third Sixth, Second Sixth
 5000
 20 - Calls*(PROC-SYN,PROC-SYN has no result
 procedure p,q;
@@ -99,7 +99,7 @@ Select <p.procName,q.procName> such that Calls*(p, q) with p.procName = "Sixth"
 
 5000
 21 - Calls*(PROC-SYN,PROC-SYN) with irrelevant syns in clauses
-procedure p,q,z
+procedure p,q,z;
 Select z such that Calls*(p, q) with q.procName = "Third"
-First, Second, Third, Fourth, Fifth, Sixth, Seventh
+First, Second, Third, Fourth, Fifth, Sixth
 5000
