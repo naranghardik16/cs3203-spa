@@ -124,4 +124,18 @@ class StubPkbReadFacade: public PkbReadFacade {
   bool HasNextStar(std::string statement_number);
   bool HasNextStarBy(std::string statement_number);
   bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
+  PkbCommunicationTypes::PairConstraintSet GetAffectsPairs();
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedBy(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffecting(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffected();
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffect();
+  bool HasAffectsRelationship(string stmt_num, string stmt_num_being_affected);
+  bool IsThereAnyAffectsRelationship();
+  PkbCommunicationTypes::PairConstraintSet GetAffectsStarPairs();
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedStarBy(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectingStar(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffectedStar();
+  bool IsThereAnyAffectsStarRelationship();
+  bool HasAffectsStarRelationship(string stmt_num, string stmt_num_being_affected);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffectStar();
 };
