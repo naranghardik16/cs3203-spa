@@ -8,7 +8,7 @@
 #include "PKB/Types/PkbTypes.h"
 #include "SP/SP.h"
 
-void dfs(shared_ptr<CfgNode> node,
+void Dfs(shared_ptr<CfgNode> node,
          int lvl,
          std::unordered_set<int> &visited,
          std::unordered_map<int, vector<vector<int>>> &stmts_at_lvl,
@@ -25,7 +25,7 @@ void dfs(shared_ptr<CfgNode> node,
       if (visited.find(kStmt) != visited.end()) {
         continue;
       }
-      dfs(child, lvl + 1, visited, stmts_at_lvl, node_representations);
+      Dfs(child, lvl + 1, visited, stmts_at_lvl, node_representations);
     }
   }
 }
@@ -122,7 +122,7 @@ TEST_CASE("Check if CFG is created correctly for a procedure starting with if") 
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
 
     vector<vector<vector<int>>>
         answer = {{{1}}, {{2}, {3}}, {{4}}, {{5}, {6}}, {{7}}};
@@ -149,7 +149,7 @@ TEST_CASE("Check if CFG is created correctly for a procedure starting with if") 
   }
 }
 
-TEST_CASE("Check if CFG is created correctly for if statements") {
+TEST_CASE("Check if CFG is created correctly for simple nested if statements") {
   try {
     string input = "procedure main {\n"
                    "  x = 1;"
@@ -193,7 +193,7 @@ TEST_CASE("Check if CFG is created correctly for if statements") {
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
     vector<vector<vector<int>>>
         answer = {{{1, 2}}, {{3}}, {{4, 5}, {9}}, {{6}, {10}}, {{7}, {8}}};
 
@@ -207,6 +207,147 @@ TEST_CASE("Check if CFG is created correctly for if statements") {
     std::unordered_set<string>
         expected_representations =
         {"{1,2}", "{3}", "{4,5}", "{6}", "{7}", "{8}", "{9}", "{10}"};
+    REQUIRE(node_representations.size() == expected_representations.size());
+    for (auto s : node_representations) {
+      if (expected_representations.find(s)
+          == expected_representations.end()) {
+        FAIL(s + " is an unexpected representation");
+      }
+    }
+
+  } catch (SpaException &e) {
+    FAIL(string("Unexpectedly failed: ") + string(e.what()));
+  }
+}
+
+TEST_CASE("Check if CFG is created correctly for simple nested while statements") {
+  try {
+    string input = "procedure main {\n"
+                   "  x = 1;"
+                   "  flag = 0;"
+                   "  while (x==1) {"
+                   "    flag = 1;"
+                   "    while( flag == 1 ) {"
+                   "        flag = 2;"
+                   "    }"
+                   "  } "
+                   "  y = 20;"
+                   "}\n";
+    std::istringstream is;
+    is.str(input);
+
+    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
+    shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
+
+    shared_ptr<Parser> parser = make_shared<Parser>();
+    shared_ptr<Program> program = parser->ParseSource(*tokens);
+
+    auto cfg = make_shared<Cfg>();
+    shared_ptr<CfgExtractor> cfg_extractor = make_shared<CfgExtractor>(cfg);
+
+    Program::ProcListContainer procedures = program->GetProcedureList();
+    for (shared_ptr<Procedure> &p : procedures) {
+      p->Accept(cfg_extractor);
+      auto statements = p->GetStatementList();
+      for (auto const &s : statements) {
+        s->Accept(cfg_extractor);
+      }
+    }
+    auto cfg_main = cfg->GetCfgRootNodes()["main"];
+    std::unordered_set<int> visited;
+    std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
+    vector<string> node_representations;
+
+    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    vector<vector<vector<int>>>
+        answer = {{{1, 2}}, {{3}}, {{4}, {7}}, {{5}}, {{6}}};
+
+    for (int i = 0; i < answer.size(); i++) {
+      REQUIRE(stmts_at_lvl[i].size() == answer[i].size());
+      if (stmts_at_lvl[i] != answer[i]) {
+        FAIL("Wrong number of stmts at a lvl");
+      }
+    }
+
+    std::unordered_set<string>
+        expected_representations =
+        {"{1,2}", "{3}", "{4}", "{5}", "{6}", "{7}"};
+    REQUIRE(node_representations.size() == expected_representations.size());
+    for (auto s : node_representations) {
+      if (expected_representations.find(s)
+          == expected_representations.end()) {
+        FAIL(s + " is an unexpected representation");
+      }
+    }
+
+  } catch (SpaException &e) {
+    FAIL(string("Unexpectedly failed: ") + string(e.what()));
+  }
+}
+
+TEST_CASE(
+    "Check if CFG is created correctly for while statements at the start of procedure") {
+  try {
+    string input = "procedure main {\n"
+                   "  while (x==1) {"
+                   "    flag = 1;"
+                   "    while( flag == 1 ) {"
+                   "        flag = 2;"
+                   "    }"
+                   "    count = count + 1;"
+                   "  } "
+                   "  y = 20;"
+                   "  while (x==1) {"
+                   "    flag = 1;"
+                   "    while( flag == 1 ) {"
+                   "        flag = 2;"
+                   "    }"
+                   "  }"
+                   "  count = count - 1; "
+                   "}\n";
+    std::istringstream is;
+    is.str(input);
+
+    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
+    shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
+
+    shared_ptr<Parser> parser = make_shared<Parser>();
+    shared_ptr<Program> program = parser->ParseSource(*tokens);
+
+    auto cfg = make_shared<Cfg>();
+    shared_ptr<CfgExtractor> cfg_extractor = make_shared<CfgExtractor>(cfg);
+
+    Program::ProcListContainer procedures = program->GetProcedureList();
+    for (shared_ptr<Procedure> &p : procedures) {
+      p->Accept(cfg_extractor);
+      auto statements = p->GetStatementList();
+      for (auto const &s : statements) {
+        s->Accept(cfg_extractor);
+      }
+    }
+    auto cfg_main = cfg->GetCfgRootNodes()["main"];
+    std::unordered_set<int> visited;
+    std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
+    vector<string> node_representations;
+
+    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    vector<vector<vector<int>>>
+        answer = {{{1}}, {{2}, {6}}, {{3}, {7}}, {{4}, {5}, {8}, {11}}, {{9}},
+                  {{10}}};
+
+    for (int i = 0; i < answer.size(); i++) {
+      REQUIRE(stmts_at_lvl[i].size() == answer[i].size());
+      if (stmts_at_lvl[i] != answer[i]) {
+        FAIL("Wrong number of stmts at a lvl");
+      }
+    }
+
+    std::unordered_set<string>
+        expected_representations =
+        {"{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}", "{10}",
+         "{11}"};
     REQUIRE(node_representations.size() == expected_representations.size());
     for (auto s : node_representations) {
       if (expected_representations.find(s)

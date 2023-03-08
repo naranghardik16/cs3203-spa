@@ -73,8 +73,12 @@ void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statemen
   auto loop_cfg_node = make_shared<CfgNode>();
   auto end_cfg_node = make_shared<CfgNode>();
 
-  AddTransitionAndUpdate(while_cfg_node, true);
-
+  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+    AddTransitionAndUpdate(while_cfg_node, true);
+  } else {
+    while_cfg_node = cur_cfg_node_;
+  }
+  
   AddCfgForStmt(stmt_number);
   auto loop_stmts = while_statement->GetLoopStatements();
 
