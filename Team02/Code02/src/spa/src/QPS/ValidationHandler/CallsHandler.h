@@ -2,10 +2,7 @@
 
 #include "Handler.h"
 
-/*
- * Validate stmt and stmt relationship (Follows, Follows*, Parent, Parent*).
- */
-class StmtToStmtHandler : public Handler {
+class CallsHandler : public Handler {
  public:
   void HandleSyntax(std::shared_ptr<ClauseSyntax> clause) override;
   void HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) override;

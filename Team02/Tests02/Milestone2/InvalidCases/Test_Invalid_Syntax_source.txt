@@ -1,0 +1,11 @@
+procedure main {
+  x = 2;
+  z = 3;
+  i = 5; }
+
+procedure computeCentroid {
+  count = 5;
+  cenX = 10;
+  cenY = 15;
+  read input;
+  print cenY; }
