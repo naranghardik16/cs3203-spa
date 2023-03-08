@@ -27,7 +27,7 @@ jobs:
       - name: Build Project
         shell: bash
         run: |
-          cd Team02/Code02
+          cd $GITHUB_WORKSPACE/Team02/Code02
           mkdir build
           cd build
           cmake -A x64 ..
@@ -35,6 +35,18 @@ jobs:
           cmake --build . --target integration_testing --config Release
           cmake --build . --target autotester --config Release
           cd ../..
+
+      - name: Unit Testing
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/Team02/Code02/build/src/unit_testing/ 
+          ./unit_testing
+
+      - name: Integration Testing
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/ 
+          ./integration_testing
 
   build_macos:
     runs-on: macos-latest
@@ -57,3 +69,13 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: cmake --build . --config $BUILD_TYPE
+
+      - name: Unit Testing
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: ./src/unit_testing/unit_testing
+
+      - name: Integration Testing
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: ./src/integration_testing/integration_testing
