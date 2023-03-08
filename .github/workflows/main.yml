@@ -41,14 +41,13 @@ jobs:
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE/Team02/Code02/build/src/unit_testing/Release
-          ls
-#          ./unit_testing
+          ./unit_testing.exe
 
       - name: Integration Testing
         shell: bash
         run: |
-          cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/
-#          ./integration_testing
+          cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/Release
+          ./integration_testing.exe
 
   build_macos:
     runs-on: macos-latest
