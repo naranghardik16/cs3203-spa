@@ -22,7 +22,7 @@ procedure Second {
 procedure Third {
     z = 5;
     v = z;
-    if (v == z) {
+    if (v == z) then {
         call Fifth;
     } else {
         call Fourth;

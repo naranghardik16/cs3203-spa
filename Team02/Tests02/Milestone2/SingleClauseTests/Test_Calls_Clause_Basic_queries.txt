@@ -1,12 +1,12 @@
 1 - Calls(_,_) is true
 procedure p;
 Select p.procName such that Calls(_,_)
-First, Second, Third, Fourth, Fifth, Sixth
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
 5000
 2 - Calls(_,IDENT) is true
 procedure p;procedure q;
 Select <p.procName,q> such that Calls(_,"Sixth")
-First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth
+First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth, First Second, First Third, First Fourth, First Fifth, First Sixth, Second First, Second Third, Second Fourth, Second Fifth, Second Sixth, Third First, Third Second, Third Fourth, Third Fifth, Third Sixth, Fourth First, Fourth Second, Fourth Third, Fourth Fifth, Fourth Sixth, Fifth First, Fifth Second, Fifth Third, Fifth Fourth, Fifth Sixth, Sixth First, Sixth Second, Sixth Third, Sixth Fourth, Sixth Fifth, Fifth Seventh,First Seventh,Fourth Seventh,Second Seventh,Seventh Fifth,Seventh First,Seventh Fourth,Seventh Second,Seventh Seventh,Seventh Sixth,Seventh Third,Sixth Seventh,Third Seventh
 5000
 3 - Calls(_,IDENT) is false
 procedure p;procedure q;
@@ -26,7 +26,7 @@ FALSE
 6 - Calls(IDENT,IDENT) is true
 procedure p;
 Select p such that Calls("First","Second")
-First, Second, Third, Fourth, Fifth, Sixth
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
 5000
 7 - Calls(IDENT,IDENT) is false
 procedure p;
@@ -73,12 +73,12 @@ procedure p;
 Select p.procName such that Calls(p, "First")
 
 5000
-16 - Calls(PROC-SYN,PROC-SYN has result
+16 - Calls(PROC-SYN,PROC-SYN) has result
 procedure p,q;
 Select <p,q> such that Calls(p, q)
 First Second, Second Third, Second Sixth, Third Fourth, Third Fifth, Fifth Sixth
 5000
-17 - Calls(PROC-SYN,PROC-SYN has result -- nested case
+17 - Calls(PROC-SYN,PROC-SYN) has result -- nested case
 procedure p,q,z;
 Select <p,q,z> such that Calls(p, q) such that Calls(q,z)
 First Second Third, First Second Sixth, Second Third Fourth, Second Third Fifth, Third Fifth Sixth
