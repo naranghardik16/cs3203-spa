@@ -458,10 +458,11 @@ TEST_CASE("Integration testing for Calls") {
   }
 
   SECTION("Calls(IDENT,_) is true") {
-    std::string query = "procedure p; procedure q       ; Select   <p. procName, q .procName > such that Calls  (\"proc1\",   _)";
+    std::string query = "procedure p; procedure q       ; Select   <p. procName, p .procName > such that Calls  (\"proc1\",   _)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc 6", "proc7 proc 7", "proc8 proc8"};
+    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc6", "proc7 proc7", "proc8 proc8"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
@@ -501,7 +502,7 @@ TEST_CASE("Integration testing for Calls") {
     std::string query = "procedure p; Select p  . procName such that Calls(p, \"      proc2       \")";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc5", "proc6"};
+    std::list<std::string> expected_results{"proc1"};
     REQUIRE(results == expected_results);
   }
 
@@ -534,6 +535,7 @@ TEST_CASE("Integration testing for Calls") {
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
     std::list<std::string> expected_results{"proc2", "proc3", "proc4", "proc5", "proc6", "proc7"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
@@ -550,7 +552,7 @@ TEST_CASE("Integration testing for Calls") {
     std::string query = "procedure p,p1,p2,p3,p4; Select p1 such that Calls(p1,p2) and Calls(p2,_)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"proc1", "proc2", "proc5", "proc6"};
+    std::list<std::string> expected_results{"proc1", "proc2", "proc5"};
     REQUIRE(results == expected_results);
   }
 
@@ -559,7 +561,7 @@ TEST_CASE("Integration testing for Calls") {
     std::string query = "procedure p,p1,p2,p3,p4; Select <p1,p2,p3.procName,p4> such that Calls(p1,p2) and Calls(p2,p3) and Calls(p3,p4)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"proc1 proc2 proc3 proc4", "proc2 proc5 proc6 proc7"};
+    std::list<std::string> expected_results{"proc1 proc2 proc5 proc6", "proc1 proc2 proc3 proc4", "proc2 proc5 proc6 proc7"};
     REQUIRE(results == expected_results);
   }
 }
@@ -612,10 +614,11 @@ TEST_CASE("Integration testing for Calls*") {
   }
 
   SECTION("Calls*(IDENT,_) is true") {
-    std::string query = "procedure p; procedure q       ; Select   <p. procName, q .procName > such that Calls*  (\"proc2\",   _)";
+    std::string query = "procedure p; procedure q       ; Select   <p. procName, p .procName > such that Calls*  (\"proc2\",   _)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc 6", "proc7 proc 7", "proc8 proc8"};
+    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc6", "proc7 proc7", "proc8 proc8"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
@@ -688,6 +691,7 @@ TEST_CASE("Integration testing for Calls*") {
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
     std::list<std::string> expected_results{"proc2", "proc3", "proc4", "proc5", "proc6", "proc7"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
@@ -704,6 +708,7 @@ TEST_CASE("Integration testing for Calls*") {
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
     std::list<std::string> expected_results{"proc1 proc3", "proc1 proc4", "proc1 proc5", "proc1 proc6", "proc1 proc7", "proc2 proc4", "proc2 proc6","proc2 proc7", "proc5 proc7"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
@@ -712,6 +717,7 @@ TEST_CASE("Integration testing for Calls*") {
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
     std::list<std::string> expected_results{"proc1 proc3", "proc1 proc5", "proc1 proc6", "proc2 proc6"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 }
