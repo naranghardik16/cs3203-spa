@@ -5,6 +5,7 @@
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/PKB.h"
 #include "QPS/Qps.h"
+#include "PKB/Stores/CallsStore.h"
 
 TEST_CASE("Check if QPS works with PKB for basic operations") {
   std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
@@ -319,6 +320,404 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
     Qps::ProcessQuery(query, results, pkb_read);
 
     std::list<std::string> expected_results{"x"};
+    REQUIRE(results == expected_results);
+  }
+}
+
+TEST_CASE("Test case of empty relationship stores") {
+  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb);
+  std::shared_ptr<PkbWriteFacade> pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
+
+  pkb_write->AddProcedure("test");
+  pkb_write->AddStatementOfAType("1", StatementType::READ);
+  pkb_write->AddStatementOfAType("2", StatementType::ASSIGN);
+  pkb_write->AddStatementOfAType("3", StatementType::IF);
+  pkb_write->AddStatementOfAType("4", StatementType::PRINT);
+  pkb_write->AddStatementOfAType("5", StatementType::WHILE);
+  pkb_write->AddStatementOfAType("6", StatementType::ASSIGN);
+  pkb_write->AddStatementOfAType("7", StatementType::PRINT);
+  pkb_write->AddStatementOfAType("8", StatementType::CALL);
+  pkb_write->AddVariable("x");
+  pkb_write->AddVariable("y");
+  pkb_write->AddVariable("test");
+  pkb_write->AddConstant("0");
+  pkb_write->AddConstant("1");
+
+  SECTION("Calls(_,_)") {
+    std::string query = "procedure p; Select p.procName such that Calls(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(PROC-SYN,_)") {
+    std::string query = "procedure p; Select p such that Calls(p,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(_,PROC-SYN)") {
+    std::string query = "procedure p; Select p such that Calls(_,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(_,_)") {
+    std::string query = "procedure p; Select p.procName such that Calls*(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(PROC-SYN,_)") {
+    std::string query = "procedure p; Select p such that Calls*(p,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(_,PROC-SYN)") {
+    std::string query = "procedure p; Select p such that Calls*(_,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Follows(_,_)") {
+    std::string query = "constant c; Select c.value such that Follows(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent(_,_)") {
+    std::string query = "assign a; Select a.stmt# such that Parent(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+}
+
+TEST_CASE("Integration testing for Calls") {
+  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb);
+  std::shared_ptr<PkbWriteFacade> pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
+
+  pkb_write->AddProcedure("proc1");
+  pkb_write->AddProcedure("proc2");
+  pkb_write->AddProcedure("proc3");
+  pkb_write->AddProcedure("proc4");
+  pkb_write->AddProcedure("proc5");
+  pkb_write->AddProcedure("proc6");
+  pkb_write->AddProcedure("proc7");
+  pkb_write->AddProcedure("proc8");
+
+  pkb_write->AddCallsRelation("proc1", "proc2");
+  pkb_write->AddCallsRelation("proc1", "proc3");
+  pkb_write->AddCallsRelation("proc2", "proc3");
+  pkb_write->AddCallsRelation("proc2", "proc5");
+  pkb_write->AddCallsRelation("proc3", "proc4");
+  pkb_write->AddCallsRelation("proc5", "proc6");
+  pkb_write->AddCallsRelation("proc6", "proc7");
+
+
+  SECTION("Calls(_,_) is true") {
+    std::string query = "procedure p; Select p.procName such that Calls(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(_,IDENT) is true") {
+    std::string query = "procedure p; Select <p.procName> such that Calls(_,\"proc5\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(_,IDENT) is false") {
+    std::string query = "procedure p; Select <p.procName> such that Calls (_,\"proc1\"  )   ";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(IDENT,_) is true") {
+    std::string query = "procedure p; procedure q       ; Select   <p. procName, p .procName > such that Calls  (\"proc1\",   _)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc6", "proc7 proc7", "proc8 proc8"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(IDENT,_) is false") {
+    std::string query = "procedure p; procedure q; Select <p.procName, q.procName> such that Calls(\"proc8\",_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(IDENT,IDENT) is true") {
+    std::string query = "procedure p; Select p such that Calls(\"proc1\",\"proc2\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(IDENT,IDENT) is false") {
+    std::string query = "procedure p; Select p .procName such that Calls(\"proc3    \",\"       proc2\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(PROC-SYN,_) has result") {
+    std::string query = "procedure p; Select p. procName such that Calls(p,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc5", "proc6"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(PROC-SYN,IDENT) has result") {
+    std::string query = "procedure p; Select p  . procName such that Calls(p, \"      proc2       \")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(PROC-SYN,IDENT) has no result") {
+    std::string query = "procedure p; Select p  . procName such that Calls(p, \"proc8\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(PROC-SYN,PROC-SYN) has result") {
+    std::string query = "procedure p; procedure q; Select p.procName such that Calls(p,q) with q.procName = \"proc6\"";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc5"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Query with Calls(PROC-SYN,PROC-SYN) has no result") {
+    std::string query = "procedure p; procedure q; Select p.procName such that Calls(p,q) with p.procName = \"proc4\"";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(_,PROC-SYN) has result") {
+    std::string query = "procedure p; Select p.procName such that Calls(_,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc2", "proc3", "proc4", "proc5", "proc6", "proc7"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(IDENT,PROC-SYN) has result") {
+    std::string query = "procedure p; Select p.procName such that Calls(\"proc2\",p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc3", "proc5"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls Multiclause") {
+    //Select procedures that call procedures that are callers
+    std::string query = "procedure p,p1,p2,p3,p4; Select p1 such that Calls(p1,p2) and Calls(p2,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc5"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls Multiclause -- test transitive") {
+    //Select procedures that call procedures that are callers
+    std::string query = "procedure p,p1,p2,p3,p4; Select <p1,p2,p3.procName,p4> such that Calls(p1,p2) and Calls(p2,p3) and Calls(p3,p4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1 proc2 proc5 proc6", "proc1 proc2 proc3 proc4", "proc2 proc5 proc6 proc7"};
+    REQUIRE(results == expected_results);
+  }
+}
+
+TEST_CASE("Integration testing for Calls*") {
+  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb);
+  std::shared_ptr<PkbWriteFacade> pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
+
+  pkb_write->AddProcedure("proc1");
+  pkb_write->AddProcedure("proc2");
+  pkb_write->AddProcedure("proc3");
+  pkb_write->AddProcedure("proc4");
+  pkb_write->AddProcedure("proc5");
+  pkb_write->AddProcedure("proc6");
+  pkb_write->AddProcedure("proc7");
+  pkb_write->AddProcedure("proc8");
+
+  pkb_write->AddCallsRelation("proc1", "proc2");
+  pkb_write->AddCallsRelation("proc1", "proc3");
+  pkb_write->AddCallsRelation("proc2", "proc3");
+  pkb_write->AddCallsRelation("proc2", "proc5");
+  pkb_write->AddCallsRelation("proc3", "proc4");
+  pkb_write->AddCallsRelation("proc5", "proc6");
+  pkb_write->AddCallsRelation("proc6", "proc7");
+
+
+  SECTION("Calls*(_,_) is true") {
+    std::string query = "procedure p; Select p.procName such that Calls*(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(_,IDENT) is true") {
+    std::string query = "procedure p; Select <p.procName> such that Calls*(_,\"proc4\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(_,IDENT) is false") {
+    std::string query = "procedure p; Select <p.procName> such that Calls*(_,\"proc8\"  )   ";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(IDENT,_) is true") {
+    std::string query = "procedure p; procedure q       ; Select   <p. procName, p .procName > such that Calls*  (\"proc2\",   _)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1 proc1", "proc2 proc2", "proc3 proc3", "proc4 proc4", "proc5 proc5", "proc6 proc6", "proc7 proc7", "proc8 proc8"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(IDENT,_) is false") {
+    std::string query = "procedure p; procedure q; Select <p.procName, q.procName> such that Calls*(\"proc7\",_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(IDENT,IDENT) is true") {
+    std::string query = "procedure p; Select p such that Calls*(\"proc2\",\"proc7\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc4", "proc5", "proc6", "proc7", "proc8"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(IDENT,IDENT) is false") {
+    std::string query = "procedure p; Select p .procName such that Calls*(\"proc4  \",\"       proc7\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(PROC-SYN,_) has result") {
+    std::string query = "procedure p; Select p. procName such that Calls*(p,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc3", "proc5", "proc6"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(PROC-SYN,IDENT) has result") {
+    std::string query = "procedure p; Select p  . procName such that Calls*(p, \"      proc7       \")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1", "proc2", "proc5", "proc6"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(PROC-SYN,IDENT) has no result") {
+    std::string query = "procedure p; Select p  . procName such that Calls*(p, \"proc8\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(PROC-SYN,PROC-SYN) has result") {
+    std::string query = "procedure p; procedure q; Select q.procName such that Calls*(p,q) with p.procName = \"proc2\"";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc3", "proc5", "proc4", "proc6", "proc7"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Query with Calls*(PROC-SYN,PROC-SYN) has no result") {
+    std::string query = "procedure p; procedure q; Select p.procName such that Calls*(p,q) with q.procName = \"proc1\"";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(_,PROC-SYN) has result") {
+    std::string query = "procedure p; Select p.procName such that Calls*(_,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc2", "proc3", "proc4", "proc5", "proc6", "proc7"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*(IDENT,PROC-SYN) has result") {
+    std::string query = "procedure p; Select p.procName such that Calls*(\"proc5\",p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc6", "proc7"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls Multiclause -- indirect calls only") {
+    std::string query = "procedure p,p1,p2,p3,p4; Select <p1,p3> such that Calls(p1,p2) and Calls*(p2,p3)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1 proc3", "proc1 proc4", "proc1 proc5", "proc1 proc6", "proc1 proc7", "proc2 proc4", "proc2 proc6","proc2 proc7", "proc5 proc7"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls Multiclause -- test transitive") {
+    std::string query = "procedure p,p1,p2,p3,p4; Select <p1,p3.procName> such that Calls(p1,p2) and Calls*(p2,p3) and Calls*(p3,p4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"proc1 proc3", "proc1 proc5", "proc1 proc6", "proc2 proc6"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 }
