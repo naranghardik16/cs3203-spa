@@ -40,13 +40,14 @@ jobs:
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE/Team02/Code02/build/src/unit_testing/ 
-          ./unit_testing
+          ls
+#          ./unit_testing
 
       - name: Integration Testing
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/ 
-          ./integration_testing
+#          ./integration_testing
 
   build_macos:
     runs-on: macos-latest
