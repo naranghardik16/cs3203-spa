@@ -1,9 +1,11 @@
 #include "CfgNode.h"
 
 void CfgNode::AddTransition(bool is_true, std::shared_ptr<CfgNode> node) {
-  if (node_trans_.count(is_true) < 1) {
+  if (node_trans_.count(is_true) > 0) {
+
     throw SemanticErrorException(
-        "CFGNode already has a transition node here");
+        "CFGNode already has a transition node here for "
+            + std::to_string(is_true));
   }
   node_trans_[is_true] = std::move(node);
 }
@@ -26,4 +28,17 @@ CfgNode::BoolToCfgNodeMap CfgNode::GetNodeTrans() {
 
 CfgNode::CfgNodeContainer CfgNode::GetParentNodes() {
   return parent_nodes_;
+}
+
+std::string CfgNode::GetStringRepresentation() {
+  std::string string_representation = "{";
+  for (auto e : node_stmts_) {
+    string_representation += std::to_string(e) + ",";
+  }
+  if (string_representation.length() > 1) {
+    string_representation =
+        string_representation.substr(0, string_representation.length() - 1);
+  }
+  string_representation += "}";
+  return string_representation;
 }
