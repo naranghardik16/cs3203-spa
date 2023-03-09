@@ -577,3 +577,124 @@ bool StubPkbReadFacade::IsNextStar(std::string statement_num_1, std::string stat
   }
   return false;
 }
+
+//Affects API
+PkbCommunicationTypes::PairConstraintSet  StubPkbReadFacade::GetAffectsPairs() {
+  return {{"1", "5"},{"3", "5"},{"2", "4"},{"2", "6"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectedBy(std::string stmt_num) {
+  if (stmt_num == "1") {
+    return {"5"};
+  }
+  if (stmt_num == "3") {
+    return {"5"};
+  }
+  if (stmt_num == "2") {
+    return {"4","6"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffecting(std::string stmt_num) {
+  if (stmt_num == "5") {
+    return {"1","3"};
+  }
+  if (stmt_num == "4") {
+    return {"2"};
+  }
+  if (stmt_num == "6") {
+    return {"2"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAreAffected() {
+  return {"4", "5","6"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAffect() {
+  return {"1","2","3"};
+}
+
+bool StubPkbReadFacade::HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
+  if ((stmt_num == "1") && (stmt_num_being_affected == "5")) {
+    return true;
+  }
+  if ((stmt_num == "3") && (stmt_num_being_affected == "5")) {
+    return true;
+  }
+  if ((stmt_num == "2") && (stmt_num_being_affected == "4")) {
+    return true;
+  }
+  if ((stmt_num == "2") && (stmt_num_being_affected == "6")) {
+    return true;
+  }
+  return false;
+}
+
+bool StubPkbReadFacade::IsThereAnyAffectsRelationship() {
+  return true;
+}
+
+//Affects* API
+PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetAffectsStarPairs() {
+  return {{"1", "4"},{"1", "10"},{"1", "11"},{"9", "12"},{"12","13"}, {"9", "13"}};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectedStarBy(std::string stmt_num) {
+  if (stmt_num == "1") {
+    return {"4", "10", "11"};
+  }
+  if (stmt_num == "9") {
+    return {"12","13"};
+  }
+  if (stmt_num == "12") {
+    return {"13"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectingStar(std::string stmt_num) {
+  if (stmt_num == "4" || stmt_num == "10" || stmt_num == "11") {
+    return {"1"};
+  }
+  if (stmt_num == "12") {
+    return {"9"};
+  }
+  if (stmt_num == "13") {
+    return {"9","12"};
+  }
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAreAffectedStar() {
+  return {"4","10","11","12","13"};
+}
+
+PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAffectStar() {
+  return {"1","9","12"};
+}
+
+bool StubPkbReadFacade::HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
+  if (stmt_num == "1") {
+    if (stmt_num_being_affected == "4" || stmt_num_being_affected == "10" || stmt_num_being_affected == "11") {
+      return true;
+    }
+  }
+  if (stmt_num == "9") {
+    if (stmt_num_being_affected == "12" || stmt_num_being_affected == "13") {
+      return true;
+    }
+  }
+  if (stmt_num == "12") {
+    if (stmt_num_being_affected == "13") {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool StubPkbReadFacade::IsThereAnyAffectsStarRelationship() {
+  return true;
+}

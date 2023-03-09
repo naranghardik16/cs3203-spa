@@ -1608,3 +1608,284 @@ TEST_CASE("Test NextStar Clause Evaluator") {
     REQUIRE(eval_result == correct_set);
   }
 }
+
+
+TEST_CASE("Test Affects Clause Evaluator") {
+  PKB pkb = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Affects(_, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Affects(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, _), boolean check passes") {
+    //GetAssignsAffectedBy(5)
+    std::string query = "assign a;Select a such that Affects(1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, _), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects(5, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(_, INT), boolean check passes") {
+    //GetAssignsAffecting
+    std::string query = "assign a;Select a such that Affects(_, 5)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(_, INT), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects(_, 1)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, INT), boolean check passes") {
+    std::string query = "assign a;Select a such that Affects(1, 5)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({{"2", "6", "7"}});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, INT), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects(1, 4)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(SYN, SYN)") {
+    std::string query = "assign a1,a2;Select a1 such that Affects(a1, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1","2","3"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(SYN, _)") {
+    std::string query = "assign a1, a2;Select a1 such that Affects(a1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1", "2","3"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(SYN, INT)") {
+    std::string query = "assign a1, a2;Select a1 such that Affects(a1, 5)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1","3"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(_, SYN)") {
+    std::string query = "assign a1, a2;Select a2 such that Affects(_, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4","5","6"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, SYN)") {
+    std::string query = "assign a1, a2;Select a2 such that Affects(2, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4", "6"});
+    REQUIRE(eval_result == correct_set);
+  }
+}
+
+
+TEST_CASE("Test AffectsStar Clause Evaluator") {
+  PKB pkb = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Affects*(_, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Affects*(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(INT, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Affects*(1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(INT, _), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects*(5, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(_, INT), boolean check passes") {
+    //GetAssignsAffecting
+    std::string query = "assign a;Select a such that Affects*(_, 4)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(_, INT), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects*(_, 1)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(INT, INT), boolean check passes") {
+    std::string query = "assign a;Select a such that Affects*(1, 10)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({{"2", "6", "7"}});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(INT, INT), boolean check fails") {
+    std::string query = "assign a;Select a such that Affects*(1, 5)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(SYN, SYN)") {
+    std::string query = "assign a1,a2;Select a1 such that Affects*(a1, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1","9","12"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(SYN, _)") {
+    std::string query = "assign a1, a2;Select a1 such that Affects*(a1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1", "9","12"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(SYN, INT)") {
+    std::string query = "assign a1, a2;Select a1 such that Affects*(a1, 13)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"9","12"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects*(_, SYN)") {
+    std::string query = "assign a1, a2;Select a2 such that Affects*(_, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4","10","11","12","13"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Affects(INT, SYN)") {
+    std::string query = "assign a1, a2;Select a2 such that Affects*(1, a2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4", "10","11"});
+    REQUIRE(eval_result == correct_set);
+  }
+}
