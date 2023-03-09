@@ -1,6 +1,4 @@
-#pragma once
 #include "WithClauseSyntax.h"
-#include "QPS/Evaluator/WithClauseEvaluator/WithClauseEvaluator.h"
 
 WithClauseSyntax::WithClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
 

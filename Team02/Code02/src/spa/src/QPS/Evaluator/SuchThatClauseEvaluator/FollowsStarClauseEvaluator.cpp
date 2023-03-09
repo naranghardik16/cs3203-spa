@@ -1,6 +1,4 @@
-#pragma once
 #include "FollowsStarClauseEvaluator.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);

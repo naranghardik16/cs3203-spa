@@ -44,11 +44,13 @@ shared_ptr<Expression> ArithmeticOperationParser::Factor() {
   shared_ptr<Expression> term = nullptr;
 
   if (GetCurrentTokenType() == LEFT_PARENTHESIS) {
+    AddParenthesis(LEFT_PARENTHESIS, GetCurrentTokenValue(), GetCurrentTokenPos());
     GetNext();
     term = Parse();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
       throw SyntaxErrorException("Missing )");
     }
+    AddParenthesis(RIGHT_PARENTHESIS, GetCurrentTokenValue(), GetCurrentTokenPos());
   } else if (GetCurrentTokenType() == INTEGER) {
     term = make_shared<Constant>(GetCurrentTokenValue());
   } else if (GetCurrentTokenType() == NAME) {

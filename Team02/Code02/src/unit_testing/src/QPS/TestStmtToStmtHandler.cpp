@@ -14,6 +14,18 @@ TEST_CASE("Test StmtToStmtHandler handlerSyntax") {
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
+  SECTION("Test valid next clause") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"a", "p"}}});
+
+    REQUIRE_NOTHROW(handler.HandleSyntax(clause));
+  }
+
+  SECTION("Test valid next* clause") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"a", "4"}}});
+
+    REQUIRE_NOTHROW(handler.HandleSyntax(clause));
+  }
+
   SECTION("Test invalid clause syntax - invalid rel") {
     std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Followed", {"a", "p"}}});
 
@@ -31,6 +43,30 @@ TEST_CASE("Test StmtToStmtHandler handlerSyntax") {
 
     REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
   }
+
+  SECTION("Test invalid next clause syntax - arg_1 not stmt ref") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"\"a\"", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid next clause syntax - arg_2 not stmt ref") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"a", "\"p\""}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid next* clause syntax - arg_1 not stmt ref") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"\"a\"", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid next* clause syntax - arg_2 not stmt ref") {
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"a", "\"p\""}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSyntax(clause), SyntaxErrorException);
+  }
 }
 
 TEST_CASE("Test StmtToStmtHandler handlerSemantic") {
@@ -41,6 +77,24 @@ TEST_CASE("Test StmtToStmtHandler handlerSemantic") {
                     {"p", "stmt"}};
 
     std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Follows", {"a", "p"}}});
+
+    REQUIRE_NOTHROW(handler.HandleSemantic(clause, declaration));
+  }
+
+  SECTION("Test valid next clause semantic - ref(stmt, stmt)") {
+    Map declaration{{"a", "stmt"},
+                    {"p", "stmt"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"a", "p"}}});
+
+    REQUIRE_NOTHROW(handler.HandleSemantic(clause, declaration));
+  }
+
+  SECTION("Test valid next* clause semantic - ref(stmt, stmt)") {
+    Map declaration{{"a", "stmt"},
+                    {"p", "stmt"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"a", "p"}}});
 
     REQUIRE_NOTHROW(handler.HandleSemantic(clause, declaration));
   }
@@ -77,6 +131,42 @@ TEST_CASE("Test StmtToStmtHandler handlerSemantic") {
                     {"p", "variable"}};
 
     std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Follows", {"a", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
+  }
+
+  SECTION("Test invalid next clause - arg_1 not stmt entity") {
+    Map declaration{{"a", "variable"},
+                    {"p", "stmt"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"a", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
+  }
+
+  SECTION("Test invalid next clause - arg_2 not stmt entity") {
+    Map declaration{{"a", "read"},
+                    {"p", "variable"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next", {"a", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
+  }
+
+  SECTION("Test invalid next* clause - arg_1 not stmt entity") {
+    Map declaration{{"a", "variable"},
+                    {"p", "stmt"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"a", "p"}}});
+
+    REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
+  }
+
+  SECTION("Test invalid next* clause - arg_2 not stmt entity") {
+    Map declaration{{"a", "read"},
+                    {"p", "variable"}};
+
+    std::shared_ptr<ClauseSyntax> clause(new SuchThatClauseSyntax{{"Next*", {"a", "p"}}});
 
     REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
   }

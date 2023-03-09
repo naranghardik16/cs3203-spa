@@ -1,6 +1,4 @@
-#pragma once
 #include "ParentStarClauseEvaluator.h"
-#include "PKB/Types/PkbCommunicationTypes.h"
 
 bool ParentStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();

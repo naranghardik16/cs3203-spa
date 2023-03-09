@@ -1,0 +1,65 @@
+1 - invalid entity
+procedure p1;assign p2;
+Select p1 such that Calls( p1, p2)
+SemanticError
+5000
+2 - invalid entity
+assign p1;procedure p2;
+Select p1 such that Calls*( p2, p1)
+SemanticError
+5000
+3 - invalid entity
+stmt p1, p2;
+Select p1 such that Calls( "x", p1)
+SemanticError
+5000
+4 - invalid entity
+stmt p1, p2;
+Select p1 such that Calls*( p1, "x")
+SemanticError
+5000
+5 - invalid entity
+stmt p1;assign p2;
+Select p1 such that Affects( p2, p1)
+SemanticError
+5000
+6 - invalid entity
+read p1;assign p2;
+Select p1 such that Affects*( p1, p2)
+SemanticError
+5000
+7 - invalid entity
+print a1, a2;
+Select a1 such that Affects( 1, a2)
+SemanticError
+5000
+8 - invalid entity
+call a1;assign a2;
+Select a1 such that Affects*( a1, a2)
+SemanticError
+5000
+9 - invalid entity
+if a1;assign a2;
+Select a1 such that Affects*( a2, a1)
+SemanticError
+5000
+10 - invalid entity
+procedure a1;assign a2;
+Select a1 such that Affects*( a1, a2)
+SemanticError
+5000
+11 - invalid entity
+procedure a1, a2;
+Select a1 such that Next( a1, 10)
+SemanticError
+5000
+12 - invalid entity
+constant a1; 
+Select a1 such that Next*( 1, a1)
+SemanticError
+5000
+13 - invalid entity
+variable a1; assign a2;
+Select a1 such that Next( a2, a1)
+SemanticError
+5000

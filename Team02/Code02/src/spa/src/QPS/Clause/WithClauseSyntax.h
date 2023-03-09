@@ -1,5 +1,7 @@
 #pragma once
+
 #include "ClauseSyntax.h"
+#include "QPS/Evaluator/WithClauseEvaluator/WithClauseEvaluator.h"
 
 class WithClauseSyntax : public ClauseSyntax {
  public:

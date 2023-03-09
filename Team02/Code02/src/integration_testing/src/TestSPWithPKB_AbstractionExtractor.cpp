@@ -64,11 +64,11 @@ TEST_CASE("Check if follows/* are extracted correctly") {
 
   SECTION("Check that all follows pair are present") {
     vector<pair<string, string>> expected_follows_pairs = {
-        make_pair("1","2"),
+        make_pair("1", "2"),
         make_pair("2", "3"),
         make_pair("3", "4"),
         make_pair("5", "6"),
-        make_pair("6","7"),
+        make_pair("6", "7"),
         make_pair("4", "8"),
         make_pair("10", "11"),
         make_pair("8", "12")
@@ -84,11 +84,11 @@ TEST_CASE("Check if follows/* are extracted correctly") {
   SECTION("Check that all follows* pair are present") {
     vector<pair<string, string>> expected_follows_star_pairs = {
         // follows
-        make_pair("1","2"),
+        make_pair("1", "2"),
         make_pair("2", "3"),
         make_pair("3", "4"),
         make_pair("5", "6"),
-        make_pair("6","7"),
+        make_pair("6", "7"),
         make_pair("4", "8"),
         make_pair("10", "11"),
         make_pair("8", "12"),
@@ -154,13 +154,13 @@ TEST_CASE("Check if parent/* are extracted correctly") {
 
   SECTION("Check that all parent pair are present") {
     vector<pair<string, string>> expected_parent_pairs = {
-        make_pair("4","5"),
+        make_pair("4", "5"),
         make_pair("4", "6"),
         make_pair("4", "7"),
         make_pair("7", "8"),
         make_pair("7", "9"),
         make_pair("4", "10"),
-        make_pair("11","12"),
+        make_pair("11", "12"),
         make_pair("11", "13"),
         make_pair("13", "14"),
         make_pair("13", "15"),
@@ -179,13 +179,13 @@ TEST_CASE("Check if parent/* are extracted correctly") {
   SECTION("Check that all parent* pair are present") {
     vector<pair<string, string>> expected_parent_star_pairs = {
         // parent pairs
-        make_pair("4","5"),
+        make_pair("4", "5"),
         make_pair("4", "6"),
         make_pair("4", "7"),
         make_pair("7", "8"),
         make_pair("7", "9"),
         make_pair("4", "10"),
-        make_pair("11","12"),
+        make_pair("11", "12"),
         make_pair("11", "13"),
         make_pair("13", "14"),
         make_pair("13", "15"),
@@ -200,7 +200,8 @@ TEST_CASE("Check if parent/* are extracted correctly") {
         make_pair("11", "16")
     };
     for (pair<string, string> pp : expected_parent_star_pairs) {
-      if (!pkb_read_facade->HasAncestorDescendantRelationship(pp.first, pp.second)) {
+      if (!pkb_read_facade->HasAncestorDescendantRelationship(pp.first,
+                                                              pp.second)) {
         FAIL();
       }
     }
@@ -245,7 +246,7 @@ TEST_CASE("Check if calls/* are extracted correctly") {
 
   SECTION("Check that all calls pair are present") {
     vector<pair<string, string>> expected_call_pairs = {
-        make_pair("First","Second"),
+        make_pair("First", "Second"),
         make_pair("Second", "Third")
     };
     for (pair<string, string> pp : expected_call_pairs) {
@@ -259,7 +260,7 @@ TEST_CASE("Check if calls/* are extracted correctly") {
 
   SECTION("Check that all calls* pair are present") {
     vector<pair<string, string>> expected_call_pairs = {
-        make_pair("First","Second"),
+        make_pair("First", "Second"),
         make_pair("Second", "Third"),
         make_pair("First", "Third")
     };
@@ -328,7 +329,7 @@ TEST_CASE("Check if modifies are extracted correctly") {
   SECTION("Check that all modifiesS pair are present") {
     vector<pair<string, string>> expected_modifies_s_pairs = {
         // Modifies(a, v)
-        make_pair("1","flag"),
+        make_pair("1", "flag"),
         // Modifies(re, v)
         make_pair("4", "x"),
         make_pair("5", "y"),
@@ -383,7 +384,8 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("25", "y")
     };
     for (pair<string, string> pp : expected_modifies_s_pairs) {
-      if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first, pp.second)) {
+      if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first,
+                                                             pp.second)) {
         FAIL();
       }
     }
@@ -410,7 +412,8 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("computeCentroid", "normSq"),
     };
     for (pair<string, string> pp : expected_modifies_p_pairs) {
-      if (!pkb_read_facade->HasModifiesProcedureRelationship(pp.first, pp.second)) {
+      if (!pkb_read_facade->HasModifiesProcedureRelationship(pp.first,
+                                                             pp.second)) {
         FAIL();
       }
     }
@@ -571,7 +574,7 @@ TEST_CASE("Check if uses are extracted correctly") {
     auto pairs = pkb_read_facade->GetUsesProcedureVariablePairs();
     for (pair<string, string> pp : expected_uses_p_pairs) {
       if (!pkb_read_facade->HasUsesProcedureRelationship(pp.first, pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
     }
     SUCCEED();

@@ -82,7 +82,7 @@ class StubPkbReadFacade: public PkbReadFacade {
   PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type) override;
   PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type) override;
   bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child) override;
-  bool IsAnyParentRelationshipPresent();
+  bool IsAnyParentRelationshipPresent() override;
 
   //!API for ParentStar
   PkbCommunicationTypes::PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) override;
@@ -96,4 +96,32 @@ class StubPkbReadFacade: public PkbReadFacade {
   //!API for pattern
   PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) override;
   PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expr) override;
+  PkbCommunicationTypes::PairConstraintSet GetIfConditionVariablePair() override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfWithConditionVariable(const std::string &var_name) override;
+  PkbCommunicationTypes::SingleConstraintSet GetIfThatHasConditionVariable() override;
+  PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair() override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name) override;
+  PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable() override;
+
+  //!API for Next
+  PkbCommunicationTypes::PairConstraintSet GetNextPairs(StatementType type_1, StatementType type_2);
+  PkbCommunicationTypes::SingleConstraintSet GetNext(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextBy(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextFirst(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextSecond(StatementType statement_type);
+  bool HasNextRelationship();
+  bool HasNext(std::string statement_number);
+  bool HasNextBy(std::string statement_number);
+  bool IsNext(std::string statement_num_1, std::string statement_num_2);
+
+  //!API for Next*
+  PkbCommunicationTypes::PairConstraintSet GetNextStarPairs(StatementType type_1, StatementType type_2);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStar(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarBy(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarFirst(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarSecond(StatementType statement_type);
+  bool HasNextStarRelationship();
+  bool HasNextStar(std::string statement_number);
+  bool HasNextStarBy(std::string statement_number);
+  bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
 };

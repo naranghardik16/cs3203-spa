@@ -1136,6 +1136,72 @@ TEST_CASE("Test pattern evaluator") {
     std::unordered_set<std::string> correct_set({"2"});
     REQUIRE(eval_result == correct_set);
   }
+
+  SECTION("pattern if(v, _, _)") {
+    std::string query = "if ifs; variable v;Select v pattern ifs(v, _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"x", "y"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern if(\"x\", _, _)") {
+    std::string query = "if ifs; Select ifs pattern ifs(\"x\", _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern if(_, _, _)") {
+    std::string query = "if ifs; Select ifs pattern ifs(_, _, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(v, _)") {
+    std::string query = "while w; variable v;Select v pattern w(v, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"x"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(\"x\", _)") {
+    std::string query = "while w; Select w pattern w(\"x\", _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"6"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("pattern while(_, _)") {
+    std::string query = "while w; Select w pattern w(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"6"});
+    REQUIRE(eval_result == correct_set);
+  }
 }
 
 TEST_CASE("Multi-clause tests") {
@@ -1265,5 +1331,280 @@ TEST_CASE("Test With Clause Evaluator") {
     std::unordered_set<std::string> correct_set({});
     REQUIRE(eval_result == correct_set);
   }
+}
 
+TEST_CASE("Test Nex Clause Evaluator") {
+  PKB pkb = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Next(_, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Next(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(1, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Next(1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(4, _), boolean check fails") {
+    std::string query = "assign a;Select a such that Next(4, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(_, 3), boolean check passes") {
+    std::string query = "assign a;Select a such that Next(_, 3)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(_, 6), boolean check fails") {
+    std::string query = "assign a;Select a such that Next(_, 6)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(1, 2), boolean check passes") {
+    std::string query = "assign a;Select a such that Next(1, 2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({{"2", "6", "7"}});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(1, 4), boolean check fails") {
+    std::string query = "assign a;Select a such that Next(1, 4)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(s1, s2)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next(s1, s2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1", "2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(s1, _)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next(s1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"1", "2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(_, s2)") {
+    std::string query = "stmt s1, s2;Select s2 such that Next(_, s2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "3"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(s1, 3)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next(s1, 3)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next(1, s1)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next(1, s1)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2"});
+    REQUIRE(eval_result == correct_set);
+  }
+}
+
+TEST_CASE("Test NextStar Clause Evaluator") {
+  PKB pkb = PKB();
+  std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Next*(_, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Next*(_, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(4, _), boolean check passes") {
+    std::string query = "assign a;Select a such that Next*(4, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(1, _), boolean check fails") {
+    std::string query = "assign a;Select a such that Next*(1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(_, 6), boolean check passes") {
+    std::string query = "assign a;Select a such that Next*(_, 6)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"2", "6", "7"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(_, 1), boolean check fails") {
+    std::string query = "assign a;Select a such that Next*(_, 1)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(4, 6), boolean check passes") {
+    std::string query = "assign a;Select a such that Next*(4, 6)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({{"2", "6", "7"}});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(1, 4), boolean check fails") {
+    std::string query = "assign a;Select a such that Next*(1, 4)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(s1, s2)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next*(s1, s2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4", "5"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(s1, _)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next*(s1, _)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(_, s2)") {
+    std::string query = "stmt s1, s2;Select s2 such that Next*(_, s2)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"6"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(s1, 6)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next*(s1, 6)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"4", "5"});
+    REQUIRE(eval_result == correct_set);
+  }
+
+  SECTION("Next*(4, s1)") {
+    std::string query = "stmt s1, s2;Select s1 such that Next*(4, s1)";
+    auto correct_output = qp->ParseQuery(query);
+
+    auto eval = std::make_shared<PqlEvaluator>(correct_output, pkb_read_facade);
+    auto eval_result = eval->Evaluate();
+
+    std::unordered_set<std::string> correct_set({"5", "6"});
+    REQUIRE(eval_result == correct_set);
+  }
 }
