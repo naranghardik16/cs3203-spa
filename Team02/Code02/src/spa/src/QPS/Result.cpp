@@ -69,7 +69,7 @@ InterceptResult Result::FindIntercept(ResultHeader &r_1, ResultHeader &r_2) {
 }
 
 ResultTable Result::HashJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept) {
-  std::multimap<std::vector<std::string>, std::vector<std::string>> map;
+  std::unordered_map<std::vector<std::string>, std::vector<std::vector<std::string>>, vector_string_hash> map;
   //build
   for (auto &row : other) {
     std::vector<std::string> key;
@@ -80,7 +80,7 @@ ResultTable Result::HashJoin(ResultTable &main, ResultTable &other, InterceptRes
     for (auto &p : intercept.second) {
       value.push_back(row[p.second]);
     }
-    map.insert({key, value});
+    map[key].push_back(value);
   }
 
   //probe
@@ -90,14 +90,16 @@ ResultTable Result::HashJoin(ResultTable &main, ResultTable &other, InterceptRes
     for (auto &p : intercept.first) {
       key.push_back(row[p.first]);
     }
-    auto range = map.equal_range(key);
 
-    for (auto i = range.first; i != range.second; ++i) {
-      ResultRow new_row(row);
-      new_row.insert(new_row.end(), i->second.begin(), i->second.end());
-      r.push_back(new_row);
-      if (intercept.second.empty()) {
-        break;
+    if (map.find(key) != map.end()) {
+      auto &values = map[key];
+      for (auto &value : values) {
+        ResultRow new_row(row);
+        new_row.insert(new_row.end(), value.begin(), value.end());
+        r.push_back(new_row);
+        if (intercept.second.empty()) {
+          break;
+        }
       }
     }
   }

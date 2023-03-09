@@ -3,8 +3,18 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
-#include <map>
+#include <unordered_map>
 #include "QPS/Util/QPSTypeDefs.h"
+
+struct vector_string_hash {
+  std::size_t operator()(const std::vector<std::string>& strings) const {
+    std::size_t seed = 0;
+    for (const auto& kStr : strings) {
+      seed ^= std::hash<std::string>()(kStr) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+    return seed;
+  }
+};
 
 /*!
  * Class to store the result of clause evaluation.
