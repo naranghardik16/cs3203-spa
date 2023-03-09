@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
+#include <map>
 #include "QPS/Util/QPSTypeDefs.h"
 
 /*!
@@ -24,7 +25,9 @@ class Result {
   std::unordered_set<std::string> ProjectResult(const SelectedSynonymTuple& synonym);
   std::unordered_set<std::string> ProjectResultForBoolean();
 
+ private:
   //!Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
-  static ResultTable FindMatch(ResultRow &row, ResultTable &table, InterceptResult &intercept);
+  static ResultTable HashJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept);
+  static ResultTable NestedLoopJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept);
 };
