@@ -1,3 +1,0 @@
-[submodule "Team02/Code02/src/spa_benchmarks/lib"]
-	path = Team02/Code02/src/spa_benchmarks/lib
-	url = https://github.com/google/benchmark.git
