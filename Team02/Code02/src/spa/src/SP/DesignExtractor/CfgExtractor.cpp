@@ -39,25 +39,59 @@ void CfgExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   auto else_cfg_node = make_shared<CfgNode>();
   auto end_cfg_node = make_shared<CfgNode>();
 
-  AddTransitionAndUpdate(if_cfg_node, true);
+  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+    AddTransitionAndUpdate(if_cfg_node, true);
+  } else {
+    if_cfg_node = cur_cfg_node_;
+  }
 
   AddCfgForStmt(stmt_number);
+
   auto then_stmts = if_statement->GetThenStatements();
   auto else_stmts = if_statement->GetElseStatements();
 
+  // Create the CFG nodes for then statements
   AddTransitionAndUpdate(then_cfg_node, true);
   ProcessStatements(then_stmts);
+
+  // Create dummy node for end of if else
   AddTransitionAndUpdate(end_cfg_node, true);
+
+  // Create the CFG nodes for else statements
   cur_cfg_node_ = if_cfg_node;
   AddTransitionAndUpdate(else_cfg_node, false);
   ProcessStatements(else_stmts);
+
+  // Add transition to the dummy node at the end
   AddTransitionAndUpdate(end_cfg_node, true);
 
 }
 
-void CfgExtractor::VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) {}
+void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
+  int stmt_number = while_statement->GetStatementNumber();
+  auto while_cfg_node = make_shared<CfgNode>();
+  auto loop_cfg_node = make_shared<CfgNode>();
+  auto end_cfg_node = make_shared<CfgNode>();
 
-void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {}
+  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+    AddTransitionAndUpdate(while_cfg_node, true);
+  } else {
+    while_cfg_node = cur_cfg_node_;
+  }
+  
+  AddCfgForStmt(stmt_number);
+  auto loop_stmts = while_statement->GetLoopStatements();
+
+  // add CfgNodes for statements
+  AddTransitionAndUpdate(loop_cfg_node, true);
+  ProcessStatements(loop_stmts);
+  // loop back to the while node;
+  AddTransitionAndUpdate(while_cfg_node, true);
+  // create an end node for while
+  AddTransitionAndUpdate(end_cfg_node, false);
+}
+
+void CfgExtractor::VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) {}
 
 void CfgExtractor::VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) {}
 
@@ -69,7 +103,13 @@ void CfgExtractor::VisitConstant(shared_ptr<Constant> constant) {}
 
 void CfgExtractor::ProcessStatements(const Procedure::StmtListContainer &statements) {
   for (auto const &stmt : statements) {
-    stmt->Accept(make_shared<CfgExtractor>(*this));
+
+    auto this_cfg_extractor = make_shared<CfgExtractor>(*this);
+    stmt->Accept(this_cfg_extractor);
+    cur_cfg_node_ = this_cfg_extractor->cur_cfg_node_;
+    cfg_ = this_cfg_extractor->cfg_;
+    cur_proc_name_ = this_cfg_extractor->cur_proc_name_;
+
   }
 }
 
@@ -78,7 +118,7 @@ void CfgExtractor::AddCfgForStmt(int stmt_number) {
   cfg_->AddStmtCfg(stmt_number, cur_cfg_node_);
 }
 
-void CfgExtractor::AddTransitionAndUpdate(shared_ptr<CfgNode> &new_node,
+void CfgExtractor::AddTransitionAndUpdate(shared_ptr<CfgNode> new_node,
                                           bool value) {
   cur_cfg_node_->AddTransition(value, new_node);
   new_node->AddParent(cur_cfg_node_);

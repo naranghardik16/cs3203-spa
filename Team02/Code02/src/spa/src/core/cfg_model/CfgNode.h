@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <string>
 
 #include "General/SpaException/SemanticErrorException.h"
 
@@ -16,6 +17,7 @@ class CfgNode {
   BoolToCfgNodeMap GetNodeTrans();
   std::vector<int> GetNodeStmts();
   CfgNodeContainer GetParentNodes();
+  std::string GetStringRepresentation();
 
  private:
   BoolToCfgNodeMap node_trans_;

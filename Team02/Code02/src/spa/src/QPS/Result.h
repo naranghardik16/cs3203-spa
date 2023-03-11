@@ -3,7 +3,18 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
+#include <unordered_map>
 #include "QPS/Util/QPSTypeDefs.h"
+
+struct vector_string_hash {
+  std::size_t operator()(const std::vector<std::string>& strings) const {
+    std::size_t seed = 0;
+    for (const auto& kStr : strings) {
+      seed ^= std::hash<std::string>()(kStr) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+    return seed;
+  }
+};
 
 /*!
  * Class to store the result of clause evaluation.
@@ -24,7 +35,9 @@ class Result {
   std::unordered_set<std::string> ProjectResult(const SelectedSynonymTuple& synonym);
   std::unordered_set<std::string> ProjectResultForBoolean();
 
+ private:
   //!Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
-  static ResultTable FindMatch(ResultRow &row, ResultTable &table, InterceptResult &intercept);
+  static ResultTable HashJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept);
+  static ResultTable NestedLoopJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept);
 };

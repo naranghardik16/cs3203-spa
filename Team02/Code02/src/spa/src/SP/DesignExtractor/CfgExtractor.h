@@ -35,7 +35,7 @@ class CfgExtractor : public ParserVisitor {
   void VisitExpression(shared_ptr<Expression> expression);
  private:
   void ProcessStatements(const Procedure::StmtListContainer &statements);
-  void AddTransitionAndUpdate(shared_ptr<CfgNode> &new_node, bool value);
+  void AddTransitionAndUpdate(shared_ptr<CfgNode> new_node, bool value);
   void AddCfgForStmt(int stmt_number);
   shared_ptr<Cfg> cfg_;
   string cur_proc_name_;

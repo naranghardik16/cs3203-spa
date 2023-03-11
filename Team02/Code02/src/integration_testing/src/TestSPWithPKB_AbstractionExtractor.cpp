@@ -209,7 +209,7 @@ TEST_CASE("Check if parent/* are extracted correctly") {
   }
 }
 
-TEST_CASE("Check if calls/* are extracted correctly") {
+TEST_CASE("Check if calls/* are extracted correctly (simple)") {
   string input = "procedure First {"
                  "read x;"
                  "read z;"
@@ -263,6 +263,106 @@ TEST_CASE("Check if calls/* are extracted correctly") {
         make_pair("First", "Second"),
         make_pair("Second", "Third"),
         make_pair("First", "Third")
+    };
+    for (pair<string, string> pp : expected_call_pairs) {
+      if (!pkb_read_facade->HasCallsStarRelation(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
+}
+
+TEST_CASE("Check if calls/* are extracted correctly (complex)") {
+  string input = "procedure First {\n"
+                 "    read x;\n"
+                 "    read z;\n"
+                 "    call Second; }\n"
+                 "\n"
+                 "procedure Second {\n"
+                 "    x = 0;\n"
+                 "    i = 5;\n"
+                 "    while (i!=0) {\n"
+                 "        x = x + 2*y;\n"
+                 "        call Third;\n"
+                 "        i = i - 1; }\n"
+                 "    if (x==1) then {\n"
+                 "        call Sixth;\n"
+                 "        x = x+1; }\n"
+                 "    else {\n"
+                 "        z = 1; }\n"
+                 "    z = z + x + i;\n"
+                 "    y = z + 2;\n"
+                 "    x = x * y + z; }\n"
+                 "\n"
+                 "procedure Third {\n"
+                 "    z = 5;\n"
+                 "    v = z;\n"
+                 "    if (v == z) then {\n"
+                 "        call Fifth;\n"
+                 "    } else {\n"
+                 "        call Fourth;\n"
+                 "    }\n"
+                 "    print v; }\n"
+                 "\n"
+                 "procedure Fourth {\n"
+                 "    read g;\n"
+                 "}\n"
+                 "\n"
+                 "procedure Fifth {\n"
+                 "    read l;\n"
+                 "    call Sixth;\n"
+                 "}\n"
+                 "\n"
+                 "procedure Sixth {\n"
+                 "    print g;\n"
+                 "}\n"
+                 "\n"
+                 "procedure Seventh {\n"
+                 "    print g;\n"
+                 "}";
+  std::istringstream is;
+  is.str(input);
+
+  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<SP> sp = make_shared<SP>();
+  sp->ProcessSIMPLE(is, pkb);
+
+  shared_ptr<PkbReadFacade>
+      pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+
+  SECTION("Check that all calls pair are present") {
+    vector<pair<string, string>> expected_call_pairs = {
+        make_pair("First", "Second"),
+        make_pair("Second", "Third"),
+        make_pair("Second", "Sixth"),
+        make_pair("Third", "Fifth"),
+        make_pair("Third", "Fourth"),
+        make_pair("Fifth", "Sixth"),
+    };
+    for (pair<string, string> pp : expected_call_pairs) {
+      if (!pkb_read_facade->HasCallsRelation(pp.first, pp.second)) {
+        FAIL();
+      }
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check that all calls* pair are present") {
+    vector<pair<string, string>> expected_call_pairs = {
+        make_pair("First", "Second"),
+        make_pair("Second", "Third"),
+        make_pair("Second", "Sixth"),
+        make_pair("Third", "Fifth"),
+        make_pair("Third", "Fourth"),
+        make_pair("Fifth", "Sixth"),
+        make_pair("First", "Third"),
+        make_pair("First", "Fourth"),
+        make_pair("First", "Fifth"),
+        make_pair("First", "Sixth"),
+        make_pair("Second", "Fourth"),
+        make_pair("Second", "Fifth"),
+        make_pair("Third", "Sixth")
     };
     for (pair<string, string> pp : expected_call_pairs) {
       if (!pkb_read_facade->HasCallsStarRelation(pp.first, pp.second)) {
