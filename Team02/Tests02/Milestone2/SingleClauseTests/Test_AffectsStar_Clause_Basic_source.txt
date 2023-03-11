@@ -29,6 +29,5 @@ procedure Fourth {
     read k; }
    else {
     k=1; }
-   }
    k=k+1;
 }
