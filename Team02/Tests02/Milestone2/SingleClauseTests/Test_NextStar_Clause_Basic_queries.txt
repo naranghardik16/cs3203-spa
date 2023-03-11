@@ -64,8 +64,8 @@ Select <ifs, w> such that Next*(ifs,w)
 1 2, 1 5, 4 5, 9 8
 5000 
 14 - (Valid Query) Next*(SYN, SYN) no result
-stmt s;
-Select s such that Next*(s,s)
+read r;
+Select r such that Next*(r,r)
 none
 5000
 15 - (Valid Query) Next*(SYN, INT)
