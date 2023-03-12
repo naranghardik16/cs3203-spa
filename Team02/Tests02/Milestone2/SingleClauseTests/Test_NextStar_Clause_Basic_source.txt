@@ -1,0 +1,22 @@
+procedure p {
+    if (1 == 2) then {
+        while (3 == 4) {
+        x = 1; } }
+    else {
+     if (x == 1) then {
+         while (y == x) {
+             z = 2; } }
+        else {
+       y = 3; } }
+} 
+
+procedure r {
+    while (z == 0) {
+        if (a == b) then {
+            z = 3;
+        }
+        else {
+            b = 3;
+        }
+    }
+}

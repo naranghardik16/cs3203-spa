@@ -607,7 +607,7 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name);
 
   /**
-   * Retrieves while statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   * Retrieves while statements that uses variables in its conditions. e.g. while(1=1) is not counted.
    *
    * @return A set of statement numbers.
    */
