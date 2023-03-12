@@ -124,10 +124,10 @@ class CallsStore {
 
  private:
   // Stores the Calls relation OneToMany mapping between two procedures.
-  OneToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_store_;
+  ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_store_;
   // Stores the Calls* relation ManyToMany mapping between two procedures.
   ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_star_store_;
-  // Stores the procedure name to call statment(s)
+  // Stores the procedure name to call statement(s)
   OneToManyStore<PkbTypes::PROCEDURE, PkbTypes::STATEMENT_NUMBER> procedure_to_call_store_;
 };
 
