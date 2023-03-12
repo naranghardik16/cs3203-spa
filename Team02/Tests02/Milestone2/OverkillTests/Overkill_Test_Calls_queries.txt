@@ -56,7 +56,7 @@ A,B
 12-comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(_,p)
-A,B,C,D,E,F
+B,C,D,E,F
 5000
 13-comment
 call c; procedure p,p1;assign a;variable v;
@@ -81,7 +81,7 @@ A,B,C,D,E,F
 17-comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(p1,p)
-A,B,C,D,E,F
+B,C,D,E,F
 5000
 18-comment
 call c; procedure p,p1;assign a;variable v;
@@ -102,7 +102,7 @@ none
 21-comment
 call c; procedure p,p1;assign a;variable v;
 Select BOOLEAN with 1 = "a"
-FALSE
+SemanticError
 5000
 22-comment
 call c; procedure p,p1;assign a;variable v;
@@ -112,7 +112,7 @@ TRUE
 23-comment
 call c; procedure p,p1;assign a;variable v;
 Select p with p.procName = c.procName
-A,B,C,D,E,F
+B,C,D,E,F
 5000
 24-comment
 call c; procedure p,p1;assign a;variable v;
@@ -137,12 +137,12 @@ FALSE
 33-comment
 call c; procedure p,p1;assign a;
 Select <p,p>
-A A,B B,C C,D D,E E,F F,G G,H H
+A A,B B,C C,D D,E E,F F
 5000
 34-comment
 call c; procedure p,p1;assign a;variable v;
 Select <p,p.procName> with c.procName = p.procName
-A A,B B,C C,D D,E E,F F
+B B,C C,D D,E E,F F
 5000
 35-comment
 call c; procedure p,p1;assign a;variable v;
