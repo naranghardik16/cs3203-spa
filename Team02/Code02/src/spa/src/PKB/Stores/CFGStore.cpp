@@ -19,4 +19,9 @@ std::shared_ptr<CfgNode> CFGStore::getCfgNodeFromStatementNumber(PkbTypes::STATE
   return this->cfg_->GetStmtToCfg()[std::stoi(statement_number)];
 }
 
+std::shared_ptr<Cfg> CFGStore::getCfg() const {
+  return cfg_;
+}
+
+
 

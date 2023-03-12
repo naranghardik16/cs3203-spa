@@ -47,6 +47,13 @@ class CFGStore {
    */
   std::shared_ptr<CfgNode> getCfgNodeFromStatementNumber(PkbTypes::STATEMENT_NUMBER statement_number);
 
+  /**
+   * Returns the CFG stored in this CFGStore.
+   *
+   * @return The CFG stored in this CFGStore.
+   */
+  std::shared_ptr<Cfg> getCfg() const;
+
  private:
   std::shared_ptr<Cfg> cfg_;
 };
