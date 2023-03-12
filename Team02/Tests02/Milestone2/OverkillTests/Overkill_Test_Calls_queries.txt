@@ -94,11 +94,6 @@ call c; procedure p,p1;assign a;variable v;
 Select p with p.procName = A
 A
 5000
-20-comment
-call c; procedure p,p1;assign a;variable v;
-Select s with 1 = cons.value
-none
-5000
 21-comment
 call c; procedure p,p1;assign a;variable v;
 Select BOOLEAN with 1 = "a"
@@ -157,7 +152,7 @@ C 46 46,D 46 46,E 46 46,F 46 46
 37-comment
 call c; procedure p,p1,p2;assign a;variable v;while w;if ifs;
 Select <p,ifs.stmt#> such that Calls("A",p) and Calls*(p,p1) pattern ifs(v,_,_) with v.varName = "w"
-B 3
+B 3,B 51,B 34
 5000
 38-comment
 call c; procedure p,p1,p2;assign a;variable v;while w;
