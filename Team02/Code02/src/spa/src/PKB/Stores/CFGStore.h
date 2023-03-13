@@ -54,6 +54,20 @@ class CFGStore {
    */
   [[nodiscard]] std::shared_ptr<Cfg> getCfg() const;
 
+  /**
+   * Retrieves the map of procedure name to its respective cfg node.
+   *
+   * @return An unordered map that contains procedure name and cfg nodes as keys and values respectively.
+   */
+  std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> getProcedureToCfgRootNodeMap();
+
+  /**
+   * Retrieves the map of statement number to its respective cfg node.
+   *
+   * @return An unordered map that contains statement number and cfg nodes as keys and values respectively.
+   */
+  std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> getStatementNumberToCfgRootNodeMap();
+
  private:
   std::shared_ptr<Cfg> cfg_;
 };

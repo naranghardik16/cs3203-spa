@@ -11,6 +11,13 @@ class NextStore {
 
   ~NextStore();
 
+  void setProcedureToCfgRootNodeMap(std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> ptonode);
+
+  void setStatementNumberToCfgRootNodeMap(std::unordered_map<PkbTypes::STATEMENT_NUMBER,
+                                          std::shared_ptr<CfgNode>> stonode);
+
+  void extractNextRelations();
+
   bool hasNextRelation(PkbTypes::STATEMENT_NUMBER statement_number,
                        PkbTypes::STATEMENT_NUMBER next_statement_number, std::shared_ptr<CFGStore> cfg_store);
 
@@ -27,6 +34,8 @@ class NextStore {
   retrieveAllNextStarPairs();
 
  private:
-  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> next_store_;
+  ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> next_store_;
+  std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> statement_number_to_cfg_node_map_;
+  std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> procedure_name_to_cfg_node_map_;
 };
 

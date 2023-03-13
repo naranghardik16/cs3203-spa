@@ -8,6 +8,7 @@
 #include "PKB/Stores/ExpressionStore.h"
 #include "PKB/Stores/FollowsStore.h"
 #include "PKB/Stores/ModifiesStore.h"
+#include "PKB/Stores/NextStore.h"
 #include "PKB/Stores/ParentStore.h"
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
@@ -79,6 +80,11 @@ class PKB {
    * CFG Store that stores the control flow graph of the SIMPLE source.
    */
   CFGStore *cfg_store_;
+
+  /**
+   * Next Store that stores the next relation between SIMPLE's entities.
+   */
+  NextStore *next_store_;
 
   friend class PkbWriteFacade;
   friend class PkbReadFacade;
