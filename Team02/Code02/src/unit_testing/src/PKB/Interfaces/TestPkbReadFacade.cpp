@@ -286,6 +286,123 @@ TEST_CASE("Testing PkbReadFacade") {
 
 
   }
+
+  SECTION("Test Next API - Complex CFG") {
+    PKB pkb_ = PKB();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+
+    std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+    node1->AddStmt(1);
+    cfg->AddStmtCfg(1, node1);
+    node1->AddStmt(2);
+    cfg->AddStmtCfg(2, node1);
+    node1->AddStmt(3);
+    cfg->AddStmtCfg(3, node1);
+
+    std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+    node2->AddStmt(4);
+    cfg->AddStmtCfg(4, node2);
+
+    std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+    node3->AddStmt(5);
+    cfg->AddStmtCfg(5, node3);
+
+    std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+    node4->AddStmt(6);
+    cfg->AddStmtCfg(6, node4);
+
+    std::shared_ptr<CfgNode> node5 = std::make_shared<CfgNode>();
+    node5->AddStmt(7);
+    cfg->AddStmtCfg(7, node5);
+
+    std::shared_ptr<CfgNode> node6 = std::make_shared<CfgNode>();
+    node6->AddStmt(8);
+    cfg->AddStmtCfg(8, node6);
+
+    std::shared_ptr<CfgNode> node7 = std::make_shared<CfgNode>();
+    node7->AddStmt(9);
+    cfg->AddStmtCfg(9, node7);
+
+    pkb_write_facade_->AddStatementOfAType("1", READ);
+    pkb_write_facade_->AddStatementOfAType("2", READ);
+    pkb_write_facade_->AddStatementOfAType("3", READ);
+    pkb_write_facade_->AddStatementOfAType("4", READ);
+    pkb_write_facade_->AddStatementOfAType("5", READ);
+    pkb_write_facade_->AddStatementOfAType("6", READ);
+    pkb_write_facade_->AddStatementOfAType("7", READ);
+    pkb_write_facade_->AddStatementOfAType("8", READ);
+    pkb_write_facade_->AddStatementOfAType("9", READ);
+
+    node1->AddTransition(true, node2);
+    node2->AddTransition(true, node3);
+    node3->AddTransition(true, node2);
+    node2->AddTransition(false, node4);
+    node4->AddTransition(false, node5);
+    node4->AddTransition(true, node6);
+    node6->AddTransition(true, node7);
+
+    cfg->AddProcCfg("main", node1);
+
+    pkb_write_facade_->AddCfg(cfg);
+
+    REQUIRE(pkb_read_facade_->IsNext("1", "2") == true);
+    REQUIRE(pkb_read_facade_->IsNext("2", "3") == true);
+    REQUIRE(pkb_read_facade_->IsNext("3", "4") == true);
+    REQUIRE(pkb_read_facade_->IsNext("4", "5") == true);
+    REQUIRE(pkb_read_facade_->IsNext("4", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNext("5", "4") == true);
+    REQUIRE(pkb_read_facade_->IsNext("6", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNext("6", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNext("8", "9") == true);
+
+
+    REQUIRE(pkb_read_facade_->HasNext("1") == true);
+    REQUIRE(pkb_read_facade_->HasNext("2") == true);
+    REQUIRE(pkb_read_facade_->HasNext("3") == true);
+    REQUIRE(pkb_read_facade_->HasNext("5") == true);
+    REQUIRE(pkb_read_facade_->HasNext("4") == true);
+    REQUIRE(pkb_read_facade_->HasNext("6") == true);
+    REQUIRE(pkb_read_facade_->HasNext("8") == true);
+
+    REQUIRE(pkb_read_facade_->GetNext("1", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("2")});
+    REQUIRE(pkb_read_facade_->GetNext("2", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("3")});
+    REQUIRE(pkb_read_facade_->GetNext("3", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("4")});
+    // this should give true for 4 -> 5,6 but giving false
+    // this should also give true for 6 -> 7,8 but giving false
+    REQUIRE(pkb_read_facade_->GetNext("8", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("9")});
+
+    REQUIRE(pkb_read_facade_->GetNextBy("2", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("1")});
+    REQUIRE(pkb_read_facade_->GetNextBy("3", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("2")});
+    REQUIRE(pkb_read_facade_->GetNextBy("9", READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>{("8")});
+
+    REQUIRE(pkb_read_facade_->GetNextFirst(READ) == std::unordered_set
+        <PkbTypes::STATEMENT_NUMBER>({"1","2","3","5","4","6","8"}));
+    REQUIRE(pkb_read_facade_->GetNextSecond(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+      "2","3","4","5","6","7","8","9"
+    }));
+
+    REQUIRE(pkb_read_facade_->GetNextPairs(READ, READ) == std::unordered_set<std::pair
+    <PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+      std::make_pair("1","2"), std::make_pair("2","3"),
+      std::make_pair("3","4"), std::make_pair("4","5"),
+      std::make_pair("4","6"), std::make_pair("5","4"),
+      std::make_pair("6","7"), std::make_pair("6","8"),
+      std::make_pair("8","9")
+      }));
+
+  }
   SECTION("Test Next API - With Dummy Node") {
     PKB pkb_ = PKB();
     PkbReadFacade *pkb_read_facade_;
@@ -409,6 +526,7 @@ TEST_CASE("Testing PkbReadFacade") {
       std::make_pair("8","9"), std::make_pair("9","10"),
       }));
   }
+
   SECTION("Test Next API - Basic CFG") {
     PKB pkb_ = PKB();
     PkbReadFacade *pkb_read_facade_;
