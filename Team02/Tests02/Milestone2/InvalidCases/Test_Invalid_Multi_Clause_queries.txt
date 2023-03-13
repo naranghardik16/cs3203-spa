@@ -18,24 +18,19 @@ assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and Parent*(1, a)
 SyntaxError
 5000
-4 - pattern + and with
+5 - pattern + and with
 assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and a.stmt#=6
 SyntaxError
 5000
-5 - such that + and pattern
+6 - such that + and pattern
 assign a; while w;
 Select a such that Parent* (w, a) and a ("x", _)
 SyntaxError
 5000
-6 - such that + and with
+7 - such that + and with
 assign a; while w;
 Select a such that Parent* (w, a) and a.stmt#=6
-SyntaxError
-5000
-7 - with + and such that
-assign a; while w;
-Select a with a.stmt#=6 and Parent* (w, a)
 SyntaxError
 5000
 8 - with + and pattern
@@ -76,5 +71,190 @@ SyntaxError
 15 - extra clause markers - with
 assign a; while w;
 Select a such that with Parent* (w, a) and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+16 - misspelled clause indicators -- such that
+assign a; while w;
+Select a such tha Parent(w, a) and Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+17 - misspelled clause indicators -- pattern
+assign a; while w;
+Select a patter a(_,_) such that Modifies (a, "x") and Parent*(1, a)
+SyntaxError
+5000
+18 - misspelled clause indicators -- with
+assign a; while w;
+Select a pattern a(_,_) such that Modifies (a, "x") and Parent*(1, a) ith 5=5
+SyntaxError
+5000
+19 - misspelled clause indicators -- and
+assign a; while w;
+Select a pattern a(_,_) such that Modifies (a, "x") an Parent*(1, a) with 5=5
+SyntaxError
+5000
+20 - misspelling in such that -- Modifie
+assign a; while w;
+Select a pattern a(_,_) such that Modifie (a, "x") and Parent*(1, a) with 5=5
+SyntaxError
+5000
+21 - extra comma in clause -- pattern
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(_,,_) with 5=5
+SyntaxError
+5000
+22 - extra bracket in clause
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a)) pattern a(_,_) with 5=5
+SyntaxError
+5000
+23 - missing opening bracket in pattern clause
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a) pattern a_,_) with 5=5
+SyntaxError
+5000
+24 - missing opening bracket in clause
+assign a; while w;
+Select a such that Modifiesa, "x") and Parent*(1, a) pattern a(_,_) with 5=5
+SyntaxError
+5000
+25 - missing comma in clause (__)
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(__) with 5=5
+SyntaxError
+5000
+26 - missing comma in clause
+assign a; while w;
+Select a such that Modifies(a "x") and Parent*(1, a) pattern a(_,_) with 5=5
+SyntaxError
+5000
+27 - misspelling in with -- stmt#
+assign a; while w;
+Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with a.stmt = 5
+SyntaxError
+5000
+28 - misspelling in with -- varName
+assign a; while w; variable v;
+Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with v.varNam = "x"
+SyntaxError
+5000
+29 - misspelling in with -- procName
+assign a; while w; procedure p;
+Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with "x"=p.proName
+SyntaxError
+5000
+30 - extra = in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"==p.procName such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+31 - extra ) in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"=p.procName) such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+32 - extra ( in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with ("x"=p.procName such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+33 - no = in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x" p.procName such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+34 - no = in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"p.procName such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+35 - extra " in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x""=p.procName such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+36 - compare diff type in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"=a.stmt# such that Modifies(a, "x") and Parent*(1, a)
+SemanticError
+5000
+37 - wrong attr-ent to syn
+assign a; while w; procedure p;
+Select a pattern a(_,_) with 5=p.stmt# such that Modifies(a, "x") and Parent*(1, a)
+SemanticError
+5000
+38 - wrong attr-ent to syn
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"=a.varName such that Modifies(a, "x") and Parent*(1, a)
+SemanticError
+5000
+39 - wrong attr-ent to syn
+assign a; while w; procedure p;
+Select a pattern a(_,_) with "x"=a.procName such that Modifies(a, "x") and Parent*(1, a)
+SemanticError
+5000
+40 - no . in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with astmt# = 5 such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+41 - extra . in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with 5=a..stmt# such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+42 - extra character in with
+assign a; while w; procedure p;
+Select a pattern a(_,_) with 5a=a.stmt# such that Modifies(a, "x") and Parent*(1, a)
+SyntaxError
+5000
+43 - missing closing bracket in clause
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a pattern a(_,_) with 5=5
+SyntaxError
+5000
+44 - missing closing bracket in clause
+assign a; while w;
+Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(_,_ with 5=5
+SyntaxError
+5000
+45 - with + and such that
+assign a; while w;
+Select a with a.stmt#=6 and Parent* (w, a)
+SyntaxError
+5000
+46 - extra arguments
+assign a; while w;
+Select a with a.stmt#=6 such that Parent* (w,a,a)
+SyntaxError
+5000
+47 - extra characters in arguments
+assign a; while w;
+Select a with a.stmt#=6 such that Parent* (w,a,)
+SyntaxError
+5000
+48 - extra characters in arguments
+assign a; while w;
+Select a with a.stmt#=6 such that Parent* (,w,a)
+SyntaxError
+5000
+49 - missing clause indicators -- such that
+assign a; while w;
+Select a Modifies(a, "x") and Parent*(1, a) pattern a(_,_) with 5=5
+SyntaxError
+5000
+50 - missing clause indicators -- pattern
+assign a; while w;
+Select a such that Modifies(a, "x") such that Parent*(1, a) a(_,_) with 5=5
+SyntaxError
+5000
+51 - missing clause indicators -- with
+assign a; while w;
+Select a such that Modifies(a, "x") 5=5 such that Parent*(1, a) pattern a(_,_)
+SyntaxError
+5000
+52 - missing clause indicators -- and
+assign a; while w;
+Select a such that Modifies(a, "x") with 5=5 5=6 pattern a(_,_)
 SyntaxError
 5000
