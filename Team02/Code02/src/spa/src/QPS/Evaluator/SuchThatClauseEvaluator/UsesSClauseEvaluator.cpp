@@ -22,6 +22,7 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_synonym = declaration_map.count(first_arg_);
+  bool is_first_arg_a_read_synonym = QueryUtil::IsReadSynonym(declaration_map,first_arg_);
 
   bool is_second_arg_synonym = declaration_map.count(second_arg_);
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
@@ -37,6 +38,13 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
+
+
+  //! Special case where there will be no result is if first_arg_ is read synonym
+  if (is_first_arg_a_read_synonym) {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
     //Example query: Uses(s, v)
