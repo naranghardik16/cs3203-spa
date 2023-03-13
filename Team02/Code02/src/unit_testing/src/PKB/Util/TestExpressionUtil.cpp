@@ -194,5 +194,45 @@ TEST_CASE("Testcases for Expression Util") {
 
     REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [&& true false] true]");
   }
+
+  SECTION("Flattening Singleton (One Constant)") {
+    std::shared_ptr<Expression> root;
+    root = std::make_shared<Constant>("7");
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "7");
+  }
+
+  SECTION("Flattening Singleton (One Variable)") {
+    std::shared_ptr<Expression> root;
+    root = std::make_shared<Variable>("a");
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "a");
+  }
+
+  SECTION("Flatten Expression with Nested Logical and Relation Operations and Mixed Constants and Variables") {
+    auto a = std::make_shared<Variable>("a");
+    auto b = std::make_shared<Variable>("b");
+    auto c = std::make_shared<Variable>("c");
+    auto d = std::make_shared<Variable>("d");
+    auto e = std::make_shared<Variable>("e");
+
+    auto left_args1 = std::make_pair(a, std::make_shared<Constant>("10"));
+    auto left1 = std::make_shared<RelationalOperation>(">", left_args1);
+    auto right_args1 = std::make_pair(b, std::make_shared<Constant>("20"));
+    auto right1 = std::make_shared<RelationalOperation>("<=", right_args1);
+    auto mid1 = std::make_shared<ConditionalOperation>("||", std::make_pair(left1, right1));
+
+    auto left_args2 = std::make_pair(c, std::make_shared<Constant>("5"));
+    auto left2 = std::make_shared<RelationalOperation>(">=", left_args2);
+    auto right_args2 = std::make_pair(d, std::make_shared<Constant>("15"));
+    auto right2 = std::make_shared<RelationalOperation>("<", right_args2);
+    auto mid_left2 = std::make_shared<ConditionalOperation>("&&", std::make_pair(left2, right2));
+
+    auto mid_right = std::make_shared<Variable>("e");
+    auto mid = std::make_shared<ConditionalOperation>("&&", std::make_pair(mid_left2, mid_right));
+    auto root = std::make_shared<ConditionalOperation>("||", std::make_pair(mid, mid1));
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [&& [&& [>= c 5] [< d 15]] e] [|| [> a 10] [<= b 20]]]");
+  }
 }
 
