@@ -23,5 +23,12 @@ std::shared_ptr<Cfg> CFGStore::getCfg() const {
   return cfg_;
 }
 
+int CFGStore::getCfgCount() const {
+  if (!cfg_) {
+    return 0;
+  }
+  return 1;
+}
+
 
 

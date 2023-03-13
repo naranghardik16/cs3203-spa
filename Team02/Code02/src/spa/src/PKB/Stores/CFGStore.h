@@ -54,6 +54,14 @@ class CFGStore {
    */
   std::shared_ptr<Cfg> getCfg() const;
 
+
+  /**
+   * Returns the number of CFGs stored in the CFGStore
+   *
+   * @return The number of CFGs stored in the CFGStore
+   */
+  int getCfgCount() const;
+
  private:
   std::shared_ptr<Cfg> cfg_;
 };
