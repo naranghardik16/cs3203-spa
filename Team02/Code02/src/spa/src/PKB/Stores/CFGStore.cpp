@@ -26,7 +26,10 @@ std::shared_ptr<Cfg> CFGStore::getCfg() const {
 
 std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> CFGStore::getProcedureToCfgRootNodeMap() {
   std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> temp;
-  temp.insert(this->cfg_->GetCfgRootNodes().begin(), this->cfg_->GetCfgRootNodes().end());
+  auto proc_node_map = this->cfg_->GetCfgRootNodes();
+  for (const auto& [key, value] : proc_node_map) {
+    temp.insert(std::pair<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>>(key, value));
+  }
   return temp;
 }
 
