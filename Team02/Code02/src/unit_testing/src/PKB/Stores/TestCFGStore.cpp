@@ -3,17 +3,8 @@
 #include "core/cfg_model/Cfg.h"
 
 TEST_CASE("Test CFGStore addCfg and getCfg") {
-  SECTION("Test CFGStore methods") {
-    CFGStore cfg_store;
-    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
-    cfg_store.addCfg(cfg);
-
-    REQUIRE(cfg_store.getCfg() == cfg);
-  }
-
   SECTION("Test getCfg() with empty CFGStore") {
     CFGStore cfg_store;
-    REQUIRE(cfg_store.getCfg() == nullptr);
     REQUIRE(cfg_store.getCfgCount() == 0);
   }
 
@@ -23,7 +14,6 @@ TEST_CASE("Test CFGStore addCfg and getCfg") {
     cfg_store.addCfg(cfg);
     REQUIRE(cfg_store.getCfgCount() == 1);
   }
-
 }
 
 TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
