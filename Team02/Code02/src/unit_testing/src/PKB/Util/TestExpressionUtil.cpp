@@ -116,7 +116,34 @@ TEST_CASE("Testcases for Expression Util") {
     REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({ "11" }));
 
+  }
 
+  SECTION("Flatten Complex Arithmetic Expression with Multiple Levels (Both Variables and Constants)") {
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> ll1;
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> ll2;
+
+    ll1.first = std::make_shared<Variable>("x");
+    ll1.second = std::make_shared<Constant>("1");
+    ll2.first = std::make_shared<Variable>("y");
+    ll2.second = std::make_shared<Variable>("z");
+
+    auto l1 = std::make_shared<ArithmeticOperation>("+", ll1);
+    auto l2 = std::make_shared<ArithmeticOperation>("-", ll2);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> left_subtree;
+
+    left_subtree.first = l1;
+    left_subtree.second = l2;
+
+    auto f =  std::make_shared<ArithmeticOperation>("*", left_subtree);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> root_args;
+    root_args.first = f;
+    root_args.second = std::make_shared<Constant>("5");
+
+    auto root = std::make_shared<ArithmeticOperation>("/", root_args);
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[/ [* [+ x 1] [- y z]] 5]");
   }
 }
 
