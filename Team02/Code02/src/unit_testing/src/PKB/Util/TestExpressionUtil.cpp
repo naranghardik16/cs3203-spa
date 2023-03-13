@@ -102,5 +102,21 @@ TEST_CASE("Testcases for Expression Util") {
     REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) == std::unordered_set<std::string>({ "x", "y", "z" }));
     REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) == std::unordered_set<std::string>({ "1", "5" }));
   }
+
+  SECTION("Basic Arithmetic Expression (One Constant And One Variable) Flattening") {
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> arguments;
+    arguments.first = std::make_shared<Constant>("11");
+    arguments.second = std::make_shared<Variable>("x");
+
+    auto root = std::make_shared<ArithmeticOperation>("+", arguments);
+
+    REQUIRE(ExpressionUtil::flatten(root) == "x + 11");
+    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
+                == std::unordered_set<std::string>({ "x" }));
+    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
+                == std::unordered_set<std::string>({ "11" }));
+
+
+  }
 }
 

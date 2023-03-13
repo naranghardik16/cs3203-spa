@@ -9,7 +9,8 @@
 
 class ExpressionUtil {
  public:
-  static std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesFromExpression(std::shared_ptr<Expression> expression) {
+  static std::unordered_set<PkbTypes::VARIABLE>
+      retrieveAllVariablesFromExpression(std::shared_ptr<Expression> expression) {
     std::unordered_set<PkbTypes::VARIABLE> result;
     std::stack<std::shared_ptr<Expression>> s;
 
@@ -36,7 +37,8 @@ class ExpressionUtil {
     return result;
   }
 
-  static std::unordered_set<PkbTypes::CONSTANT> retrieveAllConstantsFromExpression(std::shared_ptr<Expression> expression) {
+  static std::unordered_set<PkbTypes::CONSTANT>
+      retrieveAllConstantsFromExpression(std::shared_ptr<Expression> expression) {
     std::unordered_set<PkbTypes::CONSTANT> result;
     std::stack<std::shared_ptr<Expression>> s;
 
@@ -63,9 +65,18 @@ class ExpressionUtil {
     return result;
   }
 
-//  static std::string flatten(Expression expression) {
-//    return "";
-//  }
+  static std::string flatten(std::shared_ptr<Expression> expression) {
+    if (!expression) return "";
+
+    std::string ret;
+    ret += expression->GetName();
+    auto children = expression->GetArguments();
+
+    ret += flatten(children->first);
+    ret += flatten(children->second);
+
+    return "[" + ret + "]";
+  }
 
 };
 
