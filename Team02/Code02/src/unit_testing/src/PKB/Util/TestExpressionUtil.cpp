@@ -110,7 +110,7 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    REQUIRE(ExpressionUtil::flatten(root) == "x + 11");
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[+ 11 x]");
     REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
                 == std::unordered_set<std::string>({ "x" }));
     REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)

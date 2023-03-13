@@ -65,15 +65,17 @@ class ExpressionUtil {
     return result;
   }
 
-  static std::string flatten(std::shared_ptr<Expression> expression) {
+  static std::string prefixFlatten(std::shared_ptr<Expression> expression) {
     if (!expression) return "";
 
     std::string ret;
     ret += expression->GetName();
     auto children = expression->GetArguments();
 
-    ret += flatten(children->first);
-    ret += flatten(children->second);
+    if (!children) return ret;
+
+    ret += " " + prefixFlatten(children->first);
+    ret += " " + prefixFlatten(children->second);
 
     return "[" + ret + "]";
   }
