@@ -26,7 +26,7 @@ class NextStore {
   retrieveAllNextStarPairs();
 
  private:
-
+  
 
 };
 
