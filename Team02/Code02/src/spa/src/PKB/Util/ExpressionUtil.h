@@ -9,6 +9,12 @@
 
 class ExpressionUtil {
  public:
+  /**
+   * Retrieves the set of variables that are a part of the given expression.
+   *
+   * @param expression - The expression whose variables are to be extracted.
+   * @return An unordered set of variables.
+   */
   static std::unordered_set<PkbTypes::VARIABLE>
       retrieveAllVariablesFromExpression(std::shared_ptr<Expression> expression) {
     std::unordered_set<PkbTypes::VARIABLE> result;
@@ -37,6 +43,12 @@ class ExpressionUtil {
     return result;
   }
 
+  /**
+   * Retrieves the set of constants that are a part of the given expression.
+   *
+   * @param expression - The expression whose constants are to be extracted.
+   * @return An unordered set of constants.
+   */
   static std::unordered_set<PkbTypes::CONSTANT>
       retrieveAllConstantsFromExpression(std::shared_ptr<Expression> expression) {
     std::unordered_set<PkbTypes::CONSTANT> result;
@@ -65,6 +77,12 @@ class ExpressionUtil {
     return result;
   }
 
+  /**
+   * Flattens the given expression into a string.
+   *
+   * @param expression - The expression to be flattened.
+   * @return The string representing the flattened expression tree.
+   */
   static std::string prefixFlatten(std::shared_ptr<Expression> expression) {
     if (!expression) return "";
 
