@@ -2,6 +2,7 @@
 
 #include "PKB/Stores/AssignmentStore.h"
 #include "PKB/Stores/CallsStore.h"
+#include "PKB/Stores/CFGStore.h"
 #include "PKB/Stores/ControlFlowStore.h"
 #include "PKB/Stores/EntityStore.h"
 #include "PKB/Stores/ExpressionStore.h"
@@ -73,6 +74,11 @@ class PKB {
    * Uses store that stores multi-variate calls relation between SIMPLE's entities.
    */
   CallsStore *calls_store_;
+
+  /**
+   * CFG Store that stores the control flow graph of the SIMPLE source.
+   */
+  CFGStore *cfg_store_;
 
   friend class PkbWriteFacade;
   friend class PkbReadFacade;

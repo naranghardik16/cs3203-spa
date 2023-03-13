@@ -141,3 +141,7 @@ void PkbWriteFacade::AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER 
   this->pkb.calls_store_->addCallStatementToProcedureName(statement_number, procedure);
 }
 
+void PkbWriteFacade::AddCfg(std::shared_ptr<Cfg>& cfg) {
+  this->pkb.cfg_store_->addCfg(cfg);
+}
+

@@ -8,7 +8,8 @@ NextStore::NextStore() = default;
 NextStore::~NextStore() = default;
 
 bool NextStore::hasNextRelation(PkbTypes::STATEMENT_NUMBER statement_number,
-                                PkbTypes::STATEMENT_NUMBER next_statement_number, std::shared_ptr<CFGStore> cfg_store) {
+                                PkbTypes::STATEMENT_NUMBER next_statement_number) {
+
 //  std::shared_ptr<CfgNode> node_of_statement = cfg_store->getCfgNodeFromStatementNumber(statement_number);
 //  if (!node_of_statement) return false;
 //

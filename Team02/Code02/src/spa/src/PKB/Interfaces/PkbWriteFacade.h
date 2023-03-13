@@ -3,7 +3,7 @@
 #include "General/StatementTypeEnum.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
-//#include "core/model/Expression.h"
+#include "core/cfg_model/Cfg.h"
 
 /**
  * Facade implementation consisting of write methods
@@ -141,11 +141,18 @@ class PkbWriteFacade {
    void AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
 
    /**
-    * Add calls statement to procedure name mapping to PKB.
+    * Adds calls statement to procedure name mapping to PKB.
     *
     * @param statement_number - The statement number associated with the call statement.
     * @param procedure - The procedure being called as a part of that statement.
     */
    void AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::PROCEDURE procedure);
+
+   /**
+    * Adds control flow graph to PKB.
+    *
+    * @param cfg - The control flow graph to be added.
+    */
+   void AddCfg(std::shared_ptr<Cfg>& cfg);
 };
 

@@ -29,7 +29,7 @@ class CFGStore {
    *
    * @param cfg - The CFG to be added.
    */
-  void addCfg(std::shared_ptr<Cfg> cfg);
+  void addCfg(std::shared_ptr<Cfg>& cfg);
 
   /**
    * Retrieves the CFG given a procedure.

@@ -3,6 +3,7 @@
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Util/PairHasherUtil.h"
 #include "CFGStore.h"
+#include "PKB/AbstractDataModels/OneToManyStore.h"
 
 class NextStore {
  public:
@@ -26,7 +27,6 @@ class NextStore {
   retrieveAllNextStarPairs();
 
  private:
-  
-
+  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> next_store_;
 };
 

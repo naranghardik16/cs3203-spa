@@ -7,7 +7,7 @@ CFGStore::CFGStore() = default;
 
 CFGStore::~CFGStore() = default;
 
-void CFGStore::addCfg(std::shared_ptr<Cfg> cfg) {
+void CFGStore::addCfg(std::shared_ptr<Cfg>& cfg) {
   this->cfg_ = std::move(cfg);
 }
 
