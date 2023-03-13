@@ -185,5 +185,14 @@ TEST_CASE("Testcases for Expression Util") {
 
     REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [> 1 2] [<= 3 4]]");
   }
+
+  SECTION("Flatten Expression with Nested Logical Operations and Constants") {
+    auto left = std::make_shared<Constant>("true");
+    auto right = std::make_shared<Constant>("false");
+    auto root = std::make_shared<ConditionalOperation>("&&", std::make_pair(left, right));
+    root = std::make_shared<ConditionalOperation>("||", std::make_pair(root, left));
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [&& true false] true]");
+  }
 }
 
