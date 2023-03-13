@@ -22,36 +22,43 @@ void NextStore::setStatementNumberToCfgRootNodeMap(std::unordered_map<PkbTypes::
 void NextStore::extractNextRelations() {
   for (const auto& p: this->procedure_name_to_cfg_node_map_) {
     std::unordered_set<std::string> visited;
-    std::stack<std::shared_ptr<CfgNode>> s;
+    std::stack<std::pair<int, std::shared_ptr<CfgNode>>> s;
 
-    s.push(p.second);
-    int prev_last = -1;
+    s.push(std::make_pair(-1, p.second));
 
     while (!s.empty()) {
-      std::shared_ptr<CfgNode> current = s.top();
+      auto ps = s.top();
+      int prev_stmt = ps.first;
+      auto current = ps.second;
       s.pop();
-      visited.insert(current->GetStringRepresentation());
+
 
       std::vector<int> statements = current->GetNodeStmts();
-      if (statements.empty()) continue;
+      if (statements.empty()) {
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        continue;
+      }
 
-      if (prev_last != -1) this->next_store_.insert(std::to_string(prev_last), std::to_string(statements[0]));
+      if (prev_stmt != -1) this->next_store_.insert(std::to_string(prev_stmt), std::to_string(statements[0]));
 
       for (int i = 0; i < statements.size() - 1; ++i) {
         this->next_store_.insert(std::to_string(statements[i]),
                                  std::to_string(statements[i + 1]));
       }
 
-      prev_last = statements[statements.size() - 1];
+      prev_stmt = statements[statements.size() - 1];
 
-      if (!(visited.count(current->GetNodeTrans()[true]->GetStringRepresentation()) > 0)) {
-        s.push(current->GetNodeTrans()[true]);
+      if (visited.count(current->GetStringRepresentation()) > 0) continue;
+
+      if (current->GetNodeTrans().count(true) > 0) {
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
       }
 
-      if (current->GetNodeTrans().count(false) > 0 &&
-          !(visited.count(current->GetNodeTrans()[false]->GetStringRepresentation()) > 0)) {
-        s.push(current->GetNodeTrans()[false]);
+      if (current->GetNodeTrans().count(false) > 0) {
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
       }
+
+      visited.insert(current->GetStringRepresentation());
     }
   }
 }
