@@ -1,0 +1,125 @@
+1 -
+procedure p, q;
+Select p such that Calls(_, _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+2 -
+procedure p, q;
+Select p such that Calls(_, p)
+ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+3 -
+procedure p, q;
+Select p such that Calls(_, "aj")
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+4 -
+procedure p, q;
+Select p such that Calls(p, _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc
+5000
+5 -
+procedure p, q;
+Select <p, q> such that Calls(p, q)
+aa ab, aa ac, aa ad, aa ae, aa af, aa ag, aa ah, aa ai, aa aj, aa ak, aa al, aa am, aa an, aa ao, aa ap, aa aq, aa ar, aa as, aa at, aa au, aa av, aa aw, aa ax, aa ay, aa az, aa ba, aa bb, aa bc, aa bd, ab ac, ab ad, ab ae, ab af, ab ag, ab ah, ab ai, ab aj, ab ak, ab al, ab am, ab an, ab ao, ab ap, ab aq, ab ar, ab as, ab at, ab au, ab av, ab aw, ab ax, ab ay, ab az, ab ba, ab bb, ab bc, ab bd, ac ad, ac ae, ac af, ac ag, ac ah, ac ai, ac aj, ac ak, ac al, ac am, ac an, ac ao, ac ap, ac aq, ac ar, ac as, ac at, ac au, ac av, ac aw, ac ax, ac ay, ac az, ac ba, ac bb, ac bc, ac bd, ad ae, ad af, ad ag, ad ah, ad ai, ad aj, ad ak, ad al, ad am, ad an, ad ao, ad ap, ad aq, ad ar, ad as, ad at, ad au, ad av, ad aw, ad ax, ad ay, ad az, ad ba, ad bb, ad bc, ad bd, ae af, ae ag, ae ah, ae ai, ae aj, ae ak, ae al, ae am, ae an, ae ao, ae ap, ae aq, ae ar, ae as, ae at, ae au, ae av, ae aw, ae ax, ae ay, ae az, ae ba, ae bb, ae bc, ae bd, af ag, af ah, af ai, af aj, af ak, af al, af am, af an, af ao, af ap, af aq, af ar, af as, af at, af au, af av, af aw, af ax, af ay, af az, af ba, af bb, af bc, af bd, ag ah, ag ai, ag aj, ag ak, ag al, ag am, ag an, ag ao, ag ap, ag aq, ag ar, ag as, ag at, ag au, ag av, ag aw, ag ax, ag ay, ag az, ag ba, ag bb, ag bc, ag bd, ah ai, ah aj, ah ak, ah al, ah am, ah an, ah ao, ah ap, ah aq, ah ar, ah as, ah at, ah au, ah av, ah aw, ah ax, ah ay, ah az, ah ba, ah bb, ah bc, ah bd, ai aj, ai ak, ai al, ai am, ai an, ai ao, ai ap, ai aq, ai ar, ai as, ai at, ai au, ai av, ai aw, ai ax, ai ay, ai az, ai ba, ai bb, ai bc, ai bd, aj ak, aj al, aj am, aj an, aj ao, aj ap, aj aq, aj ar, aj as, aj at, aj au, aj av, aj aw, aj ax, aj ay, aj az, aj ba, aj bb, aj bc, aj bd, ak al, ak am, ak an, ak ao, ak ap, ak aq, ak ar, ak as, ak at, ak au, ak av, ak aw, ak ax, ak ay, ak az, ak ba, ak bb, ak bc, ak bd, al am, al an, al ao, al ap, al aq, al ar, al as, al at, al au, al av, al aw, al ax, al ay, al az, al ba, al bb, al bc, al bd, am an, am ao, am ap, am aq, am ar, am as, am at, am au, am av, am aw, am ax, am ay, am az, am ba, am bb, am bc, am bd, an ao, an ap, an aq, an ar, an as, an at, an au, an av, an aw, an ax, an ay, an az, an ba, an bb, an bc, an bd, ao ap, ao aq, ao ar, ao as, ao at, ao au, ao av, ao aw, ao ax, ao ay, ao az, ao ba, ao bb, ao bc, ao bd, ap aq, ap ar, ap as, ap at, ap au, ap av, ap aw, ap ax, ap ay, ap az, ap ba, ap bb, ap bc, ap bd, aq ar, aq as, aq at, aq au, aq av, aq aw, aq ax, aq ay, aq az, aq ba, aq bb, aq bc, aq bd, ar as, ar at, ar au, ar av, ar aw, ar ax, ar ay, ar az, ar ba, ar bb, ar bc, ar bd, as at, as au, as av, as aw, as ax, as ay, as az, as ba, as bb, as bc, as bd, at au, at av, at aw, at ax, at ay, at az, at ba, at bb, at bc, at bd, au av, au aw, au ax, au ay, au az, au ba, au bb, au bc, au bd, av aw, av ax, av ay, av az, av ba, av bb, av bc, av bd, aw ax, aw ay, aw az, aw ba, aw bb, aw bc, aw bd, ax ay, ax az, ax ba, ax bb, ax bc, ax bd, ay az, ay ba, ay bb, ay bc, ay bd, az ba, az bb, az bc, az bd, ba bb, ba bc, ba bd, bb bc, bb bd, bc bd
+5000
+6 -
+procedure p, q;
+Select q such that Calls(p, "aa")
+none
+5000
+7 -
+procedure p, q;
+Select BOOLEAN such that Calls("ao", _)
+TRUE
+5000
+8 -
+procedure p, q;
+Select p such that Calls("au", p)
+av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+9 -
+procedure p, q;
+Select BOOLEAN such that Calls("ae", "aw")
+TRUE
+5000
+10 -
+procedure p, q;
+Select BOOLEAN such that Calls*(_, _)
+TRUE
+5000
+11 -
+procedure p, q;
+Select BOOLEAN such that Calls*(_, p)
+TRUE
+5000
+12 -
+procedure p, q;
+Select p such that Calls*(_, "aa")
+none
+5000
+13 -
+procedure p, q;
+Select p such that Calls*(p, _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc
+5000
+14 -
+procedure p, q;
+Select BOOLEAN such that Calls*(p, q)
+TRUE
+5000
+15 -
+procedure p, q;
+Select p such that Calls*(p, "aq")
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap
+5000
+16 -
+procedure p, q;
+Select q such that Calls*("al", _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+17 -
+procedure p, q;
+Select p such that Calls*("ax", p)
+ay, az, ba, bb, bc, bd
+5000
+18 -
+procedure p, q;
+Select p such that Calls*("ay", "af")
+none
+5000
+19 -
+procedure p, q;
+Select p such that Calls(p, p)
+none
+5000
+20 -
+procedure p, q;
+Select p such that Calls*(p, p)
+none
+5000
+21 - 
+procedure p, q;
+Select q such that Calls(p, "ab")
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+22 - 
+procedure p, q;
+Select p such that Calls(p, "ab")
+aa
+5000
+23 -
+procedure p, q;
+Select q such that Calls*("ax", p)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd
+5000
+24 - 
+procedure p, q;
+Select <p, q> such that Calls(p, "ad")
+aa aa,aa ab,aa ac,aa ad,aa ae,aa af,aa ag,aa ah,aa ai,aa aj,aa ak,aa al,aa am,aa an,aa ao,aa ap,aa aq,aa ar,aa as,aa at,aa au,aa av,aa aw,aa ax,aa ay,aa az,aa ba,aa bb,aa bc,aa bd,ab aa,ab ab,ab ac,ab ad,ab ae,ab af,ab ag,ab ah,ab ai,ab aj,ab ak,ab al,ab am,ab an,ab ao,ab ap,ab aq,ab ar,ab as,ab at,ab au,ab av,ab aw,ab ax,ab ay,ab az,ab ba,ab bb,ab bc,ab bd,ac aa,ac ab,ac ac,ac ad,ac ae,ac af,ac ag,ac ah,ac ai,ac aj,ac ak,ac al,ac am,ac an,ac ao,ac ap,ac aq,ac ar,ac as,ac at,ac au,ac av,ac aw,ac ax,ac ay,ac az,ac ba,ac bb,ac bc,ac bd
+5000
+25 -
+procedure p, q;
+Select <p, q> such that Calls*(_, _)
+aa ab, aa ac, aa ad, aa ae, aa af, aa ag, aa ah, aa ai, aa aj, aa ak, aa al, aa am, aa an, aa ao, aa ap, aa aq, aa ar, aa as, aa at, aa au, aa av, aa aw, aa ax, aa ay, aa az, aa ba, aa bb, aa bc, aa bd, ab ac, ab ad, ab ae, ab af, ab ag, ab ah, ab ai, ab aj, ab ak, ab al, ab am, ab an, ab ao, ab ap, ab aq, ab ar, ab as, ab at, ab au, ab av, ab aw, ab ax, ab ay, ab az, ab ba, ab bb, ab bc, ab bd, ac ad, ac ae, ac af, ac ag, ac ah, ac ai, ac aj, ac ak, ac al, ac am, ac an, ac ao, ac ap, ac aq, ac ar, ac as, ac at, ac au, ac av, ac aw, ac ax, ac ay, ac az, ac ba, ac bb, ac bc, ac bd, ad ae, ad af, ad ag, ad ah, ad ai, ad aj, ad ak, ad al, ad am, ad an, ad ao, ad ap, ad aq, ad ar, ad as, ad at, ad au, ad av, ad aw, ad ax, ad ay, ad az, ad ba, ad bb, ad bc, ad bd, ae af, ae ag, ae ah, ae ai, ae aj, ae ak, ae al, ae am, ae an, ae ao, ae ap, ae aq, ae ar, ae as, ae at, ae au, ae av, ae aw, ae ax, ae ay, ae az, ae ba, ae bb, ae bc, ae bd, af ag, af ah, af ai, af aj, af ak, af al, af am, af an, af ao, af ap, af aq, af ar, af as, af at, af au, af av, af aw, af ax, af ay, af az, af ba, af bb, af bc, af bd, ag ah, ag ai, ag aj, ag ak, ag al, ag am, ag an, ag ao, ag ap, ag aq, ag ar, ag as, ag at, ag au, ag av, ag aw, ag ax, ag ay, ag az, ag ba, ag bb, ag bc, ag bd, ah ai, ah aj, ah ak, ah al, ah am, ah an, ah ao, ah ap, ah aq, ah ar, ah as, ah at, ah au, ah av, ah aw, ah ax, ah ay, ah az, ah ba, ah bb, ah bc, ah bd, ai aj, ai ak, ai al, ai am, ai an, ai ao, ai ap, ai aq, ai ar, ai as, ai at, ai au, ai av, ai aw, ai ax, ai ay, ai az, ai ba, ai bb, ai bc, ai bd, aj ak, aj al, aj am, aj an, aj ao, aj ap, aj aq, aj ar, aj as, aj at, aj au, aj av, aj aw, aj ax, aj ay, aj az, aj ba, aj bb, aj bc, aj bd, ak al, ak am, ak an, ak ao, ak ap, ak aq, ak ar, ak as, ak at, ak au, ak av, ak aw, ak ax, ak ay, ak az, ak ba, ak bb, ak bc, ak bd, al am, al an, al ao, al ap, al aq, al ar, al as, al at, al au, al av, al aw, al ax, al ay, al az, al ba, al bb, al bc, al bd, am an, am ao, am ap, am aq, am ar, am as, am at, am au, am av, am aw, am ax, am ay, am az, am ba, am bb, am bc, am bd, an ao, an ap, an aq, an ar, an as, an at, an au, an av, an aw, an ax, an ay, an az, an ba, an bb, an bc, an bd, ao ap, ao aq, ao ar, ao as, ao at, ao au, ao av, ao aw, ao ax, ao ay, ao az, ao ba, ao bb, ao bc, ao bd, ap aq, ap ar, ap as, ap at, ap au, ap av, ap aw, ap ax, ap ay, ap az, ap ba, ap bb, ap bc, ap bd, aq ar, aq as, aq at, aq au, aq av, aq aw, aq ax, aq ay, aq az, aq ba, aq bb, aq bc, aq bd, ar as, ar at, ar au, ar av, ar aw, ar ax, ar ay, ar az, ar ba, ar bb, ar bc, ar bd, as at, as au, as av, as aw, as ax, as ay, as az, as ba, as bb, as bc, as bd, at au, at av, at aw, at ax, at ay, at az, at ba, at bb, at bc, at bd, au av, au aw, au ax, au ay, au az, au ba, au bb, au bc, au bd, av aw, av ax, av ay, av az, av ba, av bb, av bc, av bd, aw ax, aw ay, aw az, aw ba, aw bb, aw bc, aw bd, ax ay, ax az, ax ba, ax bb, ax bc, ax bd, ay az, ay ba, ay bb, ay bc, ay bd, az ba, az bb, az bc, az bd, ba bb, ba bc, ba bd, bb bc, bb bd, bc bd
+5000
