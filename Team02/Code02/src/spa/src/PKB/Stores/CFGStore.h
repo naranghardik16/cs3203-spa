@@ -52,7 +52,7 @@ class CFGStore {
    *
    * @return The CFG stored in this CFGStore.
    */
-  std::shared_ptr<Cfg> getCfg() const;
+  [[nodiscard]] std::shared_ptr<Cfg> getCfg() const;
 
  private:
   std::shared_ptr<Cfg> cfg_;
