@@ -1,0 +1,120 @@
+procedure A {
+	lol = lol + 1; 
+	d = f * 3 - r; 
+	if ((w == x) && ((w == y) && (w ==z))) then { 
+		if ((y != z) || (!( (y > z) && (z <= y) ))) then { 
+			read input101; 
+			q = (a + b - c / d); 
+		} else {
+            while(e != e) { 
+			    print output101; 
+            }
+		}
+	} else {
+		w = (x + (y * z)); 
+	}
+	call B; 
+}
+
+procedure B {
+	while ((!(a != 0) && ( 0 > 1))) { 
+		b = a - 1; 
+        call D; 
+        if (r != d) then { 
+            read a; 
+        } else {
+            call C; 
+        }
+        print a; 
+        print output202; 
+		i =  (i + (1 + 2 + (3 + 4 + (5)))); 
+        while ((f > 4) || ((f <= 1) && (f != 5))) { 
+            while (f < 6) { 
+                f = f - 1; 
+                if (d <= 0) then { 
+                    a = a + (5 * 10); 
+                }
+                else {
+                    r = t + 2 + 1 + 3 + 4 + 5 + 6 + 7 + z; 
+                }
+            }           
+        }
+	}
+	call E; 
+}
+
+procedure C {
+	if ( x >= 1) then { 
+		read input301; 
+        if ( a == 1 ) then { 
+            read aVeryLargeInputToSeeIfLexerCanParseItCorrectlyLOLHopeItWorks7331is42TheAnswer; 
+        } else {
+            complicatedCalculationHereWOOHOO = (1 + (1+2 + (1+2+3 + (1 + 2 + 3 * 4 * 5 / 6 - 7)))); 
+        }
+	} else {
+		while (y < 0) { 
+			a = y + 1; 
+			if (x == w + y) then { 
+				x = x * 3 + y / z % 5 + 2 + 3 + 5 + 6 + 7; 
+				y = c + 2 - z; 
+			} else {
+                if((a==0)&&((b==0)&&(c==0))) then { 
+                    a = d + e + a + f + b + c + 1;  
+                } else {
+                    b = c + (a + 1);     
+                }
+			}
+		}
+		call F; 
+	}
+
+}
+
+procedure D {
+	while (f == 0) { 
+		print result;  
+		read result12321; 
+        while(e == f + 6 % e) { 
+            if (y != a) then { 
+                while (w <= z) { 
+                    while (a == b - c * 20 / 10 + 20 % 5 ) { 
+                        t = 5 - (x / y % 2); 
+                        call F; 
+                    }
+                }
+            } else {
+                while (a - 5 < b) { 
+                    if(b == c - w + v) then { 
+                        a = 4 / (a % b * c); 
+                    } else {
+                        read input401; 
+                    }
+                }
+            } 
+        }
+	}		
+}
+
+procedure E {
+	if ((g == 0) && ((h>1) || ( (!(j < 2)) && (i != 0)))) then { 
+		while (h < 1) { 
+			if (j >= 2) then { 
+				k = 1; 
+			} else { 
+				while(i <= 0) { 
+					read something; 
+					while (O == 0) { 
+						print p; 
+					}
+				}
+			}
+		}
+	} else {
+		l = m + 2 + 4 * 5 * 6 * 7 / 10; 
+	}
+
+}
+
+procedure F {
+    read nothingToDoHere;
+}
