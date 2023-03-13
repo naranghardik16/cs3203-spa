@@ -11,6 +11,12 @@ TEST_CASE("Test CFGStore addCfg and getCfg") {
     REQUIRE(cfg_store.getCfg() == cfg);
   }
 
+  SECTION("Test getCfg() with empty CFGStore") {
+    CFGStore cfg_store;
+    REQUIRE(cfg_store.getCfg() == nullptr);
+    REQUIRE(cfg_store.getCfgCount() == 0);
+  }
+
   SECTION("Test addCfg with Empty Cfg") {
     CFGStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
