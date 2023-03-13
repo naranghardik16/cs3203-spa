@@ -145,5 +145,45 @@ TEST_CASE("Testcases for Expression Util") {
 
     REQUIRE(ExpressionUtil::prefixFlatten(root) == "[/ [* [+ x 1] [- y z]] 5]");
   }
+
+  SECTION("Flatten Complex Expression with Nested Relation Operations and Variables") {
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> left_args;
+    left_args.first = std::make_shared<Variable>("a");
+    left_args.second = std::make_shared<Variable>("b");
+    auto left = std::make_shared<RelationalOperation>("<", left_args);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> right_args;
+    right_args.first = std::make_shared<Variable>("c");
+    right_args.second = std::make_shared<Variable>("d");
+    auto right = std::make_shared<RelationalOperation>("==", right_args);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> root_args;
+    root_args.first = left;
+    root_args.second = right;
+
+    auto root = std::make_shared<ConditionalOperation>("&&", root_args);
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[&& [< a b] [== c d]]");
+  }
+
+  SECTION("Flatten Expression with Nested Logical and Relation Operations and Constants") {
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> left_args;
+    left_args.first = std::make_shared<Constant>("1");
+    left_args.second = std::make_shared<Constant>("2");
+    auto left = std::make_shared<RelationalOperation>(">", left_args);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> right_args;
+    right_args.first = std::make_shared<Constant>("3");
+    right_args.second = std::make_shared<Constant>("4");
+    auto right = std::make_shared<RelationalOperation>("<=", right_args);
+
+    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> root_args;
+    root_args.first = left;
+    root_args.second = right;
+
+    auto root = std::make_shared<ConditionalOperation>("||", root_args);
+
+    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [> 1 2] [<= 3 4]]");
+  }
 }
 
