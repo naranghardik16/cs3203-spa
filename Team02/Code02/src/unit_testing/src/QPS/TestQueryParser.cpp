@@ -70,6 +70,7 @@ TEST_CASE("Test Invalid And Clause") {
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
   }
 
+
   SECTION("And with pattern_Throw syntax error") {
     std::string query("assign a; while w; Select a such that Parent* (w, a) and pattern a (\"x\", _) such that Modifies (a, \"y\")");
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
@@ -656,6 +657,12 @@ TEST_CASE("Test invalid queries") {
     std::string query = "Select BOOLEAN <";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
+    query = "assign a; while w;SelectBOOLEAN such that Modifies (a, \"x\") and Parent* (w, a)";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign Select; while BOOLEAN;SelectSelect such that Modifies(Select, \"x\") and Parent* (BOOLEAN, Select) pattern Select(_,_) with Select.stmt# = 5";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
     query = "Select <BOOLEAN>";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
 
@@ -789,6 +796,9 @@ TEST_CASE("Test invalid queries") {
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
     query = "assign a; Select";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; SelectSelect";
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
 
     query ="assign Select;Select such that Modifies(Select,\"count\") pattern Select(\"count\", _)";

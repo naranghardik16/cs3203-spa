@@ -88,7 +88,7 @@ class QpsTokenizer {
   */
   SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause);
   SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
-  size_t FindStartOfSubClauseStart(const string &clause, const regex &rgx);
+  size_t FindIndexOfRegexMatch(const string &clause, const regex &rgx);
   size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
   SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause);
   shared_ptr<ClauseSyntax> MakePatternClauseSyntax(string sub_clause);
