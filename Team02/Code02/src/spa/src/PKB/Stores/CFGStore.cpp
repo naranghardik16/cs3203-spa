@@ -23,10 +23,18 @@ std::shared_ptr<Cfg> CFGStore::getCfg() const {
   return cfg_;
 }
 
+
 std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> CFGStore::getProcedureToCfgRootNodeMap() {
   std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> temp;
   temp.insert(this->cfg_->GetCfgRootNodes().begin(), this->cfg_->GetCfgRootNodes().end());
   return temp;
+}
+
+int CFGStore::getCfgCount() const {
+  if (!cfg_) {
+    return 0;
+  }
+  return 1;
 }
 
 std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> CFGStore::getStatementNumberToCfgRootNodeMap() {

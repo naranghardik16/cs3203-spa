@@ -1,0 +1,32 @@
+procedure main {
+    call adjustResults;
+    call printResults;
+}
+
+procedure adjustResults {
+    call readPoint;
+}
+
+procedure printResults {
+    print x;
+}
+
+procedure readPoint {
+    while ((x != 0) && (y != 0)) {
+        while (y!=1) {
+            read x;
+        }
+        if (y == 0) then {
+           if (y == 0) then {
+               read a;
+           } else {
+              while ((x != 0) && (y != 0)) {
+               b = 1;
+              }
+           }
+         } else {
+            z = 1;
+         }
+    }
+    print y;
+}

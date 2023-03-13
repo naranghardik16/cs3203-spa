@@ -33,3 +33,20 @@ assign a; variable v;
 Select BOOLEAN with 5=5 and "y"="x" such that Parent(_,5) and Uses(6,"digit") pattern a("digit",_) and a(_,_"number"_)
 FALSE
 5000
+8 - Affects -- 6,9,13 but pattern filters to 6 only
+assign a; variable v;read r;
+Select a such that Affects(5,a) with r.stmt#=1 pattern a(v,_) such that Uses(a,v) with 5=5
+6
+5000
+9 - Affects* -- 6,9,13,14,15 but pattern filters to 14,15 only
+assign a; variable v;
+Select a pattern a(v,_) such that Affects*(5,a) and Uses(a,v) with v.varName="number"
+14,15
+5000
+10 - Calls/Calls*, pattern if, pattern while
+procedure p, p1,p2; variable v,v1; if if; read r; while while;
+Select <p2.procName,v1> such that Modifies(p2,v1) such that Calls(p,p1) and Calls*(p1,p2) pattern if(v,_,_) and while(v,_) with r.varName = v.varName
+number k
+5000
+
+

@@ -68,6 +68,14 @@ class CFGStore {
    */
   std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> getStatementNumberToCfgRootNodeMap();
 
+
+  /**
+   * Returns the number of CFGs stored in the CFGStore
+   *
+   * @return The number of CFGs stored in the CFGStore
+   */
+  int getCfgCount() const;
+
  private:
   std::shared_ptr<Cfg> cfg_;
 };
