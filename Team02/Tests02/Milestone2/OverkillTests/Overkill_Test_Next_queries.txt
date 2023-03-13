@@ -1,0 +1,50 @@
+1-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select BOOLEAN such that Next(s,s)
+FALSE
+5000
+2-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select s such that Next*(s,s)
+7,8,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,58,59,60,61
+5000
+3-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,a> such that Calls(p,"B") and Modifies(p,v) and Modifies(s,v) pattern a("q",_"a"_) such that Next(s,a)
+5 6
+5000
+4-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,w,ifs> such that Parent*(s,w) and Parent*(s,ifs) and Modifies(a,"a") and Next*(a,w) and Parent(ifs,a)
+11 21 23,20 21 23
+5000
+5-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,s1> such that Parent*(s,c) and Parent*(s1,c) and Parent*(s,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1)
+41 47,44 47,45 47,46 47
+5000
+6-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,s1,a> such that Parent*(s,c) and Parent*(s1,c) and Parent*(s,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1) pattern a(v, _"a%b*c"_) such that Modifies(p1, v) 
+41 47 52,44 47 52,45 47 52,46 47 52
+5000
+7-comment
+call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,s1,a> such that Parent*(s,c) and Parent*(s1,c) and Parent*(s,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1) pattern a(v, _"a%b*c"_) such that Modifies(p1, v) and Calls(p2, p1) with p2.procName = "B"
+41 47 52,44 47 52,45 47 52,46 47 52
+5000
+8-comment
+constant con; call c; procedure p,p1,p2,p3;assign a, a1, a2; variable v, v1;while w; if ifs;stmt s,s1,s2;
+Select s such that Next(95, s)
+none
+5000
+9-comment
+constant con; call c; procedure p,p1,p2,p3;assign a, a1, a2; variable v, v1;while w; if ifs;stmt s,s1,s2;
+Select s such that Next*(1, s)
+2,3,4,5,6,7,8,9,10
+5000
+10-comment
+call c; procedure p,p1,p2;assign a, a1; prog_line pl;variable v;while w; if ifs;stmt s,s1,s2;
+Select <s,w,ifs,s2> such that Parent*(s,w) and Parent*(s,ifs) and Modifies(a,"a") and Next*(a,w) and Parent(ifs,a) such that Parent*(s2,c) and Parent*(s1,c) and Parent*(s2,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1) pattern a1(v, _"a%b*c"_) such that Modifies(p1, v) and Calls(p2, p1) with p2.procName = "B"
+11 21 23 41,11 21 23 44,11 21 23 45,11 21 23 46,20 21 23 41,20 21 23 44,20 21 23 45,20 21 23 46
+5000
