@@ -1,0 +1,60 @@
+1 -
+procedure p; variable v;
+Select <p, v> such that Modifies(p, v)
+aa x, aa hello, ab x, ab hello, ac x, ac hello, ad x, ad hello, ae x, ae hello, af x, af hello, ag x, ag hello, ah x, ah hello, ai x, ai hello, aj x, aj hello, ak x, ak hello, al x, al hello, am x, am hello, an x, an hello, ao x, ao hello, ap x, ap hello, aq x, aq hello, ar x, ar hello, as x, as hello, at x, at hello, au x, au hello, av x, av hello, aw x, aw hello, ax x, ax hello, ay x, ay hello, az x, az hello, ba x, ba hello, bb x, bb hello, bc x, bc hello, bd x, bd hello, be x, be hello, bf x, bf hello, bg x, bg hello, bh x, bh hello, bi x, bi hello, bj x, bj hello, bk x, bk hello, bl x, bl hello, bm x, bm hello, bn x, bn hello, bo x, bo hello, bp x, bp hello, bq x, bq hello, br x, br hello, bs x, bs hello, bt x, bt hello, bu x, bu hello, bv x, bv hello, bw x, bw hello, bx x, bx hello, by x, by hello, bz x, bz hello, ca x, ca hello, cb x, cb hello, cc x, cc hello, cd x, cd hello, ce x, ce hello, cf x, cf hello, cg x, cg hello, ch x, ch hello, ci x, ci hello, cj x, cj hello, ck x, ck hello, cl x, cl hello, cm x, cm hello, cn x, cn hello, co x, co hello, cp x, cp hello, cq x, cq hello, cr x, cr hello, cs x, cs hello, ct x, ct hello, cu x, cu hello, cv x, cv hello, cw x, cw hello, cx x, cx hello, cy x, cy hello, cz x, cz hello, da x, da hello, db x, db hello, dc x, dc hello, dd x, dd hello, de x, de hello, df x, df hello, dg x, dg hello, dh x, dh hello, di x, di hello, dj x, dj hello, dk x, dk hello, dl x, dl hello, dm x, dm hello, dn x, dn hello, do x, do hello, dp x, dp hello, dq x, dq hello, dr x, dr hello, ds x, ds hello, dt x, dt hello, du x, du hello, dv x, dv hello, dw x, dw hello, dx x, dx hello, dy x, dz x, ea x, eb x, ec x, ed x, ee x, ef x, eg x, eh x, ei x, ej x, ek x, el x, em x, en x, eo x, ep x, eq x
+5000
+2 -
+procedure p; variable v;
+Select p such that Modifies(p, "hello")
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd, be, bf, bg, bh, bi, bj, bk, bl, bm, bn, bo, bp, bq, br, bs, bt, bu, bv, bw, bx, by, bz, ca, cb, cc, cd, ce, cf, cg, ch, ci, cj, ck, cl, cm, cn, co, cp, cq, cr, cs, ct, cu, cv, cw, cx, cy, cz, da, db, dc, dd, de, df, dg, dh, di, dj, dk, dl, dm, dn, do, dp, dq, dr, ds, dt, du, dv, dw, dx
+5000
+3 -
+procedure p; variable v;
+Select v such that Modifies("bt", v)
+hello, x
+5000
+4 -
+procedure p; variable v;
+Select BOOLEAN such that Modifies("ek", "hello")
+FALSE
+5000
+5 -
+procedure p; variable v;
+Select p such that Modifies(p, _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd, be, bf, bg, bh, bi, bj, bk, bl, bm, bn, bo, bp, bq, br, bs, bt, bu, bv, bw, bx, by, bz, ca, cb, cc, cd, ce, cf, cg, ch, ci, cj, ck, cl, cm, cn, co, cp, cq, cr, cs, ct, cu, cv, cw, cx, cy, cz, da, db, dc, dd, de, df, dg, dh, di, dj, dk, dl, dm, dn, do, dp, dq, dr, ds, dt, du, dv, dw, dx, dy, dz, ea, eb, ec, ed, ee, ef, eg, eh, ei, ej, ek, el, em, en, eo, ep, eq
+5000
+6 -
+procedure p; variable v;
+Select BOOLEAN such that Modifies("eq", _)
+TRUE
+5000
+7 -
+procedure p; variable v;
+Select <p, v> such that Uses(p, v)
+aa y, aa world, aa testing, aa abc, ab y, ab world, ab testing, ab abc, ac y, ac world, ac testing, ac abc, ad y, ad world, ad testing, ad abc, ae y, ae world, ae testing, ae abc, af y, af world, af testing, af abc, ag y, ag world, ag testing, ag abc, ah y, ah world, ah testing, ah abc, ai y, ai world, ai testing, ai abc, aj y, aj world, aj testing, aj abc, ak y, ak world, ak testing, ak abc, al y, al world, al testing, al abc, am y, am world, am testing, am abc, an y, an world, an testing, an abc, ao y, ao world, ao testing, ao abc, ap y, ap world, ap testing, ap abc, aq y, aq world, aq testing, aq abc, ar y, ar world, ar testing, ar abc, as y, as world, as testing, as abc, at y, at world, at testing, at abc, au y, au world, au testing, au abc, av y, av world, av testing, av abc, aw y, aw world, aw testing, aw abc, ax y, ax world, ax testing, ax abc, ay y, ay world, ay testing, ay abc, az y, az world, az testing, az abc, ba y, ba world, ba testing, ba abc, bb y, bb world, bb testing, bc y, bc world, bc testing, bd y, bd world, bd testing, be y, be world, be testing, bf y, bf world, bf testing, bg y, bg world, bg testing, bh y, bh world, bh testing, bi y, bi world, bi testing, bj y, bj world, bj testing, bk y, bk world, bk testing, bl y, bl world, bl testing, bm y, bm world, bm testing, bn y, bn world, bn testing, bo y, bo world, bo testing, bp y, bp world, bp testing, bq y, bq world, bq testing, br y, br world, br testing, bs y, bs world, bs testing, bt y, bt world, bt testing, bu y, bu world, bu testing, bv y, bv world, bv testing, bw y, bw world, bw testing, bx y, bx world, bx testing, by y, by world, by testing, bz y, bz world, bz testing, ca y, ca world, ca testing, cb y, cb world, cb testing, cc y, cc world, cc testing, cd y, cd world, cd testing, ce y, ce world, ce testing, cf y, cf world, cf testing, cg y, cg world, cg testing, ch y, ch world, ch testing, ci y, ci world, ci testing, cj y, cj world, cj testing, ck y, ck world, ck testing, cl y, cl world, cl testing, cm y, cm world, cm testing, cn y, cn world, cn testing, co y, co world, co testing, cp y, cp world, cp testing, cq y, cq world, cq testing, cr y, cr world, cr testing, cs y, cs world, cs testing, ct y, ct world, ct testing, cu y, cu world, cu testing, cv y, cv world, cv testing, cw y, cw world, cw testing, cx y, cx world, cx testing, cy y, cy world, cy testing, cz y, cz world, cz testing, da y, da world, da testing, db y, db world, db testing, dc y, dc world, dc testing, dd y, dd world, dd testing, de y, de world, de testing, df y, df world, df testing, dg y, dg world, dg testing, dh y, dh world, dh testing, di y, di world, di testing, dj y, dj world, dj testing, dk y, dk world, dk testing, dl y, dl world, dl testing, dm y, dm world, dm testing, dn y, dn world, dn testing, do y, do world, do testing, dp y, dp world, dp testing, dq y, dq world, dq testing, dr y, dr world, dr testing, ds y, ds world, ds testing, dt y, dt world, dt testing, du y, du world, du testing, dv y, dv world, dv testing, dw y, dw world, dw testing, dx y, dx world, dx testing, dy y, dz y, ea y, eb y, ec y, ed y, ee y, ef y, eg y, eh y, ei y, ej y, ek y, el y, em y, en y, eo y, ep y, eq y
+5000
+8 -
+procedure p; variable v;
+Select p such that Uses(p, "abc")
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba
+5000
+9 -
+procedure p; variable v;
+Select v such that Uses("cf", v)
+y, world, testing
+5000
+10 -
+procedure p; variable v;
+Select p such that Uses("da", "abc")
+none
+5000
+11 -
+procedure p; variable v;
+Select p such that Uses(p, _)
+aa, ab, ac, ad, ae, af, ag, ah, ai, aj, ak, al, am, an, ao, ap, aq, ar, as, at, au, av, aw, ax, ay, az, ba, bb, bc, bd, be, bf, bg, bh, bi, bj, bk, bl, bm, bn, bo, bp, bq, br, bs, bt, bu, bv, bw, bx, by, bz, ca, cb, cc, cd, ce, cf, cg, ch, ci, cj, ck, cl, cm, cn, co, cp, cq, cr, cs, ct, cu, cv, cw, cx, cy, cz, da, db, dc, dd, de, df, dg, dh, di, dj, dk, dl, dm, dn, do, dp, dq, dr, ds, dt, du, dv, dw, dx, dy, dz, ea, eb, ec, ed, ee, ef, eg, eh, ei, ej, ek, el, em, en, eo, ep, eq
+5000
+12 -
+procedure p; variable v;
+Select BOOLEAN such that Uses("cp", _)
+TRUE
+5000

@@ -1,0 +1,60 @@
+1 -
+procedure p; variable v;
+Select <p, v> such that Modifies(p, v)
+procA aA, procA fA, procA hA, procA jA, procA lA, procA pA, procA rA, procA tA, procA vA, procA zA, procB aB, procB fB, procB hB, procB jB, procB lB, procB pB, procB rB, procB tB, procB vB, procB zB, procC aC, procC fC, procC hC, procC jC, procC lC, procC pC, procC rC, procC tC, procC vC, procC zC, procD aD, procD fD, procD hD, procD jD, procD lD, procD pD, procD rD, procD tD, procD vD, procD zD, procE aE, procE fE, procE hE, procE jE, procE lE, procE pE, procE rE, procE tE, procE vE, procE zE, procF aF, procF fF, procF hF, procF jF, procF lF, procF pF, procF rF, procF tF, procF vF, procF zF, procG aG, procG fG, procG hG, procG jG, procG lG, procG pG, procG rG, procG tG, procG vG, procG zG, procH aH, procH fH, procH hH, procH jH, procH lH, procH pH, procH rH, procH tH, procH vH, procH zH, procI aI, procI fI, procI hI, procI jI, procI lI, procI pI, procI rI, procI tI, procI vI, procI zI, procJ aJ, procJ fJ, procJ hJ, procJ jJ, procJ lJ, procJ pJ, procJ rJ, procJ tJ, procJ vJ, procJ zJ, procA aB, procA fB, procA hB, procA jB, procA lB, procA pB, procA rB, procA tB, procA vB, procA zB, procA aC, procA fC, procA hC, procA jC, procA lC, procA pC, procA rC, procA tC, procA vC, procA zC, procA aD, procA fD, procA hD, procA jD, procA lD, procA pD, procA rD, procA tD, procA vD, procA zD, procA aE, procA fE, procA hE, procA jE, procA lE, procA pE, procA rE, procA tE, procA vE, procA zE, procA aF, procA fF, procA hF, procA jF, procA lF, procA pF, procA rF, procA tF, procA vF, procA zF, procA aG, procA fG, procA hG, procA jG, procA lG, procA pG, procA rG, procA tG, procA vG, procA zG, procA aH, procA fH, procA hH, procA jH, procA lH, procA pH, procA rH, procA tH, procA vH, procA zH, procA aI, procA fI, procA hI, procA jI, procA lI, procA pI, procA rI, procA tI, procA vI, procA zI, procA aJ, procA fJ, procA hJ, procA jJ, procA lJ, procA pJ, procA rJ, procA tJ, procA vJ, procA zJ
+5000
+2 -
+procedure p; variable v;
+Select p such that Modifies(p, "fI")
+procA, procI
+5000
+3 -
+procedure p; variable v;
+Select v such that Modifies("procA", v)
+aA, fA, hA, jA, lA, pA, rA, tA, vA, zA, aB, fB, hB, jB, lB, pB, rB, tB, vB, zB, aC, fC, hC, jC, lC, pC, rC, tC, vC, zC, aD, fD, hD, jD, lD, pD, rD, tD, vD, zD, aE, fE, hE, jE, lE, pE, rE, tE, vE, zE, aF, fF, hF, jF, lF, pF, rF, tF, vF, zF, aG, fG, hG, jG, lG, pG, rG, tG, vG, zG, aH, fH, hH, jH, lH, pH, rH, tH, vH, zH, aI, fI, hI, jI, lI, pI, rI, tI, vI, zI, aJ, fJ, hJ, jJ, lJ, pJ, rJ, tJ, vJ, zJ
+5000
+4 -
+procedure p; variable v;
+Select BOOLEAN such that Modifies("procB", "vF")
+FALSE
+5000
+5 -
+procedure p; variable v;
+Select p such that Modifies(p, _)
+procA, procB, procC, procD, procE, procF, procG, procH, procI, procJ
+5000
+6 -
+procedure p; variable v;
+Select BOOLEAN such that Modifies("procD", _)
+TRUE
+5000
+7 -
+procedure p; variable v;
+Select <p, v> such that Uses(p, v)
+procA bA, procA cA, procA dA, procA eA, procA gA, procA iA, procA kA, procA mA, procA nA, procA oA, procA qA, procA sA, procA uA, procA wA, procA xA, procA yA, procB bB, procB cB, procB dB, procB eB, procB gB, procB iB, procB kB, procB mB, procB nB, procB oB, procB qB, procB sB, procB uB, procB wB, procB xB, procB yB, procC bC, procC cC, procC dC, procC eC, procC gC, procC iC, procC kC, procC mC, procC nC, procC oC, procC qC, procC sC, procC uC, procC wC, procC xC, procC yC, procD bD, procD cD, procD dD, procD eD, procD gD, procD iD, procD kD, procD mD, procD nD, procD oD, procD qD, procD sD, procD uD, procD wD, procD xD, procD yD, procE bE, procE cE, procE dE, procE eE, procE gE, procE iE, procE kE, procE mE, procE nE, procE oE, procE qE, procE sE, procE uE, procE wE, procE xE, procE yE, procF bF, procF cF, procF dF, procF eF, procF gF, procF iF, procF kF, procF mF, procF nF, procF oF, procF qF, procF sF, procF uF, procF wF, procF xF, procF yF, procG bG, procG cG, procG dG, procG eG, procG gG, procG iG, procG kG, procG mG, procG nG, procG oG, procG qG, procG sG, procG uG, procG wG, procG xG, procG yG, procH bH, procH cH, procH dH, procH eH, procH gH, procH iH, procH kH, procH mH, procH nH, procH oH, procH qH, procH sH, procH uH, procH wH, procH xH, procH yH, procI bI, procI cI, procI dI, procI eI, procI gI, procI iI, procI kI, procI mI, procI nI, procI oI, procI qI, procI sI, procI uI, procI wI, procI xI, procI yI, procJ bJ, procJ cJ, procJ dJ, procJ eJ, procJ gJ, procJ iJ, procJ kJ, procJ mJ, procJ nJ, procJ oJ, procJ qJ, procJ sJ, procJ uJ, procJ wJ, procJ xJ, procJ yJ, procA bB, procA cB, procA dB, procA eB, procA gB, procA iB, procA kB, procA mB, procA nB, procA oB, procA qB, procA sB, procA uB, procA wB, procA xB, procA yB, procA bC, procA cC, procA dC, procA eC, procA gC, procA iC, procA kC, procA mC, procA nC, procA oC, procA qC, procA sC, procA uC, procA wC, procA xC, procA yC, procA bD, procA cD, procA dD, procA eD, procA gD, procA iD, procA kD, procA mD, procA nD, procA oD, procA qD, procA sD, procA uD, procA wD, procA xD, procA yD, procA bE, procA cE, procA dE, procA eE, procA gE, procA iE, procA kE, procA mE, procA nE, procA oE, procA qE, procA sE, procA uE, procA wE, procA xE, procA yE, procA bF, procA cF, procA dF, procA eF, procA gF, procA iF, procA kF, procA mF, procA nF, procA oF, procA qF, procA sF, procA uF, procA wF, procA xF, procA yF, procA bG, procA cG, procA dG, procA eG, procA gG, procA iG, procA kG, procA mG, procA nG, procA oG, procA qG, procA sG, procA uG, procA wG, procA xG, procA yG, procA bH, procA cH, procA dH, procA eH, procA gH, procA iH, procA kH, procA mH, procA nH, procA oH, procA qH, procA sH, procA uH, procA wH, procA xH, procA yH, procA bI, procA cI, procA dI, procA eI, procA gI, procA iI, procA kI, procA mI, procA nI, procA oI, procA qI, procA sI, procA uI, procA wI, procA xI, procA yI, procA bJ, procA cJ, procA dJ, procA eJ, procA gJ, procA iJ, procA kJ, procA mJ, procA nJ, procA oJ, procA qJ, procA sJ, procA uJ, procA wJ, procA xJ, procA yJ
+5000
+8 -
+procedure p; variable v;
+Select p such that Uses(p, "nF")
+procA, procF
+5000
+9 -
+procedure p; variable v;
+Select BOOLEAN such that Uses("procE", v)
+TRUE
+5000
+10 -
+procedure p; variable v;
+Select p such that Uses("procH", "iF")
+none
+5000
+11 -
+procedure p; variable v;
+Select p such that Uses(p, _)
+procA, procB, procC, procD, procE, procF, procG, procH, procI, procJ
+5000
+12 -
+procedure p; variable v;
+Select p such that Uses("procG", _)
+procA, procB, procC, procD, procE, procF, procG, procH, procI, procJ
+5000
