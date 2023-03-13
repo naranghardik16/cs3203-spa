@@ -17,9 +17,20 @@ TEST_CASE("Test CFGStore addCfg and getCfg") {
     cfg_store.addCfg(cfg);
     REQUIRE(cfg_store.getCfgCount() == 1);
   }
+
 }
 
 TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
+
+  SECTION("Test getCfgNodeFromProcedure with empty CFGStore") {
+    CFGStore cfg_store;
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    cfg_store.addCfg(cfg);
+
+    // Assert that getCfgNodeFromProcedure returns nullptr for an empty CFGStore
+    REQUIRE(cfg_store.getCfgNodeFromProcedure("main") == nullptr);
+  }
+
   SECTION("Test getCfgNodeFromProcedure Method with Single Procedure") {
     CFGStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
@@ -61,6 +72,48 @@ TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
     // Ensure the root nodes returned from the CFGStore are the same as the ones we added
     REQUIRE(result_node_1 == root_node_1);
     REQUIRE(result_node_2 == root_node_2);
+  }
+
+  SECTION("Test getCfgNodeFromProcedure with multiple procedures in CFGStore") {
+    CFGStore cfg_store;
+    std::shared_ptr<Cfg> cfg1 = std::make_shared<Cfg>();
+
+    std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+    node1->AddStmt(1);
+    cfg1->AddStmtCfg(1, node1);
+    node1->AddStmt(2);
+    cfg1->AddStmtCfg(2, node1);
+
+    std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+    node2->AddStmt(3);
+    cfg1->AddStmtCfg(3, node2);
+    node2->AddStmt(4);
+    cfg1->AddStmtCfg(4, node2);
+
+    node1->AddTransition(true, node2);
+
+    std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+    node3->AddStmt(5);
+    cfg1->AddStmtCfg(5, node3);
+    node3->AddStmt(6);
+    cfg1->AddStmtCfg(6, node3);
+
+    std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+    node4->AddStmt(7);
+    cfg1->AddStmtCfg(7, node4);
+    node4->AddStmt(8);
+    cfg1->AddStmtCfg(8, node4);
+
+    node3->AddTransition(true, node4);
+
+    cfg1->AddProcCfg("main", node1);
+    cfg1->AddProcCfg("proc1", node3);
+    cfg_store.addCfg(cfg1);
+
+    REQUIRE(cfg_store.getCfgNodeFromProcedure("main") == node1);
+    REQUIRE(cfg_store.getCfgNodeFromProcedure("proc1") == node3);
+    REQUIRE(cfg_store.getCfgCount() == 1);
+    REQUIRE(cfg_store.getCfgNodeFromProcedure("nonexistent_proc") == nullptr);
   }
 
 }
@@ -158,7 +211,6 @@ TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
     REQUIRE(result_node5 == node3);
     REQUIRE(result_node6 == node3);
   }
-
 
 }
 
