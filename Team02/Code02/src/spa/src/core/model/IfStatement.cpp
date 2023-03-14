@@ -20,7 +20,6 @@ void IfStatement::AddElseStmtList(shared_ptr<Statement> statement) {
   else_statements_.push_back(statement);
 }
 
-// TODO: Add logic for visitor
 void IfStatement::Accept(shared_ptr<ParserVisitor> visitor) {
   visitor->VisitIfStatement(make_shared<IfStatement>(*this));
 }
@@ -36,6 +35,3 @@ IfStatement::StmtListContainer IfStatement::GetThenStatements() const {
 IfStatement::StmtListContainer IfStatement::GetElseStatements() const {
   return else_statements_;
 }
-
-
-

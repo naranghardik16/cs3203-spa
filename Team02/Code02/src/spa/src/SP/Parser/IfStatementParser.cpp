@@ -82,7 +82,6 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 }
 
 bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
-
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
                         return p->GetValue() == "}";

@@ -75,7 +75,6 @@ TEST_CASE("Check if CFG is created for a simple procedure") {
       auto assign_node_main2 = cfg->GetCfgRootNodes()["main2"];
       REQUIRE(assign_node_main2->GetNodeStmts().size() == 2);
     }
-
   } catch (SpaException &e) {
     cout << e.what() << endl;
   }
@@ -214,7 +213,6 @@ TEST_CASE("Check if CFG is created correctly for simple nested if statements") {
         FAIL(s + " is an unexpected representation");
       }
     }
-
   } catch (SpaException &e) {
     FAIL(string("Unexpectedly failed: ") + string(e.what()));
   }
@@ -280,7 +278,6 @@ TEST_CASE("Check if CFG is created correctly for simple nested while statements"
         FAIL(s + " is an unexpected representation");
       }
     }
-
   } catch (SpaException &e) {
     FAIL(string("Unexpectedly failed: ") + string(e.what()));
   }
@@ -355,7 +352,6 @@ TEST_CASE(
         FAIL(s + " is an unexpected representation");
       }
     }
-
   } catch (SpaException &e) {
     FAIL(string("Unexpectedly failed: ") + string(e.what()));
   }
