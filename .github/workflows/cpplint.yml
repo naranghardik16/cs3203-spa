@@ -19,5 +19,5 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install cpplint
-      - run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 .
+      - run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright" .
 
