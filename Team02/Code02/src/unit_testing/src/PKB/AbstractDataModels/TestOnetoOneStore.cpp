@@ -36,10 +36,10 @@ TEST_CASE("AbstractDataModels: OneToOne") {
     std::vector<std::pair<TestKeys, TestValues>> entry;
 
     TestKeys test_keys[] = {TEST_KEY2, TEST_KEY3};
-    TestValues test_values[] = { TEST_VALUE2, TEST_VALUE3};
+    TestValues test_values[] = {TEST_VALUE2, TEST_VALUE3};
 
     int i = 0;
-    for (TestKeys key: test_keys) {
+    for (TestKeys key : test_keys) {
       TestValues value = test_values[i];
       store.insert(key, value);
       keys.insert(key);
@@ -69,7 +69,7 @@ TEST_CASE("AbstractDataModels: OneToOne") {
     REQUIRE(store.length() == 2);
   }
 
-  SECTION("Edge cases"){
+  SECTION("Edge cases") {
     REQUIRE_NOTHROW(store.insert(TEST_KEY2, TEST_VALUE2));
   }
 }

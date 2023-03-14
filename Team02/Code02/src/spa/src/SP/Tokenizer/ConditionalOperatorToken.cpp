@@ -1,5 +1,4 @@
 #include "ConditionalOperatorToken.h"
-using namespace std;
 
 ConditionalOperatorToken::ConditionalOperatorToken(string val, TokenType type) : Token(val, type) {}
 
@@ -11,3 +10,4 @@ bool ConditionalOperatorToken::Equals(shared_ptr<Token> other) {
   }
   return false;
 }
+
