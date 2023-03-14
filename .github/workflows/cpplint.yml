@@ -19,5 +19,5 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install cpplint
-      - run: cpplint --recursive .
+      - run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 .
 
