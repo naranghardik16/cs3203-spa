@@ -7,10 +7,15 @@ TEST_CASE("Testcases for Follows Store") {
     REQUIRE(follows_store->hasAnyFollowsRelation() == false);
     REQUIRE(follows_store->hasAnyFollowsStarRelation() == false);
     REQUIRE(follows_store->hasFollowsStarRelation("2", "3") == false);
-    REQUIRE(follows_store->retrieveAllFollowsPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
-    REQUIRE(follows_store->retrieveAllFollowsStarPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
+
+    REQUIRE(follows_store->retrieveAllFollowsPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({ }));
+
+    REQUIRE(follows_store->retrieveAllFollowsStarPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({ }));
+
     REQUIRE(follows_store->hasFollowsRelation("2", "3") == false);
     REQUIRE(follows_store->hasFollowsStar("2") == false);
     REQUIRE(follows_store->hasFollowsStarBy("2") == false);
@@ -25,10 +30,12 @@ TEST_CASE("Testcases for Follows Store") {
     REQUIRE(follows_store->hasFollowsRelation("4", "8") == true);
     REQUIRE(follows_store->hasAnyFollowsRelation() == true);
 
-    REQUIRE(follows_store->retrieveAllFollowsPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::STATEMENT_NUMBER>,
-                                                                           PairHasherUtil::hash_pair>(
-        { std::make_pair("1", "2"), std::make_pair("4", "8")}));
+    REQUIRE(follows_store->retrieveAllFollowsPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+      std::make_pair("1", "2"),
+      std::make_pair("4", "8")
+    }));
+
     REQUIRE(follows_store->hasAnyFollowsStarRelation() == true);
   }
 
@@ -40,11 +47,11 @@ TEST_CASE("Testcases for Follows Store") {
     REQUIRE(follows_store->hasAnyFollowsRelation() == true);
     REQUIRE(follows_store->hasFollowsRelation("1", "2") == true);
     REQUIRE(follows_store->hasFollowsRelation("2", "3") == true);
-    REQUIRE(follows_store->retrieveAllFollowsPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-              std::make_pair("1", "2"), std::make_pair("2", "3")
-            }));
-
+    REQUIRE(follows_store->retrieveAllFollowsPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+      std::make_pair("1", "2"),
+      std::make_pair("2", "3")
+    }));
   }
 
   SECTION("Dependent Follows with Multiple Transitive Relationship") {
@@ -117,17 +124,24 @@ TEST_CASE("Testcases for Follows Store") {
     REQUIRE(follows_store->hasFollowsStarRelation("4", "6") == true);
     REQUIRE(follows_store->hasFollowsStarRelation("5", "6") == true);
     REQUIRE(follows_store->retrieveAllFollowsStarPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>(
-                {std::make_pair("1", "2"), std::make_pair("1", "2"),
-                 std::make_pair("1", "2"), std::make_pair("2", "3"),
-                 std::make_pair("1", "3"), std::make_pair("2", "4"),
-                 std::make_pair("1", "4"), std::make_pair("2", "5"),
-                 std::make_pair("1", "5"), std::make_pair("2", "6"),
-                 std::make_pair("1", "6"), std::make_pair("3", "4"),
-                 std::make_pair("4", "6"), std::make_pair("3", "5"),
-                 std::make_pair("5", "6"), std::make_pair("3", "6"),
-                 std::make_pair("4", "5")
-                 }));
-
+            PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+              std::make_pair("1", "2"),
+              std::make_pair("1", "2"),
+              std::make_pair("1", "2"),
+              std::make_pair("2", "3"),
+              std::make_pair("1", "3"),
+              std::make_pair("2", "4"),
+              std::make_pair("1", "4"),
+              std::make_pair("2", "5"),
+              std::make_pair("1", "5"),
+              std::make_pair("2", "6"),
+              std::make_pair("1", "6"),
+              std::make_pair("3", "4"),
+              std::make_pair("4", "6"),
+              std::make_pair("3", "5"),
+              std::make_pair("5", "6"),
+              std::make_pair("3", "6"),
+              std::make_pair("4", "5")
+            }));
   }
 }

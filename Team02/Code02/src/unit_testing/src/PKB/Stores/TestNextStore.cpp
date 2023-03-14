@@ -6,7 +6,6 @@ TEST_CASE("Testcases for Next Store") {
     auto next_store = new NextStore();
     REQUIRE(next_store->hasAnyNextRelation() == false);
   }
-
 }
 
 //  SECTION("Independent Next without any Transitive Relationship") {
