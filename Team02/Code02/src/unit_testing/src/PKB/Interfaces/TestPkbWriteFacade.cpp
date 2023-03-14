@@ -1,6 +1,6 @@
-//#include "catch.hpp"
+// #include "catch.hpp"
 
-//TEST_CASE("Check if the variables are being correctly added to the PKB variable store") {
+// TEST_CASE("Check if the variables are being correctly added to the PKB variable store") {
 //  SECTION("Test simple case of adding a single variable") {
 //    PKB pkb_ = PKB();
 //    PkbWriteFacade* pkb_write_facade_;
@@ -71,8 +71,8 @@
 //    PkbReadFacade* pkb_read_facade_;
 //    pkb_read_facade_ = new PkbReadFacade(pkb_);
 //
-////    std::unordered_set<std::string> constants = pkb_read_facade_->GetConstants();
-////    REQUIRE(constants == std::unordered_set<std::string>{c1, c2, c3, c4});
+//    std::unordered_set<std::string> constants = pkb_read_facade_->GetConstants();
+//    REQUIRE(constants == std::unordered_set<std::string>{c1, c2, c3, c4});
 //  }
 
 //}

@@ -65,6 +65,4 @@ TEST_CASE("AbstractDataModels: OneToMany") {
     REQUIRE(store.numberOfKeys() == 3);
     REQUIRE(store.numberOfValues() == 4);
   }
-
-
 }

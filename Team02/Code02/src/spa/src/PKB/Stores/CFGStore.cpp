@@ -40,7 +40,8 @@ int CFGStore::getCfgCount() const {
   return 1;
 }
 
-std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> CFGStore::getStatementNumberToCfgRootNodeMap() {
+std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>>
+CFGStore::getStatementNumberToCfgRootNodeMap() {
   std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> temp;
   for (const auto& [key, value]: this->cfg_->GetStmtToCfg()) {
     temp[std::to_string(key)] = value;

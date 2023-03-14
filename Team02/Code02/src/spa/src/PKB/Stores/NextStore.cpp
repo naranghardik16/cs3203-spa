@@ -10,7 +10,8 @@ NextStore::NextStore() = default;
 
 NextStore::~NextStore() = default;
 
-void NextStore::setProcedureToCfgRootNodeMap(std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> ptonode) {
+void NextStore::setProcedureToCfgRootNodeMap(std::unordered_map<PkbTypes::PROCEDURE,
+                                             std::shared_ptr<CfgNode>> ptonode) {
   this->procedure_name_to_cfg_node_map_ = ptonode;
 }
 
