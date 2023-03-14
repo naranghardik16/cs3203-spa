@@ -10,19 +10,19 @@
 
 void Dfs(shared_ptr<CfgNode> node,
          int lvl,
-         std::unordered_set<int> &visited,
-         std::unordered_map<int, vector<vector<int>>> &stmts_at_lvl,
-         vector<string> &node_representations) {
+         std::unordered_set<int> *visited,
+         std::unordered_map<int, vector<vector<int>>> *stmts_at_lvl,
+         vector<string> *node_representations) {
   vector<int> stmt_numbers = node->GetNodeStmts();
-  stmts_at_lvl[lvl].push_back(stmt_numbers);
+  stmts_at_lvl->operator[](lvl).push_back(stmt_numbers);
   for (auto const stmt : stmt_numbers) {
-    visited.insert(stmt);
+    visited->insert(stmt);
   }
-  node_representations.emplace_back(node->GetStringRepresentation());
+  node_representations->emplace_back(node->GetStringRepresentation());
   for (auto &[key, child] : node->GetNodeTrans()) {
     vector<int> stmt_numbers = child->GetNodeStmts();
     for (auto const kStmt : stmt_numbers) {
-      if (visited.find(kStmt) != visited.end()) {
+      if (visited->find(kStmt) != visited->end()) {
         continue;
       }
       Dfs(child, lvl + 1, visited, stmts_at_lvl, node_representations);
@@ -121,7 +121,7 @@ TEST_CASE("Check if CFG is created correctly for a procedure starting with if") 
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, &visited, &stmts_at_lvl, &node_representations);
 
     vector<vector<vector<int>>>
         answer = {{{1}}, {{2}, {3}}, {{4}}, {{5}, {6}}, {{7}}};
@@ -192,7 +192,7 @@ TEST_CASE("Check if CFG is created correctly for simple nested if statements") {
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, &visited, &stmts_at_lvl, &node_representations);
     vector<vector<vector<int>>>
         answer = {{{1, 2}}, {{3}}, {{4, 5}, {9}}, {{6}, {10}}, {{7}, {8}}};
 
@@ -257,7 +257,7 @@ TEST_CASE("Check if CFG is created correctly for simple nested while statements"
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, &visited, &stmts_at_lvl, &node_representations);
     vector<vector<vector<int>>>
         answer = {{{1, 2}}, {{3}}, {{4}, {7}}, {{5}}, {{6}}};
 
@@ -329,7 +329,7 @@ TEST_CASE(
     std::unordered_map<int, vector<vector<int>>> stmts_at_lvl;
     vector<string> node_representations;
 
-    Dfs(cfg_main, 0, visited, stmts_at_lvl, node_representations);
+    Dfs(cfg_main, 0, &visited, &stmts_at_lvl, &node_representations);
     vector<vector<vector<int>>>
         answer = {{{1}}, {{2}, {6}}, {{3}, {7}}, {{4}, {5}, {8}, {11}}, {{9}},
                   {{10}}};
