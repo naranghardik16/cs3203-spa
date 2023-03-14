@@ -19,5 +19,40 @@ jobs:
         with:
           python-version: 3.x
       - run: pip install cpplint
-      - run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright" .
+
+      - name: Checking SP's Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/SP
+
+      - name: Checking PKB's Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/PKB
+
+      - name: Checking QPS's Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/QPS
+
+      - name: Checking Core's Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/core
+
+      - name: Checking General Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/General
+
+      - name: Checking Integration Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/integration_testing/src
+        
+      - name: Checking SP's Unit Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/unit_testing/src/SP
+
+      - name: Checking PKB's Unit Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/unit_testing/src/PKB
+
+      - name: Checking QPS's Unit Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/unit_testing/src/QPS
 
