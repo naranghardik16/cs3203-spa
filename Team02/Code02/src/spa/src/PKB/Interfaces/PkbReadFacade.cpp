@@ -644,7 +644,8 @@ bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 }
 
 // Pattern API
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression>& expr) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression>& expr) {
   PkbCommunicationTypes::SingleConstraintSet result;
 
   for (const auto& s: this->GetAssignStatements()) {
@@ -1193,7 +1194,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarBy(std::str
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(StatementType statement_type){
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(StatementType statement_type) {
   PkbCommunicationTypes::SingleConstraintSet statements_of_type =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -1221,7 +1222,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(Stat
   return result;
 }
 
-bool PkbReadFacade::HasNextStarRelationship(){
+bool PkbReadFacade::HasNextStarRelationship() {
   return this->HasNextRelationship();
 }
 
