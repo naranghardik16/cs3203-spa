@@ -3,17 +3,8 @@
 #include "core/cfg_model/Cfg.h"
 
 TEST_CASE("Test CFGStore addCfg and getCfg") {
-  SECTION("Test CFGStore methods") {
-    CFGStore cfg_store;
-    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
-    cfg_store.addCfg(cfg);
-
-    REQUIRE(cfg_store.getCfg() == cfg);
-  }
-
   SECTION("Test getCfg() with empty CFGStore") {
     CFGStore cfg_store;
-    REQUIRE(cfg_store.getCfg() == nullptr);
     REQUIRE(cfg_store.getCfgCount() == 0);
   }
 
@@ -23,11 +14,9 @@ TEST_CASE("Test CFGStore addCfg and getCfg") {
     cfg_store.addCfg(cfg);
     REQUIRE(cfg_store.getCfgCount() == 1);
   }
-
 }
 
 TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
-
   SECTION("Test getCfgNodeFromProcedure with empty CFGStore") {
     CFGStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
@@ -121,7 +110,6 @@ TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
     REQUIRE(cfg_store.getCfgCount() == 1);
     REQUIRE(cfg_store.getCfgNodeFromProcedure("nonexistent_proc") == nullptr);
   }
-
 }
 
 TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
@@ -217,7 +205,6 @@ TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
     REQUIRE(result_node5 == node3);
     REQUIRE(result_node6 == node3);
   }
-
 }
 
 

@@ -47,6 +47,16 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
+
+  ResultTable table;
+  //! Special case Follow(5,5) or Follow(a,a) will always return empty
+  //! Nothing can follow first statement
+  bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
+  if (is_same_syn_or_int_pairs || second_arg_ == "1") {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Follows(s, _) --> Get statements that have followers
@@ -74,7 +84,6 @@ std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<P
     single_constraint = pkb->GetStatementThatAreFollowers(QueryUtil::GetStatementType(declaration_map, second_arg_));
   }
 
-  ResultTable table;
   if (!single_constraint.empty()) {
     table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   }

@@ -1,16 +1,16 @@
 1 - Select variables
 variable x;
-Select x.varName
+Select x. varName
 number, sum, digit
 5000
 2 - Select constants
 constant c;
-Select c.value
+Select c .value
 0, 10, 100
 5000
 3 - Select procedure
 procedure p;
-Select p.procName
+Select p . procName
 sumDigits
 5000
 4 - Select if statements
@@ -45,11 +45,11 @@ Select s.stmt#
 5000
 10 - Select attr_ref in tuples -- stmt#
 read r; print p;
-Select <r.stmt#, p.stmt#>
+Select <r. stmt#, p .stmt#>
 1 16, 2 16, 1 9, 2 9, 1 11, 2 11, 1 13, 2 13
 5000
 11 - Select attr_ref in tuples -- varName
 read r;
-Select <r.varName, r.stmt#>
+Select <    r. varName  , r.stmt# >
 number 1, sum 2
 5000

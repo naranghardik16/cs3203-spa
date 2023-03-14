@@ -87,7 +87,8 @@ std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllDescendan
   return this->parent_star_store_.retrieveAllValues();
 }
 
-std::unordered_set<PkbTypes::STATEMENT_NUMBER> ParentStore::retrieveAllDescendants(PkbTypes::STATEMENT_NUMBER statement) {
+std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    ParentStore::retrieveAllDescendants(PkbTypes::STATEMENT_NUMBER statement) {
   return this->parent_star_store_.retrieveFromKey(statement);
 }
 

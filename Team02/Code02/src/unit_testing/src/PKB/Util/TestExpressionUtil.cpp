@@ -99,8 +99,10 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("/", root_args);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) == std::unordered_set<std::string>({ "x", "y", "z" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) == std::unordered_set<std::string>({ "1", "5" }));
+    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) ==
+    std::unordered_set<std::string>({ "x", "y", "z" }));
+    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) ==
+    std::unordered_set<std::string>({ "1", "5" }));
   }
 
   SECTION("Basic Arithmetic Expression (One Constant And One Variable) Flattening") {
@@ -115,7 +117,6 @@ TEST_CASE("Testcases for Expression Util") {
                 == std::unordered_set<std::string>({ "x" }));
     REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({ "11" }));
-
   }
 
   SECTION("Flatten Complex Arithmetic Expression with Multiple Levels (Both Variables and Constants)") {

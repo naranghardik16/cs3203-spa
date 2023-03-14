@@ -45,6 +45,14 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
+  //! Special case Follow*(5,5) or Follow*a,a) will always return empty
+  //! Nothing can follow first statement
+  bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
+  if (is_same_syn_or_int_pairs || second_arg_ == "1") {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
   StatementType arg_2_type = QueryUtil::GetStatementType(declaration_map, second_arg_);
 

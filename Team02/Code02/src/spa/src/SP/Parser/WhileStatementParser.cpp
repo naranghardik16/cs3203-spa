@@ -5,7 +5,7 @@ shared_ptr<Statement> WhileStatementParser::ParseEntity(TokenStream &tokens) {
   tokens.pop_front();
   auto condition = ExtractCondition(line);
   auto while_stmt = make_shared<WhileStatement>(Program::GetAndIncreaseStatementNumber(),
-                                       *condition,GetProcName());
+                                                *condition, GetProcName());
   CheckStartOfLoopStatement(line);
   while (!tokens.empty() && !IsEndOfWhileStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);

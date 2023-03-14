@@ -20,6 +20,7 @@ const std::string kFullStop = ".";
 const std::string kSelectBoolean = "BOOLEAN";
 const std::string kSelectKeyword = "Select";
 
+const std::regex kSelectRegex("Select [A-Za-z|<]");
 //such that should have a relationship ref next e.g. "Modifies" etc. which start with a letter
 const std::regex kSuchThatRegex("such that [A-Za-z]");
 // next token should be a syn-assign, which starts with a letter rather than , or ) e.g. (pattern, pattern)

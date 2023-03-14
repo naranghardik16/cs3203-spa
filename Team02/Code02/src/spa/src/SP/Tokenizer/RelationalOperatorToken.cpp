@@ -1,5 +1,4 @@
 #include "RelationalOperatorToken.h"
-using namespace std;
 
 RelationalOperatorToken::RelationalOperatorToken(string val, TokenType type) : Token(val, type) {}
 

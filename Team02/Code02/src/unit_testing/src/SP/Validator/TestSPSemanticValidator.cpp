@@ -239,8 +239,3 @@ TEST_CASE("Invalid source program [A procedure cannot call a non-existing proced
   shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
   REQUIRE_THROWS_AS(validator->ValidateProgram(program), SemanticErrorException);
 }
-
-
-
-
-

@@ -31,9 +31,10 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getStatementsFromType(UNK) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ }));
     REQUIRE(statement_store->getStatementsFromType(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ }));
     REQUIRE(statement_store->getStatementsFromType(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ }));
-    REQUIRE(statement_store->getStatementsFromType(STATEMENT) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
+    REQUIRE(statement_store->getStatementsFromType(STATEMENT) ==
+    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == IF );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == IF);
   }
 
   SECTION("Single Statement Type to Multiple Statements Mapping") {
@@ -56,10 +57,10 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getStatementsFromType(STATEMENT) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "2", "3", "4" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("3") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("4") == READ );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("3") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("4") == READ);
   }
 
 //  Should throw error
@@ -104,22 +105,23 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getStatementsFromType(WHILE) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "12", "13" }));
     REQUIRE(statement_store->getStatementsFromType(STATEMENT) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3", "4", "8", "1", "5", "7", "9", "2", "14", "6", "11", "13", "12", "10" }));
+    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3", "4", "8", "1", "5", "7", "9", "2",
+                                                     "14", "6", "11", "13", "12", "10" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("3") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("4") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("5") == IF );
-    REQUIRE(statement_store->getStatementTypeByNumber("6") == IF );
-    REQUIRE(statement_store->getStatementTypeByNumber("7") == PRINT );
-    REQUIRE(statement_store->getStatementTypeByNumber("8") == CALL );
-    REQUIRE(statement_store->getStatementTypeByNumber("9") == CALL );
-    REQUIRE(statement_store->getStatementTypeByNumber("10") == CALL );
-    REQUIRE(statement_store->getStatementTypeByNumber("11") == ASSIGN );
-    REQUIRE(statement_store->getStatementTypeByNumber("12") == WHILE );
-    REQUIRE(statement_store->getStatementTypeByNumber("13") == WHILE );
-    REQUIRE(statement_store->getStatementTypeByNumber("14") == UNK );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("3") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("4") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("5") == IF);
+    REQUIRE(statement_store->getStatementTypeByNumber("6") == IF);
+    REQUIRE(statement_store->getStatementTypeByNumber("7") == PRINT);
+    REQUIRE(statement_store->getStatementTypeByNumber("8") == CALL);
+    REQUIRE(statement_store->getStatementTypeByNumber("9") == CALL);
+    REQUIRE(statement_store->getStatementTypeByNumber("10") == CALL);
+    REQUIRE(statement_store->getStatementTypeByNumber("11") == ASSIGN);
+    REQUIRE(statement_store->getStatementTypeByNumber("12") == WHILE);
+    REQUIRE(statement_store->getStatementTypeByNumber("13") == WHILE);
+    REQUIRE(statement_store->getStatementTypeByNumber("14") == UNK);
   }
 
   SECTION("Single Statement to Single Field Mapping") {
@@ -132,7 +134,7 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getAllStatements() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
     REQUIRE(statement_store->getStatementsFromType(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == IF );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == IF);
   }
 
   SECTION("Single Statement to Multiple Fields Mapping") {
@@ -147,7 +149,7 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getAllStatements() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
     REQUIRE(statement_store->getStatementsFromType(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == ASSIGN );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == ASSIGN);
   }
 
   SECTION("Multiple Statements to Single Field Mapping") {
@@ -171,9 +173,9 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getStatementsFromType(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
     REQUIRE(statement_store->getStatementsFromType(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
 
-    REQUIRE(statement_store->getStatementTypeByNumber("1") == ASSIGN );
-    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ );
-    REQUIRE(statement_store->getStatementTypeByNumber("3") == CALL );
+    REQUIRE(statement_store->getStatementTypeByNumber("1") == ASSIGN);
+    REQUIRE(statement_store->getStatementTypeByNumber("2") == READ);
+    REQUIRE(statement_store->getStatementTypeByNumber("3") == CALL);
   }
 
   SECTION("Multiple Statements to Multiple Fields Mapping") {
@@ -203,7 +205,8 @@ TEST_CASE("Testcases for Statement Store") {
     statement_store->addStatementAndField("8", "main");
     statement_store->addStatementAndField("6", "d");
 
-    REQUIRE(statement_store->getFieldsForStatement("1") == std::unordered_set<PkbTypes::FIELD>({ "c", "main", "something" }));
+    REQUIRE(statement_store->getFieldsForStatement("1") == std::unordered_set<PkbTypes::FIELD>({ "c", "main",
+                                                                                                 "something" }));
     REQUIRE(statement_store->getFieldsForStatement("2") == std::unordered_set<PkbTypes::FIELD>({ "a", "5" }));
     REQUIRE(statement_store->getFieldsForStatement("3") == std::unordered_set<PkbTypes::FIELD>({ "4", "d" }));
     REQUIRE(statement_store->getFieldsForStatement("4") == std::unordered_set<PkbTypes::FIELD>({ "main", "a", "c" }));
@@ -214,8 +217,10 @@ TEST_CASE("Testcases for Statement Store") {
     REQUIRE(statement_store->getAllStatements() ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "2", "3", "4", "5", "6", "8" }));
 
-    REQUIRE(statement_store->getStatementsFromType(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "4" }));
-    REQUIRE(statement_store->getStatementsFromType(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "6" }));
+    REQUIRE(statement_store->getStatementsFromType(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1",
+                                                                                                               "4" }));
+    REQUIRE(statement_store->getStatementsFromType(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2",
+                                                                                                             "6" }));
     REQUIRE(statement_store->getStatementsFromType(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
     REQUIRE(statement_store->getStatementsFromType(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "5", "8" }));
 
