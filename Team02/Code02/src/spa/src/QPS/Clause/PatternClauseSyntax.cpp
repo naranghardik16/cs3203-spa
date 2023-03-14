@@ -20,7 +20,9 @@ std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map 
   std::string syn = declaration_map.at(ClauseSyntax::GetEntity());
   std::shared_ptr<ClauseEvaluator> eval;
   if (syn == pql_constants::kPqlAssignEntity) {
-    eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), ClauseSyntax::GetExpression());
+    eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map,
+                                                          ClauseSyntax::GetSyntaxPair(),
+                                                          ClauseSyntax::GetExpression());
   } else if (syn == pql_constants::kPqlIfEntity) {
     eval = std::make_shared<IfPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
   } else {

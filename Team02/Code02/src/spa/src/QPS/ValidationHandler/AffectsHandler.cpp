@@ -10,7 +10,7 @@ void AffectsHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 
-  //Check if is valid stmtRef
+  // Check if is valid stmtRef
   if (!QueryUtil::IsStmtRef(arg_1) || !QueryUtil::IsStmtRef(arg_2)) {
     throw SyntaxErrorException("The statement reference was not valid");
   }
@@ -28,7 +28,7 @@ void AffectsHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 
-  //Check if synonym is assign statement synonym
+  // Check if synonym is assign statement synonym
   if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlAssignEntity) {
     throw SemanticErrorException("The synonym is not assign statement synonym");
   }
