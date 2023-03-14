@@ -17,11 +17,13 @@ void ControlFlowStore::addWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER 
   this->while_store_.insert(std::move(statement_number), expression);
 }
 
-std::shared_ptr<Expression> ControlFlowStore::retrieveIfStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
+std::shared_ptr<Expression>
+    ControlFlowStore::retrieveIfStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
   return this->if_store_.retrieveFromKey(std::move(statement_number));
 }
 
-std::shared_ptr<Expression> ControlFlowStore::retrieveWhileStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
+std::shared_ptr<Expression>
+    ControlFlowStore::retrieveWhileStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
   return this->while_store_.retrieveFromKey(std::move(statement_number));
 }
 
