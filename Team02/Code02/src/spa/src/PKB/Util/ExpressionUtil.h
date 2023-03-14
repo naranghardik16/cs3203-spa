@@ -98,5 +98,14 @@ class ExpressionUtil {
     return "[" + ret + "]";
   }
 
+  static bool hasSubExpression(shared_ptr<Expression> expression, std::shared_ptr<Expression> sub_expression) {
+    if (!sub_expression || !expression) return false;
+    if (expression->operator==(*sub_expression)) return true;
+
+    auto children = expression->GetArguments();
+    if (!children) return false;
+
+    return hasSubExpression(children->first, sub_expression) || hasSubExpression(children->second, sub_expression);
+  }
 };
 
