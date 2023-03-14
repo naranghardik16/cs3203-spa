@@ -104,7 +104,6 @@ TEST_CASE("A bit more complex") {
     REQUIRE(pkb_read_facade_->IsNext("1", "2") == true);
     REQUIRE(pkb_read_facade_->IsNext("3", "4") == true);
     REQUIRE(pkb_read_facade_->IsNext("3", "9") == true);
-
   } catch (SpaException &e) {
     cout << e.what() << endl;
   }
@@ -220,7 +219,7 @@ TEST_CASE("Test Next with while at the start of the procedure") {
     REQUIRE(pkb_read_facade_->IsNext("1", "2") == true);
     REQUIRE(pkb_read_facade_->IsNext("2", "3") == true);
     REQUIRE(pkb_read_facade_->IsNext("3", "4") == true);
-    REQUIRE(pkb_read_facade_->IsNext("4","3") == true);
+    REQUIRE(pkb_read_facade_->IsNext("4", "3") == true);
     REQUIRE(pkb_read_facade_->IsNext("3", "5") == true);
     REQUIRE(pkb_read_facade_->IsNext("5", "1") == true);
     REQUIRE(pkb_read_facade_->IsNext("1", "6") == true);

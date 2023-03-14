@@ -112,7 +112,6 @@ TEST_CASE(
   } catch (SyntaxErrorException &e) {
     REQUIRE(e.what() == "A procedure Line should start with procedure");
   }
-
 }
 
 TEST_CASE("Check if CallStatementParser works") {

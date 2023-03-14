@@ -7,7 +7,8 @@ expr: expr '+' term | expr '-' term | term
  */
 shared_ptr<Expression> ArithmeticOperationParser::Parse() {
   shared_ptr<Expression> root = Term();
-  while (!IsEndOfLine() && root != nullptr && count(term_operators_.begin(), term_operators_.end(), GetCurrentTokenType())) {
+  while (!IsEndOfLine() && root != nullptr
+      && count(term_operators_.begin(), term_operators_.end(), GetCurrentTokenType())) {
     string prev_token_value = GetCurrentTokenValue();
     GetNext();
     shared_ptr<Expression> right_node = Term();
@@ -25,7 +26,8 @@ term: term '*' factor | term '/' factor | term '%' factor | factor
 shared_ptr<Expression> ArithmeticOperationParser::Term() {
   shared_ptr<Expression> term = Factor();
 
-  while (!IsEndOfLine() && term != nullptr && count(factor_operators_.begin(), factor_operators_.end(), GetCurrentTokenType())) {
+  while (!IsEndOfLine() && term != nullptr
+      && count(factor_operators_.begin(), factor_operators_.end(), GetCurrentTokenType())) {
     string prev_token_value = GetCurrentTokenValue();
     GetNext();
     shared_ptr<Expression> right_node = Factor();

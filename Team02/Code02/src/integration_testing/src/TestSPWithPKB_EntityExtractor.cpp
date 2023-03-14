@@ -73,7 +73,6 @@ TEST_CASE("Check if SP works with PKB") {
       } else {
         FAIL(kNonExistingConst + " should not be in the pkb");
       }
-
     }
   } catch (SpaException &e) {
     cout << e.what();
