@@ -98,6 +98,13 @@ class ExpressionUtil {
     return "[" + ret + "]";
   }
 
+  /**
+   * Checks if the given sub expression is a part of the given expression.
+   *
+   * @param expression - The expression to be checked to check membership against.
+   * @param sub_expression - The expression whose membership is to be checked.
+   * @return True if it exists, false otherwise.
+   */
   static bool hasSubExpression(shared_ptr<Expression> expression, std::shared_ptr<Expression> sub_expression) {
     if (!sub_expression || !expression) return false;
     if (expression->operator==(*sub_expression)) return true;
