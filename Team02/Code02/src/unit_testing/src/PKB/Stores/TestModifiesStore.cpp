@@ -3,17 +3,22 @@
 #include "PKB/Stores/ModifiesStore.h"
 
 TEST_CASE("Testcases for Modifies Store") {
-
   SECTION("Empty Modifies store") {
     auto modifies_store = new ModifiesStore();
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == false);
     REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "a") == false);
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<PkbTypes
-    ::VARIABLE>({}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("anya") == std::unordered_set<PkbTypes::VARIABLE>({}));
-    REQUIRE(modifies_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
-    REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
+
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") ==
+    std::unordered_set<PkbTypes::VARIABLE>({}));
+
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("anya") ==
+    std::unordered_set<PkbTypes::VARIABLE>({}));
+
+    REQUIRE(modifies_store->retrieveProcedureVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
+
+    REQUIRE(modifies_store->retrieveStatementVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({ }));
   }
 
   SECTION("Single statement modifying a single variable") {
@@ -22,21 +27,20 @@ TEST_CASE("Testcases for Modifies Store") {
     modifies_store->addStatementModifyingVariable("2", "a");
     modifies_store->addStatementModifyingVariable("3", "b");
 
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<std::string>({"a"}));
-    REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({"a"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("2") == std::unordered_set<std::string>({ "a" }));
+    REQUIRE_FALSE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") ==
+    std::unordered_set<std::string>({ "a" }));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") == std::unordered_set<std::string>({ "b" }));
+
     REQUIRE(modifies_store->retrieveStatementVariablePairs() ==
     std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
-      std::make_pair("2", "a"), std::make_pair("3", "b") }));
+      std::make_pair("2", "a"),
+      std::make_pair("3", "b")
+    }));
+
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == true);
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "c") == false);
   }
-
-//  Should throw error
-//  SECTION("Single statement modifying multiple variables") {
-//
-//
-//  }
 
   SECTION("Multiple statements modifying a single variable") {
     auto modifies_store = new ModifiesStore();
@@ -48,13 +52,16 @@ TEST_CASE("Testcases for Modifies Store") {
     std::unordered_set<std::string>({"a"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("3") ==
         std::unordered_set<std::string>({"a"}));
+
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("2", "a") == true);
     REQUIRE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "a") == true);
     REQUIRE_FALSE(modifies_store->hasModifiesRelationBetweenStatementAndVariable("3", "b") == true);
-    REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({ std::make_pair("2", "a"),
-                                                              std::make_pair("3", "a")}));
 
+    REQUIRE(modifies_store->retrieveStatementVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+      std::make_pair("2", "a"),
+      std::make_pair("3", "a")
+    }));
   }
 
 
@@ -88,13 +95,17 @@ TEST_CASE("Testcases for Modifies Store") {
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("7") == std::unordered_set<std::string>({"c"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAStatement("8") == std::unordered_set<std::string>({"d"}));
 
-    REQUIRE(modifies_store->retrieveStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-            PkbTypes::VARIABLE>,PairHasherUtil::hash_pair>(
-                { std::make_pair("1", "a"), std::make_pair("2", "b"),
-                  std::make_pair("3", "c"), std::make_pair("4", "d"),
-                  std::make_pair("5", "a"), std::make_pair("6", "b"),
-                  std::make_pair("7", "c"), std::make_pair("8", "d")}));
-
+    REQUIRE(modifies_store->retrieveStatementVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+      std::make_pair("1", "a"),
+      std::make_pair("2", "b"),
+      std::make_pair("3", "c"),
+      std::make_pair("4", "d"),
+      std::make_pair("5", "a"),
+      std::make_pair("6", "b"),
+      std::make_pair("7", "c"),
+      std::make_pair("8", "d")
+    }));
   }
 
 
@@ -134,11 +145,15 @@ TEST_CASE("Testcases for Modifies Store") {
     == std::unordered_set<std::string>({"c"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("bumblebee")
     == std::unordered_set<std::string>({"c", "d"}));
-    REQUIRE(modifies_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
-            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
-              std::make_pair("anya", "a"), std::make_pair("anya", "b"),
-              std::make_pair("anya", "e"),
-              std::make_pair("bumblebee", "c"), std::make_pair("bumblebee", "d")}));
+
+    REQUIRE(modifies_store->retrieveProcedureVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+      std::make_pair("anya", "a"),
+      std::make_pair("anya", "b"),
+      std::make_pair("anya", "e"),
+      std::make_pair("bumblebee", "c"),
+      std::make_pair("bumblebee", "d")}));
+
     REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "a") == true);
     REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "b") == true);
     REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("anya", "e") == true);
@@ -167,11 +182,12 @@ TEST_CASE("Testcases for Modifies Store") {
         std::unordered_set<std::string>({"a"}));
     REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("ironhide") ==
         std::unordered_set<std::string>({"a"}));
-    REQUIRE(modifies_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
-            PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
-              std::make_pair("anya", "a"), std::make_pair("bumblebee", "a"),
-              std::make_pair("megatron", "a"),
-              std::make_pair("ironhide", "a")}));
+    REQUIRE(modifies_store->retrieveProcedureVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+      std::make_pair("anya", "a"),
+      std::make_pair("bumblebee", "a"),
+      std::make_pair("megatron", "a"),
+      std::make_pair("ironhide", "a")}));
   }
 
   SECTION("Multiple Procedures modifying multiple variables") {
@@ -186,23 +202,31 @@ TEST_CASE("Testcases for Modifies Store") {
     modifies_store->addProcedureModifyingVariable("Sumanth", "c");
     modifies_store->addProcedureModifyingVariable("Hanhui", "d");
 
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Anya","a"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Bumblebee","b"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Megatron","c"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Ironhide","d"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Maya","a"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Sourabh","b"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Sumanth","c"));
-    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Hanhui","d"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Anya", "a"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Bumblebee", "b"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Megatron", "c"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Ironhide", "d"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Maya", "a"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Sourabh", "b"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Sumanth", "c"));
+    REQUIRE(modifies_store->hasModifiesRelationBetweenProcedureAndVariable("Hanhui", "d"));
 
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Anya") == std::unordered_set<std::string>({"a"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Bumblebee") == std::unordered_set<std::string>({"b"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Megatron") == std::unordered_set<std::string>({"c"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Ironhide") == std::unordered_set<std::string>({"d"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Maya") == std::unordered_set<std::string>({"a"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Sourabh") == std::unordered_set<std::string>({"b"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Sumanth") == std::unordered_set<std::string>({"c"}));
-    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Hanhui") == std::unordered_set<std::string>({"d"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Anya") ==
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Bumblebee") ==
+    std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Megatron") ==
+    std::unordered_set<std::string>({"c"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Ironhide") ==
+    std::unordered_set<std::string>({"d"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Maya") ==
+    std::unordered_set<std::string>({"a"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Sourabh") ==
+    std::unordered_set<std::string>({"b"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Sumanth") ==
+    std::unordered_set<std::string>({"c"}));
+    REQUIRE(modifies_store->retrieveAllVariablesModifiedByAProcedure("Hanhui") ==
+    std::unordered_set<std::string>({"d"}));
 
     REQUIRE(modifies_store->retrieveProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
             PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({

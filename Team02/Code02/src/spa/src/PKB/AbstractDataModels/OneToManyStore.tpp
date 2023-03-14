@@ -1,8 +1,8 @@
 template<typename K, typename V>
-OneToManyStore<K, V>::OneToManyStore() {};
+OneToManyStore<K, V>::OneToManyStore() = default;
 
 template<typename K, typename V>
-OneToManyStore<K, V>::~OneToManyStore() {};
+OneToManyStore<K, V>::~OneToManyStore() = default;
 
 template<typename K, typename V>
 void OneToManyStore<K, V>::insert(K key, V value) {
