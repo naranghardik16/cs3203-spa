@@ -651,19 +651,19 @@ TEST_CASE("Test if ParseSynonym works") {
 TEST_CASE("Check if FindIndexesOfClauseStart works as expected") {
   SECTION("ValidSuchThatMatch_ReturnIndex") {
     std::string query_substr = "pattern a (\"such that \", _) such that parent* (w, pattern )";
-    auto index = tokenizer->FindStartOfSubClauseStart(query_substr, pql_constants::kSuchThatRegex);
+    auto index = tokenizer->FindIndexOfRegexMatch(query_substr, pql_constants::kSuchThatRegex);
     REQUIRE(index == 28);
   }
 
   SECTION("ValidPatternMatch_ReturnIndex") {
     std::string query_substr = "such that parent* (w, pattern ) pattern a (\"count\", _)";
-    auto index = tokenizer->FindStartOfSubClauseStart(query_substr, pql_constants::kPatternRegex);
+    auto index = tokenizer->FindIndexOfRegexMatch(query_substr, pql_constants::kPatternRegex);
     REQUIRE(index == 32);
   }
 
   SECTION("CannotFindMatch_ReturnNPOS") {
     std::string query_substr = "pattern a (\"count\", _)";
-    auto index = tokenizer->FindStartOfSubClauseStart(query_substr, pql_constants::kSuchThatRegex);
+    auto index = tokenizer->FindIndexOfRegexMatch(query_substr, pql_constants::kSuchThatRegex);
     REQUIRE(index == std::string::npos);
   }
 }

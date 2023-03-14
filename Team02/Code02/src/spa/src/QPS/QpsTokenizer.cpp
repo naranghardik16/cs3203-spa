@@ -2,6 +2,15 @@
 
 QpsTokenizer::QpsTokenizer() : syntax_validator_(new SyntaxValidator()), semantic_validator_(new SemanticValidator()){}
 
+size_t QpsTokenizer::FindIndexOfRegexMatch(const std::string& clause, const std::regex& rgx) {
+  std::smatch match;
+  std::regex_search(clause, match, rgx);
+  if (match.empty()){
+    return std::string::npos;
+  }
+  return clause.find(match[0]);
+}
+
 QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespace_removed) {
   std::string delimiter = pql_constants::kSemicolon;
   std::vector<std::string> declaration_statements;
@@ -22,8 +31,8 @@ QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespac
     throw SyntaxErrorException("There is no select statement identified");
   }
 
-  if (select_statement.substr(0, pql_constants::kSelectKeyword.length()) != pql_constants::kSelectKeyword) {
-    throw SyntaxErrorException("There is no Select keyword in the Select statement");
+  if (FindIndexOfRegexMatch(select_statement, pql_constants::kSelectRegex) != 0) {
+    throw SyntaxErrorException("There is no valid Select keyword in the Select statement");
   }
 
   QueryLinesPair declaration_select_statement_pair;
@@ -249,15 +258,6 @@ size_t QpsTokenizer::FindEndOfSubClauseStart(const std::string& clause, const st
   return clause.find(match[0]) + match[0].length()-1;
 }
 
-size_t QpsTokenizer::FindStartOfSubClauseStart(const std::string& clause, const std::regex& rgx) {
-  std::smatch match;
-  std::regex_search(clause, match, rgx);
-  if (match.empty()){
-    return std::string::npos;
-  }
-  return clause.find(match[0]);
-}
-
 std::vector<size_t> QpsTokenizer::FindIndexesOfClauseStart(const std::string& clause, const std::regex& rgx) {
   std::vector<size_t> index_list;
   for (sregex_iterator it = sregex_iterator(clause.begin(), clause.end(), rgx);
@@ -350,11 +350,11 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(std::string sub
 
 std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeAndClauseSyntax(std::string sub_clause, std::string previous_sub_clause) {
 
-  if (FindStartOfSubClauseStart(previous_sub_clause, pql_constants::kPatternRegex) == 0) {
+  if (FindIndexOfRegexMatch(previous_sub_clause, pql_constants::kPatternRegex) == 0) {
     return MakePatternClauseSyntax(sub_clause);
-  } else if (FindStartOfSubClauseStart(previous_sub_clause, pql_constants::kSuchThatRegex) == 0) {
+  } else if (FindIndexOfRegexMatch(previous_sub_clause, pql_constants::kSuchThatRegex) == 0) {
     return MakeSuchThatClauseSyntax(sub_clause);
-  } else if (FindStartOfSubClauseStart(previous_sub_clause, pql_constants::kWithRegex) == 0) {
+  } else if (FindIndexOfRegexMatch(previous_sub_clause, pql_constants::kWithRegex) == 0) {
     return MakeWithClauseSyntax(sub_clause);
   } else {
     throw SyntaxErrorException("There is no clause before the and clause");
@@ -377,22 +377,22 @@ std::vector<std::shared_ptr<ClauseSyntax>> QpsTokenizer::ParseSubClauses(const s
     sub_clause = string_util::Trim(statement_trimmed.substr(start_index,next_index-start_index));
     start_index = next_index;
 
-    if (FindStartOfSubClauseStart(sub_clause, pql_constants::kPatternRegex) == 0) {
+    if (FindIndexOfRegexMatch(sub_clause, pql_constants::kPatternRegex) == 0) {
       previous_sub_clause = sub_clause;
       processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kPatternRegex));
       auto pattern_syntax = MakePatternClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(pattern_syntax);
-    } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kSuchThatRegex) == 0) {
+    } else if (FindIndexOfRegexMatch(sub_clause, pql_constants::kSuchThatRegex) == 0) {
       previous_sub_clause = sub_clause;
       processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kSuchThatRegex));
       auto such_that_syntax = MakeSuchThatClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(such_that_syntax);
-    } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kWithRegex) == 0) {
+    } else if (FindIndexOfRegexMatch(sub_clause, pql_constants::kWithRegex) == 0) {
       previous_sub_clause = sub_clause;
       processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kWithRegex));
       auto with_syntax = MakeWithClauseSyntax(processed_sub_clause);
       syntax_pair_list.push_back(with_syntax);
-    } else if (FindStartOfSubClauseStart(sub_clause, pql_constants::kAndRegex) == 0) {
+    } else if (FindIndexOfRegexMatch(sub_clause, pql_constants::kAndRegex) == 0) {
       processed_sub_clause =  sub_clause.substr(FindEndOfSubClauseStart(sub_clause, pql_constants::kAndRegex));
       if (previous_sub_clause.empty()) {
         throw SyntaxErrorException("The first clause cannot be an and clause");

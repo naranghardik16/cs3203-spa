@@ -83,3 +83,13 @@ assign pattern, Select;
 Select          pattern   such that         Follows(           pattern,    Select             )
 4, 6
 5000
+18 - (Valid Query) Follows(SAME-SYN,SAME-SYN) returns false
+read r; assign a;
+Select r such that Follows(a, a)
+none
+5000
+19 - (Valid Query) Follows(SAME-INT,SAME-INT) returns false
+read r; assign a;
+Select r such that Follows(5, 5)
+none
+5000

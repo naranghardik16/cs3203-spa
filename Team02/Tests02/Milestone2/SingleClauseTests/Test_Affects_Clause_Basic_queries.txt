@@ -159,7 +159,7 @@ Select a such that Affects(a,14)
 
 5000
 34 - Affects(ASSIGN-SYN, ASSIGN-SYN)
-assign a,a1;
-Select <a,a1> such that Affects(a,a1)
+                assign a,                   a1;
+Select <a   ,a1                > such that Affects(                         a,a1)
 1 4, 1 8, 1 10, 1 12, 4 4, 4 8, 4 10, 4 12, 8 10, 8 12, 9 10, 10 10, 10 11, 10 12, 2 10, 6 6, 6 10,11 12, 21 22
 5000
