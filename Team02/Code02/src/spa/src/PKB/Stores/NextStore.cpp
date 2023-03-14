@@ -24,7 +24,7 @@ void NextStore::extractNextRelations() {
     std::unordered_set<std::string> visited;
     std::stack<std::pair<int, std::shared_ptr<CfgNode>>> s;
 
-    s.push(std::make_pair(-1, p.second));
+    s.emplace(std::make_pair(-1, p.second));
 
     while (!s.empty()) {
       auto ps = s.top();
@@ -35,7 +35,7 @@ void NextStore::extractNextRelations() {
 
       std::vector<int> statements = current->GetNodeStmts();
       if (statements.empty()) {
-        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
         continue;
       }
 
@@ -51,11 +51,11 @@ void NextStore::extractNextRelations() {
       if (visited.count(current->GetStringRepresentation()) > 0) continue;
 
       if (current->GetNodeTrans().count(true) > 0) {
-        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
       }
 
       if (current->GetNodeTrans().count(false) > 0) {
-        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
+        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
       }
 
       visited.insert(current->GetStringRepresentation());
@@ -82,5 +82,61 @@ bool NextStore::hasNext(PkbTypes::STATEMENT_NUMBER statement_number) {
 }
 
 bool NextStore::hasNextBy(PkbTypes::STATEMENT_NUMBER statement_number) {
+  return this->next_store_.containsValue(statement_number);
+}
+
+std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
+NextStore::retrieveAllNextStarPairs() {
+  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
+  result;
+
+  for (const auto& k: this->next_store_.retrieveAllKeys()) {
+    std::stack<PkbTypes::STATEMENT_NUMBER> s;
+    std::unordered_set<PkbTypes::STATEMENT_NUMBER> visited;
+    s.push(k);
+
+    while (!s.empty()) {
+      PkbTypes::STATEMENT_NUMBER current = s.top();
+      s.pop();
+
+      for (const auto& c: this->next_store_.retrieveFromKey(current)) {
+        if (!(visited.count(c) > 0)) {
+          result.insert(std::make_pair(k, c));
+          s.push(c);
+        }
+      }
+
+      visited.insert(current);
+    }
+  }
+
+  return result;
+}
+
+bool NextStore::hasNextStarRelation(PkbTypes::STATEMENT_NUMBER statement_number,
+                                    PkbTypes::STATEMENT_NUMBER next_statement_number) {
+  std::stack<PkbTypes::STATEMENT_NUMBER> s;
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> visited;
+  s.push(statement_number);
+
+  while (!s.empty()) {
+    PkbTypes::STATEMENT_NUMBER current = s.top();
+    s.pop();
+
+    for (const auto &c: this->next_store_.retrieveFromKey(current)) {
+      if (c == next_statement_number) return true;
+      if (!(visited.count(c) > 0)) s.push(c);
+    }
+    visited.insert(current);
+  }
+
+  return false;
+}
+
+bool NextStore::hasNextStar(PkbTypes::STATEMENT_NUMBER statement_number) {
+  return this->next_store_.containsKey(statement_number);
+}
+
+bool NextStore::hasNextStarBy(PkbTypes::STATEMENT_NUMBER statement_number) {
   return this->next_store_.containsValue(statement_number);
 }

@@ -78,12 +78,15 @@ class NextStore {
    */
   bool hasNextBy(PkbTypes::STATEMENT_NUMBER statement_number);
 
-//  bool hasNextStarRelation(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::STATEMENT_NUMBER next_statement_number);
-//
-//  bool hasAnyNextStarRelation();
-//
-//  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
-//  retrieveAllNextStarPairs();
+  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
+  retrieveAllNextStarPairs();
+
+  bool hasNextStarRelation(PkbTypes::STATEMENT_NUMBER statement_number,
+                           PkbTypes::STATEMENT_NUMBER next_statement_number);
+
+  bool hasNextStar(PkbTypes::STATEMENT_NUMBER statement_number);
+
+  bool hasNextStarBy(PkbTypes::STATEMENT_NUMBER statement_number);
 
  private:
   // A many-to-many store for PkbTypes::STATEMENT_NUMBER pairs representing Next relations between statements.

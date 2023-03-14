@@ -1128,49 +1128,93 @@ bool PkbReadFacade::IsNext(std::string statement_number_1, std::string statement
 
 // Next* API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextStarPairs(StatementType statement_type_1,
-                                                                            StatementType statement_type_2) {
-  //todo
-  return {};
+                                                                         StatementType statement_type_2) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type_1 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_1);
+
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type_2 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_2);
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStar(std::string statement_number,
-                                                                         StatementType statement_type) {
-  //todo
-  return {};
+                                                                      StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+    if (statements_of_type.count(p.second) > 0 && p.first == statement_number) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarBy(std::string statement_number,
-                                                                           StatementType statement_type) {
-  //todo
-  return {};
+                                                                        StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+    if (statements_of_type.count(p.first) > 0 && p.second == statement_number) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(StatementType statement_type){
-  //todo
-  return {};
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+    if (statements_of_type.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(StatementType statement_type) {
-  //todo
-  return {};
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+    if (statements_of_type.count(p.second) > 0) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
 bool PkbReadFacade::HasNextStarRelationship(){
-  //todo
-  return {};
+  return this->HasNextRelationship();
 }
 
 bool PkbReadFacade::HasNextStar(std::string statement_number) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNextStar(statement_number);
 }
 
 bool PkbReadFacade::HasNextStarBy(std::string statement_number) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNextStarBy(statement_number);
 }
 
 bool PkbReadFacade::IsNextStar(std::string statement_number_1, std::string statement_number_2) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNextStarRelation(statement_number_1, statement_number_2);
 }
