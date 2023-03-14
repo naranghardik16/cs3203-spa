@@ -58,8 +58,8 @@ class NextStore {
   bool hasAnyNextRelation();
 
   /**
-   *
-   * @return
+   * Retrieves all pairs of statements having Next relation
+   * @return set of pair of statements satisfying Next relation
    */
   std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
   retrieveAllNextPairs();
