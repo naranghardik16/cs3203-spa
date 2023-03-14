@@ -78,3 +78,13 @@ if ifs;
 Select ifs such that Follows*(2, 1)
 none
 5000
+17 - (Valid Query) Follows(SAME-SYN,SAME-SYN) returns false
+if ifs; assign a;
+Select ifs such that Follows*(a, a)
+none
+5000
+18 - (Valid Query) Follows(SAME-INT,SAME-INT) returns false
+if ifs; assign a;
+Select ifs such that Follows*(5, 5)
+none
+5000

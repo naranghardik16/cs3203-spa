@@ -962,50 +962,87 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
 // Next API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextPairs(StatementType statement_type_1,
                                                                          StatementType statement_type_2) {
-  //todo
-  return {};
+  return this->pkb.next_store_->retrieveAllNextPairs();
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNext(std::string statement_number,
                                                                       StatementType statement_type) {
-  //todo
-  return {};
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    if (p.first == statement_number && statements_of_type.count(p.second) > 0) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextBy(std::string statement_number,
                                                                         StatementType statement_type) {
-  //todo
-  return {};
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    if (p.second == statement_number && statements_of_type.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextFirst(StatementType statement_type){
-  //todo
-  return {};
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    result.insert(p.first);
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(StatementType statement_type) {
-  //todo
-  return {};
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    result.insert(p.second);
+  }
+
+  return result;
 }
 
 bool PkbReadFacade::HasNextRelationship(){
-  //todo
-  return {};
+  return this->pkb.next_store_->hasAnyNextRelation();
 }
 
 bool PkbReadFacade::HasNext(std::string statement_number) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNext(statement_number);
 }
 
 bool PkbReadFacade::HasNextBy(std::string statement_number) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNextBy(statement_number);
 }
 
 bool PkbReadFacade::IsNext(std::string statement_number_1, std::string statement_number_2) {
-  //todo
-  return {};
+  return this->pkb.next_store_->hasNextRelation(statement_number_1, statement_number_2);
 }
 
 // Next* API

@@ -10,7 +10,7 @@ FALSE
 5000
 3 - (Valid Query) Select Modifies(INT, IDENT) is True
 
-Select BOOLEAN such that Modifies(1, "x")
+        Select BOOLEAN such that Modifies(1, "x")
 TRUE
 5000
 4 - (Valid Query) Select Modifies(INT, IDENT) is False
@@ -19,17 +19,17 @@ Select BOOLEAN such that Modifies(1, "y")
 FALSE
 5000
 5 - (Valid Query) Select Modifies(SYN, IDENT)
-call c;
-Select c such that Modifies(c,"x")
+        call c          ;
+Select          c such that Modifies(        c," x   ")
 1,3
 5000
 5 - (Valid Query) Select Modifies(SYN, WILDCARD)
 call c;
-Select c such that Modifies(c, _)
+Select   c such that Modifies(        c, _        )
 1,3
 5000
 7 - (Valid Query) Select Modifies(SYN, SYN)
-call c; variable v;
-Select v such that Modifies(c,v) with c.stmt# = 1
+            call c          ; variable v                ;
+Select v such that Modifies(c,v)        with c.stmt#       = 1
 x,a,b,z
 5000

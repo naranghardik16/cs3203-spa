@@ -83,3 +83,18 @@ while suchthat; assign pattern;
 Select pattern such that Parent(suchthat, pattern)
 4, 5
 5000
+18 - (Valid Query) Parent(SAME-SYN,SAME-SYN) returns false
+if ifs;
+Select ifs such that Parent(ifs, ifs)
+none
+5000
+19 - (Valid Query) Parent(SAME-SYN,SAME-SYN) returns false
+assign a;if ifs;
+Select ifs such that Parent(a, a)
+none
+5000
+20 - (Valid Query) Parent(SAME-INT,SAME-INT) returns false
+if ifs;
+Select ifs such that Parent(5, 5)
+none
+5000

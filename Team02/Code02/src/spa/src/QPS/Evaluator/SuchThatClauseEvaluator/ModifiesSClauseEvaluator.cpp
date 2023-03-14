@@ -23,6 +23,7 @@ std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr
   //!Validated in validator as a statement synonym or its subset
   bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
   bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
+  bool is_first_arg_a_type_of_print_synonym = QueryUtil::IsPrintSynonym(declaration_map, first_arg_);
 
   //!Validated in validator as a variable synonym
   bool is_second_arg_a_variable_synonym = declaration_map.count(second_arg_);
@@ -39,7 +40,13 @@ std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
-  //! Modifies Statement
+  ResultTable table;
+  //! Special case where there will be no result is if first_arg_ is print synonym
+  if (is_first_arg_a_type_of_print_synonym) {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Select s such that Modifies(s, _) / Select s1 such that Modifies(s1,_)
@@ -60,7 +67,6 @@ std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr
     single_constraint = pkb->GetVariablesModifiedByStatement(first_arg_);
   }
 
-  ResultTable table;
   if (!single_constraint.empty()) {
     table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   }

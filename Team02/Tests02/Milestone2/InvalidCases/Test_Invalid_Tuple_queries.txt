@@ -43,4 +43,70 @@ assign a; while w;
 Select <    <a   ,  w> such that Parent* (w, a)
 SyntaxError
 5000
+10 - misspelled attr-ref
+assign a; while w;
+Select <a.stmt, w> such that Parent* (w, a)
+SyntaxError
+5000
+11 - misspelled attr-ref
+assign a; while w; read r;
+Select <a.stmt#, w, r.arName> such that Parent* (w, a)
+SyntaxError
+5000
+12 - misspelled attr-ref
+assign a; while w; read r; call c;
+Select <a.stmt#, w, c.proName> such that Parent* (w, a)
+SyntaxError
+5000
+13 - misspelled attr-ref
+assign a; while w; read r; procedure p;
+Select <a.stmt#, w, p.procame> such that Parent* (w, a)
+SyntaxError
+5000
+14 - no space between select
+assign a; while w; read r; procedure p;
+Select<a,w,p,r> such that Parent* (w, a)
+SyntaxError
+5000
+15 - no dot in attr-ref
+assign a; while w; read r; procedure p;
+Select <a stmt#,w,p,r> such that Parent* (w, a)
+SyntaxError
+5000
+16 - extra dot in attr-ref
+assign a; while w; read r; procedure p;
+Select <a..stmt#,w,p,r> such that Parent* (w, a)
+SyntaxError
+5000
+17 - missing dot in attr-ref
+assign a; while w; read r; procedure p;
+Select <a.stmt#,w,p procName,r> such that Parent* (w, a)
+SyntaxError
+5000
+18 - mismatch in attr-ref
+assign a; while w; read r; procedure p;
+Select <a.varName,w,p.procName,r> such that Parent* (w, a)
+SemanticError
+5000
+19 - mismatch in attr-ref
+assign a; while w; read r; procedure p;
+Select <a,w,p.stmt#,r> such that Parent* (w, a)
+SemanticError
+5000
+20 - extra >
+assign a; while w; read r; procedure p;
+Select <a,>w,r> such that Parent* (w, a)
+SyntaxError
+5000
+21 - extra >
+assign a; while w; read r; procedure p;
+Select <a,w>,r> such that Parent* (w, a)
+SyntaxError
+5000
+22 - extra <
+assign a; while w; read r; procedure p;
+Select <a,<w,r> such that Parent* (w, a)
+SyntaxError
+5000
+
 

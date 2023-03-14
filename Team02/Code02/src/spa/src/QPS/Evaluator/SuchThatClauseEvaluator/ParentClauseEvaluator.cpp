@@ -48,6 +48,21 @@ std::shared_ptr<Result> ParentClauseEvaluator::EvaluateClause(std::shared_ptr<Pk
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
+
+  ResultTable table;
+
+  //! Special case where there will be no result is if first_arg_ is not container statement
+  bool is_first_arg_a_container_syn = QueryUtil::IsIfSynonym(declaration_map, first_arg_)
+      || QueryUtil::IsWhileSynonym(declaration_map,first_arg_)
+      || QueryUtil::IsStatementSynonym(declaration_map, first_arg_);
+  //! Special case Parent(5,5) or Parent(if,if) will always return empty
+  bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
+  //! Nothing can be parent of first statement
+  if (is_first_arg_a_type_of_statement_synonym && !is_first_arg_a_container_syn || is_same_syn_or_int_pairs || second_arg_ == "1") {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   if (is_first_arg_a_type_of_statement_synonym) {
     if (is_second_arg_a_wildcard) {
       //e.g. Parent(s, _) --> Get statements that are parents
@@ -73,7 +88,6 @@ std::shared_ptr<Result> ParentClauseEvaluator::EvaluateClause(std::shared_ptr<Pk
     single_constraint = pkb->GetStatementsThatAreChildren(QueryUtil::GetStatementType(declaration_map, second_arg_));
   }
 
-  ResultTable table;
   if (!single_constraint.empty()) {
     table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   }
