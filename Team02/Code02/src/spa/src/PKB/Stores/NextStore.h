@@ -53,20 +53,22 @@ class NextStore {
 
   /**
    * Returns true if there exists any Next relation in the PKB.
+   *
    * @return True if there exists any Next relation in the PKB.
    */
   bool hasAnyNextRelation();
 
   /**
-   * Retrieves all pairs of statements having Next relation
-   * @return set of pair of statements satisfying Next relation
+   * Retrieves all pairs of statements having Next relation.
+   *
+   * @return A set of pair of statements satisfying Next relation.
    */
   std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
   retrieveAllNextPairs();
 
   /**
    * Returns all the pairs of statement numbers that have a Next relation between them in the PKB.
-   * @param statement_number
+   * @param statement_number -
    * @return A set of all pairs of statement numbers that have a Next relation between them in the PKB.
    */
   bool hasNext(PkbTypes::STATEMENT_NUMBER statement_number);
@@ -78,14 +80,35 @@ class NextStore {
    */
   bool hasNextBy(PkbTypes::STATEMENT_NUMBER statement_number);
 
+  /**
+   * Retrieves all pairs of statements that have Next * relation.
+   *
+   * @return A set of pairs of statements satisfying the relation.
+   */
   std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
   retrieveAllNextStarPairs();
 
+  /**
+   *
+   * @param statement_number
+   * @param next_statement_number
+   * @return
+   */
   bool hasNextStarRelation(PkbTypes::STATEMENT_NUMBER statement_number,
                            PkbTypes::STATEMENT_NUMBER next_statement_number);
 
+  /**
+   *
+   * @param statement_number
+   * @return
+   */
   bool hasNextStar(PkbTypes::STATEMENT_NUMBER statement_number);
 
+  /**
+   *
+   * @param statement_number
+   * @return
+   */
   bool hasNextStarBy(PkbTypes::STATEMENT_NUMBER statement_number);
 
  private:

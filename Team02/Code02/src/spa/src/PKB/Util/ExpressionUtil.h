@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <stack>
 #include <unordered_set>
-#include <memory>
 
 #include "core/model/Expression.h"
 #include "PKB/Types/PkbTypes.h"

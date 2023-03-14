@@ -1,7 +1,6 @@
+#include <utility>
 
 #include "ControlFlowStore.h"
-
-#include <utility>
 
 ControlFlowStore::ControlFlowStore() = default;
 

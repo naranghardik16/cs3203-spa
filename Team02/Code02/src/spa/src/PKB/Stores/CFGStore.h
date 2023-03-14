@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+
 #include "core/cfg_model/Cfg.h"
 #include "PKB/Types/PkbTypes.h"
 

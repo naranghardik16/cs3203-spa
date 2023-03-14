@@ -1,10 +1,10 @@
 #include <algorithm>
-#include <string>
 #include <queue>
 #include <stack>
+#include <string>
 
-#include "NextStore.h"
 #include "core/cfg_model/CfgNode.h"
+#include "NextStore.h"
 
 NextStore::NextStore() = default;
 
