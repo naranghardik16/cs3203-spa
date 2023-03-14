@@ -1,7 +1,7 @@
 #include "IfPatternClauseEvaluator.h"
 
 bool IfPatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  //Would never be called as pattern clause always has synonym
+  // Would never be called as pattern clause always has synonym
   return false;
 }
 
@@ -18,12 +18,12 @@ std::shared_ptr<Result> IfPatternClauseEvaluator::EvaluateClause(std::shared_ptr
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_arg_1_synonym) {
-    //e.g. if(s, _, _)
-    header[first_arg_] = (int) header.size();
+    // e.g. if(s, _, _)
+    header[first_arg_] = static_cast<int>(header.size());
 
     pair_constraint = pkb->GetIfConditionVariablePair();
   } else if (is_arg_1_wildcard) {
-    //e.g. if(_,_,_)
+    // e.g. if(_,_,_)
     single_constraint = pkb->GetIfThatHasConditionVariable();
   } else {
     single_constraint = pkb->GetIfWithConditionVariable(QueryUtil::GetIdent(first_arg_));

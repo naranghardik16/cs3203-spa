@@ -25,7 +25,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   std::string syn(clause->GetEntity());
   ParameterVector args(clause->GetParameters());
 
-  //Check if syn is declared and is correct entity
+  // Check if syn is declared and is correct entity
   if (declaration.find(syn) == declaration.end()) {
     throw SemanticErrorException();
   }
@@ -35,7 +35,8 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
     if (!is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity) {
       throw SemanticErrorException();
     }
-    if (is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity && declaration[syn] != pql_constants::kPqlWhileEntity) {
+    if (is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity
+    && declaration[syn] != pql_constants::kPqlWhileEntity) {
       throw SemanticErrorException();
     }
   }
@@ -43,7 +44,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
     throw SemanticErrorException();
   }
 
-  //If arg_1 is synonym, check if it is declared and is 'variable' entity
+  // If arg_1 is synonym, check if it is declared and is 'variable' entity
   bool is_syn = QueryUtil::IsSynonym(args[0]);
   if (is_syn && declaration.find(args[0]) == declaration.end()) {
     throw SemanticErrorException(args[0] + "is a synonym that is not declared");

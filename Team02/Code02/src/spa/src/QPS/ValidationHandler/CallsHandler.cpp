@@ -10,7 +10,7 @@ void CallsHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 
-  //Check if is valid stmtRef
+  // Check if is valid stmtRef
   if (!QueryUtil::IsEntRef(arg_1) || !QueryUtil::IsEntRef(arg_2)) {
     throw SyntaxErrorException("The statement reference was not valid");
   }
@@ -28,7 +28,7 @@ void CallsHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &dec
   std::string arg_1(clause->GetFirstParameter());
   std::string arg_2(clause->GetSecondParameter());
 
-  //Check if synonym is procedure synonym
+  // Check if synonym is procedure synonym
   if (QueryUtil::IsSynonym(arg_1) && declaration[arg_1] != pql_constants::kPqlProcedureEntity) {
     throw SemanticErrorException("The synonym is not procedure synonym");
   }

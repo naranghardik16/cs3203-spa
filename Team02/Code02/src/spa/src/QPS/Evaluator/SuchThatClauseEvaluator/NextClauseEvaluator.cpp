@@ -5,19 +5,19 @@ bool NextClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacad
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    //Example query: Next(_, _)
+    // Example query: Next(_, _)
 
     return pkb->HasNextRelationship();
   } else if (is_first_arg_a_wildcard) {
-    //Example query: Next(_, 1)
+    // Example query: Next(_, 1)
 
     return pkb->HasNextBy(second_arg_);
   } else if (is_second_arg_a_wildcard) {
-    //Example query: Next(1, _)
+    // Example query: Next(1, _)
 
     return pkb->HasNext(first_arg_);
   } else {
-    //Example query: Next(1, 6)
+    // Example query: Next(1, 6)
 
     return pkb->IsNext(first_arg_, second_arg_);
   }
@@ -36,10 +36,10 @@ std::shared_ptr<Result> NextClauseEvaluator::EvaluateClause(std::shared_ptr<PkbR
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
-    header[first_arg_] = (int) header.size();
+    header[first_arg_] = static_cast<int>(header.size());
   }
   if (is_second_arg_synonym) {
-    header[second_arg_] = (int) header.size();
+    header[second_arg_] = static_cast<int>(header.size());
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
@@ -49,23 +49,23 @@ std::shared_ptr<Result> NextClauseEvaluator::EvaluateClause(std::shared_ptr<PkbR
   StatementType arg_2_type = QueryUtil::GetStatementType(declaration_map, second_arg_);
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    //Example query: Next (s,s)
+    // Example query: Next (s,s)
 
     pair_constraint = pkb->GetNextPairs(arg_1_type, arg_2_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    //Example query: Next (s,_)
+    // Example query: Next (s,_)
 
     single_constraint = pkb->GetNextFirst(arg_1_type);
   } else if (is_first_arg_synonym) {
-    //Example query: Next (s, 1)
+    // Example query: Next (s, 1)
 
     single_constraint = pkb->GetNextBy(second_arg_, arg_1_type);
   } else if (is_first_arg_a_wildcard) {
-    //Example query: Next (_, s)
+    // Example query: Next (_, s)
 
     single_constraint = pkb->GetNextSecond(arg_2_type);
   } else {
-    //Example query: Next (1, s)
+    // Example query: Next (1, s)
 
     single_constraint = pkb->GetNext(first_arg_, arg_2_type);
   }

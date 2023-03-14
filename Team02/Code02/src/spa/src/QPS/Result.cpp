@@ -14,7 +14,7 @@ void Result::JoinResult(const std::shared_ptr<Result>& result) {
   InterceptResult intercept = FindIntercept(this->header_, result->header_);
 
   for (auto &i : intercept.second) {
-    this->header_[i.first] = (int) this->header_.size();
+    this->header_[i.first] = static_cast<int>(this->header_.size());
   }
 
   if (result->table_.empty() || this->table_.empty()) {
@@ -22,7 +22,7 @@ void Result::JoinResult(const std::shared_ptr<Result>& result) {
     return;
   }
 
-  //this->table_ = NestedLoopJoin(this->table_, result->table_, intercept);
+  // this->table_ = NestedLoopJoin(this->table_, result->table_, intercept);
   this->table_ = HashJoin(this->table_, result->table_, intercept);
 }
 
@@ -38,7 +38,7 @@ std::unordered_set<std::string> Result::ProjectResult(const SelectedSynonymTuple
   for (auto &row : this->table_) {
     std::stringstream result;
     for (int i = 0; i < index_lst.size(); ++i) {
-      result << ( i ? " " : "" ) << row[index_lst[i]];
+      result << (i ? " " : "") << row[index_lst[i]];
     }
     output.insert(result.str());
   }
@@ -70,7 +70,7 @@ InterceptResult Result::FindIntercept(ResultHeader &r_1, ResultHeader &r_2) {
 
 ResultTable Result::HashJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept) {
   std::unordered_map<std::vector<std::string>, std::vector<std::vector<std::string>>, vector_string_hash> map;
-  //build
+  // build
   for (auto &row : other) {
     std::vector<std::string> key;
     std::vector<std::string> value;
@@ -83,7 +83,7 @@ ResultTable Result::HashJoin(ResultTable &main, ResultTable &other, InterceptRes
     map[key].push_back(value);
   }
 
-  //probe
+  // probe
   ResultTable r;
   for (auto &row : main) {
     std::vector<std::string> key;
