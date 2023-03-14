@@ -2,7 +2,6 @@
 #include "PKB/Stores/ParentStore.h"
 
 TEST_CASE("Testcases for Parent Store") {
-
   SECTION("Empty Parent Store") {
     auto parent_store = new ParentStore();
     REQUIRE(parent_store->hasAnyParentRelation() == false);
@@ -38,7 +37,7 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE_FALSE(parent_store->hasParentRelation("1", "8") == true);
     REQUIRE(parent_store->retrieveAllParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
             PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-              std::make_pair("1", "2"), std::make_pair("4", "8")}) );
+              std::make_pair("1", "2"), std::make_pair("4", "8")}));
     REQUIRE(parent_store->retrieveAllParents() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "4" }));
     REQUIRE(parent_store->retrieveAllParents("2") ==  PkbTypes::STATEMENT_NUMBER("1"));
     REQUIRE(parent_store->retrieveAllParents("8") ==  PkbTypes::STATEMENT_NUMBER("4"));
@@ -71,18 +70,16 @@ TEST_CASE("Testcases for Parent Store") {
 
 
     REQUIRE(parent_store->retrieveAllParents() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "3" }));
-    REQUIRE(parent_store->retrieveAllParents("2") == PkbTypes::STATEMENT_NUMBER( "1" ));
-    REQUIRE(parent_store->retrieveAllParents("3") == PkbTypes::STATEMENT_NUMBER( "1" ));
-    REQUIRE(parent_store->retrieveAllParents("4") == PkbTypes::STATEMENT_NUMBER( "3" ));
+    REQUIRE(parent_store->retrieveAllParents("2") == PkbTypes::STATEMENT_NUMBER("1"));
+    REQUIRE(parent_store->retrieveAllParents("3") == PkbTypes::STATEMENT_NUMBER("1"));
+    REQUIRE(parent_store->retrieveAllParents("4") == PkbTypes::STATEMENT_NUMBER("3"));
 
     REQUIRE(parent_store->retrieveAllParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
             PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"), std::make_pair("1", "3"),
-              std::make_pair( "3", "4")}) );
+              std::make_pair("3", "4")}));
 
     REQUIRE(parent_store->hasAnyParentRelation() == true);
-
-
   }
 
   SECTION("Dependent Follows with Multiple Transitive Relationship") {
@@ -115,9 +112,9 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->hasParentRelation("12", "13") == true);
 
     REQUIRE(parent_store->retrieveAllChildren() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "2", "3", "4","5", "6", "7", "8", "9", "11", "12", "13" }));
+        { "2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13" }));
     REQUIRE(parent_store->retrieveAllChildren("1") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "2", "3" , "4" }));
+        { "2", "3", "4" }));
     REQUIRE(parent_store->retrieveAllChildren("4") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         { "5" }));
     REQUIRE(parent_store->retrieveAllChildren("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
@@ -130,27 +127,26 @@ TEST_CASE("Testcases for Parent Store") {
 
     REQUIRE(parent_store->retrieveAllParents() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         { "1", "4", "5", "10", "12" }));
-    REQUIRE(parent_store->retrieveAllParents("2") == PkbTypes::STATEMENT_NUMBER( "1" ));
-    REQUIRE(parent_store->retrieveAllParents("3") == PkbTypes::STATEMENT_NUMBER( "1" ));
-    REQUIRE(parent_store->retrieveAllParents("4") == PkbTypes::STATEMENT_NUMBER( "1" ));
-    REQUIRE(parent_store->retrieveAllParents("5") == PkbTypes::STATEMENT_NUMBER( "4" ));
-    REQUIRE(parent_store->retrieveAllParents("6") == PkbTypes::STATEMENT_NUMBER( "5" ));
-    REQUIRE(parent_store->retrieveAllParents("7") == PkbTypes::STATEMENT_NUMBER( "5" ));
-    REQUIRE(parent_store->retrieveAllParents("8") == PkbTypes::STATEMENT_NUMBER( "5" ));
-    REQUIRE(parent_store->retrieveAllParents("9") == PkbTypes::STATEMENT_NUMBER( "5" ));
-    REQUIRE(parent_store->retrieveAllParents("11") == PkbTypes::STATEMENT_NUMBER( "10" ));
-    REQUIRE(parent_store->retrieveAllParents("12") == PkbTypes::STATEMENT_NUMBER( "10" ));
-    REQUIRE(parent_store->retrieveAllParents("13") == PkbTypes::STATEMENT_NUMBER( "12" ));
+    REQUIRE(parent_store->retrieveAllParents("2") == PkbTypes::STATEMENT_NUMBER("1"));
+    REQUIRE(parent_store->retrieveAllParents("3") == PkbTypes::STATEMENT_NUMBER("1"));
+    REQUIRE(parent_store->retrieveAllParents("4") == PkbTypes::STATEMENT_NUMBER("1"));
+    REQUIRE(parent_store->retrieveAllParents("5") == PkbTypes::STATEMENT_NUMBER("4"));
+    REQUIRE(parent_store->retrieveAllParents("6") == PkbTypes::STATEMENT_NUMBER("5"));
+    REQUIRE(parent_store->retrieveAllParents("7") == PkbTypes::STATEMENT_NUMBER("5"));
+    REQUIRE(parent_store->retrieveAllParents("8") == PkbTypes::STATEMENT_NUMBER("5"));
+    REQUIRE(parent_store->retrieveAllParents("9") == PkbTypes::STATEMENT_NUMBER("5"));
+    REQUIRE(parent_store->retrieveAllParents("11") == PkbTypes::STATEMENT_NUMBER("10"));
+    REQUIRE(parent_store->retrieveAllParents("12") == PkbTypes::STATEMENT_NUMBER("10"));
+    REQUIRE(parent_store->retrieveAllParents("13") == PkbTypes::STATEMENT_NUMBER("12"));
 
     REQUIRE(parent_store->retrieveAllParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
             PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"), std::make_pair("1", "3"),
-              std::make_pair( "1", "4"), std::make_pair( "4", "5"),
-              std::make_pair( "5", "6"), std::make_pair( "5", "7"),
-              std::make_pair( "5", "8"), std::make_pair( "5", "9"),
-              std::make_pair( "10", "11"), std::make_pair( "10", "12"),
-              std::make_pair( "12", "13")}) );
-
+              std::make_pair("1", "4"), std::make_pair("4", "5"),
+              std::make_pair("5", "6"), std::make_pair("5", "7"),
+              std::make_pair("5", "8"), std::make_pair("5", "9"),
+              std::make_pair("10", "11"), std::make_pair("10", "12"),
+              std::make_pair("12", "13") }));
   }
 
   SECTION("Checking ParentStar") {
@@ -195,29 +191,29 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->retrieveAllAncestors() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         { "1", "4", "5", "10", "12"}));
     REQUIRE(parent_store->retrieveAllAncestors("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "1", "4" }) );
+        { "1", "4" }));
     REQUIRE(parent_store->retrieveAllAncestors("2") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "1" }) );
+        { "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("3") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "1" }) );
+        { "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("4") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "1" }) );
+        { "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("5") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "4", "1" }) );
+        { "4", "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("6") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "5", "4", "1" }) );
+        { "5", "4", "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("7") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "5", "4", "1" }) );
+        { "5", "4", "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("8") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        { "5", "4", "1" }) );
+        { "5", "4", "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("9") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {  "5", "4", "1" }) );
+        {  "5", "4", "1" }));
     REQUIRE(parent_store->retrieveAllAncestors("11") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"10"}) );
+        {"10"}));
     REQUIRE(parent_store->retrieveAllAncestors("12") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"10"}) );
+        {"10"}));
     REQUIRE(parent_store->retrieveAllAncestors("13") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"12", "10"}) );
+        {"12", "10"}));
     REQUIRE(parent_store->retrieveAllDescendants() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         { "2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13"}));
     REQUIRE(parent_store->retrieveAllDescendants("1") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(

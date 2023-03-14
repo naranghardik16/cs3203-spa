@@ -12,7 +12,8 @@ void UsesStore::addProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbType
   this->uses_procedure_variable_.insert(procedure, variable);
 }
 
-std::unordered_set<PkbTypes::VARIABLE> UsesStore::retrieveAllVariablesUsedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number) {
+std::unordered_set<PkbTypes::VARIABLE>
+    UsesStore::retrieveAllVariablesUsedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number) {
   return this->uses_statement_variable_.retrieveFromKey(statement_number);
 }
 
@@ -20,11 +21,13 @@ std::unordered_set<PkbTypes::VARIABLE> UsesStore::retrieveAllVariablesUsedByAPro
   return this->uses_procedure_variable_.retrieveFromKey(procedure);
 }
 
-std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair> UsesStore::retrieveStatementVariablePairs() {
+std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
+    UsesStore::retrieveStatementVariablePairs() {
   return this->uses_statement_variable_.retrieveAll();
 }
 
-std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair> UsesStore::retrieveProcedureVariablePairs() {
+std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
+    UsesStore::retrieveProcedureVariablePairs() {
   return this->uses_procedure_variable_.retrieveAll();
 }
 
