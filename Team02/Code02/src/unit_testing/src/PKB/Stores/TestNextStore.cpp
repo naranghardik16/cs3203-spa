@@ -7,6 +7,8 @@ TEST_CASE("Testcases for Next Store") {
     REQUIRE(next_store->hasAnyNextRelation() == false);
   }
 
+}
+
 //  SECTION("Independent Next without any Transitive Relationship") {
 //    auto next_store = new NextStore();
 //    REQUIRE(next_store->hasNextRelation("1", "2") == true);
@@ -18,4 +20,3 @@ TEST_CASE("Testcases for Next Store") {
 //                                                                           PairHasherUtil::hash_pair>(
 //        {std::make_pair("1", "2"), std::make_pair("4", "8")}));
 //  }
-}
