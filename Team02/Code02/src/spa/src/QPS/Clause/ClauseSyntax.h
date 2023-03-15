@@ -16,6 +16,8 @@ class ClauseSyntax {
   SyntaxPair pair_;
   std::shared_ptr<Expression> expr_;
  public:
+  std::unordered_set<std::string> syn_;
+
   explicit ClauseSyntax(SyntaxPair pair);
 
   /**
