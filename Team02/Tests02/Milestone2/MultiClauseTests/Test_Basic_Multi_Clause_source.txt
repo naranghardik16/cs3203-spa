@@ -21,3 +21,16 @@ procedure sumDigits {
         number = number / 10; }
     print number;
 }
+
+procedure number {
+    k=5*5;
+}
+
+procedure multiplyDigits {
+    call number;
+}
+
+procedure Calculate {
+    call sumDigits;
+    call multiplyDigits;
+}

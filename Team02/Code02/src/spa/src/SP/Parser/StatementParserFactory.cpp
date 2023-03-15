@@ -37,8 +37,8 @@ bool StatementParserFactory::CheckKeywordType(Line &line,
         && next(entity_itr)->get()->GetValue() == "(";
   }
   return entity_itr == std::begin(line);
-
 }
+
 bool StatementParserFactory::CheckAssignmentType(Line &line) {
   auto entity_itr =
       std::find_if(std::begin(line),
@@ -49,3 +49,4 @@ bool StatementParserFactory::CheckAssignmentType(Line &line) {
 
   return entity_itr != std::end(line);
 }
+

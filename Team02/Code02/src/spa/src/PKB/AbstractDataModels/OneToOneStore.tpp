@@ -1,8 +1,8 @@
 template<typename K, typename V>
-OneToOneStore<K, V>::OneToOneStore() {};
+OneToOneStore<K, V>::OneToOneStore() = default;
 
 template<typename K, typename V>
-OneToOneStore<K, V>::~OneToOneStore() {};
+OneToOneStore<K, V>::~OneToOneStore() = default;
 
 template<typename K, typename V>
 void OneToOneStore<K, V>::insert(K key, V value) {

@@ -5,13 +5,14 @@ bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_second_arg_a_wildcard) {
-    //Example query: Uses(5, _)
+    // Example query: Uses(5, _)
 
     return !pkb->GetVariablesUsedByStatement(first_arg_).empty();
   } else {
-    //Example query: uses(5, "count")
+    // Example query: uses(5, "count")
 
-    return pkb->HasUsesStatementRelationship(first_arg_, QueryUtil::GetIdent(second_arg_));
+    return pkb->HasUsesStatementRelationship(first_arg_,
+                                             QueryUtil::GetIdent(second_arg_));
   }
 }
 
@@ -22,15 +23,16 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_first_arg_synonym = declaration_map.count(first_arg_);
+  bool is_first_arg_a_read_synonym = QueryUtil::IsReadSynonym(declaration_map, first_arg_);
 
   bool is_second_arg_synonym = declaration_map.count(second_arg_);
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
-    header[first_arg_] = (int) header.size();
+    header[first_arg_] = static_cast<int>(header.size());
   }
   if (is_second_arg_synonym) {
-    header[second_arg_] = (int) header.size();
+    header[second_arg_] = static_cast<int>(header.size());
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
@@ -38,20 +40,28 @@ std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
 
   StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
 
+
+  // Special case where there will be no result is if first_arg_ is read synonym
+  if (is_first_arg_a_read_synonym) {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    //Example query: Uses(s, v)
+    // Example query: Uses(s, v)
 
     pair_constraint = pkb->GetUsesStatementVariablePairs(arg_1_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    //Example query: Uses(s, _)
+    // Example query: Uses(s, _)
 
     single_constraint = pkb->GetStatementsThatUses(arg_1_type);
   } else if (is_first_arg_synonym) {
-    //Example query: Uses(s, "x")
+    // Example query: Uses(s, "x")
 
-    single_constraint = pkb->GetStatementsUsesVariable(arg_1_type, QueryUtil::GetIdent(second_arg_));
+    single_constraint = pkb->GetStatementsUsesVariable(arg_1_type,
+                                                       QueryUtil::GetIdent(second_arg_));
   } else {
-    //Example query: Uses(1, v)
+    // Example query: Uses(1, v)
 
     single_constraint = pkb->GetVariablesUsedByStatement(first_arg_);
   }

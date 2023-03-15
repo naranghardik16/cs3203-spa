@@ -3,7 +3,7 @@
 void SuchThatBaseHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string rel_ref(clause->GetEntity());
 
-  //Check if relRef valid
+  // Check if relRef valid
   if (pql_constants::kRelRefs.find(rel_ref) == pql_constants::kRelRefs.end()) {
     throw SyntaxErrorException("The relationship reference is invalid in the Such That clause");
   }

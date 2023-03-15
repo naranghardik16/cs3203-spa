@@ -57,5 +57,4 @@ TEST_CASE("Test Qps") {
 
     REQUIRE(results.front() == "SemanticError");
   }
-
 }

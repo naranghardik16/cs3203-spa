@@ -1,0 +1,33 @@
+name: Linting Checks
+
+on:
+  push:
+    branches:
+      - master
+      - "milestone[1-3]"
+  pull_request:
+    branches:
+      - master
+      - "milestone[1-3]"
+
+jobs:
+  cpplint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - run: pip install cpplint
+
+      - name: Checking Source
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/
+
+      - name: Checking Integration Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/integration_testing/src
+        
+      - name: Checking Unit Testing
+        shell: bash
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/unit_testing/src/

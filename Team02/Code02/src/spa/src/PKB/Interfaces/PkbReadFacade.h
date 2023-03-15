@@ -607,7 +607,7 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name);
 
   /**
-   * Retrieves while statements that uses variables in its conditions. e.g. if(1=1) is not counted.
+   * Retrieves while statements that uses variables in its conditions. e.g. while(1=1) is not counted.
    *
    * @return A set of statement numbers.
    */
@@ -891,6 +891,170 @@ class PkbReadFacade {
    * @return True is there is AffectsStars Relationship stored, else False
    */
   virtual bool IsThereAnyAffectsStarRelationship();
+
+  //!API for Next
+  /**
+   * Retrieves all (s1, s2) pairs where Next(s1, s2) relationship holds and s1 is of type_1 and s2 is of type_2.
+   *
+   * @param type_1 - The statement type of s1.
+   * @param type_2 - The statement type of s2.
+   * @return A set of pairs (s1_statement_num, s2_statement_num).
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetNextPairs(StatementType type_1, StatementType type_2);
+
+  /**
+   * Retrieves all s where Next(statement_num, s) holds for the given statement_num and
+   * s is of the given statement type.
+   *
+   * @param statement_number - The specific statement.
+   * @param statement_type - The constraint on the statements in the set.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNext(std::string statement_number,
+                                                             StatementType statement_type);
+  /**
+   * Retrieves all s where Next(s, statement_num) holds for the given statement_num and
+   * s is of the given statement type.
+   *
+   * @param statement_number - The specific statement.
+   * @param statement_type - The constraint on the statements in the set.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextBy(std::string statement_number,
+                                                               StatementType statement_type);
+  /**
+   * Return s1 for all Next (s1, s2) pairs where s1 of the given statement type
+   * i.e. return the first value of all Next relationships in program.
+   *
+   * @param statement_type - The constraint on the statements in the set ie on s1.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextFirst(StatementType statement_type);
+
+  /**
+   * Return s2 for all Next (s1, s2) pairs where s2 of the given statement type.
+   * i.e. return the second value of all Next relationships in program.
+   *
+   * @param statement_type - The constraint on the statements in the set ie on s2.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextSecond(StatementType statement_type);
+
+  /**
+   * Checks if there is any Next relationship in program.
+   *
+   * @return True if Next* relationship exists in program, false otherwise.
+   */
+  virtual bool HasNextRelationship();
+
+  /**
+   * Checks if there exists any statement s, where Next(statement_num, s) holds for the given statement_num.
+   * i.e. statement_number appears as the first value in a Next relationship pair.
+   *
+   * @param statement_number - The statement number representing the statement.
+   * @return True is such s exists, false otherwise.
+   */
+  virtual bool HasNext(std::string statement_number);
+
+  /**
+   * Checks if there exists any statement s, where Next(s, statement_num) holds for the given statement_num.
+   * i.e. statement_number appears as the second value in a Next relationship pair.
+   *
+   * @param statement_number - The statement number representing the statement.
+   * @return True is such s exists, false otherwise.
+   */
+  virtual bool HasNextBy(std::string statement_number);
+
+  /**
+   * Checks if Next(statement_num_1, string statement_num_2) holds for the given two statement_num.
+   *
+   * @param statement_num_1 - The statement number 1.
+   * @param statement_num_2 - The statement number 2.
+   * @return True is relationship holds, false otherwise.
+   */
+  virtual bool IsNext(std::string statement_num_1, std::string statement_num_2);
+
+  //!API for NextStar
+  /**
+   * Retrieves all (s1, s2) pairs where Next*(s1, s2) relationship holds and s1 is of type_1 and s2 is of type_2.
+   *
+   * @param type_1 - The statement type of s1.
+   * @param type_2 - The statement type of s2.
+   * @return A set of pairs (s1_statement_num, s2_statement_num).
+   */
+  virtual PkbCommunicationTypes::PairConstraintSet GetNextStarPairs(StatementType type_1, StatementType type_2);
+
+  /**
+   * Retrieves all s where Next*(statement_num, s) holds for the given statement_num and
+   * s is of the given statement type.
+   *
+   * @param statement_number - The specific statement.
+   * @param statement_type - The constraint on the statements in the set.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextStar(std::string statement_number,
+                                                                    StatementType statement_type);
+  /**
+   * Retrieves all s where Next*(s, statement_num) holds for the given statement_num and
+   * s is of the given statement type.
+   *
+   * @param statement_number - The specific statement.
+   * @param statement_type - The constraint on the statements in the set.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextStarBy(std::string statement_number,
+                                                                      StatementType statement_type);
+  /**
+   * Return s1 for all Next* (s1, s2) pairs where s1 of the given statement type
+   * i.e. return the first value of all Next* relationships in program.
+   *
+   * @param statement_type - The constraint on the statements in the set ie on s1.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextStarFirst(StatementType statement_type);
+
+  /**
+   * Return s2 for all Next* (s1, s2) pairs where s2 of the given statement type.
+   * i.e. return the second value of all Next* relationships in program.
+   *
+   * @param statement_type - The constraint on the statements in the set ie on s2.
+   * @return A set of statement numbers.
+   */
+  virtual PkbCommunicationTypes::SingleConstraintSet GetNextStarSecond(StatementType statement_type);
+
+  /**
+   * Checks if there is any Next* relationship in program.
+   *
+   * @return True if Next* relationship exists in program, false otherwise.
+   */
+  virtual bool HasNextStarRelationship();
+
+  /**
+   * Checks if there exists any statement s, where Next*(statement_num, s) holds for the given statement_num.
+   * i.e. statement_number appears as the first value in a Next* relationship pair.
+   *
+   * @param statement_number - The statement number representing the statement.
+   * @return True is such s exists, false otherwise.
+   */
+  virtual bool HasNextStar(std::string statement_number);
+
+  /**
+   * Checks if there exists any statement s, where Next*(s, statement_num) holds for the given statement_num.
+   * i.e. statement_number appears as the second value in a Next* relationship pair.
+   *
+   * @param statement_number - The statement number representing the statement.
+   * @return True is such s exists, false otherwise.
+   */
+  virtual bool HasNextStarBy(std::string statement_number);
+
+  /**
+   * Checks if Next*(statement_num_1, string statement_num_2) holds for the given two statement_num.
+   *
+   * @param statement_num_1 - The statement number 1.
+   * @param statement_num_2 - The statement number 2.
+   * @return True is relationship holds, false otherwise.
+   */
+  virtual bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
 
  private:
   PKB& pkb;

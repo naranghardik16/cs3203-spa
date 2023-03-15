@@ -107,5 +107,4 @@ TEST_CASE("Test CallsHandler handlerSemantic") {
 
     REQUIRE_THROWS_AS(handler.HandleSemantic(clause, declaration), SemanticErrorException);
   }
-
 }

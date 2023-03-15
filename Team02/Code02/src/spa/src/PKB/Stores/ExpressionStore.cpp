@@ -16,10 +16,12 @@ void ExpressionStore::addExpression(std::shared_ptr<Expression> expression) {
   }
 }
 
-std::unordered_set<PkbTypes::VARIABLE> ExpressionStore::retrieveVariablesOfTheExpression(std::shared_ptr<Expression> expression) {
+std::unordered_set<PkbTypes::VARIABLE>
+    ExpressionStore::retrieveVariablesOfTheExpression(std::shared_ptr<Expression> expression) {
   return this->expression_to_variable_store_.retrieveFromKey(expression);
 }
 
-std::unordered_set<PkbTypes::CONSTANT> ExpressionStore::retrieveConstantsOfTheExpression(std::shared_ptr<Expression> expression) {
+std::unordered_set<PkbTypes::CONSTANT>
+    ExpressionStore::retrieveConstantsOfTheExpression(std::shared_ptr<Expression> expression) {
   return this->expression_to_constant_store_.retrieveFromKey(expression);
 }

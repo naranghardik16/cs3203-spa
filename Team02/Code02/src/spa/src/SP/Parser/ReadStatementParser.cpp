@@ -31,7 +31,6 @@ std::string ReadStatementParser::ExtractVariableName(Line &line) const {
   }
 
   return line[1]->GetValue();
-
 }
 
 void ReadStatementParser::CheckEndOfStatement(Line &line) const {

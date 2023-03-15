@@ -1,6 +1,5 @@
 #include "CallStatementParser.h"
 
-
 shared_ptr<Statement> CallStatementParser::ParseEntity(TokenStream &tokens) {
   auto line = tokens.front();
   tokens.pop_front();
@@ -32,7 +31,6 @@ std::string CallStatementParser::ExtractProcedureName(Line &line) const {
   }
 
   return line[1]->GetValue();
-
 }
 
 void CallStatementParser::CheckEndOfStatement(Line &line) const {

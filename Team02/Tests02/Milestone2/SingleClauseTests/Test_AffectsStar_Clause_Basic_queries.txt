@@ -1,0 +1,85 @@
+1 - Affects*(_,_) is true
+
+Select BOOLEAN such that Affects*(_,_)
+TRUE
+5000
+2 - Affects*(_,INT) is true
+
+Select BOOLEAN such that Affects*(_,11)
+TRUE
+5000
+3 - Affects*(_,INT) is false
+
+Select BOOLEAN such that Affects*(_,14)
+FALSE
+5000
+4 - Affects*(INT,_) is true
+
+Select BOOLEAN such that Affects*(6,_)
+TRUE
+5000
+5 -  Affects*(INT,_) is false
+
+Select BOOLEAN such that Affects*(17,_)
+FALSE
+5000
+6 - Affects*(INT,INT) is true -- self modification e.g. x=x+1
+
+Select BOOLEAN such that Affects*(6,6)
+TRUE
+5000
+7 - Affects*(INT,INT) is true
+
+Select BOOLEAN such that Affects*(1,11)
+TRUE
+5000
+8 - Affects*(INT,INT) is false -- variable is read
+
+Select BOOLEAN such that Affects*(11,14)
+FALSE
+5000
+9 - Affects*(INT,INT) is false
+
+Select BOOLEAN such that Affects*(2,4)
+FALSE
+5000
+10 - Affects*(ASSIGN-SYN,_)
+assign a,a1,a2;
+Select a2 such that Affects(a,a1) and Affects*(a1,a2) and Affects*(a2,_)
+1,4,8,2,6
+5000
+11 - Affects*(_,ASSIGN-SYN)
+assign a,a1,a2;
+Select a2 such that Affects(a,a1) and Affects*(a1,a2) and Affects*(_,a2)
+11,12
+5000
+12 - Affects*(INT,ASSIGN-SYN) has result
+assign a;
+Select a such that Affects*(1,a)
+4,8,10,12,11
+5000
+13 - Affects*(INT,ASSIGN-SYN) has result
+assign a;
+Select a such that Affects*(6,a)
+6,10,11,12
+5000
+14 - Affects*(INT,ASSIGN-SYN) has no result
+assign a,a1,a2;
+Select a2 such that Affects(a,a1) and Affects*(a1,a2) and Affects*(10,a2)
+
+5000
+15 - Affects(ASSIGN-SYN, INT) has result
+assign a;
+Select a such that Affects*(a,11)
+10,1,4,8,2,6
+5000
+16 - Affects(ASSIGN-SYN, INT) has no result
+assign a;
+Select a such that Affects*(a,14)
+
+5000
+17 - Affects(ASSIGN-SYN, ASSIGN-SYN)
+assign a,a1,a2;
+Select <a,a2> such that Affects(a,a1) and Affects*(a1,a2)
+1 11, 4 11, 8 11, 2 11, 2 12, 6 11, 6 12
+5000

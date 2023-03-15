@@ -1,0 +1,68 @@
+procedure OverkillTestWhile {
+    while(a < 1) { 
+        while(b < 2) { 
+            while(c < 3) { 
+                while(d < 4) { 
+                    while(e < 5) { 
+                        while(f < 6) { 
+                            while(g < 7) { 
+                                while(h < 8) { 
+                                    while(i < 9) { 
+                                        while(j < 10) { 
+                                            while(k < 11) { 
+                                                while(l < 12) { 
+                                                    while(m < 13) { 
+                                                        while(n < 14) { 
+                                                            while(o < 15) { 
+                                                                while(p < 16) { 
+                                                                    if(q > 17) then {
+                                                                        if(r > 18) then {
+                                                                            if(s > 19) then {
+                                                                                if(t > 20) then {
+                                                                                    shouldWork21 = 21;
+                                                                                } else {
+                                                                                    looksCorrectToMe22 = 22;
+                                                                                }
+                                                                            } else {
+                                                                                definitelyWorks23 = 23;
+                                                                            }
+                                                                        } else {
+                                                                            whatIfItFails24 = 24;
+                                                                        }
+                                                                    } else {
+                                                                        nahItsAllGood25 = 25;
+                                                                    }
+                                                                    ifsLookOk = 26;
+                                                                }
+                                                                za = 27;
+                                                            }
+                                                            zb = 28;
+                                                        }
+                                                        zc = 29;
+                                                    }
+                                                    zd = 30;
+                                                }
+                                                ze = 31;
+                                            }
+                                            zf = 32;
+                                        }
+                                        zg = 33;
+                                    }
+                                    zh = 34;
+                                }
+                                zi = 35;
+                            }
+                            zj = 36;
+                        }
+                        zk = 37;
+                    }
+                    zl = 38;
+                }
+                zm = 39;
+            }
+            zn = 40;
+        }
+        zo = 41;
+    }
+    zp = 42;
+}

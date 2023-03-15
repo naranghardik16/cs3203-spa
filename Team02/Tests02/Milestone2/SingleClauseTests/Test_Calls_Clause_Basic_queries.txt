@@ -1,17 +1,17 @@
 1 - Calls(_,_) is true
 procedure p;
 Select p.procName such that Calls(_,_)
-First, Second, Third, Fourth, Fifth, Sixth
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
 5000
 2 - Calls(_,IDENT) is true
 procedure p;procedure q;
-Select <p.procName,q> such that Calls(_,"Sixth")
-First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth
+Select <p.  procName,q> such that Calls(_,"Sixth")
+First First, Second Second, Third Third, Fourth Fourth, Fifth Fifth, Sixth Sixth, First Second, First Third, First Fourth, First Fifth, First Sixth, Second First, Second Third, Second Fourth, Second Fifth, Second Sixth, Third First, Third Second, Third Fourth, Third Fifth, Third Sixth, Fourth First, Fourth Second, Fourth Third, Fourth Fifth, Fourth Sixth, Fifth First, Fifth Second, Fifth Third, Fifth Fourth, Fifth Sixth, Sixth First, Sixth Second, Sixth Third, Sixth Fourth, Sixth Fifth, Fifth Seventh,First Seventh,Fourth Seventh,Second Seventh,Seventh Fifth,Seventh First,Seventh Fourth,Seventh Second,Seventh Seventh,Seventh Sixth,Seventh Third,Sixth Seventh,Third Seventh
 5000
 3 - Calls(_,IDENT) is false
 procedure p;procedure q;
 Select <p.procName,q> such that Calls(_,"First")
-
+none
 5000
 4 - Calls(IDENT,_) is true
 procedure p;
@@ -26,12 +26,12 @@ FALSE
 6 - Calls(IDENT,IDENT) is true
 procedure p;
 Select p such that Calls("First","Second")
-First, Second, Third, Fourth, Fifth, Sixth
+First, Second, Third, Fourth, Fifth, Sixth, Seventh
 5000
 7 - Calls(IDENT,IDENT) is false
 procedure p;
 Select p such that Calls("Sixth","Second")
-
+none
 5000
 8 - Calls(_,PROC-SYN) has result
 procedure p;
@@ -41,7 +41,7 @@ Second, Third, Fourth, Fifth, Sixth
 9 - Calls(_,PROC-SYN) has no result
 procedure p;
 Select p such that Calls(_,p) and Calls(_,"First")
-
+none
 5000
 10 - Calls(IDENT,PROC-SYN) has result
 procedure p;
@@ -51,7 +51,7 @@ Sixth
 11 - Calls(IDENT,PROC-SYN) has no result
 procedure p;
 Select p.procName such that Calls("Fourth",p)
-
+none
 5000
 12 - Calls(PROC-SYN,_) has result
 procedure p;
@@ -61,7 +61,7 @@ First, Second, Third, Fifth
 13 - Calls(PROC-SYN,_) has no result
 procedure p;variable v;
 Select p.procName such that Calls(p,_) with p.procName=v.varName
-
+none
 5000
 14 - Calls(PROC-SYN,IDENT) has result
 procedure p;
@@ -71,25 +71,25 @@ Second
 15 - Calls(PROC-SYN,IDENT) has no result
 procedure p;
 Select p.procName such that Calls(p, "First")
-
+none
 5000
-16 - Calls(PROC-SYN,PROC-SYN has result
+16 - Calls(PROC-SYN,PROC-SYN) has result
 procedure p,q;
 Select <p,q> such that Calls(p, q)
 First Second, Second Third, Second Sixth, Third Fourth, Third Fifth, Fifth Sixth
 5000
-17 - Calls(PROC-SYN,PROC-SYN has result -- nested case
+17 - Calls(PROC-SYN,PROC-SYN) has result -- nested case
 procedure p,q,z;
 Select <p,q,z> such that Calls(p, q) such that Calls(q,z)
 First Second Third, First Second Sixth, Second Third Fourth, Second Third Fifth, Third Fifth Sixth
 5000
 18 - Calls(PROC-SYN,PROC-SYN has result -- even more nested case
 procedure p1,p2,p3,p4,p5;
-Select <p1,p2,p3,p4,p5> such that Calls(p1, p2) and Calls(p2,p3) such that Calls(p3,p4) and Calls(p4,p5)
+Select <        p1,p2,p3,p4 ,p5  > such that Calls(p1, p2) and Calls(p2,p3) such that Calls(p3,p4) and Calls(p4,p5)
 First Second Third Fifth Sixth
 5000
 19 - Calls(PROC-SYN,PROC-SYN has no result
 procedure p1,p2,p3,p4,p5,p6;
-Select p1 such that Calls(p1, p2) and Calls(p2,p3) and Calls(p3,p4) and Calls(p4,p5) and Calls(p5,p6)
-
+Select p1 such that Calls(      p1, p2          ) and Calls(p2      ,p3) and Calls(p3,p4        ) and Calls(p4,p5) and Calls(p5,            p6)
+none
 5000

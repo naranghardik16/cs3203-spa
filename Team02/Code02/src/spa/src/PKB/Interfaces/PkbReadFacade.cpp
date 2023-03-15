@@ -48,7 +48,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignStatements() 
   return this->pkb.statement_store_->getStatementsFromType(StatementType::ASSIGN);
 }
 
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
+PkbCommunicationTypes::PairConstraintSet
+PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -142,9 +143,11 @@ bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure, std:
 
 // Uses Statement API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesStatementVariablePairs(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
+      this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
   for (const auto& p : statement_variable_pairs) {
@@ -157,9 +160,11 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetUsesStatementVariable
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
+      this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p : statement_variable_pairs) {
@@ -174,10 +179,13 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByStat
   return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(std::move(statement_number));
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVariable(StatementType statement_type, std::string variable) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements = this->pkb.statement_store_->getStatementsFromType(statement_type);
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVariable(StatementType statement_type,
+                                                                                    std::string variable) {
+  std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
 
-  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs = this->pkb.uses_store_->retrieveStatementVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
+      this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p : statement_variable_pairs) {
@@ -189,7 +197,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsUsesVaria
 }
 
 bool PkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
-  return this->pkb.uses_store_->hasUsesRelationBetweenStatementAndVariable(std::move(statement_number), std::move(variable));
+  return this->pkb.uses_store_->hasUsesRelationBetweenStatementAndVariable(std::move(statement_number),
+                                                                           std::move(variable));
 }
 
 // Uses Procedure API
@@ -206,7 +215,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesUsedByProc
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresUsesVariable(std::string variable) {
-  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs = this->pkb.uses_store_->retrieveProcedureVariablePairs();
+  PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs =
+      this->pkb.uses_store_->retrieveProcedureVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p : procedure_variable_pairs) {
@@ -219,11 +229,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresUsesVaria
 
 bool PkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
   return this->pkb.uses_store_->hasUsesRelationBetweenProcedureAndVariable(procedure, variable);
-
 }
 
 // Follows API
-PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) {
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(StatementType statement_type,
+                                                                       StatementType statement_type_follower) {
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements_of_type_1 =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -244,7 +254,8 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(Statement
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num, StatementType statement_type) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy(std::string statement_num,
+                                                                                 StatementType statement_type) {
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -262,7 +273,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num, StatementType statement_type) {
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowing(std::string statement_num,
+                                                                                StatementType statement_type) {
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -385,7 +397,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(StatementType statement_type){
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(StatementType statement_type) {
   PkbCommunicationTypes::SingleConstraintSet statements =
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
@@ -422,7 +434,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(S
   return result;
 }
 
-bool PkbReadFacade::HasFollowsStarRelationship(){
+bool PkbReadFacade::HasFollowsStarRelationship() {
   return this->pkb.follows_store_->hasAnyFollowsStarRelation();
 }
 
@@ -631,47 +643,50 @@ bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 }
 
 // Pattern API
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) {
-  //todo
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) {
+  // todo
   return {"1", "2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expression) {
-  //todo
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expression) {
+  // todo
   return {"1"};
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetIfConditionVariablePair() {
-  //todo
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfWithConditionVariable(const std::string &var_name) {
-  //todo
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfThatHasConditionVariable() {
-  //todo
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetWhileConditionVariablePair() {
-  //todo
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileWithConditionVariable(const std::string &var_name) {
-  //todo
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditionVariable() {
-  //todo
+  // todo
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression) {
   return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
 }
 
@@ -765,7 +780,8 @@ bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, P
   return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
       this->pkb.calls_store_->retrieveAllCallsPairs();
 
@@ -780,7 +796,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSp
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
       this->pkb.calls_store_->retrieveAllCallsPairs();
 
@@ -825,7 +842,8 @@ bool PkbReadFacade::IsThereAnyCallsRelationship() {
   return this->pkb.calls_store_->hasAnyCallsRelation();
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE procedure) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
       this->pkb.calls_store_->retrieveAllCallsStarPairs();
 
@@ -840,7 +858,8 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSp
   return result;
 }
 
-PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE procedure) {
+PkbCommunicationTypes::SingleConstraintSet
+PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
       this->pkb.calls_store_->retrieveAllCallsStarPairs();
 
@@ -889,72 +908,207 @@ bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
 
 // Affects API
 PkbCommunicationTypes::PairConstraintSet  PkbReadFacade::GetAffectsPairs() {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedBy(std::string stmt_num) {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffecting(std::string stmt_num) {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffected() {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAffect() {
-  //TODO
+  // todo
   return {};
 }
 
 bool PkbReadFacade::HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
-  //TODO
+  // todo
   return true;
 }
 
 bool PkbReadFacade::IsThereAnyAffectsRelationship() {
-  //TODO
+  // todo
   return true;
 }
 
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAffectsStarPairs() {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectedStarBy(std::string stmt_num) {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAssignsAffectingStar(std::string stmt_num) {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAreAffectedStar() {
-  //TODO
+  // todo
   return {};
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllAssignsThatAffectStar() {
-  //TODO
+  // todo
   return {};
 }
 
 bool PkbReadFacade::HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
-  //TODO
+  // todo
   return true;
 }
 
 bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
-  //TODO
+  // todo
   return true;
+}
+
+// Next API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextPairs(StatementType statement_type_1,
+                                                                         StatementType statement_type_2) {
+  return this->pkb.next_store_->retrieveAllNextPairs();
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNext(std::string statement_number,
+                                                                      StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    if (p.first == statement_number && statements_of_type.count(p.second) > 0) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextBy(std::string statement_number,
+                                                                        StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    if (p.second == statement_number && statements_of_type.count(p.first) > 0) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextFirst(StatementType statement_type) {
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    result.insert(p.first);
+  }
+
+  return result;
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(StatementType statement_type) {
+  PkbCommunicationTypes::PairConstraintSet next_pairs =
+      this->pkb.next_store_->retrieveAllNextPairs();
+
+  PkbCommunicationTypes::SingleConstraintSet result;
+
+  for (const auto& p: next_pairs) {
+    result.insert(p.second);
+  }
+
+  return result;
+}
+
+bool PkbReadFacade::HasNextRelationship() {
+  return this->pkb.next_store_->hasAnyNextRelation();
+}
+
+bool PkbReadFacade::HasNext(std::string statement_number) {
+  return this->pkb.next_store_->hasNext(statement_number);
+}
+
+bool PkbReadFacade::HasNextBy(std::string statement_number) {
+  return this->pkb.next_store_->hasNextBy(statement_number);
+}
+
+bool PkbReadFacade::IsNext(std::string statement_number_1, std::string statement_number_2) {
+  return this->pkb.next_store_->hasNextRelation(statement_number_1, statement_number_2);
+}
+
+// Next* API
+PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextStarPairs(StatementType statement_type_1,
+                                                                            StatementType statement_type_2) {
+  // todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStar(std::string statement_number,
+                                                                         StatementType statement_type) {
+  // todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarBy(std::string statement_number,
+                                                                           StatementType statement_type) {
+  // todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(StatementType statement_type) {
+  // todo
+  return {};
+}
+
+PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(StatementType statement_type) {
+  // todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStarRelationship() {
+  // todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStar(std::string statement_number) {
+  // todo
+  return {};
+}
+
+bool PkbReadFacade::HasNextStarBy(std::string statement_number) {
+  // todo
+  return {};
+}
+
+bool PkbReadFacade::IsNextStar(std::string statement_number_1, std::string statement_number_2) {
+  // todo
+  return {};
 }

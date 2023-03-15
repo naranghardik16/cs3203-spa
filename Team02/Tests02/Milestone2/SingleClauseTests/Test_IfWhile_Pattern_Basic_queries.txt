@@ -1,0 +1,30 @@
+1 - select if stmts with condition variable 
+if ifs; while w;
+Select ifs pattern ifs(_,_,_)
+4, 9
+5000
+2 - select while stmts with condition variable 
+if ifs; while w; 
+Select w pattern w(_,_)
+5, 8
+5000
+3 - select if stmts and variable pair 
+if ifs; while w;variable v;
+Select <ifs, v> pattern ifs(v,_,_)
+4 x, 9 a, 9 b
+5000
+4 - select while stmts and variable pair 
+if ifs; while w;variable v;
+Select <w, v.varName> pattern w(v,_)
+5 y, 5 x, 8 z
+5000
+5 - select if stmts with given var
+if ifs; while w;
+Select ifs pattern ifs("b",_,_)
+9
+5000
+6 - select while stmts with given var
+if ifs; while w; 
+Select w pattern w("x",_)
+5
+5000

@@ -30,7 +30,6 @@ std::string PrintStatementParser::ExtractVariableName(Line &line) const {
   }
 
   return line[1]->GetValue();
-
 }
 
 void PrintStatementParser::CheckEndOfStatement(Line &line) const {

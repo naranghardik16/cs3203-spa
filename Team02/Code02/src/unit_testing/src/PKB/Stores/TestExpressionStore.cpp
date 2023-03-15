@@ -147,6 +147,5 @@ TEST_CASE("Testcases for Expression Store") {
         std::unordered_set<PkbTypes::VARIABLE>({ "hardik", "x", "c" }));
     REQUIRE(expression_store->retrieveConstantsOfTheExpression(root5) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
-
   }
 }

@@ -102,4 +102,40 @@ class StubPkbReadFacade: public PkbReadFacade {
   PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair() override;
   PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name) override;
   PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable() override;
+
+  //!API for Next
+  PkbCommunicationTypes::PairConstraintSet GetNextPairs(StatementType type_1, StatementType type_2);
+  PkbCommunicationTypes::SingleConstraintSet GetNext(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextBy(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextFirst(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextSecond(StatementType statement_type);
+  bool HasNextRelationship();
+  bool HasNext(std::string statement_number);
+  bool HasNextBy(std::string statement_number);
+  bool IsNext(std::string statement_num_1, std::string statement_num_2);
+
+  //!API for Next*
+  PkbCommunicationTypes::PairConstraintSet GetNextStarPairs(StatementType type_1, StatementType type_2);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStar(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarBy(std::string statement_number, StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarFirst(StatementType statement_type);
+  PkbCommunicationTypes::SingleConstraintSet GetNextStarSecond(StatementType statement_type);
+  bool HasNextStarRelationship();
+  bool HasNextStar(std::string statement_number);
+  bool HasNextStarBy(std::string statement_number);
+  bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
+  PkbCommunicationTypes::PairConstraintSet GetAffectsPairs();
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedBy(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffecting(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffected();
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffect();
+  bool HasAffectsRelationship(string stmt_num, string stmt_num_being_affected);
+  bool IsThereAnyAffectsRelationship();
+  PkbCommunicationTypes::PairConstraintSet GetAffectsStarPairs();
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedStarBy(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectingStar(string stmt_num);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffectedStar();
+  bool IsThereAnyAffectsStarRelationship();
+  bool HasAffectsStarRelationship(string stmt_num, string stmt_num_being_affected);
+  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffectStar();
 };

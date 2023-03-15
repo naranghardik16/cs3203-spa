@@ -1,5 +1,4 @@
 #include "ArithmeticOperatorToken.h"
-using namespace std;
 
 ArithmeticOperatorToken::ArithmeticOperatorToken(string val, TokenType type) : Token(val, type) {}
 

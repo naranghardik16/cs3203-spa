@@ -11,7 +11,8 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Cfg/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.cpp")
 
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"

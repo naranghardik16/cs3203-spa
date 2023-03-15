@@ -64,7 +64,6 @@ void CfgExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
 
   // Add transition to the dummy node at the end
   AddTransitionAndUpdate(end_cfg_node, true);
-
 }
 
 void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
@@ -78,7 +77,7 @@ void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statemen
   } else {
     while_cfg_node = cur_cfg_node_;
   }
-  
+
   AddCfgForStmt(stmt_number);
   auto loop_stmts = while_statement->GetLoopStatements();
 
@@ -103,13 +102,11 @@ void CfgExtractor::VisitConstant(shared_ptr<Constant> constant) {}
 
 void CfgExtractor::ProcessStatements(const Procedure::StmtListContainer &statements) {
   for (auto const &stmt : statements) {
-
     auto this_cfg_extractor = make_shared<CfgExtractor>(*this);
     stmt->Accept(this_cfg_extractor);
     cur_cfg_node_ = this_cfg_extractor->cur_cfg_node_;
     cfg_ = this_cfg_extractor->cfg_;
     cur_proc_name_ = this_cfg_extractor->cur_proc_name_;
-
   }
 }
 
