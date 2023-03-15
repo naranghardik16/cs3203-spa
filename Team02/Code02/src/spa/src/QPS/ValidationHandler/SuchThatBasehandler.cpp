@@ -25,6 +25,12 @@ void SuchThatBaseHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, M
   if (QueryUtil::IsSynonym(arg_2) && declaration.find(arg_2) == declaration.end()) {
     throw SemanticErrorException("The synonym in the second argument was not declared");
   }
+  if (QueryUtil::IsSynonym(arg_1)) {
+    clause->syn_.insert(arg_1);
+  }
+  if (QueryUtil::IsSynonym(arg_2)) {
+    clause->syn_.insert(arg_2);
+  }
 
   return Handler::HandleSemantic(clause, declaration);
 }
