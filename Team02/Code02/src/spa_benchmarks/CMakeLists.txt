@@ -1,6 +1,7 @@
 project(spa_benchmarks)
 set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
-add_subdirectory(lib)
+include(AddGitSubmodule.cmake)
+add_git_submodule(lib)
 
 add_executable(spa_benchmarks spa_benchmark.cpp)
 
