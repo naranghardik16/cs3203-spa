@@ -1,7 +1,7 @@
 #include "WhilePatternClauseEvaluator.h"
 
 bool WhilePatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  //Would never be called as pattern clause always has synonym
+  // Would never be called as pattern clause always has synonym
   return false;
 }
 
@@ -18,12 +18,12 @@ std::shared_ptr<Result> WhilePatternClauseEvaluator::EvaluateClause(std::shared_
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_arg_1_synonym) {
-    //e.g. while(s,_)
-    header[first_arg_] = (int) header.size();
+    // e.g. while(s,_)
+    header[first_arg_] = static_cast<int>(header.size());
 
     pair_constraint = pkb->GetWhileConditionVariablePair();
   } else if (is_arg_1_wildcard) {
-    //e.g. while(_,_)
+    // e.g. while(_,_)
     single_constraint = pkb->GetWhileThatHasConditionVariable();
   } else {
     single_constraint = pkb->GetWhileWithConditionVariable(QueryUtil::GetIdent(first_arg_));

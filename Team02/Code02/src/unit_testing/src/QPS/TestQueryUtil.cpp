@@ -18,7 +18,6 @@ TEST_CASE("Check if isStmtRef follows rules correctly") {
 }
 
 TEST_CASE("Check if isEntRef follows rules correctly") {
-
   SECTION("Test valid cases") {
   std::vector<std::string> valid_vector {"a12AV", "_", "\"a12AV\""};
   for (const auto& kS : valid_vector) {
@@ -32,11 +31,9 @@ TEST_CASE("Check if isEntRef follows rules correctly") {
   REQUIRE_FALSE(QueryUtil::IsEntRef(kS));
   }
   }
-
 }
 
 TEST_CASE("Check if IsDesignEntity follows rules correctly") {
-
   SECTION("Test valid cases") {
     std::vector<std::string> valid_vector{"stmt", "read", "print", "call", "while", "if",
                                           "assign", "variable", "constant", "procedure"};

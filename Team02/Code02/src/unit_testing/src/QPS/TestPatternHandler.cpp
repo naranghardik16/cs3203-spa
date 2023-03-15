@@ -53,61 +53,84 @@ TEST_CASE("Test PatternHandler HandleSyntax") {
   }
 
   SECTION("Test valid clause syntax - arg_2(_   \"(1)- (a)\"  _)") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "_   \"(1)- (a)\"  _"}}});
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "_   \"(1)- (a)\"  _"}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
   SECTION("Test valid clause syntax - arg_2(_   \"(1%v) *(a)\"  _)") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "_   \"(1%v) *(a)\"  _"}}});
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "_   \"(1%v) *(a)\"  _"}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
   SECTION("Test valid clause syntax - arg_2(_   \"((((1)%((v))))) *(a)\"  _)") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "_   \"((((1)%((v))))) *(a)\"  _"}}});
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "_   \"((((1)%((v))))) *(a)\"  _"}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
   SECTION("Test valid clause syntax - arg_2(\"2 * (3 + 4) / (5 - 6) + 7 % 2 - 8 * (9 - 10) + 11\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"2 * (3 + 4) / (5 - 6) + 7 % 2 - 8 * (9 - 10) + 11\""}}});
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"2 * (3 + 4) / (5 - 6) + "
+                                            "7 % 2 - 8 * (9 - 10) + 11\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"(((((((((((1 / 2) / 3) / 4) / 5) / 6) / 7) / 8) / 9) / 10) / 11) / 12)\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(((((((((((1 / 2) / 3) / 4) / 5) / 6) / 7) / 8) / 9) / 10) / 11) / 12)\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"(((((((((((1 / 2) / 3) / 4) / 5) / 6) / 7) / 8) / 9) / 10) / 11) / 12)\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"(((((((((((1 / 2) / 3) / 4) / 5) / 6) "
+                                            "/ 7) / 8) / 9) / 10) / 11) / 12)\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"(((x * (x + y)) * (x + (x + y))) + ((y * (x + y)) * (y + (x + y)))) / ((x + y) * (x + y))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(((x * (x + y)) * (x + (x + y))) + ((y * (x + y)) * (y + (x + y)))) / ((x + y) * (x + y))\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"(((x * (x + y)) * (x + (x + y))) + ((y * (x + y)) * (y + (x + y)))) / ((x + y) * (x + y))\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"(((x * (x + y)) * (x + (x + y))) + "
+                                            "((y * (x + y)) * (y + (x + y)))) / ((x + y) * (x + y))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"(a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"(a + (b + (c + (d + (e + (f + (g + (h + "
+                                            "(i + (j + (k + (l + (m + (n + (o + p)))))))))))))))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * (10 * (11 * (12 * (13 * (14 * (15)))))))))))))\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"2 * (3 * (4 * (5 * (6 * (7 * (8 * (9 * "
+                                            "(10 * (11 * (12 * (13 * (14 * (15)))))))))))))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"((((((1 + 2) * 3) / 4) - 5) * 6) + 7) - (((8 - 9) * 10) / ((11 * 12) + 13))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"((((((1 + 2) * 3) / 4) - 5) * 6) + 7) - (((8 - 9) * 10) / ((11 * 12) + 13))\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"((((((1 + 2) * 3) / 4) - 5) * 6) + 7) - (((8 - 9) * 10) / ((11 * 12) + 13))\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"((((((1 + 2) * 3) / 4) - 5) * 6) + 7) "
+                                            "- (((8 - 9) * 10) / ((11 * 12) + 13))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
 
-  SECTION("Test valid clause syntax - arg_2(\"(((2 + 3) * 4) / ((5 - 6) * (7 + 8))) - (((9 - 10) * 11) + ((12 * 13) / (14 + 15)))\")") {
-    std::shared_ptr<ClauseSyntax> clause(new PatternClauseSyntax{{"a", {"_", "\"(((2 + 3) * 4) / ((5 - 6) * (7 + 8))) - (((9 - 10) * 11) + ((12 * 13) / (14 + 15)))\""}}});
+  SECTION("Test valid clause syntax - "
+          "arg_2(\"(((2 + 3) * 4) / ((5 - 6) * (7 + 8))) - (((9 - 10) * 11) + ((12 * 13) / (14 + 15)))\")") {
+    std::shared_ptr<ClauseSyntax> clause(
+        new PatternClauseSyntax{{"a", {"_", "\"(((2 + 3) * 4) / ((5 - 6) * (7 + 8))) - "
+                                            "(((9 - 10) * 11) + ((12 * 13) / (14 + 15)))\""}}});
 
     REQUIRE_NOTHROW(handler.HandleSyntax(clause));
   }
