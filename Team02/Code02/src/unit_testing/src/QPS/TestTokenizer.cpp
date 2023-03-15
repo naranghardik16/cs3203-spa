@@ -18,7 +18,8 @@ SyntaxPair CreateCorrectSyntaxPair(std::string entity, std::string first_paramet
   return syntax;
 }
 
-SyntaxPair CreateCorrectThreeArgSyntaxPair(std::string entity, std::string first_parameter, std::string second_parameter, std::string third_parameter) {
+SyntaxPair CreateCorrectThreeArgSyntaxPair(std::string entity, std::string first_parameter,
+                                           std::string second_parameter, std::string third_parameter) {
   ParameterVector parameter_vector = {first_parameter, second_parameter, third_parameter};
   SyntaxPair syntax;
   syntax.first = entity;
@@ -28,9 +29,12 @@ SyntaxPair CreateCorrectThreeArgSyntaxPair(std::string entity, std::string first
 
 TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
   SECTION("Valid Query: And + With clauses + repeated terminal names") {
-    std::string statement = "pattern if(_,_,_) and Parent(_,_,_) and Parent(_,_) with if.stmt#=a.stmt# and 6 = 5 such that Parent(w,if)";
-    SyntaxPair correct_if_syntax = CreateCorrectThreeArgSyntaxPair("if", "_", "_", "_");
-    SyntaxPair correct_parentT_syntax = CreateCorrectThreeArgSyntaxPair("Parent", "_", "_", "_");
+    std::string statement = "pattern if(_,_,_) and Parent(_,_,_) and Parent(_,_) "
+                            "with if.stmt#=a.stmt# and 6 = 5 such that Parent(w,if)";
+    SyntaxPair correct_if_syntax = CreateCorrectThreeArgSyntaxPair("if", "_",
+                                                                   "_", "_");
+    SyntaxPair correct_parentT_syntax = CreateCorrectThreeArgSyntaxPair("Parent", "_",
+                                                                        "_", "_");
     SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent", "_", "_");
     SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "if.stmt#", "a.stmt#");
     SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPair("", "6", "5");
@@ -48,7 +52,8 @@ TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
     std::shared_ptr<ClauseSyntax>
         parent2_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parent2_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>>
-        correct_vector = {pattern_clause_ptr, parentT_clause_ptr, parent_clause_ptr, with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
+        correct_vector = {pattern_clause_ptr, parentT_clause_ptr, parent_clause_ptr,
+                          with_clause_ptr, with2_clause_ptr, parent2_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
 
@@ -82,10 +87,12 @@ TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
   }
 
   SECTION("Valid Query: And + With clauses + random spacing") {
-    std::string statement = "such           that     Parent*    (w,      c) and Parent    (w,      c) with       c.procName =   p.procName and 6 = 5";
+    std::string statement = "such           that     Parent*    (w,      c) and Parent    "
+                            "(w,      c) with       c.procName =   p.procName and 6 = 5";
     SyntaxPair correct_parentT_syntax = CreateCorrectSyntaxPair("Parent*", "w", "c");
     SyntaxPair correct_parent_syntax = CreateCorrectSyntaxPair("Parent", "w", "c");
-    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName", "p.procName");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName",
+                                                             "p.procName");
     SyntaxPair correct_with2_syntax = CreateCorrectSyntaxPair("", "6", "5");
     std::shared_ptr<ClauseSyntax>
         parentT_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_parentT_syntax);
@@ -104,12 +111,11 @@ TEST_CASE("Check if ParseSubclauses works with Multi-clauses") {
       REQUIRE(vector[i]->Equals(*correct_vector[i]));
     }
   }
-
 }
 
 TEST_CASE("Check if ParseSubclauses work for With clause") {
-  SECTION ("INT = INT") {
-    std::string statement = "with 6=5" ;
+  SECTION("INT = INT") {
+    std::string statement = "with 6=5";
     SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "6", "5");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with_clause_ptr};
@@ -120,7 +126,7 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
     }
   }
 
-  SECTION ("IDENT = IDENT") {
+  SECTION("IDENT = IDENT") {
     std::string statement = "with \"x\"=\"y\"";
     SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "\"x\"", "\"y\"");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
@@ -132,9 +138,10 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
     }
   }
 
-  SECTION ("ATTRREF = ATTRREF") {
+  SECTION("ATTRREF = ATTRREF") {
     std::string statement = "with     c.    procName =      p.procName";
-    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName", "p.procName");
+    SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName",
+                                                             "p.procName");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with_clause_ptr};
 
@@ -144,8 +151,8 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
     }
   }
 
-  SECTION ("ATTRREF = IDENT") {
-    std::string statement = "with c.procName    =     \" x   \"" ;
+  SECTION("ATTRREF = IDENT") {
+    std::string statement = "with c.procName    =     \" x   \"";
     SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "c.procName", "\"x\"");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with_clause_ptr};
@@ -156,8 +163,8 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
     }
   }
 
-  SECTION ("ATTRREF = INT") {
-    std::string statement = "with s.stmt#=5" ;
+  SECTION("ATTRREF = INT") {
+    std::string statement = "with s.stmt#=5";
     SyntaxPair correct_with_syntax = CreateCorrectSyntaxPair("", "s.stmt#", "5");
     std::shared_ptr<ClauseSyntax> with_clause_ptr = std::make_shared<WithClauseSyntax>(correct_with_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {with_clause_ptr};
@@ -170,10 +177,10 @@ TEST_CASE("Check if ParseSubclauses work for With clause") {
 }
 
 TEST_CASE("Check if ParseSubclauses work for If pattern clause") {
-
   SECTION("random spacing") {
-    std::string statement = "               pattern ifs      (   v  ,_  ,_    )     " ;
-    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "v", "_", "_");
+    std::string statement = "               pattern ifs      (   v  ,_  ,_    )     ";
+    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "v",
+                                                                        "_", "_");
     std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -184,8 +191,10 @@ TEST_CASE("Check if ParseSubclauses work for If pattern clause") {
 
   SECTION("All wildcard") {
     std::string statement = "pattern ifs(_,_,_)";
-    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "_", "_", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "_",
+                                                                        "_", "_");
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -195,9 +204,11 @@ TEST_CASE("Check if ParseSubclauses work for If pattern clause") {
   }
 
   SECTION("first arg is ident") {
-    std::string statement = "pattern ifs(\"x\",_,_)" ;
-    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "\"x\"", "_", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::string statement = "pattern ifs(\"x\",_,_)";
+    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "\"x\"",
+                                                                        "_", "_");
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -207,8 +218,9 @@ TEST_CASE("Check if ParseSubclauses work for If pattern clause") {
   }
 
   SECTION("first arg is syn") {
-    std::string statement = "pattern ifs (v,_ ,_)" ;
-    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "v", "_", "_");
+    std::string statement = "pattern ifs (v,_ ,_)";
+    SyntaxPair correct_pattern_syntax = CreateCorrectThreeArgSyntaxPair("ifs", "v",
+                                                                        "_", "_");
     std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
@@ -223,7 +235,8 @@ TEST_CASE("Check if ParseSubclauses work for While pattern clause") {
   SECTION("All wildcard") {
     std::string statement = "pattern w(_,_)";
     SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("w", "_", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -233,9 +246,10 @@ TEST_CASE("Check if ParseSubclauses work for While pattern clause") {
   }
 
   SECTION("first arg is ident") {
-    std::string statement = "pattern w(\"x\",_)" ;
+    std::string statement = "pattern w(\"x\",_)";
     SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("w", "\"x\"", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -245,9 +259,10 @@ TEST_CASE("Check if ParseSubclauses work for While pattern clause") {
   }
 
   SECTION("first arg is syn") {
-    std::string statement = "pattern w(v,_)" ;
+    std::string statement = "pattern w(v,_)";
     SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("w", "v", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -257,9 +272,10 @@ TEST_CASE("Check if ParseSubclauses work for While pattern clause") {
   }
 
   SECTION("random spacing") {
-    std::string statement = "               pattern w      (   v  ,_  ,_    )     " ;
+    std::string statement = "               pattern w      (   v  ,_  ,_    )     ";
     SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("w", "v", "_");
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -267,20 +283,21 @@ TEST_CASE("Check if ParseSubclauses work for While pattern clause") {
       REQUIRE(vector[i]->Equals(*correct_vector[i]));
     }
   }
-
 }
-
 
 TEST_CASE("Check if ParseSubClauses works as expected") {
   SECTION("Test if ParseSubClauses works on repeated terminal names with keyword pattern_ReturnList") {
     std::string statement = "such that Parent* (  w  ,pattern) pattern pattern    (\"count\",   _   )  ";
 
-    //we trim before searching for keywords so the returned string will be a trimmed version
-    SyntaxPair correct_such_that_syntax = CreateCorrectSyntaxPair("Parent*", "w", "pattern");
-    SyntaxPair correct_pattern_syntax = CreateCorrectSyntaxPair("pattern", "\"count\"", "_");
-    std::shared_ptr<ClauseSyntax>
-        such_that_clause_ptr = std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
-    std::shared_ptr<ClauseSyntax> pattern_clause_ptr = std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
+    // we trim before searching for keywords so the returned string will be a trimmed version
+    SyntaxPair correct_such_that_syntax =
+        CreateCorrectSyntaxPair("Parent*", "w", "pattern");
+    SyntaxPair correct_pattern_syntax =
+        CreateCorrectSyntaxPair("pattern", "\"count\"", "_");
+    std::shared_ptr<ClauseSyntax> such_that_clause_ptr =
+        std::make_shared<SuchThatClauseSyntax>(correct_such_that_syntax);
+    std::shared_ptr<ClauseSyntax> pattern_clause_ptr =
+        std::make_shared<PatternClauseSyntax>(correct_pattern_syntax);
     std::vector<std::shared_ptr<ClauseSyntax>> correct_vector = {such_that_clause_ptr, pattern_clause_ptr};
 
     auto vector = tokenizer->ParseSubClauses(statement);
@@ -367,7 +384,7 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
   }
 
   SECTION("Test on invalid pattern clause with invalid concrete syntax_ThrowSyntaxErrorException") {
-    std::string invalid_pattern_clause = "a (\"count\" _)"; //invalid clause without comma
+    std::string invalid_pattern_clause = "a (\"count\" _)";  // invalid clause without comma
     try {
          auto pair  = tokenizer->ExtractAbstractSyntaxFromClause(invalid_pattern_clause);
     } catch (const SyntaxErrorException& e) {
@@ -376,7 +393,7 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
   }
 
   SECTION("Test on invalid such that clause with invalid concrete syntax_ThrowSyntaxErrorException") {
-    std::string invalid_such_that_clause = "a, v)"; //invalid clause without (
+    std::string invalid_such_that_clause = "a, v)";  // invalid clause without (
     try {
       auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause);
     } catch (const SyntaxErrorException& e) {
@@ -386,7 +403,7 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
 
 
   SECTION("Test on clause with missing abstract syntax_ThrowSyntaxErrorException") {
-    std::string invalid_such_that_clause = "(,)"; //checks will be done by validator to throw exception
+    std::string invalid_such_that_clause = "(,)";  // checks will be done by validator to throw exception
     try {
       auto pair = tokenizer->ExtractAbstractSyntaxFromClause(invalid_such_that_clause);
     } catch (const SyntaxErrorException& e) {
@@ -395,11 +412,12 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromClause works as expected") {
   }
 }
 
-//Split declaration statements from Select Statement
+// Split declaration statements from Select Statement
 TEST_CASE("Check if SplitQuery works") {
   SECTION("ValidCases_ReturnPair") {
     std::vector<std::string> queries = {"variable v, v1;procedure p, p1;\nSelect v",
-                                        "  assign a  ; while w; \n  Select a such that Parent* (w, a) pattern a (\"count\", _)"};
+                                        "  assign a  ; while w; \n  Select a such that Parent* "
+                                        "(w, a) pattern a (\"count\", _)"};
     std::vector<std::vector<std::string>>
         correct_declaration_clauses{{"variable v, v1", "procedure p, p1"}, {"assign a", "while w"}};
     std::vector<std::string>
@@ -419,7 +437,8 @@ TEST_CASE("Check if SplitQuery works") {
   }
 
   SECTION("InvalidDeclaration_ThrowSyntaxErrorException") {
-    std::vector<std::string> invalid_queries = {"variable v;", "Select v", "variable v Select v", "variable v, v1;    such that"};
+    std::vector<std::string> invalid_queries = {"variable v;", "Select v", "variable v Select v",
+                                                "variable v, v1;    such that"};
     for (auto invalid_query : invalid_queries) {
       try {
         auto declaration_select_pair = tokenizer->SplitQuery(invalid_query);
@@ -449,7 +468,8 @@ TEST_CASE("Test if ParseSynonym works") {
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "     1a      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map),
+                      SyntaxErrorException);
   }
 
   SECTION("InvalidAttrNameInRef_ThrowsSyntaxErrorException") {
@@ -457,7 +477,8 @@ TEST_CASE("Test if ParseSynonym works") {
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "r.varname      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map),
+                      SyntaxErrorException);
   }
 
   SECTION("InvalidSynInRef_ThrowsSyntaxErrorException") {
@@ -465,15 +486,18 @@ TEST_CASE("Test if ParseSynonym works") {
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "1r.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map),
+                      SyntaxErrorException);
   }
 
   SECTION("InvalidAttrRef_ThrowsSyntaxErrorException") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
-    std::string select_keyword_removed_query = "r.varName.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    std::string select_keyword_removed_query = "r.varName.varName      such  that   "
+                                               "Parent* (w, a) pattern a (\"count\", _)";
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map),
+                      SyntaxErrorException);
   }
 
   SECTION("BOOLEANInTupleNotDeclared_HasSemanticError") {
@@ -508,7 +532,8 @@ TEST_CASE("Test if ParseSynonym works") {
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
     std::string select_keyword_removed_query = "<r.varName      such  that   Parent* (w, a) pattern a (\"count\", _)";
-    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map), SyntaxErrorException);
+    REQUIRE_THROWS_AS(tk->ParseSynonym(select_keyword_removed_query, map),
+                      SyntaxErrorException);
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
 
@@ -552,7 +577,7 @@ TEST_CASE("Test if ParseSynonym works") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
-    std::string select_keyword_removed_query = "<proc.procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    std::string select_keyword_removed_query = "<proc.procName>   such  that   Parent* (w, a) pattern a (\"count\", _)";
     REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
@@ -615,7 +640,7 @@ TEST_CASE("Test if ParseSynonym works") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
-    std::string select_keyword_removed_query = "<ca.procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    std::string select_keyword_removed_query = "<ca.procName>     such  that   Parent* (w, a) pattern a (\"count\", _)";
     REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
@@ -633,7 +658,8 @@ TEST_CASE("Test if ParseSynonym works") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
-    std::string select_keyword_removed_query = "<a.stmt#,c.value,ca.procName,r.varName,p.varName,v.varName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    std::string select_keyword_removed_query = "<a.stmt#,c.value,ca.procName,r.varName,p.varName,v.varName>      "
+                                               "such  that   Parent* (w, a) pattern a (\"count\", _)";
     REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
@@ -642,7 +668,8 @@ TEST_CASE("Test if ParseSynonym works") {
     auto tk = std::make_shared<QpsTokenizer>();
     tk->semantic_validator_->declaration_ = declaration;
     Map map = {};
-    std::string select_keyword_removed_query = "<a.   stmt#,c   .value,     ca   .   procName>      such  that   Parent* (w, a) pattern a (\"count\", _)";
+    std::string select_keyword_removed_query = "<a.   stmt#,c   .value,     ca   .   procName>      such  that   "
+                                               "Parent* (w, a) pattern a (\"count\", _)";
     REQUIRE_NOTHROW(tk->ParseSynonym(select_keyword_removed_query, map));
     REQUIRE_FALSE(tk->semantic_validator_->has_semantic_error_);
   }
@@ -672,7 +699,7 @@ TEST_CASE("Check if GetIndexListOfClauses works as expected") {
   SECTION("ValidCase_ReturnSortedVectorOfSizeT") {
     std::string query_substr = "pattern a (\"such that \", _) such that parent* (w, pattern )";
     auto index = tokenizer->GetIndexListOfClauses(query_substr);
-    std::vector<size_t> correct_vector = {0,28};
+    std::vector<size_t> correct_vector = {0, 28};
     REQUIRE(index == correct_vector);
   }
 
@@ -682,7 +709,7 @@ TEST_CASE("Check if GetIndexListOfClauses works as expected") {
   }
 }
 
-//Check if design entities and corresponding synonyms can be extracted from declarations
+// Check if design entities and corresponding synonyms can be extracted from declarations
 TEST_CASE("Check if ExtractAbstractSyntaxFromDeclaration works as expected") {
   SECTION("Test simple case of one design entity and one synonym_ReturnMap") {
     std::vector<std::string> declarations{"variable v"};
@@ -752,5 +779,3 @@ TEST_CASE("Check if ExtractAbstractSyntaxFromDeclaration works as expected") {
     REQUIRE(map == correct_synonym_to_design_entity_map);
   }
 }
-
-

@@ -5,11 +5,11 @@ bool UsesPClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFaca
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_second_arg_a_wildcard) {
-    //Example query: Uses("Main", _)
+    // Example query: Uses("Main", _)
 
     return !pkb->GetVariablesUsedByProcedure(QueryUtil::GetIdent(first_arg_)).empty();
   } else {
-    //Example query: uses("Main", "count")
+    // Example query: uses("Main", "count")
 
     return pkb->HasUsesProcedureRelationship(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
   }
@@ -27,29 +27,29 @@ std::shared_ptr<Result> UsesPClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
-    header[first_arg_] = (int) header.size();
+    header[first_arg_] = static_cast<int>(header.size());
   }
   if (is_second_arg_synonym) {
-    header[second_arg_] = (int) header.size();
+    header[second_arg_] = static_cast<int>(header.size());
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    //Example query: Uses(p, v)
+    // Example query: Uses(p, v)
 
     pair_constraint = pkb->GetUsesProcedureVariablePairs();
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    //Example query: Uses(p, _)
+    // Example query: Uses(p, _)
 
     single_constraint = pkb->GetProceduresThatUse();
-  } else if (is_first_arg_synonym && !is_second_arg_a_wildcard){
-    //Example query: Uses(p, "x")
+  } else if (is_first_arg_synonym && !is_second_arg_a_wildcard) {
+    // Example query: Uses(p, "x")
 
     single_constraint = pkb->GetProceduresUsesVariable(QueryUtil::GetIdent(second_arg_));
   } else {
-    //Example query: Uses("Main", v)
+    // Example query: Uses("Main", v)
 
     single_constraint = pkb->GetVariablesUsedByProcedure(QueryUtil::GetIdent(first_arg_));
   }

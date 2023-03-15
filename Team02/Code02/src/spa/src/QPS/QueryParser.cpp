@@ -10,9 +10,10 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
   std::vector<std::string> declarations = declaration_select_pair.first;
   Map declaration_map = tk->ExtractAbstractSyntaxFromDeclarations(declarations);
 
-  //Already checked if the statement starts with Select
+  // Already checked if the statement starts with Select
   std::string trimmed_select_statement = declaration_select_pair.second;
-  std::string remaining_clause = string_util::Trim(trimmed_select_statement.substr(pql_constants::kSelectKeyword.length()));
+  std::string remaining_clause = string_util::Trim(trimmed_select_statement
+      .substr(pql_constants::kSelectKeyword.length()));
 
   SelectedSynonymTuple synonym_tuple = tk->ParseSynonym(remaining_clause, declaration_map);
 
@@ -26,7 +27,7 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
     throw SemanticErrorException();
   }
 
-  //consolidate parsing result
+  // consolidate parsing result
   std::shared_ptr<Query> query_ptr = std::make_shared<Query>(synonym_tuple, declaration_map, syntax_pair_list);
   return query_ptr;
 }

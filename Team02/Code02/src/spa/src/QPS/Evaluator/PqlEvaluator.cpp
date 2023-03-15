@@ -61,7 +61,7 @@ std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
 }
 
 void PqlEvaluator::EvaluateBooleanConstraints() {
-  //!Evaluate and remove all boolean constraints first
+  // Evaluate and remove all boolean constraints first
 
   for (auto iter = syntax_list_.begin(); iter != syntax_list_.end(); ) {
     auto clause = *iter;
@@ -83,15 +83,15 @@ void PqlEvaluator::EvaluateBooleanConstraints() {
 std::shared_ptr<Result> PqlEvaluator::GetClauseEvaluationResult() {
   std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
 
-  //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
+  // Evaluate the remaining constraints and use intersection of result classes to resolve constraints
   for (const auto& kClause : syntax_list_) {
     auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
     std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
 
-    //get intersection
+    // get intersection
     clause_evaluation_result->JoinResult(intermediate_result);
 
-    //Whenever results become empty stop and return empty set
+    // Whenever results become empty stop and return empty set
     if (clause_evaluation_result->table_.empty()) {
       is_return_empty_set_ = true;
       break;
@@ -119,7 +119,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(std::shared_pt
   }
 
 
-  //only add the remaining selected synonym values into table if it is not already present in the header
+  // only add the remaining selected synonym values into table if it is not already present in the header
   auto &header = clause_evaluation_result->header_;
   for (const auto& kSynonym : synonym_tuple_) {
     if (header.count(kSynonym) == 0) {
