@@ -118,7 +118,8 @@ shared_ptr<Parser::TokenStream> Tokenizer::Tokenize(istream &stream) {
       // else if it is the end of the line it will also be extracted for name/integer
       if (type != NOT_SET &&
           (isspace(current_char)
-          || (current_token != nullptr && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
+              || (current_token != nullptr
+                  && !(current_token->GetType() == NAME || current_token->GetType() == INTEGER)))) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index), type);
       } else if (type != NOT_SET && j == lines[i].size() - 1) {
         prev_token = MatchNameOrIntegerToken(lrv, lines[i].substr(*start_index, j - *start_index + 1), type);

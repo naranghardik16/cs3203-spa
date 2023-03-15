@@ -28,7 +28,6 @@ TEST_CASE("Check if expressions are parsed correctly for uses") {
                                   PairHasherUtil::hash_pair>({std::make_pair(
         "1",
         "flag")}));
-
   } catch (SpaException &e) {
     cout << e.what() << endl;
   }
@@ -250,7 +249,6 @@ TEST_CASE("Check if calls/* are extracted correctly (simple)") {
         make_pair("Second", "Third")
     };
     for (pair<string, string> pp : expected_call_pairs) {
-      // TODO: Update with PKB retrieve calls relationship method
       if (!pkb_read_facade->HasCallsRelation(pp.first, pp.second)) {
         FAIL();
       }

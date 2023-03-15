@@ -2,7 +2,6 @@
 
 void CfgNode::AddTransition(bool is_true, std::shared_ptr<CfgNode> node) {
   if (node_trans_.count(is_true) > 0) {
-
     throw SemanticErrorException(
         "CFGNode already has a transition node here for "
             + std::to_string(is_true));

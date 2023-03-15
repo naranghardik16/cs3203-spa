@@ -10,7 +10,8 @@ bool QueryUtil::IsQuoted(const std::string& s) {
 }
 
 bool QueryUtil::IsQuotedIdent(const std::string &s) {
-  return (s[0] == '"' && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2)) && s[s.length()-1] == '"');
+  return (s[0] == '"' && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2))
+  && s[s.length()-1] == '"');
 }
 
 bool QueryUtil::IsWildcard(const std::string& s) {
@@ -19,7 +20,8 @@ bool QueryUtil::IsWildcard(const std::string& s) {
 
 bool QueryUtil::IsAttrRef(const std::string& s) {
   std::vector<std::string> token_lst = SplitAttrRef(s);
-  if (token_lst.size() != 2 || !IsSynonym(token_lst[0]) || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
+  if (token_lst.size() != 2 || !IsSynonym(token_lst[0])
+  || pql_constants::kAttrName.find(token_lst[1]) == pql_constants::kAttrName.end()) {
     return false;
   }
   return true;
@@ -42,15 +44,19 @@ bool QueryUtil::IsRef(const std::string &s) {
 }
 
 bool QueryUtil::IsDesignEntity(const std::string& s) {
-  return s == pql_constants::kPqlStatementEntity || s == pql_constants::kPqlReadEntity || s == pql_constants::kPqlPrintEntity
-  || s == pql_constants::kPqlCallEntity || s == pql_constants::kPqlWhileEntity || s == pql_constants::kPqlIfEntity ||
-  s == pql_constants::kPqlAssignEntity || s == pql_constants::kPqlVariableEntity || s == pql_constants::kPqlConstantEntity ||
-  s == pql_constants::kPqlProcedureEntity;
+  return s == pql_constants::kPqlStatementEntity || s == pql_constants::kPqlReadEntity
+  || s == pql_constants::kPqlPrintEntity
+  || s == pql_constants::kPqlCallEntity || s == pql_constants::kPqlWhileEntity
+  || s == pql_constants::kPqlIfEntity ||
+  s == pql_constants::kPqlAssignEntity || s == pql_constants::kPqlVariableEntity
+  || s == pql_constants::kPqlConstantEntity
+  || s == pql_constants::kPqlProcedureEntity;
 }
 
 bool QueryUtil::IsRelationshipReference(const std::string& s) {
-  return s == pql_constants::kPqlFollowsRel || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlParentRel
-  || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlUsesRel  || s == pql_constants::kPqlModifiesRel ;
+  return s == pql_constants::kPqlFollowsRel || s == pql_constants::kPqlFollowsRel
+  || s == pql_constants::kPqlParentRel
+  || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlUsesRel  || s == pql_constants::kPqlModifiesRel;
 }
 
 bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expression) {
@@ -98,7 +104,7 @@ bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression)
 }
 
 bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& expression) {
-  //check if synonym first
+  // check if synonym first
   if (declaration.count(expression) == 0) {
     return false;
   }
@@ -135,9 +141,9 @@ StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& s
     return StatementType::CALL;
   } else if (IsAssignSynonym(declaration, synonym)) {
     return StatementType::ASSIGN;
-  } else if (IsWhileSynonym(declaration, synonym)){
+  } else if (IsWhileSynonym(declaration, synonym)) {
     return StatementType::WHILE;
-  } else if (IsStatementSynonym(declaration, synonym)){
+  } else if (IsStatementSynonym(declaration, synonym)) {
     return StatementType::STATEMENT;
   } else {
     return StatementType::UNK;
@@ -179,9 +185,12 @@ std::string QueryUtil::AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &de
 }
 
 bool QueryUtil::IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Map &declaration_map) {
-  //! remove trivial attr name e.g. r.stmt# is same as r except for c.procName, read.varName and print.varName
-  bool is_call_proc_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlCallEntity) && (attr_ref_token_lst[1] == pql_constants::kProcName);
-  bool is_read_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlReadEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
-  bool is_print_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity) && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  // remove trivial attr name e.g. r.stmt# is same as r except for c.procName, read.varName and print.varName
+  bool is_call_proc_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlCallEntity)
+      && (attr_ref_token_lst[1] == pql_constants::kProcName);
+  bool is_read_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlReadEntity)
+      && (attr_ref_token_lst[1] == pql_constants::kVarname);
+  bool is_print_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity)
+      && (attr_ref_token_lst[1] == pql_constants::kVarname);
   return !is_call_proc_name_attr_ref && !is_read_var_name_attr_ref && !is_print_var_name_attr_ref;
 }
