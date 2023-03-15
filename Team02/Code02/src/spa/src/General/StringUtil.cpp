@@ -29,7 +29,7 @@ std::string string_util::Trim(const std::string &s) {
  * Splits a string by a specified delimiter. The delimiter will be excluded.
  */
 std::vector<std::string> string_util::SplitStringByDelimiter(std::string s, const std::string &delimiter) {
-  //Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+  // Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
   std::vector<std::string> tokens;
   std::string token;
 
@@ -69,7 +69,7 @@ std::string string_util::GetFirstWord(const std::string& s) {
  */
 std::string string_util::GetSubStringAfterKeyword(const std::string& clause, const std::string& keyword) {
   size_t new_start_index = clause.find(keyword) + keyword.length();
-  return Trim(clause.substr(new_start_index,clause.length() - 1));
+  return Trim(clause.substr(new_start_index, clause.length() - 1));
 }
 
 /*
@@ -78,6 +78,7 @@ std::string string_util::GetSubStringAfterKeyword(const std::string& clause, con
  */
 std::string string_util::RemoveExtraWhitespacesInString(const std::string& input) {
   std::string output;
-  std::unique_copy(input.begin(), input.end(), std::back_insert_iterator<std::string>(output),[](char a,char b){ return std::isspace(a) && std::isspace(b);});
+  std::unique_copy(input.begin(), input.end(), std::back_insert_iterator<std::string>(output),
+      [](char a, char b){ return std::isspace(a) && std::isspace(b);});
   return Trim(output);
 }

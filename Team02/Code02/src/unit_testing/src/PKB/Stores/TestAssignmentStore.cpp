@@ -45,7 +45,7 @@ TEST_CASE("Testcases for Assignment Store") {
     REQUIRE(assignment_store->retrieveAllStatementNumbersWhichContainExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
   }
-  
+
   SECTION("Multiple Assignment Statements with the same RHS") {
     auto assignment_store = new AssignmentStore();
     std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> arguments;

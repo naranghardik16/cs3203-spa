@@ -5,19 +5,19 @@ bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbRe
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    //Example query: Follow*(_, _)
+    // Example query: Follow*(_, _)
 
     return pkb->HasFollowsStarRelationship();
   } else if (is_first_arg_a_wildcard && !is_second_arg_a_wildcard) {
-    //Example query: Follow*(_, 1)
+    // Example query: Follow*(_, 1)
 
     return pkb->HasFollowsStarBy(second_arg_);
   } else if (!is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    //Example query: Follow*(1, _)
+    // Example query: Follow*(1, _)
 
     return pkb->HasFollowsStar(first_arg_);
   } else {
-    //Example query: Follow*(1, 6)
+    // Example query: Follow*(1, 6)
 
     return pkb->IsFollowsStar(first_arg_, second_arg_);
   }
@@ -36,17 +36,17 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_synonym) {
-    header[first_arg_] = (int) header.size();
+    header[first_arg_] = static_cast<int>(header.size());
   }
   if (is_second_arg_synonym) {
-    header[second_arg_] = (int) header.size();
+    header[second_arg_] = static_cast<int>(header.size());
   }
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
-  //! Special case Follow*(5,5) or Follow*a,a) will always return empty
-  //! Nothing can follow first statement
+  // Special case Follow*(5,5) or Follow*a,a) will always return empty
+  // Nothing can follow first statement
   bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
   if (is_same_syn_or_int_pairs || second_arg_ == "1") {
     std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
@@ -57,23 +57,23 @@ std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_p
   StatementType arg_2_type = QueryUtil::GetStatementType(declaration_map, second_arg_);
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    //Example query: Follows* (s,s)
+    // Example query: Follows* (s,s)
 
     pair_constraint = pkb->GetFollowsStarPairs(arg_1_type, arg_2_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    //Example query: Follows* (s,_)
+    // Example query: Follows* (s,_)
 
     single_constraint = pkb->GetFollowsStarFirst(arg_1_type);
   } else if (is_first_arg_synonym) {
-    //Example query: Follows* (s, 1)
+    // Example query: Follows* (s, 1)
 
     single_constraint = pkb->GetFollowsStarBy(second_arg_, arg_1_type);
   } else if (is_first_arg_a_wildcard) {
-    //Example query: Follows* (_, s)
+    // Example query: Follows* (_, s)
 
     single_constraint = pkb->GetFollowsStarSecond(arg_2_type);
   } else {
-    //Example query: Follows* (1, s)
+    // Example query: Follows* (1, s)
 
     single_constraint = pkb->GetFollowsStar(first_arg_, arg_2_type);
   }

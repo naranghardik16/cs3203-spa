@@ -476,4 +476,3 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
 }
-
