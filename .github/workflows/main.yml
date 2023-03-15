@@ -35,6 +35,8 @@ jobs:
           cmake --build . --target unit_testing --config Release
           cmake --build . --target integration_testing --config Release
           cmake --build . --target autotester --config Release
+          cmake -E chdir "build" cmake -DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release ../
+          cmake --build . --target spa_benchmarks
           cd ../..
 
       - name: Unit Testing
