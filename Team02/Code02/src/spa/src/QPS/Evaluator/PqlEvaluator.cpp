@@ -21,14 +21,15 @@ void PqlEvaluator::AdjustTrivialAttrRefs() {
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   if (!groups_.empty() && groups_[0]->GetSize() == 0) {
     EvaluateBooleanConstraints();
-    if (is_return_empty_set_) {
-      return {};
-    }
     groups_.erase(groups_.begin());
   }
 
   if (synonym_tuple_.empty()) {
     return EvaluateBooleanQuery();
+  }
+
+  if (is_return_empty_set_) {
+    return {};
   }
 
   if (groups_.empty()) {
