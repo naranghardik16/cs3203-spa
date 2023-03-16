@@ -745,3 +745,117 @@ TEST_CASE("Integration testing for Calls*") {
     REQUIRE(results == expected_results);
   }
 }
+
+TEST_CASE("Integration testing for Next") {
+  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb);
+  std::shared_ptr<PkbWriteFacade> pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
+
+  std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+
+  std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+  node1->AddStmt(1);
+  cfg->AddStmtCfg(1, node1);
+  node1->AddStmt(2);
+  cfg->AddStmtCfg(2, node1);
+
+  std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+  node2->AddStmt(3);
+  cfg->AddStmtCfg(3, node2);
+  node2->AddStmt(4);
+  cfg->AddStmtCfg(4, node2);
+
+  std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+  node3->AddStmt(5);
+  cfg->AddStmtCfg(5, node3);
+  node3->AddStmt(6);
+  cfg->AddStmtCfg(6, node3);
+
+  pkb_write->AddStatementOfAType("1", ASSIGN);
+  pkb_write->AddStatementOfAType("2", IF);
+  pkb_write->AddStatementOfAType("3", CALL);
+  pkb_write->AddStatementOfAType("4", ASSIGN);
+  pkb_write->AddStatementOfAType("5", CALL);
+  pkb_write->AddStatementOfAType("6", READ);
+
+  node1->AddTransition(true, node2);
+  node1->AddTransition(false, node3);
+
+  cfg->AddProcCfg("main", node1);
+
+  pkb_write->AddCfg(cfg);
+
+  SECTION("Next(_,_) is true") {
+    std::string query = "stmt s; Select s.stmt# such that Next(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"1", "2", "3", "4", "5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(_,IDENT) is true") {
+    std::string query = "stmt s; Select <s.stmt#> such that Next(_,2)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"1","2","3","4", "5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(_,IDENT) is false") {
+    std::string query = "stmt s; Select <s.stmt#> such that Next (_,1 )";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(IDENT, _) is true") {
+    std::string query = "stmt s1; stmt s2; Select <s1.stmt#, s1.stmt#> such that Next (1,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"1 1", "2 2","3 3", "4 4", "5 5", "6 6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(IDENT, _) is false") {
+    std::string query = "stmt s1; stmt s2; Select <s1.stmt#, s2.stmt#> such that Next (6,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(IDENT,IDENT) is true") {
+    std::string query = "stmt s; Select s such that Next(1,2)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"1", "2", "3", "4", "5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(IDENT,IDENT) is false") {
+    std::string query = "stmt s; Select s .stmt# such that Next(3,2)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Next(IDENT, IDENT)is true") {
+    std::string query = "stmt s; Select s such that Next(3, s)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{"4"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+
+
+}
+
+
