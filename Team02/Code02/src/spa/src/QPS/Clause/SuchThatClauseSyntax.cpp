@@ -61,3 +61,45 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
   }
   return evaluator;
 }
+
+int SuchThatClauseSyntax::GetClauseScore(Map &declaration_map) {
+  int score;
+  std::string relationship_reference = ClauseSyntax::GetEntity();
+  if (relationship_reference == pql_constants::kPqlCallsRel) {
+    score = 3;
+  } else if (relationship_reference == pql_constants::kPqlParentRel) {
+    score = 4;
+  } else if (relationship_reference == pql_constants::kPqlFollowsRel) {
+    score = 5;
+  } else if (relationship_reference == pql_constants::kPqlNextRel) {
+    score = 6;
+  } else if (relationship_reference == pql_constants::kPqlModifiesRel) {
+    if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())
+        || QueryUtil::IsQuoted(ClauseSyntax::GetFirstParameter())) {
+      score = 7;
+    } else {
+      score = 8;
+    }
+  } else if (relationship_reference == pql_constants::kPqlUsesRel) {
+    if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())
+        || QueryUtil::IsQuoted(ClauseSyntax::GetFirstParameter())) {
+      score = 9;
+    } else {
+      score = 10;
+    }
+  } else if (relationship_reference == pql_constants::kPqlCallsStarRel) {
+    score = 11;
+  }  else if (relationship_reference == pql_constants::kPqlAffectsRel) {
+    score = 12;
+  } else if (relationship_reference == pql_constants::kPqlParentStarRel) {
+    score = 13;
+  } else if (relationship_reference == pql_constants::kPqlFollowsStarRel) {
+    score = 14;
+  } else if (relationship_reference == pql_constants::kPqlNextStarRel) {
+    score = 15;
+  } else {
+    // AffectsStar case
+    score = 16;
+  }
+  return score;
+}

@@ -3,6 +3,8 @@
 #include "QPS/Clause/ClauseSyntax.h"
 #include <algorithm>
 #include <unordered_set>
+#include <queue>
+#include "CompareScore.h"
 
 class ClauseGroup {
  private:
@@ -14,7 +16,7 @@ class ClauseGroup {
   void AddClause(const std::shared_ptr<ClauseSyntax>& clause);
   bool HasSelectedSynonym(const SelectedSynonymTuple& synonym_tuple);
   ClauseSyntaxPtrList GetClauseList();
-  void SortClauses();
+  void SortClauses(Map &declaration_map);
   int GetSize();
 };
 

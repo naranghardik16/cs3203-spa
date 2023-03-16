@@ -5,6 +5,19 @@ ClauseSyntax::ClauseSyntax(SyntaxPair pair) {
   expr_ = nullptr;
 }
 
+int ClauseSyntax::GetSynonymCount() {
+  return syn_.size();
+}
+
+int ClauseSyntax::GetArgumentScore(Map &declaration_map) {
+  int score  = 0;
+  auto score_map = pql_constants::kSynTypeScoreMap;
+  for (auto syn:syn_) {
+    score += score_map[declaration_map[syn]];
+  }
+  return score;
+}
+
 std::string ClauseSyntax::GetEntity() {
   return pair_.first;
 }

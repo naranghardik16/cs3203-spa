@@ -2,6 +2,7 @@
 #include <iostream>
 #include <regex>
 #include <unordered_map>
+#include <unordered_set>
 
 /**
  * Organises all constants that are used in QPS
@@ -88,4 +89,18 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityTo
     {kPqlCallEntity, {kStmtNo, kProcName}},
     {kPqlAssignEntity, {kStmtNo}}
 };
+
+const std::unordered_map<std::string, int> kSynTypeScoreMap {
+    {kPqlProcedureEntity, 1},
+    {kPqlVariableEntity, 1},
+    {kPqlConstantEntity, 1},
+    {kPqlReadEntity, 2},
+    {kPqlPrintEntity, 2},
+    {kPqlCallEntity, 3},
+    {kPqlWhileEntity, 4},
+    {kPqlIfEntity, 4},
+    {kPqlAssignEntity, 5},
+    {kPqlStatementEntity, 6},
+};
+
 }

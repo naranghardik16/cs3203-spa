@@ -31,3 +31,16 @@ std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map 
 
   return eval;
 }
+
+int PatternClauseSyntax::GetClauseScore(Map &declaration_map) {
+  int score;
+  std::string syn = declaration_map.at(ClauseSyntax::GetEntity());
+  if (syn == pql_constants::kPqlAssignEntity) {
+    score = 3;
+  } else if (syn == pql_constants::kPqlIfEntity) {
+    score = 2;
+  } else {
+    score = 2;
+  }
+  return score;
+}
