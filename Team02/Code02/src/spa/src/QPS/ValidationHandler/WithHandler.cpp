@@ -25,17 +25,17 @@ void WithHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &decl
   bool is_second_arg_an_attr_ref = QueryUtil::IsAttrRef(arg_2);
 
   if (is_first_arg_an_attr_ref) {
-    CheckAttrRef(arg_1, declaration);
+    clause->syn_.insert(CheckAttrRef(arg_1, declaration));
   }
   if (is_second_arg_an_attr_ref) {
-    CheckAttrRef(arg_2, declaration);
+    clause->syn_.insert(CheckAttrRef(arg_2, declaration));
   }
   if (GetAttrType(arg_1) != GetAttrType(arg_2)) {
     throw SemanticErrorException("Invalid comparison");
   }
 }
 
-void WithHandler::CheckAttrRef(std::string &ref, Map &declaration) {
+std::string WithHandler::CheckAttrRef(std::string &ref, Map &declaration) {
   std::vector<std::string> token_lst = QueryUtil::SplitAttrRef(ref);
   auto it = declaration.find(token_lst[0]);
   if (it == declaration.end()) {
@@ -45,6 +45,7 @@ void WithHandler::CheckAttrRef(std::string &ref, Map &declaration) {
   if (attr_name.find(token_lst[1]) == attr_name.end()) {
     throw SemanticErrorException("The attr is invalid: " + ref);
   }
+  return token_lst[0];
 }
 
 std::string WithHandler::GetAttrType(std::string &ref) {

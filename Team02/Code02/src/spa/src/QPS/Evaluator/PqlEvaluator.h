@@ -8,6 +8,8 @@
 #include "QPS/Clause/ClauseSyntax.h"
 #include "QPS/Evaluator/DesignEntityGetter.h"
 #include "QPS/Util/QueryUtil.h"
+#include "QPS/Optimizer/Optimizer.h"
+#include "QPS/Optimizer/ClauseGroup.h"
 #include <utility>
 #include <memory>
 
@@ -21,6 +23,7 @@ class PqlEvaluator {
   ClauseSyntaxPtrList syntax_list_;
   bool is_return_empty_set_;
   std::shared_ptr<PkbReadFacade> pkb_;
+  std::vector<std::shared_ptr<ClauseGroup>> groups_;
 
  public:
   PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb);
@@ -35,9 +38,8 @@ class PqlEvaluator {
    * Evaluates a basic Select statement without subclauses
    * @return Result class, which stores the evaluation information for handling in Evaluator
    */
-  std::shared_ptr<Result> EvaluateBasicSelect(Synonym synonym);
-  unordered_set<string> GetFinalEvaluationResult(shared_ptr<Result>& clause_evaluation_result);
-  shared_ptr<Result> GetClauseEvaluationResult();
+  unordered_set<string> GetFinalEvaluationResult(std::vector<std::shared_ptr<Result>>& clause_evaluation_results);
+  std::vector<std::shared_ptr<Result>> GetClauseEvaluationResult();
   void EvaluateBooleanConstraints();
   shared_ptr<Result> EvaluateSelectStatementWithoutClauses();
   unordered_set<string> EvaluateBooleanQuery();

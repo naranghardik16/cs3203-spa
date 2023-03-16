@@ -1,0 +1,60 @@
+procedure patternsAssign {
+    abc1 = abc + bcd;
+    abc2 = abc + bcd + cde;
+    abc3 = abc + (bcd + cde) + def;
+
+    bcd4 = abc + abc + abc;
+    bcd5 = (abc + (abc + abc));
+    bcd6 = abc + ((abc + abc));
+    bcd7 = (((abc)));
+
+    cde8 = abc + bcd - cde * def / efg % fgh;
+    cde9 = (abc + bcd) - cde * def / efg % fgh;
+    cde10 = abc + (bcd - cde) * def / efg % fgh;
+    cde11 = abc + bcd - (cde * def)/ efg % fgh;
+    cde12 = abc + bcd - cde * (def / efg) % fgh;
+    cde13 = abc;
+
+    longSums14 = a + 2 + c + 4 + d + e + f + g + h + i;
+    longSums15 = (a + (2 + (c + (4 + (d + (e + (f + (g + (h + i)))))))));
+}
+
+procedure patternsWhile {
+    while ( abc16 == bcd16 ) {
+        abc17 = 17;
+    }
+    while( 123456789 > 18 ) {
+        while( abc19 <= abc + bcd + cde) {
+            stmt20 = bcd + (cde + abc);
+            read stmt21;
+        }
+        while(abc22 != abc * (bcd + cde - (def + efg)/(fgh))) {
+            while(!((abc23 < abc + bcd + cde)||(abc23 > abc + bcd + cde ))) {
+                print abc24;
+            }
+        }
+    }
+}
+
+procedure patternsIf {
+    if (abc25 > while) then {
+        if(26 > if + 20 + 40 + (50/10)) then {
+            print else;
+        } else {
+            read read;
+            if (!(read + 29 - (40 + 50) > 170)) then {
+                print = then;
+                then = print;
+            } else {
+                call patternsWhile;
+            }
+        }
+    } else {
+        if (!((abc33 < abc + bcd + cde)||(abc33 > abc + bcd + cde ))) then {
+            print abc34;
+        } else {
+            call patternsAssign;
+        }
+        abc2 = abc + bcd;
+    }
+}
