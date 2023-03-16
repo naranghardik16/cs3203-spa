@@ -23,12 +23,17 @@ void TestWrapper::parse(std::string filename) {
 
   std::ifstream source(filename);
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(source, pkb_);
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(source, pkb_);
+  // Terminate program without evaluating any queries if there's invalid SIMPLE code
+  if (!is_SP_processing_successful) {
+    cout << "Terminating program due to Invalid SIMPLE code";
+    exit(0);
+  }
 }
 
 // method to evaluating a query
 void TestWrapper::evaluate(std::string query, std::list<std::string> &results) {
-// call your evaluator to evaluate the query here
+  // call your evaluator to evaluate the query here
   // ...code to evaluate query...
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.

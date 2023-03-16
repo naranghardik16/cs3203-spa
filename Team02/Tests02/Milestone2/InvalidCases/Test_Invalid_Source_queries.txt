@@ -1,0 +1,10 @@
+1 - Select variables
+variable x;
+Select x. varName
+number, sum, digit
+5000
+2 - Select constants
+constant c;
+Select c .value
+0, 10, 100
+5000

@@ -10,5 +10,5 @@ using namespace std;
 class SP {
  public:
   SP();
-  void ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb);
+  bool ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb);
 };

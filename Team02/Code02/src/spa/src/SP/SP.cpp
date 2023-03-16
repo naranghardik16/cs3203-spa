@@ -2,7 +2,7 @@
 
 SP::SP() {};
 
-void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
+bool SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
   try {
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(source);
@@ -16,7 +16,9 @@ void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
     shared_ptr<DesignExtractor>
         design_extractor = make_shared<DesignExtractor>(pkb);
     design_extractor->ExtractDesign(program);
+    return true;
   } catch (SpaException &e) {
     cout << e.what() << endl;
+    return false;
   }
 }
