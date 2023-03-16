@@ -107,14 +107,9 @@ const std::unordered_map<std::string, int> kPatternScoreMap {
     {kPqlIfEntity, 2},
     {kPqlWhileEntity, 2}};
 
-const std::string kModifiesPRel = "ModifiesP";
-const std::string kModifiesSRel = "ModifiesS";
-const std::string kUsesPRel = "UsesP";
-const std::string kUsesSRel = "UsesS";
 const std::unordered_map<std::string, int> kSuchThatScoreMap {
     {kPqlCallsRel, 4},{kPqlParentRel, 5},{kPqlFollowsRel, 6},{kPqlNextRel, 7},
-    {kModifiesPRel, 8},{kModifiesSRel, 9},{kUsesPRel, 10},{kUsesSRel, 11},
-    {kPqlCallsStarRel, 12}, {kPqlAffectsRel,13}, {kPqlParentStarRel, 14},
-    {kPqlFollowsStarRel,15},{kPqlNextStarRel,16},{kPqlAffectsStarRel,17}};
-
+    {kPqlModifiesRel, 8},{kPqlUsesRel, 9},
+    {kPqlCallsStarRel, 10}, {kPqlAffectsRel,11}, {kPqlParentStarRel, 12},
+    {kPqlFollowsStarRel,13},{kPqlNextStarRel,14},{kPqlAffectsStarRel,15}};
 }

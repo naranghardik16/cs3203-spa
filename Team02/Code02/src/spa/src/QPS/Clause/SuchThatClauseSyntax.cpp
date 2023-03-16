@@ -65,21 +65,5 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
 int SuchThatClauseSyntax::GetClauseScore(Map &declaration_map) {
   auto score_map = pql_constants::kSuchThatScoreMap;
   std::string relationship_reference = ClauseSyntax::GetEntity();
-  if (relationship_reference == pql_constants::kPqlModifiesRel) {
-    if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())
-        || QueryUtil::IsQuoted(ClauseSyntax::GetFirstParameter())) {
-      return score_map[pql_constants::kModifiesPRel];
-    } else {
-      return score_map[pql_constants::kModifiesSRel];
-    }
-  } else if (relationship_reference == pql_constants::kPqlUsesRel) {
-    if (QueryUtil::IsProcedureSynonym(declaration_map, ClauseSyntax::GetFirstParameter())
-        || QueryUtil::IsQuoted(ClauseSyntax::GetFirstParameter())) {
-      return score_map[pql_constants::kUsesPRel];
-    } else {
-      return score_map[pql_constants::kUsesSRel];
-    }
-  } else {
-    return score_map[relationship_reference];
-  }
+  return score_map[relationship_reference];
 }
