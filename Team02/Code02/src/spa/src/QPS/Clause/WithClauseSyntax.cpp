@@ -28,3 +28,7 @@ std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &de
                                                                                 ClauseSyntax::GetSyntaxPair());
   return eval;
 }
+
+int WithClauseSyntax::GetClauseScore(Map &declaration_map) {
+  return 1;
+}

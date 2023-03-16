@@ -2,6 +2,7 @@
 #include <iostream>
 #include <regex>
 #include <unordered_map>
+#include <unordered_set>
 
 /**
  * Organises all constants that are used in QPS
@@ -88,4 +89,27 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityTo
     {kPqlCallEntity, {kStmtNo, kProcName}},
     {kPqlAssignEntity, {kStmtNo}}
 };
+
+const std::unordered_map<std::string, int> kSynTypeScoreMap {
+    {kPqlProcedureEntity, 1},
+    {kPqlVariableEntity, 2},
+    {kPqlConstantEntity, 2},
+    {kPqlReadEntity, 3},
+    {kPqlPrintEntity, 4},
+    {kPqlCallEntity, 5},
+    {kPqlWhileEntity, 6},
+    {kPqlIfEntity, 7},
+    {kPqlAssignEntity, 8},
+    {kPqlStatementEntity, 9}};
+
+const std::unordered_map<std::string, int> kPatternScoreMap {
+    {kPqlAssignEntity, 3},
+    {kPqlIfEntity, 2},
+    {kPqlWhileEntity, 2}};
+
+const std::unordered_map<std::string, int> kSuchThatScoreMap {
+    {kPqlCallsRel, 4},{kPqlParentRel, 5},{kPqlFollowsRel, 6},{kPqlNextRel, 7},
+    {kPqlModifiesRel, 8},{kPqlUsesRel, 9},
+    {kPqlCallsStarRel, 10}, {kPqlAffectsRel,11}, {kPqlParentStarRel, 12},
+    {kPqlFollowsStarRel,13},{kPqlNextStarRel,14},{kPqlAffectsStarRel,15}};
 }
