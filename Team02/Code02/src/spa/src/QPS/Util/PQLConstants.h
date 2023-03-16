@@ -92,15 +92,29 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityTo
 
 const std::unordered_map<std::string, int> kSynTypeScoreMap {
     {kPqlProcedureEntity, 1},
-    {kPqlVariableEntity, 1},
-    {kPqlConstantEntity, 1},
-    {kPqlReadEntity, 2},
-    {kPqlPrintEntity, 2},
-    {kPqlCallEntity, 3},
-    {kPqlWhileEntity, 4},
-    {kPqlIfEntity, 4},
-    {kPqlAssignEntity, 5},
-    {kPqlStatementEntity, 6},
-};
+    {kPqlVariableEntity, 2},
+    {kPqlConstantEntity, 2},
+    {kPqlReadEntity, 3},
+    {kPqlPrintEntity, 4},
+    {kPqlCallEntity, 5},
+    {kPqlWhileEntity, 6},
+    {kPqlIfEntity, 7},
+    {kPqlAssignEntity, 8},
+    {kPqlStatementEntity, 9}};
+
+const std::unordered_map<std::string, int> kPatternScoreMap {
+    {kPqlAssignEntity, 3},
+    {kPqlIfEntity, 2},
+    {kPqlWhileEntity, 2}};
+
+const std::string kModifiesPRel = "ModifiesP";
+const std::string kModifiesSRel = "ModifiesS";
+const std::string kUsesPRel = "UsesP";
+const std::string kUsesSRel = "UsesS";
+const std::unordered_map<std::string, int> kSuchThatScoreMap {
+    {kPqlCallsRel, 4},{kPqlParentRel, 5},{kPqlFollowsRel, 6},{kPqlNextRel, 7},
+    {kModifiesPRel, 8},{kModifiesSRel, 9},{kUsesPRel, 10},{kUsesSRel, 11},
+    {kPqlCallsStarRel, 12}, {kPqlAffectsRel,13}, {kPqlParentStarRel, 14},
+    {kPqlFollowsStarRel,15},{kPqlNextStarRel,16},{kPqlAffectsStarRel,17}};
 
 }
