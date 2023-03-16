@@ -13,11 +13,7 @@ TEST_CASE("Testcases for Next Store") {
     auto next_store = new NextStore();
   }
 
-  SECTION("Check for Next Star Relation Existence") {
+  SECTION("Check for Next Star Relation Existence") {}
 
-  }
-
-  SECTION("Check for Next Relation Existence") {
-
-  }
+  SECTION("Check for Next Relation Existence") {}
 }

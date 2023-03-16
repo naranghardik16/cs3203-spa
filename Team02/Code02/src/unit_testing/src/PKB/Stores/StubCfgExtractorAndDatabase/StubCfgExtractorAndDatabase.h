@@ -3,9 +3,5 @@
 #include <string>
 
 class StubCfgExtractorAndDatabase {
- public:
-
- private:
-
 };
 
