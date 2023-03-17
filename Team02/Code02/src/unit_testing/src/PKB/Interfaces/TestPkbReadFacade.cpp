@@ -586,6 +586,174 @@ TEST_CASE("Testing PkbReadFacade") {
     }));
   }
 
+  SECTION("Test Next Star API - Complex CFG") {
+    PKB pkb_ = PKB();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+
+    std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+    node1->AddStmt(1);
+    cfg->AddStmtCfg(1, node1);
+    node1->AddStmt(2);
+    cfg->AddStmtCfg(2, node1);
+    node1->AddStmt(3);
+    cfg->AddStmtCfg(3, node1);
+    node1->AddStmt(4);
+    cfg->AddStmtCfg(4, node1);
+
+    std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+    node2->AddStmt(5);
+    cfg->AddStmtCfg(5, node2);
+
+    std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+    node3->AddStmt(6);
+    cfg->AddStmtCfg(6, node3);
+    node3->AddStmt(7);
+    cfg->AddStmtCfg(7, node3);
+
+    std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+    node4->AddStmt(8);
+    cfg->AddStmtCfg(8, node4);
+
+    std::shared_ptr<CfgNode> node5 = std::make_shared<CfgNode>();
+    node5->AddStmt(9);
+    cfg->AddStmtCfg(9, node5);
+    node5->AddStmt(10);
+    cfg->AddStmtCfg(10, node5);
+
+    std::shared_ptr<CfgNode> node6 = std::make_shared<CfgNode>();
+    node6->AddStmt(11);
+    cfg->AddStmtCfg(11, node6);
+    node6->AddStmt(12);
+    cfg->AddStmtCfg(12, node6);
+
+    std::shared_ptr<CfgNode> node7 = std::make_shared<CfgNode>();
+    node7->AddStmt(13);
+    cfg->AddStmtCfg(13, node7);
+    node7->AddStmt(14);
+    cfg->AddStmtCfg(14, node7);
+
+    pkb_write_facade_->AddStatementOfAType("1", READ);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", CALL);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", IF);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", CALL);
+    pkb_write_facade_->AddStatementOfAType("8", WHILE);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("12", CALL);
+    pkb_write_facade_->AddStatementOfAType("13", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("14", CALL);
+
+    node1->AddTransition(true, node2);
+    node2->AddTransition(true, node3);
+    node2->AddTransition(false, node4);
+    node3->AddTransition(true, node7);
+    node4->AddTransition(true, node5);
+    node4->AddTransition(false, node6);
+    node5->AddTransition(true, node4);
+    node6->AddTransition(true, node7);
+
+    cfg->AddProcCfg("Bumblebee", node1);
+
+    pkb_write_facade_->AddCfg(cfg);
+
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "2") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "3") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "4") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "5") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("1", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "3") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "4") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "5") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("2", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "4") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "5") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("3", "14") == true);
+    REQUIRE_FALSE(pkb_read_facade_->IsNextStar("3", "2") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "5") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("4", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "6") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "7") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("5", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("6", "7") == true);
+    REQUIRE_FALSE(pkb_read_facade_->IsNextStar("6", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("6", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("6", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("7", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("7", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "9") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("8", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("9", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "8") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "10") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "11") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("10", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("11", "12") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("11", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("11", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("12", "13") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("12", "14") == true);
+    REQUIRE(pkb_read_facade_->IsNextStar("13", "14") == true);
+
+  }
+
   SECTION("Test Next API - Basic CFG") {
     PKB pkb_ = PKB();
     PkbReadFacade *pkb_read_facade_;
