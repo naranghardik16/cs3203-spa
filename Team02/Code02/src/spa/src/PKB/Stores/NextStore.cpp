@@ -25,7 +25,7 @@ void NextStore::extractNextRelations() {
     std::unordered_set<std::string> visited;
     std::stack<std::pair<int, std::shared_ptr<CfgNode>>> s;
 
-    s.emplace(std::make_pair(-1, p.second));
+    s.push(std::make_pair(-1, p.second));
 
     while (!s.empty()) {
       auto ps = s.top();
@@ -36,7 +36,7 @@ void NextStore::extractNextRelations() {
 
       std::vector<int> statements = current->GetNodeStmts();
       if (statements.empty()) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
         continue;
       }
 
@@ -52,11 +52,11 @@ void NextStore::extractNextRelations() {
       if (visited.count(current->GetStringRepresentation()) > 0) continue;
 
       if (current->GetNodeTrans().count(true) > 0) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
       }
 
       if (current->GetNodeTrans().count(false) > 0) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
       }
 
       visited.insert(current->GetStringRepresentation());
