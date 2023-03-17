@@ -231,6 +231,7 @@ TEST_CASE("Test Next with Bumblebee") {
     REQUIRE(pkb_read_facade_->IsNext("11", "12") == true);
     REQUIRE(pkb_read_facade_->IsNext("12", "13") == true);
     REQUIRE(pkb_read_facade_->IsNext("13", "14") == true);
+    REQUIRE(pkb_read_facade_->HasNext("14") == false);
   } catch (SpaException &e) {
     cout << e.what() << endl;
   }
