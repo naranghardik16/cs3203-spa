@@ -98,7 +98,7 @@ NextStore::retrieveAllNextStarPairs() {
 
   for (const auto& k: this->next_store_.retrieveAllKeys()) {
     std::stack<PkbTypes::STATEMENT_NUMBER> s;
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER> visited;
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair> visited;
     s.push(k);
 
     while (!s.empty()) {
@@ -106,13 +106,12 @@ NextStore::retrieveAllNextStarPairs() {
       s.pop();
 
       for (const auto& c: this->next_store_.retrieveFromKey(current)) {
-        if (!(visited.count(c) > 0)) {
+        if (!(visited.count(std::make_pair(k, c)) > 0)) {
           result.insert(std::make_pair(k, c));
           s.push(c);
+          visited.insert(std::make_pair(k, c));
         }
       }
-
-      visited.insert(current);
     }
   }
 

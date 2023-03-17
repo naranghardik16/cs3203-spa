@@ -76,7 +76,7 @@ Select w pattern w ("abc", _)
 15 - select all w statements
 while w; variable v;
 Select w pattern w (_, _)
-16, 18, 19, 22, 23
+16, 19, 22, 23
 5000
 16 - if pattern
 if ifs; variable v;
