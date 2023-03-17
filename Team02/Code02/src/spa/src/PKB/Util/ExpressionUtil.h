@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <stack>
 #include <unordered_set>
-#include <memory>
 
 #include "core/model/Expression.h"
 #include "PKB/Types/PkbTypes.h"
@@ -98,5 +98,21 @@ class ExpressionUtil {
     return "[" + ret + "]";
   }
 
+  /**
+   * Checks if the given sub expression is a part of the given expression.
+   *
+   * @param expression - The expression to be checked to check membership against.
+   * @param sub_expression - The expression whose membership is to be checked.
+   * @return True if it exists, false otherwise.
+   */
+  static bool hasSubExpression(shared_ptr<Expression> expression, std::shared_ptr<Expression> sub_expression) {
+    if (!sub_expression || !expression) return false;
+    if (expression->operator==(*sub_expression)) return true;
+
+    auto children = expression->GetArguments();
+    if (!children) return false;
+
+    return hasSubExpression(children->first, sub_expression) || hasSubExpression(children->second, sub_expression);
+  }
 };
 

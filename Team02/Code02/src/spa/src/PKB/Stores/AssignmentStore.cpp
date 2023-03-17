@@ -1,6 +1,6 @@
-#include "AssignmentStore.h"
-
 #include <utility>
+
+#include "AssignmentStore.h"
 
 AssignmentStore::AssignmentStore() = default;
 

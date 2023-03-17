@@ -1,5 +1,4 @@
 #include "ExpressionStore.h"
-
 #include "PKB/Util/ExpressionUtil.h"
 
 ExpressionStore::ExpressionStore() = default;

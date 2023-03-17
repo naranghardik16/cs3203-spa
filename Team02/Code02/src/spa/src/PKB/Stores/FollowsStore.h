@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PKB/Types/PkbTypes.h"
-#include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
+#include "PKB/AbstractDataModels/OneToOneStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 /**
  * @class FollowsStore

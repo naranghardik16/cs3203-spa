@@ -1,8 +1,8 @@
 #pragma once
 
+#include "core/model/Expression.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/Types/PkbTypes.h"
-#include "core/model/Expression.h"
 
 /**
  * @class AssignmentStore

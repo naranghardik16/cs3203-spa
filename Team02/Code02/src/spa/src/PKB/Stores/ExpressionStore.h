@@ -1,9 +1,10 @@
 #pragma once
 
 #include <unordered_set>
+
 #include "core/model/Expression.h"
-#include "PKB/Types/PkbTypes.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 /**
  * @class ExpressionStore
