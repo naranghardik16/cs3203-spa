@@ -674,13 +674,11 @@ PkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression>&
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetIfConditionVariablePair() {
   PkbCommunicationTypes::SingleConstraintSet if_statements = this->GetIfStatements();
 
-  PkbCommunicationTypes::PairConstraintSet uses_pairs =
-      this->pkb.uses_store_->retrieveStatementVariablePairs();
-
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (if_statements.count(p.first) > 0) {
-      result.insert(p);
+  for (const auto& i: if_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
+    for (const auto& v: ExpressionUtil::retrieveAllVariablesFromExpression(e)) {
+      result.insert(std::make_pair(i, v));
     }
   }
 
@@ -690,13 +688,11 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetIfConditionVariablePa
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfWithConditionVariable(const std::string &variable) {
   PkbCommunicationTypes::SingleConstraintSet if_statements = this->GetIfStatements();
 
-  PkbCommunicationTypes::PairConstraintSet uses_pairs =
-      this->pkb.uses_store_->retrieveStatementVariablePairs();
-
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (if_statements.count(p.first) > 0 && p.second == variable) {
-      result.insert(p.first);
+  for (const auto& i: if_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
+    if (ExpressionUtil::retrieveAllVariablesFromExpression(e).count(variable) > 0) {
+        result.insert(i);
     }
   }
 
@@ -706,13 +702,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfWithConditionVari
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfThatHasConditionVariable() {
   PkbCommunicationTypes::SingleConstraintSet if_statements = this->GetIfStatements();
 
-  PkbCommunicationTypes::PairConstraintSet uses_pairs =
-      this->pkb.uses_store_->retrieveStatementVariablePairs();
-
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (if_statements.count(p.first)) {
-      result.insert(p.first);
+  for (const auto& i: if_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
+    if (!ExpressionUtil::retrieveAllVariablesFromExpression(e).empty()) {
+      result.insert(i);
     }
   }
 
@@ -722,13 +716,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfThatHasConditionV
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetWhileConditionVariablePair() {
   PkbCommunicationTypes::SingleConstraintSet while_statements = this->GetWhileStatements();
 
-  PkbCommunicationTypes::PairConstraintSet uses_pairs =
-      this->pkb.uses_store_->retrieveStatementVariablePairs();
-
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (while_statements.count(p.first) > 0) {
-      result.insert(p);
+  for (const auto& w: while_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
+    for (const auto& v: ExpressionUtil::retrieveAllVariablesFromExpression(e)) {
+      result.insert(std::make_pair(w, v));
     }
   }
 
@@ -742,9 +734,10 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileWithConditionV
       this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (while_statements.count(p.first) > 0 && p.second == variable) {
-      result.insert(p.first);
+  for (const auto& w: while_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
+    if (ExpressionUtil::retrieveAllVariablesFromExpression(e).count(variable) > 0) {
+      result.insert(w);
     }
   }
 
@@ -758,9 +751,10 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditi
       this->pkb.uses_store_->retrieveStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: uses_pairs) {
-    if (while_statements.count(p.first)) {
-      result.insert(p.first);
+  for (const auto& w: while_statements) {
+    std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
+    if (!ExpressionUtil::retrieveAllVariablesFromExpression(e).empty()) {
+      result.insert(w);
     }
   }
 
