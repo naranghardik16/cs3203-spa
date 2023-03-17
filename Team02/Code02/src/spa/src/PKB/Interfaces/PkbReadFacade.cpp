@@ -1056,7 +1056,20 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
 // Next API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextPairs(StatementType statement_type_1,
                                                                          StatementType statement_type_2) {
-  return this->pkb.next_store_->retrieveAllNextPairs();
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type_1 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_1);
+
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type_2 =
+      this->pkb.statement_store_->getStatementsFromType(statement_type_2);
+
+  PkbCommunicationTypes::PairConstraintSet result;
+  for (const auto& p: this->pkb.next_store_->retrieveAllNextPairs()) {
+    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
+      result.insert(p);
+    }
+  }
+
+  return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNext(std::string statement_number,
