@@ -450,11 +450,6 @@ TEST_CASE("Testing PkbReadFacade") {
 
     REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc12") ==
     std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc11")
-    }));
-
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc12") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
       std::make_pair("proc10", "proc12")
     }));
 
@@ -968,16 +963,13 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE)
                 == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "8" }));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(ASSIGN)
-                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3", "4", "5", "6", "7", "8",
-                                                                    "9", "10", "11", "12", "13", "14" }));
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "4", "13", "10", "11", "9", "6" }));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(CALL)
-                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4", "5", "6", "7", "8", "9",
-                                                                    "10", "11", "12", "13", "14"}));
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3", "7", "12", "14" }));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(IF)
-                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "6", "7", "8", "9", "10",
-                                                                    "11", "12", "13", "14" }));
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "5" }));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE)
-                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "9", "10", "11", "12", "13", "14" }));
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "8" }));
     REQUIRE(pkb_read_facade_->GetNextStar("1", READ)
                 == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ }));
     REQUIRE(pkb_read_facade_->GetNextStar("13", CALL)
