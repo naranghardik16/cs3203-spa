@@ -37,8 +37,6 @@ void NextStore::extractNextRelations() {
         continue;
       }
 
-      std::cout << current->GetStringRepresentation() << std::endl;
-
       std::vector<int> statements = current->GetNodeStmts();
       if (statements.empty() && current->GetNodeTrans().count(true) > 0) {
         s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
