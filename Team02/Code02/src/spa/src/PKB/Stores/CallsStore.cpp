@@ -35,15 +35,14 @@ void CallsStore::addCallsStarRelation() {
     while (!s.empty()) {
       PkbTypes::PROCEDURE current = s.top();
       s.pop();
+      visited.insert(current);
 
       for (const auto& c: this->calls_store_.retrieveFromKey(current)) {
         if (!(visited.count(c) > 0)) {
-          this->calls_star_store_.insert(k, c);
-          s.push(c);
+            this->calls_star_store_.insert(k, c);
+            s.push(c);
         }
       }
-
-      visited.insert(current);
     }
   }
 }
