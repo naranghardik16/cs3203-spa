@@ -751,7 +751,6 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->IsNextStar("12", "13") == true);
     REQUIRE(pkb_read_facade_->IsNextStar("12", "14") == true);
     REQUIRE(pkb_read_facade_->IsNextStar("13", "14") == true);
-
   }
 
   SECTION("Test Next API - Basic CFG") {
