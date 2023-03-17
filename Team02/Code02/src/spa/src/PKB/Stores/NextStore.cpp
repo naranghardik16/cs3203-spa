@@ -33,7 +33,6 @@ void NextStore::extractNextRelations() {
       auto current = ps.second;
       s.pop();
 
-
       std::vector<int> statements = current->GetNodeStmts();
       if (statements.empty()) {
         s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
@@ -43,6 +42,7 @@ void NextStore::extractNextRelations() {
       if (prev_stmt != -1) this->next_store_.insert(std::to_string(prev_stmt), std::to_string(statements[0]));
 
       for (int i = 0; i < statements.size() - 1; ++i) {
+        std::cout << statements[i] << "," << statements[i + 1] << std::endl;
         this->next_store_.insert(std::to_string(statements[i]),
                                  std::to_string(statements[i + 1]));
       }
