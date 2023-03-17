@@ -751,6 +751,34 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->IsNextStar("12", "13") == true);
     REQUIRE(pkb_read_facade_->IsNextStar("12", "14") == true);
     REQUIRE(pkb_read_facade_->IsNextStar("13", "14") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarRelationship() == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("1") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("2") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("3") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("4") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("5") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("6") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("7") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("8") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("9") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("10") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("11") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("12") == true);
+    REQUIRE(pkb_read_facade_->HasNextStar("13") == true);
+    REQUIRE_FALSE(pkb_read_facade_->HasNextStar("14") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("2") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("3") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("4") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("5") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("6") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("7") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("8") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("9") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("10") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("11") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("12") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("13") == true);
+    REQUIRE(pkb_read_facade_->HasNextStarBy("14") == true);
   }
 
   SECTION("Test Next API - Basic CFG") {
