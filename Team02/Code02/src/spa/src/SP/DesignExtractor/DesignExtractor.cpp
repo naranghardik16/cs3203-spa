@@ -39,6 +39,7 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
 
   auto pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb_);
   pkb_write_facade_->AddCallsStarRelation();
+  pkb_write_facade_->AddCfg(cfg_);
 
   for (shared_ptr<Procedure> p : procedures) {
     abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
