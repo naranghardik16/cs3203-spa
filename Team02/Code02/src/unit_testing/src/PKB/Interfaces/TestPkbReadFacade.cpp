@@ -798,6 +798,12 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
       "9", "10", "11", "12", "13", "14"
     }));
+//    REQUIRE(pkb_read_facade_->GetNextStar("1", READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+//      "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"
+//    }));
+//    REQUIRE(pkb_read_facade_->GetNextStar("13", ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+//      "14"
+//    }));
   }
 
   SECTION("Test Next API - Basic CFG") {
