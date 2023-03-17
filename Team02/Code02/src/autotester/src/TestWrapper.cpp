@@ -14,6 +14,7 @@ TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   pkb_ = make_shared<PKB>();
+  cfg_ = make_shared<Cfg>();
 }
 
 // method for parsing the SIMPLE source
@@ -23,7 +24,7 @@ void TestWrapper::parse(std::string filename) {
 
   std::ifstream source(filename);
   shared_ptr<SP> sp = make_shared<SP>();
-  bool is_SP_processing_successful = sp->ProcessSIMPLE(source, pkb_);
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(source, pkb_, cfg_);
   // Terminate program without evaluating any queries if there's invalid SIMPLE code
   if (!is_SP_processing_successful) {
     cout << "Terminating program due to Invalid SIMPLE code";

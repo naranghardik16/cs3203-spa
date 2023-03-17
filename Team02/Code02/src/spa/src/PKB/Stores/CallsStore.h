@@ -122,6 +122,8 @@ class CallsStore {
    */
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
 
+  void addCallsStarRelation();
+
  private:
   // Stores the Calls relation OneToMany mapping between two procedures.
   ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_store_;
