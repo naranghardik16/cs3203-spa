@@ -798,7 +798,7 @@ TEST_CASE("Integration testing for Next - Basic") {
     std::string query = "stmt s; Select <s.stmt#> such that Next(_,2)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"1","2","3","4", "5", "6"};
+    std::list<std::string> expected_results{"1", "2", "3", "4", "5", "6"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -815,7 +815,7 @@ TEST_CASE("Integration testing for Next - Basic") {
     std::string query = "stmt s1; stmt s2; Select <s1.stmt#, s1.stmt#> such that Next (1,_)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results{"1 1", "2 2","3 3", "4 4", "5 5", "6 6"};
+    std::list<std::string> expected_results{"1 1", "2 2", "3 3", "4 4", "5 5", "6 6"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -844,27 +844,25 @@ TEST_CASE("Integration testing for Next - Basic") {
     std::list<std::string> expected_results{};
     REQUIRE(results == expected_results);
   }
-
-
 }
 
-//"procedure main {\n"
-//"  while (x==1) {"
-//"    flag = 1;"
-//"    while( flag == 1 ) {"
-//"        flag = 2;"
-//"    }"
-//"    count = count + 1;"
-//"  } "
-//"  y = 20;"
-//"  while (x==1) {"
-//"    flag = 1;"
-//"    while( flag == 1 ) {"
-//"        flag = 2;"
-//"    }"
-//"  }"
-//"  count = count - 1; "
-//"}\n";
+// "procedure main {\n"
+// "  while (x==1) {"
+// "    flag = 1;"
+// "    while( flag == 1 ) {"
+// "        flag = 2;"
+// "    }"
+// "    count = count + 1;"
+// "  } "
+// "  y = 20;"
+// "  while (x==1) {"
+// "    flag = 1;"
+// "    while( flag == 1 ) {"
+// "        flag = 2;"
+// "    }"
+// "  }"
+// "  count = count - 1; "
+// "}\n";
 TEST_CASE("Integration testing for Next API - Complex") {
   std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
   std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(*pkb);
@@ -978,7 +976,6 @@ TEST_CASE("Integration testing for Next API - Complex") {
     results.sort();
     REQUIRE(results == expected_results);
   }
-
 }
 
 
