@@ -6,7 +6,7 @@ abc1, abc2, abc3, bcd4, bcd5, bcd6, bcd7, cde8, cde9, cde10, cde11, cde12, cde13
 2 - RHS partial match
 assign a; variable v;
 Select a pattern a (v, _"abc + bcd"_)
-1, 2, 9
+1, 2, 9, 11, 12, 36, 8
 5000
 3 - RHS exact variable name pattern
 assign a; variable v;
