@@ -1098,26 +1098,34 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextBy(std::string 
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextFirst(StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
   PkbCommunicationTypes::PairConstraintSet next_pairs =
       this->pkb.next_store_->retrieveAllNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-
   for (const auto& p: next_pairs) {
-    result.insert(p.first);
+    if (statements_of_type.count(p.first) > 0) {
+      result.insert(p.first);
+    }
   }
 
   return result;
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(StatementType statement_type) {
+  PkbCommunicationTypes::SingleConstraintSet statements_of_type =
+      this->pkb.statement_store_->getStatementsFromType(statement_type);
+
   PkbCommunicationTypes::PairConstraintSet next_pairs =
       this->pkb.next_store_->retrieveAllNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
-
   for (const auto& p: next_pairs) {
-    result.insert(p.second);
+    if (statements_of_type.count(p.second) > 0) {
+      result.insert(p.second);
+    }
   }
 
   return result;
