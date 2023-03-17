@@ -37,26 +37,11 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
     }
   }
 
+  abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
   for (shared_ptr<Procedure> p : procedures) {
-    abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
     Procedure::StmtListContainer statements = p->GetStatementList();
     for (shared_ptr<Statement> s : statements) {
       s->Accept(abstraction_extractor);
     }
   }
-
-  /*
-  for (shared_ptr<Procedure> p : procedures) {
-    p->Accept(abstraction_extractor);
-    Procedure::StmtListContainer statements = p->GetStatementList();
-    shared_ptr<Statement> prev_stmt = nullptr;
-    for (shared_ptr<Statement> s : statements) {
-      if (prev_stmt != nullptr) {
-        abstraction_extractor->ExtractFollows(prev_stmt, s);
-      }
-      s->Accept(abstraction_extractor);
-      prev_stmt = s;
-    }
-  }
-  */
 }
