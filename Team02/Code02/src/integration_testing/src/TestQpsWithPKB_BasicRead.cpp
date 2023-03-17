@@ -599,6 +599,41 @@ TEST_CASE("Integration testing for Calls*") {
   pkb_write->AddCallsRelation("proc5", "proc6");
   pkb_write->AddCallsRelation("proc6", "proc7");
 
+  SECTION("Calls*(p,p) should have no result") {
+    std::string query = "procedure p; Select p.procName such that Calls*(p,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls(p,p) should have no result") {
+    std::string query = "procedure p; Select p.procName such that Calls(p,p)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls('proc1','proc1') should have no result") {
+    std::string query = "procedure p; Select p.procName such that Calls(\"proc1\",\"proc1\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Calls*('proc1','proc1') should have no result") {
+    std::string query = "procedure p; Select p.procName such that Calls*(\"proc1\",\"proc1\")";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string> expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
   SECTION("Calls*(_,_) is true") {
     std::string query = "procedure p; Select p.procName such that Calls*(_,_)";
