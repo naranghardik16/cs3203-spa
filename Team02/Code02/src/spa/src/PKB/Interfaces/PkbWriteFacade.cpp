@@ -136,6 +136,10 @@ void PkbWriteFacade::AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbT
   this->pkb.calls_store_->addCallsRelation(caller_procedure, callee_procedure);
 }
 
+void PkbWriteFacade::AddCallsStarRelation() {
+  this->pkb.calls_store_->addCallsStarRelation();
+}
+
 void PkbWriteFacade::AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number,
                                                       PkbTypes::PROCEDURE procedure) {
   this->pkb.calls_store_->addCallStatementToProcedureName(statement_number, procedure);

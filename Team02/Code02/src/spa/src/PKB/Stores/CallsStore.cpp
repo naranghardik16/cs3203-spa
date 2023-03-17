@@ -1,4 +1,6 @@
 #include "CallsStore.h"
+#include <iostream>
+#include <stack>
 
 CallsStore::CallsStore() = default;
 
@@ -6,19 +8,43 @@ CallsStore::~CallsStore() = default;
 
 void CallsStore::addCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
   this->calls_store_.insert(caller_procedure, callee_procedure);
-  this->calls_star_store_.insert(caller_procedure, callee_procedure);
+//  this->calls_star_store_.insert(caller_procedure, callee_procedure);
+//
+//  std::unordered_set<PkbTypes::PROCEDURE> callers =
+//      this->calls_star_store_.retrieveFromValue(caller_procedure);
+//
+//  while (!callers.empty()) {
+//    std::unordered_set<PkbTypes::PROCEDURE> updated_callers;
+//    for (const auto& p: callers) {
+//      std::unordered_set<PkbTypes::PROCEDURE> temp = this->calls_star_store_.retrieveFromValue(p);
+//      updated_callers.insert(temp.begin(), temp.end());
+//      if (p != callee_procedure) {
+//        this->calls_star_store_.insert(p, callee_procedure);
+//      }
+//    }
+//    callers = updated_callers;
+//  }
+}
 
-  std::unordered_set<PkbTypes::PROCEDURE> callers =
-      this->calls_star_store_.retrieveFromValue(caller_procedure);
+void CallsStore::addCallsStarRelation() {
+  for (const auto& k: this->calls_store_.retrieveAllKeys()) {
+    std::stack<PkbTypes::PROCEDURE> s;
+    std::unordered_set<PkbTypes::PROCEDURE> visited;
+    s.push(k);
 
-  while (!callers.empty()) {
-    std::unordered_set<PkbTypes::PROCEDURE> updated_callers;
-    for (const auto& p: callers) {
-      std::unordered_set<PkbTypes::PROCEDURE> temp = this->calls_star_store_.retrieveFromValue(p);
-      updated_callers.insert(temp.begin(), temp.end());
-      this->calls_star_store_.insert(p, callee_procedure);
+    while (!s.empty()) {
+      PkbTypes::PROCEDURE current = s.top();
+      s.pop();
+
+      for (const auto& c: this->calls_store_.retrieveFromKey(current)) {
+        if (!(visited.count(c) > 0)) {
+          this->calls_star_store_.insert(k, c);
+          s.push(c);
+        }
+      }
+
+      visited.insert(current);
     }
-    callers = updated_callers;
   }
 }
 
