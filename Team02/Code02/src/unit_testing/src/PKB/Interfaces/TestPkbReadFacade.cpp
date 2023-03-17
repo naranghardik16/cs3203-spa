@@ -782,9 +782,22 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetNextStarFirst(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
         ({"2", "4", "6", "9", "10", "11", "13"}));
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"3", "7", "12"}));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"3", "7", "12"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+        {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+      "6", "7", "8", "9", "10", "11", "12", "13", "14"
+    }));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+      "9", "10", "11", "12", "13", "14"
+    }));
   }
 
   SECTION("Test Next API - Basic CFG") {

@@ -1214,7 +1214,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(Stat
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
-    if (statements_of_type.count(p.second) > 0) {
+    if (statements_of_type.count(p.first) > 0) {
       result.insert(p.second);
     }
   }
