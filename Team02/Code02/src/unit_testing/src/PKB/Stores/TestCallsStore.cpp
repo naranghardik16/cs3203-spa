@@ -9,25 +9,35 @@ TEST_CASE("Testcases for Calls Store") {
     auto calls_store = new CallsStore();
 
     REQUIRE(calls_store->hasAnyCallsRelation() == false);
-    REQUIRE(calls_store->hasCallsRelation("caller procedure", "callee procedure") == false);
+    REQUIRE(
+        calls_store->hasCallsRelation("caller procedure", "callee procedure")
+            == false);
 
-    REQUIRE(calls_store->retrieveAllCallsPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
-            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({ }));
+    REQUIRE(calls_store->retrieveAllCallsPairs()
+                == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                                PkbTypes::PROCEDURE>,
+                                      PairHasherUtil::hash_pair>({}));
 
     REQUIRE(calls_store->hasAnyCallsStarRelation() == false);
-    REQUIRE(calls_store->hasCallsStarRelation("caller_procedure", "callee_procedure") == false);
+    REQUIRE(calls_store->hasCallsStarRelation("caller_procedure",
+                                              "callee_procedure") == false);
 
-    REQUIRE(calls_store->retrieveAllCallsStarPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
-            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({ }));
+    REQUIRE(calls_store->retrieveAllCallsStarPairs()
+                == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                                PkbTypes::PROCEDURE>,
+                                      PairHasherUtil::hash_pair>({}));
 
     REQUIRE(calls_store->hasCallsStar("procedure_name") == false);
     REQUIRE(calls_store->hasCallsStarBy("procedure_name") == false);
 
-    REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("procedure_name") ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ }));
+    REQUIRE(
+        calls_store->retrieveCallStatementsFromAProcedure("procedure_name") ==
+            std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
 
     REQUIRE(calls_store->retrieveAllCallStatementToProcedurePairs() ==
-    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({ }));
+        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+                                     PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({}));
   }
 
   SECTION("Independent Calls without any Transitive Relationship") {
@@ -41,29 +51,48 @@ TEST_CASE("Testcases for Calls Store") {
 
     // Test independent Calls Relation with expected behaviour
     REQUIRE(calls_store->hasAnyCallsRelation() == true);
-    REQUIRE(calls_store->hasCallsRelation("caller_procedure1", "callee_procedure1") == true);
-    REQUIRE(calls_store->hasCallsRelation("caller_procedure2", "callee_procedure2") == true);
+    REQUIRE(
+        calls_store->hasCallsRelation("caller_procedure1", "callee_procedure1")
+            == true);
+    REQUIRE(
+        calls_store->hasCallsRelation("caller_procedure2", "callee_procedure2")
+            == true);
 
-    REQUIRE_FALSE(calls_store->hasCallsRelation("caller_procedure1", "callee_procedure2") == true);
-    REQUIRE_FALSE(calls_store->hasCallsRelation("caller_procedure2", "callee_procedure1") == true);
+    REQUIRE_FALSE(
+        calls_store->hasCallsRelation("caller_procedure1", "callee_procedure2")
+            == true);
+    REQUIRE_FALSE(
+        calls_store->hasCallsRelation("caller_procedure2", "callee_procedure1")
+            == true);
 
     REQUIRE(calls_store->retrieveAllCallsPairs() ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("caller_procedure1", "callee_procedure1"),
-      std::make_pair("caller_procedure2", "callee_procedure2")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "caller_procedure1",
+                                                              "callee_procedure1"),
+                                                          std::make_pair(
+                                                              "caller_procedure2",
+                                                              "callee_procedure2")
+                                                      }));
 
     REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("procedure3") ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"4"}));
 
     REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("procedure4") ==
-        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "10" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"10"}));
 
-    REQUIRE(calls_store->retrieveAllCallStatementToProcedurePairs() == std::unordered_set<std::pair<
-        PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-          std::make_pair("procedure3", "4"),
-          std::make_pair("procedure4", "10")
-        }));
+    REQUIRE(calls_store->retrieveAllCallStatementToProcedurePairs()
+                == std::unordered_set<std::pair<
+                    PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>,
+                                      PairHasherUtil::hash_pair>({
+                                                                     std::make_pair(
+                                                                         "procedure3",
+                                                                         "4"),
+                                                                     std::make_pair(
+                                                                         "procedure4",
+                                                                         "10")
+                                                                 }));
   }
 
   SECTION("Test CallsStar Relation") {
@@ -80,6 +109,8 @@ TEST_CASE("Testcases for Calls Store") {
     calls_star_store->addCallsRelation("proc10", "proc11");
     calls_star_store->addCallsRelation("proc10", "proc12");
     calls_star_store->addCallsRelation("proc12", "proc13");
+
+    calls_star_store->addCallsStarRelation();
 
     REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc2") == true);
     REQUIRE(calls_star_store->hasCallsStarRelation("proc1", "proc3") == true);
@@ -125,20 +156,74 @@ TEST_CASE("Testcases for Calls Store") {
     REQUIRE(calls_star_store->hasCallsStarBy("proc12") == true);
     REQUIRE_FALSE(calls_star_store->hasCallsStarBy("proc2") == true);
 
-    REQUIRE(calls_star_store->retrieveAllCallsStarPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
-            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-              std::make_pair("proc1", "proc2"), std::make_pair("proc1", "proc3"),
-              std::make_pair("proc1", "proc4"), std::make_pair("proc4", "proc5"),
-              std::make_pair("proc5", "proc6"), std::make_pair("proc5", "proc7"),
-              std::make_pair("proc5", "proc8"), std::make_pair("proc5", "proc9"),
-              std::make_pair("proc10", "proc11"), std::make_pair("proc10", "proc12"),
-              std::make_pair("proc12", "proc13"), std::make_pair("proc1", "proc5"),
-              std::make_pair("proc1", "proc6"), std::make_pair("proc1", "proc7"),
-              std::make_pair("proc1", "proc8"), std::make_pair("proc1", "proc9"),
-              std::make_pair("proc4", "proc6"), std::make_pair("proc4", "proc7"),
-              std::make_pair("proc4", "proc8"), std::make_pair("proc4", "proc9"),
-              std::make_pair("proc10", "proc13")
-    }));
+    REQUIRE(calls_star_store->retrieveAllCallsStarPairs()
+                == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                                PkbTypes::PROCEDURE>,
+                                      PairHasherUtil::hash_pair>({
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc2"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc3"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc4"),
+                                                                     std::make_pair(
+                                                                         "proc4",
+                                                                         "proc5"),
+                                                                     std::make_pair(
+                                                                         "proc5",
+                                                                         "proc6"),
+                                                                     std::make_pair(
+                                                                         "proc5",
+                                                                         "proc7"),
+                                                                     std::make_pair(
+                                                                         "proc5",
+                                                                         "proc8"),
+                                                                     std::make_pair(
+                                                                         "proc5",
+                                                                         "proc9"),
+                                                                     std::make_pair(
+                                                                         "proc10",
+                                                                         "proc11"),
+                                                                     std::make_pair(
+                                                                         "proc10",
+                                                                         "proc12"),
+                                                                     std::make_pair(
+                                                                         "proc12",
+                                                                         "proc13"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc5"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc6"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc7"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc8"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc9"),
+                                                                     std::make_pair(
+                                                                         "proc4",
+                                                                         "proc6"),
+                                                                     std::make_pair(
+                                                                         "proc4",
+                                                                         "proc7"),
+                                                                     std::make_pair(
+                                                                         "proc4",
+                                                                         "proc8"),
+                                                                     std::make_pair(
+                                                                         "proc4",
+                                                                         "proc9"),
+                                                                     std::make_pair(
+                                                                         "proc10",
+                                                                         "proc13")
+                                                                 }));
   }
 
   SECTION("Dependent Calls with Single Transitive Relationship") {
@@ -154,12 +239,20 @@ TEST_CASE("Testcases for Calls Store") {
 
     REQUIRE(calls_store->hasAnyCallsRelation() == true);
 
-    REQUIRE(calls_store->retrieveAllCallsPairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
-            PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-              std::make_pair("proc1", "proc2"),
-              std::make_pair("proc1", "proc3"),
-              std::make_pair("proc3", "proc4")
-    }));
+    REQUIRE(calls_store->retrieveAllCallsPairs()
+                == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                                PkbTypes::PROCEDURE>,
+                                      PairHasherUtil::hash_pair>({
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc2"),
+                                                                     std::make_pair(
+                                                                         "proc1",
+                                                                         "proc3"),
+                                                                     std::make_pair(
+                                                                         "proc3",
+                                                                         "proc4")
+                                                                 }));
   }
 
   SECTION("Test OneToMany Calls Relation with statements and procedure") {
@@ -173,22 +266,30 @@ TEST_CASE("Testcases for Calls Store") {
     calls_store->addCallStatementToProcedureName("9", "proc3");
 
     REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc1") ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4", "5" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"4", "5"}));
 
     REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc2") ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "6", "7" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"6", "7"}));
 
     REQUIRE(calls_store->retrieveCallStatementsFromAProcedure("proc3") ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "8", "9" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8", "9"}));
 
     REQUIRE(calls_store->retrieveAllCallStatementToProcedurePairs() ==
-    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "4"),
-      std::make_pair("proc1", "5"),
-      std::make_pair("proc2", "6"),
-      std::make_pair("proc2", "7"),
-      std::make_pair("proc3", "8"),
-      std::make_pair("proc3", "9")
-    }));
+        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+                                     PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "4"),
+                                                          std::make_pair("proc1",
+                                                                         "5"),
+                                                          std::make_pair("proc2",
+                                                                         "6"),
+                                                          std::make_pair("proc2",
+                                                                         "7"),
+                                                          std::make_pair("proc3",
+                                                                         "8"),
+                                                          std::make_pair("proc3",
+                                                                         "9")
+                                                      }));
   }
 }

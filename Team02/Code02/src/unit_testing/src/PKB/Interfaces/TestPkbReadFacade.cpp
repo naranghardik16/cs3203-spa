@@ -25,19 +25,19 @@ TEST_CASE("Testing PkbReadFacade") {
     pkb_write_facade_->AddStatementModifyingVariable("4", "x");
 
     REQUIRE(pkb_read_facade_->GetVariablesModifiedByStatement("3") ==
-    std::unordered_set<std::string>({ "z" }));
+        std::unordered_set<std::string>({"z"}));
 
     REQUIRE(pkb_read_facade_->GetVariablesModifiedByStatement("2") ==
-    std::unordered_set<std::string>({ "z", "x" }));
+        std::unordered_set<std::string>({"z", "x"}));
 
     REQUIRE(pkb_read_facade_->GetStatements() ==
-    std::unordered_set<std::string>({ "4", "2", "3", "1" }));
+        std::unordered_set<std::string>({"4", "2", "3", "1"}));
 
     REQUIRE(pkb_read_facade_->GetStatementsThatModify(STATEMENT) ==
-    std::unordered_set<std::string>({ "2", "3", "4", "1" }));
+        std::unordered_set<std::string>({"2", "3", "4", "1"}));
 
     REQUIRE(pkb_read_facade_->GetStatementsModifiesVariable("z", IF) ==
-    std::unordered_set<std::string>({ "2" }));
+        std::unordered_set<std::string>({"2"}));
   }
 
   SECTION("Test Calls API") {
@@ -58,238 +58,456 @@ TEST_CASE("Testing PkbReadFacade") {
     pkb_write_facade_->AddCallsRelation("proc10", "proc11");
     pkb_write_facade_->AddCallsRelation("proc10", "proc12");
     pkb_write_facade_->AddCallsRelation("proc12", "proc13");
+    pkb_write_facade_->AddCallsStarRelation();
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairs() ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2"),
-      std::make_pair("proc1", "proc3"),
-      std::make_pair("proc1", "proc4"),
-      std::make_pair("proc4", "proc5"),
-      std::make_pair("proc5", "proc6"),
-      std::make_pair("proc5", "proc7"),
-      std::make_pair("proc5", "proc8"),
-      std::make_pair("proc5", "proc9"),
-      std::make_pair("proc10", "proc11"),
-      std::make_pair("proc12", "proc13"),
-      std::make_pair("proc10", "proc12")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc2"),
+                                                          std::make_pair("proc1",
+                                                                         "proc3"),
+                                                          std::make_pair("proc1",
+                                                                         "proc4"),
+                                                          std::make_pair("proc4",
+                                                                         "proc5"),
+                                                          std::make_pair("proc5",
+                                                                         "proc6"),
+                                                          std::make_pair("proc5",
+                                                                         "proc7"),
+                                                          std::make_pair("proc5",
+                                                                         "proc8"),
+                                                          std::make_pair("proc5",
+                                                                         "proc9"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc11"),
+                                                          std::make_pair(
+                                                              "proc12",
+                                                              "proc13"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc12")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsStarPairs() ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2"),
-      std::make_pair("proc1", "proc3"),
-      std::make_pair("proc1", "proc4"),
-      std::make_pair("proc4", "proc5"),
-      std::make_pair("proc5", "proc6"),
-      std::make_pair("proc5", "proc7"),
-      std::make_pair("proc5", "proc8"),
-      std::make_pair("proc5", "proc9"),
-      std::make_pair("proc10", "proc11"),
-      std::make_pair("proc12", "proc13"),
-      std::make_pair("proc1", "proc5"),
-      std::make_pair("proc1", "proc6"),
-      std::make_pair("proc1", "proc7"),
-      std::make_pair("proc1", "proc8"),
-      std::make_pair("proc1", "proc9"),
-      std::make_pair("proc4", "proc6"),
-      std::make_pair("proc4", "proc7"),
-      std::make_pair("proc4", "proc8"),
-      std::make_pair("proc4", "proc9"),
-      std::make_pair("proc10", "proc13"),
-      std::make_pair("proc10", "proc12")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc2"),
+                                                          std::make_pair("proc1",
+                                                                         "proc3"),
+                                                          std::make_pair("proc1",
+                                                                         "proc4"),
+                                                          std::make_pair("proc4",
+                                                                         "proc5"),
+                                                          std::make_pair("proc5",
+                                                                         "proc6"),
+                                                          std::make_pair("proc5",
+                                                                         "proc7"),
+                                                          std::make_pair("proc5",
+                                                                         "proc8"),
+                                                          std::make_pair("proc5",
+                                                                         "proc9"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc11"),
+                                                          std::make_pair(
+                                                              "proc12",
+                                                              "proc13"),
+                                                          std::make_pair("proc1",
+                                                                         "proc5"),
+                                                          std::make_pair("proc1",
+                                                                         "proc6"),
+                                                          std::make_pair("proc1",
+                                                                         "proc7"),
+                                                          std::make_pair("proc1",
+                                                                         "proc8"),
+                                                          std::make_pair("proc1",
+                                                                         "proc9"),
+                                                          std::make_pair("proc4",
+                                                                         "proc6"),
+                                                          std::make_pair("proc4",
+                                                                         "proc7"),
+                                                          std::make_pair("proc4",
+                                                                         "proc8"),
+                                                          std::make_pair("proc4",
+                                                                         "proc9"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc13"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc12")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCaller("proc12") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc12", "proc13")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "proc12",
+                                                              "proc13")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCaller("proc1") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2"),
-      std::make_pair("proc1", "proc3"),
-      std::make_pair("proc1", "proc4")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc2"),
+                                                          std::make_pair("proc1",
+                                                                         "proc3"),
+                                                          std::make_pair("proc1",
+                                                                         "proc4")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCaller("proc4") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc4", "proc5")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc4",
+                                                                         "proc5")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCaller("proc5") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc6"),
-      std::make_pair("proc5", "proc7"),
-      std::make_pair("proc5", "proc8"),
-      std::make_pair("proc5", "proc9")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc5",
+                                                                         "proc6"),
+                                                          std::make_pair("proc5",
+                                                                         "proc7"),
+                                                          std::make_pair("proc5",
+                                                                         "proc8"),
+                                                          std::make_pair("proc5",
+                                                                         "proc9")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCaller("proc10") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc11"),
-      std::make_pair("proc10", "proc12")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc11"),
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc12")
+                                                      }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc1") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2"),
-      std::make_pair("proc1", "proc3"),
-      std::make_pair("proc1", "proc4"),
-      std::make_pair("proc1", "proc5"),
-      std::make_pair("proc1", "proc6"),
-      std::make_pair("proc1", "proc7"),
-      std::make_pair("proc1", "proc8"),
-      std::make_pair("proc1", "proc9")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc1") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc2"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc3"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc4"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc5"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc6"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc7"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc8"),
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc9")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc4") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc4", "proc5"),
-      std::make_pair("proc4", "proc6"),
-      std::make_pair("proc4", "proc7"),
-      std::make_pair("proc4", "proc8"),
-      std::make_pair("proc4", "proc9")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc4") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc5"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc6"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc7"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc8"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc9")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc5") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc6"),
-      std::make_pair("proc5", "proc7"),
-      std::make_pair("proc5", "proc8"),
-      std::make_pair("proc5", "proc9")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc5") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc6"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc7"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc8"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc9")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc10") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc11"),
-      std::make_pair("proc10", "proc13"),
-      std::make_pair("proc10", "proc12")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc10") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc11"),
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc13"),
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc12")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc12") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc12", "proc13")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCaller("proc12") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc12",
+                                                                  "proc13")
+                                                          }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc2") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc2")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc3") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc3")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc3")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc4") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc4")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc1",
+                                                                         "proc4")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc5") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc4", "proc5")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc4",
+                                                                         "proc5")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc6") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc6")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc5",
+                                                                         "proc6")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc7") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc7")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc5",
+                                                                         "proc7")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc8") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc8")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc5",
+                                                                         "proc8")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc9") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc5", "proc9")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("proc5",
+                                                                         "proc9")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc11") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc11")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc11")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc12") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc12")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "proc10",
+                                                              "proc12")
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairsWithSpecifiedCallee("proc13") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc12", "proc13")
-    }));
+        std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair(
+                                                              "proc12",
+                                                              "proc13")
+                                                      }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc2") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc2")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc2") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc2")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc3") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc3")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc3") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc3")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc4") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc4")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc4") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc4")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc5") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc5"),
-      std::make_pair("proc4", "proc5")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc5") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc5"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc5")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc6") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc6"),
-      std::make_pair("proc4", "proc6"),
-      std::make_pair("proc5", "proc6")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc6") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc6"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc6"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc6")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc7") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc7"),
-      std::make_pair("proc4", "proc7"),
-      std::make_pair("proc5", "proc7")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc7") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc7"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc7"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc7")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc8") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc8"),
-      std::make_pair("proc4", "proc8"),
-      std::make_pair("proc5", "proc8")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc8") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc8"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc8"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc8")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc9") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc1", "proc9"),
-      std::make_pair("proc4", "proc9"),
-      std::make_pair("proc5", "proc9")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc9") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc1",
+                                                                  "proc9"),
+                                                              std::make_pair(
+                                                                  "proc4",
+                                                                  "proc9"),
+                                                              std::make_pair(
+                                                                  "proc5",
+                                                                  "proc9")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc11") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc11")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc11") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc11")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc12") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc12")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc12") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc12")
+                                                          }));
 
-    REQUIRE(pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc13") ==
-    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({
-      std::make_pair("proc10", "proc13"),
-      std::make_pair("proc12", "proc13")
-    }));
+    REQUIRE(
+        pkb_read_facade_->GetAllCallsStarPairsWithSpecifiedCallee("proc13") ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE,
+                                         PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                                                              std::make_pair(
+                                                                  "proc10",
+                                                                  "proc13"),
+                                                              std::make_pair(
+                                                                  "proc12",
+                                                                  "proc13")
+                                                          }));
 
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc2") == true);
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc3") == true);
@@ -400,7 +618,6 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->IsNext("6", "8") == true);
     REQUIRE(pkb_read_facade_->IsNext("8", "9") == true);
 
-
     REQUIRE(pkb_read_facade_->HasNext("1") == true);
     REQUIRE(pkb_read_facade_->HasNext("2") == true);
     REQUIRE(pkb_read_facade_->HasNext("3") == true);
@@ -410,44 +627,57 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->HasNext("8") == true);
 
     REQUIRE(pkb_read_facade_->GetNext("1", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2"}));
 
     REQUIRE(pkb_read_facade_->GetNext("2", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"3"}));
 
     REQUIRE(pkb_read_facade_->GetNext("3", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"4"}));
 
     REQUIRE(pkb_read_facade_->GetNext("8", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"9" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"9"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("2", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("3", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("9", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
 
     REQUIRE(pkb_read_facade_->GetNextFirst(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "2", "3", "5", "4", "6", "8" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1", "2", "3", "5", "4",
+                                                        "6", "8"}));
 
     REQUIRE(pkb_read_facade_->GetNextSecond(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3", "4", "5", "6", "7", "8", "9" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2", "3", "4", "5", "6",
+                                                        "7", "8", "9"}));
 
     REQUIRE(pkb_read_facade_->GetNextPairs(READ, READ) ==
-    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-      std::make_pair("1", "2"),
-      std::make_pair("2", "3"),
-      std::make_pair("3", "4"),
-      std::make_pair("4", "5"),
-      std::make_pair("4", "6"),
-      std::make_pair("5", "4"),
-      std::make_pair("6", "7"),
-      std::make_pair("6", "8"),
-      std::make_pair("8", "9")
-    }));
+        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+                                     PkbTypes::STATEMENT_NUMBER>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("1",
+                                                                         "2"),
+                                                          std::make_pair("2",
+                                                                         "3"),
+                                                          std::make_pair("3",
+                                                                         "4"),
+                                                          std::make_pair("4",
+                                                                         "5"),
+                                                          std::make_pair("4",
+                                                                         "6"),
+                                                          std::make_pair("5",
+                                                                         "4"),
+                                                          std::make_pair("6",
+                                                                         "7"),
+                                                          std::make_pair("6",
+                                                                         "8"),
+                                                          std::make_pair("8",
+                                                                         "9")
+                                                      }));
   }
 
   SECTION("Test Next API - With Dummy Node") {
@@ -536,54 +766,68 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->HasNext("9") == true);
 
     REQUIRE(pkb_read_facade_->GetNext("1", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2"}));
 
     REQUIRE(pkb_read_facade_->GetNext("3", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"4"}));
 
     REQUIRE(pkb_read_facade_->GetNext("5", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "6" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"6"}));
 
     REQUIRE(pkb_read_facade_->GetNext("7", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "8" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
 
     REQUIRE(pkb_read_facade_->GetNext("9", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "10" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"10"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("2", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("4", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"3"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("6", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "5" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("8", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "7" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"7"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("10", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "9" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"9"}));
 
     REQUIRE(pkb_read_facade_->GetNextFirst(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "2", "3", "5", "4", "6", "7", "8", "9" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1", "2", "3", "5", "4",
+                                                        "6", "7", "8", "9"}));
 
     REQUIRE(pkb_read_facade_->GetNextSecond(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2", "3", "4", "5", "6",
+                                                        "7", "8", "9", "10"}));
 
     REQUIRE(pkb_read_facade_->GetNextPairs(READ, READ) ==
-    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-      std::make_pair("1", "2"),
-      std::make_pair("2", "3"),
-      std::make_pair("3", "4"),
-      std::make_pair("5", "6"),
-      std::make_pair("2", "5"),
-      std::make_pair("4", "7"),
-      std::make_pair("7", "8"),
-      std::make_pair("6", "7"),
-      std::make_pair("8", "9"),
-      std::make_pair("9", "10")
-    }));
+        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+                                     PkbTypes::STATEMENT_NUMBER>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("1",
+                                                                         "2"),
+                                                          std::make_pair("2",
+                                                                         "3"),
+                                                          std::make_pair("3",
+                                                                         "4"),
+                                                          std::make_pair("5",
+                                                                         "6"),
+                                                          std::make_pair("2",
+                                                                         "5"),
+                                                          std::make_pair("4",
+                                                                         "7"),
+                                                          std::make_pair("7",
+                                                                         "8"),
+                                                          std::make_pair("6",
+                                                                         "7"),
+                                                          std::make_pair("8",
+                                                                         "9"),
+                                                          std::make_pair("9",
+                                                                         "10")
+                                                      }));
   }
 
   SECTION("Test Next Star API - Complex CFG") {
@@ -779,29 +1023,52 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->HasNextStarBy("12") == true);
     REQUIRE(pkb_read_facade_->HasNextStarBy("13") == true);
     REQUIRE(pkb_read_facade_->HasNextStarBy("14") == true);
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-        ({"2", "4", "6", "9", "10", "11", "13"}));
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"3", "7", "12"}));
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
-    REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
-    REQUIRE(pkb_read_facade_->GetNextStarSecond(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
-    REQUIRE(pkb_read_facade_->GetNextStarSecond(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
-    REQUIRE(pkb_read_facade_->GetNextStarSecond(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
-    REQUIRE(pkb_read_facade_->GetNextStarSecond(IF) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
-      "6", "7", "8", "9", "10", "11", "12", "13", "14"
-    }));
-    REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
-      "9", "10", "11", "12", "13", "14"
-    }));
-    REQUIRE(pkb_read_facade_->GetNextStar("1", READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
-    REQUIRE(pkb_read_facade_->GetNextStar("13", CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
-      "14"
-    }));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(READ)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(ASSIGN)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+                    ({"2", "4", "6", "9", "10", "11", "13"}));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(CALL)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                    {"3", "7", "12"}));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(IF)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
+    REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(READ)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                    {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
+                     "13", "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(ASSIGN)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                    {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+                     "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(CALL)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                    {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+                     "14"}));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(IF)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+                                                                      "6", "7",
+                                                                      "8", "9",
+                                                                      "10",
+                                                                      "11",
+                                                                      "12",
+                                                                      "13", "14"
+                                                                  }));
+    REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+                                                                      "9", "10",
+                                                                      "11",
+                                                                      "12",
+                                                                      "13", "14"
+                                                                  }));
+    REQUIRE(pkb_read_facade_->GetNextStar("1", READ)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
+    REQUIRE(pkb_read_facade_->GetNextStar("13", CALL)
+                == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
+                                                                      "14"
+                                                                  }));
   }
 
   SECTION("Test Next API - Basic CFG") {
@@ -859,39 +1126,47 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE_FALSE(pkb_read_facade_->HasNext("6") == true);
 
     REQUIRE(pkb_read_facade_->GetNext("1", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2"}));
 
     REQUIRE(pkb_read_facade_->GetNext("3", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"4"}));
 
     REQUIRE(pkb_read_facade_->GetNext("5", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "6" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"6"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("2", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("4", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"3"}));
 
     REQUIRE(pkb_read_facade_->GetNextBy("6", READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "5" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
 
     REQUIRE(pkb_read_facade_->HasNextBy("2") == true);
 
     REQUIRE(pkb_read_facade_->GetNextPairs(READ, READ) ==
-    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-      std::make_pair("1", "2"),
-      std::make_pair("2", "3"),
-      std::make_pair("3", "4"),
-      std::make_pair("5", "6"),
-      std::make_pair("2", "5"),
-      }));
+        std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
+                                     PkbTypes::STATEMENT_NUMBER>,
+                           PairHasherUtil::hash_pair>({
+                                                          std::make_pair("1",
+                                                                         "2"),
+                                                          std::make_pair("2",
+                                                                         "3"),
+                                                          std::make_pair("3",
+                                                                         "4"),
+                                                          std::make_pair("5",
+                                                                         "6"),
+                                                          std::make_pair("2",
+                                                                         "5"),
+                                                      }));
 
     REQUIRE(pkb_read_facade_->GetNextFirst(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1", "2", "3", "5" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1", "2", "3", "5"}));
 
     REQUIRE(pkb_read_facade_->GetNextSecond(READ) ==
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3", "4", "5", "6" }));
+        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"2", "3", "4", "5",
+                                                        "6"}));
   }
 }
 
