@@ -1066,8 +1066,7 @@ TEST_CASE("Integration testing for Next API - Complex") {
     std::string query = "while w; Select w such that Next(_, w)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results
-        {"10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    std::list<std::string> expected_results { "10", "2", "4", "8" };
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1076,8 +1075,7 @@ TEST_CASE("Integration testing for Next API - Complex") {
     std::string query = "while w; assign a; Select w such that Next(w, a)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results
-        {"1", "10", "11", "2", "3", "4", "5", "6", "7", "8", "9"};
+    std::list<std::string> expected_results { "10", "2", "4", "8" };
     results.sort();
     REQUIRE(results == expected_results);
   }
