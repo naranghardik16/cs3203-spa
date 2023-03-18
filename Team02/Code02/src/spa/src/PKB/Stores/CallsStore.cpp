@@ -8,39 +8,25 @@ CallsStore::~CallsStore() = default;
 
 void CallsStore::addCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
   this->calls_store_.insert(caller_procedure, callee_procedure);
-//  this->calls_star_store_.insert(caller_procedure, callee_procedure);
-//
-//  std::unordered_set<PkbTypes::PROCEDURE> callers =
-//      this->calls_star_store_.retrieveFromValue(caller_procedure);
-//
-//  while (!callers.empty()) {
-//    std::unordered_set<PkbTypes::PROCEDURE> updated_callers;
-//    for (const auto& p: callers) {
-//      std::unordered_set<PkbTypes::PROCEDURE> temp = this->calls_star_store_.retrieveFromValue(p);
-//      updated_callers.insert(temp.begin(), temp.end());
-//      if (p != callee_procedure) {
-//        this->calls_star_store_.insert(p, callee_procedure);
-//      }
-//    }
-//    callers = updated_callers;
-//  }
 }
 
 void CallsStore::addCallsStarRelation() {
   for (const auto& k: this->calls_store_.retrieveAllKeys()) {
     std::stack<PkbTypes::PROCEDURE> s;
-    std::unordered_set<PkbTypes::PROCEDURE> visited;
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair> visited;
     s.push(k);
 
     while (!s.empty()) {
       PkbTypes::PROCEDURE current = s.top();
       s.pop();
-      visited.insert(current);
 
       for (const auto& c: this->calls_store_.retrieveFromKey(current)) {
-        if (!(visited.count(c) > 0)) {
+        if (!(visited.count(std::make_pair(k, c)) > 0)) {
+          if (k != c) {
             this->calls_star_store_.insert(k, c);
             s.push(c);
+            visited.insert(std::make_pair(k, c));
+          }
         }
       }
     }
