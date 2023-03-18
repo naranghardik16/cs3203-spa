@@ -44,7 +44,7 @@ Select s such that Next*(1, s)
 2,3,4,5,6,7,8,9,10
 5000
 10-comment
-call c; procedure p,p1,p2;assign a, a1; prog_line pl;variable v;while w; if ifs;stmt s,s1,s2;
+call c; procedure p,p1,p2;assign a, a1; variable v;while w; if ifs;stmt s,s1,s2;
 Select <s,w,ifs,s2> such that Parent*(s,w) and Parent*(s,ifs) and Modifies(a,"a") and Next*(a,w) and Parent(ifs,a) such that Parent*(s2,c) and Parent*(s1,c) and Parent*(s2,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1) pattern a1(v, _"a%b*c"_) such that Modifies(p1, v) and Calls(p2, p1) with p2.procName = "B"
 11 21 23 41,11 21 23 44,11 21 23 45,11 21 23 46,20 21 23 41,20 21 23 44,20 21 23 45,20 21 23 46
 5000
