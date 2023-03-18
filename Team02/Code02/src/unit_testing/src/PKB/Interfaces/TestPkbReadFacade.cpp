@@ -952,13 +952,11 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->HasNextStarBy("12") == true);
     REQUIRE(pkb_read_facade_->HasNextStarBy("13") == true);
     REQUIRE(pkb_read_facade_->HasNextStarBy("14") == true);
-    
     REQUIRE(pkb_read_facade_->GetNextStarFirst(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
         ({"2", "4", "6", "9", "10", "11", "13"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"3", "7", "12"}));
-        
     REQUIRE(pkb_read_facade_->GetNextStarFirst(IF) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"5"}));
     REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE) ==
