@@ -25,7 +25,7 @@ void NextStore::extractNextRelations() {
     std::unordered_set<std::string> visited;
     std::stack<std::pair<int, std::shared_ptr<CfgNode>>> s;
 
-    s.emplace(std::make_pair(-1, p.second));
+    s.push(std::make_pair(-1, p.second));
 
     while (!s.empty()) {
       auto ps = s.top();
@@ -33,10 +33,13 @@ void NextStore::extractNextRelations() {
       auto current = ps.second;
       s.pop();
 
+      if (current->GetNodeStmts().size() == 0 && current->GetNodeTrans().count(true) == 0) {
+        continue;
+      }
 
       std::vector<int> statements = current->GetNodeStmts();
-      if (statements.empty()) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+      if (statements.empty() && current->GetNodeTrans().count(true) > 0) {
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
         continue;
       }
 
@@ -52,11 +55,11 @@ void NextStore::extractNextRelations() {
       if (visited.count(current->GetStringRepresentation()) > 0) continue;
 
       if (current->GetNodeTrans().count(true) > 0) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[true]));
       }
 
       if (current->GetNodeTrans().count(false) > 0) {
-        s.emplace(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
+        s.push(std::make_pair(prev_stmt, current->GetNodeTrans()[false]));
       }
 
       visited.insert(current->GetStringRepresentation());
@@ -93,7 +96,8 @@ NextStore::retrieveAllNextStarPairs() {
 
   for (const auto& k: this->next_store_.retrieveAllKeys()) {
     std::stack<PkbTypes::STATEMENT_NUMBER> s;
-    std::unordered_set<PkbTypes::STATEMENT_NUMBER> visited;
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+        PairHasherUtil::hash_pair> visited;
     s.push(k);
 
     while (!s.empty()) {
@@ -101,13 +105,12 @@ NextStore::retrieveAllNextStarPairs() {
       s.pop();
 
       for (const auto& c: this->next_store_.retrieveFromKey(current)) {
-        if (!(visited.count(c) > 0)) {
+        if (!(visited.count(std::make_pair(k, c)) > 0)) {
           result.insert(std::make_pair(k, c));
           s.push(c);
+          visited.insert(std::make_pair(k, c));
         }
       }
-
-      visited.insert(current);
     }
   }
 

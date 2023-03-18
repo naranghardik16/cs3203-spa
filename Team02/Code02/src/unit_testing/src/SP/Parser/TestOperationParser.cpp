@@ -475,4 +475,18 @@ TEST_CASE("Check if ConditionalOperationParser & RelationalOperationParser works
     auto expr = expr_parser->ParseEntity(expr_line);
     REQUIRE_THROWS_AS(expr_parser->ParseEntity(expr_line), SyntaxErrorException);
   }
+  SECTION("Check if cond_expr [  ( ! (a != 0) ) && (0 > 1) ] parses without syntax error") {
+    Parser::Line expr_line{
+        make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<ConditionalOperatorToken>("!", NOT),
+        make_shared<PunctuationToken>("(", LEFT_PARENTHESIS), make_shared<NameToken>("a"),
+        make_shared<RelationalOperatorToken>("!=", NE), make_shared<IntegerToken>("0"),
+        make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+        make_shared<ConditionalOperatorToken>("&&", AND), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+        make_shared<IntegerToken>("0"), make_shared<RelationalOperatorToken>(">", GT),
+        make_shared<IntegerToken>("1"), make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+        make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)
+    };
+    auto expr_parser = ExpressionParserFactory::GetExpressionParser(expr_line, "if");
+    REQUIRE_NOTHROW(expr_parser->ParseEntity(expr_line));
+  }
 }
