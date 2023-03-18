@@ -30,14 +30,22 @@ class ClauseEvaluator {
  * @param s which is an unordered set of strings
  * @return the unordered set in ResultTable format
  */
-  static ResultTable ConvertSetToResultTableFormat(PkbCommunicationTypes::SingleConstraintSet s);
+  static ResultTable ConvertSetToResultTableFormat(const PkbCommunicationTypes::SingleConstraintSet& s);
 
   /**
    * Converts an unordered set of pairs (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
    * @param s which is an unordered set of pairs
    * @return  the unordered set in ResultTable format
    */
-  static ResultTable ConvertPairSetToResultTableFormat(PkbCommunicationTypes::PairConstraintSet s);
+  static ResultTable ConvertPairSetToResultTableFormat(const PkbCommunicationTypes::PairConstraintSet& s);
+
+  /**
+   * Filter the set when the two synonyms of clause are same.
+   *
+   * @param s
+   * @return the filtered unordered set
+   */
+  static PkbCommunicationTypes::PairConstraintSet FilterForSameSynonym(const PkbCommunicationTypes::PairConstraintSet& s);
 
   /**
    * Evaluates non-boolean constraints by interacting with PKB

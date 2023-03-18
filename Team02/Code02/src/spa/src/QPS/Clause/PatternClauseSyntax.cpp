@@ -31,3 +31,9 @@ std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map 
 
   return eval;
 }
+
+int PatternClauseSyntax::GetClauseScore(Map &declaration_map) {
+  std::string entity = declaration_map.at(ClauseSyntax::GetEntity());
+  auto pattern_score_map = pql_constants::kPatternScoreMap;
+  return pattern_score_map[entity];
+}

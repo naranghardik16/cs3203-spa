@@ -2,8 +2,9 @@
 
 #include <string>
 #include <unordered_set>
-#include "PKB/Types/PkbTypes.h"
+
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
+#include "PKB/Types/PkbTypes.h"
 #include "PKB/Util/PairHasherUtil.h"
 
 /**

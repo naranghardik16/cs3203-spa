@@ -52,6 +52,10 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
   if (is_syn && declaration[args[0]] != pql_constants::kPqlVariableEntity) {
     throw SemanticErrorException(args[0] + "is not a variable entity");
   }
+  clause->syn_.insert(syn);
+  if (is_syn) {
+    clause->syn_.insert(args[0]);
+  }
 
   return;
 }

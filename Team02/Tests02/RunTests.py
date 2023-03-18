@@ -108,7 +108,7 @@ def Execute(folder_to_test_in):
             test_summary = ExecuteAutotester(autotester_file_path, param)
             test_report += "\n" + test_summary
         except Exception as e:
-            print(e.str())
+            print(str(e))
             continue
 
     print(test_report)

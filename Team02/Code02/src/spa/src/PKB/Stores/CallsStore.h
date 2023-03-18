@@ -1,8 +1,8 @@
 #pragma once
 
-#include "PKB/Types/PkbTypes.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 /**
  * @class CallsStore
@@ -121,6 +121,8 @@ class CallsStore {
    * @return A set of statements that call this procedure.
    */
   std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
+
+  void addCallsStarRelation();
 
  private:
   // Stores the Calls relation OneToMany mapping between two procedures.

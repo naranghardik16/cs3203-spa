@@ -61,3 +61,9 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
   }
   return evaluator;
 }
+
+int SuchThatClauseSyntax::GetClauseScore(Map &declaration_map) {
+  auto score_map = pql_constants::kSuchThatScoreMap;
+  std::string relationship_reference = ClauseSyntax::GetEntity();
+  return score_map[relationship_reference];
+}

@@ -17,7 +17,11 @@ TEST_CASE("Check if expressions are parsed correctly for uses") {
 
     shared_ptr<PKB> pkb = make_shared<PKB>();
     shared_ptr<SP> sp = make_shared<SP>();
-    sp->ProcessSIMPLE(is, pkb);
+    shared_ptr<Cfg> cfg = make_shared<Cfg>();
+    bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+    if (!is_SP_processing_successful) {
+      FAIL();
+    }
 
     shared_ptr<PkbReadFacade>
         pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -56,8 +60,11 @@ TEST_CASE("Check if follows/* are extracted correctly") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
-
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
 
@@ -146,7 +153,11 @@ TEST_CASE("Check if parent/* are extracted correctly") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
 
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -238,7 +249,11 @@ TEST_CASE("Check if calls/* are extracted correctly (simple)") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
 
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -324,7 +339,11 @@ TEST_CASE("Check if calls/* are extracted correctly (complex)") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
 
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -419,7 +438,11 @@ TEST_CASE("Check if modifies are extracted correctly") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
 
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -567,7 +590,11 @@ TEST_CASE("Check if uses are extracted correctly") {
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
   shared_ptr<SP> sp = make_shared<SP>();
-  sp->ProcessSIMPLE(is, pkb);
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
 
   shared_ptr<PkbReadFacade>
       pkb_read_facade = make_shared<PkbReadFacade>(*pkb);

@@ -50,6 +50,12 @@ std::shared_ptr<Result> CallsStarClauseEvaluator::EvaluateClause(std::shared_ptr
       single_constraint = pkb->GetAllProceduresThatAreCallersStar();
     } else if (is_second_arg_a_procedure_synonym) {
       // Calls*(p,q)
+      if (first_arg_ == second_arg_) {
+        // return empty table since e.g. in Calls*(p,p) --> should return empty
+        ResultTable table;
+        std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+        return result_ptr;
+      }
       pair_constraint = pkb->GetAllCallsStarPairs();
     } else {
       // Calls*(p, “first”) -- get procedures that directly or indirectly call "First"

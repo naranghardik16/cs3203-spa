@@ -1,7 +1,6 @@
-#include "FollowsStore.h"
-#include <iostream>
-#include <algorithm>
 #include <iterator>
+
+#include "FollowsStore.h"
 
 FollowsStore::FollowsStore() = default;
 
