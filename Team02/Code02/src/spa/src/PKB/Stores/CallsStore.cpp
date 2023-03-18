@@ -31,6 +31,24 @@ void CallsStore::addCallsStarRelation() {
       }
     }
   }
+//  for (const auto& k: this->calls_store_.retrieveAllKeys()) {
+//    std::stack<PkbTypes::PROCEDURE> s;
+//    std::unordered_set<PkbTypes::PROCEDURE> visited;
+//    s.push(k);
+//
+//    while (!s.empty()) {
+//      PkbTypes::PROCEDURE current = s.top();
+//      s.pop();
+//      visited.insert(current);
+//
+//      for (const auto& c: this->calls_store_.retrieveFromKey(current)) {
+//        if (!(visited.count(c) > 0)) {
+//          this->calls_star_store_.insert(k, c);
+//          s.push(c);
+//        }
+//      }
+//    }
+//  }
 }
 
 void CallsStore::addCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number,
@@ -40,7 +58,14 @@ void CallsStore::addCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER stat
 
 std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
 CallsStore::retrieveAllCallStatementToProcedurePairs() {
-  return this->procedure_to_call_store_.retrieveAll();
+  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
+      result;
+
+  for (const auto& p: this->procedure_to_call_store_.retrieveAll()) {
+    result.insert(std::make_pair(p.second, p.first));
+  }
+
+  return result;
 }
 
 std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
