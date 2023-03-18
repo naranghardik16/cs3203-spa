@@ -90,7 +90,7 @@ Select c such that Calls*(p1,p)
 5000
 19 - comment
 call c; procedure p,p1;assign a;variable v;
-Select p with p.procName = A
+Select p with p.procName = "A"
 A
 5000
 21 - comment
