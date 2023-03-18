@@ -86,15 +86,9 @@ TEST_CASE("Testcases for Calls Store") {
                 == std::unordered_set<std::pair<
                     PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>,
                                       PairHasherUtil::hash_pair>({
-                                                                     std::make_pair(
-                                                                         "4",
-                                                                         "procedure3"
-                                                                         ),
-                                                                     std::make_pair(
-                                                                         "10",
-                                                                         "procedure4"
-                                                                         )
-                                                                 }));
+                                        std::make_pair("4", "procedure3"),
+                                        std::make_pair("10", "procedure4")
+                                      }));
   }
 
   SECTION("Test CallsStar Relation") {
