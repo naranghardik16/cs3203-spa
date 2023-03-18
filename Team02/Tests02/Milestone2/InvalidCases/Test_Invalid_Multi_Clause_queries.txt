@@ -1,49 +1,49 @@
-1 - and + such that
+1 - and followed by such that
 assign a; while w;
 Select a such that Parent* (w, a) and Modifies (a, "x") and such that Parent* (1, a)
 SyntaxError
 5000
-2 - and + pattern
+2 - and followed by  pattern
 assign a; while w;
 Select a such that Parent* (w, a) and pattern a ("x", _) such that Parent*(1, a)
 SyntaxError
 5000
-3 - and + with
+3 - and followed by with
 assign a; while w;
 Select a such that Parent* (w, a) with a.stmt#=w.stmt# and with a.stmt#=6
 SyntaxError
 5000
-4 - pattern + and such that
+4 - pattern followed by  and such that
 assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and Parent*(1, a)
 SyntaxError
 5000
-5 - pattern + and with
+5 - pattern followed by  and with
 assign a; while w;
 Select a such that Parent* (w, a) pattern a ("x", _) and a.stmt#=6
 SyntaxError
 5000
-6 - such that + and pattern
+6 - such that followed by  and pattern
 assign a; while w;
 Select a such that Parent* (w, a) and a ("x", _)
 SyntaxError
 5000
-7 - such that + and with
+7 - such that followed by  and with
 assign a; while w;
 Select a such that Parent* (w, a) and a.stmt#=6
 SyntaxError
 5000
-8 - with + and pattern
+8 - with followed by  and pattern
 assign a; while w;
 Select a with a.stmt#=6 and a("x", _)
 SyntaxError
 5000
-9 - extra ;
+9 - extra semicolon
 assign a; while w;
 Select a such that Parent* (w, a) ; and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-10 - extra >
+10 - extra character
 assign a; while w;
 Select a such that Parent* (w, a) and Modifies (a, "x") and <Parent*(1, a)
 SyntaxError
@@ -53,52 +53,52 @@ assign a; while w;
 Select a such that Parent* (w, a) and Modifies (a, "x") and Parent*(1, a) and
 SyntaxError
 5000
-12 - extra clause markers - and
+12 - extra clause markers and
 assign a; while w;
 Select a such that Parent* (w, a) such that and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-13 - extra clause markers - pattern
+13 - extra clause markers pattern
 assign a; while w;
 Select a such that Parent* (w, a) pattern and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-14 - extra clause markers - such that
+14 - extra clause markers such that
 assign a; while w;
 Select a such that such that Parent* (w, a) and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-15 - extra clause markers - with
+15 - extra clause markers with
 assign a; while w;
 Select a such that with Parent* (w, a) and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-16 - misspelled clause indicators -- such that
+16 - misspelled clause indicators such that
 assign a; while w;
 Select a such tha Parent(w, a) and Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-17 - misspelled clause indicators -- pattern
+17 - misspelled clause indicators pattern
 assign a; while w;
 Select a patter a(_,_) such that Modifies (a, "x") and Parent*(1, a)
 SyntaxError
 5000
-18 - misspelled clause indicators -- with
+18 - misspelled clause indicators with
 assign a; while w;
 Select a pattern a(_,_) such that Modifies (a, "x") and Parent*(1, a) ith 5=5
 SyntaxError
 5000
-19 - misspelled clause indicators -- and
+19 - misspelled clause indicators and
 assign a; while w;
 Select a pattern a(_,_) such that Modifies (a, "x") an Parent*(1, a) with 5=5
 SyntaxError
 5000
-20 - misspelling in such that -- Modifie
+20 - misspelling in such that Modifie
 assign a; while w;
 Select a pattern a(_,_) such that Modifie (a, "x") and Parent*(1, a) with 5=5
 SyntaxError
 5000
-21 - extra comma in clause -- pattern
+21 - extra comma in clause pattern
 assign a; while w;
 Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(_,,_) with 5=5
 SyntaxError
@@ -118,7 +118,7 @@ assign a; while w;
 Select a such that Modifiesa, "x") and Parent*(1, a) pattern a(_,_) with 5=5
 SyntaxError
 5000
-25 - missing comma in clause (__)
+25 - missing comma in clause
 assign a; while w;
 Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(__) with 5=5
 SyntaxError
@@ -128,47 +128,47 @@ assign a; while w;
 Select a such that Modifies(a "x") and Parent*(1, a) pattern a(_,_) with 5=5
 SyntaxError
 5000
-27 - misspelling in with -- stmt#
+27 - misspelling in attrref
 assign a; while w;
 Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with a.stmt = 5
 SyntaxError
 5000
-28 - misspelling in with -- varName
+28 - misspelling in with varName
 assign a; while w; variable v;
 Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with v.varNam = "x"
 SyntaxError
 5000
-29 - misspelling in with -- procName
+29 - misspelling in with procName
 assign a; while w; procedure p;
 Select a pattern a(_,_) such that Modifies(a, "x") and Parent*(1, a) with "x"=p.proName
 SyntaxError
 5000
-30 - extra = in with
+30 - extra equal sign in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"==p.procName such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-31 - extra ) in with
+31 - extra closing bracket in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"=p.procName) such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-32 - extra ( in with
+32 - extra opening bracket in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with ("x"=p.procName such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-33 - no = in with
+33 - no equal in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x" p.procName such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-34 - no = in with
+34 - no equal in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"p.procName such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-35 - extra " in with
+35 - extra quotation in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x""=p.procName such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
@@ -178,27 +178,27 @@ assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"=a.stmt# such that Modifies(a, "x") and Parent*(1, a)
 SemanticError
 5000
-37 - wrong attr-ent to syn
+37 - wrong attrent to syn
 assign a; while w; procedure p;
 Select a pattern a(_,_) with 5=p.stmt# such that Modifies(a, "x") and Parent*(1, a)
 SemanticError
 5000
-38 - wrong attr-ent to syn
+38 - wrong attrent to syn
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"=a.varName such that Modifies(a, "x") and Parent*(1, a)
 SemanticError
 5000
-39 - wrong attr-ent to syn
+39 - wrong attrent to syn
 assign a; while w; procedure p;
 Select a pattern a(_,_) with "x"=a.procName such that Modifies(a, "x") and Parent*(1, a)
 SemanticError
 5000
-40 - no . in with
+40 - no dot in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with astmt# = 5 such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
 5000
-41 - extra . in with
+41 - extra dot in with
 assign a; while w; procedure p;
 Select a pattern a(_,_) with 5=a..stmt# such that Modifies(a, "x") and Parent*(1, a)
 SyntaxError
@@ -218,7 +218,7 @@ assign a; while w;
 Select a such that Modifies(a, "x") and Parent*(1, a) pattern a(_,_ with 5=5
 SyntaxError
 5000
-45 - with + and such that
+45 - with followed by and such that
 assign a; while w;
 Select a with a.stmt#=6 and Parent* (w, a)
 SyntaxError
@@ -238,22 +238,22 @@ assign a; while w;
 Select a with a.stmt#=6 such that Parent* (,w,a)
 SyntaxError
 5000
-49 - missing clause indicators -- such that
+49 - missing clause indicators such that
 assign a; while w;
 Select a Modifies(a, "x") and Parent*(1, a) pattern a(_,_) with 5=5
 SyntaxError
 5000
-50 - missing clause indicators -- pattern
+50 - missing clause indicators pattern
 assign a; while w;
 Select a such that Modifies(a, "x") such that Parent*(1, a) a(_,_) with 5=5
 SyntaxError
 5000
-51 - missing clause indicators -- with
+51 - missing clause indicators with
 assign a; while w;
 Select a such that Modifies(a, "x") 5=5 such that Parent*(1, a) pattern a(_,_)
 SyntaxError
 5000
-52 - missing clause indicators -- and
+52 - missing clause indicators and
 assign a; while w;
 Select a such that Modifies(a, "x") with 5=5 5=6 pattern a(_,_)
 SyntaxError

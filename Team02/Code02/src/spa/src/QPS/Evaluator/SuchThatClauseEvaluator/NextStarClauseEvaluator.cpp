@@ -52,6 +52,10 @@ std::shared_ptr<Result> NextStarClauseEvaluator::EvaluateClause(std::shared_ptr<
     // Example query: Next* (s,s)
 
     pair_constraint = pkb->GetNextStarPairs(arg_1_type, arg_2_type);
+
+    if (first_arg_ == second_arg_) {
+      pair_constraint = ClauseEvaluator::FilterForSameSynonym(pair_constraint);
+    }
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
     // Example query: Next* (s,_)
 
