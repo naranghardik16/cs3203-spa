@@ -87,11 +87,13 @@ TEST_CASE("Testcases for Calls Store") {
                     PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>,
                                       PairHasherUtil::hash_pair>({
                                                                      std::make_pair(
-                                                                         "procedure3",
-                                                                         "4"),
+                                                                         "4",
+                                                                         "procedure3"
+                                                                         ),
                                                                      std::make_pair(
-                                                                         "procedure4",
-                                                                         "10")
+                                                                         "10",
+                                                                         "procedure4"
+                                                                         )
                                                                  }));
   }
 
@@ -278,18 +280,12 @@ TEST_CASE("Testcases for Calls Store") {
         std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
                                      PkbTypes::PROCEDURE>,
                            PairHasherUtil::hash_pair>({
-                                                          std::make_pair("proc1",
-                                                                         "4"),
-                                                          std::make_pair("proc1",
-                                                                         "5"),
-                                                          std::make_pair("proc2",
-                                                                         "6"),
-                                                          std::make_pair("proc2",
-                                                                         "7"),
-                                                          std::make_pair("proc3",
-                                                                         "8"),
-                                                          std::make_pair("proc3",
-                                                                         "9")
-                                                      }));
+                             std::make_pair("4", "proc1"),
+                             std::make_pair("5", "proc1"),
+                             std::make_pair("6", "proc2"),
+                             std::make_pair("7", "proc2"),
+                             std::make_pair("8", "proc3"),
+                             std::make_pair("9", "proc3")
+                           }));
   }
 }
