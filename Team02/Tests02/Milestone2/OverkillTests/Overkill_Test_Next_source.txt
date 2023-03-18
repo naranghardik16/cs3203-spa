@@ -17,7 +17,7 @@ call B;
 }
 
 procedure B {
-while ((!(a != 0) && ( 0 > 1))) {
+while ((!(a != 0)) && ( 0 > 1)) {
 b = a - 1;
 call D;
 if (r != d) then {
