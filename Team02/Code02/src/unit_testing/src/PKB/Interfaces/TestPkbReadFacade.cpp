@@ -964,18 +964,18 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetNextStarFirst(WHILE) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"8"}));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(READ) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+        {}));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+        {"2", "4", "6", "9", "10", "11", "13"}));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(CALL) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"}));
+        {"3", "7", "12", "14"}));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(IF) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
-      "6", "7", "8", "9", "10", "11", "12", "13", "14"
+      "5"
     }));
     REQUIRE(pkb_read_facade_->GetNextStarSecond(WHILE) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({
-      "9", "10", "11", "12", "13", "14"
+      "8"
     }));
     REQUIRE(pkb_read_facade_->GetNextStar("1", READ) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
@@ -1085,7 +1085,7 @@ TEST_CASE("Testing PkbReadFacade") {
         {"12", "14"}));
     REQUIRE(pkb_read_facade_->GetNextStar("8", WHILE) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {}));
+        {"8"}));
     REQUIRE(pkb_read_facade_->GetNextStar("8", IF) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {}));
@@ -1093,7 +1093,7 @@ TEST_CASE("Testing PkbReadFacade") {
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
     REQUIRE(pkb_read_facade_->GetNextStar("9", ASSIGN) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"10", "11", "13"}));
+        {"10", "11", "13", "9"}));
     REQUIRE(pkb_read_facade_->GetNextStar("9", CALL) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"12", "14"}));
@@ -1107,7 +1107,7 @@ TEST_CASE("Testing PkbReadFacade") {
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
     REQUIRE(pkb_read_facade_->GetNextStar("10", ASSIGN) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"9", "11", "13"}));
+        {"9", "10", "11", "13"}));
     REQUIRE(pkb_read_facade_->GetNextStar("10", CALL) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"12", "14"}));
@@ -1268,7 +1268,7 @@ TEST_CASE("Testing PkbReadFacade") {
         {"3"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("8", WHILE)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {}));
+        {"8"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("8", IF)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"5"}));
@@ -1276,7 +1276,7 @@ TEST_CASE("Testing PkbReadFacade") {
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("9", ASSIGN)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"2", "4", "10"}));
+        {"2", "4", "9", "10"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("9", CALL)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"3"}));
@@ -1290,7 +1290,7 @@ TEST_CASE("Testing PkbReadFacade") {
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("10", ASSIGN)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
-        {"2", "4", "9"}));
+        {"2", "4", "9", "10"}));
     REQUIRE(pkb_read_facade_->GetNextStarBy("10", CALL)
     == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
         {"3"}));
