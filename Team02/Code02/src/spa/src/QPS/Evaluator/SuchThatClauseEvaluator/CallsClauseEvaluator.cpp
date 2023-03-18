@@ -44,12 +44,19 @@ std::shared_ptr<Result> CallsClauseEvaluator::EvaluateClause(std::shared_ptr<Pkb
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
   PkbCommunicationTypes::PairConstraintSet pair_constraint;
 
+
   if (is_first_arg_a_procedure_synonym) {
     if (is_second_arg_a_wildcard) {
       // Calls(p, _) --> Get procedures that call another procedure
       single_constraint = pkb->GetAllProceduresThatAreCallers();
     } else if (is_second_arg_a_procedure_synonym) {
       // Calls(p,q)
+      if (first_arg_ == second_arg_) {
+        // return empty table since e.g. in Calls(p,p) --> should return empty
+        ResultTable table;
+        std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+        return result_ptr;
+      }
       pair_constraint = pkb->GetAllCallsPairs();
     } else {
       // Calls(p, “first”) -- get procedures that call "First"

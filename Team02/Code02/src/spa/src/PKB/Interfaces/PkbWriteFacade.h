@@ -140,6 +140,7 @@ class PkbWriteFacade {
     */
    void AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
 
+  void AddCallsStarRelation();
    /**
     * Adds calls statement to procedure name mapping to PKB.
     *
