@@ -199,10 +199,6 @@ void AbstractionExtractor::ExtractIndirectModifiesFromCallStatements(PkbTypes::P
   auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
   for (auto call_stmt_no : call_stmts) {
     pkb_write_facade_->AddStatementModifyingVariable(call_stmt_no, variable);
-    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
-    for (auto ancestor_stmt_no : ancestors) {
-      pkb_write_facade_->AddStatementModifyingVariable(ancestor_stmt_no, variable);
-    }
   }
 }
 
@@ -221,10 +217,6 @@ void AbstractionExtractor::ExtractIndirectUsesFromCallStatements(PkbTypes::PROCE
   auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
   for (auto call_stmt_no : call_stmts) {
     pkb_write_facade_->AddStatementUsingVariable(call_stmt_no, variable);
-    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
-    for (auto ancestor_stmt_no : ancestors) {
-      pkb_write_facade_->AddStatementUsingVariable(ancestor_stmt_no, variable);
-    }
   }
 }
 
