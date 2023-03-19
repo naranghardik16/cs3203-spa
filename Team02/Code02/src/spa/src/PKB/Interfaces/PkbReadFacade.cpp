@@ -769,13 +769,13 @@ PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expr
 
 // Calls API
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetCallProcedurePair() {
-  return this->pkb.calls_store_->retrieveAllCallStatementToProcedurePairs();
+  return this->pkb.calls_store_->GetCallStatementToProcedurePairs();
 }
 
 PkbCommunicationTypes::PairConstraintSet
 PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -791,7 +791,7 @@ PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure
 PkbCommunicationTypes::PairConstraintSet
 PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -807,7 +807,7 @@ PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(PkbTypes::PROCEDURE proce
 PkbCommunicationTypes::PairConstraintSet
 PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -823,7 +823,7 @@ PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure
 PkbCommunicationTypes::PairConstraintSet
 PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -837,30 +837,30 @@ PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(PkbTypes::PROCEDURE proce
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsPairs() {
-  return this->pkb.calls_store_->retrieveAllCallsPairs();
+  return this->pkb.calls_store_->GetCallsPairs();
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetAllCallsStarPairs() {
-  return this->pkb.calls_store_->retrieveAllCallsStarPairs();
+  return this->pkb.calls_store_->GetCallsStarPairs();
 }
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure) {
-  return this->pkb.calls_store_->retrieveCallStatementsFromAProcedure(procedure);
+  return this->pkb.calls_store_->GetCallStatementsFromProcedure(procedure);
 }
 
 bool PkbReadFacade::HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
-  return this->pkb.calls_store_->hasCallsRelation(caller_procedure, callee_procedure);
+  return this->pkb.calls_store_->HasCallsRelation(caller_procedure, callee_procedure);
 }
 
 bool PkbReadFacade::HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure) {
-  return this->pkb.calls_store_->hasCallsStarRelation(caller_procedure, callee_procedure);
+  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure, callee_procedure);
 }
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -876,7 +876,7 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCaller(PkbTypes::PROCEDURE procedure
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -891,7 +891,7 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCallee(PkbTypes::PROCEDURE procedure
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallers() {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -904,7 +904,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAr
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallees() {
   PkbCommunicationTypes::PairConstraintSet calls_pairs =
-      this->pkb.calls_store_->retrieveAllCallsPairs();
+      this->pkb.calls_store_->GetCallsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -916,13 +916,13 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAr
 }
 
 bool PkbReadFacade::IsThereAnyCallsRelationship() {
-  return this->pkb.calls_store_->hasAnyCallsRelation();
+  return this->pkb.calls_store_->HasCallsRelation();
 }
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -938,7 +938,7 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(PkbTypes::PROCEDURE proce
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE procedure) {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -953,7 +953,7 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(PkbTypes::PROCEDURE proce
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCallersStar() {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -966,7 +966,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAr
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAreCalleesStar() {
   PkbCommunicationTypes::PairConstraintSet calls_star_pairs =
-      this->pkb.calls_store_->retrieveAllCallsStarPairs();
+      this->pkb.calls_store_->GetCallsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -978,7 +978,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetAllProceduresThatAr
 }
 
 bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
-  return this->pkb.calls_store_->hasAnyCallsStarRelation();
+  return this->pkb.calls_store_->HasCallsStarRelation();
 }
 
 // Affects API

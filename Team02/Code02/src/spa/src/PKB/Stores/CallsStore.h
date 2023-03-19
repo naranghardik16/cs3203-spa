@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stack>
+
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/Types/PkbTypes.h"
@@ -16,6 +18,17 @@
  */
 class CallsStore {
  public:
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_set<std::pair<StatementNumber, Procedure>, PairHasherUtil::hash_pair>
+  StatementNumberProcedurePairSet;
+  typedef std::unordered_set<std::pair<Procedure, Procedure>, PairHasherUtil::hash_pair>
+  ProcedureProcedurePairSet;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef ManyToManyStore<Procedure, Procedure> MultiProcedureToProcedureStore;
+  typedef OneToManyStore<Procedure, StatementNumber> ProcedureToMultiStatementNumberStore;
+  typedef std::stack<Procedure> ProcedureStack;
+
   /**
    * Constructor for Calls store.
    */
@@ -32,7 +45,12 @@ class CallsStore {
    * @param caller_procedure - Procedure that calls another procedure.
    * @param callee_procedure - Procedure that is called by another procedure.
    */
-  void addCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  void AddCallsRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
+
+  /**
+   * Adds all calls star relations, which signify the transitive calls relations.
+   */
+  void AddCallsStarRelation();
 
   /**
    * Add calls statement to procedure name mapping to Pkb.
@@ -40,31 +58,28 @@ class CallsStore {
    * @param statement_number - The statement number associated with the call statement.
    * @param procedure - The procedure being called as a part of that statement.
    */
-  void addCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::PROCEDURE procedure);
+  void AddCallStatementToProcedure(const StatementNumber& statement_number, const Procedure& procedure);
 
   /**
    * Retrieves all calls statement to procedure name mappings in the Calls Store.
    *
    * @return An unordered set of all the call statement to procedure pairs.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
-  retrieveAllCallStatementToProcedurePairs();
+  StatementNumberProcedurePairSet GetCallStatementToProcedurePairs();
 
   /**
    * Retrieves all the Calls relation pairs stored in Calls Store.
    *
    * @return An unordered set of all the Calls relation pairs.
    */
-  std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
-  retrieveAllCallsPairs();
+  ProcedureProcedurePairSet GetCallsPairs();
 
   /**
    * Retrieves all the Calls* relation pairs stored in the Calls Store.
    *
    * @return An unordered set of all the Calls* relation pairs.
    */
-  std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>
-  retrieveAllCallsStarPairs();
+  ProcedureProcedurePairSet GetCallsStarPairs();
 
   /**
    * Checks if a Calls relationship exists between two procedures.
@@ -73,7 +88,7 @@ class CallsStore {
    * @param callee_procedure - Procedure that is called by another procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  bool HasCallsRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
 
   /**
    * Checks if a Calls* relationship exists between two statements.
@@ -82,29 +97,29 @@ class CallsStore {
    * @param callee_procedure - Procedure that is called by another procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  bool HasCallsStarRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
 
   /**
    * Checks if the store contains any Calls relationship.
    *
    * @return True if the store contains at least one Calls relationship, false otherwise.
    */
-  bool hasAnyCallsRelation();
+  bool HasCallsRelation();
 
   /**
    * Checks if the store contains any Calls* relationship.
    *
    * @return True if the store contains at least one Calls* relationship, false otherwise.
    */
-  bool hasAnyCallsStarRelation();
+  bool HasCallsStarRelation();
 
   /**
-   * Checks if the procedure has any Calls in the store.
+   * Checks if the procedure has any calls in the store.
    *
    * @param procedure - The procedure.
    * @return True if the procedure has at least one Calls* in the store with respect to the procedure, false otherwise.
    */
-  bool hasCallsStar(PkbTypes::PROCEDURE procedure);
+  bool HasCallsStarRelation(const Procedure& procedure);
 
   /**
    * Checks if the procedure has any caller statements for it in the store.
@@ -112,7 +127,7 @@ class CallsStore {
    * @param procedure - The procedure.
    * @return True if the procedure has at least one Calls* in the store with respect to the procedure, false otherwise.
    */
-  bool hasCallsStarBy(PkbTypes::PROCEDURE procedure);
+  bool HasCallsStarRelationBy(const Procedure& procedure);
 
   /**
    * Retrieves all the statements that call a procedure.
@@ -120,16 +135,14 @@ class CallsStore {
    * @param procedure - The specified procedure.
    * @return A set of statements that call this procedure.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
-
-  void addCallsStarRelation();
+  StatementNumberSet GetCallStatementsFromProcedure(const Procedure& procedure);
 
  private:
   // Stores the Calls relation OneToMany mapping between two procedures.
-  ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_store_;
+  MultiProcedureToProcedureStore calls_relation_store_;
   // Stores the Calls* relation ManyToMany mapping between two procedures.
-  ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE> calls_star_store_;
+  MultiProcedureToProcedureStore calls_star_relation_store_;
   // Stores the procedure name to call statement(s)
-  OneToManyStore<PkbTypes::PROCEDURE, PkbTypes::STATEMENT_NUMBER> procedure_to_call_store_;
+  ProcedureToMultiStatementNumberStore procedure_to_call_statement_store_;
 };
 
