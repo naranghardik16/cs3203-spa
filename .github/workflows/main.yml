@@ -50,6 +50,12 @@ jobs:
           cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/Release
           ./integration_testing.exe
 
+      - name: Running System Tests
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/Team02/Tests02
+          python RunTests.py False
+
   build_macos:
     runs-on: macos-latest
     timeout-minutes: 15
@@ -81,3 +87,9 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: ./src/integration_testing/integration_testing
+
+      - name: Running System Tests
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/Team02/Tests02
+          python RunTests.py False
