@@ -88,8 +88,11 @@ jobs:
         shell: bash
         run: ./src/integration_testing/integration_testing
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
       - name: Running System Tests
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE/Team02/Tests02
-          python RunTests.py False
+          python3 RunTests.py False

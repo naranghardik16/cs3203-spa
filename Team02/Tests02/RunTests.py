@@ -31,7 +31,7 @@ def FindAutotesterExecutablePath():
             results.append(os.path.join(root, file_name))
 
     if len(results) == 0:
-        raise Exception(f'Unable to find {file_name} in `Code02/` folder')
+        raise Exception(f"Unable to find {file_name} in `Code02/` folder")
 
     # defaulting to return the first file in the possible results
     return results[0]
