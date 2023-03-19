@@ -102,7 +102,7 @@ def ExecuteAutotester(autotester_filepath, autotester_param, redirect_output):
     command = MakePathSuitableForOS(command)
 
     if redirect_output:
-        exit_code = os.system(command + "> /dev/null 2>&1")
+        exit_code = os.system(command + "> log.txt")
     else:
         exit_code = os.system(command)
 
