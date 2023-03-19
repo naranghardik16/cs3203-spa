@@ -7,7 +7,7 @@
 
 /**
  * Facade implementation consisting of write methods
- * which acts as an interface between SP and Pkb
+ * which acts as an interface between Sp and Pkb
  */
 class PkbWriteFacade {
  private:

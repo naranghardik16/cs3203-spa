@@ -6,7 +6,7 @@
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
-#include "SP/SP.h"
+#include "SP/Sp.h"
 
 void Dfs(shared_ptr<CfgNode> node,
          int lvl,

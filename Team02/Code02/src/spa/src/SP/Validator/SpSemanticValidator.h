@@ -12,12 +12,11 @@
 #include "./core/model/WhileStatement.h"
 #include "./core/model/IfStatement.h"
 
-
 using namespace std;
 
-class SPSemanticValidator {
+class SpSemanticValidator {
  public:
-  SPSemanticValidator();
+  SpSemanticValidator();
   void AddProcedure(string proc_name);
   void AddCallsRelationship(string caller_proc_name, string callee_proc_name);
   void ValidateProgram(shared_ptr<Program> program);
@@ -28,8 +27,11 @@ class SPSemanticValidator {
   vector<list<int>> adj_list_;
   bool IsProcedureExist(string proc_name);
   void ProcessProgram(shared_ptr<Program> program);
-  void ProcessStatements(Procedure::StmtListContainer statements, string proc_name);
+  void ProcessStatements(Procedure::StmtListContainer statements,
+                         string proc_name);
   void PopulateAdjacencyList();
   void ValidateNoRecursiveAndCyclicCalls();
-  bool IsCyclicUtil(int v, shared_ptr<vector<bool>> visited, shared_ptr<vector<bool>> rec_stack);
+  bool IsCyclicUtil(int v,
+                    shared_ptr<vector<bool>> visited,
+                    shared_ptr<vector<bool>> rec_stack);
 };

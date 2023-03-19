@@ -6,8 +6,8 @@
 #include "./SP/Parser/Parser.h"
 #include "SP/Tokenizer/Tokenizer.h"
 
-
-bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) {
+bool CheckTokenStreamEquality(Parser::TokenStream ts1,
+                              Parser::TokenStream ts2) {
   if (ts1.size() != ts2.size()) {
     return false;
   }
@@ -26,10 +26,11 @@ bool CheckTokenStreamEquality(Parser::TokenStream ts1, Parser::TokenStream ts2) 
   return true;
 }
 
-TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
+TEST_CASE("Check if Sp Tokenizer::Tokenize works as expected") {
   shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
 
-  SECTION("Test if it valid tokens (e.g. abc123 for name token) are tokenized as expected") {
+  SECTION(
+      "Test if it valid tokens (e.g. abc123 for name token) are tokenized as expected") {
     string input = "abc123 = 1;\n"
                    "ABC123 = 2;\n"
                    "a1b2 = 3;\n"
@@ -39,18 +40,25 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
     shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {make_shared<NameToken>("abc123"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        {make_shared<NameToken>("abc123"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
          make_shared<IntegerToken>("1"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("ABC123"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
-         make_shared<IntegerToken>("2"), make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("a1b2"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        {make_shared<NameToken>("ABC123"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<IntegerToken>("2"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("a1b2"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
          make_shared<IntegerToken>("3"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+        {make_shared<NameToken>("if"),
+         make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
          make_shared<NameToken>("i"),
-         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS), make_shared<IntegerToken>("0"),
-         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<NameToken>("then"),
+         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+         make_shared<IntegerToken>("0"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+         make_shared<NameToken>("then"),
          make_shared<PunctuationToken>("{", LEFT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
@@ -63,12 +71,17 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
     shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {make_shared<NameToken>("while"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+        {make_shared<NameToken>("while"),
+         make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
          make_shared<NameToken>("i"),
-         make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0"),
+         make_shared<RelationalOperatorToken>(">", GT),
+         make_shared<IntegerToken>("0"),
          make_shared<ConditionalOperatorToken>("&&", AND),
-         make_shared<NameToken>("i"), make_shared<RelationalOperatorToken>("<=", LTE), make_shared<IntegerToken>("10"),
-         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>("{", LEFT_BRACE)}
+         make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>("<=", LTE),
+         make_shared<IntegerToken>("10"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+         make_shared<PunctuationToken>("{", LEFT_BRACE)}
     };
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
@@ -90,10 +103,12 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     Parser::TokenStream expected = {
         {make_shared<NameToken>("read"), make_shared<NameToken>("print"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("then"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        {make_shared<NameToken>("then"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
          make_shared<NameToken>("read"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("else"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        {make_shared<NameToken>("else"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
          make_shared<NameToken>("print"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
     };
@@ -110,21 +125,35 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
 
     shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {make_shared<NameToken>("while"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
-         make_shared<NameToken>("i"),
-         make_shared<RelationalOperatorToken>(">", GT), make_shared<IntegerToken>("0"),
-         make_shared<ConditionalOperatorToken>("&&", AND),
-         make_shared<NameToken>("i"), make_shared<RelationalOperatorToken>("<=", LTE), make_shared<IntegerToken>("10"),
-         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<PunctuationToken>("{", LEFT_BRACE)},
-        {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<NameToken>("x"),
-         make_shared<ArithmeticOperatorToken>("+", PLUS), make_shared<NameToken>("z"),
-         make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
-         make_shared<IntegerToken>("5"), make_shared<ArithmeticOperatorToken>("/", DIV), make_shared<IntegerToken>("2"),
-         make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("z"), make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+        {make_shared<NameToken>("while"),
          make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
-         make_shared<IntegerToken>("10"), make_shared<ArithmeticOperatorToken>("-", MINUS), make_shared<NameToken>("x"),
-         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS), make_shared<ArithmeticOperatorToken>("%", MOD),
+         make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>(">", GT),
+         make_shared<IntegerToken>("0"),
+         make_shared<ConditionalOperatorToken>("&&", AND),
+         make_shared<NameToken>("i"),
+         make_shared<RelationalOperatorToken>("<=", LTE),
+         make_shared<IntegerToken>("10"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+         make_shared<PunctuationToken>("{", LEFT_BRACE)},
+        {make_shared<NameToken>("x"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<NameToken>("x"),
+         make_shared<ArithmeticOperatorToken>("+", PLUS),
+         make_shared<NameToken>("z"),
+         make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+         make_shared<IntegerToken>("5"),
+         make_shared<ArithmeticOperatorToken>("/", DIV),
+         make_shared<IntegerToken>("2"),
+         make_shared<PunctuationToken>(";", SEMICOLON)},
+        {make_shared<NameToken>("z"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+         make_shared<IntegerToken>("10"),
+         make_shared<ArithmeticOperatorToken>("-", MINUS),
+         make_shared<NameToken>("x"),
+         make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+         make_shared<ArithmeticOperatorToken>("%", MOD),
          make_shared<IntegerToken>("2"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
         {make_shared<PunctuationToken>("}", RIGHT_BRACE)}
@@ -132,23 +161,32 @@ TEST_CASE("Check if SP Tokenizer::Tokenize works as expected") {
     REQUIRE(CheckTokenStreamEquality(*actual, expected));
   }
 
-  SECTION("Test if it works for identifying lines based on END_OF_LINES punctuations") {
+  SECTION(
+      "Test if it works for identifying lines based on END_OF_LINES punctuations") {
     string input = "if (i == 0) { x = 1; y = 3; z = 5; }";
     std::istringstream is;
     is.str(input);
 
     shared_ptr<Parser::TokenStream> actual = tokenizer->Tokenize(is);
     Parser::TokenStream expected = {
-        {make_shared<NameToken>("if"), make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+        {make_shared<NameToken>("if"),
+         make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
          make_shared<NameToken>("i"),
-         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS), make_shared<IntegerToken>("0"),
+         make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+         make_shared<IntegerToken>("0"),
          make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
          make_shared<PunctuationToken>("{", LEFT_BRACE)},
-        {make_shared<NameToken>("x"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("1"),
+        {make_shared<NameToken>("x"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<IntegerToken>("1"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("y"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("3"),
+        {make_shared<NameToken>("y"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<IntegerToken>("3"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
-        {make_shared<NameToken>("z"), make_shared<PunctuationToken>("=", SINGLE_EQUAL), make_shared<IntegerToken>("5"),
+        {make_shared<NameToken>("z"),
+         make_shared<PunctuationToken>("=", SINGLE_EQUAL),
+         make_shared<IntegerToken>("5"),
          make_shared<PunctuationToken>(";", SEMICOLON)},
         {make_shared<PunctuationToken>("}", RIGHT_BRACE)}
     };

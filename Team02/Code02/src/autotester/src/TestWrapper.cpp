@@ -23,7 +23,7 @@ void TestWrapper::parse(std::string filename) {
   // ...rest of your code...
 
   std::ifstream source(filename);
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(source, pkb_, cfg_);
   // Terminate program without evaluating any queries if there's invalid SIMPLE code
   if (!is_SP_processing_successful) {

@@ -4,7 +4,7 @@
 #include <sstream>
 #include "./SP/Parser/Parser.h"
 #include "SP/Tokenizer/Tokenizer.h"
-#include "SP/Validator/SPSemanticValidator.h"
+#include "SP/Validator/SpSemanticValidator.h"
 
 TEST_CASE("Valid source program") {
   string input = "      procedure First {\n"
@@ -40,11 +40,13 @@ TEST_CASE("Valid source program") {
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
   REQUIRE_NOTHROW(validator->ValidateProgram(program));
 }
 
-TEST_CASE("Valid source program [Make sure that case sensitive works \"First\" and \"first\"]") {
+TEST_CASE(
+    "Valid source program [Make sure that case sensitive works \"First\" and \"first\"]") {
   string input = "      procedure First {\n"
                  "      read x;\n"
                  "      read z;\n"
@@ -78,11 +80,13 @@ TEST_CASE("Valid source program [Make sure that case sensitive works \"First\" a
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
   REQUIRE_NOTHROW(validator->ValidateProgram(program));
 }
 
-TEST_CASE("Invalid source program [Program having 2 or more procedures with the same name]") {
+TEST_CASE(
+    "Invalid source program [Program having 2 or more procedures with the same name]") {
   string input = "      procedure First {\n"
                  "      read x;\n"
                  "      read z;\n"
@@ -116,11 +120,14 @@ TEST_CASE("Invalid source program [Program having 2 or more procedures with the 
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
-  REQUIRE_THROWS_AS(validator->ValidateProgram(program), SemanticErrorException);
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
+  REQUIRE_THROWS_AS(validator->ValidateProgram(program),
+                    SemanticErrorException);
 }
 
-TEST_CASE("Invalid source program [Recursive and cyclic calls are not allowed e.g. A calls A]") {
+TEST_CASE(
+    "Invalid source program [Recursive and cyclic calls are not allowed e.g. A calls A]") {
   string input = "      procedure First {\n"
                  "      read x;\n"
                  "      read z;\n"
@@ -154,11 +161,14 @@ TEST_CASE("Invalid source program [Recursive and cyclic calls are not allowed e.
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
-  REQUIRE_THROWS_AS(validator->ValidateProgram(program), SemanticErrorException);
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
+  REQUIRE_THROWS_AS(validator->ValidateProgram(program),
+                    SemanticErrorException);
 }
 
-TEST_CASE("Invalid source program [Recursive and cyclic calls are not allowed e.g. A calls B, B calls C, C calls A]") {
+TEST_CASE(
+    "Invalid source program [Recursive and cyclic calls are not allowed e.g. A calls B, B calls C, C calls A]") {
   string input = "      procedure A {\n"
                  "      read x;\n"
                  "      read z;\n"
@@ -198,12 +208,15 @@ TEST_CASE("Invalid source program [Recursive and cyclic calls are not allowed e.
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
-  REQUIRE_THROWS_AS(validator->ValidateProgram(program), SemanticErrorException);
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
+  REQUIRE_THROWS_AS(validator->ValidateProgram(program),
+                    SemanticErrorException);
 }
 
-TEST_CASE("Invalid source program [A procedure cannot call a non-existing procedure]") {
-    string input = "      procedure First {\n"
+TEST_CASE(
+    "Invalid source program [A procedure cannot call a non-existing procedure]") {
+  string input = "      procedure First {\n"
                  "      read x;\n"
                  "      read z;\n"
                  "      call Second; }\n"
@@ -236,6 +249,8 @@ TEST_CASE("Invalid source program [A procedure cannot call a non-existing proced
   shared_ptr<Parser> parser = make_shared<Parser>();
   shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-  shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
-  REQUIRE_THROWS_AS(validator->ValidateProgram(program), SemanticErrorException);
+  shared_ptr<SpSemanticValidator>
+      validator = make_shared<SpSemanticValidator>();
+  REQUIRE_THROWS_AS(validator->ValidateProgram(program),
+                    SemanticErrorException);
 }

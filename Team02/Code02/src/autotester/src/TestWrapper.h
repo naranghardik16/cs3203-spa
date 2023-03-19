@@ -10,7 +10,7 @@
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "QPS/Qps.h"
-#include "SP/SP.h"
+#include "SP/Sp.h"
 #include <fstream>
 
 class TestWrapper : public AbstractWrapper {
