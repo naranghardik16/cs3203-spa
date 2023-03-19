@@ -96,12 +96,12 @@ class QpsTokenizer {
   shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
   shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
   pair<string, string> ProcessIDENT(string first_parameter, string second_parameter);
-  string ParseIDENT(string parameter);
+  std::string ParseIDENT(string parameter);
   ParameterVector ParseParameters(string parameters_substr);
-  string GetSynonymSubstring(string select_keyword_removed_clause);
-  string ParseAttrRef(string attr_ref);
+  std::string GetSynonymSubstring(string select_keyword_removed_clause);
+  std::string ParseAttrRef(string attr_ref);
   SelectedSynonymTuple ParseSingleSynonym(string clause_after_syn);
-  string GetSubclauseString(string clause_with_select_removed, SelectedSynonymTuple syn_vector);
-  string ParseWithClauseParameter(string parameter);
-  string GetRegexMatch(const string &clause, const regex &rgx);
+  std::string GetSubclauseString(string clause_with_select_removed, SelectedSynonymTuple syn_vector);
+  std::string ParseWithClauseParameter(string parameter);
+  std::string GetRegexMatch(const string &clause, const regex &rgx);
 };
