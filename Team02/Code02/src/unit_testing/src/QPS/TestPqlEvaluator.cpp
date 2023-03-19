@@ -7,7 +7,7 @@
 #include <memory>
 
 TEST_CASE("Check if PQLEvaluator works for basic select statements") {
-  PKB pkb_ = PKB();
+  Pkb pkb_ = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
   auto qp = std::make_shared<QueryParser>();
 
@@ -124,10 +124,10 @@ TEST_CASE("Check if PQLEvaluator works for basic select statements") {
 
 TEST_CASE("Basic Evaluation of Attr-ref") {
   auto qp = std::make_shared<QueryParser>();
-  PKB pkb_ = PKB();
+  Pkb pkb_ = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
 
-  SECTION("INT, WILDCARD, Return True from PKB so get all variables") {
+  SECTION("INT, WILDCARD, Return True from Pkb so get all variables") {
     std::string query = "variable x;Select x.varName";
     auto correct_output = qp->ParseQuery(query);
 
@@ -141,12 +141,12 @@ TEST_CASE("Basic Evaluation of Attr-ref") {
 
 TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   auto qp = std::make_shared<QueryParser>();
-  PKB pkb_ = PKB();
+  Pkb pkb_ = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
 
   //! test are based on stmt 1 : read x
   // stub->GetVariablesModifiedByStatement(1) will not be empty so get all var
-  SECTION("INT, WILDCARD, Return True from PKB so get all variables") {
+  SECTION("INT, WILDCARD, Return True from Pkb so get all variables") {
     std::string query = "variable v;Select v such that Modifies(1,_)";
     auto correct_output = qp->ParseQuery(query);
 
@@ -158,7 +158,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   }
 
   // stub->GetVariablesModifiedByStatement(20) will be empty
-  SECTION("INT, WILDCARD, Return False from PKB so get empty set") {
+  SECTION("INT, WILDCARD, Return False from Pkb so get empty set") {
     std::string query = "variable v;Select v such that Modifies(20,_)";
     auto correct_output = qp->ParseQuery(query);
 
@@ -183,7 +183,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
 
   // Modifies(1, "x") -- does 1 modify "x"?
   // stub->HasModifiesStatementRelationship(first_arg_, second_arg_) --> stub will return true for (1, "x")
-  SECTION("INT, IDENT, Return True from PKB so get all variables") {
+  SECTION("INT, IDENT, Return True from Pkb so get all variables") {
     std::string query = "variable v;Select v such that Modifies(1,\"x\")";
     auto correct_output = qp->ParseQuery(query);
 
@@ -195,7 +195,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
   }
 
   // Stub->HasModifiesStatementRelationship will return false for stmt num 20
-  SECTION("INT, IDENT, Return False from PKB so get empty set") {
+  SECTION("INT, IDENT, Return False from Pkb so get empty set") {
     std::string query = "variable v;Select v such that Modifies(20,\"v\")";
     auto correct_output = qp->ParseQuery(query);
 
@@ -273,7 +273,7 @@ TEST_CASE("Make sure Evaluation of Modifies Statement works") {
 }
 
 TEST_CASE("Make sure Modifies Procedure Works") {
-  PKB pkb_ = PKB();
+  Pkb pkb_ = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
   auto qp = std::make_shared<QueryParser>();
 
@@ -359,7 +359,7 @@ TEST_CASE("Make sure Modifies Procedure Works") {
 }
 
 TEST_CASE("Test Uses Statement Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -453,7 +453,7 @@ TEST_CASE("Test Uses Statement Clause Evaluator") {
 }
 
 TEST_CASE("Test Uses Procedure Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -547,7 +547,7 @@ TEST_CASE("Test Uses Procedure Clause Evaluator") {
 }
 
 TEST_CASE("Make sure Follows Clause Evaluator Works") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -676,7 +676,7 @@ TEST_CASE("Make sure Follows Clause Evaluator Works") {
 }
 
 TEST_CASE("Test FollowsStar Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -814,7 +814,7 @@ TEST_CASE("Test FollowsStar Clause Evaluator") {
 }
 
 TEST_CASE("Make sure Parent Clause Evaluator Works") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -941,7 +941,7 @@ TEST_CASE("Make sure Parent Clause Evaluator Works") {
 }
 
 TEST_CASE("Make sure ParentStar Clause Evaluator Works") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1054,7 +1054,7 @@ TEST_CASE("Make sure ParentStar Clause Evaluator Works") {
 }
 
 TEST_CASE("Test pattern evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1203,7 +1203,7 @@ TEST_CASE("Test pattern evaluator") {
 }
 
 TEST_CASE("Multi-clause tests") {
-  PKB pkb_ = PKB();
+  Pkb pkb_ = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade_ = std::make_shared<StubPkbReadFacade>(pkb_);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1279,7 +1279,7 @@ TEST_CASE("Multi-clause tests") {
 }
 
 TEST_CASE("Test With Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1329,7 +1329,7 @@ TEST_CASE("Test With Clause Evaluator") {
 }
 
 TEST_CASE("Test Nex Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1467,7 +1467,7 @@ TEST_CASE("Test Nex Clause Evaluator") {
 }
 
 TEST_CASE("Test NextStar Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1606,7 +1606,7 @@ TEST_CASE("Test NextStar Clause Evaluator") {
 
 
 TEST_CASE("Test Affects Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 
@@ -1747,7 +1747,7 @@ TEST_CASE("Test Affects Clause Evaluator") {
 
 
 TEST_CASE("Test AffectsStar Clause Evaluator") {
-  PKB pkb = PKB();
+  Pkb pkb = Pkb();
   std::shared_ptr<PkbReadFacade> pkb_read_facade = std::make_shared<StubPkbReadFacade>(pkb);
   auto qp = std::make_shared<QueryParser>();
 

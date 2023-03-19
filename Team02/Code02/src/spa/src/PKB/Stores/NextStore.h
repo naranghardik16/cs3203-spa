@@ -7,7 +7,7 @@
 
 /**
  * @class NextStore
- * Class representing the Next Store in the PKB.
+ * Class representing the Next Store in the Pkb.
  */
 class NextStore {
  public:

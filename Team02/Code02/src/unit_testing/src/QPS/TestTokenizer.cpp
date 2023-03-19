@@ -1,4 +1,3 @@
-#pragma once
 #include "QPS/QpsTokenizer.h"
 #include "General/SpaException/SemanticErrorException.h"
 #include "General/SpaException/SyntaxErrorException.h"

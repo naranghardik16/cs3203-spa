@@ -12,10 +12,10 @@ TEST_CASE("Testcases for Assignment Store") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Constant>("7");
 
-    assignment_store->addAssignmentExpression("1", root);
+    assignment_store->AddAssignmentExpression("1", root);
 
-    REQUIRE(assignment_store->retrieveAssignmentExpressionByStatementNumber("1") == root);
-    REQUIRE(assignment_store->retrieveAllStatementNumbersWhichContainExpression(root) ==
+    REQUIRE(assignment_store->GetExpressionFromStatementNumber("1") == root);
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
   }
 
@@ -24,10 +24,10 @@ TEST_CASE("Testcases for Assignment Store") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Variable>("x");
 
-    assignment_store->addAssignmentExpression("2", root);
+    assignment_store->AddAssignmentExpression("2", root);
 
-    REQUIRE(assignment_store->retrieveAssignmentExpressionByStatementNumber("2") == root);
-    REQUIRE(assignment_store->retrieveAllStatementNumbersWhichContainExpression(root) ==
+    REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
   }
 
@@ -39,10 +39,10 @@ TEST_CASE("Testcases for Assignment Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    assignment_store->addAssignmentExpression("2", root);
+    assignment_store->AddAssignmentExpression("2", root);
 
-    REQUIRE(assignment_store->retrieveAssignmentExpressionByStatementNumber("2") == root);
-    REQUIRE(assignment_store->retrieveAllStatementNumbersWhichContainExpression(root) ==
+    REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
   }
 
@@ -54,12 +54,12 @@ TEST_CASE("Testcases for Assignment Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    assignment_store->addAssignmentExpression("2", root);
-    assignment_store->addAssignmentExpression("3", root);
+    assignment_store->AddAssignmentExpression("2", root);
+    assignment_store->AddAssignmentExpression("3", root);
 
-    REQUIRE(assignment_store->retrieveAssignmentExpressionByStatementNumber("2") == root);
-    REQUIRE(assignment_store->retrieveAssignmentExpressionByStatementNumber("3") == root);
-    REQUIRE(assignment_store->retrieveAllStatementNumbersWhichContainExpression(root) ==
+    REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
+    REQUIRE(assignment_store->GetExpressionFromStatementNumber("3") == root);
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3" }));
   }
 }

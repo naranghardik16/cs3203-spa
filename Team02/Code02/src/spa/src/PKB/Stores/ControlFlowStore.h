@@ -6,7 +6,7 @@
 
 /**
  * @class ControlFlowStore
- * Class representing Control Flow Store in PKB.
+ * Class representing Control Flow Store in Pkb.
  */
 class ControlFlowStore {
  public:

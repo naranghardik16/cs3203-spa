@@ -1,6 +1,6 @@
-#include "PKB.h"
+#include "Pkb.h"
 
-PKB::PKB() {
+Pkb::Pkb() {
   entity_store_ = new EntityStore();
   statement_store_ = new StatementStore();
   modifies_store_ = new ModifiesStore();
@@ -15,6 +15,6 @@ PKB::PKB() {
   next_store_ = new NextStore();
 }
 
-PKB::~PKB() = default;
+Pkb::~Pkb() = default;
 
 

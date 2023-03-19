@@ -13,17 +13,17 @@
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
 
-class PKB {
+class Pkb {
  public:
   /**
- * Constructor for PKB.
+ * Constructor for Pkb.
  */
-  PKB();
+  Pkb();
 
   /**
-   * Destructor for PKB.
+   * Destructor for Pkb.
    */
-  ~PKB();
+  ~Pkb();
 
  private:
   /**

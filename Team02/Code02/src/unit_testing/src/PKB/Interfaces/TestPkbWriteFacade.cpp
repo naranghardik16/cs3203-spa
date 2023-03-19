@@ -1,8 +1,8 @@
 // #include "catch.hpp"
 
-// TEST_CASE("Check if the variables are being correctly added to the PKB variable store") {
+// TEST_CASE("Check if the variables are being correctly added to the Pkb variable store") {
 //  SECTION("Test simple case of adding a single variable") {
-//    PKB pkb_ = PKB();
+//    Pkb pkb_ = Pkb();
 //    PkbWriteFacade* pkb_write_facade_;
 //    pkb_write_facade_ = new PkbWriteFacade(pkb_);
 //
@@ -12,7 +12,7 @@
 //  }
 
 //  SECTION("Test simple case of adding multiple variables") {
-//    PKB pkb_ = PKB();
+//    Pkb pkb_ = Pkb();
 //    PkbWriteFacade* pkb_write_facade_;
 //    pkb_write_facade_ = new PkbWriteFacade(pkb_);
 //
@@ -28,7 +28,7 @@
 //  }
 //
 //  SECTION("Test simple case of adding a single procedure") {
-//    PKB pkb_ = PKB();
+//    Pkb pkb_ = Pkb();
 //    PkbWriteFacade* pkb_write_facade_;
 //    pkb_write_facade_ = new PkbWriteFacade(pkb_);
 //
@@ -38,7 +38,7 @@
 //  }
 //
 //  SECTION("Test simple case of adding multiple procedures") {
-//    PKB pkb_ = PKB();
+//    Pkb pkb_ = Pkb();
 //    PkbWriteFacade* pkb_write_facade_;
 //    pkb_write_facade_ = new PkbWriteFacade(pkb_);
 //
@@ -54,7 +54,7 @@
 //  }
 
 //  SECTION("Test simple case of populating multiple constants") {
-//    PKB pkb_ = PKB();
+//    Pkb pkb_ = Pkb();
 //    PkbWriteFacade* pkb_write_facade_;
 //    pkb_write_facade_ = new PkbWriteFacade(pkb_);
 //

@@ -1,13 +1,12 @@
 //! Preserving the stub written previously
 
-#pragma once
 #include "StubPKBReadFacade.h"
 
 #include <memory>
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
-StubPkbReadFacade::StubPkbReadFacade(PKB &pkb): PkbReadFacade(pkb) {}
+StubPkbReadFacade::StubPkbReadFacade(Pkb &pkb): PkbReadFacade(pkb) {}
 
 StubPkbReadFacade::~StubPkbReadFacade() {}
 

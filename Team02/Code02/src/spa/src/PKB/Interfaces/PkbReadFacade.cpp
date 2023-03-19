@@ -1,11 +1,11 @@
 #include <memory>
 
 #include "PkbReadFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "PKB/Util/ExpressionUtil.h"
 
-PkbReadFacade::PkbReadFacade(PKB& pkb): pkb(pkb) {}
+PkbReadFacade::PkbReadFacade(Pkb& pkb): pkb(pkb) {}
 
 PkbReadFacade::~PkbReadFacade() = default;
 
@@ -649,7 +649,7 @@ PkbReadFacade::GetAssignWithExactExpression(const std::shared_ptr<Expression>& e
   PkbCommunicationTypes::SingleConstraintSet result;
 
   for (const auto& s: this->GetAssignStatements()) {
-    if (this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(s)->operator==(*expr)) {
+    if (this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(*expr)) {
       result.insert(s);
     }
   }
@@ -662,8 +662,8 @@ PkbReadFacade::GetAssignWithPartialExpression(const std::shared_ptr<Expression>&
   PkbCommunicationTypes::SingleConstraintSet result;
 
   for (const auto& s: this->GetAssignStatements()) {
-    std::shared_ptr<Expression> e = this->pkb.assignment_store_->retrieveAssignmentExpressionByStatementNumber(s);
-    if (ExpressionUtil::hasSubExpression(e, sub_expression)) {
+    std::shared_ptr<Expression> e = this->pkb.assignment_store_->GetExpressionFromStatementNumber(s);
+    if (ExpressionUtil::HasSubExpression(e, sub_expression)) {
       result.insert(s);
     }
   }
@@ -677,7 +677,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetIfConditionVariablePa
   PkbCommunicationTypes::PairConstraintSet result;
   for (const auto& i: if_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
-    for (const auto& v: ExpressionUtil::retrieveAllVariablesFromExpression(e)) {
+    for (const auto& v: ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(i, v));
     }
   }
@@ -691,7 +691,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfWithConditionVari
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& i: if_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
-    if (ExpressionUtil::retrieveAllVariablesFromExpression(e).count(variable) > 0) {
+    if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
         result.insert(i);
     }
   }
@@ -705,7 +705,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetIfThatHasConditionV
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& i: if_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveIfStatementCondition(i);
-    if (!ExpressionUtil::retrieveAllVariablesFromExpression(e).empty()) {
+    if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(i);
     }
   }
@@ -719,7 +719,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetWhileConditionVariabl
   PkbCommunicationTypes::PairConstraintSet result;
   for (const auto& w: while_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
-    for (const auto& v: ExpressionUtil::retrieveAllVariablesFromExpression(e)) {
+    for (const auto& v: ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(w, v));
     }
   }
@@ -736,7 +736,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileWithConditionV
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& w: while_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
-    if (ExpressionUtil::retrieveAllVariablesFromExpression(e).count(variable) > 0) {
+    if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
       result.insert(w);
     }
   }
@@ -753,7 +753,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditi
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& w: while_statements) {
     std::shared_ptr<Expression> e = this->pkb.control_flow_store_->retrieveWhileStatementCondition(w);
-    if (!ExpressionUtil::retrieveAllVariablesFromExpression(e).empty()) {
+    if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(w);
     }
   }

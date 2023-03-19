@@ -13,7 +13,7 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
-  pkb_ = make_shared<PKB>();
+  pkb_ = make_shared<Pkb>();
   cfg_ = make_shared<Cfg>();
 }
 

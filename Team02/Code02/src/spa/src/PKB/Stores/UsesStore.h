@@ -9,9 +9,9 @@
 
 /**
  * @class UsesStore
- * Class representing the Uses Store in the PKB.
+ * Class representing the Uses Store in the Pkb.
  *
- * The UsesStore class is responsible for maintaining information about the Uses relation in the PKB.
+ * The UsesStore class is responsible for maintaining information about the Uses relation in the Pkb.
  * The Uses relation between a statement and a variable is represented as a ManyToMany relationship.
  * The UsesStore class also maintains information about the Uses relation between a procedure and a variable.
  */

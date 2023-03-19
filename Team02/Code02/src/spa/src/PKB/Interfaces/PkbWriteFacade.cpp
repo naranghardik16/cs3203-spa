@@ -2,9 +2,9 @@
 
 #include "General/StatementTypeEnum.h"
 #include "PkbWriteFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 
-PkbWriteFacade::PkbWriteFacade(PKB &pkb) : pkb(pkb) {}
+PkbWriteFacade::PkbWriteFacade(Pkb &pkb) : pkb(pkb) {}
 
 PkbWriteFacade::~PkbWriteFacade() = default;
 
@@ -74,7 +74,7 @@ void PkbWriteFacade::AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_numb
 void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUMBER statement_number,
                                                          std::shared_ptr<
                                                              Expression> expression) {
-  this->pkb.assignment_store_->addAssignmentExpression(statement_number,
+  this->pkb.assignment_store_->AddAssignmentExpression(statement_number,
                                                        expression);
   this->pkb.expression_store_->addExpression(expression);
 

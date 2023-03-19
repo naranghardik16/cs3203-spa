@@ -7,9 +7,9 @@
 
 /**
  * @class ParentStore
- * Class representing the Parent Store in PKB.
+ * Class representing the Parent Store in Pkb.
  *
- * The ParentStore class is responsible for maintaining information about the Parent and Parent* relation in the PKB.
+ * The ParentStore class is responsible for maintaining information about the Parent and Parent* relation in the Pkb.
  *
  * Parent relation follows OneToMany mapping.
  * Parent* relation follows ManyToMany mapping.

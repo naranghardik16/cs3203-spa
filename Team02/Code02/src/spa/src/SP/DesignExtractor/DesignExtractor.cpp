@@ -1,6 +1,6 @@
 #include "DesignExtractor.h"
 
-DesignExtractor::DesignExtractor(shared_ptr<PKB> pkb, shared_ptr<Cfg> cfg) {
+DesignExtractor::DesignExtractor(shared_ptr<Pkb> pkb, shared_ptr<Cfg> cfg) {
   pkb_ = pkb;
   cfg_ = cfg;
 }

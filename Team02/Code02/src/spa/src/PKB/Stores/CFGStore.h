@@ -7,7 +7,7 @@
 
 /**
  * @class CFGStore
- * Class representing the CFG Store in PKB.
+ * Class representing the CFG Store in Pkb.
  *
  * The CFGStore class is responsible for maintaining information about the
  * control flow graph of the source program.

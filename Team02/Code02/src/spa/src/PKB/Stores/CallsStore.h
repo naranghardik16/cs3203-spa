@@ -6,10 +6,10 @@
 
 /**
  * @class CallsStore
- * Class representing the Calls Store in PKB.
+ * Class representing the Calls Store in Pkb.
  *
  * The CallsStore class is responsible for maintaining information about the
- * Calls and Calls* relations in the PKB.
+ * Calls and Calls* relations in the Pkb.
  *
  * Calls relation follows OneToMany mapping.
  * Calls* relation follows ManyToMany mapping.
@@ -35,7 +35,7 @@ class CallsStore {
   void addCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
 
   /**
-   * Add calls statement to procedure name mapping to PKB.
+   * Add calls statement to procedure name mapping to Pkb.
    *
    * @param statement_number - The statement number associated with the call statement.
    * @param procedure - The procedure being called as a part of that statement.

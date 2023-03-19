@@ -6,9 +6,9 @@
 
 /**
  * @class FollowsStore
- * Class representing the Follows Store in PKB.
+ * Class representing the Follows Store in Pkb.
  *
- * The FollowsStore class is responsible for maintaining information about the Follows and Follows* relation in the PKB.
+ * The FollowsStore class is responsible for maintaining information about the Follows and Follows* relation in the Pkb.
  *
  * Follows relation follows OneToOne mapping.
  * Follows* relation follows ManyToMany mapping.

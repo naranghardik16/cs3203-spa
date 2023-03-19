@@ -4,96 +4,96 @@
 
 #include "General/StatementTypeEnum.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "core/model/Expression.h"
 
 /**
  * Facade implementation consisting of read-only methods
- * which acts as an interface between QPS and PKB
+ * which acts as an interface between QPS and Pkb
  */
 class PkbReadFacade {
  public:
   /**
-   * Constructor for PKB's read facade.
+   * Constructor for Pkb's read facade.
    *
-   * @param pkb - Instance of PKB.
+   * @param pkb - Instance of Pkb.
    */
-  PkbReadFacade(PKB& pkb);
+  PkbReadFacade(Pkb& pkb);
 
   /**
-   * Destructor for PKB's read facade.
+   * Destructor for Pkb's read facade.
    */
   ~PkbReadFacade();
 
   /**
-   * Retrieves variables stored in PKB.
+   * Retrieves variables stored in Pkb.
    *
-   * @return A set of variables that are present in PKB.
+   * @return A set of variables that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetVariables();
 
   /**
-   * Retrieves constants stored in PKB.
+   * Retrieves constants stored in Pkb.
    *
-   * @return A set of constants that are present in PKB.
+   * @return A set of constants that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetConstants();
 
   /**
-   * Retrieves procedures stored in PKB.
+   * Retrieves procedures stored in Pkb.
    *
-   * @return A set of procedures that are present in PKB.
+   * @return A set of procedures that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetProcedures();
 
   /**
-   * Retrieves statements stored in PKB.
+   * Retrieves statements stored in Pkb.
    *
-   * @return A set of statements that are present in PKB.
+   * @return A set of statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetStatements();
 
   /**
-   * Retrieves read statements stored in PKB.
+   * Retrieves read statements stored in Pkb.
    *
-   * @return A set of read statements that are present in PKB.
+   * @return A set of read statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetReadStatements();
 
   /**
-   * Retrieves print statements stored in PKB.
+   * Retrieves print statements stored in Pkb.
    *
-   * @return A set of print statements that are present in PKB.
+   * @return A set of print statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetPrintStatements();
 
   /**
-   * Retrieves call statements stored in PKB.
+   * Retrieves call statements stored in Pkb.
    *
-   * @return A set of call statements that are present in PKB.
+   * @return A set of call statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetCallStatements();
 
   /**
-   * Retrieves while statements stored in PKB.
+   * Retrieves while statements stored in Pkb.
    *
-   * @return A set of while statements that are present in PKB.
+   * @return A set of while statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetWhileStatements();
 
   /**
-   * Retrieves if statements stored in PKB.
+   * Retrieves if statements stored in Pkb.
    *
-   * @return A set of if statements that are present in PKB.
+   * @return A set of if statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetIfStatements();
 
   /**
-   * Retrieves assign statements stored in PKB.
+   * Retrieves assign statements stored in Pkb.
    *
-   * @return A set of assign statements that are present in PKB.
+   * @return A set of assign statements that are present in Pkb.
    */
   virtual PkbCommunicationTypes::SingleConstraintSet GetAssignStatements();
 
@@ -673,9 +673,9 @@ class PkbReadFacade {
   virtual PkbCommunicationTypes::SingleConstraintSet
   GetAllCallStatementsFromAProcedure(PkbTypes::PROCEDURE procedure);
 
-  //! QPS-PKB Calls API
+  //! QPS-Pkb Calls API
   /**
- * Retrieves all calls pairs stored in PKB.
+ * Retrieves all calls pairs stored in Pkb.
  *
  * @return An unordered set of all the calls pairs.
  */
@@ -683,7 +683,7 @@ class PkbReadFacade {
   GetAllCallsPairs();
 
   /**
-   * Retrieves all the calls star pairs stored in PKB.
+   * Retrieves all the calls star pairs stored in Pkb.
    *
    * @return An unordered set of all the calls star pairs.
    */
@@ -1057,6 +1057,6 @@ class PkbReadFacade {
   virtual bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
 
  private:
-  PKB& pkb;
+  Pkb& pkb;
 };
 

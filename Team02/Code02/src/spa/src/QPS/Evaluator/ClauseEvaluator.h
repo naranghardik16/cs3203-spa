@@ -26,14 +26,14 @@ class ClauseEvaluator {
   Map GetDeclarationMap();
 
   /**
- * Converts an unordered set of strings (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
+ * Converts an unordered set of strings (Pkb output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
  * @param s which is an unordered set of strings
  * @return the unordered set in ResultTable format
  */
   static ResultTable ConvertSetToResultTableFormat(const PkbCommunicationTypes::SingleConstraintSet& s);
 
   /**
-   * Converts an unordered set of pairs (PKB output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
+   * Converts an unordered set of pairs (Pkb output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
    * @param s which is an unordered set of pairs
    * @return  the unordered set in ResultTable format
    */
@@ -48,14 +48,14 @@ class ClauseEvaluator {
   static PkbCommunicationTypes::PairConstraintSet FilterForSameSynonym(const PkbCommunicationTypes::PairConstraintSet& s);
 
   /**
-   * Evaluates non-boolean constraints by interacting with PKB
+   * Evaluates non-boolean constraints by interacting with Pkb
    * @param pkb which stores data about information from the SIMPLE program
    * @return a Result class containing information about the evaluation for further handling
    */
   virtual std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) = 0;
 
   /**
-   * Evaluates a boolean constraint by interacting with PKB
+   * Evaluates a boolean constraint by interacting with Pkb
    * @param pkb which stores data about information from the SIMPLE program
    * @return true if the boolean constraint is fulfilled, else false which means final evaluation of the query is None
    */

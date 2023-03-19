@@ -4,14 +4,14 @@
 #include <unordered_set>
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 
 //!Should inherit from PKBReadFacade
 class StubPkbReadFacade: public PkbReadFacade {
  public:
-  StubPkbReadFacade(PKB& pkb);
+  StubPkbReadFacade(Pkb& pkb);
 
   ~StubPkbReadFacade();
 

@@ -1,10 +1,10 @@
 #include "catch.hpp"
 #include "QPS/Qps.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
 TEST_CASE("Test Qps") {
-  PKB pkb;
+  Pkb pkb;
   std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(pkb);
   std::list<std::string> results;
 
