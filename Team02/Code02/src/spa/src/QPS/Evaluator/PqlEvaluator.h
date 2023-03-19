@@ -14,7 +14,7 @@
 #include <memory>
 
 /**
- * Handles evaluation of PQL query by interacting with PKB to get data
+ * Handles evaluation of PQL query by interacting with Pkb to get data
  */
 class PqlEvaluator {
  private:

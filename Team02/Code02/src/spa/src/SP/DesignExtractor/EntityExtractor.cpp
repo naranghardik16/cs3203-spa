@@ -1,7 +1,6 @@
-#pragma once
 #include "EntityExtractor.h"
 
-EntityExtractor::EntityExtractor(shared_ptr<PKB> pkb) {
+EntityExtractor::EntityExtractor(shared_ptr<Pkb> pkb) {
   pkb_ = pkb;
   pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb);
 }

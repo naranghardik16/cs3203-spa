@@ -196,7 +196,7 @@ class QueryUtil {
   static std::string GetIdent(const std::string &quoted_ident);
 
   /**
-   * Gets the statement type based on the design entity assigned to the synonym for accessing data in PKB
+   * Gets the statement type based on the design entity assigned to the synonym for accessing data in Pkb
    * @param declaration which contains the synonyms as key and design entity as value
    * @param synonym to get statement type of
    * @return statement type of synonym

@@ -1,35 +1,32 @@
-#include <utility>
-
 #include "ControlFlowStore.h"
 
 ControlFlowStore::ControlFlowStore() = default;
 
 ControlFlowStore::~ControlFlowStore() = default;
 
-void ControlFlowStore::addIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                  std::shared_ptr<Expression> expression) {
-  this->if_store_.insert(std::move(statement_number), expression);
+void ControlFlowStore::AddIfStatementAndExpression(const StatementNumber& statement_number,
+                                                   const ExpressionPtr& expression) {
+  this->if_store_.insert(statement_number, expression);
 }
 
-void ControlFlowStore::addWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                     std::shared_ptr<Expression> expression) {
-  this->while_store_.insert(std::move(statement_number), expression);
-}
-
-std::shared_ptr<Expression>
-    ControlFlowStore::retrieveIfStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
-  return this->if_store_.retrieveFromKey(std::move(statement_number));
+void ControlFlowStore::AddWhileStatementAndExpression(const StatementNumber& statement_number,
+                                                      const ExpressionPtr& expression) {
+  this->while_store_.insert(statement_number, expression);
 }
 
 std::shared_ptr<Expression>
-    ControlFlowStore::retrieveWhileStatementCondition(PkbTypes::STATEMENT_NUMBER statement_number) {
-  return this->while_store_.retrieveFromKey(std::move(statement_number));
+    ControlFlowStore::GetExpressionFromIfStatement(const StatementNumber& statement_number) {
+  return this->if_store_.retrieveFromKey(statement_number);
 }
 
-// superficial expression
-std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-    ControlFlowStore::retrieveAllIfStatementsWithCondition(std::shared_ptr<Expression> expression) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> result;
+std::shared_ptr<Expression>
+    ControlFlowStore::GetExpressionFromWhileStatement(const StatementNumber& statement_number) {
+  return this->while_store_.retrieveFromKey(statement_number);
+}
+
+ControlFlowStore::StatementNumberSet
+ControlFlowStore::GetIfStatementsFromExpression(const ExpressionPtr& expression) {
+  StatementNumberSet result;
 
   for (const auto &p: this->if_store_.retrieveAll()) {
     if (p.second->operator==(*expression)) {
@@ -40,10 +37,9 @@ std::unordered_set<PkbTypes::STATEMENT_NUMBER>
   return result;
 }
 
-// superficial expression
-std::unordered_set<PkbTypes::STATEMENT_NUMBER>
-    ControlFlowStore::retrieveAllWhileStatementsWithCondition(std::shared_ptr<Expression> expression) {
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> result;
+ControlFlowStore::StatementNumberSet
+ControlFlowStore::GetWhileStatementsFromExpression(const ExpressionPtr& expression) {
+  StatementNumberSet result;
 
   for (const auto &p: this->while_store_.retrieveAll()) {
     if (p.second == expression) {

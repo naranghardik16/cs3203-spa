@@ -1,6 +1,6 @@
 #include "AbstractionExtractor.h"
 
-AbstractionExtractor::AbstractionExtractor(shared_ptr<PKB> pkb) : pkb_(pkb) {
+AbstractionExtractor::AbstractionExtractor(shared_ptr<Pkb> pkb) : pkb_(pkb) {
   pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb);
   pkb_read_facade_ = make_shared<PkbReadFacade>(*pkb);
   is_extract_indirect_modifies_and_uses_ = make_shared<bool>(false);

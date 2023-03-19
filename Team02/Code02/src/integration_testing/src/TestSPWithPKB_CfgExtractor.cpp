@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include "PKB/Interfaces/PkbReadFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "SP/SP.h"
 #include <utility>
 
@@ -18,7 +18,7 @@ TEST_CASE("Check if Next Abstractions are correct") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -73,7 +73,7 @@ TEST_CASE("A bit more complex") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -125,7 +125,7 @@ TEST_CASE("A bit bit more complex") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -188,7 +188,7 @@ TEST_CASE("Test Next with Bumblebee") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -259,7 +259,7 @@ TEST_CASE("Test Next with while at the start of the procedure") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 

@@ -6,7 +6,7 @@
 
 TEST_CASE("Testing PkbReadFacade") {
   SECTION("empty") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
@@ -41,7 +41,7 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 
   SECTION("Test Calls API") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
@@ -309,7 +309,7 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 
   SECTION("Test Next API - Complex CFG") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
@@ -434,7 +434,7 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 
   SECTION("Test Next API - With Dummy Node") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
@@ -573,7 +573,7 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 
   SECTION("Test Next Star API - Complex CFG") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);
@@ -1192,7 +1192,7 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 
   SECTION("Test Next API - Basic CFG") {
-    PKB pkb_ = PKB();
+    Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
     PkbWriteFacade *pkb_write_facade_;
     pkb_read_facade_ = new PkbReadFacade(pkb_);

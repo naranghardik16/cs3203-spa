@@ -19,7 +19,7 @@ using namespace std;
 class EntityExtractor : public ParserVisitor {
  public:
   typedef vector<shared_ptr<Statement>> StmtListContainer;
-  EntityExtractor(shared_ptr<PKB> pkb);
+  EntityExtractor(shared_ptr<Pkb> pkb);
   void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override;
   void VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) override;
   void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) override;
@@ -38,6 +38,6 @@ class EntityExtractor : public ParserVisitor {
 
  private:
   void ProcessStatements(const StmtListContainer &statements);
-  shared_ptr<PKB> pkb_;
+  shared_ptr<Pkb> pkb_;
   shared_ptr<PkbWriteFacade> pkb_write_facade_;
 };
