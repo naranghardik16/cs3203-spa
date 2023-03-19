@@ -1,7 +1,7 @@
 1-comment
 call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
 Select BOOLEAN such that Next(s,s)
-TRUE
+FALSE
 5000
 2-comment
 call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;

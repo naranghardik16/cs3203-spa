@@ -1,6 +1,6 @@
 #include "Sp.h"
 
-Sp::Sp() {};
+Sp::Sp() {}
 
 bool Sp::ProcessSIMPLE(istream &source,
                        shared_ptr<Pkb> pkb,
