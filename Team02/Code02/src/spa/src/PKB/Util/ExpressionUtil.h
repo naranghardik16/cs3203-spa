@@ -1,17 +1,28 @@
 #pragma once
 
+#include <memory>
 #include <stack>
 #include <unordered_set>
-#include <memory>
 
 #include "core/model/Expression.h"
 #include "PKB/Types/PkbTypes.h"
 
 class ExpressionUtil {
  public:
-  static std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesFromExpression(std::shared_ptr<Expression> expression) {
-    std::unordered_set<PkbTypes::VARIABLE> result;
-    std::stack<std::shared_ptr<Expression>> s;
+  typedef std::unordered_set<PkbTypes::VARIABLE> VariableSet;
+  typedef std::unordered_set<PkbTypes::CONSTANT> ConstantSet;
+  typedef std::stack<std::shared_ptr<Expression>> ExpressionStack;
+  typedef std::shared_ptr<Expression> ExpressionPtr;
+
+  /**
+   * Retrieves the set of variables that are a part of the given expression.
+   *
+   * @param expression - The expression whose variables are to be extracted.
+   * @return An unordered set of variables.
+   */
+  static VariableSet GetAllVariablesFromExpression(const ExpressionPtr& expression) {
+    VariableSet result;
+    ExpressionStack s;
 
     s.push(expression);
 
@@ -36,9 +47,15 @@ class ExpressionUtil {
     return result;
   }
 
-  static std::unordered_set<PkbTypes::CONSTANT> retrieveAllConstantsFromExpression(std::shared_ptr<Expression> expression) {
-    std::unordered_set<PkbTypes::CONSTANT> result;
-    std::stack<std::shared_ptr<Expression>> s;
+  /**
+   * Retrieves the set of constants that are a part of the given expression.
+   *
+   * @param expression - The expression whose constants are to be extracted.
+   * @return An unordered set of constants.
+   */
+  static ConstantSet GetAllConstantsFromExpression(const ExpressionPtr& expression) {
+    ConstantSet result;
+    ExpressionStack s;
 
     s.push(expression);
 
@@ -63,9 +80,43 @@ class ExpressionUtil {
     return result;
   }
 
-//  static std::string flatten(Expression expression) {
-//    return "";
-//  }
+  /**
+   * Flattens the given expression into a string.
+   *
+   * @param expression - The expression to be flattened.
+   * @return The string representing the flattened expression tree.
+   */
+  static std::string PrefixFlatten(const ExpressionPtr& expression) {
+    if (!expression) return "";
 
+    std::string result;
+    result += expression->GetName();
+    auto children = expression->GetArguments();
+
+    if (!children) return result;
+
+    result += " " + PrefixFlatten(children->first);
+    result += " " + PrefixFlatten(children->second);
+
+    return "[" + result + "]";
+  }
+
+  /**
+   * Checks if the given sub expression is a part of the given expression.
+   *
+   * @param expression - The expression to be checked to check membership against.
+   * @param sub_expression - The expression whose membership is to be checked.
+   * @return True if it exists, false otherwise.
+   */
+  static bool HasSubExpression(const ExpressionPtr& expression,
+                               const ExpressionPtr& sub_expression) {
+    if (!sub_expression || !expression) return false;
+    if (expression->operator==(*sub_expression)) return true;
+
+    auto children = expression->GetArguments();
+    if (!children) return false;
+
+    return HasSubExpression(children->first, sub_expression) || HasSubExpression(children->second, sub_expression);
+  }
 };
 

@@ -2,6 +2,7 @@
 #include "SP/Parser/AssignStatementParser.h"
 #include "SP/Parser/PrintStatementParser.h"
 #include "SP/Parser/ReadStatementParser.h"
+#include "SP/Parser/CallStatementParser.h"
 
 #include "catch.hpp"
 #include <string>
@@ -111,5 +112,62 @@ TEST_CASE(
   } catch (SyntaxErrorException &e) {
     REQUIRE(e.what() == "A procedure Line should start with procedure");
   }
+}
 
+TEST_CASE("Check if CallStatementParser works") {
+  SECTION("Check for valid call statement") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call"), make_shared<NameToken>("Third"),
+         make_shared<PunctuationToken>(";", SEMICOLON)};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    auto stmt = parser->ParseEntity(stmt_tokens);
+    shared_ptr<CallStatement> call_stmt = dynamic_pointer_cast<CallStatement>(stmt);
+    if (call_stmt->GetProcedureName() == "Third") {
+      SUCCEED();
+    } else {
+      FAIL();
+    }
+  }
+
+  SECTION("Check for invalid call statement - missing semicolon") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call"), make_shared<NameToken>("Third")};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    REQUIRE_THROWS_AS(parser->ParseEntity(stmt_tokens), SyntaxErrorException);
+  }
+
+  SECTION("Check for invalid call statement - missing semicolon") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call"), make_shared<NameToken>("Third")};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    REQUIRE_THROWS_AS(parser->ParseEntity(stmt_tokens), SyntaxErrorException);
+  }
+
+  SECTION("Check for invalid call statement - missing procedure name") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call")};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    REQUIRE_THROWS_AS(parser->ParseEntity(stmt_tokens), SyntaxErrorException);
+  }
+
+  SECTION("Check for invalid call statement - invalid procedure name") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call"), make_shared<IntegerToken>("123")};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    REQUIRE_THROWS_AS(parser->ParseEntity(stmt_tokens), SyntaxErrorException);
+  }
+
+  SECTION("Check for invalid call statement - more than 2 tokens") {
+    Parser::Line stmt_line
+        {make_shared<NameToken>("call"), make_shared<NameToken>("abc"),
+         make_shared<NameToken>("efg")};
+    Parser::TokenStream stmt_tokens{stmt_line};
+    auto parser = make_shared<CallStatementParser>();
+    REQUIRE_THROWS_AS(parser->ParseEntity(stmt_tokens), SyntaxErrorException);
+  }
 }

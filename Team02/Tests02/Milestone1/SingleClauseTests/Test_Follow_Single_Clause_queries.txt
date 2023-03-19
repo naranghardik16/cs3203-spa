@@ -1,0 +1,95 @@
+1 - (Valid Query) Follows(WILDCARD, WILDCARD) returns true
+read r;
+Select r such that Follows(_,_)
+1
+5000
+2 - (Valid Query) Follows(WILDCARD, INT) returns true
+read r;
+Select r such that Follows(_,5)
+1
+5000
+3 - (Valid Query) Follows(WILDCARD, INT) returns false
+read r;
+Select r such that Follows(_, 1)
+none
+5000
+4 - (Valid Query) Follows(INT, WILDCARD) returns true
+read r;
+Select r such that Follows(1, _)
+1
+5000
+5 - (Valid Query) Follows(INT, WILDCARD) returns false
+read r;
+Select r such that Follows(9, _)
+none
+5000
+6 - (Valid Query) Follows(INT, INT) returns true
+read r;
+Select r such that Follows(1, 2)
+1
+5000
+7 - (Valid Query) Follows(INT, INT) returns false
+read r;
+Select r such that Follows(7, 8)
+none
+5000
+8 - (Valid Query) Follows(SYN, wildcard)
+if i;
+Select i such that Follows(i, _)
+2
+5000
+9 - (Valid Query) Follows(SYN, SYN)
+if i; assign a;
+Select i such that Follows(i, a)
+2
+5000
+10 - (Valid Query) Follows(SYN, SYN) has result
+assign a, a1;
+Select a such that Follows(a,a1)
+4, 6
+5000
+11 - (Valid Query) Follows(SYN, INT) has no result
+assign a;
+Select a such that Follows(a,8)
+none
+5000
+12 - (Valid Query) Follows(SYN, INT) with irrelevant synonym
+assign a; read r;
+Select a such that Follows(r, 2)
+4, 5, 6, 7, 8, 9
+5000
+13 - (Valid Query) Follows(INT, SYN)
+assign a;
+Select a such that Follows(2, a)
+9
+5000
+14 - (Valid Query) Follows(WILDCARD, SYN)
+assign a;
+Select a such that Follows(_, a)
+5, 6, 7, 9
+5000
+15 - (Valid Query) Random spacing
+assign              a;
+    Select     a    such    that    Follows(             _,          a           )
+5, 6, 7, 9
+5000
+16 - (Valid Query) many declarations
+assign a; assign a1; print p1,p2,p3,p4,p5,p6;
+Select a such that Follows(_, a)
+5, 6, 7, 9
+5000
+17 - (Valid Query) repeated terminal names
+assign pattern, Select;
+Select          pattern   such that         Follows(           pattern,    Select             )
+4, 6
+5000
+18 - (Valid Query) Follows(SAME-SYN,SAME-SYN) returns false
+read r; assign a;
+Select r such that Follows(a, a)
+none
+5000
+19 - (Valid Query) Follows(SAME-INT,SAME-INT) returns false
+read r; assign a;
+Select r such that Follows(5, 5)
+none
+5000

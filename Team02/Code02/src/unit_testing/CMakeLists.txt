@@ -5,18 +5,22 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/AbstractDataModels/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Interfaces/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/StubCfgExtractorAndDatabase/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Util/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Cfg/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.cpp")
 
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Stores/StubCfgExtractorAndDatabase/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/Util/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/StubPKB/*.h")
 
-add_executable(unit_testing ${srcs} ${header})
+add_executable(unit_testing ${srcs} ${headers})
 target_link_libraries(unit_testing spa)
 

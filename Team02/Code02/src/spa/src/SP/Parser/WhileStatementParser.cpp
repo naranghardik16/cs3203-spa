@@ -5,11 +5,11 @@ shared_ptr<Statement> WhileStatementParser::ParseEntity(TokenStream &tokens) {
   tokens.pop_front();
   auto condition = ExtractCondition(line);
   auto while_stmt = make_shared<WhileStatement>(Program::GetAndIncreaseStatementNumber(),
-                                       *condition,
-                                       "main");
+                                                *condition, GetProcName());
   CheckStartOfLoopStatement(line);
   while (!tokens.empty() && !IsEndOfWhileStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
+    stmt_parser->SetProcName(GetProcName());
     auto loop_stmt = stmt_parser->ParseEntity(tokens);
     while_stmt->AddStatement(loop_stmt);
   }

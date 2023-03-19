@@ -1,8 +1,8 @@
 template<typename K, typename V>
-ManyToManyStore<K, V>::ManyToManyStore() {};
+ManyToManyStore<K, V>::ManyToManyStore() = default;
 
 template<typename K, typename V>
-ManyToManyStore<K, V>::~ManyToManyStore() {};
+ManyToManyStore<K, V>::~ManyToManyStore() = default;
 
 template<typename K, typename V>
 void ManyToManyStore<K, V>::insert(K key, V value) {

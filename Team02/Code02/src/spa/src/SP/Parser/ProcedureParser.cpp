@@ -12,6 +12,7 @@ shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
   // Adding Statements of a Procedure
   while (!IsProcedureEnd(line)) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
+    stmt_parser->SetProcName(proc_name);
     auto stmt = stmt_parser->ParseEntity(tokens);
     proc->AddToStatementList(stmt);
     line = tokens.front();
@@ -26,6 +27,9 @@ shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
 std::string ProcedureParser::ExtractProcName(Line &line) {
   if (line[0]->GetValue() != "procedure" || line.size() < 2) {
     throw SyntaxErrorException("A procedure Line should start with procedure");
+  }
+  if (line[1]->GetType() != NAME) {
+    throw SyntaxErrorException("proc_name should be a NAME");
   }
   return line[1]->GetValue();
 }

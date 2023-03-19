@@ -7,13 +7,14 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto if_stmt =
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
                                *condition,
-                               "main");
+                               GetProcName());
   // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
 
   // Parse and add statements in then block
   while (!tokens.empty() && !IsEndOfThenStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
+    stmt_parser->SetProcName(GetProcName());
     auto stmt = stmt_parser->ParseEntity(tokens);
     if_stmt->AddThenStmtList(stmt);
   }
@@ -29,6 +30,7 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
 
   while (!tokens.empty() && !IsEndOfIfElseStatement(tokens.front())) {
     auto stmt_parser = StatementParserFactory::GetStatementParser(tokens);
+    stmt_parser->SetProcName(GetProcName());
     auto stmt = stmt_parser->ParseEntity(tokens);
     if_stmt->AddElseStmtList(stmt);
   }
@@ -80,7 +82,6 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 }
 
 bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
-
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
                         return p->GetValue() == "}";

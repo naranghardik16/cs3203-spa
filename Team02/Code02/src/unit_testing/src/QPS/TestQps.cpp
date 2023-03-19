@@ -1,12 +1,22 @@
 #include "catch.hpp"
 #include "QPS/Qps.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
 TEST_CASE("Test Qps") {
-  PKB pkb;
+  Pkb pkb;
   std::shared_ptr<PkbReadFacade> pkb_read = std::make_shared<PkbReadFacade>(pkb);
   std::list<std::string> results;
+
+  SECTION("Test valid query - SELECT BOOLEAN") {
+    results.clear();
+    REQUIRE(results.size() == 0);
+
+    std::string query = "Select BOOLEAN";
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    REQUIRE(results.front() == "TRUE");
+  }
 
   SECTION("Test invalid query - wrong select keyword") {
     results.clear();

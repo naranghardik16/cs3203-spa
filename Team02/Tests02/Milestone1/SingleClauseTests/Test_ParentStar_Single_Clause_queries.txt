@@ -1,0 +1,100 @@
+1 - (Valid Query) Parent*(WILDCARD, WILDCARD) returns true
+read r;
+Select r such that Parent*(_,_)
+1
+5000
+2 - (Valid Query) Parent*(WILDCARD, INT) returns true
+read r;
+Select r such that Parent*(_,4)
+1
+5000
+3 - (Valid Query) Parent*(WILDCARD, INT) returns false
+read r;
+Select r such that Parent*(_, 1)
+none
+5000
+4 - (Valid Query) Parent*(INT, WILDCARD) returns true
+read r;
+Select r such that Parent*(3, _)
+1
+5000
+5 - (Valid Query) Parent*(INT, WILDCARD) returns false
+read r;
+Select r such that Parent*(1, _)
+none
+5000
+6 - (Valid Query) Parent*(INT, INT) returns true
+read r;
+Select r such that Parent*(2, 5)
+1
+5000
+7 - (Valid Query) Parent*(INT, INT) returns false
+read r;
+Select r such that Parent*(1, 3)
+none
+5000
+8 - (Valid Query) Parent*(SYN, wildcard)
+if i;
+Select i such that Parent*(i, _)
+2
+5000
+9 - (Valid Query) Parent*(SYN, SYN)
+if i; assign a;
+Select a such that Parent*(i, a)
+4, 5, 6, 7, 8
+5000
+10 - (Valid Query) Parent*(SYN, INT) has result
+stmt s;
+Select s such that Parent*(s, 4)
+2, 3
+5000
+11 - (Valid Query) Parent*(SYN, INT) has no result
+stmt s;
+Select s such that Parent*(s, 9)
+none
+5000
+12 - (Valid Query) Parent*(SYN, INT) with irrelevant synonym
+if i, i1;
+Select i such that Parent*(i1, 5)
+2
+5000
+13 - (Valid Query) Parent*(INT, SYN)
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7, 8
+5000
+14 - (Valid Query) Parent(WILDCARD, SYN)
+assign a;
+Select a such that Parent*(_, a)
+4, 5, 6, 7, 8
+5000
+15 - (Valid Query) Random spacing
+            assign  a        ;
+    Select   a such           that   Parent*        (   _   ,           a)
+4, 5, 6, 7, 8
+5000
+16 - (Valid Query) many declarations
+assign a; assign a1; print p1,p2,p3,p4,p5,p6; variable v; read r1;
+Select a such that Parent*(_, a)
+4, 5, 6, 7, 8
+5000
+17 - (Valid Query) repeated terminal names
+if pattern; assign Select;
+Select Select such that Parent*(pattern, Select)
+4, 5, 6, 7, 8
+5000
+18 - (Valid Query) Parent(SAME-SYN,SAME-SYN) returns false
+if ifs;
+Select ifs such that Parent*(ifs, ifs)
+none
+5000
+19 - (Valid Query) Parent(SAME-SYN,SAME-SYN) returns false
+assign a;if ifs;
+Select ifs such that Parent*(a, a)
+none
+5000
+20 - (Valid Query) Parent(SAME-INT,SAME-INT) returns false
+if ifs;
+Select ifs such that Parent*(5, 5)
+none
+5000

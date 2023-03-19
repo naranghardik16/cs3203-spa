@@ -12,7 +12,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
 
   try {
     shared_ptr<RelationalOperationParser> relational_operation_parser = make_shared<RelationalOperationParser>();
-    relational_operation_parser->InheritArgs(GetPos(),GetIsSubExpr(),GetIsProcessedCurrToken());
+    relational_operation_parser->InheritArgs(GetPos(), GetIsSubExpr(), GetIsProcessedCurrToken());
     auto rel_expr = relational_operation_parser->ParseEntity(*GetLine());
     this->SetIsSubExpr(false);
     if (rel_expr) {
@@ -21,12 +21,14 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
       UpdateCurrTokenWithUpdatedPos();
       return make_shared<ConditionalOperation>("rel_expr", args);
     }
-  } catch (SpaException& e) {
+  } catch (SpaException &e) {
     string err_msg = "ConditionalOperationParser::Parse() failed relational_operation_parser";
     //    cout << err_msg << endl;
   }
 
-  this->InheritArgs(make_shared<int>(initial_pos), initial_is_sub_expr, make_shared<bool>(initial_is_processed_curr_token));
+  this->InheritArgs(make_shared<int>(initial_pos),
+                    initial_is_sub_expr,
+                    make_shared<bool>(initial_is_processed_curr_token));
 
   if (GetCurrentTokenType() == NOT) {
     GetNext();
@@ -35,7 +37,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
       this->SetIsSubExpr(true);
       auto cond_expr = Parse();
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-        throw SyntaxErrorException("Missing )");
+        throw SyntaxErrorException("Missing ) ");
       }
       GetNext();
       pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
@@ -49,7 +51,7 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     auto left_cond_expr = Parse();
 //    GetNext();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-      throw SyntaxErrorException("Missing )");
+      throw SyntaxErrorException("Missing ) " + GetCurrentTokenValue());
     }
 
     GetNext();
@@ -67,14 +69,14 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
         GetNext();
       }
       if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
-        throw SyntaxErrorException("Missing )");
+        throw SyntaxErrorException("Missing ) " + GetCurrentTokenValue());
       }
       pair<shared_ptr<Expression>, shared_ptr<Expression>> args;
       args.first = left_cond_expr;
       args.second = right_cond_expr;
       return make_shared<ConditionalOperation>(op, args);
     } else {
-      throw SyntaxErrorException("Missing (");
+      throw SyntaxErrorException("Missing ( ");
     }
   }
 

@@ -1,7 +1,6 @@
-#pragma once
 #include "QPS/Query.h"
 
-Synonym Query::GetSynonym() {
+SelectedSynonymTuple Query::GetSynonymTuple() {
   return synonym_;
 }
 

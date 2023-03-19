@@ -16,15 +16,15 @@ TEST_CASE("Testcases for Control Flow Store") {
 
     auto root = std::make_shared<ConditionalOperation>(">", arguments);
 
-    control_flow_store->addWhileStatementAndCondition("1", root);
-    control_flow_store->addIfStatementAndCondition("2", root);
+    control_flow_store->AddWhileStatementAndExpression("1", root);
+    control_flow_store->AddIfStatementAndExpression("2", root);
 
-    REQUIRE(control_flow_store->retrieveAllIfStatementsWithCondition(root) ==
+    REQUIRE(control_flow_store->GetIfStatementsFromExpression(root) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
-    REQUIRE(control_flow_store->retrieveAllWhileStatementsWithCondition(root) ==
+    REQUIRE(control_flow_store->GetWhileStatementsFromExpression(root) ==
     std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
-    REQUIRE(control_flow_store->retrieveIfStatementCondition("2") == root);
-    REQUIRE(control_flow_store->retrieveWhileStatementCondition("1") == root);
+    REQUIRE(control_flow_store->GetExpressionFromIfStatement("2") == root);
+    REQUIRE(control_flow_store->GetExpressionFromWhileStatement("1") == root);
   }
 
   SECTION("Compound Conditional Statements for If and While") {
@@ -65,24 +65,24 @@ TEST_CASE("Testcases for Control Flow Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("/", root_args);
 
-    control_flow_store->addWhileStatementAndCondition("1", root);
-    control_flow_store->addIfStatementAndCondition("4", root);
-    control_flow_store->addWhileStatementAndCondition("3", root1);
-    control_flow_store->addIfStatementAndCondition("9", root1);
+    control_flow_store->AddWhileStatementAndExpression("1", root);
+    control_flow_store->AddIfStatementAndExpression("4", root);
+    control_flow_store->AddWhileStatementAndExpression("3", root1);
+    control_flow_store->AddIfStatementAndExpression("9", root1);
 
-    REQUIRE(control_flow_store->retrieveAllIfStatementsWithCondition(root) ==
+    REQUIRE(control_flow_store->GetIfStatementsFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "4" }));
-    REQUIRE(control_flow_store->retrieveAllWhileStatementsWithCondition(root) ==
+    REQUIRE(control_flow_store->GetWhileStatementsFromExpression(root) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
-    REQUIRE(control_flow_store->retrieveIfStatementCondition("4") == root);
-    REQUIRE(control_flow_store->retrieveWhileStatementCondition("1") == root);
+    REQUIRE(control_flow_store->GetExpressionFromIfStatement("4") == root);
+    REQUIRE(control_flow_store->GetExpressionFromWhileStatement("1") == root);
 
-    REQUIRE(control_flow_store->retrieveAllIfStatementsWithCondition(root1) ==
+    REQUIRE(control_flow_store->GetIfStatementsFromExpression(root1) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "9" }));
-    REQUIRE(control_flow_store->retrieveAllWhileStatementsWithCondition(root1) ==
+    REQUIRE(control_flow_store->GetWhileStatementsFromExpression(root1) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "3" }));
-    REQUIRE(control_flow_store->retrieveIfStatementCondition("9") == root1);
-    REQUIRE(control_flow_store->retrieveWhileStatementCondition("3") == root1);
+    REQUIRE(control_flow_store->GetExpressionFromIfStatement("9") == root1);
+    REQUIRE(control_flow_store->GetExpressionFromWhileStatement("3") == root1);
   }
 }
 

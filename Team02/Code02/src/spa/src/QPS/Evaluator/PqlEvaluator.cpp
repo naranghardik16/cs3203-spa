@@ -1,79 +1,143 @@
-#pragma once
-#include "QPS/Util/QueryUtil.h"
 #include "PqlEvaluator.h"
-#include "QPS/Clause/ClauseSyntax.h"
-#include <stdexcept>
-#include <utility>
 
 PqlEvaluator::PqlEvaluator(const std::shared_ptr<Query>& parser_output, std::shared_ptr<PkbReadFacade> pkb) {
-  synonym_ = parser_output->GetSynonym();
   declaration_map_ = parser_output->GetDeclarationMap();
-  syntax_pair_list_ = parser_output->GetClauseSyntaxPtrList();
+  synonym_tuple_ = parser_output->GetSynonymTuple();
+  AdjustTrivialAttrRefs();
+  syntax_list_ = parser_output->GetClauseSyntaxPtrList();
+  is_return_empty_set_ = false;
   pkb_ = std::move(pkb);
+  Optimizer opt;
+  groups_ = opt.GetClauseGroups(syntax_list_);
+}
+
+void PqlEvaluator::AdjustTrivialAttrRefs() {
+  //! remove trivial attr name e.g. r.stmt# is same as r
+  for (int i = 0; i < synonym_tuple_.size(); ++i) {
+    synonym_tuple_.at(i) = QueryUtil::AdjustSynonymWithTrivialAttrRefValue(synonym_tuple_[i], declaration_map_);
+  }
 }
 
 std::unordered_set<std::string> PqlEvaluator::Evaluate() {
-  std::shared_ptr<Result> evaluation_result = EvaluateBasicSelectStatement();
+  if (!groups_.empty() && groups_[0]->GetSize() == 0) {
+    EvaluateBooleanConstraints();
+    groups_.erase(groups_.begin());
+  }
 
-  //!Evaluate and remove all boolean constraints first
-  for (int i=0; i<syntax_pair_list_.size();i++) {
-    auto clause = syntax_pair_list_[i];
-    auto is_bool_constraint = clause->IsBooleanClause(declaration_map_);
+  if (synonym_tuple_.empty()) {
+    return EvaluateBooleanQuery();
+  }
 
-    if (is_bool_constraint) {
-      auto evaluator = clause->CreateClauseEvaluator(synonym_, declaration_map_);
-      auto is_clause_true = evaluator->EvaluateBooleanConstraint(pkb_);
-      if (!is_clause_true) {
+  if (is_return_empty_set_) {
+    return {};
+  }
+
+  if (groups_.empty()) {
+    auto evaluation_result = EvaluateSelectStatementWithoutClauses();
+    return evaluation_result->ProjectResult(synonym_tuple_);
+  }
+
+  auto clause_evaluation_result = GetClauseEvaluationResult();
+  if (is_return_empty_set_) {
+    return {};
+  }
+
+  return GetFinalEvaluationResult(clause_evaluation_result);
+}
+
+
+std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
+  if (syntax_list_.empty()) {
+    return {"TRUE"};
+  }
+
+  if (is_return_empty_set_) {
+    return {"FALSE"};
+  }
+
+  if (groups_.empty()) {
+    return {"TRUE"};
+  }
+
+  auto clause_evaluation_result = GetClauseEvaluationResult();
+  if (is_return_empty_set_) {
+    return {"FALSE"};
+  }
+  return {"TRUE"};
+}
+
+void PqlEvaluator::EvaluateBooleanConstraints() {
+  ClauseSyntaxPtrList clause_list = groups_[0]->GetClauseList();
+
+  for (auto iter = clause_list.begin(); iter != clause_list.end(); ++iter) {
+    auto clause = *iter;
+
+    auto evaluator = clause->CreateClauseEvaluator(declaration_map_);
+    auto is_clause_true = evaluator->EvaluateBooleanConstraint(pkb_);
+    if (!is_clause_true) {
+      is_return_empty_set_ = true;
+      break;
+    }
+  }
+}
+
+std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
+  std::vector<std::shared_ptr<Result>> results;
+
+  for (auto &group : groups_) {
+    std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
+    ClauseSyntaxPtrList clause_list = group->GetClauseList();
+    for (const auto& kClause : clause_list) {
+      auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
+      std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
+
+      // get intersection
+      clause_evaluation_result->JoinResult(intermediate_result);
+
+      // Whenever results become empty stop and return empty set
+      if (clause_evaluation_result->GetTable().empty()) {
+        is_return_empty_set_ = true;
         return {};
       }
-      syntax_pair_list_.erase(syntax_pair_list_.begin()+i);
+    }
+    if (group->HasSelectedSynonym(synonym_tuple_)) {
+      results.push_back(clause_evaluation_result);
     }
   }
-
-  //Evaluate the remaining constraints and use intersection of result classes to resolve constraints
-  for (const auto &kClause : syntax_pair_list_) {
-    auto evaluator = kClause->CreateClauseEvaluator(synonym_, declaration_map_);
-    std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
-
-    //get intersection
-    evaluation_result->JoinResult(intermediate_result);
-
-    //Whenever results become empty stop and return empty set
-    if (evaluation_result->table_.empty()) {
-      return {};
-    }
-  }
-
-  std::unordered_set<std::string> results = evaluation_result->ProjectResult(synonym_);
 
   return results;
 }
 
-std::shared_ptr<Result> PqlEvaluator::EvaluateBasicSelectStatement() {
-  ResultHeader header;
-  header.push_back(synonym_);
-  ResultTable table;
-  if (QueryUtil::IsVariableSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetVariables());
-  } else if (QueryUtil::IsConstantSynonym(declaration_map_, synonym_)) {
-    table =  ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetConstants());
-  } else if (QueryUtil::IsAssignSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
-  } else if (QueryUtil::IsIfSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetIfStatements());
-  } else if (QueryUtil::IsWhileSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetWhileStatements());
-  } else if (QueryUtil::IsPrintSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetPrintStatements());
-  } else if (QueryUtil::IsReadSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetReadStatements());
-  } else if (QueryUtil::IsCallSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetCallStatements());
-  } else if (QueryUtil::IsStatementSynonym(declaration_map_, synonym_)) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetStatements());
-  } else  {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetProcedures());
+std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
+  std::shared_ptr<Result> evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
+
+  for (const auto& kSynonym : synonym_tuple_) {
+    if (evaluation_result->GetHeader().count(kSynonym) == 0) {
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
+      evaluation_result->JoinResult(initial_result);
+    }
   }
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
+
+  return evaluation_result;
+}
+
+std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(
+    std::vector<std::shared_ptr<Result>>& clause_evaluation_results
+    ) {
+  std::shared_ptr<Result> crossed_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
+  for (auto &result : clause_evaluation_results) {
+    crossed_result->JoinResult(result);
+  }
+  // only add the remaining selected synonym values into table if it is not already present in the header
+  auto &header = crossed_result->GetHeader();
+  for (const auto& kSynonym : synonym_tuple_) {
+    if (header.count(kSynonym) == 0) {
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
+      crossed_result->JoinResult(initial_result);
+    }
+  }
+
+  std::unordered_set<std::string> results;
+  results = crossed_result->ProjectResult(synonym_tuple_);
+  return results;
 }

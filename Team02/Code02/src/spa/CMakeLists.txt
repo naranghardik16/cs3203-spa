@@ -1,5 +1,6 @@
 file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/cfg_model/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/*.cpp"
@@ -12,15 +13,19 @@ file(GLOB srcs
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/PatternClauseEvaluator/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/SuchThatClauseEvaluator/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/WithClauseEvaluator/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Util/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/ValidationHandler/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Optimizer/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.cpp")
 
 file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/core/model/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/core/cfg_model/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/General/SpaException/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/PKB/*.h"
@@ -35,10 +40,13 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/PatternClauseEvaluator/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/SuchThatClauseEvaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Evaluator/WithClauseEvaluator/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/QPS/Optimizer/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h")
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.h")
 
 add_library(spa ${srcs} ${headers})
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

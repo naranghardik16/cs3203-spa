@@ -4,7 +4,6 @@
 #include "ProcedureParser.h"
 
 shared_ptr<Program> Parser::ParseSource(TokenStream &tokens) {
-
   shared_ptr<Program> program = make_shared<Program>();
   auto proc_parser = make_shared<ProcedureParser>();
 

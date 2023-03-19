@@ -15,7 +15,6 @@ void WhileStatement::AddStatement(shared_ptr<Statement> stmt) {
   loop_statements_.push_back(stmt);
 }
 
-// TODO: implement accept for the visitor pattern
 void WhileStatement::Accept(shared_ptr<ParserVisitor> visitor) {
   visitor->VisitWhileStatement(make_shared<WhileStatement>(*this));
 }

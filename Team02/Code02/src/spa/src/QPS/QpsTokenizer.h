@@ -1,26 +1,34 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
 #include <regex>
 #include <string>
 #include <memory>
+#include <utility>
 #include <unordered_map>
 #include "General/StringUtil.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Clause/ClauseSyntax.h"
 #include "QPS/Util/QPSTypeDefs.h"
-#include "QPS/ClauseSyntaxValidator.h"
-#include "QPS/ClauseSemanticValidator.h"
+#include "QPS/SyntaxValidator.h"
+#include "QPS/SemanticValidator.h"
+#include "General/SpaException/SyntaxErrorException.h"
+#include "QPS/Util/PQLConstants.h"
+#include "Clause/SuchThatClauseSyntax.h"
+#include "Clause/PatternClauseSyntax.h"
+#include "QPS/Util/QueryUtil.h"
+#include "QPS/Clause/WithClauseSyntax.h"
 
 /*!
  * The tokenizer handles the parsing of the query
- * It works with ClauseSyntaxValidator and ClauseSemanticValidator to complete validation of the query
+ * It works with SyntaxValidator and SemanticValidator to complete validation of the query
  */
 class QpsTokenizer {
 
  public:
-  std::shared_ptr<ClauseSyntaxValidator> syntax_validator_;
-  std::shared_ptr<ClauseSemanticValidator> semantic_validator_;
+  std::shared_ptr<SyntaxValidator> syntax_validator_;
+  std::shared_ptr<SemanticValidator> semantic_validator_;
 
   QpsTokenizer();
 
@@ -30,15 +38,15 @@ class QpsTokenizer {
  * @param query_extra_whitespace_removed is the query with any duplicate white space removed
  * @throws SyntaxErrorException if there is no Select statement or if there is no Select keyword in the Select statement
  */
-  QueryStatementPair SplitQuery(const std::string& query_extra_whitespace_removed);
+  QueryLinesPair SplitQuery(const std::string& query_extra_whitespace_removed);
 
   /**
-   * Parses for the synonym in the clause
-   * @param clause with extra white space removed and has the Select keyword removed
+   * Parses for the synonym in the clause_with_select_removed
+   * @param clause_with_select_removed with extra white space removed and has the Select keyword removed
    * @throws SyntaxErrorException if the synonym does not adhere to the lexical rules of being a synonym
    * @return synonym
    */
-  std::string ParseSynonym(const std::string& clause);
+  SelectedSynonymTuple ParseSynonym(const std::string& clause_with_select_removed, Map declaration_map);
 
   /**
    * Extracts the synonym as a key and the corresponding design entity as the value in an unordered map for semantic validation
@@ -65,15 +73,8 @@ class QpsTokenizer {
  * @param rgx which is the regex of the start of subclause indicator to find
  * @return index of start of subclause if there is a match, else returns npos
  */
-  size_t FindStartOfSubClauseIndex(const std::string& clause, const std::regex& rgx);
+  std::vector<size_t> FindIndexesOfClauseStart(const std::string& clause, const std::regex& rgx);
 
-  /**
-   * Searches for the start of subclauses (e.g. such that, pattern) and returns their index
-   * Helper function to parse subclauses
-   * @param statement which is not empty and contains only the subclauses
-   * @throws SyntaxErrorException if there are no indexes found or if the first index is not 0
-   * @return a vector of subclause start index to parse the subclauses
-   */
   std::vector<size_t> GetIndexListOfClauses(const std::string& statement);
 
   /**
@@ -85,6 +86,22 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the concrete syntax in a such that clause cannot be found or if there are extra characters after the subclause
    * @return a SyntaxPair which contains the entity and the arguments
   */
-  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause,const std::string& clause_start_indicator);
-
+  SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause);
+  SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
+  size_t FindIndexOfRegexMatch(const string &clause, const regex &rgx);
+  size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
+  SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause);
+  shared_ptr<ClauseSyntax> MakePatternClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
+  shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
+  pair<string, string> ProcessIDENT(string first_parameter, string second_parameter);
+  std::string ParseIDENT(string parameter);
+  ParameterVector ParseParameters(string parameters_substr);
+  std::string GetSynonymSubstring(string select_keyword_removed_clause);
+  std::string ParseAttrRef(string attr_ref);
+  SelectedSynonymTuple ParseSingleSynonym(string clause_after_syn);
+  std::string GetSubclauseString(string clause_with_select_removed, SelectedSynonymTuple syn_vector);
+  std::string ParseWithClauseParameter(string parameter);
+  std::string GetRegexMatch(const string &clause, const regex &rgx);
 };

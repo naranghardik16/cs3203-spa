@@ -65,5 +65,4 @@ TEST_CASE("AbstractDataModels: ManyToMany") {
 
     REQUIRE_NOTHROW(store.insert(TEST_KEY2, TEST_VALUE4));
   }
-
 }

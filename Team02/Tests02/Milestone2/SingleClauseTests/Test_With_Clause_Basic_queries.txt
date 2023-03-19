@@ -1,0 +1,160 @@
+1 - select constant
+constant c;
+Select c with c.value=10
+10
+5000
+2 - select constant -- swap args
+constant c;
+Select c with 10=c.value
+10
+5000
+3 - select var
+variable v;
+Select v with v.varName="number"
+number
+5000
+4 - select var swap args
+variable v;
+Select v with "number"=v.varName
+number
+5000
+5 - select read var
+read r;
+Select r with r.varName="number"
+1
+5000
+6 - select read var swap args
+read r;
+Select r with "number"=r.varName
+1
+5000
+7- select print var
+print p;
+Select p with p.varName="number"
+16
+5000
+8 - select print var - swap args
+print p;
+Select p with "number"=p.varName
+16
+5000
+9 - select proc name
+procedure p;
+Select p with p.procName="NonExistent"
+none
+5000
+10 - select stmt num
+stmt s;
+Select s with s.stmt#=4
+4
+5000
+11 - select stmt num -- swap args
+stmt s;
+Select s with 4=s.stmt#
+4
+5000
+12 - with attrref = attrref -- int
+stmt s;constant c;
+Select s with s.stmt#=c.value
+1, 2, 10
+5000
+13 - with attrref = attrref -- int -- swap args
+stmt s;constant c;
+Select s with c .value=s. stmt#
+1, 2, 10
+5000
+14 - with attrref = attrref -- ident
+variable v;procedure p;
+Select v with v.varName=p.procName
+sumDigits
+5000
+15 - with attrref = attrref -- add random spacing
+variable v;procedure p;
+Select v with p       .procName = v .varName
+sumDigits
+5000
+15 - with attrref = attrref -- mismatch varName with stmt#
+variable v;stmt s;
+Select v    with    s.        stmt# =   v.        varName
+SemanticError
+5000
+16 - with attrref = attrref -- mismatch procName with stmt#
+stmt s; procedure p;
+Select p with p .procName=s. stmt#
+SemanticError
+5000
+17 - with attrref = attrref -- mismatch procName with value
+constant c; procedure p;
+Select p with c. value=p    .procName
+SemanticError
+5000
+18 - with attrref = attrref -- mismatch varName with value
+constant c; variable v;
+Select v                    with                           c.value=v.varName
+SemanticError
+5000
+19 - with attrref = int -- varName = int
+constant c; variable v;
+Select v with v.varName = 5
+SemanticError
+5000
+20 - with attrref = int -- procName = int
+constant c; procedure p;
+Select p with 5=p   .   procName
+SemanticError
+5000
+21 - with attrref = int -- stmt# = ident
+read r;
+Select r with r.stmt# = "x"
+SemanticError
+5000
+22 - with attrref = int -- value = ident
+constant c;
+Select c with "x"=c.value
+SemanticError
+5000
+23 - with int = int is true
+read r;
+Select r with 5=5
+1,2
+5000
+24 - with int = int is false
+read r;
+Select r with 5=6
+
+5000
+26 - with ident=ident is true
+read r;
+Select r with "     x    "=" x    "
+1,2
+5000
+27 - with ident=ident is false
+read r;
+Select r with "x"="y"
+
+5000
+28 - with int=ident
+read r;
+Select r        with       "x"   =  5
+SemanticError
+5000
+29 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select p with p.varName = r.varName
+16
+5000
+30 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select r.varName with p.varName = r.varName
+number
+5000
+31 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select r with p.varName = r.varName
+1
+5000
+32 - with special case attr_ref = special case attr_ref
+read r; print p;
+Select p.varName with p.varName = r.varName
+number
+5000

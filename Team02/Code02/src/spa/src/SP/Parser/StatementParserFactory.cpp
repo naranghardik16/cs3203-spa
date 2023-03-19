@@ -13,6 +13,8 @@ shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::dequ
     return make_shared<PrintStatementParser>();
   } else if (CheckKeywordType(line, "read", false)) {
     return make_shared<ReadStatementParser>();
+  } else if (CheckKeywordType(line, "call", false)) {
+    return make_shared<CallStatementParser>();
   }
   throw SemanticErrorException("Unknown Statement type");
 }
@@ -35,8 +37,8 @@ bool StatementParserFactory::CheckKeywordType(Line &line,
         && next(entity_itr)->get()->GetValue() == "(";
   }
   return entity_itr == std::begin(line);
-
 }
+
 bool StatementParserFactory::CheckAssignmentType(Line &line) {
   auto entity_itr =
       std::find_if(std::begin(line),
@@ -47,3 +49,4 @@ bool StatementParserFactory::CheckAssignmentType(Line &line) {
 
   return entity_itr != std::end(line);
 }
+

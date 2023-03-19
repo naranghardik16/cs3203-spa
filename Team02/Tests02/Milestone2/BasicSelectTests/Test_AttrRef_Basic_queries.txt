@@ -1,0 +1,55 @@
+1 - Select variables
+variable x;
+Select x. varName
+number, sum, digit
+5000
+2 - Select constants
+constant c;
+Select c .value
+0, 10, 100
+5000
+3 - Select procedure
+procedure p;
+Select p . procName
+sumDigits
+5000
+4 - Select if statements
+if i;
+Select i.stmt#
+8, 10
+5000
+5 - Select assign statements
+assign a;
+Select a.stmt#
+3, 5, 6, 14, 15
+5000
+6 - Select read statements
+read r;
+Select r.stmt#
+1, 2
+5000
+7 - Select print statements
+print pn;
+Select pn.stmt#
+9, 11, 13, 16
+5000
+8 - Select while statements
+while w;
+Select w.stmt#
+4, 7, 12
+5000
+9 - Select statements
+stmt s;
+Select s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+10 - Select attr_ref in tuples -- stmt#
+read r; print p;
+Select <r. stmt#, p .stmt#>
+1 16, 2 16, 1 9, 2 9, 1 11, 2 11, 1 13, 2 13
+5000
+11 - Select attr_ref in tuples -- varName
+read r;
+Select <    r. varName  , r.stmt# >
+number 1, sum 2
+5000

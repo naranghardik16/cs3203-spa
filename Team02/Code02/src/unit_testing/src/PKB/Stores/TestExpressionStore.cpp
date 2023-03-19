@@ -13,10 +13,10 @@ TEST_CASE("Testcases for Expression Store") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Constant>("7");
 
-    expression_store->addExpression(root);
+    expression_store->AddExpression(root);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root) == std::unordered_set<PkbTypes::VARIABLE>({ }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root) == std::unordered_set<PkbTypes::VARIABLE>({ }));
+    REQUIRE(expression_store->GetConstantsFromExpression(root) ==
     std::unordered_set<PkbTypes::CONSTANT>({ "7" }));
   }
 
@@ -26,11 +26,11 @@ TEST_CASE("Testcases for Expression Store") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Variable>("x");
 
-    expression_store->addExpression(root);
+    expression_store->AddExpression(root);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root) ==
     std::unordered_set<PkbTypes::VARIABLE>({ "x" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root) == std::unordered_set<PkbTypes::CONSTANT>({ }));
+    REQUIRE(expression_store->GetConstantsFromExpression(root) == std::unordered_set<PkbTypes::CONSTANT>({ }));
   }
 
   SECTION("Simple Arithmetic Expression (One Variable and One Constant)") {
@@ -42,11 +42,11 @@ TEST_CASE("Testcases for Expression Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    expression_store->addExpression(root);
+    expression_store->AddExpression(root);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "x" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root) ==
     std::unordered_set<PkbTypes::CONSTANT>({ "11" }));
   }
 
@@ -64,11 +64,11 @@ TEST_CASE("Testcases for Expression Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("*", root_args);
 
-    expression_store->addExpression(root);
+    expression_store->AddExpression(root);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "x", "y", "z" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
   }
 
@@ -86,11 +86,11 @@ TEST_CASE("Testcases for Expression Store") {
 
     auto root = std::make_shared<ArithmeticOperation>("*", root_args);
 
-    expression_store->addExpression(root);
+    expression_store->AddExpression(root);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root) ==
         std::unordered_set<PkbTypes::VARIABLE>({ }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root) ==
         std::unordered_set<PkbTypes::CONSTANT>({ "9", "4", "8" }));
   }
 
@@ -117,36 +117,35 @@ TEST_CASE("Testcases for Expression Store") {
     arguments.second = root3;
     auto root5 = std::make_shared<ArithmeticOperation>("-", arguments);
 
-    expression_store->addExpression(root1);
-    expression_store->addExpression(root2);
-    expression_store->addExpression(root3);
-    expression_store->addExpression(root4);
-    expression_store->addExpression(root5);
+    expression_store->AddExpression(root1);
+    expression_store->AddExpression(root2);
+    expression_store->AddExpression(root3);
+    expression_store->AddExpression(root4);
+    expression_store->AddExpression(root5);
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root1) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root1) ==
         std::unordered_set<PkbTypes::VARIABLE>({ }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root1) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root1) ==
         std::unordered_set<PkbTypes::CONSTANT>({ "69" }));
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root2) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root2) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "hardik" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root2) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root2) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root3) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root3) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "x", "c" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root3) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root3) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root4) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root4) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "hardik", "x", "c" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root4) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root4) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
 
-    REQUIRE(expression_store->retrieveVariablesOfTheExpression(root5) ==
+    REQUIRE(expression_store->GetVariablesFromExpression(root5) ==
         std::unordered_set<PkbTypes::VARIABLE>({ "hardik", "x", "c" }));
-    REQUIRE(expression_store->retrieveConstantsOfTheExpression(root5) ==
+    REQUIRE(expression_store->GetConstantsFromExpression(root5) ==
         std::unordered_set<PkbTypes::CONSTANT>({ }));
-
   }
 }

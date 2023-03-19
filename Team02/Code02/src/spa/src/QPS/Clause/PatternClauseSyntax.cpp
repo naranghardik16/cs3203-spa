@@ -1,7 +1,6 @@
-#pragma once
 #include "PatternClauseSyntax.h"
 
-PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
 
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
@@ -17,9 +16,24 @@ bool PatternClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return false;
 }
 
-std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Synonym s, Map &declaration_map) {
-  std::shared_ptr<ClauseEvaluator> eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
+  std::string syn = declaration_map.at(ClauseSyntax::GetEntity());
+  std::shared_ptr<ClauseEvaluator> eval;
+  if (syn == pql_constants::kPqlAssignEntity) {
+    eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map,
+                                                          ClauseSyntax::GetSyntaxPair(),
+                                                          ClauseSyntax::GetExpression());
+  } else if (syn == pql_constants::kPqlIfEntity) {
+    eval = std::make_shared<IfPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  } else {
+    eval = std::make_shared<WhilePatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+  }
+
   return eval;
 }
 
-
+int PatternClauseSyntax::GetClauseScore(Map &declaration_map) {
+  std::string entity = declaration_map.at(ClauseSyntax::GetEntity());
+  auto pattern_score_map = pql_constants::kPatternScoreMap;
+  return pattern_score_map[entity];
+}

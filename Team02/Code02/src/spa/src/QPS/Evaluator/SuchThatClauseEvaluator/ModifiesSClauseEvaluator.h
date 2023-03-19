@@ -1,5 +1,9 @@
 #pragma once
+
 #include "QPS/Evaluator/ClauseEvaluator.h"
+#include "General/LexicalRuleValidator.h"
+#include "QPS/Util/QueryUtil.h"
+#include "PKB/Types/PkbCommunicationTypes.h"
 
 class ModifiesSClauseEvaluator : public ClauseEvaluator {
  private:
@@ -9,9 +13,9 @@ class ModifiesSClauseEvaluator : public ClauseEvaluator {
  public:
   ModifiesSClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
     relationship_reference_ = syntax_pair.first;
-    first_arg_ =  syntax_pair.second.first;
-    second_arg_ = syntax_pair.second.second;
+    first_arg_ =  syntax_pair.second[0];
+    second_arg_ = syntax_pair.second[1];
   }
-  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb);
-  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb);
+  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) override;
+  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) override;
 };

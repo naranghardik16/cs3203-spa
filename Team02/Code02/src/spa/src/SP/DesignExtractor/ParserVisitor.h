@@ -15,6 +15,7 @@ class Statement;
 class Expression;
 class Variable;
 class Constant;
+class CallStatement;
 
 using namespace std;
 
@@ -29,6 +30,7 @@ class ParserVisitor {
   virtual void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) = 0;
   virtual void VisitPrintStatement(shared_ptr<PrintStatement> print_statement) = 0;
   virtual void VisitReadStatement(shared_ptr<ReadStatement> read_statement) = 0;
+  virtual void VisitCallStatement(shared_ptr<CallStatement> call_statement) = 0;
   virtual void VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) = 0;
   virtual void VisitIfStatement(shared_ptr<IfStatement> if_statement) = 0;
   virtual void VisitWhileStatement(shared_ptr<WhileStatement> while_statement) = 0;

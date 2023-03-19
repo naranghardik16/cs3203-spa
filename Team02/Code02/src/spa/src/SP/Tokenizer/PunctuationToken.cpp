@@ -1,5 +1,4 @@
 #include "PunctuationToken.h"
-using namespace std;
 
 PunctuationToken::PunctuationToken(string val, TokenType type) : Token(val, type) {}
 

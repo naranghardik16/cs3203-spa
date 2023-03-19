@@ -1,50 +1,46 @@
-
 #include "ModifiesStore.h"
 
 ModifiesStore::ModifiesStore() {}
 
 ModifiesStore::~ModifiesStore() {}
 
-void ModifiesStore::addStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                  PkbTypes::VARIABLE variable) {
-  this->modifies_statement_variable_.insert(statement_number, variable);
+void ModifiesStore::AddStatementModifiesVariable(const StatementNumber& statement_number, const Variable& variable) {
+  this->modifies_statement_variable_store_.insert(statement_number, variable);
 }
 
-void ModifiesStore::addProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable) {
+void ModifiesStore::AddProcedureModifiesVariable(const Procedure& procedure, const Variable& variable) {
   this->modifies_procedure_variable_.insert(procedure, variable);
 }
 
 std::unordered_set<PkbTypes::VARIABLE>
-    ModifiesStore::retrieveAllVariablesModifiedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number) {
-  return this->modifies_statement_variable_.retrieveFromKey(statement_number);
+    ModifiesStore::GetVariablesModifiedByStatement(const StatementNumber& statement_number) {
+  return this->modifies_statement_variable_store_.retrieveFromKey(statement_number);
 }
 
 std::unordered_set<PkbTypes::VARIABLE>
-    ModifiesStore::retrieveAllVariablesModifiedByAProcedure(PkbTypes::PROCEDURE procedure) {
+    ModifiesStore::GetVariablesModifiedByProcedure(const Procedure& procedure) {
   return this->modifies_procedure_variable_.retrieveFromKey(procedure);
 }
 
-std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
-    ModifiesStore::retrieveStatementVariablePairs() {
-  return this->modifies_statement_variable_.retrieveAll();
+ModifiesStore::StatementVariablePairSet ModifiesStore::GetStatementVariablePairs() {
+  return this->modifies_statement_variable_store_.retrieveAll();
 }
 
-std::unordered_set<std::pair<PkbTypes::PROCEDURE , PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
-    ModifiesStore::retrieveProcedureVariablePairs() {
+ModifiesStore::ProcedureVariablePairSet ModifiesStore::GetProcedureVariablePairs() {
   return this->modifies_procedure_variable_.retrieveAll();
 }
 
-bool ModifiesStore::hasModifiesRelationBetweenStatementAndVariable(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                                   PkbTypes::VARIABLE variable) {
-  return this->modifies_statement_variable_.contains(statement_number, variable);
+bool ModifiesStore::HasModifiesStatementVariableRelation(const StatementNumber& statement_number,
+                                                         const Variable& variable) {
+  return this->modifies_statement_variable_store_.contains(statement_number, variable);
 }
 
-bool ModifiesStore::hasModifiesRelationBetweenProcedureAndVariable(PkbTypes::PROCEDURE procedure,
-                                                                   PkbTypes::VARIABLE variable) {
+bool ModifiesStore::HasModifiesProcedureVariableRelation(const Procedure& procedure,
+                                                         const Variable& variable) {
   return this->modifies_procedure_variable_.contains(procedure, variable);
 }
 
-std::unordered_set<PkbTypes::PROCEDURE> ModifiesStore::retrieveAllProceduresThatModify() {
+ModifiesStore::ProcedureSet ModifiesStore::GetProceduresThatModify() {
   return this->modifies_procedure_variable_.retrieveAllKeys();
 }
 

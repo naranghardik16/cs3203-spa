@@ -1,0 +1,95 @@
+1 - 2 synonyms, select v
+assign a; variable v;
+Select v pattern a (v, _)
+abc1, abc2, abc3, bcd4, bcd5, bcd6, bcd7, cde8, cde9, cde10, cde11, cde12, cde13, longSums14, longSums15, abc17, stmt20, print, then
+5000
+2 - RHS partial match
+assign a; variable v;
+Select a pattern a (v, _"abc + bcd"_)
+1, 2, 9, 11, 12, 36, 8
+5000
+3 - RHS exact variable name pattern
+assign a; variable v;
+Select a pattern a (v, "abc")
+7, 13
+5000
+4 - RHS exact expression name pattern
+assign a; variable v;
+Select a pattern a (v, "abc + bcd")
+1, 36
+5000
+5 - LHS match
+assign a; variable v;
+Select a pattern a ("abc2", _)
+2, 36
+5000
+6 - LHS match, RHS exact
+assign a; variable v;
+Select a pattern a ("abc2", "(abc + bcd + cde)")
+2
+5000
+7 - LHS match, RHS exact, more brackets
+assign a; variable v;
+Select a pattern a ("abc2", "((abc + bcd) + cde)")
+2
+5000
+7 - LHS match, RHS partial
+assign a; variable v;
+Select a pattern a ("longSums14", _"a + 2 + c"_)
+14
+5000
+8 - LHS match, RHS partial
+assign a; variable v;
+Select a pattern a ("longSums14", _"(a + 2) + c"_)
+14
+5000
+9 - LHS match, RHS partial
+assign a; variable v;
+Select a pattern a ("longSums15", _"g + (h + i)"_)
+15
+5000
+10 - invalid LHS match, RHS partial
+assign a; variable v;
+Select a pattern a ("longSums14", _"g + (h + i)"_)
+none
+5000
+11 - RHS partial
+assign a; variable v;
+Select a pattern a (v, _"(bcd-cde)*def/efg%fgh"_)
+10
+5000
+12 - wildcards
+assign a; variable v;
+Select a pattern a (_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 20, 30, 31, 36
+5000
+13 - while pattern
+while w; variable v;
+Select <w, v> pattern w (v, _)
+16 abc16, 16 bcd16, 19 abc19, 19 abc, 19 bcd, 19 cde, 22 abc22, 22 abc, 22 bcd, 22 cde, 22 def, 22 efg, 22 fgh, 23 abc23, 23 abc, 23 bcd, 23 cde
+5000
+14 - LHS match
+while w; variable v;
+Select w pattern w ("abc", _)
+19, 22, 23
+5000
+15 - select all w statements
+while w; variable v;
+Select w pattern w (_, _)
+16, 19, 22, 23
+5000
+16 - if pattern
+if ifs; variable v;
+Select <ifs, v> pattern ifs (v, _, _)
+25 abc25, 25 while, 26 if, 29 read, 33 abc33, 33 abc, 33 bcd, 33 cde
+5000
+17 - LHS match
+if ifs; variable v;
+Select ifs pattern ifs ("while", _, _)
+25
+5000
+18 - select all if stmts
+if ifs;
+Select ifs pattern ifs(_, _, _)
+25, 26, 29, 33
+5000

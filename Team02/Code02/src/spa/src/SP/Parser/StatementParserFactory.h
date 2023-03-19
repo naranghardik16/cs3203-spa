@@ -8,6 +8,7 @@
 #include "PrintStatementParser.h"
 #include "ReadStatementParser.h"
 #include "WhileStatementParser.h"
+#include "CallStatementParser.h"
 
 /**
  * Factory class for getting the appropriate Statement Parser
