@@ -3,6 +3,7 @@
 #include <regex>
 #include <unordered_map>
 #include <unordered_set>
+#include "General/StatementTypeEnum.h"
 
 /**
  * Organises all constants that are used in QPS
@@ -76,6 +77,24 @@ const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity,
                                                             kPqlIfEntity, kPqlWhileEntity,
                                                             kPqlCallEntity, kPqlProcedureEntity});
 const std::unordered_set<std::string> kAttrName({kProcName, kVarname, kValue, kStmtNo});
+
+const std::unordered_set<std::string> kDesignEntities({kPqlStatementEntity,kPqlReadEntity,kPqlPrintEntity,
+                                                       kPqlCallEntity,kPqlWhileEntity,kPqlIfEntity,kPqlAssignEntity,
+                                                       kPqlVariableEntity,kPqlConstantEntity,kPqlProcedureEntity});
+
+
+const std::unordered_map<std::string, StatementType> kEntityToStatementType {
+    {kPqlProcedureEntity, StatementType::UNK},
+    {kPqlVariableEntity, StatementType::UNK},
+    {kPqlConstantEntity, StatementType::UNK},
+    {kPqlStatementEntity, StatementType::STATEMENT},
+    {kPqlReadEntity, StatementType::READ},
+    {kPqlPrintEntity, StatementType::PRINT},
+    {kPqlWhileEntity, StatementType::WHILE},
+    {kPqlIfEntity, StatementType::IF},
+    {kPqlCallEntity, StatementType::CALL},
+    {kPqlAssignEntity, StatementType::ASSIGN}
+};
 
 const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityToAttrName {
     {kPqlProcedureEntity, {kProcName}},
