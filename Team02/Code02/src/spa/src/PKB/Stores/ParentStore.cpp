@@ -4,7 +4,8 @@ ParentStore::ParentStore() = default;
 
 ParentStore::~ParentStore() = default;
 
-void ParentStore::AddParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement) {
+void ParentStore::AddParentRelation(const StatementNumber& first_statement,
+                                    const StatementNumber& second_statement) {
   this->parent_relation_store_.insert(first_statement, second_statement);
   this->parent_star_relation_store_.insert(first_statement, second_statement);
 
@@ -29,11 +30,13 @@ ParentStore::StatementStatementPairSet ParentStore::GetParentStarPairs() {
   return this->parent_star_relation_store_.retrieveAll();
 }
 
-bool ParentStore::HasParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement) {
+bool ParentStore::HasParentRelation(const StatementNumber& first_statement,
+                                    const StatementNumber& second_statement) {
   return this->parent_relation_store_.contains(first_statement, second_statement);
 }
 
-bool ParentStore::HasParentStarRelation(const StatementNumber& first_statement, const StatementNumber& second_statement) {
+bool ParentStore::HasParentStarRelation(const StatementNumber& first_statement,
+                                        const StatementNumber& second_statement) {
   return this->parent_star_relation_store_.contains(first_statement, second_statement);
 }
 

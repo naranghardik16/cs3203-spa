@@ -107,7 +107,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementT
   return result;
 }
 
-bool PkbReadFacade::HasModifiesStatementRelationship(const StatementNumber& statement_number, const Variable& variable) {
+bool PkbReadFacade::HasModifiesStatementRelationship(const StatementNumber& statement_number,
+                                                     const Variable& variable) {
   return this->pkb.modifies_store_->HasModifiesStatementVariableRelation(statement_number, variable);
 }
 
@@ -327,7 +328,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const State
   return result;
 }
 
-bool PkbReadFacade::HasFollowsRelationship(const StatementNumber& statement_number, const StatementNumber& statement_number_follower) {
+bool PkbReadFacade::HasFollowsRelationship(const StatementNumber& statement_number,
+                                           const StatementNumber& statement_number_follower) {
   return this->pkb.follows_store_->HasFollowsRelation(statement_number, statement_number_follower);
 }
 
@@ -445,14 +447,15 @@ bool PkbReadFacade::HasFollowsStarBy(const StatementNumber& statement_number) {
   return this->pkb.follows_store_->HasFollowsStarRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsFollowsStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) {
+bool PkbReadFacade::IsFollowsStar(const StatementNumber& statement_number_1,
+                                  const StatementNumber& statement_number_2) {
   return this->pkb.follows_store_->HasFollowsStarRelation(statement_number_1,
                                                           statement_number_2);
 }
 
 // Parent API
 PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType& statement_type,
-                                                                            const StatementType& statement_type_child) {
+                                                          const StatementType& statement_type_child) {
   SingleSet statement_of_type_for_parent =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -474,7 +477,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType& s
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const StatementNumber& statement_number,
-                                                                                     const StatementType& statement_type) {
+                                                                   const StatementType& statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -489,7 +492,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const Stateme
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const StatementNumber& statement_number,
-                                                                                         const StatementType& statement_type) {
+                                                                       const StatementType& statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -546,7 +549,8 @@ bool PkbReadFacade::IsAnyParentRelationshipPresent() {
 
 // Parent* API
 PkbReadFacade::PairSet
-PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type, const StatementType& statement_type_descendant) {
+PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type,
+                                          const StatementType& statement_type_descendant) {
   SingleSet statement_of_type_for_parent =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -568,7 +572,8 @@ PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type, c
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_number, const StatementType& statement_type) {
+PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_number,
+                                              const StatementType& statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -586,7 +591,8 @@ PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_n
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber& statement_number, const StatementType& statement_type) {
+PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber& statement_number,
+                                                 const StatementType& statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 

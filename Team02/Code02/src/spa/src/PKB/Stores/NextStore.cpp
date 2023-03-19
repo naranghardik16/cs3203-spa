@@ -59,7 +59,8 @@ void NextStore::AddNextRelations() {
   }
 }
 
-bool NextStore::HasNextRelation(const StatementNumber& statement_number, const StatementNumber& next_statement_number) {
+bool NextStore::HasNextRelation(const StatementNumber& statement_number,
+                                const StatementNumber& next_statement_number) {
   return this->next_relation_store_.contains(statement_number, next_statement_number);
 }
 
@@ -104,7 +105,8 @@ NextStore::StatementStatementPairSet NextStore::GetNextStarPairs() {
   return result;
 }
 
-bool NextStore::HasNextStarRelation(const StatementNumber& statement_number, const StatementNumber& next_statement_number) {
+bool NextStore::HasNextStarRelation(const StatementNumber& statement_number,
+                                    const StatementNumber& next_statement_number) {
   StatementNumberStack s;
   StatementNumberSet visited;
   s.push(statement_number);
