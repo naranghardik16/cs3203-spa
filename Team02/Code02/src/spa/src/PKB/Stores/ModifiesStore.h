@@ -110,7 +110,7 @@ class ModifiesStore {
    */
   ProcedureSet GetProceduresThatModify();
 
- protected:
+ private:
   MultiStatementVariableStore modifies_statement_variable_store_;
   MultiProcedureVariableSet modifies_procedure_variable_;
 };

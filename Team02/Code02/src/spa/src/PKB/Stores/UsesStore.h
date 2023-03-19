@@ -17,6 +17,18 @@
  */
 class UsesStore {
  public:
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef PkbTypes::VARIABLE Variable;
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef std::unordered_set<Variable> VariableSet;
+  typedef std::unordered_set<Procedure> ProcedureSet;
+  typedef std::unordered_set<std::pair<StatementNumber, Variable>, PairHasherUtil::hash_pair>
+  StatementVariablePairSet;
+  typedef std::unordered_set<std::pair<Procedure, Variable>, PairHasherUtil::hash_pair>
+  ProcedureVariablePairSet;
+  typedef ManyToManyStore<StatementNumber, Variable> MultiStatementToVariableStore;
+  typedef ManyToManyStore<Procedure, Variable> MultiProcedureToVariableStore;
+  
   /**
    * Default constructor for UsesStore.
    * Initializes an empty UsesStore object.
@@ -36,7 +48,7 @@ class UsesStore {
    * @param statement_number - Statement number representing a statement that uses the variable.
    * @param variable - Variable modified by the statement.
    */
-  void addStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
+  void AddStatementUsesVariable(const StatementNumber& statement_number, const Variable& variable);
 
   /**
    * Add a procedure to variable mapping to the store signifying a uses relationship where the procedure
@@ -45,7 +57,7 @@ class UsesStore {
    * @param procedure - Procedure that uses the variable.
    * @param variable - Variable modified by the procedure.
    */
-  void addProcedureUsingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
+  void AddProcedureUsesVariable(const Procedure& procedure, const Variable& variable);
 
   /**
    * Retrieves all the variables that have a uses relationship with the statement given.
@@ -53,7 +65,7 @@ class UsesStore {
    * @param statement_number - Statement number representing a statement that uses the variable(s).
    * @return A set of variables that have uses relationship with the statement given.
    */
-  std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesUsedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number);
+  VariableSet retrieveAllVariablesUsedByAStatement(const StatementNumber& statement_number);
 
   /**
    * Retrieves all the variables that have a uses relationship with the procedure given.
@@ -61,21 +73,21 @@ class UsesStore {
    * @param procedure - Procedure that uses the variable(s)
    * @return A set of variables that have a uses relationship with the procedure given.
    */
-  std::unordered_set<PkbTypes::VARIABLE> retrieveAllVariablesUsedByAProcedure(PkbTypes::PROCEDURE procedure);
+  VariableSet GetVariablesUsedByProcedure(const Procedure& procedure);
 
   /**
    * Retrieves all the statement variable pairs that have a uses relation among themselves.
    *
    * @return A set of pairs of statement number representing statement and variable.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair> retrieveStatementVariablePairs();
+  StatementVariablePairSet GetStatementVariablePairs();
 
   /**
    * Retrieves all the procedure variable pairs that have a uses relationship among themselves.
    *
    * @return A set of pairs of procedure and variable.
    */
-  std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair> retrieveProcedureVariablePairs();
+  ProcedureVariablePairSet GetProcedureVariablePairs();
 
   /**
    * Checks if a given statement and variable have a uses relationship between them.
@@ -84,7 +96,7 @@ class UsesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasUsesRelationBetweenStatementAndVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
+  bool HasUsesStatementVariableRelation(const StatementNumber& statement_number, const Variable& variable);
 
   /**
    * Checks if a given procedure and variable have a uses relationship between them.
@@ -93,17 +105,16 @@ class UsesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasUsesRelationBetweenProcedureAndVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
+  bool HasUsesProcedureVariableRelation(const Procedure& procedure, const Variable& variable);
 
   /**
    * Retrieves all the procedures that have some sort of a uses relationship with some variable.
    *
    * @return A set of procedures satisfying the criteria.
    */
-  std::unordered_set<PkbTypes::PROCEDURE> retrieveAllProceduresThatUse();
+  ProcedureSet retrieveAllProceduresThatUse();
 
- protected:
-  ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE> uses_statement_variable_;
-  ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::VARIABLE> uses_procedure_variable_;
-
+ private:
+  MultiStatementToVariableStore uses_statement_variable_store_;
+  MultiProcedureToVariableStore uses_procedure_variable_store_;
 };

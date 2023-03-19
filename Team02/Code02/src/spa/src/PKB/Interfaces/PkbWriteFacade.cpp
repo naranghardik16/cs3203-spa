@@ -22,24 +22,24 @@ PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) const {
 
 void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
                                                PkbTypes::VARIABLE variable) const {
-  this->pkb.uses_store_->addStatementUsingVariable(statement_number, variable);
+  this->pkb.uses_store_->AddStatementUsesVariable(statement_number, variable);
 
-  for (const auto &p : this->pkb.parent_store_->retrieveAllAncestors(
+  for (const auto &p : this->pkb.parent_store_->GetAncestors(
       statement_number)) {
-    this->pkb.uses_store_->addStatementUsingVariable(p, variable);
+    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
   }
 }
 
 void PkbWriteFacade::AddStatementOfAType(PkbTypes::STATEMENT_NUMBER statement_number,
                                          StatementType statement_type) const {
-  this->pkb.statement_store_->addStatementForAType(statement_type,
-                                                   statement_number);
+  this->pkb.statement_store_->AddStatementAndType(statement_type,
+                                                  statement_number);
 }
 
 void PkbWriteFacade::AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure,
                                                PkbTypes::VARIABLE variable) const {
-  this->pkb.uses_store_->addProcedureUsingVariable(std::move(procedure),
-                                                   std::move(variable));
+  this->pkb.uses_store_->AddProcedureUsesVariable(std::move(procedure),
+                                                  std::move(variable));
 }
 
 void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
@@ -47,7 +47,7 @@ void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER st
   this->pkb.modifies_store_->AddStatementModifiesVariable(statement_number,
                                                           variable);
 
-  for (const auto &p : this->pkb.parent_store_->retrieveAllAncestors(
+  for (const auto &p : this->pkb.parent_store_->GetAncestors(
       statement_number)) {
     this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
   }
@@ -67,7 +67,7 @@ void PkbWriteFacade::AddFollowsRelation(PkbTypes::STATEMENT_NUMBER first_stateme
 
 void PkbWriteFacade::AddParentRelation(PkbTypes::STATEMENT_NUMBER statement_number_1,
                                        PkbTypes::STATEMENT_NUMBER statement_number_2) const {
-  this->pkb.parent_store_->addParentRelation(std::move(statement_number_1),
+  this->pkb.parent_store_->AddParentRelation(std::move(statement_number_1),
                                              std::move(statement_number_2));
 }
 

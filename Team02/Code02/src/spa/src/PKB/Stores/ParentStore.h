@@ -16,6 +16,13 @@
  */
 class ParentStore {
  public:
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_set<std::pair<StatementNumber, StatementNumber>, PairHasherUtil::hash_pair> 
+  StatementStatementPairSet;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef OneToManyStore<StatementNumber, StatementNumber> StatementToMultiStatementStore;
+  typedef ManyToManyStore<StatementNumber, StatementNumber> MultiStatementToStatementStore;
+  
   /**
    * Constructor for Parent store.
    */
@@ -33,23 +40,21 @@ class ParentStore {
    * second statement.
    * @param second_statement - Statement that comes second.
    */
-  void addParentRelation(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
+  void AddParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
 
   /**
    * Retrieves all the Parent relation pairs stored in Parent Store.
    *
    * @return An unordered set of all the Parent relation pairs.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
-  retrieveAllParentPairs();
+  StatementStatementPairSet GetParentPairs();
 
   /**
    * Retrieves all the Parent* relation pairs stored in the Parent Store.
    *
    * @return An unordered set of all the Parent* relation pairs.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
-  retrieveAllParentStarPairs();
+  StatementStatementPairSet GetParentStarPairs();
 
   /**
    * Checks if a Parent relationship exists between two statements.
@@ -58,7 +63,7 @@ class ParentStore {
    * @param second_statement - Statement that comes second.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasParentRelation(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
+  bool HasParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
 
   /**
    * Checks if a Parent* relationship exists between two statements.
@@ -67,21 +72,21 @@ class ParentStore {
    * @param second_statement - Statement that comes second.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasParentStarRelation(PkbTypes::STATEMENT_NUMBER first_statement, PkbTypes::STATEMENT_NUMBER second_statement);
+  bool HasParentStarRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
 
   /**
    * Checks if the store contains any Parent relationship.
    *
    * @return True if the store contains at least one Parent relationship, false otherwise.
    */
-  bool hasAnyParentRelation();
+  bool HasParentRelation();
 
   /**
    * Checks if the store contains any Parent* relationship.
    *
    * @return True if the store contains at least one Parent* relationship, false otherwise.
    */
-  bool hasAnyParentStarRelation();
+  bool HasParentStarRelation();
 
   /**
    * Checks if any statement has any parents in the store.
@@ -89,7 +94,7 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return True if the statement has at least one parent in the store, false otherwise.
    */
-  bool hasParentStar(PkbTypes::STATEMENT_NUMBER statement);
+  bool HasParentStarRelation(const StatementNumber& statement);
 
   /**
    * Checks if any statement has any children in the store.
@@ -97,14 +102,14 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return True if the statement has at least one child in the store, false otherwise.
    */
-  bool hasParentStarBy(PkbTypes::STATEMENT_NUMBER statement);
+  bool HasParentStarRelationBy(const StatementNumber& statement);
 
   /**
    * Retrieves all parent statements stored in the store.
    *
    * @return An unordered set of statement numbers representing all the parent statements in the store.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllParents();
+  StatementNumberSet GetParents();
 
   /**
    * Retrieves the parent statement of a given statement stored in the store.
@@ -112,28 +117,28 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return The statement number which is the parent of the given statement.
    */
-  PkbTypes::STATEMENT_NUMBER retrieveAllParents(PkbTypes::STATEMENT_NUMBER statement);
+  StatementNumber GetParents(const StatementNumber& statement);
 
   /**
    * Retrieves all the statements that are children in the Parent relationship.
    *
    * @return An unordered set of statement numbers representing all the statements that are children.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllChildren();
+  StatementNumberSet GetChildren();
 
   /**
    * Retrieves all the statement numbers that are children of the given statement.
    * @param statement - The statement number to retrieve children of.
    * @return - An unordered set of statement numbers representing all children of the given statement.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllChildren(PkbTypes::STATEMENT_NUMBER statement);
+  StatementNumberSet GetChildren(const StatementNumber& statement);
 
   /**
    * Retrieve all statements that are parent in the Parent* relationship.
    *
    * @return An unordered set of statement numbers representing all statements that are parent in the Parent* relation.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllAncestors();
+  StatementNumberSet GetAncestors();
 
   /**
    * Retrieves all statements that are parent of a given statement in the Parent* relationship.
@@ -141,14 +146,14 @@ class ParentStore {
    * @param statement - The statement number to retrieve ancestors of.
    * @return An unordered set of statement numbers representing all statements that are ancestors.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllAncestors(PkbTypes::STATEMENT_NUMBER statement);
+  StatementNumberSet GetAncestors(const StatementNumber& statement);
 
   /**
    * Retrieves all statement numbers that are children in a Parent* relation (Descendants).
    *
    * @return An unordered set of statement numbers representing all the statements which are descendants.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllDescendants();
+  StatementNumberSet GetDescendants();
 
   /**
    * Retrieves all statement numbers that are children of a given statement in the Parent* relationship.
@@ -156,11 +161,12 @@ class ParentStore {
    * @param statement - The statement number to retrieve descendants of.
    * @return An unordered set of statement numbers representing all statements that are descendants.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> retrieveAllDescendants(PkbTypes::STATEMENT_NUMBER statement);
+  StatementNumberSet GetDescendants(const StatementNumber& statement);
 
  private:
   // Stores the Parent relation OneToMany mapping between two statements.
-  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> parent_store_;
+  StatementToMultiStatementStore parent_relation_store_;
+
   // Stores the Parent* relation ManyToMany mapping between two statements.
-  ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> parent_star_store_;
+  MultiStatementToStatementStore parent_star_relation_store_;
 };

@@ -79,7 +79,7 @@ class EntityStore {
    */
   ConstantSet GetConstants();
 
- protected:
+ private:
   VariableToIndexStore variable_store_;
   ProcedureToIndexStore procedure_store_;
   ConstantToIndexStore constant_store_;
