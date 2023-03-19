@@ -13,15 +13,16 @@
 class EntityStore {
  public:
   typedef PkbTypes::INDEX Index;
+  typedef PkbTypes::VARIABLE Variable;
   typedef PkbTypes::PROCEDURE Procedure;
   typedef PkbTypes::CONSTANT Constant;
-  typedef PkbTypes::VARIABLE Variable;
   typedef std::unordered_set<Variable> VariableSet;
-  typedef std::unordered_set<Constant> ConstantSet;
   typedef std::unordered_set<Procedure> ProcedureSet;
+  typedef std::unordered_set<Constant> ConstantSet;
   typedef OneToOneStore<Variable, Index> VariableToIndexStore;
-  typedef OneToOneStore<Constant, Index> ConstantToIndexStore;
   typedef OneToOneStore<Procedure, Index> ProcedureToIndexStore;
+  typedef OneToOneStore<Constant, Index> ConstantToIndexStore;
+
 
   /**
    * Constructor for Entity store.

@@ -76,17 +76,17 @@ void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUM
                                                              Expression> expression) {
   this->pkb.assignment_store_->AddAssignmentExpression(statement_number,
                                                        expression);
-  this->pkb.expression_store_->addExpression(expression);
+  this->pkb.expression_store_->AddExpression(expression);
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
+        &p : this->pkb.expression_store_->GetVariablesFromExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
     this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
+        &p : this->pkb.expression_store_->GetConstantsFromExpression(
       expression)) {
     this->pkb.entity_store_->AddConstant(p);
   }
@@ -96,17 +96,17 @@ void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER state
                                                 std::shared_ptr<Expression> expression) {
   this->pkb.control_flow_store_->AddIfStatementAndExpression(statement_number,
                                                              expression);
-  this->pkb.expression_store_->addExpression(expression);
+  this->pkb.expression_store_->AddExpression(expression);
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
+        &p : this->pkb.expression_store_->GetVariablesFromExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
     this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
+        &p : this->pkb.expression_store_->GetConstantsFromExpression(
       expression)) {
     this->pkb.entity_store_->AddConstant(p);
   }
@@ -116,17 +116,17 @@ void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER st
                                                    std::shared_ptr<Expression> expression) {
   this->pkb.control_flow_store_->AddWhileStatementAndExpression(
       statement_number, expression);
-  this->pkb.expression_store_->addExpression(expression);
+  this->pkb.expression_store_->AddExpression(expression);
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
+        &p : this->pkb.expression_store_->GetVariablesFromExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
     this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
-        &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
+        &p : this->pkb.expression_store_->GetConstantsFromExpression(
       expression)) {
     this->pkb.entity_store_->AddConstant(p);
   }

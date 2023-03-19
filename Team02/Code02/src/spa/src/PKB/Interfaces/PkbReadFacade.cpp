@@ -764,7 +764,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetWhileThatHasConditi
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::RetrieveAllVariablesOfExpression(std::shared_ptr<Expression> expression) {
-  return this->pkb.expression_store_->retrieveVariablesOfTheExpression(expression);
+  return this->pkb.expression_store_->GetVariablesFromExpression(expression);
 }
 
 // Calls API

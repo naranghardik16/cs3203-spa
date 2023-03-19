@@ -15,6 +15,14 @@
  */
 class ExpressionStore {
  public:
+  typedef PkbTypes::VARIABLE Variable;
+  typedef PkbTypes::CONSTANT Constant;
+  typedef std::unordered_set<Variable> VariableSet;
+  typedef std::unordered_set<Constant> ConstantSet;
+  typedef std::shared_ptr<Expression> ExpressionPtr;
+  typedef OneToManyStore<ExpressionPtr, Variable> ExpressionToMultiVariableStore;
+  typedef OneToManyStore<ExpressionPtr, Constant> ExpressionToMultiConstantStore;
+
   /**
    * Constructor for Expression store.
    */
@@ -29,7 +37,7 @@ class ExpressionStore {
    * Adds an expression to the store.
    * @param expression - A shared pointer to the Expression object to be added.
    */
-  void addExpression(std::shared_ptr<Expression> expression);
+  void AddExpression(const ExpressionPtr& expression);
 
   /**
    * Retrieves the set of variables used in a given expression.
@@ -37,8 +45,7 @@ class ExpressionStore {
    * @param expression - A shared pointer to the Expression object to be queried.
    * @return An unordered set of variables used in the given expression.
    */
-  std::unordered_set<PkbTypes::VARIABLE> retrieveVariablesOfTheExpression(
-      std::shared_ptr<Expression> expression);
+  VariableSet GetVariablesFromExpression(const ExpressionPtr& expression);
 
   /**
    * Retrieves the set of constants used in a given expression.
@@ -46,15 +53,12 @@ class ExpressionStore {
    * @param expression - A shared pointer to the Expression object to be queried.
    * @return An unordered set of constants used in the given expression.
    */
-  std::unordered_set<PkbTypes::CONSTANT> retrieveConstantsOfTheExpression(
-      std::shared_ptr<Expression> expression);
+  ConstantSet GetConstantsFromExpression(const ExpressionPtr& expression);
 
  private:
   // Stores the mapping between an expression and set of variables used in it.
-  OneToManyStore<std::shared_ptr<Expression>, PkbTypes::VARIABLE>
-      expression_to_variable_store_;
+  ExpressionToMultiVariableStore expression_to_variable_store_;
   // Stores the mapping between an expression and the set of constants used in it.
-  OneToManyStore<std::shared_ptr<Expression>, PkbTypes::CONSTANT>
-      expression_to_constant_store_;
+  ExpressionToMultiConstantStore expression_to_constant_store_;
 };
 
