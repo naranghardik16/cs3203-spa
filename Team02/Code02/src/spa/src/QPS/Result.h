@@ -23,8 +23,6 @@ struct vector_string_hash {
  */
 class Result {
  public:
-  ResultHeader header_;
-  ResultTable table_;
   Result(ResultHeader header, ResultTable table);
 
   /*!
@@ -33,9 +31,13 @@ class Result {
    */
   void JoinResult(const std::shared_ptr<Result>& result);
   std::unordered_set<std::string> ProjectResult(const SelectedSynonymTuple& synonym);
-  std::unordered_set<std::string> ProjectResultForBoolean();
+  ResultHeader &GetHeader();
+  ResultTable &GetTable();
 
  private:
+  ResultHeader header_;
+  ResultTable table_;
+
   //!Helper function
   static InterceptResult FindIntercept(ResultHeader &r_1, ResultHeader &r_2);
   static ResultTable HashJoin(ResultTable &main, ResultTable &other, InterceptResult &intercept);

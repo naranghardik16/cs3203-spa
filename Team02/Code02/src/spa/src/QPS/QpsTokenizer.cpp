@@ -66,12 +66,12 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
       if (synonym_to_design_entity_map.find(kSynonym) != synonym_to_design_entity_map.end()) {
         // we want to throw syntax exception first if there are any but this will mean that we will continue to loop
         // and parse the declarations, which takes extra time
-        semantic_validator_->has_semantic_error_ = true;
+        semantic_validator_->SetHasSemanticError(true);
       }
       synonym_to_design_entity_map.insert({kSynonym, design_entity});
     }
   }
-  semantic_validator_->declaration_ = synonym_to_design_entity_map;
+  semantic_validator_->SetDeclaration(synonym_to_design_entity_map);
 
   return synonym_to_design_entity_map;
 }

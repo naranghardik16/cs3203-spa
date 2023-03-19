@@ -95,7 +95,7 @@ std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
       clause_evaluation_result->JoinResult(intermediate_result);
 
       // Whenever results become empty stop and return empty set
-      if (clause_evaluation_result->table_.empty()) {
+      if (clause_evaluation_result->GetTable().empty()) {
         is_return_empty_set_ = true;
         return {};
       }
@@ -112,7 +112,7 @@ std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
   std::shared_ptr<Result> evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
 
   for (const auto& kSynonym : synonym_tuple_) {
-    if (evaluation_result->header_.count(kSynonym) == 0) {
+    if (evaluation_result->GetHeader().count(kSynonym) == 0) {
       auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
@@ -129,7 +129,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(
     crossed_result->JoinResult(result);
   }
   // only add the remaining selected synonym values into table if it is not already present in the header
-  auto &header = crossed_result->header_;
+  auto &header = crossed_result->GetHeader();
   for (const auto& kSynonym : synonym_tuple_) {
     if (header.count(kSynonym) == 0) {
       auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
