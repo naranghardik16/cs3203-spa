@@ -49,6 +49,12 @@ std::shared_ptr<Result> AffectsStarClauseEvaluator::EvaluateClause(std::shared_p
       single_constraint = pkb->GetAllAssignsThatAffectStar();
     } else if (is_second_arg_a_type_of_assign_synonym) {
       // e.g. Affects*(a, a1) —> get pairs of assigns such that a affects* a1
+      if (first_arg_ == second_arg_) {
+        // return empty table since e.g. in Affects*(a,a) --> should return empty
+        ResultTable table;
+        std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+        return result_ptr;
+      }
       pair_constraint = pkb->GetAffectsStarPairs();
     } else {
       // e.g. Affects*(a,”6”) --> get assigns that directly or indirectly affect stmt 6
