@@ -1,5 +1,4 @@
 //! Preserving the stub written previously
-
 #pragma once
 #include <unordered_set>
 #include "PKB/Types/PkbTypes.h"
@@ -16,126 +15,142 @@ class StubPkbReadFacade: public PkbReadFacade {
   ~StubPkbReadFacade();
 
   //! API for basic Select statements
-  PkbCommunicationTypes::SingleConstraintSet GetVariables() override;
-  PkbCommunicationTypes::SingleConstraintSet GetConstants() override;
-  PkbCommunicationTypes::SingleConstraintSet GetProcedures() override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetReadStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetPrintStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetCallStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetWhileStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetIfStatements() override;
-  PkbCommunicationTypes::SingleConstraintSet GetAssignStatements() override;
+  SingleSet GetVariables() override;
+  SingleSet GetConstants() override;
+  SingleSet GetProcedures() override;
+  SingleSet GetStatements() override;
+  SingleSet GetReadStatements() override;
+  SingleSet GetPrintStatements() override;
+  SingleSet GetCallStatements() override;
+  SingleSet GetWhileStatements() override;
+  SingleSet GetIfStatements() override;
+  SingleSet GetAssignStatements() override;
 
   //! API for Modifies - Statement
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByStatement(std::string statement_number) override;
-  PkbCommunicationTypes::PairConstraintSet GetModifiesStatementVariablePairs(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsModifiesVariable(std::string var_name, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatModify(StatementType stmt_type) override;
-  bool HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) override;
+  SingleSet GetVariablesModifiedByStatement(const StatementNumber& statement_number) override;
+  PairSet GetModifiesStatementVariablePairs(const StatementType& statement_type) override;
+  SingleSet GetStatementsModifiesVariable(const Variable& variable, const StatementType& statement_type) override;
+  SingleSet GetStatementsThatModify(const StatementType& statement_type) override;
+  bool HasModifiesStatementRelationship(const StatementNumber& statement_number, const Variable& variable) override;
 
   //! API for Modifies - Procedure
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesModifiedByProcedure(std::string procedure_name) override;
-  PkbCommunicationTypes::PairConstraintSet GetModifiesProcedureVariablePairs() override;
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresModifiesVariable(std::string var_name) override;
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresThatModify() override;
-  bool HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) override;
+  SingleSet GetVariablesModifiedByProcedure(const Procedure& procedure) override;
+  PairSet GetModifiesProcedureVariablePairs() override;
+  SingleSet GetProceduresModifiesVariable(const Variable& variable) override;
+  SingleSet GetProceduresThatModify() override;
+  bool HasModifiesProcedureRelationship(const Procedure& procedure, const Variable& variable) override;
 
   //! API for Uses - Statement
-  PkbCommunicationTypes::PairConstraintSet GetUsesStatementVariablePairs(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatUses(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByStatement(std::string statement_number) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsUsesVariable(StatementType statement_type, std::string variable) override;
-  bool HasUsesStatementRelationship(std::string statement_number, std::string variable) override;
+  PairSet GetUsesStatementVariablePairs(const StatementType& statement_type) override;
+  SingleSet GetStatementsThatUses(const StatementType& statement_type) override;
+  SingleSet GetVariablesUsedByStatement(const StatementNumber& statement_number) override;
+  SingleSet GetStatementsUsesVariable(const StatementType& statement_type, const Variable& variable) override;
+  bool HasUsesStatementRelationship(const StatementNumber& statement_number, const Variable& variable) override;
 
   //! API for Uses - Procedure
-  PkbCommunicationTypes::PairConstraintSet GetUsesProcedureVariablePairs() override;
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresThatUse() override;
-  PkbCommunicationTypes::SingleConstraintSet GetVariablesUsedByProcedure(std::string procedure) override;
-  PkbCommunicationTypes::SingleConstraintSet GetProceduresUsesVariable(std::string variable) override;
-  bool HasUsesProcedureRelationship(std::string procedure, std::string variable) override;
+  PairSet GetUsesProcedureVariablePairs() override;
+  SingleSet GetProceduresThatUse() override;
+  SingleSet GetVariablesUsedByProcedure(const Procedure& procedure) override;
+  SingleSet GetProceduresUsesVariable(const Variable& variable) override;
+  bool HasUsesProcedureRelationship(const Procedure& procedure, const Variable& variable) override;
 
   //!API for Follows
-  PkbCommunicationTypes::PairConstraintSet GetFollowPairs(StatementType statement_type, StatementType statement_type_follower) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementFollowedBy(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementFollowing(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsWithFollowers(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementThatAreFollowers(StatementType statement_type) override;
-  bool HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) override;
+  PairSet GetFollowPairs(const StatementType& statement_type, const StatementType& statement_type_follower) override;
+  SingleSet GetStatementFollowedBy(const StatementNumber& statement_number,
+                                   const StatementType& statement_type) override;
+  SingleSet GetStatementFollowing(const StatementNumber& statement_number,
+                                  const StatementType& statement_type) override;
+  SingleSet GetStatementsWithFollowers(const StatementType& statement_type) override;
+  SingleSet GetStatementThatAreFollowers(const StatementType& statement_type) override;
+  bool HasFollowsRelationship(const StatementNumber& statement_number,
+                              const StatementNumber& statement_number_follower) override;
   bool IsAnyFollowsRelationshipPresent() override;
 
   //!API for FollowsStar
-  PkbCommunicationTypes::PairConstraintSet GetFollowsStarPairs(StatementType statement_type_1, StatementType statement_type_2) override;
-  PkbCommunicationTypes::SingleConstraintSet GetFollowsStar(std::string statement_number, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarBy(std::string statement_number, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarFirst(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetFollowsStarSecond(StatementType statement_type) override;
+  PairSet GetFollowsStarPairs(const StatementType& statement_type_1, const StatementType& statement_type_2) override;
+  SingleSet GetFollowsStar(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetFollowsStarBy(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetFollowsStarFirst(const StatementType& statement_type) override;
+  SingleSet GetFollowsStarSecond(const StatementType& statement_type) override;
   bool HasFollowsStarRelationship() override;
-  bool HasFollowsStar(std::string statement_number) override;
-  bool HasFollowsStarBy(std::string statement_number) override;
-  bool IsFollowsStar(std::string statement_number_1, std::string statement_number_2) override;
+  bool HasFollowsStar(const StatementNumber& statement_number) override;
+  bool HasFollowsStarBy(const StatementNumber& statement_number) override;
+  bool IsFollowsStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) override;
 
   //!API for Parent
-  PkbCommunicationTypes::PairConstraintSet GetParentChildPairs(StatementType statement_type, StatementType statement_type_child) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementThatIsParentOf(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildrenOf(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreParents(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreChildren(StatementType statement_type) override;
-  bool HasParentChildRelationship(std::string statement_num, std::string statement_num_child) override;
+  PairSet GetParentChildPairs(const StatementType& statement_type, const StatementType& statement_type_child) override;
+  SingleSet GetStatementThatIsParentOf(const StatementNumber& statement_number,
+                                       const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreChildrenOf(const StatementNumber& statement_number,
+                                           const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreParents(const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreChildren(const StatementType& statement_type) override;
+  bool HasParentChildRelationship(const StatementNumber& statement_number,
+                                  const StatementNumber& statement_number_child) override;
   bool IsAnyParentRelationshipPresent() override;
 
   //!API for ParentStar
-  PkbCommunicationTypes::PairConstraintSet GetAncestorDescendantPairs(StatementType statement_type, StatementType statement_type_descendant) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestorOf(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendantsOf(std::string statement_num, StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreAncestors(StatementType statement_type) override;
-  PkbCommunicationTypes::SingleConstraintSet GetStatementsThatAreDescendants(StatementType statement_type) override;
-  bool HasAncestorDescendantRelationship(std::string statement_num, std::string statement_num_descendant) override;
+  PairSet GetAncestorDescendantPairs(const StatementType& statement_type,
+                                     const StatementType& statement_type_descendant) override;
+  SingleSet GetStatementsThatAreAncestorOf(const StatementNumber& statement_number,
+                                           const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreDescendantsOf(const StatementNumber& statement_number,
+                                              const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreAncestors(const StatementType& statement_type) override;
+  SingleSet GetStatementsThatAreDescendants(const StatementType& statement_type) override;
+  bool HasAncestorDescendantRelationship(const StatementNumber& statement_number,
+                                         const StatementNumber& statement_number_descendant) override;
   bool IsAnyAncestorDescendantRelationshipPresent() override;
 
   //!API for pattern
-  PkbCommunicationTypes::SingleConstraintSet GetAssignWithExactExpression(const std::shared_ptr<Expression> &expr) override;
-  PkbCommunicationTypes::SingleConstraintSet GetAssignWithPartialExpression(const std::shared_ptr<Expression> &sub_expr) override;
-  PkbCommunicationTypes::PairConstraintSet GetIfConditionVariablePair() override;
-  PkbCommunicationTypes::SingleConstraintSet GetIfWithConditionVariable(const std::string &var_name) override;
-  PkbCommunicationTypes::SingleConstraintSet GetIfThatHasConditionVariable() override;
-  PkbCommunicationTypes::PairConstraintSet GetWhileConditionVariablePair() override;
-  PkbCommunicationTypes::SingleConstraintSet GetWhileWithConditionVariable(const std::string &var_name) override;
-  PkbCommunicationTypes::SingleConstraintSet GetWhileThatHasConditionVariable() override;
+  SingleSet GetAssignWithExactExpression(const ExpressionPtr& expr) override;
+  SingleSet GetAssignWithPartialExpression(const ExpressionPtr& sub_expr) override;
+  PairSet GetIfConditionVariablePair() override;
+  SingleSet GetIfWithConditionVariable(const Variable& variable) override;
+  SingleSet GetIfThatHasConditionVariable() override;
+  PairSet GetWhileConditionVariablePair() override;
+  SingleSet GetWhileWithConditionVariable(const Variable& variable) override;
+  SingleSet GetWhileThatHasConditionVariable() override;
 
   //!API for Next
-  PkbCommunicationTypes::PairConstraintSet GetNextPairs(StatementType type_1, StatementType type_2);
-  PkbCommunicationTypes::SingleConstraintSet GetNext(std::string statement_number, StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextBy(std::string statement_number, StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextFirst(StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextSecond(StatementType statement_type);
+  PairSet GetNextPairs(const StatementType& statement_type_1, const StatementType& statement_type_2);
+  SingleSet GetNext(const StatementNumber& statement_number, const StatementType& statement_type);
+  SingleSet GetNextBy(const StatementNumber& statement_number, const StatementType& statement_type);
+  SingleSet GetNextFirst(const StatementType& statement_type);
+  SingleSet GetNextSecond(const StatementType& statement_type);
   bool HasNextRelationship();
-  bool HasNext(std::string statement_number);
-  bool HasNextBy(std::string statement_number);
-  bool IsNext(std::string statement_num_1, std::string statement_num_2);
+  bool HasNext(const StatementNumber& statement_number);
+  bool HasNextBy(const StatementNumber& statement_number);
+  bool IsNext(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2);
 
   //!API for Next*
-  PkbCommunicationTypes::PairConstraintSet GetNextStarPairs(StatementType type_1, StatementType type_2);
-  PkbCommunicationTypes::SingleConstraintSet GetNextStar(std::string statement_number, StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextStarBy(std::string statement_number, StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextStarFirst(StatementType statement_type);
-  PkbCommunicationTypes::SingleConstraintSet GetNextStarSecond(StatementType statement_type);
+  PairSet GetNextStarPairs(const StatementType& statement_type_1, const StatementType& statement_type_2);
+  SingleSet GetNextStar(const StatementNumber& statement_number, const StatementType& statement_type);
+  SingleSet GetNextStarBy(const StatementNumber& statement_number, const StatementType& statement_type);
+  SingleSet GetNextStarFirst(const StatementType& statement_type);
+  SingleSet GetNextStarSecond(const StatementType& statement_type);
   bool HasNextStarRelationship();
-  bool HasNextStar(std::string statement_number);
-  bool HasNextStarBy(std::string statement_number);
-  bool IsNextStar(std::string statement_num_1, std::string statement_num_2);
-  PkbCommunicationTypes::PairConstraintSet GetAffectsPairs();
-  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedBy(string stmt_num);
-  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffecting(string stmt_num);
-  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffected();
-  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffect();
-  bool HasAffectsRelationship(string stmt_num, string stmt_num_being_affected);
+  bool HasNextStar(const StatementNumber& statement_number);
+  bool HasNextStarBy(const StatementNumber& statement_number);
+  bool IsNextStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2);
+
+  // !API for Affects
+  PairSet GetAffectsPairs();
+  SingleSet GetAssignsAffectedBy(const StatementNumber& statement_number);
+  SingleSet GetAssignsAffecting(const StatementNumber& statement_number);
+  SingleSet GetAllAssignsThatAreAffected();
+  SingleSet GetAllAssignsThatAffect();
+  bool HasAffectsRelationship(const StatementNumber& statement_number, 
+                              const StatementNumber& statement_number_being_affected);
   bool IsThereAnyAffectsRelationship();
-  PkbCommunicationTypes::PairConstraintSet GetAffectsStarPairs();
-  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectedStarBy(string stmt_num);
-  PkbCommunicationTypes::SingleConstraintSet GetAssignsAffectingStar(string stmt_num);
-  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAreAffectedStar();
+
+  // !API for Affects*
+  PairSet GetAffectsStarPairs();
+  SingleSet GetAssignsAffectedStarBy(const StatementNumber& statement_number);
+  SingleSet GetAssignsAffectingStar(const StatementNumber& statement_number);
+  SingleSet GetAllAssignsThatAreAffectedStar();
   bool IsThereAnyAffectsStarRelationship();
-  bool HasAffectsStarRelationship(string stmt_num, string stmt_num_being_affected);
-  PkbCommunicationTypes::SingleConstraintSet GetAllAssignsThatAffectStar();
+  bool HasAffectsStarRelationship(const StatementNumber& statement_number, 
+                                  const StatementNumber& statement_number_being_affected);
+  SingleSet GetAllAssignsThatAffectStar();
 };
