@@ -81,13 +81,15 @@ def GetAutotesterParameterList(folder_to_test_in):
 Taken from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
 """
 def check_output_xml(output_xml):
+    if not os.path.exists(output_xml):
+        return "\n"
     with open(output_xml) as f:
         output = f.read()
         text_chunks = Counter(output.split())
         passed_test_cases = text_chunks[SUCCESS_TAG]
         failed_test_cases = text_chunks[FAILURE_CLOSING_TAG]
         test_summary = f'\nTest passed:{passed_test_cases}\nTest failed:{failed_test_cases}'
-    return test_summary
+    return test_summary + "\n"
 
 
 def ExecuteAutotester(autotester_filepath, autotester_param, redirect_output):
