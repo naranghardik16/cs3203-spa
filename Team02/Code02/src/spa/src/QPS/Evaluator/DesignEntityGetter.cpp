@@ -107,10 +107,10 @@ std::shared_ptr<Result> DesignEntityGetter::GetIntersectionOfTwoAttr(
   auto result_1 = EvaluateBasicSelect(syn_1, pkb, declaration_map);
   auto result_2 = EvaluateBasicSelect(syn_2, pkb, declaration_map);
 
-  int index = result_2->header_.size() == 1 ? 0 : 1;
-  result_2->header_[syn_1] = static_cast<int>(result_2->header_.size());
+  int index = result_2->GetHeader().size() == 1 ? 0 : 1;
+  result_2->GetHeader()[syn_1] = static_cast<int>(result_2->GetHeader().size());
 
-  for (auto &row : result_2->table_) {
+  for (auto &row : result_2->GetTable()) {
     row.push_back(row[index]);
   }
   result_1->JoinResult(result_2);

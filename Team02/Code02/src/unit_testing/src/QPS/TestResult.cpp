@@ -18,8 +18,8 @@ TEST_CASE("Test Result - Join result") {
     ResultTable expected_table{{"6", "count"}, {"7", "cenX"}, {"8", "cenY"},
                                {"12", "cenX"}, {"13", "centY"}};
     r_1->JoinResult(r_2);
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test simple join - partially match extends with matching row - success") {
@@ -38,8 +38,8 @@ TEST_CASE("Test Result - Join result") {
     ResultTable expected_table{{"1", "2", "4", "9"}, {"1", "2", "2", "8"}};
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test simple join - partially match extends with matching row - success") {
@@ -62,8 +62,8 @@ TEST_CASE("Test Result - Join result") {
                                {"14", "ost", "14"}, {"14", "y", "11"}, {"14", "wes", "10"}};
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test simple join - not match cross product - success") {
@@ -84,8 +84,8 @@ TEST_CASE("Test Result - Join result") {
                                {"1", "2", "2", "2", "4"}, {"1", "2", "2", "2", "2"}};
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test simple join - join with empty table - success") {
@@ -103,8 +103,8 @@ TEST_CASE("Test Result - Join result") {
     ResultTable expected_table{};
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test simple join - empty table join with another table - success") {
@@ -124,8 +124,8 @@ TEST_CASE("Test Result - Join result") {
                                {"1", "2", "2"}};
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test complex join - multiple join sequence - success") {
@@ -153,8 +153,8 @@ TEST_CASE("Test Result - Join result") {
     r_1->JoinResult(r_2);
     r_1->JoinResult(r_3);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 
   SECTION("Test complex join - multiple join sequence different order - success") {
@@ -182,7 +182,7 @@ TEST_CASE("Test Result - Join result") {
     r_1->JoinResult(r_3);
     r_1->JoinResult(r_2);
 
-    REQUIRE(r_1->header_ == expected_header);
-    REQUIRE(r_1->table_ == expected_table);
+    REQUIRE(r_1->GetHeader() == expected_header);
+    REQUIRE(r_1->GetTable() == expected_table);
   }
 }
