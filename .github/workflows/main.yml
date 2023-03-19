@@ -50,8 +50,14 @@ jobs:
           cd $GITHUB_WORKSPACE/Team02/Code02/build/src/integration_testing/Release
           ./integration_testing.exe
 
+      - name: Running System Tests
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/Team02/Tests02
+          python RunTests.py False
+
   build_macos:
-    runs-on: macos-latest
+    runs-on: macos-latest-xl
     timeout-minutes: 15
     strategy:
       fail-fast: true
@@ -81,3 +87,11 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: ./src/integration_testing/integration_testing
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - name: Running System Tests
+        shell: bash
+        working-directory: ${{runner.workspace}}/build
+        run: python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False

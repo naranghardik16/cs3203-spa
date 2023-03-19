@@ -684,6 +684,8 @@ FodyWeavers.xsd
 
 *.xml
 
+LOG.txt
+
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
