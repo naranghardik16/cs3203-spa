@@ -90,7 +90,7 @@ def check_output_xml(output_xml):
     return test_summary
 
 
-def ExecuteAutotester(autotester_filepath, autotester_param):
+def ExecuteAutotester(autotester_filepath, autotester_param, redirect_output):
     source_filepath = autotester_param[0]
     query_filepath = autotester_param[1]
     output_xml_filepath = autotester_param[2]
@@ -99,7 +99,10 @@ def ExecuteAutotester(autotester_filepath, autotester_param):
     command = f'{autotester_filepath} {source_filepath} {query_filepath} {output_xml_filepath}'
     command = MakePathSuitableForOS(command)
 
-    exit_code = os.system(command)
+    if redirect_output:
+        exit_code = os.system(command + "> /dev/null 2>&1")
+    else:
+        exit_code = os.system(command)
 
     if exit_code != SUCCESS_EXIT_CODE:
         test_summary = f'Autotester execution failed for {test_name} with exit code: {exit_code}'
@@ -108,7 +111,7 @@ def ExecuteAutotester(autotester_filepath, autotester_param):
     return test_summary
 
 
-def Execute(folder_to_test_in):
+def Execute(folder_to_test_in, redirect_output):
     autotester_file_path = FindAutotesterExecutablePath()
     autotester_param_list = GetAutotesterParameterList(folder_to_test_in)
     MakeResultDirectory()
@@ -116,7 +119,7 @@ def Execute(folder_to_test_in):
     test_report = ""
     for param in autotester_param_list:
         try:
-            test_summary = ExecuteAutotester(autotester_file_path, param)
+            test_summary = ExecuteAutotester(autotester_file_path, param, redirect_output)
             test_report += "\n" + test_summary
         except Exception as e:
             print(str(e))
@@ -132,8 +135,8 @@ def Execute(folder_to_test_in):
 
 
 if __name__ == "__main__":
-    Execute("Milestone1")
-    Execute("Milestone2")
+    Execute("Milestone1", True)
+    Execute("Milestone2", True)
 
     if len(sys.argv) != 2:
         start_python_host_command = "python -m http.server 8000"
