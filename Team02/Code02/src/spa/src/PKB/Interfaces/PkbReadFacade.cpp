@@ -1060,7 +1060,7 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
 }
 
 // Next API
-PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType& statement_type_1, 
+PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType& statement_type_1,
                                                    const StatementType& statement_type_2) {
   SingleSet statements_of_type_1 =
       this->pkb.statement_store_->GetStatements(statement_type_1);
