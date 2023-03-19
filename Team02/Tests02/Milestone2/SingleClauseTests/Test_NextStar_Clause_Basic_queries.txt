@@ -56,7 +56,7 @@ Select a such that Next*(a,_)
 12 - (Valid Query) Next*(SYN, SYN)
 stmt s; while w;
 Select <s, w> such that Next*(s,w)
-1 2, 1 5, 3 2, 4 5, 6 5, 9 8, 10 8, 11 8
+1 2, 2 2, 5 5, 8 8, 1 5, 3 2, 4 5, 6 5, 9 8, 10 8, 11 8
 5000
 13 - (Valid Query) Next*(SYN, SYN)
 if ifs; while w;
@@ -71,7 +71,7 @@ none
 15 - (Valid Query) Next*(SYN, INT)
 stmt s; 
 Select <s> such that Next*(s,8)
-9, 10, 11
+8, 9, 10, 11
 5000
 16 - (Valid Query) Next*(SYN, INT) no result
 assign a; 

@@ -23,7 +23,7 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
     syntax_pair_list = tk->ParseSubClauses(clause_substring);
   }
 
-  if (tk->semantic_validator_->has_semantic_error_) {
+  if (tk->semantic_validator_->HasSemanticError()) {
     throw SemanticErrorException();
   }
 

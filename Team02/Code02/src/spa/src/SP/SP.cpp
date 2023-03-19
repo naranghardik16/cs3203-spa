@@ -3,7 +3,7 @@
 SP::SP() {};
 
 bool SP::ProcessSIMPLE(istream &source,
-                       shared_ptr<PKB> pkb,
+                       shared_ptr<Pkb> pkb,
                        shared_ptr<Cfg> cfg) {
   try {
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();

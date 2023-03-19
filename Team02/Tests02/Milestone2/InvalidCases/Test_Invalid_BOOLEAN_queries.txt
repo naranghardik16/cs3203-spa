@@ -13,7 +13,7 @@ SemanticError
 Select BOOLEANs
 SemanticError
 5000
-4 - extra < character before BOOLEAN
+4 - extra character before BOOLEAN
 
 Select <BOOLEAN
 SyntaxError

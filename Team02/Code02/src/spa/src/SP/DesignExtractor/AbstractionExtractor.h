@@ -17,7 +17,7 @@
 
 class AbstractionExtractor : public ParserVisitor {
  public:
-  AbstractionExtractor(shared_ptr<PKB> pkb);
+  AbstractionExtractor(shared_ptr<Pkb> pkb);
   void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override;
   void VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) override;
   void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) override;
@@ -39,7 +39,7 @@ class AbstractionExtractor : public ParserVisitor {
   void SetIsExtractIndirectModifiesAndUsesTrue();
 
  private:
-  shared_ptr<PKB> pkb_;
+  shared_ptr<Pkb> pkb_;
   shared_ptr<PkbWriteFacade> pkb_write_facade_;
   shared_ptr<PkbReadFacade> pkb_read_facade_;
   shared_ptr<bool> is_extract_indirect_modifies_and_uses_;

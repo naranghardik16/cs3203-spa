@@ -13,6 +13,14 @@
  */
 class StatementStore {
  public:
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef PkbTypes::FIELD Field;
+  typedef std::unordered_set<Field> FieldSet;
+  typedef std::unordered_set<StatementType> StatementTypeSet;
+  typedef OneToManyStore<StatementType, StatementNumber> TypeToMultiStatementStore;
+  typedef OneToManyStore<StatementNumber, Field> StatementToMultiFieldStore;
+  
   /**
    * Default constructor for Statement store.
    * Initializes the object of the class.
@@ -30,7 +38,7 @@ class StatementStore {
    * @param statement_number - Statement number representing statement to be added.
    * @param field - Field to be added.
    */
-  void addStatementAndField(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::FIELD field);
+  void AddStatementAndField(const StatementNumber& statement_number, const Field& field);
 
   /**
    * Adds a statement of a particular type to the statement store.
@@ -38,7 +46,7 @@ class StatementStore {
    * @param statement_type - Type of the statement being added.
    * @param statement_number - Statement number representing statement to be added.
    */
-  void addStatementForAType(StatementType statement_type, PkbTypes::STATEMENT_NUMBER statement_number);
+  void AddStatementAndType(const StatementType& statement_type, const StatementNumber& statement_number);
 
   /**
    * Retrieve the type of statement given a statement.
@@ -46,7 +54,7 @@ class StatementStore {
    * @param statement_number - Statement number representing statement for which the type needs to be retrieved.
    * @return The type of the statement for the given statement number.
    */
-  StatementType getStatementTypeByNumber(PkbTypes::STATEMENT_NUMBER statement_number);
+  StatementType GetType(const StatementNumber& statement_number);
 
   /**
    * Retrieves all the statements present in the store for a given type.
@@ -54,21 +62,21 @@ class StatementStore {
    * @param statement_type - Statement type for which the statements are to be retrieved.
    * @return A set of statements for the type given.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> getStatementsFromType(StatementType statement_type);
+  StatementNumberSet GetStatements(const StatementType& statement_type);
 
   /**
    * Retrieves all the statement types present in the store.
    *
    * @return A set of statement types present in the store.
    */
-  std::unordered_set<StatementType> getAllStatementTypes();
+  StatementTypeSet GetTypes();
 
   /**
    * Retrieves all the statements present in the store.
    *
    * @return A set of statements present in the store.
    */
-  std::unordered_set<PkbTypes::STATEMENT_NUMBER> getAllStatements();
+  StatementNumberSet GetStatements();
 
   /**
    * Retrieves all the fields present in a statement.
@@ -76,10 +84,10 @@ class StatementStore {
    * @param statement_number - Statement number representing the statement.
    * @return A set of fields associated with the statement.
    */
-  std::unordered_set<PkbTypes::FIELD> getFieldsForStatement(PkbTypes::STATEMENT_NUMBER statement_number);
+  FieldSet GetFields(const StatementNumber& statement_number);
 
- protected:
-  OneToManyStore<StatementType, PkbTypes::STATEMENT_NUMBER> type_statement_store_;
-  OneToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::FIELD> statement_field_store_;
+ private:
+  TypeToMultiStatementStore type_statement_store_;
+  StatementToMultiFieldStore statement_field_store_;
 };
 

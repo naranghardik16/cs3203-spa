@@ -50,6 +50,9 @@ std::shared_ptr<Result> NextClauseEvaluator::EvaluateClause(std::shared_ptr<PkbR
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
     // Example query: Next (s,s)
+    if (first_arg_ == second_arg_) {
+      return std::make_shared<Result>(header, table);
+    }
 
     pair_constraint = pkb->GetNextPairs(arg_1_type, arg_2_type);
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {

@@ -16,7 +16,7 @@ Select <s,a> such that Calls(p,"B") and Modifies(p,v) and Modifies(s,v) pattern 
 4-comment
 call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
 Select <s,w,ifs> such that Parent*(s,w) and Parent*(s,ifs) and Modifies(a,"a") and Next*(a,w) and Parent(ifs,a)
-11 21 23,20 21 23
+11 20 23,27 32 37,41 44 51,41 46 51,41 47 51,41 50 51,44 46 51,44 47 51,44 50 51,45 46 51,45 47 51,45 50 51,11 21 23,20 21 23
 5000
 5-comment
 call c; procedure p,p1,p2;assign a; variable v;while w; if ifs;stmt s,s1,s2;
@@ -44,7 +44,7 @@ Select s such that Next*(1, s)
 2,3,4,5,6,7,8,9,10
 5000
 10-comment
-call c; procedure p,p1,p2;assign a, a1; prog_line pl;variable v;while w; if ifs;stmt s,s1,s2;
+call c; procedure p,p1,p2;assign a, a1; variable v;while w; if ifs;stmt s,s1,s2;
 Select <s,w,ifs,s2> such that Parent*(s,w) and Parent*(s,ifs) and Modifies(a,"a") and Next*(a,w) and Parent(ifs,a) such that Parent*(s2,c) and Parent*(s1,c) and Parent*(s2,s1) and Calls(_,p) with c.procName=p.procName such that Next(c,s1) pattern a1(v, _"a%b*c"_) such that Modifies(p1, v) and Calls(p2, p1) with p2.procName = "B"
-11 21 23 41,11 21 23 44,11 21 23 45,11 21 23 46,20 21 23 41,20 21 23 44,20 21 23 45,20 21 23 46
+11 20 23 41,11 20 23 44,11 20 23 45,11 20 23 46,27 32 37 41,27 32 37 44,27 32 37 45,27 32 37 46,41 44 51 41,41 44 51 44,41 44 51 45,41 44 51 46,41 46 51 41,41 46 51 44,41 46 51 45,41 46 51 46,41 47 51 41,41 47 51 44,41 47 51 45,41 47 51 46,41 50 51 41,41 50 51 44,41 50 51 45,41 50 51 46,44 46 51 41,44 46 51 44,44 46 51 45,44 46 51 46,44 47 51 41,44 47 51 44,44 47 51 45,44 47 51 46,44 50 51 41,44 50 51 44,44 50 51 45,44 50 51 46,45 46 51 41,45 46 51 44,45 46 51 45,45 46 51 46,45 47 51 41,45 47 51 44,45 47 51 45,45 47 51 46,45 50 51 41,45 50 51 44,45 50 51 45,45 50 51 46,11 21 23 41,11 21 23 44,11 21 23 45,11 21 23 46,20 21 23 41,20 21 23 44,20 21 23 45,20 21 23 46
 5000
