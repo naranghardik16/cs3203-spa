@@ -10,8 +10,8 @@ bool Sp::ProcessSIMPLE(istream &source,
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(source);
     shared_ptr<Parser> parser = make_shared<Parser>();
     shared_ptr<Program> program = parser->ParseSource(*tokens);
-    shared_ptr<SPSemanticValidator>
-        validator = make_shared<SPSemanticValidator>();
+    shared_ptr<SpSemanticValidator>
+        validator = make_shared<SpSemanticValidator>();
     validator->ValidateProgram(program);
     shared_ptr<DesignExtractor>
         design_extractor = make_shared<DesignExtractor>(pkb, cfg);

@@ -3,7 +3,7 @@
 #include "SP/Tokenizer/Tokenizer.h"
 #include "./SP/DesignExtractor/DesignExtractor.h"
 #include "PKB/Pkb.h"
-#include "SP/Validator/SPSemanticValidator.h"
+#include "SP/Validator/SpSemanticValidator.h"
 
 using namespace std;
 

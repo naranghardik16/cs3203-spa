@@ -1,33 +1,35 @@
-#include "SPSemanticValidator.h"
+#include "SpSemanticValidator.h"
 
-SPSemanticValidator::SPSemanticValidator() {
+SpSemanticValidator::SpSemanticValidator() {
   no_of_procedures_ = 0;
 }
 
-void SPSemanticValidator::AddProcedure(string proc_name) {
+void SpSemanticValidator::AddProcedure(string proc_name) {
   // check whether the proc_name exist before adding
   if (IsProcedureExist(proc_name)) {
-    throw SemanticErrorException("A program cannot have 2 procedures with the same name");
+    throw SemanticErrorException(
+        "A program cannot have 2 procedures with the same name");
   }
   procedures_[proc_name] = no_of_procedures_;
   no_of_procedures_++;
 }
 
-bool SPSemanticValidator::IsProcedureExist(string proc_name) {
+bool SpSemanticValidator::IsProcedureExist(string proc_name) {
   return procedures_.find(proc_name) != procedures_.end();
 }
 
-void SPSemanticValidator::AddCallsRelationship(string caller_proc_name, string callee_proc_name) {
+void SpSemanticValidator::AddCallsRelationship(string caller_proc_name,
+                                               string callee_proc_name) {
   calls_relationship_.push_back(make_pair(caller_proc_name, callee_proc_name));
 }
 
-void SPSemanticValidator::ValidateProgram(shared_ptr<Program> program) {
+void SpSemanticValidator::ValidateProgram(shared_ptr<Program> program) {
   ProcessProgram(program);
   PopulateAdjacencyList();
   ValidateNoRecursiveAndCyclicCalls();
 }
 
-void SPSemanticValidator::ProcessProgram(shared_ptr<Program> program) {
+void SpSemanticValidator::ProcessProgram(shared_ptr<Program> program) {
   Program::ProcListContainer procedures = program->GetProcedureList();
   for (shared_ptr<Procedure> p : procedures) {
     AddProcedure(p->GetProcedureName());
@@ -35,7 +37,8 @@ void SPSemanticValidator::ProcessProgram(shared_ptr<Program> program) {
   }
 }
 
-void SPSemanticValidator::ProcessStatements(Procedure::StmtListContainer statements, string proc_name) {
+void SpSemanticValidator::ProcessStatements(Procedure::StmtListContainer statements,
+                                            string proc_name) {
   for (shared_ptr<Statement> s : statements) {
     if (s->GetStatementType() == "call") {
       auto call_stmt = dynamic_pointer_cast<CallStatement>(s);
@@ -58,7 +61,7 @@ void SPSemanticValidator::ProcessStatements(Procedure::StmtListContainer stateme
   }
 }
 
-void SPSemanticValidator::PopulateAdjacencyList() {
+void SpSemanticValidator::PopulateAdjacencyList() {
   if (calls_relationship_.empty()) {
     return;
   }
@@ -67,7 +70,8 @@ void SPSemanticValidator::PopulateAdjacencyList() {
 
   for (auto crls : calls_relationship_) {
     if (!IsProcedureExist(crls.second)) {
-      throw SemanticErrorException("A procedure cannot call a non-existing procedure");
+      throw SemanticErrorException(
+          "A procedure cannot call a non-existing procedure");
     }
     auto position = procedures_.find(crls.first)->second;
     auto neighbour = procedures_.find(crls.second)->second;
@@ -76,7 +80,7 @@ void SPSemanticValidator::PopulateAdjacencyList() {
 }
 
 // Solution below adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
-void SPSemanticValidator::ValidateNoRecursiveAndCyclicCalls() {
+void SpSemanticValidator::ValidateNoRecursiveAndCyclicCalls() {
   if (calls_relationship_.empty()) {
     return;
   }
@@ -97,7 +101,9 @@ void SPSemanticValidator::ValidateNoRecursiveAndCyclicCalls() {
 }
 
 // Solution before adapted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
-bool SPSemanticValidator::IsCyclicUtil(int v, shared_ptr<vector<bool>> visited, shared_ptr<vector<bool>> rec_stack) {
+bool SpSemanticValidator::IsCyclicUtil(int v,
+                                       shared_ptr<vector<bool>> visited,
+                                       shared_ptr<vector<bool>> rec_stack) {
   if ((*visited)[v] || v >= adj_list_.size()) {
     return false;
   }
