@@ -94,8 +94,8 @@ void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUM
 
 void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                                 std::shared_ptr<Expression> expression) {
-  this->pkb.control_flow_store_->addIfStatementAndCondition(statement_number,
-                                                            expression);
+  this->pkb.control_flow_store_->AddIfStatementAndExpression(statement_number,
+                                                             expression);
   this->pkb.expression_store_->addExpression(expression);
 
   for (const auto
@@ -114,7 +114,7 @@ void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER state
 
 void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                                    std::shared_ptr<Expression> expression) {
-  this->pkb.control_flow_store_->addWhileStatementAndCondition(
+  this->pkb.control_flow_store_->AddWhileStatementAndExpression(
       statement_number, expression);
   this->pkb.expression_store_->addExpression(expression);
 
