@@ -12,6 +12,17 @@
  */
 class EntityStore {
  public:
+  typedef PkbTypes::INDEX Index;
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef PkbTypes::CONSTANT Constant;
+  typedef PkbTypes::VARIABLE Variable;
+  typedef std::unordered_set<Variable> VariableSet;
+  typedef std::unordered_set<Constant> ConstantSet;
+  typedef std::unordered_set<Procedure> ProcedureSet;
+  typedef OneToOneStore<Variable, Index> VariableToIndexStore;
+  typedef OneToOneStore<Constant, Index> ConstantToIndexStore;
+  typedef OneToOneStore<Procedure, Index> ProcedureToIndexStore;
+
   /**
    * Constructor for Entity store.
    */
@@ -23,20 +34,12 @@ class EntityStore {
   ~EntityStore();
 
   /**
-   * Adds a constant entity to the constant store.
-   *
-   * @param constant - The constant to be inserted.
-   * @return The index at which the inserted constant is mapped to.
-   */
-  PkbTypes::INDEX addConstant(PkbTypes::CONSTANT constant);
-
-  /**
    * Adds a variable entity to the variable store.
    *
    * @param variable - The variable to be inserted.
    * @return The index at which the inserted variable is mapped to.
    */
-  PkbTypes::INDEX addVariable(PkbTypes::VARIABLE variable);
+  Index AddVariable(const Variable& variable);
 
   /**
    * Adds a procedure entity to the procedure store.
@@ -44,32 +47,40 @@ class EntityStore {
    * @param procedure - The procedure to be inserted.
    * @return The index at which the inserted procedure is mapped to.
    */
-  PkbTypes::INDEX addProcedure(PkbTypes::PROCEDURE procedure);
+  Index AddProcedure(const Procedure& procedure);
+
+  /**
+   * Adds a constant entity to the constant store.
+   *
+   * @param constant - The constant to be inserted.
+   * @return The index at which the inserted constant is mapped to.
+   */
+  Index AddConstant(const Constant& constant);
 
   /**
    * Retrieves all the variable entities present in the entity store.
    *
    * @return Set of variable entities.
    */
-  std::unordered_set<PkbTypes::VARIABLE> getVariables();
+  VariableSet GetVariables();
 
   /**
    * Retrieves all the procedure entities present in the entity store.
    *
    * @return Set of procedure entities.
    */
-  std::unordered_set<PkbTypes::PROCEDURE> getProcedures();
+  ProcedureSet GetProcedures();
 
   /**
    * Retrieves all the procedure entities present in the entity store.
    *
    * @return Set of procedure entities.
    */
-  std::unordered_set<PkbTypes::CONSTANT> getConstants();
+  ConstantSet GetConstants();
 
  protected:
-  OneToOneStore<PkbTypes::VARIABLE, PkbTypes::INDEX> variable_store_;
-  OneToOneStore<PkbTypes::PROCEDURE, PkbTypes::INDEX> procedure_store_;
-  OneToOneStore<PkbTypes::CONSTANT, PkbTypes::INDEX> constant_store_;
+  VariableToIndexStore variable_store_;
+  ProcedureToIndexStore procedure_store_;
+  ConstantToIndexStore constant_store_;
 };
 

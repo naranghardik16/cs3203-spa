@@ -9,15 +9,15 @@ PkbWriteFacade::PkbWriteFacade(Pkb &pkb) : pkb(pkb) {}
 PkbWriteFacade::~PkbWriteFacade() = default;
 
 PkbTypes::INDEX PkbWriteFacade::AddVariable(PkbTypes::VARIABLE variable) const {
-  return pkb.entity_store_->addVariable(std::move(variable));
+  return pkb.entity_store_->AddVariable(std::move(variable));
 }
 
 PkbTypes::INDEX PkbWriteFacade::AddProcedure(PkbTypes::PROCEDURE procedure) const {
-  return pkb.entity_store_->addProcedure(std::move(procedure));
+  return pkb.entity_store_->AddProcedure(std::move(procedure));
 }
 
 PkbTypes::INDEX PkbWriteFacade::AddConstant(PkbTypes::CONSTANT constant) const {
-  return pkb.entity_store_->addConstant(std::move(constant));
+  return pkb.entity_store_->AddConstant(std::move(constant));
 }
 
 void PkbWriteFacade::AddStatementUsingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
@@ -82,13 +82,13 @@ void PkbWriteFacade::AddAssignmentStatementAndExpression(PkbTypes::STATEMENT_NUM
         &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->addVariable(p);
+    this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
         &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
       expression)) {
-    this->pkb.entity_store_->addConstant(p);
+    this->pkb.entity_store_->AddConstant(p);
   }
 }
 
@@ -102,13 +102,13 @@ void PkbWriteFacade::AddIfStatementAndCondition(PkbTypes::STATEMENT_NUMBER state
         &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->addVariable(p);
+    this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
         &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
       expression)) {
-    this->pkb.entity_store_->addConstant(p);
+    this->pkb.entity_store_->AddConstant(p);
   }
 }
 
@@ -122,13 +122,13 @@ void PkbWriteFacade::AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER st
         &p : this->pkb.expression_store_->retrieveVariablesOfTheExpression(
       expression)) {
     this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->addVariable(p);
+    this->pkb.entity_store_->AddVariable(p);
   }
 
   for (const auto
         &p : this->pkb.expression_store_->retrieveConstantsOfTheExpression(
       expression)) {
-    this->pkb.entity_store_->addConstant(p);
+    this->pkb.entity_store_->AddConstant(p);
   }
 }
 

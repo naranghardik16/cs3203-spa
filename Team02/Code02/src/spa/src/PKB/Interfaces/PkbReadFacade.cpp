@@ -10,15 +10,15 @@ PkbReadFacade::PkbReadFacade(Pkb& pkb): pkb(pkb) {}
 PkbReadFacade::~PkbReadFacade() = default;
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariables() {
-  return this->pkb.entity_store_->getVariables();
+  return this->pkb.entity_store_->GetVariables();
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetConstants() {
-  return this->pkb.entity_store_->getConstants();
+  return this->pkb.entity_store_->GetConstants();
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProcedures() {
-  return this->pkb.entity_store_->getProcedures();
+  return this->pkb.entity_store_->GetProcedures();
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatements() {
