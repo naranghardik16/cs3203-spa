@@ -147,8 +147,8 @@ void PkbWriteFacade::AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER 
 
 void PkbWriteFacade::AddCfg(std::shared_ptr<Cfg>& cfg) {
   this->pkb.cfg_store_->AddCfg(cfg);
-  this->pkb.next_store_->setProcedureToCfgRootNodeMap(this->pkb.cfg_store_->GetProcedureToCfgNodeMap());
-  this->pkb.next_store_->setStatementNumberToCfgRootNodeMap(this->pkb.cfg_store_->GetStatementNumberToCfgNodeMap());
-  this->pkb.next_store_->extractNextRelations();
+  this->pkb.next_store_->SetProcedureToCfgNodeMap(this->pkb.cfg_store_->GetProcedureToCfgNodeMap());
+  this->pkb.next_store_->SetStatementNumberToCfgNodeMap(this->pkb.cfg_store_->GetStatementNumberToCfgNodeMap());
+  this->pkb.next_store_->AddNextRelations();
 }
 

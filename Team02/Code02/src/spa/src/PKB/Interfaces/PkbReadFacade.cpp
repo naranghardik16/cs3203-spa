@@ -1063,7 +1063,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextPairs(StatementTy
       this->pkb.statement_store_->getStatementsFromType(statement_type_2);
 
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextPairs()) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
@@ -1078,7 +1078,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNext(std::string st
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet next_pairs =
-      this->pkb.next_store_->retrieveAllNextPairs();
+      this->pkb.next_store_->GetNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -1097,7 +1097,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextBy(std::string 
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet next_pairs =
-      this->pkb.next_store_->retrieveAllNextPairs();
+      this->pkb.next_store_->GetNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -1115,7 +1115,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextFirst(Statement
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet next_pairs =
-      this->pkb.next_store_->retrieveAllNextPairs();
+      this->pkb.next_store_->GetNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: next_pairs) {
@@ -1132,7 +1132,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(Statemen
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet next_pairs =
-      this->pkb.next_store_->retrieveAllNextPairs();
+      this->pkb.next_store_->GetNextPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: next_pairs) {
@@ -1145,19 +1145,19 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextSecond(Statemen
 }
 
 bool PkbReadFacade::HasNextRelationship() {
-  return this->pkb.next_store_->hasAnyNextRelation();
+  return this->pkb.next_store_->HasNextRelation();
 }
 
 bool PkbReadFacade::HasNext(std::string statement_number) {
-  return this->pkb.next_store_->hasNext(statement_number);
+  return this->pkb.next_store_->HasNextRelation(statement_number);
 }
 
 bool PkbReadFacade::HasNextBy(std::string statement_number) {
-  return this->pkb.next_store_->hasNextBy(statement_number);
+  return this->pkb.next_store_->HasNextRelationBy(statement_number);
 }
 
 bool PkbReadFacade::IsNext(std::string statement_number_1, std::string statement_number_2) {
-  return this->pkb.next_store_->hasNextRelation(statement_number_1, statement_number_2);
+  return this->pkb.next_store_->HasNextRelation(statement_number_1, statement_number_2);
 }
 
 // Next* API
@@ -1170,7 +1170,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetNextStarPairs(Stateme
       this->pkb.statement_store_->getStatementsFromType(statement_type_2);
 
   PkbCommunicationTypes::PairConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
@@ -1185,7 +1185,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStar(std::strin
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.second) > 0 && p.first == statement_number) {
       result.insert(p.second);
     }
@@ -1200,7 +1200,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarBy(std::str
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.first) > 0 && p.second == statement_number) {
       result.insert(p.first);
     }
@@ -1214,7 +1214,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarFirst(State
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -1228,7 +1228,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetNextStarSecond(Stat
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::SingleConstraintSet result;
-  for (const auto& p: this->pkb.next_store_->retrieveAllNextStarPairs()) {
+  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -1242,13 +1242,13 @@ bool PkbReadFacade::HasNextStarRelationship() {
 }
 
 bool PkbReadFacade::HasNextStar(std::string statement_number) {
-  return this->pkb.next_store_->hasNextStar(statement_number);
+  return this->pkb.next_store_->HasNextStarRelation(statement_number);
 }
 
 bool PkbReadFacade::HasNextStarBy(std::string statement_number) {
-  return this->pkb.next_store_->hasNextStarBy(statement_number);
+  return this->pkb.next_store_->HasNextStarRelationBy(statement_number);
 }
 
 bool PkbReadFacade::IsNextStar(std::string statement_number_1, std::string statement_number_2) {
-  return this->pkb.next_store_->hasNextStarRelation(statement_number_1, statement_number_2);
+  return this->pkb.next_store_->HasNextStarRelation(statement_number_1, statement_number_2);
 }

@@ -6,7 +6,7 @@ TEST_CASE("Testcases for Next Store") {
   SECTION("Empty Next Store") {
     auto next_store = new NextStore();
 
-    REQUIRE(next_store->hasAnyNextRelation() == false);
+    REQUIRE(next_store->HasNextRelation() == false);
   }
 
   SECTION("Extract Next Star Relations") {
