@@ -1,6 +1,6 @@
 #include "AbstractionExtractor.h"
 
-AbstractionExtractor::AbstractionExtractor(shared_ptr<PKB> pkb) : pkb_(pkb) {
+AbstractionExtractor::AbstractionExtractor(shared_ptr<Pkb> pkb) : pkb_(pkb) {
   pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb);
   pkb_read_facade_ = make_shared<PkbReadFacade>(*pkb);
   is_extract_indirect_modifies_and_uses_ = make_shared<bool>(false);
@@ -199,10 +199,6 @@ void AbstractionExtractor::ExtractIndirectModifiesFromCallStatements(PkbTypes::P
   auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
   for (auto call_stmt_no : call_stmts) {
     pkb_write_facade_->AddStatementModifyingVariable(call_stmt_no, variable);
-    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
-    for (auto ancestor_stmt_no : ancestors) {
-      pkb_write_facade_->AddStatementModifyingVariable(ancestor_stmt_no, variable);
-    }
   }
 }
 
@@ -221,10 +217,6 @@ void AbstractionExtractor::ExtractIndirectUsesFromCallStatements(PkbTypes::PROCE
   auto call_stmts = pkb_read_facade_->GetAllCallStatementsFromAProcedure(curr_proc);
   for (auto call_stmt_no : call_stmts) {
     pkb_write_facade_->AddStatementUsingVariable(call_stmt_no, variable);
-    auto ancestors = pkb_read_facade_->GetStatementsThatAreAncestorOf(call_stmt_no, STATEMENT);
-    for (auto ancestor_stmt_no : ancestors) {
-      pkb_write_facade_->AddStatementUsingVariable(ancestor_stmt_no, variable);
-    }
   }
 }
 

@@ -1,175 +1,174 @@
-1-comment
+1 - comment
 call c; procedure p;
 Select p such that Calls("A",p)
 B
 5000
-2-comment
+2 - comment
 call c; procedure p;assign a;
 Select p such that Calls*("A",p)
 B,C,D,E,F
 5000
-3-comment
+3 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls(p,p1)
 A,B,C,D
 5000
-4-comment
+4 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls(_,p)
 B,C,D,E,F
 5000
-5-comment
+5 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls(p,_)
 A,B,C,D
 5000
-6-commment
+6 - commment
 call c; procedure p,p1;assign a;
 Select p such that Calls(_,_)
 A,B,C,D,E,F
 5000
-7-comment
+7 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls("A","F")
 none
 5000
-8-comment
+8 - comment
 call c; procedure p,p1;assign a;
 Select BOOLEAN such that Calls("A",_)
 TRUE
 5000
-9-comment
+9 - comment
 call c; procedure p,p1;assign a;
 Select BOOLEAN such that Calls(_,"E")
 TRUE
 5000
-10-comment
+10 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls*("A","D")
 A,B,C,D,E,F
 5000
-11-comment
+11 - comment
 call c; procedure p,p1;assign a;
 Select p such that Calls*(p,"C")
 A,B
 5000
-12-comment
+12 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(_,p)
 B,C,D,E,F
 5000
-13-comment
+13 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(p,_)
 A,B,C,D
 5000
-14-comment
+14 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(_,_)
 A,B,C,D,E,F
 5000
-15-comment
+15 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*("F",_)
 none
 5000
-16-comment
+16 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(_,"B")
 A,B,C,D,E,F
 5000
-17-comment
+17 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p such that Calls*(p1,p)
 B,C,D,E,F
 5000
-18-comment
+18 - comment
 call c; procedure p,p1;assign a;variable v;
 Select c such that Calls*(p1,p)
 10,13,16,26,40,49
 5000
-5000
-19-comment
+19 - comment
 call c; procedure p,p1;assign a;variable v;
-Select p with p.procName = A
+Select p with p.procName = "A"
 A
 5000
-21-comment
+21 - comment
 call c; procedure p,p1;assign a;variable v;
 Select BOOLEAN with 1 = "a"
 SemanticError
 5000
-22-comment
+22 - comment
 call c; procedure p,p1;assign a;variable v;
 Select BOOLEAN with 1 = 1
 TRUE
 5000
-23-comment
+23 - comment
 call c; procedure p,p1;assign a;variable v;
 Select p with p.procName = c.procName
 B,C,D,E,F
 5000
-24-comment
+24 - comment
 call c; procedure p,p1;assign a;variable v;
 Select <p, c> with p.procName = c.procName
 B 10,C 16,D 13,E 26,F 40,F 49
 5000
-26-comment
+26 - comment
 call c; procedure p,p1;assign a;variable v;
 Select <p,p1> such that Calls("A",p) and Calls(p,p1)
 B D,B C,B E
 5000
-27-comment
+27 - comment
 call c; procedure p,p1;assign a;variable v;
 Select <p,p1> such that Calls("A",p) and Calls*(p,p1)
 B D,B C,B E,B F
 5000
-28-comment
+28 - comment
 call c; procedure p,p1;assign a;variable v;
 Select BOOLEAN such that Calls(p,p1) with p.procName = "E"
 FALSE
 5000
-33-comment
+29 - comment
 call c; procedure p,p1;assign a;
 Select <p,p>
 A A,B B,C C,D D,E E,F F
 5000
-34-comment
+30 - comment
 call c; procedure p,p1;assign a;variable v;
 Select <p,p.procName> with c.procName = p.procName
 B B,C C,D D,E E,F F
 5000
-35-comment
+31 - comment
 call c; procedure p,p1;assign a;variable v;
 Select <c,c.procName> such that Calls("D",p) with c.procName = p.procName
 40 F,49 F
 5000
-36-comment
+32 - comment
 call c; procedure p,p1,p2;assign a;variable v;while w;
 Select <p2,w,w.stmt#> such that Calls(p,p1) and Calls(p1,p2) pattern w("w",_) 
 C 46 46,D 46 46,E 46 46,F 46 46
 5000
-37-comment
+33 - comment
 call c; procedure p,p1,p2;assign a;variable v;while w;if ifs;
 Select <p,ifs.stmt#> such that Calls("A",p) and Calls*(p,p1) pattern ifs(v,_,_) with v.varName = "w"
 B 3,B 51,B 34
 5000
-38-comment
+34 - comment
 call c; procedure p,p1,p2;assign a;variable v;while w;
 Select <p,a,v> such that Calls(p,"F") pattern a(v,_) with v.varName = "k"
 C 57 k,D 57 k
 5000
-39-comment
+35 - comment
 call c; procedure p,p1,p2;assign a;variable v;while w; if ifs;stmt s,s1,s2;
 Select BOOLEAN such that Calls(p,p)
 FALSE
 5000
-40-comment
+36 - comment
 call c; procedure p,p1,p2;assign a;variable v;while w; if ifs;stmt s,s1,s2;
 Select BOOLEAN such that Calls*(p,p)
 FALSE
 5000
-41-comment
+37 - comment
 stmt s,s1; assign a; procedure p; while w;
 Select BOOLEAN such that Calls("A", "E")
 FALSE

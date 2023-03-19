@@ -16,8 +16,12 @@ class ClauseSyntax {
   SyntaxPair pair_;
   std::shared_ptr<Expression> expr_;
  public:
+  std::unordered_set<std::string> syn_;
+
   explicit ClauseSyntax(SyntaxPair pair);
 
+  int GetArgumentScore(Map &declaration_map);
+  int GetSynonymCount();
   /**
    * Gets the entity from the SyntaxPair, which is a relationship reference in Such That clause or a syn-assign in Pattern clause
    * @return the entity as a string
@@ -77,4 +81,7 @@ class ClauseSyntax {
    * @return a ClauseEvaluator for the specific subclause
    */
   virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Map &declaration_map) = 0;
+
+  virtual int GetClauseScore(Map &declaration_map) = 0;
+
 };

@@ -1,4 +1,3 @@
-#pragma once
 #include "WithClauseEvaluator.h"
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"

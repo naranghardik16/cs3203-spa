@@ -3,12 +3,13 @@
 #include "EntityExtractor.h"
 #include "AbstractionExtractor.h"
 #include "CfgExtractor.h"
-#include "./PKB/PKB.h"
+#include "./PKB/Pkb.h"
 
 class DesignExtractor {
  private:
-  shared_ptr<PKB> pkb_;
+  shared_ptr<Pkb> pkb_;
+  shared_ptr<Cfg> cfg_;
  public:
-  DesignExtractor(shared_ptr<PKB> pkb_);
+  DesignExtractor(shared_ptr<Pkb> pkb_, shared_ptr<Cfg> cfg);
   void ExtractDesign(shared_ptr<Program> program);
 };

@@ -1,16 +1,30 @@
 #pragma once
 
+#include <stack>
+
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Util/PairHasherUtil.h"
-#include "CFGStore.h"
+#include "CfgStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 
 /**
  * @class NextStore
- * Class representing the Next Store in the PKB.
+ * Class representing the Next Store in the Pkb.
  */
 class NextStore {
  public:
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef std::stack<StatementNumber> StatementNumberStack;
+  typedef std::shared_ptr<CfgNode> CfgNodePtr;
+  typedef std::unordered_map<Procedure, CfgNodePtr> ProcedureToCfgNodeMap;
+  typedef std::unordered_map<StatementNumber, CfgNodePtr> StatementToCfgNodeMap;
+  typedef std::unordered_set<std::pair<StatementNumber, StatementNumber>, PairHasherUtil::hash_pair>
+  StatementStatementPairSet;
+  typedef ManyToManyStore<StatementNumber, StatementNumber> MultiStatementToStatementStore;
+  typedef std::stack<std::pair<int, CfgNodePtr>> StatementCfgNodePtrStack;
+  
   /**
    * Constructor for Next store.
    */
@@ -22,77 +36,104 @@ class NextStore {
   ~NextStore();
 
   /**
-   * Sets the mapping of procedure name to its corresponding control flow graph root node in the PKB.
+   * Sets the procedure name to its cfg root node mapping(s) in Next store.
    *
-   * @param ptonode - The mapping of procedure name to its corresponding control flow graph root node.
+   * @param ptonode - A map that contains procedure name to its root cfg node mapping.
    */
-  void setProcedureToCfgRootNodeMap(std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> ptonode);
+  void SetProcedureToCfgNodeMap(const ProcedureToCfgNodeMap& ptonode);
 
   /**
-   * Sets the mapping of statement number to its corresponding control flow graph root node in the PKB.
+   * Sets the statement number to its cfg root node mapping(s) in Next store.
    *
-   * @param stonode - The mapping of statement number to its corresponding control flow graph root node.
+   * @param stonode - A map that contains statement number to its root cfg node mapping.
    */
-  void setStatementNumberToCfgRootNodeMap(std::unordered_map<PkbTypes::STATEMENT_NUMBER,
-                                          std::shared_ptr<CfgNode>> stonode);
+  void SetStatementNumberToCfgNodeMap(const StatementToCfgNodeMap& stonode);
 
   /**
-   * Extracts all the Next relations between the statements in the control flow graph.
+   * Extracts all the Next relations between the statements.
    */
-  void extractNextRelations();
+  void AddNextRelations();
 
   /**
-   * Returns true if there exists a Next relation between the given statement numbers.
+   * Checks if there exists a Next relation between the given statement numbers.
    *
-   * @param statement_number - The statement number of the statement in the PKB.
-   * @param next_statement_number - The statement number of the next statement in the PKB.
-   * @return True if there exists a Next relation between the given statement numbers.
+   * @param statement_number - The statement number that appears first.
+   * @param next_statement_number - The statement number of that appears next.
+   * @return True if such a relation exists, false otherwise.
    */
-  bool hasNextRelation(PkbTypes::STATEMENT_NUMBER statement_number,
-                       PkbTypes::STATEMENT_NUMBER next_statement_number);
+  bool HasNextRelation(const StatementNumber& statement_number, const StatementNumber& next_statement_number);
 
   /**
-   * Returns true if there exists any Next relation in the PKB.
-   * @return True if there exists any Next relation in the PKB.
+   * Checks if there exists any Next relation in the store.
+   *
+   * @return True if any relation exists, false otherwise.
    */
-  bool hasAnyNextRelation();
+  bool HasNextRelation();
 
   /**
-   * Retrieves all pairs of statements having Next relation
-   * @return set of pair of statements satisfying Next relation
+   * Retrieves all pairs of statements having Next relation.
+   *
+   * @return A set of pair of statements satisfying Next relation.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
-  retrieveAllNextPairs();
+  StatementStatementPairSet GetNextPairs();
 
   /**
-   * Returns all the pairs of statement numbers that have a Next relation between them in the PKB.
-   * @param statement_number
-   * @return A set of all pairs of statement numbers that have a Next relation between them in the PKB.
+   * Checks if a particular statement has a next relation with another statement.
+   *
+   * @param statement_number - The statement that should appear first.
+   * @return True if such a relation exists, false otherwise.
    */
-  bool hasNext(PkbTypes::STATEMENT_NUMBER statement_number);
+  bool HasNextRelation(const StatementNumber& statement_number);
 
   /**
-   * Returns true if there exists any statement number that has a Next relation from the given statement number.
-   * @param statement_number - The statement number of the statement in the PKB.
-   * @return True if there exists any statement number that has a Next relation from the given statement number.
+   * Checks if a particular statement has a next relation with another statement.
+   *
+   * @param statement_number - The statement that should appear second ie next with respect to some other statement.
+   * @return True if such a relation exists, false otherwise.
    */
-  bool hasNextBy(PkbTypes::STATEMENT_NUMBER statement_number);
+  bool HasNextRelationBy(const StatementNumber& statement_number);
 
-//  bool hasNextStarRelation(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::STATEMENT_NUMBER next_statement_number);
-//
-//  bool hasAnyNextStarRelation();
-//
-//  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>
-//  retrieveAllNextStarPairs();
+  /**
+   * Retrieves all pairs of statements that have Next star relation.
+   *
+   * @return A set of pairs of statements satisfying the Next star relation.
+   */
+  StatementStatementPairSet GetNextStarPairs();
+
+  /**
+   * Checks if there is a Next star relation between the given statements.
+   *
+   * @param statement_number - The statement that should appear first.
+   * @param next_statement_number - The statement that should appear second ie next with respect to the first statement.
+   * @return True if such a relation exists, false otherwise.
+   */
+  bool HasNextStarRelation(const StatementNumber& statement_number, const StatementNumber& next_statement_number);
+
+  /**
+   * Checks if there is a Next star relation with given statement appearing first.
+   *
+   * @param statement_number - The statement that should appear first.
+   * @return True if such a relation exists, false otherwise.
+   */
+  bool HasNextStarRelation(const StatementNumber& statement_number);
+
+  /**
+   * Checks if there is a Next star relation with given statement appearing second.
+   *
+   * @param statement_number - The statement that should appear second ie Next star with respect
+   *                           to some other statement.
+   * @return True if such a relation exists, false otherwise.
+   */
+  bool HasNextStarRelationBy(const StatementNumber& statement_number);
 
  private:
-  // A many-to-many store for PkbTypes::STATEMENT_NUMBER pairs representing Next relations between statements.
-  ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER> next_store_;
+  // A many-to-many store for StatementNumber pairs representing Next relations between statements.
+  MultiStatementToStatementStore next_relation_store_;
 
   // A map from statement numbers to their corresponding CfgNode objects.
-  std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> statement_number_to_cfg_node_map_;
+  StatementToCfgNodeMap statement_number_to_cfg_node_map_;
 
   // A map from procedure names to their corresponding CfgNode objects.
-  std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> procedure_name_to_cfg_node_map_;
+  ProcedureToCfgNodeMap procedure_name_to_cfg_node_map_;
 };
 

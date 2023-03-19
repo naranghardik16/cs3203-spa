@@ -1,6 +1,6 @@
-#include "PKB.h"
+#include "Pkb.h"
 
-PKB::PKB() {
+Pkb::Pkb() {
   entity_store_ = new EntityStore();
   statement_store_ = new StatementStore();
   modifies_store_ = new ModifiesStore();
@@ -11,10 +11,10 @@ PKB::PKB() {
   control_flow_store_ = new ControlFlowStore();
   assignment_store_ = new AssignmentStore();
   calls_store_ = new CallsStore();
-  cfg_store_ = new CFGStore();
+  cfg_store_ = new CfgStore();
   next_store_ = new NextStore();
 }
 
-PKB::~PKB() = default;
+Pkb::~Pkb() = default;
 
 

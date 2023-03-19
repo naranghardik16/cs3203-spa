@@ -44,19 +44,11 @@ bool QueryUtil::IsRef(const std::string &s) {
 }
 
 bool QueryUtil::IsDesignEntity(const std::string& s) {
-  return s == pql_constants::kPqlStatementEntity || s == pql_constants::kPqlReadEntity
-  || s == pql_constants::kPqlPrintEntity
-  || s == pql_constants::kPqlCallEntity || s == pql_constants::kPqlWhileEntity
-  || s == pql_constants::kPqlIfEntity ||
-  s == pql_constants::kPqlAssignEntity || s == pql_constants::kPqlVariableEntity
-  || s == pql_constants::kPqlConstantEntity
-  || s == pql_constants::kPqlProcedureEntity;
+  return pql_constants::kDesignEntities.find(s) != pql_constants::kDesignEntities.end();
 }
 
 bool QueryUtil::IsRelationshipReference(const std::string& s) {
-  return s == pql_constants::kPqlFollowsRel || s == pql_constants::kPqlFollowsRel
-  || s == pql_constants::kPqlParentRel
-  || s == pql_constants::kPqlFollowsRel  || s == pql_constants::kPqlUsesRel  || s == pql_constants::kPqlModifiesRel;
+  return pql_constants::kRelRefs.find(s) != pql_constants::kRelRefs.end();
 }
 
 bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expression) {
@@ -117,7 +109,7 @@ bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expressi
   return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlProcedureEntity);
 }
 
-bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expression, const std::string type) {
+bool QueryUtil::IsCorrectSynonymType(Map &declaration, const std::string &expression, const std::string& type) {
   if (declaration.count(expression) == 0) {
     return false;
   }
@@ -131,23 +123,11 @@ std::string QueryUtil::GetIdent(const std::string& quoted_ident) {
 }
 
 StatementType QueryUtil::GetStatementType(Map &declaration, const std::string& synonym) {
-  if (IsIfSynonym(declaration, synonym)) {
-    return StatementType::IF;
-  } else if (IsReadSynonym(declaration, synonym)) {
-    return StatementType::READ;
-  } else if (IsPrintSynonym(declaration, synonym)) {
-    return StatementType::PRINT;
-  } else if (IsCallSynonym(declaration, synonym)) {
-    return StatementType::CALL;
-  } else if (IsAssignSynonym(declaration, synonym)) {
-    return StatementType::ASSIGN;
-  } else if (IsWhileSynonym(declaration, synonym)) {
-    return StatementType::WHILE;
-  } else if (IsStatementSynonym(declaration, synonym)) {
-    return StatementType::STATEMENT;
-  } else {
+  if (declaration.count(synonym) == 0) {
     return StatementType::UNK;
   }
+  auto entity = declaration[synonym];
+  return pql_constants::kEntityToStatementType.at(entity);
 }
 
 std::vector<std::string> QueryUtil::SplitAttrRef(const std::string &s) {
@@ -162,12 +142,12 @@ std::vector<std::string> QueryUtil::SplitAttrRef(const std::string &s) {
 }
 
 
-std::string QueryUtil::GetAttrNameFromAttrRef(std::string attrRef) {
+std::string QueryUtil::GetAttrNameFromAttrRef(const std::string& attrRef) {
   auto token_lst = SplitAttrRef(attrRef);
   return token_lst[1];
 }
 
-std::string QueryUtil::GetSynonymFromAttrRef(std::string attrRef) {
+std::string QueryUtil::GetSynonymFromAttrRef(const std::string& attrRef) {
   auto token_lst = SplitAttrRef(attrRef);
   return token_lst[0];
 }

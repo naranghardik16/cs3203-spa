@@ -4,7 +4,7 @@
 #include "SP/Parser/Parser.h"
 #include "SP/Parser/AssignStatementParser.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
 #include "SP/Sp.h"
 
@@ -42,7 +42,7 @@ TEST_CASE("Check if CFG is created for a simple procedure") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -98,7 +98,7 @@ TEST_CASE("Check if CFG is created correctly for a procedure starting with if") 
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -169,7 +169,7 @@ TEST_CASE("Check if CFG is created correctly for simple nested if statements") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -234,7 +234,7 @@ TEST_CASE("Check if CFG is created correctly for simple nested while statements"
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 
@@ -306,7 +306,7 @@ TEST_CASE(
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(is);
 

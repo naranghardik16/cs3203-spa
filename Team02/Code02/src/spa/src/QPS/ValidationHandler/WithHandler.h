@@ -10,6 +10,6 @@ class WithHandler : public Handler {
   void HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &declaration) override;
 
   //helper
-  static void CheckAttrRef(std::string &ref, Map &declaration);
+  static std::string CheckAttrRef(std::string &ref, Map &declaration);
   static std::string GetAttrType(std::string &ref);
 };
