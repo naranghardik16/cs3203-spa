@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include "PKB/Interfaces/PkbReadFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
 #include "SP/SP.h"
 #include <utility>
@@ -15,7 +15,7 @@ TEST_CASE("Check if expressions are parsed correctly for uses") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<SP> sp = make_shared<SP>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -58,7 +58,7 @@ TEST_CASE("Check if follows/* are extracted correctly") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -151,7 +151,7 @@ TEST_CASE("Check if parent/* are extracted correctly") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -247,7 +247,7 @@ TEST_CASE("Check if calls/* are extracted correctly (simple)") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -337,7 +337,7 @@ TEST_CASE("Check if calls/* are extracted correctly (complex)") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -436,7 +436,7 @@ TEST_CASE("Check if modifies are extracted correctly") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -588,7 +588,7 @@ TEST_CASE("Check if uses are extracted correctly") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);

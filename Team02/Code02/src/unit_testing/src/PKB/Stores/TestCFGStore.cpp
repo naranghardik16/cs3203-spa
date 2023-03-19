@@ -1,33 +1,33 @@
 #include <catch.hpp>
-#include "PKB/Stores/CFGStore.h"
+#include "PKB/Stores/CfgStore.h"
 #include "core/cfg_model/Cfg.h"
 
-TEST_CASE("Test CFGStore addCfg and getCfg") {
-  SECTION("Test getCfg() with empty CFGStore") {
-    CFGStore cfg_store;
-    REQUIRE(cfg_store.getCfgCount() == 0);
+TEST_CASE("Test CfgStore AddCfg and GetCfg") {
+  SECTION("Test GetCfg() with empty CfgStore") {
+    CfgStore cfg_store;
+    REQUIRE(cfg_store.GetCfgCount() == 0);
   }
 
-  SECTION("Test addCfg with Empty Cfg") {
-    CFGStore cfg_store;
+  SECTION("Test AddCfg with Empty Cfg") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
-    cfg_store.addCfg(cfg);
-    REQUIRE(cfg_store.getCfgCount() == 1);
+    cfg_store.AddCfg(cfg);
+    REQUIRE(cfg_store.GetCfgCount() == 1);
   }
 }
 
-TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
-  SECTION("Test getCfgNodeFromProcedure with empty CFGStore") {
-    CFGStore cfg_store;
+TEST_CASE("Test CfgStore GetCfgNodeFromProcedure") {
+  SECTION("Test GetCfgNodeFromProcedure with empty CfgStore") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
-    cfg_store.addCfg(cfg);
+    cfg_store.AddCfg(cfg);
 
-    // Assert that getCfgNodeFromProcedure returns nullptr for an empty CFGStore
-    REQUIRE(cfg_store.getCfgNodeFromProcedure("main") == nullptr);
+    // Assert that GetCfgNodeFromProcedure returns nullptr for an empty CfgStore
+    REQUIRE(cfg_store.GetCfgNodeFromProcedure("main") == nullptr);
   }
 
-  SECTION("Test getCfgNodeFromProcedure Method with Single Procedure") {
-    CFGStore cfg_store;
+  SECTION("Test GetCfgNodeFromProcedure Method with Single Procedure") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
 
     // Create a CFG with a single node for procedure "main"
@@ -35,17 +35,17 @@ TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
     root_node->AddStmt(1);
     cfg->AddProcCfg("main", root_node);
 
-    cfg_store.addCfg(cfg);
+    cfg_store.AddCfg(cfg);
 
-    // Get the root node for procedure "main" from the CFGStore
-    std::shared_ptr<CfgNode> result_node = cfg_store.getCfgNodeFromProcedure("main");
+    // Get the root node for procedure "main" from the CfgStore
+    std::shared_ptr<CfgNode> result_node = cfg_store.GetCfgNodeFromProcedure("main");
 
-    // Ensure the root node returned from the CFGStore is the same as the one we added
+    // Ensure the root node returned from the CfgStore is the same as the one we added
     REQUIRE(result_node == root_node);
   }
 
-  SECTION("Test getCfgNodeFromProcedure Method with Multiple Procedures") {
-    CFGStore cfg_store;
+  SECTION("Test GetCfgNodeFromProcedure Method with Multiple Procedures") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg1 = std::make_shared<Cfg>();
 
     // Create a CFG with a single root node for procedure "main"
@@ -58,19 +58,19 @@ TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
     root_node_2->AddStmt(2);
     cfg1->AddProcCfg("foo", root_node_2);
 
-    cfg_store.addCfg(cfg1);
+    cfg_store.AddCfg(cfg1);
 
-    // Get the root nodes for "main" and "foo" procedures from the CFGStore
-    std::shared_ptr<CfgNode> result_node_1 = cfg_store.getCfgNodeFromProcedure("main");
-    std::shared_ptr<CfgNode> result_node_2 = cfg_store.getCfgNodeFromProcedure("foo");
+    // Get the root nodes for "main" and "foo" procedures from the CfgStore
+    std::shared_ptr<CfgNode> result_node_1 = cfg_store.GetCfgNodeFromProcedure("main");
+    std::shared_ptr<CfgNode> result_node_2 = cfg_store.GetCfgNodeFromProcedure("foo");
 
-    // Ensure the root nodes returned from the CFGStore are the same as the ones we added
+    // Ensure the root nodes returned from the CfgStore are the same as the ones we added
     REQUIRE(result_node_1 == root_node_1);
     REQUIRE(result_node_2 == root_node_2);
   }
 
-  SECTION("Test getCfgNodeFromProcedure with multiple procedures in CFGStore") {
-    CFGStore cfg_store;
+  SECTION("Test GetCfgNodeFromProcedure with multiple procedures in CfgStore") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg1 = std::make_shared<Cfg>();
 
     std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
@@ -103,18 +103,18 @@ TEST_CASE("Test CFGStore getCfgNodeFromProcedure") {
 
     cfg1->AddProcCfg("main", node1);
     cfg1->AddProcCfg("proc1", node3);
-    cfg_store.addCfg(cfg1);
+    cfg_store.AddCfg(cfg1);
 
-    REQUIRE(cfg_store.getCfgNodeFromProcedure("main") == node1);
-    REQUIRE(cfg_store.getCfgNodeFromProcedure("proc1") == node3);
-    REQUIRE(cfg_store.getCfgCount() == 1);
-    REQUIRE(cfg_store.getCfgNodeFromProcedure("nonexistent_proc") == nullptr);
+    REQUIRE(cfg_store.GetCfgNodeFromProcedure("main") == node1);
+    REQUIRE(cfg_store.GetCfgNodeFromProcedure("proc1") == node3);
+    REQUIRE(cfg_store.GetCfgCount() == 1);
+    REQUIRE(cfg_store.GetCfgNodeFromProcedure("nonexistent_proc") == nullptr);
   }
 }
 
-TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
-  SECTION("Test getCfgNodeFromStatementNumber method with Single Statement") {
-    CFGStore cfg_store;
+TEST_CASE("Test CfgStore GetCfgNodeFromStatementNumber") {
+  SECTION("Test GetCfgNodeFromStatementNumber method with Single Statement") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
 
     // Create a CFG with a single node for statement 1
@@ -122,17 +122,17 @@ TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
     node->AddStmt(1);
     cfg->AddStmtCfg(1, node);
 
-    cfg_store.addCfg(cfg);
+    cfg_store.AddCfg(cfg);
 
-    // Get the node for statement 1 from the CFGStore
-    std::shared_ptr<CfgNode> result_node = cfg_store.getCfgNodeFromStatementNumber("1");
+    // Get the node for statement 1 from the CfgStore
+    std::shared_ptr<CfgNode> result_node = cfg_store.GetCfgNodeFromStatementNumber("1");
 
-    // Ensure the node returned from the CFGStore is the same as the one we added
+    // Ensure the node returned from the CfgStore is the same as the one we added
     REQUIRE(result_node == node);
   }
 
-  SECTION("Test getCfgNodeFromStatementNumber method with Multiple Statements") {
-    CFGStore cfg_store;
+  SECTION("Test GetCfgNodeFromStatementNumber method with Multiple Statements") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
 
     // Create a CFG with three nodes for statements 1, 2, and 3
@@ -148,21 +148,21 @@ TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
     node3->AddStmt(3);
     cfg->AddStmtCfg(3, node3);
 
-    cfg_store.addCfg(cfg);
+    cfg_store.AddCfg(cfg);
 
-    // Get the nodes for statements 1, 2, and 3 from the CFGStore
-    std::shared_ptr<CfgNode> result_node1 = cfg_store.getCfgNodeFromStatementNumber("1");
-    std::shared_ptr<CfgNode> result_node2 = cfg_store.getCfgNodeFromStatementNumber("2");
-    std::shared_ptr<CfgNode> result_node3 = cfg_store.getCfgNodeFromStatementNumber("3");
+    // Get the nodes for statements 1, 2, and 3 from the CfgStore
+    std::shared_ptr<CfgNode> result_node1 = cfg_store.GetCfgNodeFromStatementNumber("1");
+    std::shared_ptr<CfgNode> result_node2 = cfg_store.GetCfgNodeFromStatementNumber("2");
+    std::shared_ptr<CfgNode> result_node3 = cfg_store.GetCfgNodeFromStatementNumber("3");
 
-    // Ensure the nodes returned from the CFGStore are the same as the ones we added
+    // Ensure the nodes returned from the CfgStore are the same as the ones we added
     REQUIRE(result_node1 == node1);
     REQUIRE(result_node2 == node2);
     REQUIRE(result_node3 == node3);
   }
 
-  SECTION("Test addCfg with Cfg with One Procedure and Multiple Nodes") {
-    CFGStore cfg_store;
+  SECTION("Test AddCfg with Cfg with One Procedure and Multiple Nodes") {
+    CfgStore cfg_store;
     std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
 
     std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
@@ -187,16 +187,16 @@ TEST_CASE("Test CFGStore getCfgNodeFromStatementNumber") {
     node2->AddTransition(true, node3);
 
     cfg->AddProcCfg("main", node1);
-    cfg_store.addCfg(cfg);
+    cfg_store.AddCfg(cfg);
 
-    REQUIRE(cfg_store.getCfgCount() == 1);
+    REQUIRE(cfg_store.GetCfgCount() == 1);
 
-    std::shared_ptr<CfgNode> result_node1 = cfg_store.getCfgNodeFromStatementNumber("1");
-    std::shared_ptr<CfgNode> result_node2 = cfg_store.getCfgNodeFromStatementNumber("2");
-    std::shared_ptr<CfgNode> result_node3 = cfg_store.getCfgNodeFromStatementNumber("3");
-    std::shared_ptr<CfgNode> result_node4 = cfg_store.getCfgNodeFromStatementNumber("4");
-    std::shared_ptr<CfgNode> result_node5 = cfg_store.getCfgNodeFromStatementNumber("5");
-    std::shared_ptr<CfgNode> result_node6 = cfg_store.getCfgNodeFromStatementNumber("6");
+    std::shared_ptr<CfgNode> result_node1 = cfg_store.GetCfgNodeFromStatementNumber("1");
+    std::shared_ptr<CfgNode> result_node2 = cfg_store.GetCfgNodeFromStatementNumber("2");
+    std::shared_ptr<CfgNode> result_node3 = cfg_store.GetCfgNodeFromStatementNumber("3");
+    std::shared_ptr<CfgNode> result_node4 = cfg_store.GetCfgNodeFromStatementNumber("4");
+    std::shared_ptr<CfgNode> result_node5 = cfg_store.GetCfgNodeFromStatementNumber("5");
+    std::shared_ptr<CfgNode> result_node6 = cfg_store.GetCfgNodeFromStatementNumber("6");
 
     REQUIRE(result_node1 == node1);
     REQUIRE(result_node2 == node1);

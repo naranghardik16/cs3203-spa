@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include "QueryParser.h"
 #include "Query.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "Evaluator/PqlEvaluator.h"
 #include "General/SpaException/SyntaxErrorException.h"

@@ -3,12 +3,12 @@
 #include <memory>
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "QPS/Qps.h"
 #include "PKB/Stores/CallsStore.h"
 
-TEST_CASE("Check if QPS works with PKB for basic operations") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+TEST_CASE("Check if QPS works with Pkb for basic operations") {
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbWriteFacade>
       pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
   std::shared_ptr<PkbReadFacade>
@@ -339,7 +339,7 @@ TEST_CASE("Check if QPS works with PKB for basic operations") {
 }
 
 TEST_CASE("Test case of empty relationship stores") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb);
   std::shared_ptr<PkbWriteFacade>
@@ -426,7 +426,7 @@ TEST_CASE("Test case of empty relationship stores") {
 }
 
 TEST_CASE("Integration testing for Calls") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb);
   std::shared_ptr<PkbWriteFacade>
@@ -618,7 +618,7 @@ TEST_CASE("Integration testing for Calls") {
 }
 
 TEST_CASE("Integration testing for Calls*") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb);
   std::shared_ptr<PkbWriteFacade>
@@ -852,7 +852,7 @@ TEST_CASE("Integration testing for Calls*") {
 }
 
 TEST_CASE("Integration testing for Next - Basic") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb);
   std::shared_ptr<PkbWriteFacade>
@@ -974,7 +974,7 @@ TEST_CASE("Integration testing for Next - Basic") {
 // "  count = count - 1; "
 // "}\n";
 TEST_CASE("Integration testing for Next API - Complex") {
-  std::shared_ptr<PKB> pkb = std::make_shared<PKB>();
+  std::shared_ptr<Pkb> pkb = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb);
   std::shared_ptr<PkbWriteFacade>

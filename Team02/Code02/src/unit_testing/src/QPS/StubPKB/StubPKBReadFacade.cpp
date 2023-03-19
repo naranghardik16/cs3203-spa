@@ -1,67 +1,66 @@
 //! Preserving the stub written previously
 
-#pragma once
 #include "StubPKBReadFacade.h"
 
 #include <memory>
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 
-StubPkbReadFacade::StubPkbReadFacade(PKB &pkb): PkbReadFacade(pkb) {}
+StubPkbReadFacade::StubPkbReadFacade(Pkb &pkb): PkbReadFacade(pkb) {}
 
 StubPkbReadFacade::~StubPkbReadFacade() {}
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariables() {
-  PkbCommunicationTypes::SingleConstraintSet var_set({"a", "x", "y", "g"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetVariables() {
+  SingleSet var_set({"a", "x", "y", "g"});
   return var_set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetConstants() {
-  PkbCommunicationTypes::SingleConstraintSet set({"22", "23", "24"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetConstants() {
+  SingleSet set({"22", "23", "24"});
   return set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProcedures() {
-  PkbCommunicationTypes::SingleConstraintSet set({"execute", "anya"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetProcedures() {
+  SingleSet set({"execute", "anya"});
   return set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatements() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatements() {
   return {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetReadStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"1"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetReadStatements() {
+  SingleSet set({"1"});
   return set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetPrintStatements() {
-  PkbCommunicationTypes::SingleConstraintSet print_set({"4", "9"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetPrintStatements() {
+  SingleSet print_set({"4", "9"});
   return print_set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetCallStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"3"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetCallStatements() {
+  SingleSet set({"3"});
   return set;
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileStatements() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetWhileStatements() {
   return {"8"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfStatements() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetIfStatements() {
   return {"5"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignStatements() {
-  PkbCommunicationTypes::SingleConstraintSet set({"2", "6", "7"});
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignStatements() {
+  SingleSet set({"2", "6", "7"});
   return set;
 }
 
 
 //! Modifies Statement API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatementVariablePairs(
-    StatementType statement_type
+PkbReadFacade::PairSet StubPkbReadFacade::GetModifiesStatementVariablePairs(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::READ) {
     return {std::make_pair("1", "x")};
@@ -73,8 +72,8 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesStatement
 }
 
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByStatement(
-    std::string statement_number
+PkbReadFacade::SingleSet StubPkbReadFacade::GetVariablesModifiedByStatement(
+    const StatementNumber& statement_number
     ) {
   if (statement_number == "1") {
     return {"x"};
@@ -85,34 +84,35 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifi
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsModifiesVariable(
-    std::string var_name,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsModifiesVariable(
+    const Variable& variable,
+    const StatementType& statement_type
     ) {
-  if (var_name == "x" && statement_type == StatementType::READ) {
+  if (variable == "x" && statement_type == StatementType::READ) {
     return {"1"};
   }
-  if (var_name == "a" && statement_type == StatementType::ASSIGN) {
+  if (variable == "a" && statement_type == StatementType::ASSIGN) {
     return {"2"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatModify(StatementType stmt_type) {
-  if (stmt_type == StatementType::READ) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatModify(const StatementType& statement_type) {
+  if (statement_type == StatementType::READ) {
     return {"1"};
   }
-  if (stmt_type == StatementType::ASSIGN) {
+  if (statement_type == StatementType::ASSIGN) {
     return {"2"};
   }
   return {};
 }
 
-bool StubPkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, std::string var_name) {
-  if (stmt_num == "1" && var_name == "x") {
+bool StubPkbReadFacade::HasModifiesStatementRelationship(const StatementNumber& statement_number,
+                                                         const Variable& variable) {
+  if (statement_number == "1" && variable == "x") {
     return true;
   }
-  if (stmt_num == "2" && var_name == "a") {
+  if (statement_number == "2" && variable == "a") {
     return true;
   }
   return false;
@@ -120,46 +120,46 @@ bool StubPkbReadFacade::HasModifiesStatementRelationship(std::string stmt_num, s
 
 
 //! Modifies Procedure API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetModifiesProcedureVariablePairs() {
+PkbReadFacade::PairSet StubPkbReadFacade::GetModifiesProcedureVariablePairs() {
   return {std::make_pair("execute", "x"), std::make_pair("execute", "a")};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesModifiedByProcedure(
-    std::string procedure_name
+PkbReadFacade::SingleSet StubPkbReadFacade::GetVariablesModifiedByProcedure(
+    const Procedure& procedure
     ) {
-  if (procedure_name == "execute") {
+  if (procedure == "execute") {
     return {"x", "a"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresModifiesVariable(std::string var_name) {
-  if (var_name == "x") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetProceduresModifiesVariable(const Variable& variable) {
+  if (variable == "x") {
     return {"execute"};
   }
-  if (var_name == "a") {
+  if (variable == "a") {
     return {"execute"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresThatModify() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetProceduresThatModify() {
   return {"execute"};
 }
 
-bool StubPkbReadFacade::HasModifiesProcedureRelationship(std::string procedure_name, std::string var_name) {
-  if (procedure_name == "execute" && var_name == "x") {
+bool StubPkbReadFacade::HasModifiesProcedureRelationship(const Procedure& procedure, const Variable& variable) {
+  if (procedure == "execute" && variable == "x") {
     return true;
   }
-  if (procedure_name == "execute" && var_name == "a") {
+  if (procedure == "execute" && variable == "a") {
     return true;
   }
   return false;
 }
 
 //! Uses Statement API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesStatementVariablePairs(
-    StatementType statement_type
+PkbReadFacade::PairSet StubPkbReadFacade::GetUsesStatementVariablePairs(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::ASSIGN) {
     return {{"2", "a"}, {"2", "y"}, {"6", "g"}, {"7", "y"}};
@@ -167,12 +167,12 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesStatementVari
   return {{"2", "x"}, {"2", "y"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatUses(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatUses(const StatementType& statement_type) {
   return {"2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByStatement(
-    std::string statement_number
+PkbReadFacade::SingleSet StubPkbReadFacade::GetVariablesUsedByStatement(
+    const StatementNumber& statement_number
     ) {
   if (statement_number == "2") {
     return {"x", "y"};
@@ -185,8 +185,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedBy
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsUsesVariable(
-    StatementType statement_type, std::string variable
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsUsesVariable(
+    const StatementType& statement_type, const Variable& variable
     ) {
   if (statement_type == StatementType::ASSIGN && variable == "g") {
     return {"6"};
@@ -194,7 +194,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsUsesV
   return {"2"};
 }
 
-bool StubPkbReadFacade::HasUsesStatementRelationship(std::string statement_number, std::string variable) {
+bool StubPkbReadFacade::HasUsesStatementRelationship(const StatementNumber& statement_number,
+                                                     const Variable& variable) {
   if (statement_number == "2") {
     return true;
   }
@@ -206,15 +207,15 @@ bool StubPkbReadFacade::HasUsesStatementRelationship(std::string statement_numbe
 
 
 //! Uses Procedure API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetUsesProcedureVariablePairs() {
+PkbReadFacade::PairSet StubPkbReadFacade::GetUsesProcedureVariablePairs() {
   return {{"anya", "x"}, {"anya", "y"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresThatUse() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetProceduresThatUse() {
   return {"anya"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedByProcedure(std::string procedure) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetVariablesUsedByProcedure(const Procedure& procedure) {
   if (procedure == "anya") {
     return {"x", "y"};
   } else {
@@ -222,11 +223,11 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetVariablesUsedBy
   }
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetProceduresUsesVariable(std::string variable) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetProceduresUsesVariable(const Variable& variable) {
   return {"anya"};
 }
 
-bool StubPkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std::string variable) {
+bool StubPkbReadFacade::HasUsesProcedureRelationship(const Procedure& procedure, const Variable& variable) {
   if (procedure == "anya") {
     return true;
   } else {
@@ -235,9 +236,9 @@ bool StubPkbReadFacade::HasUsesProcedureRelationship(std::string procedure, std:
 }
 
 //! Follows API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowPairs(
-    StatementType statement_type,
-    StatementType statement_type_follower
+PkbReadFacade::PairSet StubPkbReadFacade::GetFollowPairs(
+    const StatementType& statement_type,
+    const StatementType& statement_type_follower
     ) {
   if (statement_type == StatementType::READ && statement_type_follower == StatementType::ASSIGN) {
     return {std::make_pair("1", "2")};
@@ -249,28 +250,29 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowPairs(
 }
 
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementFollowedBy(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementFollowedBy(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
-  if (statement_num == "3" && statement_type == StatementType::STATEMENT) {
+  if (statement_number == "3" && statement_type == StatementType::STATEMENT) {
     return {"2"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementFollowing(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementFollowing(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
-  if (statement_num == "1" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::ASSIGN)) {
+  if (statement_number == "1" && (statement_type == StatementType::STATEMENT ||
+  statement_type == StatementType::ASSIGN)) {
     return {"2"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsWithFollowers(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsWithFollowers(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::PRINT) {
     return {"1"};
@@ -281,8 +283,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsWithF
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementThatAreFollowers(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementThatAreFollowers(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::ASSIGN) {
     return {"2"};
@@ -294,11 +296,12 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementThatAr
 }
 
 
-bool StubPkbReadFacade::HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
-  if (statement_num == "1" && statement_num_follower == "2") {
+bool StubPkbReadFacade::HasFollowsRelationship(const StatementNumber& statement_number,
+                                               const StatementNumber& statement_number_follower) {
+  if (statement_number == "1" && statement_number_follower == "2") {
     return true;
   }
-  if (statement_num == "1" && statement_num_follower == "3") {
+  if (statement_number == "1" && statement_number_follower == "3") {
     return true;
   }
   return false;
@@ -309,13 +312,13 @@ bool StubPkbReadFacade::IsAnyFollowsRelationshipPresent() {
 }
 
 //! Follows* API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetFollowsStarPairs(StatementType statement_type_1,
-                                                                            StatementType statement_type_2) {
+PkbReadFacade::PairSet StubPkbReadFacade::GetFollowsStarPairs(const StatementType& statement_type_1,
+                                                                            const StatementType& statement_type_2) {
   return {{"1", "2"}, {"1", "3"}, {"2", "3"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStar(std::string statement_number,
-                                                                         StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetFollowsStar(const StatementNumber& statement_number,
+                                                                         const StatementType& statement_type) {
   if (statement_number == "1") {
     return {"2", "3"};
   } else if (statement_number == "2") {
@@ -325,8 +328,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStar(std
   }
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarBy(std::string statement_number,
-                                                                           StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetFollowsStarBy(const StatementNumber& statement_number,
+                                                                           const StatementType& statement_type) {
   if (statement_number == "2") {
     return {"1"};
   } else if (statement_number == "3") {
@@ -336,11 +339,11 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarBy(s
   }
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarFirst(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetFollowsStarFirst(const StatementType& statement_type) {
   return {"1", "2"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetFollowsStarSecond(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetFollowsStarSecond(const StatementType& statement_type) {
   return {"2", "3"};
 }
 
@@ -348,7 +351,7 @@ bool StubPkbReadFacade::HasFollowsStarRelationship() {
   return true;
 }
 
-bool StubPkbReadFacade::HasFollowsStar(std::string statement_number) {
+bool StubPkbReadFacade::HasFollowsStar(const StatementNumber& statement_number) {
   if (statement_number == "1" || statement_number == "2") {
     return true;
   } else {
@@ -356,7 +359,7 @@ bool StubPkbReadFacade::HasFollowsStar(std::string statement_number) {
   }
 }
 
-bool StubPkbReadFacade::HasFollowsStarBy(std::string statement_number) {
+bool StubPkbReadFacade::HasFollowsStarBy(const StatementNumber& statement_number) {
   if (statement_number == "2" || statement_number == "3") {
     return true;
   } else {
@@ -364,7 +367,8 @@ bool StubPkbReadFacade::HasFollowsStarBy(std::string statement_number) {
   }
 }
 
-bool StubPkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
+bool StubPkbReadFacade::IsFollowsStar(const StatementNumber& statement_number_1,
+                                      const StatementNumber& statement_number_2) {
   if (statement_number_1 == "1" && statement_number_2 == "2") {
     return true;
   } else {
@@ -373,9 +377,9 @@ bool StubPkbReadFacade::IsFollowsStar(std::string statement_number_1, std::strin
 }
 
 //! Parent API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetParentChildPairs(
-    StatementType statement_type,
-    StatementType statement_type_child
+PkbReadFacade::PairSet StubPkbReadFacade::GetParentChildPairs(
+    const StatementType& statement_type,
+    const StatementType& statement_type_child
     ) {
   if (statement_type == StatementType::IF && statement_type_child == StatementType::ASSIGN) {
     return {std::make_pair("5", "6"), std::make_pair("5", "7")};
@@ -383,32 +387,32 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetParentChildPairs(
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementThatIsParentOf(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementThatIsParentOf(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreChildrenOf(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreChildrenOf(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
-  if (statement_num == "5" &&
+  if (statement_number == "5" &&
   (statement_type == StatementType::STATEMENT || statement_type == StatementType::ASSIGN)) {
     return {"6", "7"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreParents(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreParents(
+    const StatementType& statement_type
     ) {
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreChildren(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreChildren(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::ASSIGN) {
     return {"6", "7"};
@@ -416,8 +420,9 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatA
   return {};
 }
 
-bool StubPkbReadFacade::HasParentChildRelationship(std::string statement_num, std::string statement_num_child) {
-  if (statement_num == "5" && statement_num_child == "6") {
+bool StubPkbReadFacade::HasParentChildRelationship(const StatementNumber& statement_number,
+                                                   const StatementNumber& statement_number_child) {
+  if (statement_number == "5" && statement_number_child == "6") {
     return true;
   }
   return false;
@@ -427,9 +432,9 @@ bool StubPkbReadFacade::IsAnyParentRelationshipPresent() {
   return true;
 }
 
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetAncestorDescendantPairs(
-    StatementType statement_type,
-    StatementType statement_type_descendant
+PkbReadFacade::PairSet StubPkbReadFacade::GetAncestorDescendantPairs(
+    const StatementType& statement_type,
+    const StatementType& statement_type_descendant
     ) {
   if (statement_type == StatementType::IF && statement_type_descendant == StatementType::PRINT) {
     return {std::make_pair("5", "9")};
@@ -437,28 +442,29 @@ PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetAncestorDescendan
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreAncestorOf(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreAncestorOf(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
-  if (statement_num == "9" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::IF)) {
+  if (statement_number == "9" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::IF)) {
     return {"5"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreDescendantsOf(
-    std::string statement_num,
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreDescendantsOf(
+    const StatementNumber& statement_number,
+    const StatementType& statement_type
     ) {
-  if (statement_num == "5" && (statement_type == StatementType::STATEMENT || statement_type == StatementType::PRINT)) {
+  if (statement_number == "5" && (statement_type == StatementType::STATEMENT ||
+  statement_type == StatementType::PRINT)) {
     return {"9"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreAncestors(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreAncestors(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::IF) {
     return {"5"};
@@ -466,8 +472,8 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatA
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatAreDescendants(
-    StatementType statement_type
+PkbReadFacade::SingleSet StubPkbReadFacade::GetStatementsThatAreDescendants(
+    const StatementType& statement_type
     ) {
   if (statement_type == StatementType::PRINT) {
     return {"9"};
@@ -475,9 +481,9 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetStatementsThatA
   return {};
 }
 
-bool StubPkbReadFacade::HasAncestorDescendantRelationship(std::string statement_num,
-                                                          std::string statement_num_descendant) {
-  if (statement_num == "5" && statement_num_descendant == "9") {
+bool StubPkbReadFacade::HasAncestorDescendantRelationship(const StatementNumber& statement_number,
+                                                          const StatementNumber& statement_number_descendant) {
+  if (statement_number == "5" && statement_number_descendant == "9") {
     return true;
   }
   return false;
@@ -488,13 +494,13 @@ bool StubPkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 }
 
 //! Pattern API
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithExactExpression(
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignWithExactExpression(
     const std::shared_ptr<Expression> &expr
     ) {
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithPartialExpression(
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignWithPartialExpression(
     const std::shared_ptr<Expression> &sub_expr
     ) {
   if (sub_expr->GetName() == "g") {
@@ -503,64 +509,64 @@ PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignWithParti
   return {"2"};
 }
 
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetIfConditionVariablePair() {
+PkbReadFacade::PairSet StubPkbReadFacade::GetIfConditionVariablePair() {
   return {{"4", "x"}, {"4", "y"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfWithConditionVariable(const std::string &var_name) {
-  if (var_name == "x") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetIfWithConditionVariable(const std::string &variable) {
+  if (variable == "x") {
     return {"4"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetIfThatHasConditionVariable() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetIfThatHasConditionVariable() {
   return {"4"};
 }
 
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetWhileConditionVariablePair() {
+PkbReadFacade::PairSet StubPkbReadFacade::GetWhileConditionVariablePair() {
   return {{"6", "x"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileWithConditionVariable(
-    const std::string &var_name
+PkbReadFacade::SingleSet StubPkbReadFacade::GetWhileWithConditionVariable(
+    const std::string &variable
     ) {
-  if (var_name == "x") {
+  if (variable == "x") {
     return {"6"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetWhileThatHasConditionVariable() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetWhileThatHasConditionVariable() {
   return {"6"};
 }
 
 //! Next API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetNextPairs(StatementType type_1,
-                                                                         StatementType type_2) {
+PkbReadFacade::PairSet StubPkbReadFacade::GetNextPairs(const StatementType& statement_type_1,
+                                                                         const StatementType& statement_type_2) {
   return {{"1", "2"}, {"2", "3"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNext(std::string statement_number,
-                                                                      StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNext(const StatementNumber& statement_number,
+                                                                      const StatementType& statement_type) {
   if (statement_number == "1") {
     return {"2"};
   }
   return {"3"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextBy(std::string statement_number,
-                                                                        StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextBy(const StatementNumber& statement_number,
+                                                                        const StatementType& statement_type) {
   if (statement_number == "3") {
     return {"2"};
   }
   return {"1"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextFirst(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextFirst(const StatementType& statement_type) {
   return {"1", "2"};
 }
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextSecond(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextSecond(const StatementType& statement_type) {
   return {"2", "3"};
 }
 
@@ -568,54 +574,54 @@ bool StubPkbReadFacade::HasNextRelationship() {
   return true;
 }
 
-bool StubPkbReadFacade::HasNext(std::string statement_number) {
+bool StubPkbReadFacade::HasNext(const StatementNumber& statement_number) {
   if (statement_number == "1" || statement_number == "2") {
     return true;
   }
   return false;
 }
 
-bool StubPkbReadFacade::HasNextBy(std::string statement_number) {
+bool StubPkbReadFacade::HasNextBy(const StatementNumber& statement_number) {
   if (statement_number == "2" || statement_number == "3") {
     return true;
   }
   return false;
 }
 
-bool StubPkbReadFacade::IsNext(std::string statement_num_1, std::string statement_num_2) {
-  if (statement_num_1 == "1" && statement_num_2 == "2") {
+bool StubPkbReadFacade::IsNext(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) {
+  if (statement_number_1 == "1" && statement_number_2 == "2") {
     return true;
   }
   return false;
 }
 
 //! Next* API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetNextStarPairs(StatementType type_1,
-                                                                             StatementType type_2) {
+PkbReadFacade::PairSet StubPkbReadFacade::GetNextStarPairs(const StatementType& statement_type_1,
+                                                                             const StatementType& statement_type_2) {
   return {{"4", "5"}, {"5", "6"}, {"4", "6"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextStar(std::string statement_number,
-                                                                          StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextStar(const StatementNumber& statement_number,
+                                                                          const StatementType& statement_type) {
   if (statement_number == "4") {
     return {"5", "6"};
   }
   return {"6"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextStarBy(std::string statement_number,
-                                                                            StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextStarBy(const StatementNumber& statement_number,
+                                                                            const StatementType& statement_type) {
   if (statement_number == "6") {
     return {"4", "5"};
   }
   return {"4"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextStarFirst(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextStarFirst(const StatementType& statement_type) {
   return {"4"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetNextStarSecond(StatementType statement_type) {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetNextStarSecond(const StatementType& statement_type) {
   return {"6"};
 }
 
@@ -623,77 +629,79 @@ bool StubPkbReadFacade::HasNextStarRelationship() {
   return true;
 }
 
-bool StubPkbReadFacade::HasNextStar(std::string statement_number) {
+bool StubPkbReadFacade::HasNextStar(const StatementNumber& statement_number) {
   if (statement_number == "4" || statement_number == "5") {
     return true;
   }
   return false;
 }
 
-bool StubPkbReadFacade::HasNextStarBy(std::string statement_number) {
+bool StubPkbReadFacade::HasNextStarBy(const StatementNumber& statement_number) {
   if (statement_number == "5" || statement_number == "6") {
     return true;
   }
   return false;
 }
 
-bool StubPkbReadFacade::IsNextStar(std::string statement_num_1, std::string statement_num_2) {
-  if (statement_num_1 == "4" && statement_num_2 == "6") {
+bool StubPkbReadFacade::IsNextStar(const StatementNumber& statement_number_1,
+                                   const StatementNumber& statement_number_2) {
+  if (statement_number_1 == "4" && statement_number_2 == "6") {
     return true;
   }
   return false;
 }
 
 // Affects API
-PkbCommunicationTypes::PairConstraintSet  StubPkbReadFacade::GetAffectsPairs() {
+PkbReadFacade::PairSet  StubPkbReadFacade::GetAffectsPairs() {
   return {{"1", "5"}, {"3", "5"}, {"2", "4"}, {"2", "6"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectedBy(std::string stmt_num) {
-  if (stmt_num == "1") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignsAffectedBy(const StatementNumber& statement_number) {
+  if (statement_number == "1") {
     return {"5"};
   }
-  if (stmt_num == "3") {
+  if (statement_number == "3") {
     return {"5"};
   }
-  if (stmt_num == "2") {
+  if (statement_number == "2") {
     return {"4", "6"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffecting(std::string stmt_num) {
-  if (stmt_num == "5") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignsAffecting(const StatementNumber& statement_number) {
+  if (statement_number == "5") {
     return {"1", "3"};
   }
-  if (stmt_num == "4") {
+  if (statement_number == "4") {
     return {"2"};
   }
-  if (stmt_num == "6") {
+  if (statement_number == "6") {
     return {"2"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAreAffected() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAllAssignsThatAreAffected() {
   return {"4", "5", "6"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAffect() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAllAssignsThatAffect() {
   return {"1", "2", "3"};
 }
 
-bool StubPkbReadFacade::HasAffectsRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
-  if ((stmt_num == "1") && (stmt_num_being_affected == "5")) {
+bool StubPkbReadFacade::HasAffectsRelationship(const StatementNumber& statement_number,
+                                               const StatementNumber& statement_number_being_affected) {
+  if ((statement_number == "1") && (statement_number_being_affected == "5")) {
     return true;
   }
-  if ((stmt_num == "3") && (stmt_num_being_affected == "5")) {
+  if ((statement_number == "3") && (statement_number_being_affected == "5")) {
     return true;
   }
-  if ((stmt_num == "2") && (stmt_num_being_affected == "4")) {
+  if ((statement_number == "2") && (statement_number_being_affected == "4")) {
     return true;
   }
-  if ((stmt_num == "2") && (stmt_num_being_affected == "6")) {
+  if ((statement_number == "2") && (statement_number_being_affected == "6")) {
     return true;
   }
   return false;
@@ -704,58 +712,60 @@ bool StubPkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 // Affects* API
-PkbCommunicationTypes::PairConstraintSet StubPkbReadFacade::GetAffectsStarPairs() {
+PkbReadFacade::PairSet StubPkbReadFacade::GetAffectsStarPairs() {
   return {{"1", "4"}, {"1", "10"}, {"1", "11"}, {"9", "12"},
           {"12", "13"}, {"9", "13"}};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectedStarBy(std::string stmt_num) {
-  if (stmt_num == "1") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignsAffectedStarBy(const StatementNumber& statement_number) {
+  if (statement_number == "1") {
     return {"4", "10", "11"};
   }
-  if (stmt_num == "9") {
+  if (statement_number == "9") {
     return {"12", "13"};
   }
-  if (stmt_num == "12") {
+  if (statement_number == "12") {
     return {"13"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAssignsAffectingStar(std::string stmt_num) {
-  if (stmt_num == "4" || stmt_num == "10" || stmt_num == "11") {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAssignsAffectingStar(const StatementNumber& statement_number) {
+  if (statement_number == "4" || statement_number == "10" || statement_number == "11") {
     return {"1"};
   }
-  if (stmt_num == "12") {
+  if (statement_number == "12") {
     return {"9"};
   }
-  if (stmt_num == "13") {
+  if (statement_number == "13") {
     return {"9", "12"};
   }
   return {};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAreAffectedStar() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAllAssignsThatAreAffectedStar() {
   return {"4", "10", "11", "12", "13"};
 }
 
-PkbCommunicationTypes::SingleConstraintSet StubPkbReadFacade::GetAllAssignsThatAffectStar() {
+PkbReadFacade::SingleSet StubPkbReadFacade::GetAllAssignsThatAffectStar() {
   return {"1", "9", "12"};
 }
 
-bool StubPkbReadFacade::HasAffectsStarRelationship(std::string stmt_num, std::string stmt_num_being_affected) {
-  if (stmt_num == "1") {
-    if (stmt_num_being_affected == "4" || stmt_num_being_affected == "10" || stmt_num_being_affected == "11") {
+bool StubPkbReadFacade::HasAffectsStarRelationship(const StatementNumber& statement_number,
+                                                   const StatementNumber& statement_number_being_affected) {
+  if (statement_number == "1") {
+    if (statement_number_being_affected == "4" || statement_number_being_affected == "10" ||
+    statement_number_being_affected == "11") {
       return true;
     }
   }
-  if (stmt_num == "9") {
-    if (stmt_num_being_affected == "12" || stmt_num_being_affected == "13") {
+  if (statement_number == "9") {
+    if (statement_number_being_affected == "12" || statement_number_being_affected == "13") {
       return true;
     }
   }
-  if (stmt_num == "12") {
-    if (stmt_num_being_affected == "13") {
+  if (statement_number == "12") {
+    if (statement_number_being_affected == "13") {
       return true;
     }
   }

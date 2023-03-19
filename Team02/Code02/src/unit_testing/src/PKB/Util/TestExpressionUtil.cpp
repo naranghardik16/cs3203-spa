@@ -11,9 +11,9 @@ TEST_CASE("Testcases for Expression Util") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Constant>("7");
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root)
                 == std::unordered_set<std::string>({ }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({ "7" }));
   }
 
@@ -21,9 +21,9 @@ TEST_CASE("Testcases for Expression Util") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Variable>("a");
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root)
                 == std::unordered_set<std::string>({ "a" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({  }));
   }
 
@@ -34,9 +34,9 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root)
                 == std::unordered_set<std::string>({ "x" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({ "11" }));
   }
 
@@ -52,9 +52,9 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("*", root_args);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) ==
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root) ==
     std::unordered_set<std::string>({ "x", "y", "z" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) == std::unordered_set<std::string>({ }));
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root) == std::unordered_set<std::string>({ }));
   }
 
   SECTION("Complex Arithmetic Expression with One Level (Only Constants)") {
@@ -69,8 +69,8 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("*", root_args);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) == std::unordered_set<std::string>({ }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) ==
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root) == std::unordered_set<std::string>({ }));
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root) ==
     std::unordered_set<std::string>({ "9", "4", "8" }));
   }
 
@@ -99,9 +99,9 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("/", root_args);
 
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root) ==
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root) ==
     std::unordered_set<std::string>({ "x", "y", "z" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root) ==
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root) ==
     std::unordered_set<std::string>({ "1", "5" }));
   }
 
@@ -112,10 +112,10 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("+", arguments);
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[+ 11 x]");
-    REQUIRE(ExpressionUtil::retrieveAllVariablesFromExpression(root)
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[+ 11 x]");
+    REQUIRE(ExpressionUtil::GetAllVariablesFromExpression(root)
                 == std::unordered_set<std::string>({ "x" }));
-    REQUIRE(ExpressionUtil::retrieveAllConstantsFromExpression(root)
+    REQUIRE(ExpressionUtil::GetAllConstantsFromExpression(root)
                 == std::unordered_set<std::string>({ "11" }));
   }
 
@@ -144,7 +144,7 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ArithmeticOperation>("/", root_args);
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[/ [* [+ x 1] [- y z]] 5]");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[/ [* [+ x 1] [- y z]] 5]");
   }
 
   SECTION("Flatten Complex Expression with Nested Relation Operations and Variables") {
@@ -164,7 +164,7 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ConditionalOperation>("&&", root_args);
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[&& [< a b] [== c d]]");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[&& [< a b] [== c d]]");
   }
 
   SECTION("Flatten Expression with Nested Logical and Relation Operations and Constants") {
@@ -184,7 +184,7 @@ TEST_CASE("Testcases for Expression Util") {
 
     auto root = std::make_shared<ConditionalOperation>("||", root_args);
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [> 1 2] [<= 3 4]]");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[|| [> 1 2] [<= 3 4]]");
   }
 
   SECTION("Flatten Expression with Nested Logical Operations and Constants") {
@@ -193,21 +193,21 @@ TEST_CASE("Testcases for Expression Util") {
     auto root = std::make_shared<ConditionalOperation>("&&", std::make_pair(left, right));
     root = std::make_shared<ConditionalOperation>("||", std::make_pair(root, left));
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [&& true false] true]");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[|| [&& true false] true]");
   }
 
   SECTION("Flattening Singleton (One Constant)") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Constant>("7");
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "7");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "7");
   }
 
   SECTION("Flattening Singleton (One Variable)") {
     std::shared_ptr<Expression> root;
     root = std::make_shared<Variable>("a");
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "a");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "a");
   }
 
   SECTION("Flatten Expression with Nested Logical and Relation Operations and Mixed Constants and Variables") {
@@ -233,7 +233,7 @@ TEST_CASE("Testcases for Expression Util") {
     auto mid = std::make_shared<ConditionalOperation>("&&", std::make_pair(mid_left2, mid_right));
     auto root = std::make_shared<ConditionalOperation>("||", std::make_pair(mid, mid1));
 
-    REQUIRE(ExpressionUtil::prefixFlatten(root) == "[|| [&& [&& [>= c 5] [< d 15]] e] [|| [> a 10] [<= b 20]]]");
+    REQUIRE(ExpressionUtil::PrefixFlatten(root) == "[|| [&& [&& [>= c 5] [< d 15]] e] [|| [> a 10] [<= b 20]]]");
   }
 }
 

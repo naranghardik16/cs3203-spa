@@ -97,7 +97,7 @@ class QueryUtil {
    * @param type of design entity to validate with
    * @return true if the expression is a valid synonym of specified design entity type
    */
-  static bool IsCorrectSynonymType(Map &declaration, const std::string& expression, const std::string type);
+  static bool IsCorrectSynonymType(Map &declaration, const std::string& expression, const std::string& type);
 
   /**
    * Validates if the expression has been declared as a variable design entity
@@ -196,7 +196,7 @@ class QueryUtil {
   static std::string GetIdent(const std::string &quoted_ident);
 
   /**
-   * Gets the statement type based on the design entity assigned to the synonym for accessing data in PKB
+   * Gets the statement type based on the design entity assigned to the synonym for accessing data in Pkb
    * @param declaration which contains the synonyms as key and design entity as value
    * @param synonym to get statement type of
    * @return statement type of synonym
@@ -205,8 +205,8 @@ class QueryUtil {
   static bool IsAttrRef(const std::string &s);
 
   static std::vector<std::string> SplitAttrRef(const std::string &s);
-  static std::string GetAttrNameFromAttrRef(std::string attrRef);
-  static std::string GetSynonymFromAttrRef(std::string attrRef);
+  static std::string GetAttrNameFromAttrRef(const std::string& attrRef);
+  static std::string GetSynonymFromAttrRef(const std::string& attrRef);
   static bool IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Map &declaration_map);
   static std::string AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &declaration_map);
 };

@@ -45,14 +45,6 @@ std::unordered_set<std::string> Result::ProjectResult(const SelectedSynonymTuple
   return output;
 }
 
-std::unordered_set<std::string> Result::ProjectResultForBoolean() {
-  if (!this->table_.empty()) {
-    return { "TRUE" };
-  } else {
-    return { "FALSE" };
-  }
-}
-
 InterceptResult Result::FindIntercept(ResultHeader &r_1, ResultHeader &r_2) {
   Intercept intercept;
   NonIntercept non_intercept;
@@ -133,4 +125,12 @@ ResultTable Result::NestedLoopJoin(ResultTable &main, ResultTable &other, Interc
     }
   }
   return out;
+}
+
+ResultHeader &Result::GetHeader() {
+  return header_;
+}
+
+ResultTable &Result::GetTable() {
+  return table_;
 }

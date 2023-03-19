@@ -2,11 +2,11 @@
 #include <string>
 #include <sstream>
 #include "PKB/Interfaces/PkbReadFacade.h"
-#include "PKB/PKB.h"
+#include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
 #include "SP/SP.h"
 
-TEST_CASE("Check if SP works with PKB") {
+TEST_CASE("Check if SP works with Pkb") {
   try {
     string input = "procedure main {\n"
                    "  flag = 1;\n"
@@ -21,7 +21,7 @@ TEST_CASE("Check if SP works with PKB") {
     std::istringstream is;
     is.str(input);
 
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     shared_ptr<SP> sp = make_shared<SP>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -95,7 +95,7 @@ TEST_CASE("Check if Entity Extraction is correct for one if statement") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -138,7 +138,7 @@ TEST_CASE("Check if Entity Extraction is correct for one while statement") {
   std::istringstream is;
   is.str(input);
 
-  shared_ptr<PKB> pkb = make_shared<PKB>();
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
   shared_ptr<SP> sp = make_shared<SP>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -194,7 +194,7 @@ TEST_CASE(
   is.str(input);
 
   try {
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<SP> sp = make_shared<SP>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
@@ -270,7 +270,7 @@ TEST_CASE(
   is.str(input);
 
   try {
-    shared_ptr<PKB> pkb = make_shared<PKB>();
+    shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<SP> sp = make_shared<SP>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);

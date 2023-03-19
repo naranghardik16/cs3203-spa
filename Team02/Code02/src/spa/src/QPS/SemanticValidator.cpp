@@ -1,5 +1,7 @@
 #include "SemanticValidator.h"
 
+#include <utility>
+
 SemanticValidator::SemanticValidator() {
   has_semantic_error_ = false;
 }
@@ -49,7 +51,7 @@ void SemanticValidator::ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyn
 
     handler_1->SetNext(handler_2)->SetNext(handler_3)->SetNext(handler_4)->SetNext(handler_5);
 
-    handler_1->HandleSemantic(clause, declaration_);
+    handler_1->HandleSemantic(std::move(clause), declaration_);
   } catch (const SemanticErrorException& e) {
     has_semantic_error_ = true;
   }
@@ -63,7 +65,7 @@ void SemanticValidator::ValidatePatternClauseSemantic(std::shared_ptr<ClauseSynt
   try {
     std::shared_ptr<PatternHandler> handler = std::make_shared<PatternHandler>();
 
-    handler->HandleSemantic(clause, declaration_);
+    handler->HandleSemantic(std::move(clause), declaration_);
   } catch (const SemanticErrorException& e) {
     has_semantic_error_ = true;
   }
@@ -77,8 +79,20 @@ void SemanticValidator::ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax>
   try {
     std::shared_ptr<WithHandler> handler = std::make_shared<WithHandler>();
 
-    handler->HandleSemantic(clause, declaration_);
+    handler->HandleSemantic(std::move(clause), declaration_);
   } catch (const SemanticErrorException& e) {
     has_semantic_error_ = true;
   }
+}
+
+bool SemanticValidator::HasSemanticError() {
+  return has_semantic_error_;
+}
+
+void SemanticValidator::SetHasSemanticError(bool has_semantic_error) {
+  has_semantic_error_ = has_semantic_error;
+}
+
+void SemanticValidator::SetDeclaration(const Map &declaration) {
+  declaration_ = declaration;
 }

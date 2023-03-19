@@ -2,7 +2,7 @@
 
 #include "PKB/Stores/AssignmentStore.h"
 #include "PKB/Stores/CallsStore.h"
-#include "PKB/Stores/CFGStore.h"
+#include "PKB/Stores/CfgStore.h"
 #include "PKB/Stores/ControlFlowStore.h"
 #include "PKB/Stores/EntityStore.h"
 #include "PKB/Stores/ExpressionStore.h"
@@ -13,17 +13,17 @@
 #include "PKB/Stores/StatementStore.h"
 #include "PKB/Stores/UsesStore.h"
 
-class PKB {
+class Pkb {
  public:
   /**
- * Constructor for PKB.
+ * Constructor for Pkb.
  */
-  PKB();
+  Pkb();
 
   /**
-   * Destructor for PKB.
+   * Destructor for Pkb.
    */
-  ~PKB();
+  ~Pkb();
 
  private:
   /**
@@ -79,7 +79,7 @@ class PKB {
   /**
    * CFG Store that stores the control flow graph of the SIMPLE source.
    */
-  CFGStore *cfg_store_;
+  CfgStore *cfg_store_;
 
   /**
    * Next Store that stores the next relation between SIMPLE's entities.

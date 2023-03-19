@@ -14,11 +14,16 @@
 
 class SemanticValidator {
  public:
-  Map declaration_;
-  bool has_semantic_error_;
   SemanticValidator();
   void ValidateSelectSemantics(SelectedSynonymTuple &synonym_vector);
   void ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidatePatternClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
+  bool HasSemanticError();
+  void SetHasSemanticError(bool has_semantic_error);
+  void SetDeclaration(const Map &declaration);
+
+ private:
+  Map declaration_;
+  bool has_semantic_error_;
 };
