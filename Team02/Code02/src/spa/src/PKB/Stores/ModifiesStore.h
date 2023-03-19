@@ -17,6 +17,16 @@
  */
 class ModifiesStore {
  public:
+  typedef PkbTypes::VARIABLE Variable;
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_set<Variable> VariableSet;
+  typedef std::unordered_set<Procedure> ProcedureSet;
+  typedef std::unordered_set<std::pair<StatementNumber, Variable>, PairHasherUtil::hash_pair> StatementVariablePairSet;
+  typedef std::unordered_set<std::pair<Procedure, Variable>, PairHasherUtil::hash_pair> ProcedureVariablePairSet;
+  typedef ManyToManyStore<StatementNumber, Variable> MultiStatementVariableStore;
+  typedef ManyToManyStore<Procedure, Variable> MultiProcedureVariableSet;
+
   /**
    * Constructor for Modifies store.
    */
@@ -34,7 +44,7 @@ class ModifiesStore {
    * @param statement_number - Statement number representing a statement that modifies the variable.
    * @param variable - Variable modified by the statement.
    */
-  void addStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::VARIABLE variable);
+  void AddStatementModifiesVariable(const StatementNumber& statement_number, const Variable& variable);
 
   /**
    * Add a procedure to variable mapping to the store signifying a modifies relationship where the procedure
@@ -43,7 +53,7 @@ class ModifiesStore {
    * @param procedure - Procedure that modifies the variable.
    * @param variable - Variable modified by the procedure.
    */
-  void addProcedureModifyingVariable(PkbTypes::PROCEDURE procedure, PkbTypes::VARIABLE variable);
+  void AddProcedureModifiesVariable(const Procedure& procedure, const Variable& variable);
 
   /**
    * Retrieves all the variables that have a modifies relationship with the statement given.
@@ -51,8 +61,7 @@ class ModifiesStore {
    * @param statement_number - Statement number representing a statement that modifies the variable(s).
    * @return A set of variables that have a modifies relationship with the statement given.
    */
-  std::unordered_set<PkbTypes::VARIABLE>
-  retrieveAllVariablesModifiedByAStatement(PkbTypes::STATEMENT_NUMBER statement_number);
+  VariableSet GetVariablesModifiedByStatement(const StatementNumber& statement_number);
 
   /**
    * Retrieves all the variables that have a modifies relationship with the procedure given.
@@ -60,24 +69,21 @@ class ModifiesStore {
    * @param procedure - Procedure that modifies the variable(s).
    * @return A set of variables that have a modifies relationship with the procedure given.
    */
-  std::unordered_set<PkbTypes::VARIABLE>
-  retrieveAllVariablesModifiedByAProcedure(PkbTypes::PROCEDURE procedure);
+  VariableSet GetVariablesModifiedByProcedure(const Procedure& procedure);
 
   /**
    * Retrieves all the statement variable pairs that have a modifies relation among themselves.
    *
    * @return A set of pairs of statement number representing statement and variable.
    */
-  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
-  retrieveStatementVariablePairs();
+  StatementVariablePairSet GetStatementVariablePairs();
 
   /**
    * Retrieves all the procedure variable pairs that have a modifies relation among themselves.
    *
    * @return A set of pairs of procedure and variable.
    */
-  std::unordered_set<std::pair<PkbTypes::PROCEDURE , PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>
-  retrieveProcedureVariablePairs();
+  ProcedureVariablePairSet GetProcedureVariablePairs();
 
   /**
    * Checks if a given statement and variable have a modifies relationship between them.
@@ -86,8 +92,7 @@ class ModifiesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasModifiesRelationBetweenStatementAndVariable(PkbTypes::STATEMENT_NUMBER statement_number,
-                                                      PkbTypes::VARIABLE variable);
+  bool HasModifiesStatementVariableRelation(const StatementNumber& statement_number, const Variable& variable);
 
   /**
    * Checks if a given procedure and variable have a modifies relationship between them.
@@ -96,18 +101,17 @@ class ModifiesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool hasModifiesRelationBetweenProcedureAndVariable(PkbTypes::PROCEDURE procedure,
-                                                      PkbTypes::VARIABLE variable);
+  bool HasModifiesProcedureVariableRelation(const Procedure& procedure, const Variable& variable);
 
   /**
    * Retrieves all the procedures that have some sort of a modifies relationship with some variable.
    *
    * @return A set of procedures satisfying the criteria.
    */
-  std::unordered_set<PkbTypes::PROCEDURE> retrieveAllProceduresThatModify();
+  ProcedureSet GetProceduresThatModify();
 
  protected:
-  ManyToManyStore<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE> modifies_statement_variable_;
-  ManyToManyStore<PkbTypes::PROCEDURE, PkbTypes::VARIABLE> modifies_procedure_variable_;
+  MultiStatementVariableStore modifies_statement_variable_store_;
+  MultiProcedureVariableSet modifies_procedure_variable_;
 };
 

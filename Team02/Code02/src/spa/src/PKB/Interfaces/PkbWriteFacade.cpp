@@ -44,19 +44,19 @@ void PkbWriteFacade::AddProcedureUsingVariable(PkbTypes::PROCEDURE procedure,
 
 void PkbWriteFacade::AddStatementModifyingVariable(PkbTypes::STATEMENT_NUMBER statement_number,
                                                    PkbTypes::VARIABLE variable) const {
-  this->pkb.modifies_store_->addStatementModifyingVariable(statement_number,
-                                                           variable);
+  this->pkb.modifies_store_->AddStatementModifiesVariable(statement_number,
+                                                          variable);
 
   for (const auto &p : this->pkb.parent_store_->retrieveAllAncestors(
       statement_number)) {
-    this->pkb.modifies_store_->addStatementModifyingVariable(p, variable);
+    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
   }
 }
 
 void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure,
                                                    PkbTypes::VARIABLE variable) const {
-  this->pkb.modifies_store_->addProcedureModifyingVariable(std::move(procedure),
-                                                           std::move(variable));
+  this->pkb.modifies_store_->AddProcedureModifiesVariable(std::move(procedure),
+                                                          std::move(variable));
 }
 
 void PkbWriteFacade::AddFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement,

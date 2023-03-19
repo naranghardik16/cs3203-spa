@@ -55,7 +55,7 @@ PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
-      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+      this->pkb.modifies_store_->GetStatementVariablePairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
   for (const auto& p: statement_variable_pairs) {
@@ -69,7 +69,7 @@ PkbReadFacade::GetModifiesStatementVariablePairs(StatementType statement_type) {
 
 PkbCommunicationTypes::SingleConstraintSet
 PkbReadFacade::GetVariablesModifiedByStatement(std::string statement_number) {
-  return this->pkb.modifies_store_->retrieveAllVariablesModifiedByAStatement(std::move(statement_number));
+  return this->pkb.modifies_store_->GetVariablesModifiedByStatement(std::move(statement_number));
 }
 
 PkbCommunicationTypes::SingleConstraintSet
@@ -78,7 +78,7 @@ PkbReadFacade::GetStatementsModifiesVariable(std::string variable, StatementType
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
-      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+      this->pkb.modifies_store_->GetStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: statement_variable_pairs) {
@@ -95,7 +95,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatModif
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet statement_variable_pairs =
-      this->pkb.modifies_store_->retrieveStatementVariablePairs();
+      this->pkb.modifies_store_->GetStatementVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: statement_variable_pairs) {
@@ -108,21 +108,21 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsThatModif
 }
 
 bool PkbReadFacade::HasModifiesStatementRelationship(std::string statement_number, std::string variable) {
-  return this->pkb.modifies_store_->hasModifiesRelationBetweenStatementAndVariable(std::move(statement_number),
-                                                                                   std::move(variable));
+  return this->pkb.modifies_store_->HasModifiesStatementVariableRelation(std::move(statement_number),
+                                                                         std::move(variable));
 }
 
 PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
-  return this->pkb.modifies_store_->retrieveProcedureVariablePairs();
+  return this->pkb.modifies_store_->GetProcedureVariablePairs();
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetVariablesModifiedByProcedure(std::string procedure) {
-  return this->pkb.modifies_store_->retrieveAllVariablesModifiedByAProcedure(std::move(procedure));
+  return this->pkb.modifies_store_->GetVariablesModifiedByProcedure(std::move(procedure));
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresModifiesVariable(std::string variable) {
   PkbCommunicationTypes::PairConstraintSet procedure_variable_pairs =
-      this->pkb.modifies_store_->retrieveProcedureVariablePairs();
+      this->pkb.modifies_store_->GetProcedureVariablePairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
   for (const auto& p: procedure_variable_pairs) {
@@ -135,11 +135,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresModifiesV
 }
 
 PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetProceduresThatModify() {
-  return this->pkb.modifies_store_->retrieveAllProceduresThatModify();
+  return this->pkb.modifies_store_->GetProceduresThatModify();
 }
 
 bool PkbReadFacade::HasModifiesProcedureRelationship(std::string procedure, std::string variable) {
-  return this->pkb.modifies_store_->hasModifiesRelationBetweenProcedureAndVariable(procedure, variable);
+  return this->pkb.modifies_store_->HasModifiesProcedureVariableRelation(procedure, variable);
 }
 
 // Uses Statement API
