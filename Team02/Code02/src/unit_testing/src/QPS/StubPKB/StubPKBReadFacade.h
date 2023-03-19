@@ -113,44 +113,44 @@ class StubPkbReadFacade: public PkbReadFacade {
   SingleSet GetWhileThatHasConditionVariable() override;
 
   //!API for Next
-  PairSet GetNextPairs(const StatementType& statement_type_1, const StatementType& statement_type_2);
-  SingleSet GetNext(const StatementNumber& statement_number, const StatementType& statement_type);
-  SingleSet GetNextBy(const StatementNumber& statement_number, const StatementType& statement_type);
-  SingleSet GetNextFirst(const StatementType& statement_type);
-  SingleSet GetNextSecond(const StatementType& statement_type);
-  bool HasNextRelationship();
-  bool HasNext(const StatementNumber& statement_number);
-  bool HasNextBy(const StatementNumber& statement_number);
-  bool IsNext(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2);
+  PairSet GetNextPairs(const StatementType& statement_type_1, const StatementType& statement_type_2) override;
+  SingleSet GetNext(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetNextBy(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetNextFirst(const StatementType& statement_type) override;
+  SingleSet GetNextSecond(const StatementType& statement_type) override;
+  bool HasNextRelationship() override;
+  bool HasNext(const StatementNumber& statement_number) override;
+  bool HasNextBy(const StatementNumber& statement_number) override;
+  bool IsNext(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) override;
 
   //!API for Next*
-  PairSet GetNextStarPairs(const StatementType& statement_type_1, const StatementType& statement_type_2);
-  SingleSet GetNextStar(const StatementNumber& statement_number, const StatementType& statement_type);
-  SingleSet GetNextStarBy(const StatementNumber& statement_number, const StatementType& statement_type);
-  SingleSet GetNextStarFirst(const StatementType& statement_type);
-  SingleSet GetNextStarSecond(const StatementType& statement_type);
-  bool HasNextStarRelationship();
-  bool HasNextStar(const StatementNumber& statement_number);
-  bool HasNextStarBy(const StatementNumber& statement_number);
-  bool IsNextStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2);
+  PairSet GetNextStarPairs(const StatementType& statement_type_1, const StatementType& statement_type_2) override;
+  SingleSet GetNextStar(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetNextStarBy(const StatementNumber& statement_number, const StatementType& statement_type) override;
+  SingleSet GetNextStarFirst(const StatementType& statement_type) override;
+  SingleSet GetNextStarSecond(const StatementType& statement_type) override;
+  bool HasNextStarRelationship() override;
+  bool HasNextStar(const StatementNumber& statement_number) override;
+  bool HasNextStarBy(const StatementNumber& statement_number) override;
+  bool IsNextStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) override;
 
   // !API for Affects
-  PairSet GetAffectsPairs();
-  SingleSet GetAssignsAffectedBy(const StatementNumber& statement_number);
-  SingleSet GetAssignsAffecting(const StatementNumber& statement_number);
-  SingleSet GetAllAssignsThatAreAffected();
-  SingleSet GetAllAssignsThatAffect();
+  PairSet GetAffectsPairs() override;
+  SingleSet GetAssignsAffectedBy(const StatementNumber& statement_number) override;
+  SingleSet GetAssignsAffecting(const StatementNumber& statement_number) override;
+  SingleSet GetAllAssignsThatAreAffected() override;
+  SingleSet GetAllAssignsThatAffect() override;
   bool HasAffectsRelationship(const StatementNumber& statement_number, 
-                              const StatementNumber& statement_number_being_affected);
-  bool IsThereAnyAffectsRelationship();
+                              const StatementNumber& statement_number_being_affected) override;
+  bool IsThereAnyAffectsRelationship() override;
 
   // !API for Affects*
-  PairSet GetAffectsStarPairs();
-  SingleSet GetAssignsAffectedStarBy(const StatementNumber& statement_number);
-  SingleSet GetAssignsAffectingStar(const StatementNumber& statement_number);
-  SingleSet GetAllAssignsThatAreAffectedStar();
-  bool IsThereAnyAffectsStarRelationship();
+  PairSet GetAffectsStarPairs() override;
+  SingleSet GetAssignsAffectedStarBy(const StatementNumber& statement_number) override;
+  SingleSet GetAssignsAffectingStar(const StatementNumber& statement_number) override;
+  SingleSet GetAllAssignsThatAreAffectedStar() override;
+  bool IsThereAnyAffectsStarRelationship() override;
   bool HasAffectsStarRelationship(const StatementNumber& statement_number, 
-                                  const StatementNumber& statement_number_being_affected);
-  SingleSet GetAllAssignsThatAffectStar();
+                                  const StatementNumber& statement_number_being_affected) override;
+  SingleSet GetAllAssignsThatAffectStar() override;
 };

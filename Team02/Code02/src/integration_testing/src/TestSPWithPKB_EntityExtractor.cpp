@@ -4,9 +4,9 @@
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
-#include "SP/SP.h"
+#include "SP/Sp.h"
 
-TEST_CASE("Check if SP works with Pkb") {
+TEST_CASE("Check if Sp works with PKB") {
   try {
     string input = "procedure main {\n"
                    "  flag = 1;\n"
@@ -23,7 +23,7 @@ TEST_CASE("Check if SP works with Pkb") {
 
     shared_ptr<Pkb> pkb = make_shared<Pkb>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
     if (!is_SP_processing_successful) {
       FAIL();
@@ -96,7 +96,7 @@ TEST_CASE("Check if Entity Extraction is correct for one if statement") {
   is.str(input);
 
   shared_ptr<Pkb> pkb = make_shared<Pkb>();
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
   if (!is_SP_processing_successful) {
@@ -139,7 +139,7 @@ TEST_CASE("Check if Entity Extraction is correct for one while statement") {
   is.str(input);
 
   shared_ptr<Pkb> pkb = make_shared<Pkb>();
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   shared_ptr<Cfg> cfg = make_shared<Cfg>();
   bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
   if (!is_SP_processing_successful) {
@@ -195,7 +195,7 @@ TEST_CASE(
 
   try {
     shared_ptr<Pkb> pkb = make_shared<Pkb>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
     if (!is_SP_processing_successful) {
@@ -271,7 +271,7 @@ TEST_CASE(
 
   try {
     shared_ptr<Pkb> pkb = make_shared<Pkb>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     shared_ptr<Cfg> cfg = make_shared<Cfg>();
     bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
     if (!is_SP_processing_successful) {

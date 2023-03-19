@@ -11,7 +11,7 @@
 
 /*!
  * ExpressionParser is used to parse expression specifications in Pattern clauses for PQL.
- * Make Use of SP tokenizer and parser.
+ * Make Use of Sp tokenizer and parser.
  */
 class ExpressionSpecParser {
  public:
@@ -22,5 +22,5 @@ class ExpressionSpecParser {
    * @param expression_spec which is either a wildcard or a partial match with only a factor inside
    * @throws SyntaxErrorException if the expression specification flouts lexical rules
    */
-  static std::shared_ptr<Expression> ParseExpressionSpec(const std::string& expression_spec);
+  static std::shared_ptr<Expression> ParseExpressionSpec(const std::string &expression_spec);
 };
