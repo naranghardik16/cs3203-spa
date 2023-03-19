@@ -2,7 +2,7 @@
 
 #include "PKB/Stores/AssignmentStore.h"
 #include "PKB/Stores/CallsStore.h"
-#include "PKB/Stores/CFGStore.h"
+#include "PKB/Stores/CfgStore.h"
 #include "PKB/Stores/ControlFlowStore.h"
 #include "PKB/Stores/EntityStore.h"
 #include "PKB/Stores/ExpressionStore.h"
@@ -79,7 +79,7 @@ class Pkb {
   /**
    * CFG Store that stores the control flow graph of the SIMPLE source.
    */
-  CFGStore *cfg_store_;
+  CfgStore *cfg_store_;
 
   /**
    * Next Store that stores the next relation between SIMPLE's entities.

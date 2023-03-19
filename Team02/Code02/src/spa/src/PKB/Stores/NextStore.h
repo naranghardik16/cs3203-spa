@@ -2,7 +2,7 @@
 
 #include "PKB/Types/PkbTypes.h"
 #include "PKB/Util/PairHasherUtil.h"
-#include "CFGStore.h"
+#include "CfgStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 
 /**

@@ -11,7 +11,7 @@ Pkb::Pkb() {
   control_flow_store_ = new ControlFlowStore();
   assignment_store_ = new AssignmentStore();
   calls_store_ = new CallsStore();
-  cfg_store_ = new CFGStore();
+  cfg_store_ = new CfgStore();
   next_store_ = new NextStore();
 }
 

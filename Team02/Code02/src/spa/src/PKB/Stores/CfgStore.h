@@ -6,31 +6,38 @@
 #include "PKB/Types/PkbTypes.h"
 
 /**
- * @class CFGStore
+ * @class CfgStore
  * Class representing the CFG Store in Pkb.
  *
- * The CFGStore class is responsible for maintaining information about the
+ * The CfgStore class is responsible for maintaining information about the
  * control flow graph of the source program.
  *
  */
-class CFGStore {
+class CfgStore {
  public:
+  typedef std::shared_ptr<Cfg> CfgPtr;
+  typedef std::shared_ptr<CfgNode> CfgNodePtr;
+  typedef PkbTypes::PROCEDURE Procedure;
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_map<Procedure, CfgNodePtr> ProcedureToCfgNodeMap;
+  typedef std::unordered_map<StatementNumber, CfgNodePtr> StatementNumberToCfgNodeMap;
+  
   /**
-   * Constructor for the CFGStore class.
+   * Constructor for the CfgStore class.
    */
-  CFGStore();
+  CfgStore();
 
   /**
-   * Destructor for the CFGStore class.
+   * Destructor for the CfgStore class.
    */
-  ~CFGStore();
+  ~CfgStore();
 
   /**
    * Adds the control flow graph to the store.
    *
    * @param cfg - The CFG to be added.
    */
-  void addCfg(std::shared_ptr<Cfg>& cfg);
+  void AddCfg(const CfgPtr& cfg);
 
   /**
    * Retrieves the CFG given a procedure.
@@ -38,7 +45,7 @@ class CFGStore {
    * @param procedure - The procedure whose CFG is to be retrieved.
    * @return The root node of the CFG for the given procedure.
    */
-  std::shared_ptr<CfgNode> getCfgNodeFromProcedure(PkbTypes::PROCEDURE procedure);
+  CfgNodePtr GetCfgNodeFromProcedure(const Procedure& procedure);
 
   /**
    * Retrieves the CFG node given a statement number.
@@ -46,38 +53,37 @@ class CFGStore {
    * @param statement_number - The statement number representing the statement whose CFG node is to be retrieved.
    * @return The CFG node for the given statement number.
    */
-  std::shared_ptr<CfgNode> getCfgNodeFromStatementNumber(PkbTypes::STATEMENT_NUMBER statement_number);
+  CfgNodePtr GetCfgNodeFromStatementNumber(const StatementNumber& statement_number);
 
   /**
-   * Returns the CFG stored in this CFGStore.
+   * Returns the CFG stored in this CfgStore.
    *
-   * @return The CFG stored in this CFGStore.
+   * @return The CFG stored in this CfgStore.
    */
-  [[nodiscard]] std::shared_ptr<Cfg> getCfg() const;
+  [[nodiscard]] CfgPtr GetCfg() const;
 
   /**
    * Retrieves the map of procedure name to its respective cfg node.
    *
    * @return An unordered map that contains procedure name and cfg nodes as keys and values respectively.
    */
-  std::unordered_map<PkbTypes::PROCEDURE, std::shared_ptr<CfgNode>> getProcedureToCfgRootNodeMap();
+  ProcedureToCfgNodeMap GetProcedureToCfgNodeMap();
 
   /**
    * Retrieves the map of statement number to its respective cfg node.
    *
    * @return An unordered map that contains statement number and cfg nodes as keys and values respectively.
    */
-  std::unordered_map<PkbTypes::STATEMENT_NUMBER, std::shared_ptr<CfgNode>> getStatementNumberToCfgRootNodeMap();
-
+  StatementNumberToCfgNodeMap GetStatementNumberToCfgNodeMap();
 
   /**
-   * Returns the number of CFGs stored in the CFGStore
+   * Returns the number of CFGs stored in the CfgStore
    *
-   * @return The number of CFGs stored in the CFGStore
+   * @return The number of CFGs stored in the CfgStore
    */
-  int getCfgCount() const;
+  int GetCfgCount() const;
 
  private:
-  std::shared_ptr<Cfg> cfg_;
+  CfgPtr cfg_;
 };
 
