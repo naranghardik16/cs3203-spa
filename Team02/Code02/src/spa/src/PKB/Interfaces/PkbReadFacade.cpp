@@ -242,7 +242,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowPairs(Statement
       this->pkb.statement_store_->getStatementsFromType(statement_type_follower);
 
   PkbCommunicationTypes::PairConstraintSet follows_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsPairs();
+      this->pkb.follows_store_->GetFollowsPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -261,7 +261,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowedBy
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsPairs();
+      this->pkb.follows_store_->GetFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -280,7 +280,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementFollowing(
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsPairs();
+      this->pkb.follows_store_->GetFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -298,7 +298,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementsWithFollo
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsPairs();
+      this->pkb.follows_store_->GetFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -316,7 +316,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatAreFol
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsPairs();
+      this->pkb.follows_store_->GetFollowsPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -330,11 +330,11 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetStatementThatAreFol
 }
 
 bool PkbReadFacade::HasFollowsRelationship(std::string statement_num, std::string statement_num_follower) {
-  return this->pkb.follows_store_->hasFollowsRelation(statement_num, statement_num_follower);
+  return this->pkb.follows_store_->HasFollowsRelation(statement_num, statement_num_follower);
 }
 
 bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
-  return this->pkb.follows_store_->hasAnyFollowsRelation();
+  return this->pkb.follows_store_->HasFollowsRelation();
 }
 
 // Follows* API
@@ -347,7 +347,7 @@ PkbCommunicationTypes::PairConstraintSet PkbReadFacade::GetFollowsStarPairs(Stat
       statements_of_type_2 = this->pkb.statement_store_->getStatementsFromType(statement_type_2);
 
   PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+      this->pkb.follows_store_->GetFollowsStarPairs();
 
   PkbCommunicationTypes::PairConstraintSet result;
 
@@ -366,7 +366,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStar(std::st
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+      this->pkb.follows_store_->GetFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -385,7 +385,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarBy(std::
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+      this->pkb.follows_store_->GetFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -403,7 +403,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarFirst(St
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+      this->pkb.follows_store_->GetFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -422,7 +422,7 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(S
       this->pkb.statement_store_->getStatementsFromType(statement_type);
 
   PkbCommunicationTypes::PairConstraintSet follows_star_pairs =
-      this->pkb.follows_store_->retrieveAllFollowsStarPairs();
+      this->pkb.follows_store_->GetFollowsStarPairs();
 
   PkbCommunicationTypes::SingleConstraintSet result;
 
@@ -436,19 +436,19 @@ PkbCommunicationTypes::SingleConstraintSet PkbReadFacade::GetFollowsStarSecond(S
 }
 
 bool PkbReadFacade::HasFollowsStarRelationship() {
-  return this->pkb.follows_store_->hasAnyFollowsStarRelation();
+  return this->pkb.follows_store_->HasFollowsStarRelation();
 }
 
 bool PkbReadFacade::HasFollowsStar(std::string statement_number) {
-  return this->pkb.follows_store_->hasFollowsStar(statement_number);
+  return this->pkb.follows_store_->HasFollowsStarRelation(statement_number);
 }
 
 bool PkbReadFacade::HasFollowsStarBy(std::string statement_number) {
-  return this->pkb.follows_store_->hasFollowsStarBy(statement_number);
+  return this->pkb.follows_store_->HasFollowsStarRelationBy(statement_number);
 }
 
 bool PkbReadFacade::IsFollowsStar(std::string statement_number_1, std::string statement_number_2) {
-  return this->pkb.follows_store_->hasFollowsStarRelation(std::move(statement_number_1),
+  return this->pkb.follows_store_->HasFollowsStarRelation(std::move(statement_number_1),
                                                           std::move(statement_number_2));
 }
 

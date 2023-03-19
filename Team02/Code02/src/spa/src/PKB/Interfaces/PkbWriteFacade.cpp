@@ -61,7 +61,7 @@ void PkbWriteFacade::AddProcedureModifyingVariable(PkbTypes::PROCEDURE procedure
 
 void PkbWriteFacade::AddFollowsRelation(PkbTypes::STATEMENT_NUMBER first_statement,
                                         PkbTypes::STATEMENT_NUMBER second_statement) const {
-  this->pkb.follows_store_->addFollowsRelation(std::move(first_statement),
+  this->pkb.follows_store_->AddFollowsRelation(std::move(first_statement),
                                                std::move(second_statement));
 }
 
