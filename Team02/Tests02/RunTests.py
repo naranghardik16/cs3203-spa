@@ -1,7 +1,9 @@
 import os
 import glob
+import sys
 from collections import Counter
 from typing import List
+
 
 """
 This code took reference from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
@@ -13,12 +15,14 @@ def MakePathSuitableForOS(command):
         command = command.replace('\\', '/')
     return command
 
+
 WINDOWS_OS_NAME = 'nt'
 MAC_OS_NAME = 'posix'
 SUCCESS_EXIT_CODE = 0
 FAILURE_CLOSING_TAG = '</failed>'
 SUCCESS_TAG = '<passed/>'
 OUTPUT_DIRECTORY = MakePathSuitableForOS(os.getcwd() + "\\Result")
+
 
 def FindAutotesterExecutablePath():
     results: List[str] = list()
@@ -33,10 +37,13 @@ def FindAutotesterExecutablePath():
     # defaulting to return the first file in the possible results
     return results[0]
 
+
 def MakeResultDirectory():
     isExist = os.path.exists(OUTPUT_DIRECTORY)
     if not isExist:
         os.makedirs(OUTPUT_DIRECTORY)
+
+
 def GetAutotesterParameterList(folder_to_test_in):
     current_directory = os.getcwd()
     test_name_list = glob.glob(current_directory + f"/{folder_to_test_in}/*/*.txt")
@@ -46,7 +53,8 @@ def GetAutotesterParameterList(folder_to_test_in):
     # each source file will have a query file with the same test name
     sorted_source_test_name_list = sorted(source_test_name_list)
     sorted_query_test_name_list = sorted(query_test_name_list)
-    assert len(sorted_source_test_name_list) == len(sorted_query_test_name_list), "Not every source file has a query file or vice versa"
+    assert len(sorted_source_test_name_list) == len(sorted_query_test_name_list), \
+        "Not every source file has a query file or vice versa"
 
     autotester_parameter_list = []
     for i in range(len(sorted_source_test_name_list)):
@@ -55,7 +63,8 @@ def GetAutotesterParameterList(folder_to_test_in):
 
         source_test_name = source_file_name[:-10]
         query_test_name = query_file_name[:-11]
-        assert source_test_name == query_test_name, f"Source file name is {source_test_name} while query file name is {query_test_name}"
+        assert source_test_name == query_test_name, \
+            f"Source file name is {source_test_name} while query file name is {query_test_name}"
 
         backslash_char = "\\"
         x = backslash_char if os.name == WINDOWS_OS_NAME else '/'
@@ -66,6 +75,7 @@ def GetAutotesterParameterList(folder_to_test_in):
         autotester_parameter_list.append([source_file_name, query_file_name, output_file_name, test_name])
 
     return autotester_parameter_list
+
 
 """
 Taken from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
@@ -97,6 +107,7 @@ def ExecuteAutotester(autotester_filepath, autotester_param):
     test_summary = f"Autotester run completed for {test_name} with output {check_output_xml(output_xml_filepath)}"
     return test_summary
 
+
 def Execute(folder_to_test_in):
     autotester_file_path = FindAutotesterExecutablePath()
     autotester_param_list = GetAutotesterParameterList(folder_to_test_in)
@@ -117,10 +128,15 @@ def Execute(folder_to_test_in):
         copy_command = "copy"
     move_xsl_file_to_results = MakePathSuitableForOS(copy_command + " analysis.xsl ./Result")
 
-    start_python_host_command = "python -m http.server 8000"
     os.system(move_xsl_file_to_results)
-    os.system(start_python_host_command)
 
-#if test all then put *
-folder_to_test_in = "Milestone2"
-Execute(folder_to_test_in)
+
+if __name__ == "__main__":
+    Execute("Milestone1")
+    Execute("Milestone2")
+
+    if len(sys.argv) != 2:
+        start_python_host_command = "python -m http.server 8000"
+        os.system(start_python_host_command)
+
+
