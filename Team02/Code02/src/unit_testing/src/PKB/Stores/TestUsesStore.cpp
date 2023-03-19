@@ -9,10 +9,10 @@ TEST_CASE("Testcases for Uses Store") {
     REQUIRE(uses_store->retrieveAllVariablesUsedByAStatement("2") == std::unordered_set<PkbTypes::VARIABLE>({}));
     REQUIRE(uses_store->GetVariablesUsedByProcedure("anya") ==
     std::unordered_set<PkbTypes::VARIABLE>({}));
-    REQUIRE(uses_store->GetProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE,
-                                                                                    PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
-    REQUIRE(uses_store->GetStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                                    PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
+    REQUIRE(uses_store->GetProcedureVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
+    REQUIRE(uses_store->GetStatementVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({}));
   }
 
   SECTION("Single statement using a single variable") {
@@ -47,9 +47,11 @@ TEST_CASE("Testcases for Uses Store") {
     REQUIRE(uses_store->HasUsesStatementVariableRelation("2", "a") == true);
     REQUIRE(uses_store->HasUsesStatementVariableRelation("3", "a") == true);
     REQUIRE_FALSE(uses_store->HasUsesStatementVariableRelation("3", "b") == true);
-    REQUIRE(uses_store->GetStatementVariablePairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                                    PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({ std::make_pair("2", "a"),
-                                                              std::make_pair("3", "a")}));
+    REQUIRE(uses_store->GetStatementVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+      std::make_pair("2", "a"),
+      std::make_pair("3", "a")
+    }));
   }
 
   SECTION("Multiple statements Using multiple variables") {

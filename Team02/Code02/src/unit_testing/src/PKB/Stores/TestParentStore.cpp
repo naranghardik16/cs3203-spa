@@ -9,10 +9,12 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->HasParentStarRelation("2") == false);
     REQUIRE(parent_store->HasParentRelation("1", "2") == false);
     REQUIRE(parent_store->HasParentStarRelationBy("2") == false);
-    REQUIRE(parent_store->GetParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                           PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
-    REQUIRE(parent_store->GetParentStarPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                               PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
+    REQUIRE(parent_store->GetParentPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+        PairHasherUtil::hash_pair>({}));
+    REQUIRE(parent_store->GetParentStarPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+        PairHasherUtil::hash_pair>({}));
     REQUIRE(parent_store->HasParentStarRelation("1", "2") == false);
     REQUIRE(parent_store->GetParents() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({}));
     REQUIRE(parent_store->GetParents("2") == PkbTypes::STATEMENT_NUMBER({}));
@@ -35,9 +37,10 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->HasParentRelation("1", "2") == true);
     REQUIRE(parent_store->HasParentRelation("4", "8") == true);
     REQUIRE_FALSE(parent_store->HasParentRelation("1", "8") == true);
-    REQUIRE(parent_store->GetParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                           PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
-              std::make_pair("1", "2"), std::make_pair("4", "8")}));
+    REQUIRE(parent_store->GetParentPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+              std::make_pair("1", "2"), std::make_pair("4", "8")
+    }));
     REQUIRE(parent_store->GetParents() == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1", "4" }));
     REQUIRE(parent_store->GetParents("2") ==  PkbTypes::STATEMENT_NUMBER("1"));
     REQUIRE(parent_store->GetParents("8") ==  PkbTypes::STATEMENT_NUMBER("4"));
@@ -74,8 +77,8 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->GetParents("3") == PkbTypes::STATEMENT_NUMBER("1"));
     REQUIRE(parent_store->GetParents("4") == PkbTypes::STATEMENT_NUMBER("3"));
 
-    REQUIRE(parent_store->GetParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                           PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+    REQUIRE(parent_store->GetParentPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"), std::make_pair("1", "3"),
               std::make_pair("3", "4")}));
 
@@ -139,8 +142,8 @@ TEST_CASE("Testcases for Parent Store") {
     REQUIRE(parent_store->GetParents("12") == PkbTypes::STATEMENT_NUMBER("10"));
     REQUIRE(parent_store->GetParents("13") == PkbTypes::STATEMENT_NUMBER("12"));
 
-    REQUIRE(parent_store->GetParentPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                           PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+    REQUIRE(parent_store->GetParentPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"), std::make_pair("1", "3"),
               std::make_pair("1", "4"), std::make_pair("4", "5"),
               std::make_pair("5", "6"), std::make_pair("5", "7"),

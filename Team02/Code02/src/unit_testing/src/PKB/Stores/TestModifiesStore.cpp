@@ -228,8 +228,8 @@ TEST_CASE("Testcases for Modifies Store") {
     REQUIRE(modifies_store->GetVariablesModifiedByProcedure("Hanhui") ==
     std::unordered_set<std::string>({"d"}));
 
-    REQUIRE(modifies_store->GetProcedureVariablePairs() == std::unordered_set<std::pair<PkbTypes::PROCEDURE ,
-                                                                                        PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
+    REQUIRE(modifies_store->GetProcedureVariablePairs() ==
+    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>, PairHasherUtil::hash_pair>({
               std::make_pair("Anya", "a"), std::make_pair("Bumblebee", "b"),
               std::make_pair("Megatron", "c"), std::make_pair("Ironhide", "d"),
               std::make_pair("Maya", "a"), std::make_pair("Sourabh", "b"),

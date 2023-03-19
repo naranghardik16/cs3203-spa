@@ -66,8 +66,8 @@ TEST_CASE("Testcases for Follows Store") {
     follows_store->AddFollowsRelation("7", "8");
     follows_store->AddFollowsRelation("8", "9");
 
-    REQUIRE(follows_store->GetFollowsPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                             PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+    REQUIRE(follows_store->GetFollowsPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"), std::make_pair("2", "3"),
               std::make_pair("3", "4"), std::make_pair("4", "5"),
               std::make_pair("5", "6"), std::make_pair("6", "7"),
@@ -123,8 +123,8 @@ TEST_CASE("Testcases for Follows Store") {
     REQUIRE(follows_store->HasFollowsStarRelation("4", "5") == true);
     REQUIRE(follows_store->HasFollowsStarRelation("4", "6") == true);
     REQUIRE(follows_store->HasFollowsStarRelation("5", "6") == true);
-    REQUIRE(follows_store->GetFollowsStarPairs() == std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER,
-                                                                                 PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
+    REQUIRE(follows_store->GetFollowsStarPairs() ==
+    std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({
               std::make_pair("1", "2"),
               std::make_pair("1", "2"),
               std::make_pair("1", "2"),
