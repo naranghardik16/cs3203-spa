@@ -2,7 +2,6 @@ import os
 import glob
 import sys
 from collections import Counter
-from typing import List
 
 
 """
@@ -25,7 +24,7 @@ OUTPUT_DIRECTORY = MakePathSuitableForOS(os.getcwd() + "\\Result")
 
 
 def FindAutotesterExecutablePath():
-    results: List[str] = list()
+    results = list()
     file_name = 'autotester.exe' if os.name == WINDOWS_OS_NAME else 'autotester'
     for root, dirs, files in os.walk(os.path.dirname(os.getcwd())):
         if file_name in files:
@@ -102,7 +101,7 @@ def ExecuteAutotester(autotester_filepath, autotester_param, redirect_output):
     command = MakePathSuitableForOS(command)
 
     if redirect_output:
-        exit_code = os.system(command + "> log.txt")
+        exit_code = os.system(command + "> LOG.txt")
     else:
         exit_code = os.system(command)
 
