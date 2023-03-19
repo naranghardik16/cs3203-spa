@@ -7,8 +7,8 @@
 
 using namespace std;
 
-class SP {
+class Sp {
  public:
-  SP();
+  Sp();
   void ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb);
 };

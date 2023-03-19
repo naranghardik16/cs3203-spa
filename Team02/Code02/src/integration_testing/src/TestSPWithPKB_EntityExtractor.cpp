@@ -4,9 +4,9 @@
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/PKB.h"
 #include "PKB/Types/PkbTypes.h"
-#include "SP/SP.h"
+#include "SP/Sp.h"
 
-TEST_CASE("Check if SP works with PKB") {
+TEST_CASE("Check if Sp works with PKB") {
   try {
     string input = "procedure main {\n"
                    "  flag = 1;\n"
@@ -22,10 +22,11 @@ TEST_CASE("Check if SP works with PKB") {
     is.str(input);
 
     shared_ptr<PKB> pkb = make_shared<PKB>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     sp->ProcessSIMPLE(is, pkb);
 
-    shared_ptr<PkbReadFacade> pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+    shared_ptr<PkbReadFacade>
+        pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
     SECTION("Check if Accept(Procedure) works") {
       std::unordered_set<std::string>
           procedure_store = pkb_read_facade->GetProcedures();
@@ -91,7 +92,7 @@ TEST_CASE("Check if Entity Extraction is correct for one if statement") {
   is.str(input);
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   sp->ProcessSIMPLE(is, pkb);
 
   shared_ptr<PkbReadFacade> pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -130,7 +131,7 @@ TEST_CASE("Check if Entity Extraction is correct for one while statement") {
   is.str(input);
 
   shared_ptr<PKB> pkb = make_shared<PKB>();
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   sp->ProcessSIMPLE(is, pkb);
 
   shared_ptr<PkbReadFacade> pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
@@ -182,10 +183,11 @@ TEST_CASE(
 
   try {
     shared_ptr<PKB> pkb = make_shared<PKB>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     sp->ProcessSIMPLE(is, pkb);
 
-    shared_ptr<PkbReadFacade> pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+    shared_ptr<PkbReadFacade>
+        pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
 
     SECTION("Check if the variable from if statements are added") {
       auto var_store = pkb_read_facade->GetVariables();
@@ -253,10 +255,11 @@ TEST_CASE(
 
   try {
     shared_ptr<PKB> pkb = make_shared<PKB>();
-    shared_ptr<SP> sp = make_shared<SP>();
+    shared_ptr<Sp> sp = make_shared<Sp>();
     sp->ProcessSIMPLE(is, pkb);
 
-    shared_ptr<PkbReadFacade> pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+    shared_ptr<PkbReadFacade>
+        pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
 
     SECTION("Check if the variable from if statements are added") {
       auto var_store = pkb_read_facade->GetVariables();

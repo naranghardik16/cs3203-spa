@@ -3,7 +3,7 @@
 #include <sstream>
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/PKB.h"
-#include "SP/SP.h"
+#include "SP/Sp.h"
 #include <utility>
 
 TEST_CASE("Check if Next Abstractions are correct") {

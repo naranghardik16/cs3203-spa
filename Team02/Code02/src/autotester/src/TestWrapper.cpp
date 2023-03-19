@@ -22,7 +22,7 @@ void TestWrapper::parse(std::string filename) {
   // ...rest of your code...
 
   std::ifstream source(filename);
-  shared_ptr<SP> sp = make_shared<SP>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
   sp->ProcessSIMPLE(source, pkb_);
 }
 

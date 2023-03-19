@@ -1,8 +1,8 @@
-#include "SP.h"
+#include "Sp.h"
 
-SP::SP() {};
+Sp::Sp() {};
 
-void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
+void Sp::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
   try {
     shared_ptr<Tokenizer> tokenizer = make_shared<Tokenizer>();
     shared_ptr<Parser::TokenStream> tokens = tokenizer->Tokenize(source);
@@ -10,7 +10,8 @@ void SP::ProcessSIMPLE(istream &source, shared_ptr<PKB> pkb) {
     shared_ptr<Parser> parser = make_shared<Parser>();
     shared_ptr<Program> program = parser->ParseSource(*tokens);
 
-    shared_ptr<SPSemanticValidator> validator = make_shared<SPSemanticValidator>();
+    shared_ptr<SPSemanticValidator>
+        validator = make_shared<SPSemanticValidator>();
     validator->ValidateProgram(program);
 
     shared_ptr<DesignExtractor>

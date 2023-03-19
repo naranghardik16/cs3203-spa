@@ -7,7 +7,7 @@
 
 /**
  * Facade implementation consisting of write methods
- * which acts as an interface between SP and PKB
+ * which acts as an interface between Sp and PKB
  */
 class PkbWriteFacade {
  private:
@@ -132,27 +132,29 @@ class PkbWriteFacade {
   void AddWhileStatementAndCondition(PkbTypes::STATEMENT_NUMBER statement_number,
                                      std::shared_ptr<Expression> expression);
 
-   /**
-    * Adds calls relation to the PKB.
-    *
-    * @param caller_procedure - The caller procedure.
-    * @param callee_procedure - The callee procedure.
-    */
-   void AddCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  /**
+   * Adds calls relation to the PKB.
+   *
+   * @param caller_procedure - The caller procedure.
+   * @param callee_procedure - The callee procedure.
+   */
+  void AddCallsRelation(PkbTypes::PROCEDURE caller_procedure,
+                        PkbTypes::PROCEDURE callee_procedure);
 
-   /**
-    * Adds calls statement to procedure name mapping to PKB.
-    *
-    * @param statement_number - The statement number associated with the call statement.
-    * @param procedure - The procedure being called as a part of that statement.
-    */
-   void AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number, PkbTypes::PROCEDURE procedure);
+  /**
+   * Adds calls statement to procedure name mapping to PKB.
+   *
+   * @param statement_number - The statement number associated with the call statement.
+   * @param procedure - The procedure being called as a part of that statement.
+   */
+  void AddCallStatementToProcedureName(PkbTypes::STATEMENT_NUMBER statement_number,
+                                       PkbTypes::PROCEDURE procedure);
 
-   /**
-    * Adds control flow graph to PKB.
-    *
-    * @param cfg - The control flow graph to be added.
-    */
-   void AddCfg(std::shared_ptr<Cfg>& cfg);
+  /**
+   * Adds control flow graph to PKB.
+   *
+   * @param cfg - The control flow graph to be added.
+   */
+  void AddCfg(std::shared_ptr<Cfg> &cfg);
 };
 

@@ -1,4 +1,3 @@
-#pragma once
 #include "EntityExtractor.h"
 
 EntityExtractor::EntityExtractor(shared_ptr<PKB> pkb) {
