@@ -50,6 +50,10 @@ std::shared_ptr<Result> AffectsStarClauseEvaluator::EvaluateClause(std::shared_p
     } else if (is_second_arg_a_type_of_assign_synonym) {
       // e.g. Affects*(a, a1) —> get pairs of assigns such that a affects* a1
       pair_constraint = pkb->GetAffectsStarPairs();
+
+      if (first_arg_ == second_arg_) {
+        pair_constraint = ClauseEvaluator::FilterForSameSynonym(pair_constraint);
+      }
     } else {
       // e.g. Affects*(a,”6”) --> get assigns that directly or indirectly affect stmt 6
       single_constraint = pkb->GetAssignsAffectingStar(second_arg_);
