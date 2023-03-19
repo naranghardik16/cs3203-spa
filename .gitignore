@@ -683,6 +683,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 *.xml
+LOG.txt
 
 LOG.txt
 
