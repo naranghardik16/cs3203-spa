@@ -624,7 +624,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{ "FacTor", "factor", "x", "y", "z" };
+    Results expected_results{"FacTor", "factor", "x", "y", "z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -636,7 +636,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{ "FacTor", "factor" };
+    Results expected_results{"FacTor", "factor"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -648,10 +648,89 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{ "FacTor", "factor" };
+    Results expected_results{"FacTor", "factor"};
     results.sort();
     REQUIRE(results == expected_results);
   }
+
+  SECTION("Get all variables by sub pattern - sub expression") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,_"(2 * hello - 1) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FacTor", "factor"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all variables by sub pattern - varName") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,_"hello"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FacTor", "factor"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all variables by sub pattern - partial varName") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(v,_"hel"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all variables by sub pattern - constant") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,_"64"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FacTor", "factor"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get assign by sub pattern - pattern is not substring") {
+    Query query = R"(assign a; variable v; Select a pattern a(v,_"(2 * hello - 1) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Bracket matters - correct bracket") {
+    Query query = R"(assign a; variable v; Select a pattern a(v,_"((x + 1) * (x + 2)) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Bracket matters - wrong bracket") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(v,_"x + 1 * x + 2 "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+
 
 }
 
