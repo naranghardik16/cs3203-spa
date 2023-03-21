@@ -730,6 +730,37 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("AST lhs and rhs cannot swap - sub pattern") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(v,_"((x + 2) * (x + 1)) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("AST lhs and rhs cannot swap - full pattern") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(v,_"x + 11 "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("RHS is not an expression - syntactic error") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(v,_"y = 11 + x; "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
 
 
 }
