@@ -27,10 +27,6 @@ TEST_CASE("Test Clause Sorting") {
                            {"a3",  "assign"}, {"s1",  "stmt"}
         , {"s2", "stmt"}, {"s3", "stmt"}, {"v1", "variable"}, {"v2", "variable"}};
     auto groups = opt->GetClauseGroups(parser_output->GetClauseSyntaxPtrList());
-    for (auto group : groups) {
-      group->SortClauses(declaration_map);
-    }
-
     std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(CreateCorrectSyntaxPair
         ("a1",  {"v1", "_"}));
     std::shared_ptr<ClauseSyntax> modifies_syntax = std::make_shared<SuchThatClauseSyntax>(CreateCorrectSyntaxPair
@@ -45,9 +41,10 @@ TEST_CASE("Test Clause Sorting") {
         CreateCorrectSyntaxPair("Uses", {"s2", "v1"}));
     std::vector<ClauseSyntaxPtrList> correct_vector = {{with_syntax, modifies_syntax}, {pattern_syntax,  uses_syntax,
                                                                            follows_syntax}};
+
     for (int i = 0; i < correct_vector.size(); i++) {
       auto correct_clause_lst = correct_vector[i];
-      auto parsed_lst = groups[i]->GetClauseList();
+      auto parsed_lst = groups[i]->GetSortedClauses(declaration_map);
       for (int j = 0; j < correct_clause_lst.size(); j++) {
         REQUIRE(correct_clause_lst[j]->Equals(*parsed_lst[j]));
       }

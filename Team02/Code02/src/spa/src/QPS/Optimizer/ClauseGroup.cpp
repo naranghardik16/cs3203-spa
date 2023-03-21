@@ -31,7 +31,7 @@ bool IsClauseAccessible(std::unordered_set<std::string> accessible_syn_set, std:
   return is_accessible;
 }
 
-void ClauseGroup::SortClauses(Map &declaration_map) {
+ClauseSyntaxPtrList ClauseGroup::GetSortedClauses(Map &declaration_map) {
   std::vector<std::shared_ptr<ClauseSyntax>> sorted_clause_list;
 
   CompareScore comp(declaration_map);
@@ -77,5 +77,5 @@ void ClauseGroup::SortClauses(Map &declaration_map) {
     filtered_clauses.clear();
   }
 
-  clause_list_ = sorted_clause_list;
+  return sorted_clause_list;
 }

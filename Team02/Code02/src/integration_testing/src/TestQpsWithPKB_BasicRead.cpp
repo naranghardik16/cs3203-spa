@@ -450,6 +450,20 @@ TEST_CASE("Integration testing for Calls") {
   pkb_write->AddCallsRelation("proc6", "proc7");
 
 
+  SECTION("Calls Multiclause -- test transitive") {
+    // Select procedures that call procedures that are callers
+    std::string query =
+        "procedure p,p1,p2,p3,p4; "
+        "Select <p1,p2,p3.procName,p4> such that Calls(p1,p2) and Calls(p2,p3) and Calls(p3,p4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    std::list<std::string>
+        expected_results{"proc1 proc2 proc3 proc4", "proc1 proc2 proc5 proc6",
+                         "proc2 proc5 proc6 proc7"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Calls(_,_) is true") {
     std::string query = "procedure p; Select p.procName such that Calls(_,_)";
     std::list<std::string> results;
@@ -598,20 +612,6 @@ TEST_CASE("Integration testing for Calls") {
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
     std::list<std::string> expected_results{"proc1", "proc2", "proc5"};
-    results.sort();
-    REQUIRE(results == expected_results);
-  }
-
-  SECTION("Calls Multiclause -- test transitive") {
-    // Select procedures that call procedures that are callers
-    std::string query =
-        "procedure p,p1,p2,p3,p4; "
-        "Select <p1,p2,p3.procName,p4> such that Calls(p1,p2) and Calls(p2,p3) and Calls(p3,p4)";
-    std::list<std::string> results;
-    Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string>
-        expected_results{"proc1 proc2 proc3 proc4", "proc1 proc2 proc5 proc6",
-                         "proc2 proc5 proc6 proc7"};
     results.sort();
     REQUIRE(results == expected_results);
   }
