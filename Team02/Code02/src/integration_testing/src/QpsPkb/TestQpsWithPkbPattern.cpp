@@ -399,23 +399,38 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
   // 1. y = 11 + x
   pkb_write->AddStatementOfAType("1", ASSIGN);
   pkb_write->AddStatementModifyingVariable("1", "y");
-  pkb_write->AddAssignmentStatementAndExpression("1",
-                                                 egs->GetExpressionFromInput(token_list_expression_with_variables_1,
-                                                                             "assign"));
+  pkb_write->AddAssignmentStatementAndExpression(
+      "1",egs->GetExpressionFromInput(
+          token_list_expression_with_variables_1,"assign"));
 
   // 2. y = x * (x + 1) / 2
   pkb_write->AddStatementOfAType("2", ASSIGN);
   pkb_write->AddStatementModifyingVariable("2", "y");
-  pkb_write->AddAssignmentStatementAndExpression("2",
-                                                 egs->GetExpressionFromInput(token_list_expression_with_variables_7,
-                                                                             "assign"));
+  pkb_write->AddAssignmentStatementAndExpression(
+      "2",egs->GetExpressionFromInput(
+          token_list_expression_with_variables_7,"assign"));
 
   // 3. x = (3 * 16 + 3 * 1)
   pkb_write->AddStatementOfAType("3", ASSIGN);
   pkb_write->AddStatementModifyingVariable("3", "x");
-  pkb_write->AddAssignmentStatementAndExpression("3",
-                                                 egs->GetExpressionFromInput(token_list_pure_numbered_expression_8,
-                                                                             "assign"));
+  pkb_write->AddAssignmentStatementAndExpression(
+      "3",egs->GetExpressionFromInput(
+          token_list_pure_numbered_expression_8,"assign"));
+
+  // 4. z = 3 * 6 - 7 + 2
+  pkb_write->AddStatementOfAType("4", ASSIGN);
+  pkb_write->AddStatementModifyingVariable("4", "z");
+  pkb_write->AddAssignmentStatementAndExpression(
+      "4", egs->GetExpressionFromInput(
+          token_list_pure_numbered_expression_2, "assign"));
+
+  // 5. factor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * x - 1) / (6 * x)
+  pkb_write->AddStatementOfAType("5", ASSIGN);
+  pkb_write->AddStatementModifyingVariable("5", "factor");
+  pkb_write->AddAssignmentStatementAndExpression(
+      "5", egs->GetExpressionFromInput(
+          token_list_expression_with_variables_10, "assign"));
+
 
 
   SECTION("Test Exact Match Assign Statement") {
@@ -424,8 +439,94 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{"1", "2"};
+    Results expected_results{"1", "2", "5"};
     REQUIRE(results == expected_results);
   }
+
+  SECTION("All assignments") {
+    Query query = "assign a; Select a pattern a (_,_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"1", "2", "3", "4", "5"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("All assignments by full pattern") {
+    Query query = "assign a; Select a pattern a(_,\"3 * 6 - 7 + 2\")";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"4"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("All assignments by sub pattern") {
+    Query query = "assign a; Select a pattern a(_,_\"3 * 6 - 7\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"4"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("No assignments by sub pattern") {
+    Query query = "assign a; Select BOOLEAN pattern a(_,_\"6 - 7\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Using full pattern as sub pattern") {
+    Query query = "assign a; Select a pattern a(_,_\"x * (x + 1) / 2\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"2"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Using brackets in sub-pattern - match") {
+    Query query = "assign a; Select a pattern a(_,_\"((3 * 16) + (3 * 1))\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"3"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Using brackets in sub-pattern - no match") {
+    Query query = "assign a; Select BOOLEAN pattern a(_,_\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) "
+                  "* (2 * x + 1) * ((2 * x - 1) / (6 * x))\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+
+
+
+
+
+
+
 }
 
