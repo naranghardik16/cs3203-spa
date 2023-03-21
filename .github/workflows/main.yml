@@ -93,5 +93,5 @@ jobs:
           python-version: 3.x
       - name: Running System Tests
         shell: bash
-        working-directory: ${{runner.workspace}}/build
-        run: python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False
+        working-directory: $GITHUB_WORKSPACE/Team02/Tests02
+        run: python3 RunTests.py False
