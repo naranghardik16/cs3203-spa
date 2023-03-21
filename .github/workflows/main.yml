@@ -58,7 +58,7 @@ jobs:
 
   build_macos:
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: true
 
