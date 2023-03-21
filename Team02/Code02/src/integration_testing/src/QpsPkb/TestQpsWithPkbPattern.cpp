@@ -334,7 +334,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
       make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)
   };
 
-  // (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * x - 1) / (6 * x)
+  // (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x)
   TokenList token_list_expression_with_variables_10{
       make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
       make_shared<NameToken>("x"),
@@ -383,7 +383,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
       make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
       make_shared<IntegerToken>("2"),
       make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
-      make_shared<NameToken>("x"),
+      make_shared<NameToken>("hello"),
       make_shared<ArithmeticOperatorToken>("-", MINUS),
       make_shared<IntegerToken>("1"),
       make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
@@ -424,14 +424,14 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
       "4", egs->GetExpressionFromInput(
           token_list_pure_numbered_expression_2, "assign"));
 
-  // 5. factor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * x - 1) / (6 * x)
+  // 5. factor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x)
   pkb_write->AddStatementOfAType("5", ASSIGN);
   pkb_write->AddStatementModifyingVariable("5", "factor");
   pkb_write->AddAssignmentStatementAndExpression(
       "5", egs->GetExpressionFromInput(
           token_list_expression_with_variables_10, "assign"));
 
-  // 6. FacTor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)
+  // 6. FacTor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x)
   pkb_write->AddStatementOfAType("6", ASSIGN);
   pkb_write->AddStatementModifyingVariable("6", "FacTor");
   pkb_write->AddAssignmentStatementAndExpression(
@@ -518,7 +518,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
 
   SECTION("Using brackets in sub-pattern - no match") {
     Query query = "assign a; Select BOOLEAN pattern a(_,_\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) "
-                  "* (2 * x + 1) * ((2 * x - 1) / (64 * x))\"_)";
+                  "* (2 * x + 1) * ((2 * hello - 1) / (64 * x))\"_)";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
@@ -552,7 +552,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
 
   SECTION("Get by variable and full pattern") {
     Query query = "assign a; Select a pattern a(\"FacTor\",\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * "
-                  "(x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)\")";
+                  "(x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x)\")";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
@@ -564,7 +564,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
 
   SECTION("Get by variable and sub pattern - full expression") {
     Query query = "assign a; Select a pattern a(\"FacTor\",_\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * "
-                  "(x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)\"_)";
+                  "(x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x)\"_)";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
@@ -575,7 +575,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
   }
 
   SECTION("Get by variable and sub pattern - subexpression") {
-    Query query = "assign a; Select a pattern a(\"FacTor\",_\"(2 * x - 1)\"_)";
+    Query query = "assign a; Select a pattern a(\"FacTor\",_\"(2 * hello - 1)\"_)";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
@@ -607,7 +607,51 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Get by variable and sub pattern - varname") {
+    Query query = R"(assign a; Select a pattern a(_,_"hello"_))";
 
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all assigned variables") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{ "FacTor", "factor", "x", "y", "z" };
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all variables by full pattern") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) *
+      (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x) "))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{ "FacTor", "factor" };
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get all variables by sub pattern - full expression") {
+    Query query = R"(assign a; variable v; Select v pattern a(v,_"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) *
+      (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{ "FacTor", "factor" };
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
 }
 
