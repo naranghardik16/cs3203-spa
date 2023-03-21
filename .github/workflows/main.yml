@@ -94,4 +94,6 @@ jobs:
       - name: Running System Tests
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False
+        run: |
+          cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl ${{runner.workspace}}/build
+          python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False
