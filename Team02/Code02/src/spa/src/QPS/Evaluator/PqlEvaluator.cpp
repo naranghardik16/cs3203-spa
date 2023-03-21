@@ -85,8 +85,9 @@ std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
   std::vector<std::shared_ptr<Result>> results;
 
   for (auto &group : groups_) {
-    std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
-    ClauseSyntaxPtrList clause_list = group->GetClauseList();
+    std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{},
+                                                                                ResultTable{});
+    ClauseSyntaxPtrList clause_list = group->GetSortedClauses(declaration_map_);
     for (const auto& kClause : clause_list) {
       auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
       std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);

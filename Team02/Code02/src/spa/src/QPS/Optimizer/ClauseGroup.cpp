@@ -31,16 +31,13 @@ bool IsClauseAccessible(std::unordered_set<std::string> accessible_syn_set, std:
   return is_accessible;
 }
 
-void ClauseGroup::SortClauses(Map &declaration_map) {
+ClauseSyntaxPtrList ClauseGroup::GetSortedClauses(Map &declaration_map) {
   std::vector<std::shared_ptr<ClauseSyntax>> sorted_clause_list;
 
   CompareScore comp(declaration_map);
-  // Creates a min heap
+  // Creates a min heap in O(n)
   std::priority_queue <std::shared_ptr<ClauseSyntax>, vector<std::shared_ptr<ClauseSyntax>>,
-  CompareScore> pq(declaration_map);
-  for (auto clause : clause_list_) {
-    pq.push(clause);
-  }
+  CompareScore> pq(clause_list_.begin(), clause_list_.end(), declaration_map);
 
   // Get clause with lowest score as starting clause
   auto clause = pq.top();
@@ -77,5 +74,5 @@ void ClauseGroup::SortClauses(Map &declaration_map) {
     filtered_clauses.clear();
   }
 
-  clause_list_ = sorted_clause_list;
+  return sorted_clause_list;
 }

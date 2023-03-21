@@ -1,6 +1,7 @@
 #pragma once
 #include "QPS/Util/PQLConstants.h"
 #include "QPS/Clause/ClauseSyntax.h"
+#include <tuple>
 
 class CompareScore {
   Map declaration_map_;
