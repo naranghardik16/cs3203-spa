@@ -403,13 +403,29 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
                                                  egs->GetExpressionFromInput(token_list_expression_with_variables_1,
                                                                              "assign"));
 
+  // 2. y = x * (x + 1) / 2
+  pkb_write->AddStatementOfAType("2", ASSIGN);
+  pkb_write->AddStatementModifyingVariable("2", "y");
+  pkb_write->AddAssignmentStatementAndExpression("2",
+                                                 egs->GetExpressionFromInput(token_list_expression_with_variables_7,
+                                                                             "assign"));
+
+  // 3. x = (3 * 16 + 3 * 1)
+  pkb_write->AddStatementOfAType("3", ASSIGN);
+  pkb_write->AddStatementModifyingVariable("3", "x");
+  pkb_write->AddAssignmentStatementAndExpression("3",
+                                                 egs->GetExpressionFromInput(token_list_pure_numbered_expression_8,
+                                                                             "assign"));
+
+
   SECTION("Test Exact Match Assign Statement") {
     Query query = "assign a; variable v; Select a pattern a (v, _\"x\"_)";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{"1"};
+    Results expected_results{"1", "2"};
     REQUIRE(results == expected_results);
   }
 }
+
