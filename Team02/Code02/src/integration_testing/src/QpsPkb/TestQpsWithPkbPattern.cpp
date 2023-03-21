@@ -389,7 +389,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
       make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
       make_shared<ArithmeticOperatorToken>("/", DIV),
       make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
-      make_shared<IntegerToken>("6"),
+      make_shared<IntegerToken>("64"),
       make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
       make_shared<NameToken>("x"),
       make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS)
@@ -431,6 +431,13 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
       "5", egs->GetExpressionFromInput(
           token_list_expression_with_variables_10, "assign"));
 
+  // 6. FacTor = (x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)
+  pkb_write->AddStatementOfAType("6", ASSIGN);
+  pkb_write->AddStatementModifyingVariable("6", "FacTor");
+  pkb_write->AddAssignmentStatementAndExpression(
+      "6", egs->GetExpressionFromInput(
+          token_list_expression_with_variables_10, "assign"));
+
 
 
   SECTION("Test Exact Match Assign Statement") {
@@ -439,7 +446,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{"1", "2", "5"};
+    Results expected_results{"1", "2", "5", "6"};
     REQUIRE(results == expected_results);
   }
 
@@ -449,7 +456,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{"1", "2", "3", "4", "5"};
+    Results expected_results{"1", "2", "3", "4", "5", "6"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -511,7 +518,7 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
 
   SECTION("Using brackets in sub-pattern - no match") {
     Query query = "assign a; Select BOOLEAN pattern a(_,_\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * (x - 3) "
-                  "* (2 * x + 1) * ((2 * x - 1) / (6 * x))\"_)";
+                  "* (2 * x + 1) * ((2 * x - 1) / (64 * x))\"_)";
 
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
@@ -521,10 +528,84 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Get assign by variable name") {
+    Query query = "assign a; Select a pattern a(\"factor\",_)";
 
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
 
+    Results expected_results{"5"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
+  SECTION("Get assign by variable name - case insensitive") {
+    Query query = "assign a; Select a pattern a(\"FacTor\",_)";
 
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get by variable and full pattern") {
+    Query query = "assign a; Select a pattern a(\"FacTor\",\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * "
+                  "(x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)\")";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get by variable and sub pattern - full expression") {
+    Query query = "assign a; Select a pattern a(\"FacTor\",_\"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) * "
+                  "(x - 3) * (2 * x + 1) * (2 * x - 1) / (64 * x)\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get by variable and sub pattern - subexpression") {
+    Query query = "assign a; Select a pattern a(\"FacTor\",_\"(2 * x - 1)\"_)";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get by variable and sub pattern - constant") {
+    Query query = R"(assign a; Select a pattern a("FacTor",_"64"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Get by variable and sub pattern - partial constant") {
+    Query query = R"(assign a; Select a pattern a("FacTor",_"6"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
 
 
