@@ -23,12 +23,12 @@ TEST_CASE("Test Clause Sorting") {
     auto parser_output = qp->ParseQuery(query);
     auto groups = opt->GetClauseGroups(parser_output->GetClauseSyntaxPtrList());
 
-    Map declaration_map = {{"s2", "stmt"},{"s1", "stmt"},{"a1","assign"}};
+    Map declaration_map = {{"s2",  "stmt"}, {"s1",  "stmt"}, {"a1", "assign"}};
     std::shared_ptr<ClauseSyntax> follows_syntax_stmt = std::make_shared<SuchThatClauseSyntax>(
         CreateCorrectSyntaxPair("Follows", {"s1", "s2"}));
     std::shared_ptr<ClauseSyntax> follows_syntax_assign = std::make_shared<SuchThatClauseSyntax>(
         CreateCorrectSyntaxPair("Follows", {"s2", "a1"}));
-    std::vector<ClauseSyntaxPtrList> correct_vector = {{follows_syntax_assign,follows_syntax_stmt}};
+    std::vector<ClauseSyntaxPtrList> correct_vector = {{follows_syntax_assign, follows_syntax_stmt}};
 
     for (int i = 0; i < correct_vector.size(); i++) {
       auto correct_clause_lst = correct_vector[i];
@@ -45,7 +45,7 @@ TEST_CASE("Test Clause Sorting") {
     auto parser_output = qp->ParseQuery(query);
     auto groups = opt->GetClauseGroups(parser_output->GetClauseSyntaxPtrList());
 
-    Map declaration_map = {{"p", "procedure"},{"v", "variable"},{"s","stmt"}};
+    Map declaration_map = {{"p",  "procedure"}, {"v",  "variable"}, {"s", "stmt"}};
     std::shared_ptr<ClauseSyntax> modifies_p = std::make_shared<SuchThatClauseSyntax>(
         CreateCorrectSyntaxPair("Modifies", {"p", "v"}));
     std::shared_ptr<ClauseSyntax> modifies_s = std::make_shared<SuchThatClauseSyntax>(
@@ -68,7 +68,7 @@ TEST_CASE("Test Clause Sorting") {
     auto parser_output = qp->ParseQuery(query);
     auto groups = opt->GetClauseGroups(parser_output->GetClauseSyntaxPtrList());
 
-    Map declaration_map = {{"s2", "stmt"},{"v1",  "variable"}};
+    Map declaration_map = {{"s2",  "stmt"}, {"v1",   "variable"}};
     std::shared_ptr<ClauseSyntax> uses_syntax = std::make_shared<SuchThatClauseSyntax>(
         CreateCorrectSyntaxPair("Uses", {"s2", "v1"}));
     std::shared_ptr<ClauseSyntax> uses_syntax_less_syn = std::make_shared<SuchThatClauseSyntax>(
@@ -93,8 +93,8 @@ TEST_CASE("Test Clause Sorting") {
     auto parser_output = qp->ParseQuery(query);
     auto groups = opt->GetClauseGroups(parser_output->GetClauseSyntaxPtrList());
 
-    Map declaration_map = {{"s2", "stmt"},{"a2", "assign"},{"a1","assign"},
-                           {"v1",  "variable"}};
+    Map declaration_map = {{"s2", "stmt"}, {"a2",  "assign"}, {"a1", "assign"},
+                           {"v1",   "variable"}};
     std::shared_ptr<ClauseSyntax> affects_syntax = std::make_shared<SuchThatClauseSyntax>(
         CreateCorrectSyntaxPair("Affects", {"a1", "a2"}));
     std::shared_ptr<ClauseSyntax> follows_syntax = std::make_shared<SuchThatClauseSyntax>(
