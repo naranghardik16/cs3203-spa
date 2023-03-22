@@ -1175,5 +1175,4 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
 //    Results expected_results{"5 factor", "6 FacTor"};
 //    REQUIRE(results == expected_results);
 //  }
-
 }
