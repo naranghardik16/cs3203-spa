@@ -1135,10 +1135,45 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("assign syn sub pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,_"(64 * x) "_))";
 
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
 
+    Results expected_results{"5 factor", "6 FacTor"};
+    REQUIRE(results == expected_results);
+  }
 
+  SECTION("Pattern w (v, _, _) - syntactic error ") {
+    Query query = R"(while w; variable v; Select BOOLEAN pattern w (v, _, _) ))";
 
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
 
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+//  Check why failing
+//  SECTION("Pattern a (v, _) - overload subpattern - ideal ") {
+//    Query query = R"(assign BOOLEAN; variable v; Select BOOLEAN pattern BOOLEAN (v, _"(2 * hello - 1) "_)))";
+//
+//    Results results;
+//    Qps::ProcessQuery(query, results, pkb_read);
+//
+//    Results expected_results{"5", "6"};
+//    REQUIRE(results == expected_results);
+//  }
+
+//  SECTION("Pattern ifs (v, _, _) - select ifs ") {
+//    Query query = R"(if ifs; variable v; Select v pattern ifs (v,_, _))";
+//
+//    Results results;
+//    Qps::ProcessQuery(query, results, pkb_read);
+//
+//    Results expected_results{"5 factor", "6 FacTor"};
+//    REQUIRE(results == expected_results);
+//  }
 
 }
