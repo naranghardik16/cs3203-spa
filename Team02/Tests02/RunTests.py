@@ -126,7 +126,7 @@ def Execute(folder_to_test_in, redirect_output):
             print(str(e))
             continue
 
-    print(test_report)
+    print(test_report, flush=True)
     copy_command = "cp"
     if os.name == WINDOWS_OS_NAME:
         copy_command = "copy"
