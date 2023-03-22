@@ -16,7 +16,7 @@ class ClauseGroup {
   void AddClause(const std::shared_ptr<ClauseSyntax>& clause);
   bool HasSelectedSynonym(const SelectedSynonymTuple& synonym_tuple);
   ClauseSyntaxPtrList GetClauseList();
-  void SortClauses(Map &declaration_map);
+  ClauseSyntaxPtrList GetSortedClauses(Map &declaration_map);
   int GetSize();
 };
 
