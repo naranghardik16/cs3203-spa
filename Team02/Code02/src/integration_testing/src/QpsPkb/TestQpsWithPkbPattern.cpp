@@ -1083,4 +1083,62 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("var syn pattern ") {
+    Query query = R"(variable pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("const syn pattern ") {
+    Query query = R"(constant pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+
+  SECTION("procedure syn pattern ") {
+    Query query = R"(procedure pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("assign syn wildcard pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"1 y", "3 x", "5 factor", "4 z", "2 y", "6 FacTor"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("assign syn full pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) *
+      (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x) "))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5 factor", "6 FacTor"};
+    REQUIRE(results == expected_results);
+  }
+
+
+
+
+
+
+
 }
