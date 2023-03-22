@@ -1120,7 +1120,8 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results results;
     Qps::ProcessQuery(query, results, pkb_read);
 
-    Results expected_results{"1 y", "3 x", "5 factor", "4 z", "2 y", "6 FacTor"};
+    Results expected_results{"1 y", "2 y", "3 x", "4 z", "5 factor", "6 FacTor"};
+    results.sort();
     REQUIRE(results == expected_results);
   }
 
