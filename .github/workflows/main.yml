@@ -95,5 +95,6 @@ jobs:
         working-directory: ${{runner.workspace}}/build
         shell: bash
         run: |
-          cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl ${{runner.workspace}}/build
+          cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl .
+          ls -a
           python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False
