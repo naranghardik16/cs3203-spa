@@ -22,12 +22,12 @@ jobs:
 
       - name: Checking Source
         shell: bash
-        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/spa/src/
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet --includeorder=standardcfirst ./Team02/Code02/src/spa/src/
 
       - name: Checking Integration Testing
         shell: bash
-        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/integration_testing/src
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet --includeorder=standardcfirst ./Team02/Code02/src/integration_testing/src
         
       - name: Checking Unit Testing
         shell: bash
-        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet ./Team02/Code02/src/unit_testing/src/
+        run: cpplint --recursive --extensions=hpp,cpp,tpp --linelength=120 --filter="-legal/copyright,-whitespace/forcolon,-build/include_order,-build/include_subdir" --quiet --includeorder=standardcfirst ./Team02/Code02/src/unit_testing/src/
