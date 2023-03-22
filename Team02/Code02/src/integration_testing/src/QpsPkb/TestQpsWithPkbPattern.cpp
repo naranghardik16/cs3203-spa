@@ -400,22 +400,22 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
   pkb_write->AddStatementOfAType("1", ASSIGN);
   pkb_write->AddStatementModifyingVariable("1", "y");
   pkb_write->AddAssignmentStatementAndExpression(
-      "1",egs->GetExpressionFromInput(
-          token_list_expression_with_variables_1,"assign"));
+      "1", egs->GetExpressionFromInput(
+          token_list_expression_with_variables_1, "assign"));
 
   // 2. y = x * (x + 1) / 2
   pkb_write->AddStatementOfAType("2", ASSIGN);
   pkb_write->AddStatementModifyingVariable("2", "y");
   pkb_write->AddAssignmentStatementAndExpression(
-      "2",egs->GetExpressionFromInput(
-          token_list_expression_with_variables_7,"assign"));
+      "2", egs->GetExpressionFromInput(
+          token_list_expression_with_variables_7, "assign"));
 
   // 3. x = (3 * 16 + 3 * 1)
   pkb_write->AddStatementOfAType("3", ASSIGN);
   pkb_write->AddStatementModifyingVariable("3", "x");
   pkb_write->AddAssignmentStatementAndExpression(
-      "3",egs->GetExpressionFromInput(
-          token_list_pure_numbered_expression_8,"assign"));
+      "3", egs->GetExpressionFromInput(
+          token_list_pure_numbered_expression_8, "assign"));
 
   // 4. z = 3 * 6 - 7 + 2
   pkb_write->AddStatementOfAType("4", ASSIGN);
@@ -761,7 +761,4 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results expected_results{"SyntaxError"};
     REQUIRE(results == expected_results);
   }
-
-
 }
-
