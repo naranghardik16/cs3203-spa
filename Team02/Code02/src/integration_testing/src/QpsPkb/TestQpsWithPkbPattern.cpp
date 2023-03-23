@@ -761,4 +761,419 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results expected_results{"SyntaxError"};
     REQUIRE(results == expected_results);
   }
+
+  SECTION("Using partial expression as subpattern - syntactic error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,_"+ x"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Using operator as subpattern - syntactic error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,_"+"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Using mismatching brackets in subpattern - syntactic error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,_"x * (x + (1 / 2) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(s, _) - Semantic Error") {
+    Query query = R"(assign a; read r; Select BOOLEAN pattern a(r,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(r, _) - Semantic Error") {
+    Query query = R"(assign a; read r; Select BOOLEAN pattern a(r,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(pn, _) - Semantic Error") {
+    Query query = R"(assign a; print pn; Select BOOLEAN pattern a(pn,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(a1, _) - Semantic Error") {
+    Query query = R"(assign a; assign a1; Select BOOLEAN pattern a(a1,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(w, _) - Semantic Error") {
+    Query query = R"(assign a; while w; Select BOOLEAN pattern a(w,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(cl, _) - Semantic Error") {
+    Query query = R"(assign a; call cl; Select BOOLEAN pattern a(cl,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(c, _) - Semantic Error") {
+    Query query = R"(assign a; constant c; Select BOOLEAN pattern a(c,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(p, _) - Semantic Error") {
+    Query query = R"(assign a; procedure p; Select BOOLEAN pattern a(p,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, s) - Syntactic Error") {
+    Query query = R"(assign a; stmt s; Select BOOLEAN pattern a(_,s))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, r) - Syntactic Error") {
+    Query query = R"(assign a; read s; Select BOOLEAN pattern a(_,r))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, pn) - Syntactic Error") {
+    Query query = R"(assign a; print pn; Select BOOLEAN pattern a(_,pn))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, a1) - Syntactic Error") {
+    Query query = R"(assign a; assign a1; Select BOOLEAN pattern a(_,a1))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, ifs) - Syntactic Error") {
+    Query query = R"(assign a; if ifs; Select BOOLEAN pattern a(_,ifs))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, w) - Syntactic Error") {
+    Query query = R"(assign a; while w; Select BOOLEAN pattern a(_,w))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, cl) - Syntactic Error") {
+    Query query = R"(assign a; call cl; Select BOOLEAN pattern a(_,cl))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+
+  SECTION("Pattern a(_, v) - Syntactic Error") {
+    Query query = R"(assign a; variable v; Select BOOLEAN pattern a(_,v))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_, p) - Syntactic Error") {
+    Query query = R"(assign a; procedure p; Select BOOLEAN pattern a(_,p))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern a(_,_,_) - Syntactic Error") {
+    Query query = R"(assign a; procedure p; Select BOOLEAN pattern a(_,_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Empty full pattern - Syntactic Error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,""))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Invalid full pattern - Syntactic Error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,"_"))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Empty full pattern - Syntactic Error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,_""_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Invalid full pattern - Syntactic Error") {
+    Query query = R"(assign a; Select BOOLEAN pattern a(_,_"_"_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("stmt syn pattern - Semantic Error") {
+    Query query = R"(stmt pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("read syn pattern - Semantic Error") {
+    Query query = R"(read pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("print syn pattern - Semantic Error") {
+    Query query = R"(print pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("call syn pattern - Semantic Error") {
+    Query query = R"(call pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("while syn pattern") {
+    Query query = R"(while pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("if syn pattern ") {
+    Query query = R"(if pattern; Select BOOLEAN pattern pattern(_,_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"FALSE"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("if syn pattern ") {
+    Query query = R"(if pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("var syn pattern ") {
+    Query query = R"(variable pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("const syn pattern ") {
+    Query query = R"(constant pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+
+  SECTION("procedure syn pattern ") {
+    Query query = R"(procedure pattern; Select BOOLEAN pattern pattern(_,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SemanticError"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("assign syn wildcard pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"1 y", "2 y", "3 x", "4 z", "5 factor", "6 FacTor"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("assign syn full pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,"(x + 1) * (x + 2) * (x + 3) * (x - 1) * (x - 2) *
+      (x - 3) * (2 * x + 1) * (2 * hello - 1) / (64 * x) "))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5 factor", "6 FacTor"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("assign syn sub pattern - tuple ") {
+    Query query = R"(assign a; variable v; Select <a,v> pattern a(v,_"(64 * x) "_))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"5 factor", "6 FacTor"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Pattern w (v, _, _) - syntactic error ") {
+    Query query = R"(while w; variable v; Select BOOLEAN pattern w (v, _, _) ))";
+
+    Results results;
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    Results expected_results{"SyntaxError"};
+    REQUIRE(results == expected_results);
+  }
+
+//  Check why failing
+//  SECTION("Pattern a (v, _) - overload subpattern - ideal ") {
+//    Query query = R"(assign BOOLEAN; variable v; Select BOOLEAN pattern BOOLEAN (v, _"(2 * hello - 1) "_)))";
+//
+//    Results results;
+//    Qps::ProcessQuery(query, results, pkb_read);
+//
+//    Results expected_results{"5", "6"};
+//    REQUIRE(results == expected_results);
+//  }
+
+//  SECTION("Pattern ifs (v, _, _) - select ifs ") {
+//    Query query = R"(if ifs; variable v; Select v pattern ifs (v,_, _))";
+//
+//    Results results;
+//    Qps::ProcessQuery(query, results, pkb_read);
+//
+//    Results expected_results{"5 factor", "6 FacTor"};
+//    REQUIRE(results == expected_results);
+//  }
 }
