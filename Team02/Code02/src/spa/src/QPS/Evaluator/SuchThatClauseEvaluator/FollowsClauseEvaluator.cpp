@@ -26,7 +26,13 @@ bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFa
   }
 }
 
-
+// S1 (Major): DRY - Similar function among different relations
+// Suggestion:
+//      One way to solve the DRY problem is to optimize your inherit structure
+//      Instead of just inherit from "SuchThatEvaluator", you may consider add
+//      a interim class for Follows&Modifies
+//      Meanwhile you should also try using "Generic Programming", please search
+//      online about how to use them.
 std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 

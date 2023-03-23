@@ -1,5 +1,6 @@
 #include "StatementParserFactory.h"
 
+// G8 (Minor): Magic numbers - Please use CONST_VALUES but not directly use these strings
 shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::deque<
     StatementParserFactory::Line> &tokens) {
   auto line = tokens.front();

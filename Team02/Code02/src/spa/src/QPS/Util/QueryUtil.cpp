@@ -1,5 +1,7 @@
 #include "QPS/Util/QueryUtil.h"
 
+// G8 (Minor): Magic numbers - Please use CONST_VALUES but not directly use these chars
+
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
   bool result = s[0] == '_' && s[s.length() - 1] == '_' && s.length() > 2;
   return result;
