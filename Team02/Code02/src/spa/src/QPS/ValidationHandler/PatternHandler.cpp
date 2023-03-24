@@ -4,17 +4,18 @@ void PatternHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   std::string syn(clause->GetEntity());
   ParameterVector args(clause->GetParameters());
 
-  if (args.size() != 2 && args.size() != 3) {
+  if (args.size() != pql_constants::kPairArgumentValidSize && args.size() != pql_constants::kTripleArgumentValidSize) {
     throw SyntaxErrorException("Invalid number of argument");
   }
 
   if (!QueryUtil::IsSynonym(syn) || !QueryUtil::IsEntRef(args[0])) {
     throw SyntaxErrorException("Invalid synonym or entity reference");
   }
-  if (args.size() == 2) {
+  if (args.size() == pql_constants::kPairArgumentValidSize) {
     clause->SetExpression(ExpressionSpecParser::ParseExpressionSpec(args[1]));
   }
-  if (args.size() == 3 && (!QueryUtil::IsWildcard(args[1]) || !QueryUtil::IsWildcard(args[2]))) {
+  if (args.size() ==  pql_constants::kTripleArgumentValidSize && (!QueryUtil::IsWildcard(args[1]) ||
+  !QueryUtil::IsWildcard(args[2]))) {
     throw SyntaxErrorException("Invalid if pattern syntax");
   }
 
@@ -30,7 +31,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
     throw SemanticErrorException();
   }
 
-  if (args.size() == 2) {
+  if (args.size() == pql_constants::kPairArgumentValidSize) {
     bool is_arg_2_wildcard = QueryUtil::IsWildcard(args[1]);
     if (!is_arg_2_wildcard && declaration[syn] != pql_constants::kPqlAssignEntity) {
       throw SemanticErrorException();
@@ -40,7 +41,7 @@ void PatternHandler::HandleSemantic(std::shared_ptr<ClauseSyntax> clause, Map &d
       throw SemanticErrorException();
     }
   }
-  if (args.size() == 3 && declaration[syn] != pql_constants::kPqlIfEntity) {
+  if (args.size() == pql_constants::kTripleArgumentValidSize && declaration[syn] != pql_constants::kPqlIfEntity) {
     throw SemanticErrorException();
   }
 
