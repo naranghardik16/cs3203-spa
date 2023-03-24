@@ -49,6 +49,9 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAssignStatements() {
   return this->pkb.statement_store_->GetStatements(StatementType::ASSIGN);
 }
 
+// S1 (major): DRY - repeating code with similar structure where the only difference
+// is which store the information is retrieved from.
+// Do consider using a higher-order abstraction to reduce duplication of some logic
 PkbReadFacade::PairSet
 PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType& statement_type) {
   StatementNumberSet statements =

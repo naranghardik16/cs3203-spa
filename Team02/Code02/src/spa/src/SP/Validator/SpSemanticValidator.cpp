@@ -40,6 +40,7 @@ void SpSemanticValidator::ProcessProgram(shared_ptr<Program> program) {
 void SpSemanticValidator::ProcessStatements(Procedure::StmtListContainer statements,
                                             string proc_name) {
   for (shared_ptr<Statement> s : statements) {
+      // G8 (minor) - magic literals, use const values instead
     if (s->GetStatementType() == "call") {
       auto call_stmt = dynamic_pointer_cast<CallStatement>(s);
       AddCallsRelationship(proc_name, call_stmt->GetProcedureName());
