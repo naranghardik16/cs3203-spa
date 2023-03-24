@@ -6,7 +6,7 @@ bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<Pkb
 }
 
 std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{{syn_assign_, 0}};
+  ResultHeader header{{syn_assign_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
 
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();
@@ -67,7 +67,7 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
 
 std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(
     const std::shared_ptr<Result> &r, const std::shared_ptr<PkbReadFacade> &pkb) {
-  ResultHeader header{{syn_assign_, 0}};
+  ResultHeader header{{syn_assign_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(

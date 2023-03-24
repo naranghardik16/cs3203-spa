@@ -65,7 +65,8 @@ std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntax
     if (synonym_substring.empty()) {
       throw SyntaxErrorException("Missing synonym in declaration");
     }
-    std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring, ",");
+    std::vector<std::string> synonym_list = string_util::SplitStringByDelimiter(synonym_substring,
+                                                                                pql_constants::kComma);
     for (const std::string &kSynonym : synonym_list) {
       if (!QueryUtil::IsSynonym(kSynonym)) {
         throw SyntaxErrorException("The synonym in the declaration does not adhere "
@@ -118,12 +119,13 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
 
 
 std::string QpsTokenizer::ParseIDENT(std::string parameter) {
-  return "\"" + string_util::Trim(parameter.substr(1, parameter.length() - 2)) + "\"";
+  std::string quotation(1, pql_constants::kQuotationChar);
+  return quotation + string_util::Trim(parameter.substr(1, parameter.length() - 2)) + quotation;
 }
 
 std::string QpsTokenizer::ParseAttrRef(std::string attrRef) {
   auto token_lst = QueryUtil::SplitAttrRef(attrRef);
-  return token_lst[0] + "." + token_lst[1];
+  return token_lst[0] + pql_constants::kFullStop + token_lst[1];
 }
 
 std::string QpsTokenizer::ParseWithClauseParameter(std::string parameter) {
@@ -186,7 +188,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring)
   SelectedSynonymTuple synonym_vector;
   std::string temp;
   for (auto c : syn_substring) {
-    if (c == '.') {
+    if (c == pql_constants::kFullStopChar) {
       break;
     } else if (std::isspace(c)) {
       break;
@@ -209,7 +211,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring)
     } else {
       attrName = first_word;
     }
-    synonym_vector = {syn + "." + attrName};
+    synonym_vector = {syn + pql_constants::kFullStop + attrName};
   } else {
     synonym_vector = {syn};
   }

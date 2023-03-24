@@ -19,6 +19,10 @@ const std::string kEqual = "=";
 const std::string kSemicolon = ";";
 const std::string kFullStop = ".";
 
+const char kFullStopChar = '.';
+const char kWildcardChar = '_';
+const char kQuotationChar = '"';
+
 const std::string kSelectBoolean = "BOOLEAN";
 const std::string kSelectKeyword = "Select";
 
@@ -60,17 +64,17 @@ const std::string kValue = "value";
 const std::string kStmtNo = "stmt#";
 
 const std::unordered_set<std::string> kRelRefs({kPqlNextRel, kPqlNextStarRel,
-                                                    kPqlAffectsRel, kPqlAffectsStarRel,
-                                                    kPqlCallsRel, kPqlCallsStarRel,
-                                                    kPqlFollowsRel, kPqlFollowsStarRel,
-                                                    kPqlParentRel, kPqlParentStarRel,
-                                                    kPqlUsesRel, kPqlModifiesRel});
+                                                kPqlAffectsRel, kPqlAffectsStarRel,
+                                                kPqlCallsRel, kPqlCallsStarRel,
+                                                kPqlFollowsRel, kPqlFollowsStarRel,
+                                                kPqlParentRel, kPqlParentStarRel,
+                                                kPqlUsesRel, kPqlModifiesRel});
 const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPqlReadEntity,
-                                                            kPqlPrintEntity, kPqlAssignEntity,
-                                                            kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
+                                                        kPqlPrintEntity, kPqlAssignEntity,
+                                                        kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
 const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel,
-                                                          kPqlParentRel, kPqlParentStarRel,
-                                                          kPqlNextRel, kPqlNextStarRel});
+                                                      kPqlParentRel, kPqlParentStarRel,
+                                                      kPqlNextRel, kPqlNextStarRel});
 const std::unordered_set<std::string> kStmtProcToStmtRel({kPqlUsesRel, kPqlModifiesRel});
 const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity,
                                                             kPqlPrintEntity, kPqlAssignEntity,
@@ -78,12 +82,11 @@ const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity,
                                                             kPqlCallEntity, kPqlProcedureEntity});
 const std::unordered_set<std::string> kAttrName({kProcName, kVarname, kValue, kStmtNo});
 
-const std::unordered_set<std::string> kDesignEntities({kPqlStatementEntity,kPqlReadEntity,kPqlPrintEntity,
-                                                       kPqlCallEntity,kPqlWhileEntity,kPqlIfEntity,kPqlAssignEntity,
-                                                       kPqlVariableEntity,kPqlConstantEntity,kPqlProcedureEntity});
+const std::unordered_set<std::string> kDesignEntities({kPqlStatementEntity, kPqlReadEntity, kPqlPrintEntity,
+                                                       kPqlCallEntity, kPqlWhileEntity, kPqlIfEntity, kPqlAssignEntity,
+                                                       kPqlVariableEntity, kPqlConstantEntity, kPqlProcedureEntity});
 
-
-const std::unordered_map<std::string, StatementType> kEntityToStatementType {
+const std::unordered_map<std::string, StatementType> kEntityToStatementType{
     {kPqlProcedureEntity, StatementType::UNK},
     {kPqlVariableEntity, StatementType::UNK},
     {kPqlConstantEntity, StatementType::UNK},
@@ -96,7 +99,7 @@ const std::unordered_map<std::string, StatementType> kEntityToStatementType {
     {kPqlAssignEntity, StatementType::ASSIGN}
 };
 
-const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityToAttrName {
+const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityToAttrName{
     {kPqlProcedureEntity, {kProcName}},
     {kPqlVariableEntity, {kVarname}},
     {kPqlConstantEntity, {kValue}},
@@ -109,7 +112,7 @@ const std::unordered_map<std::string, std::unordered_set<std::string>> kEntityTo
     {kPqlAssignEntity, {kStmtNo}}
 };
 
-const std::unordered_map<std::string, int> kSynTypeScoreMap {
+const std::unordered_map<std::string, int> kSynTypeScoreMap{
     {kPqlProcedureEntity, 1},
     {kPqlVariableEntity, 2},
     {kPqlConstantEntity, 2},
@@ -121,14 +124,21 @@ const std::unordered_map<std::string, int> kSynTypeScoreMap {
     {kPqlAssignEntity, 8},
     {kPqlStatementEntity, 9}};
 
-const std::unordered_map<std::string, int> kPatternScoreMap {
+const int kWithClauseScore = 1;
+
+const std::unordered_map<std::string, int> kPatternScoreMap{
     {kPqlAssignEntity, 3},
     {kPqlIfEntity, 2},
     {kPqlWhileEntity, 2}};
 
-const std::unordered_map<std::string, int> kSuchThatScoreMap {
-    {kPqlCallsRel, 4},{kPqlParentRel, 5},{kPqlFollowsRel, 6},{kPqlNextRel, 7},
-    {kPqlModifiesRel, 8},{kPqlUsesRel, 9},
-    {kPqlCallsStarRel, 10}, {kPqlAffectsRel,11}, {kPqlParentStarRel, 12},
-    {kPqlFollowsStarRel,13},{kPqlNextStarRel,14},{kPqlAffectsStarRel,15}};
+const std::unordered_map<std::string, int> kSuchThatScoreMap{
+    {kPqlCallsRel, 4}, {kPqlParentRel, 5}, {kPqlFollowsRel, 6}, {kPqlNextRel, 7},
+    {kPqlModifiesRel, 8}, {kPqlUsesRel, 9},
+    {kPqlCallsStarRel, 10}, {kPqlAffectsRel, 11}, {kPqlParentStarRel, 12},
+    {kPqlFollowsStarRel, 13}, {kPqlNextStarRel, 14}, {kPqlAffectsStarRel, 15}};
+
+const int kResultTableInitialisationIndex = 0;
+const int kPairArgumentValidSize = 2;
+const int kTripleArgumentValidSize = 3;
+const std::string NoSynClauseGroupKey = "";
 }

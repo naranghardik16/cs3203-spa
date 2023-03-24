@@ -30,5 +30,5 @@ std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &de
 }
 
 int WithClauseSyntax::GetClauseScore(Map &declaration_map) {
-  return 1;
+  return pql_constants::kWithClauseScore;
 }
