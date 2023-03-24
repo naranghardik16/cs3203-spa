@@ -5,7 +5,7 @@
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "PKB/Util/ExpressionUtil.h"
 
-PkbReadFacade::PkbReadFacade(Pkb& pkb): pkb(pkb) {}
+PkbReadFacade::PkbReadFacade(Pkb &pkb) : pkb(pkb) {}
 
 PkbReadFacade::~PkbReadFacade() = default;
 
@@ -50,7 +50,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAssignStatements() {
 }
 
 PkbReadFacade::PairSet
-PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType& statement_type) {
+PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -58,7 +58,7 @@ PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType& statement_
       this->pkb.modifies_store_->GetStatementVariablePairs();
 
   PairSet result;
-  for (const auto& p: statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p);
     }
@@ -68,12 +68,12 @@ PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType& statement_
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetVariablesModifiedByStatement(const StatementNumber& statement_number) {
+PkbReadFacade::GetVariablesModifiedByStatement(const StatementNumber &statement_number) {
   return this->pkb.modifies_store_->GetVariablesModifiedByStatement(statement_number);
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsModifiesVariable(const Variable& variable, const StatementType& statement_type) {
+PkbReadFacade::GetStatementsModifiesVariable(const Variable &variable, const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -81,7 +81,7 @@ PkbReadFacade::GetStatementsModifiesVariable(const Variable& variable, const Sta
       this->pkb.modifies_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& p: statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0 && p.second == variable) {
       result.insert(p.first);
     }
@@ -90,7 +90,7 @@ PkbReadFacade::GetStatementsModifiesVariable(const Variable& variable, const Sta
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -98,7 +98,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementT
       this->pkb.modifies_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& p: statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -107,8 +107,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementT
   return result;
 }
 
-bool PkbReadFacade::HasModifiesStatementRelationship(const StatementNumber& statement_number,
-                                                     const Variable& variable) {
+bool PkbReadFacade::HasModifiesStatementRelationship(const StatementNumber &statement_number,
+                                                     const Variable &variable) {
   return this->pkb.modifies_store_->HasModifiesStatementVariableRelation(statement_number, variable);
 }
 
@@ -116,16 +116,16 @@ PkbReadFacade::PairSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
   return this->pkb.modifies_store_->GetProcedureVariablePairs();
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetVariablesModifiedByProcedure(const Procedure& procedure) {
+PkbReadFacade::SingleSet PkbReadFacade::GetVariablesModifiedByProcedure(const Procedure &procedure) {
   return this->pkb.modifies_store_->GetVariablesModifiedByProcedure(procedure);
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetProceduresModifiesVariable(const Variable& variable) {
+PkbReadFacade::SingleSet PkbReadFacade::GetProceduresModifiesVariable(const Variable &variable) {
   PairSet procedure_variable_pairs =
       this->pkb.modifies_store_->GetProcedureVariablePairs();
 
   SingleSet result;
-  for (const auto& p: procedure_variable_pairs) {
+  for (const auto &p : procedure_variable_pairs) {
     if (p.second == variable) {
       result.insert(p.first);
     }
@@ -138,12 +138,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetProceduresThatModify() {
   return this->pkb.modifies_store_->GetProceduresThatModify();
 }
 
-bool PkbReadFacade::HasModifiesProcedureRelationship(const Procedure& procedure, const Variable& variable) {
+bool PkbReadFacade::HasModifiesProcedureRelationship(const Procedure &procedure, const Variable &variable) {
   return this->pkb.modifies_store_->HasModifiesProcedureVariableRelation(procedure, variable);
 }
 
 // Uses Statement API
-PkbReadFacade::PairSet PkbReadFacade::GetUsesStatementVariablePairs(const StatementType& statement_type) {
+PkbReadFacade::PairSet PkbReadFacade::GetUsesStatementVariablePairs(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -151,7 +151,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetUsesStatementVariablePairs(const Statem
       this->pkb.uses_store_->GetStatementVariablePairs();
 
   PairSet result;
-  for (const auto& p : statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p);
     }
@@ -160,7 +160,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetUsesStatementVariablePairs(const Statem
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -168,7 +168,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementTyp
       this->pkb.uses_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& p : statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -176,12 +176,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementTyp
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByStatement(const StatementNumber& statement_number) {
+PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByStatement(const StatementNumber &statement_number) {
   return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(statement_number);
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const StatementType& statement_type,
-                                                                                    const Variable& variable) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const StatementType &statement_type,
+                                                                  const Variable &variable) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -189,7 +189,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const Statemen
       this->pkb.uses_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& p : statement_variable_pairs) {
+  for (const auto &p : statement_variable_pairs) {
     if (statements.count(p.first) > 0 && p.second == variable) {
       result.insert(p.first);
     }
@@ -197,7 +197,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const Statemen
   return result;
 }
 
-bool PkbReadFacade::HasUsesStatementRelationship(const StatementNumber& statement_number, const Variable& variable) {
+bool PkbReadFacade::HasUsesStatementRelationship(const StatementNumber &statement_number, const Variable &variable) {
   return this->pkb.uses_store_->HasUsesStatementVariableRelation(statement_number, variable);
 }
 
@@ -210,16 +210,16 @@ PkbReadFacade::SingleSet PkbReadFacade::GetProceduresThatUse() {
   return this->pkb.uses_store_->retrieveAllProceduresThatUse();
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByProcedure(const Procedure& procedure) {
+PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByProcedure(const Procedure &procedure) {
   return this->pkb.uses_store_->GetVariablesUsedByProcedure(procedure);
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetProceduresUsesVariable(const Variable& variable) {
+PkbReadFacade::SingleSet PkbReadFacade::GetProceduresUsesVariable(const Variable &variable) {
   PairSet procedure_variable_pairs =
       this->pkb.uses_store_->GetProcedureVariablePairs();
 
   SingleSet result;
-  for (const auto& p : procedure_variable_pairs) {
+  for (const auto &p : procedure_variable_pairs) {
     if (p.second == variable) {
       result.insert(p.first);
     }
@@ -227,13 +227,13 @@ PkbReadFacade::SingleSet PkbReadFacade::GetProceduresUsesVariable(const Variable
   return result;
 }
 
-bool PkbReadFacade::HasUsesProcedureRelationship(const Procedure& procedure, const Variable& variable) {
+bool PkbReadFacade::HasUsesProcedureRelationship(const Procedure &procedure, const Variable &variable) {
   return this->pkb.uses_store_->HasUsesProcedureVariableRelation(procedure, variable);
 }
 
 // Follows API
-PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType& statement_type,
-                                                                       const StatementType& statement_type_follower) {
+PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType &statement_type,
+                                                     const StatementType &statement_type_follower) {
   StatementNumberSet statements_of_type_1 =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -245,7 +245,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType& statem
 
   PairSet result;
 
-  for (const auto& p: follows_pairs) {
+  for (const auto &p : follows_pairs) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
       result.insert(p);
     }
@@ -254,8 +254,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType& statem
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowedBy(const StatementNumber& statement_number,
-                                                                                 const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowedBy(const StatementNumber &statement_number,
+                                                               const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -264,7 +264,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowedBy(const StatementNu
 
   SingleSet result;
 
-  for (const auto& p: follows_pairs) {
+  for (const auto &p : follows_pairs) {
     if (statements.count(p.first) > 0 && p.second == statement_number) {
       result.insert(p.first);
     }
@@ -273,8 +273,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowedBy(const StatementNu
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowing(const StatementNumber& statement_number,
-                                                                                const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowing(const StatementNumber &statement_number,
+                                                              const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -283,7 +283,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowing(const StatementNum
 
   SingleSet result;
 
-  for (const auto& p: follows_pairs) {
+  for (const auto &p : follows_pairs) {
     if (statements.count(p.second) > 0 && p.first == statement_number) {
       result.insert(p.second);
     }
@@ -292,7 +292,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowing(const StatementNum
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsWithFollowers(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsWithFollowers(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -301,7 +301,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsWithFollowers(const Stateme
 
   SingleSet result;
 
-  for (const auto& p: follows_pairs) {
+  for (const auto &p : follows_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -310,7 +310,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsWithFollowers(const Stateme
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -319,7 +319,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const State
 
   SingleSet result;
 
-  for (const auto& p: follows_pairs) {
+  for (const auto &p : follows_pairs) {
     if (statements.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -328,8 +328,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const State
   return result;
 }
 
-bool PkbReadFacade::HasFollowsRelationship(const StatementNumber& statement_number,
-                                           const StatementNumber& statement_number_follower) {
+bool PkbReadFacade::HasFollowsRelationship(const StatementNumber &statement_number,
+                                           const StatementNumber &statement_number_follower) {
   return this->pkb.follows_store_->HasFollowsRelation(statement_number, statement_number_follower);
 }
 
@@ -338,10 +338,10 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 }
 
 // Follows* API
-PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType& statement_type_1,
-                                                                            const StatementType& statement_type_2) {
+PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType &statement_type_1,
+                                                          const StatementType &statement_type_2) {
   SingleSet
-  statements_of_type_1 = this->pkb.statement_store_->GetStatements(statement_type_1);
+      statements_of_type_1 = this->pkb.statement_store_->GetStatements(statement_type_1);
 
   SingleSet
       statements_of_type_2 = this->pkb.statement_store_->GetStatements(statement_type_2);
@@ -351,7 +351,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType& s
 
   PairSet result;
 
-  for (const auto& p: follows_star_pairs) {
+  for (const auto &p : follows_star_pairs) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
       result.insert(p);
     }
@@ -360,8 +360,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType& s
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStar(const StatementNumber& statement_number,
-                                                                         const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStar(const StatementNumber &statement_number,
+                                                       const StatementType &statement_type) {
   SingleSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -370,7 +370,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStar(const StatementNumber& st
 
   SingleSet result;
 
-  for (const auto& p: follows_star_pairs) {
+  for (const auto &p : follows_star_pairs) {
     if (statement_number == p.first && statements.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -379,8 +379,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStar(const StatementNumber& st
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarBy(const StatementNumber& statement_number,
-                                                                           const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarBy(const StatementNumber &statement_number,
+                                                         const StatementType &statement_type) {
   SingleSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -389,7 +389,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarBy(const StatementNumber& 
 
   SingleSet result;
 
-  for (const auto& p: follows_star_pairs) {
+  for (const auto &p : follows_star_pairs) {
     if (statement_number == p.second && statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -398,7 +398,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarBy(const StatementNumber& 
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarFirst(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarFirst(const StatementType &statement_type) {
   SingleSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -407,7 +407,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarFirst(const StatementType&
 
   SingleSet result;
 
-  for (const auto& p: follows_star_pairs) {
+  for (const auto &p : follows_star_pairs) {
     if (statements.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -416,8 +416,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarFirst(const StatementType&
   return result;
 }
 
-
-PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarSecond(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarSecond(const StatementType &statement_type) {
   SingleSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -426,7 +425,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarSecond(const StatementType
 
   SingleSet result;
 
-  for (const auto& p: follows_star_pairs) {
+  for (const auto &p : follows_star_pairs) {
     if (statements.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -439,23 +438,23 @@ bool PkbReadFacade::HasFollowsStarRelationship() {
   return this->pkb.follows_store_->HasFollowsStarRelation();
 }
 
-bool PkbReadFacade::HasFollowsStar(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasFollowsStar(const StatementNumber &statement_number) {
   return this->pkb.follows_store_->HasFollowsStarRelation(statement_number);
 }
 
-bool PkbReadFacade::HasFollowsStarBy(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasFollowsStarBy(const StatementNumber &statement_number) {
   return this->pkb.follows_store_->HasFollowsStarRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsFollowsStar(const StatementNumber& statement_number_1,
-                                  const StatementNumber& statement_number_2) {
+bool PkbReadFacade::IsFollowsStar(const StatementNumber &statement_number_1,
+                                  const StatementNumber &statement_number_2) {
   return this->pkb.follows_store_->HasFollowsStarRelation(statement_number_1,
                                                           statement_number_2);
 }
 
 // Parent API
-PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType& statement_type,
-                                                          const StatementType& statement_type_child) {
+PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType &statement_type,
+                                                          const StatementType &statement_type_child) {
   SingleSet statement_of_type_for_parent =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -466,9 +465,9 @@ PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType& s
       this->pkb.parent_store_->GetParentPairs();
 
   PairSet result;
-  for (const auto& p: parent_child_pairs) {
+  for (const auto &p : parent_child_pairs) {
     if (statement_of_type_for_parent.count(p.first) > 0 &&
-    statement_of_type_for_child.count(p.second) > 0) {
+        statement_of_type_for_child.count(p.second) > 0) {
       result.insert(p);
     }
   }
@@ -476,8 +475,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType& s
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const StatementNumber& statement_number,
-                                                                   const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const StatementNumber &statement_number,
+                                                                   const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -491,8 +490,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const Stateme
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const StatementNumber& statement_number,
-                                                                       const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const StatementNumber &statement_number,
+                                                                       const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -500,7 +499,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const Sta
       this->pkb.parent_store_->GetChildren(statement_number);
 
   SingleSet result;
-  for (const auto& p: parents_of_specified_statement) {
+  for (const auto &p : parents_of_specified_statement) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -509,12 +508,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const Sta
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreParents(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreParents(const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.parent_store_->GetParents()) {
+  for (const auto &p : this->pkb.parent_store_->GetParents()) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -523,12 +522,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreParents(const Statem
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildren(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildren(const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.parent_store_->GetChildren()) {
+  for (const auto &p : this->pkb.parent_store_->GetChildren()) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -537,8 +536,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildren(const State
   return result;
 }
 
-bool PkbReadFacade::HasParentChildRelationship(const StatementNumber& statement_number,
-                                               const StatementNumber& statement_number_child) {
+bool PkbReadFacade::HasParentChildRelationship(const StatementNumber &statement_number,
+                                               const StatementNumber &statement_number_child) {
   return this->pkb.parent_store_->HasParentRelation(statement_number,
                                                     statement_number_child);
 }
@@ -549,8 +548,8 @@ bool PkbReadFacade::IsAnyParentRelationshipPresent() {
 
 // Parent* API
 PkbReadFacade::PairSet
-PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type,
-                                          const StatementType& statement_type_descendant) {
+PkbReadFacade::GetAncestorDescendantPairs(const StatementType &statement_type,
+                                          const StatementType &statement_type_descendant) {
   SingleSet statement_of_type_for_parent =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -561,7 +560,7 @@ PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type,
       this->pkb.parent_store_->GetParentStarPairs();
 
   PairSet result;
-  for (const auto& p: parent_child_pairs) {
+  for (const auto &p : parent_child_pairs) {
     if (statement_of_type_for_parent.count(p.first) > 0 &&
         statement_of_type_for_child.count(p.second)) {
       result.insert(p);
@@ -572,8 +571,8 @@ PkbReadFacade::GetAncestorDescendantPairs(const StatementType& statement_type,
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_number,
-                                              const StatementType& statement_type) {
+PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber &statement_number,
+                                              const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -581,7 +580,7 @@ PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_n
       this->pkb.parent_store_->GetAncestors(statement_number);
 
   SingleSet result;
-  for (const auto& p: parents_of_specified_statement) {
+  for (const auto &p : parents_of_specified_statement) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -591,8 +590,8 @@ PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber& statement_n
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber& statement_number,
-                                                 const StatementType& statement_type) {
+PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber &statement_number,
+                                                 const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -600,7 +599,7 @@ PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber& statemen
       this->pkb.parent_store_->GetDescendants(statement_number);
 
   SingleSet result;
-  for (const auto& p: parents_of_specified_statement) {
+  for (const auto &p : parents_of_specified_statement) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -609,12 +608,12 @@ PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber& statemen
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreAncestors(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreAncestors(const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.parent_store_->GetAncestors()) {
+  for (const auto &p : this->pkb.parent_store_->GetAncestors()) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -624,12 +623,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreAncestors(const Stat
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsThatAreDescendants(const StatementType& statement_type) {
+PkbReadFacade::GetStatementsThatAreDescendants(const StatementType &statement_type) {
   SingleSet statement_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.parent_store_->GetDescendants()) {
+  for (const auto &p : this->pkb.parent_store_->GetDescendants()) {
     if (statement_of_type.count(p) > 0) {
       result.insert(p);
     }
@@ -638,8 +637,8 @@ PkbReadFacade::GetStatementsThatAreDescendants(const StatementType& statement_ty
   return result;
 }
 
-bool PkbReadFacade::HasAncestorDescendantRelationship(const StatementNumber& statement_number,
-                                                      const StatementNumber& statement_number_descendant) {
+bool PkbReadFacade::HasAncestorDescendantRelationship(const StatementNumber &statement_number,
+                                                      const StatementNumber &statement_number_descendant) {
   return this->pkb.parent_store_->HasParentStarRelation(statement_number, statement_number_descendant);
 }
 
@@ -649,10 +648,10 @@ bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 
 // Pattern API
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAssignWithExactExpression(const ExpressionPtr& expr) {
+PkbReadFacade::GetAssignWithExactExpression(const ExpressionPtr &expr) {
   SingleSet result;
 
-  for (const auto& s: this->GetAssignStatements()) {
+  for (const auto &s : this->GetAssignStatements()) {
     if (this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(*expr)) {
       result.insert(s);
     }
@@ -662,10 +661,10 @@ PkbReadFacade::GetAssignWithExactExpression(const ExpressionPtr& expr) {
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAssignWithPartialExpression(const ExpressionPtr& sub_expression) {
+PkbReadFacade::GetAssignWithPartialExpression(const ExpressionPtr &sub_expression) {
   SingleSet result;
 
-  for (const auto& s: this->GetAssignStatements()) {
+  for (const auto &s : this->GetAssignStatements()) {
     ExpressionPtr e = this->pkb.assignment_store_->GetExpressionFromStatementNumber(s);
     if (ExpressionUtil::HasSubExpression(e, sub_expression)) {
       result.insert(s);
@@ -679,9 +678,9 @@ PkbReadFacade::PairSet PkbReadFacade::GetIfConditionVariablePair() {
   SingleSet if_statements = this->GetIfStatements();
 
   PairSet result;
-  for (const auto& i: if_statements) {
+  for (const auto &i : if_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
-    for (const auto& v: ExpressionUtil::GetAllVariablesFromExpression(e)) {
+    for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(i, v));
     }
   }
@@ -693,10 +692,10 @@ PkbReadFacade::SingleSet PkbReadFacade::GetIfWithConditionVariable(const std::st
   SingleSet if_statements = this->GetIfStatements();
 
   SingleSet result;
-  for (const auto& i: if_statements) {
+  for (const auto &i : if_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
     if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
-        result.insert(i);
+      result.insert(i);
     }
   }
 
@@ -707,7 +706,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetIfThatHasConditionVariable() {
   SingleSet if_statements = this->GetIfStatements();
 
   SingleSet result;
-  for (const auto& i: if_statements) {
+  for (const auto &i : if_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
     if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(i);
@@ -721,9 +720,9 @@ PkbReadFacade::PairSet PkbReadFacade::GetWhileConditionVariablePair() {
   SingleSet while_statements = this->GetWhileStatements();
 
   PairSet result;
-  for (const auto& w: while_statements) {
+  for (const auto &w : while_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
-    for (const auto& v: ExpressionUtil::GetAllVariablesFromExpression(e)) {
+    for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(w, v));
     }
   }
@@ -738,7 +737,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileWithConditionVariable(const std:
       this->pkb.uses_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& w: while_statements) {
+  for (const auto &w : while_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
     if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
       result.insert(w);
@@ -755,7 +754,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
       this->pkb.uses_store_->GetStatementVariablePairs();
 
   SingleSet result;
-  for (const auto& w: while_statements) {
+  for (const auto &w : while_statements) {
     ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
     if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(w);
@@ -765,9 +764,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
   return result;
 }
 
-
 PkbReadFacade::SingleSet
-PkbReadFacade::RetrieveAllVariablesOfExpression(const ExpressionPtr& expression) {
+PkbReadFacade::RetrieveAllVariablesOfExpression(const ExpressionPtr &expression) {
   return this->pkb.expression_store_->GetVariablesFromExpression(expression);
 }
 
@@ -777,13 +775,13 @@ PkbReadFacade::PairSet PkbReadFacade::GetCallProcedurePair() {
 }
 
 PkbReadFacade::PairSet
-PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(const Procedure& procedure) {
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(const Procedure &procedure) {
   PairSet calls_pairs =
       this->pkb.calls_store_->GetCallsPairs();
 
   PairSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     if (p.first == procedure) {
       result.insert(p);
     }
@@ -793,13 +791,13 @@ PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(const Procedure& procedure) {
 }
 
 PkbReadFacade::PairSet
-PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(const Procedure& procedure) {
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(const Procedure &procedure) {
   PairSet calls_star_pairs =
       this->pkb.calls_store_->GetCallsStarPairs();
 
   PairSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     if (p.first == procedure) {
       result.insert(p);
     }
@@ -809,13 +807,13 @@ PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(const Procedure& procedur
 }
 
 PkbReadFacade::PairSet
-PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(const Procedure& procedure) {
+PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(const Procedure &procedure) {
   PairSet calls_pairs =
       this->pkb.calls_store_->GetCallsPairs();
 
   PairSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     if (p.second == procedure) {
       result.insert(p);
     }
@@ -825,13 +823,13 @@ PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(const Procedure& procedure) {
 }
 
 PkbReadFacade::PairSet
-PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(const Procedure& procedure) {
+PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(const Procedure &procedure) {
   PairSet calls_star_pairs =
       this->pkb.calls_store_->GetCallsStarPairs();
 
   PairSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     if (p.second == procedure) {
       result.insert(p);
     }
@@ -849,7 +847,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAllCallsStarPairs() {
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAllCallStatementsFromAProcedure(const Procedure& procedure) {
+PkbReadFacade::GetAllCallStatementsFromAProcedure(const Procedure &procedure) {
   return this->pkb.calls_store_->GetCallStatementsFromProcedure(procedure);
 }
 
@@ -862,13 +860,13 @@ bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure, Procedure c
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAllProceduresWithSpecifiedCaller(const Procedure& procedure) {
+PkbReadFacade::GetAllProceduresWithSpecifiedCaller(const Procedure &procedure) {
   PairSet calls_pairs =
       this->pkb.calls_store_->GetCallsPairs();
 
   SingleSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     if (p.first == procedure) {
       result.insert(p.second);
     }
@@ -878,13 +876,13 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCaller(const Procedure& procedure) {
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAllProceduresWithSpecifiedCallee(const Procedure& procedure) {
+PkbReadFacade::GetAllProceduresWithSpecifiedCallee(const Procedure &procedure) {
   PairSet calls_pairs =
       this->pkb.calls_store_->GetCallsPairs();
 
   SingleSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     if (p.second == procedure) {
       result.insert(p.first);
     }
@@ -899,7 +897,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallers() {
 
   SingleSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     result.insert(p.first);
   }
 
@@ -912,7 +910,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallees() {
 
   SingleSet result;
 
-  for (const auto& p: calls_pairs) {
+  for (const auto &p : calls_pairs) {
     result.insert(p.second);
   }
 
@@ -924,13 +922,13 @@ bool PkbReadFacade::IsThereAnyCallsRelationship() {
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(const Procedure& procedure) {
+PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(const Procedure &procedure) {
   PairSet calls_star_pairs =
       this->pkb.calls_store_->GetCallsStarPairs();
 
   SingleSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     if (p.first == procedure) {
       result.insert(p.second);
     }
@@ -940,13 +938,13 @@ PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(const Procedure& procedur
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(const Procedure& procedure) {
+PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(const Procedure &procedure) {
   PairSet calls_star_pairs =
       this->pkb.calls_store_->GetCallsStarPairs();
 
   SingleSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     if (p.second == procedure) {
       result.insert(p.first);
     }
@@ -961,7 +959,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallersStar() {
 
   SingleSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     result.insert(p.first);
   }
 
@@ -974,7 +972,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCalleesStar() {
 
   SingleSet result;
 
-  for (const auto& p: calls_star_pairs) {
+  for (const auto &p : calls_star_pairs) {
     result.insert(p.second);
   }
 
@@ -985,55 +983,141 @@ bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
   return this->pkb.calls_store_->HasCallsStarRelation();
 }
 
+PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const StatementNumber &statement_number) {
+  return this->pkb.calls_store_->GetProcedureFromStatement(statement_number);
+}
+
 // Affects API
-PkbReadFacade::PairSet  PkbReadFacade::GetAffectsPairs() {
-  // todo
-  return {};
+PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
+  PairSet result;
+
+  for (const auto &a : this->GetAssignStatements()) {
+    std::stack<std::string> s;
+    std::unordered_set<std::string> visited;
+
+    s.push(a);
+    visited.insert(a);
+
+    std::string v = *this->GetVariablesModifiedByStatement(a).begin();
+
+    while (!s.empty()) {
+      auto current = s.top();
+      s.pop();
+      if (visited.count(current) > 0) continue;
+      if (this->GetAssignStatements().count(current) > 0) {
+        if (this->HasModifiesStatementRelationship(current, v)) continue;
+        if (this->HasUsesStatementRelationship(current, v)) result.insert(std::make_pair(a, current));
+
+        CfgNodePtr cfg_node = this->pkb.cfg_store_->GetCfgNodeFromStatementNumber(current);
+        bool flag = false;
+        for (auto &child : cfg_node->GetNodeStmts()) {
+          if (flag && std::to_string(child) != current) s.push(std::to_string(child));
+          if (current == std::to_string(child)) flag = true;
+        }
+
+        if (!(cfg_node->GetNodeTrans().count(true) > 0)) continue;
+        s.push(std::to_string(cfg_node->GetNodeTrans()[true]->GetNodeStmts()[0]));
+
+        if (!(cfg_node->GetNodeTrans().count(false) > 0)) continue;
+        s.push(std::to_string(cfg_node->GetNodeTrans()[false]->GetNodeStmts()[0]));
+
+      } else {
+        if (this->GetReadStatements().count(current) > 0 && this->HasModifiesStatementRelationship(current, v)) break;
+        if (this->GetCallStatements().count(current) > 0 &&
+            this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(current), v))
+          break;
+      }
+
+      visited.insert(current);
+    }
+  }
+
+  return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedBy(const StatementNumber& statement_number) {
-  // todo
-  return {};
+PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedBy(const StatementNumber &statement_number) {
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    if (p.first == statement_number) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffecting(const StatementNumber& statement_number) {
-  // todo
-  return {};
+PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffecting(const StatementNumber &statement_number) {
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    if (p.second == statement_number) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAreAffected() {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    result.insert(p.second);
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffect() {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    result.insert(p.first);
+  }
+
+  return result;
 }
 
-bool PkbReadFacade::HasAffectsRelationship(const StatementNumber& statement_number,
-                                           const StatementNumber& statement_number_being_affected) {
-  // todo
-  return true;
+bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_number,
+                                           const StatementNumber &statement_number_being_affected) {
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  for (const auto &p : affects_pairs) {
+    if (p.first == statement_number && p.second == statement_number_being_affected) return true;
+  }
+
+  return false;
 }
 
 bool PkbReadFacade::IsThereAnyAffectsRelationship() {
-  // todo
-  return true;
+  return !this->GetAffectsPairs().empty();
 }
-
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
   // todo
   return {};
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedStarBy(const StatementNumber& statement_number) {
+PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedStarBy(const StatementNumber &statement_number) {
   // todo
   return {};
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectingStar(const StatementNumber& statement_number) {
+PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectingStar(const StatementNumber &statement_number) {
   // todo
   return {};
 }
@@ -1048,8 +1132,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffectStar() {
   return {};
 }
 
-bool PkbReadFacade::HasAffectsStarRelationship(const StatementNumber& statement_number,
-                                               const StatementNumber& statement_number_being_affected) {
+bool PkbReadFacade::HasAffectsStarRelationship(const StatementNumber &statement_number,
+                                               const StatementNumber &statement_number_being_affected) {
   // todo
   return true;
 }
@@ -1060,8 +1144,8 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
 }
 
 // Next API
-PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType& statement_type_1,
-                                                   const StatementType& statement_type_2) {
+PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType &statement_type_1,
+                                                   const StatementType &statement_type_2) {
   SingleSet statements_of_type_1 =
       this->pkb.statement_store_->GetStatements(statement_type_1);
 
@@ -1069,7 +1153,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType& statemen
       this->pkb.statement_store_->GetStatements(statement_type_2);
 
   PairSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextPairs()) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
@@ -1078,8 +1162,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType& statemen
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber& statement_number,
-                                                                      const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber &statement_number,
+                                                const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -1088,7 +1172,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber& statement
 
   SingleSet result;
 
-  for (const auto& p: next_pairs) {
+  for (const auto &p : next_pairs) {
     if (p.first == statement_number && statements_of_type.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -1097,8 +1181,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber& statement
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber& statement_number,
-                                                                        const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber &statement_number,
+                                                  const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -1107,7 +1191,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber& stateme
 
   SingleSet result;
 
-  for (const auto& p: next_pairs) {
+  for (const auto &p : next_pairs) {
     if (p.second == statement_number && statements_of_type.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -1116,7 +1200,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber& stateme
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextFirst(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextFirst(const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -1124,7 +1208,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextFirst(const StatementType& statem
       this->pkb.next_store_->GetNextPairs();
 
   SingleSet result;
-  for (const auto& p: next_pairs) {
+  for (const auto &p : next_pairs) {
     if (statements_of_type.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -1133,7 +1217,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextFirst(const StatementType& statem
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextSecond(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextSecond(const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -1141,7 +1225,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextSecond(const StatementType& state
       this->pkb.next_store_->GetNextPairs();
 
   SingleSet result;
-  for (const auto& p: next_pairs) {
+  for (const auto &p : next_pairs) {
     if (statements_of_type.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -1154,21 +1238,21 @@ bool PkbReadFacade::HasNextRelationship() {
   return this->pkb.next_store_->HasNextRelation();
 }
 
-bool PkbReadFacade::HasNext(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasNext(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextRelation(statement_number);
 }
 
-bool PkbReadFacade::HasNextBy(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasNextBy(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsNext(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) {
+bool PkbReadFacade::IsNext(const StatementNumber &statement_number_1, const StatementNumber &statement_number_2) {
   return this->pkb.next_store_->HasNextRelation(statement_number_1, statement_number_2);
 }
 
 // Next* API
-PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType& statement_type_1,
-                                                                         const StatementType& statement_type_2) {
+PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType &statement_type_1,
+                                                       const StatementType &statement_type_2) {
   SingleSet statements_of_type_1 =
       this->pkb.statement_store_->GetStatements(statement_type_1);
 
@@ -1176,7 +1260,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType& stat
       this->pkb.statement_store_->GetStatements(statement_type_2);
 
   PairSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
@@ -1185,13 +1269,13 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType& stat
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber& statement_number,
-                                                                      const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber &statement_number,
+                                                    const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.second) > 0 && p.first == statement_number) {
       result.insert(p.second);
     }
@@ -1200,13 +1284,13 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber& state
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber& statement_number,
-                                                                        const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber &statement_number,
+                                                      const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.first) > 0 && p.second == statement_number) {
       result.insert(p.first);
     }
@@ -1215,12 +1299,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber& sta
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextStarFirst(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextStarFirst(const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.first) > 0) {
       result.insert(p.first);
     }
@@ -1229,12 +1313,12 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextStarFirst(const StatementType& st
   return result;
 }
 
-PkbReadFacade::SingleSet PkbReadFacade::GetNextStarSecond(const StatementType& statement_type) {
+PkbReadFacade::SingleSet PkbReadFacade::GetNextStarSecond(const StatementType &statement_type) {
   SingleSet statements_of_type =
       this->pkb.statement_store_->GetStatements(statement_type);
 
   SingleSet result;
-  for (const auto& p: this->pkb.next_store_->GetNextStarPairs()) {
+  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
     if (statements_of_type.count(p.second) > 0) {
       result.insert(p.second);
     }
@@ -1247,14 +1331,14 @@ bool PkbReadFacade::HasNextStarRelationship() {
   return this->HasNextRelationship();
 }
 
-bool PkbReadFacade::HasNextStar(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasNextStar(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextStarRelation(statement_number);
 }
 
-bool PkbReadFacade::HasNextStarBy(const StatementNumber& statement_number) {
+bool PkbReadFacade::HasNextStarBy(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextStarRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsNextStar(const StatementNumber& statement_number_1, const StatementNumber& statement_number_2) {
+bool PkbReadFacade::IsNextStar(const StatementNumber &statement_number_1, const StatementNumber &statement_number_2) {
   return this->pkb.next_store_->HasNextStarRelation(statement_number_1, statement_number_2);
 }

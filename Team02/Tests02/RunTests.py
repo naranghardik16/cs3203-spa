@@ -136,8 +136,8 @@ def Execute(folder_to_test_in, redirect_output):
 
 
 if __name__ == "__main__":
-    Execute("Milestone1", True)
-    Execute("Milestone2", True)
+    Execute("Milestone3", True)
+    # Execute("Milestone2", True)
 
     if len(sys.argv) != 2:
         start_python_host_command = "python -m http.server 8000"
