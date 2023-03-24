@@ -140,5 +140,5 @@ const std::unordered_map<std::string, int> kSuchThatScoreMap{
 const int kResultTableInitialisationIndex = 0;
 const int kPairArgumentValidSize = 2;
 const int kTripleArgumentValidSize = 3;
-const std::string NoSynClauseGroupKey = "";
+const std::string kNoSynClauseGroupKey = "";
 }
