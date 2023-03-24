@@ -6,7 +6,7 @@ bool WhilePatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbR
 }
 
 std::shared_ptr<Result> WhilePatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{{syn_while_, 0}};
+  ResultHeader header{{syn_while_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
 
   auto declaration_map = ClauseEvaluator::GetDeclarationMap();

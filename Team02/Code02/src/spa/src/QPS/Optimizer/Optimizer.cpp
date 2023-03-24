@@ -35,10 +35,10 @@ std::vector<std::shared_ptr<ClauseGroup>> Optimizer::GetClauseGroups(const Claus
   for (const auto &kClause : clause_list) {
     auto &syn = kClause->syn_;
     if (syn.empty()) {
-      if (groups.find("") == groups.end()) {
-        groups[""] = std::make_shared<ClauseGroup>();
+      if (groups.find(pql_constants::kNoSynClauseGroupKey) == groups.end()) {
+        groups[pql_constants::kNoSynClauseGroupKey] = std::make_shared<ClauseGroup>();
       }
-      groups[""]->AddClause(kClause);
+      groups[pql_constants::kNoSynClauseGroupKey]->AddClause(kClause);
     } else {
       std::string parent = Find(*syn.begin());
       if (groups.find(parent) == groups.end()) {
