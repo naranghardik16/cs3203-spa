@@ -1,20 +1,18 @@
 #include "AssignPatternClauseEvaluator.h"
 
-bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
+bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint() {
   // Would never be called as pattern clause always has synonym
   return false;
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
+std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause() {
   ResultHeader header{{syn_assign_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
-
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
 
   bool is_any_match = QueryUtil::IsWildcard(second_arg_);
   bool is_partial_match = QueryUtil::IsPartialMatchExpressionSpecification(second_arg_);
 
-  bool is_arg_1_synonym = declaration_map.count(first_arg_);
+  bool is_arg_1_synonym = declaration_map_.count(first_arg_);
   bool is_arg_1_wildcard = QueryUtil::IsWildcard(first_arg_);
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
@@ -23,11 +21,11 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   if (is_arg_1_synonym) {
     header[first_arg_] = static_cast<int>(header.size());
 
-    pair_constraint = pkb->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
+    pair_constraint = pkb_->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
   } else if (is_arg_1_wildcard) {
-    single_constraint = pkb->GetAssignStatements();
+    single_constraint = pkb_->GetAssignStatements();
   } else {
-    single_constraint = pkb->GetStatementsModifiesVariable(QueryUtil::GetIdent(first_arg_),
+    single_constraint = pkb_->GetStatementsModifiesVariable(QueryUtil::GetIdent(first_arg_),
                                                            StatementType::ASSIGN);
   }
 
@@ -43,9 +41,9 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared
   if (is_any_match) {
     return result_ptr;
   } else if (is_partial_match) {
-    return JoinWithAssignWithPartialExpression(result_ptr, pkb);
+    return JoinWithAssignWithPartialExpression(result_ptr, pkb_);
   } else {
-    return JoinWithAssignWithExactExpression(result_ptr, pkb);
+    return JoinWithAssignWithExactExpression(result_ptr, pkb_);
   }
 }
 
