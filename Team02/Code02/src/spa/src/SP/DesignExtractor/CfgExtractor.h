@@ -40,4 +40,5 @@ class CfgExtractor : public ParserVisitor {
   shared_ptr<Cfg> cfg_;
   string cur_proc_name_;
   shared_ptr<CfgNode> cur_cfg_node_;
+  const int no_nodes_ = 0;
 };

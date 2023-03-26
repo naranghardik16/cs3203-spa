@@ -4,6 +4,7 @@
 #include "StatementParserFactory.h"
 #include "core/model/Program.h"
 #include "core/model/WhileStatement.h"
+#include "SP/Util/SPConstants.h"
 
 class WhileStatementParser : public StatementParser {
  public:

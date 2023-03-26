@@ -12,7 +12,7 @@ shared_ptr<Statement> AssignStatementParser::ParseEntity(TokenStream &tokens) {
   CheckEndOfStatement(line);
   vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 1};
   auto expr_parser =
-      ExpressionParserFactory::GetExpressionParser(expression_tokens, "assign");
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, sp_constants::k_assign_stmt);
   auto expression = expr_parser->ParseEntity(expression_tokens);
   assign_stmt->AddExpression(expression);
   return assign_stmt;
@@ -21,7 +21,7 @@ shared_ptr<Statement> AssignStatementParser::ParseEntity(TokenStream &tokens) {
 std::string AssignStatementParser::ExtractVariableName(Line &line) const {
   auto assign_keyword_itr = std::find_if(std::begin(line), std::end(line),
                                          [&](shared_ptr<Token> const p) {
-                                           return p->GetValue() == "=";
+                                           return p->GetType() == SINGLE_EQUAL;
                                          });
 
   // There should a var on the left and an expression on the right side of the assignment operator
@@ -43,11 +43,11 @@ std::string AssignStatementParser::ExtractVariableName(Line &line) const {
 }
 
 void AssignStatementParser::CheckEndOfStatement(Line &line) const {
-  if ((*prev(line.end()))->GetValue() != ";") {
+  if ((*prev(line.end()))->GetType() != SEMICOLON) {
     throw SyntaxErrorException("AssignStatement does not end with ;");
   }
 
-  if (line.size() < 4) {
+  if (line.size() < k_min_tokens_) {
     throw SyntaxErrorException("Lesser tokens than what an AssignStatement has");
   }
 }

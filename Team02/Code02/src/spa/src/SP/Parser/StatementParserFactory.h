@@ -9,6 +9,7 @@
 #include "ReadStatementParser.h"
 #include "WhileStatementParser.h"
 #include "CallStatementParser.h"
+#include "SP/Util/SPConstants.h"
 
 /**
  * Factory class for getting the appropriate Statement Parser
@@ -24,13 +25,6 @@ class StatementParserFactory {
   static bool CheckKeywordType(Line &line,
                                std::string_view type_to_check,
                                bool has_parenthesis);
-  inline static constexpr std::string_view k_if_stmt_ = "if";
-  inline static constexpr std::string_view k_while_stmt_ = "while";
-  inline static constexpr std::string_view k_print_stmt_ = "print";
-  inline static constexpr std::string_view k_read_stmt_ = "read";
-  inline static constexpr std::string_view k_call_stmt_ = "call";
-  inline static constexpr std::string_view k_parenthesis_ = "(";
-  inline static constexpr std::string_view k_assign_ = "=";
   inline static constexpr int k_min_stmt_size_ = 2;
 };
 

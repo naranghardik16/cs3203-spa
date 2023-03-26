@@ -2,22 +2,22 @@
 
 shared_ptr<ExpressionParser> ExpressionParserFactory::GetExpressionParser(Line &line,
                                                                           string statement_type) {
-  if (CheckExpressionType(line, k_variable_)) {
+  if (CheckExpressionType(line, sp_constants::k_variable_)) {
     return make_shared<VariableParser>();
   }
-  if (CheckExpressionType(line, k_constant_)) {
+  if (CheckExpressionType(line, sp_constants::k_constant_)) {
     return make_shared<ConstantParser>();
   }
 
-  if (!CheckExpressionType(line, k_operation_)) {
+  if (!CheckExpressionType(line, sp_constants::k_operation_)) {
     return nullptr;
   }
 
-  if (statement_type == k_assign_) {
+  if (statement_type == sp_constants::k_assign_stmt) {
     return make_shared<ArithmeticOperationParser>();
   }
 
-  if (statement_type == k_if_ || statement_type == k_while_) {
+  if (statement_type == sp_constants::k_if_stmt_ || statement_type == sp_constants::k_while_stmt_) {
     return make_shared<ConditionalOperationParser>();
   }
 
@@ -26,15 +26,15 @@ shared_ptr<ExpressionParser> ExpressionParserFactory::GetExpressionParser(Line &
 
 bool ExpressionParserFactory::CheckExpressionType(Line &line,
                                                   std::string_view type_to_check) {
-  if (line.size() == 1) {
+  if (line.size() == k_min_tokens_) {
     if (line[0]->GetType() == NAME) {
-      return type_to_check == k_variable_;
+      return type_to_check == sp_constants::k_variable_;
     }
 
     if (line[0]->GetType() == INTEGER) {
-      return type_to_check == k_constant_;
+      return type_to_check == sp_constants::k_constant_;
     }
   }
 
-  return type_to_check == k_operation_;
+  return type_to_check == sp_constants::k_operation_;
 }

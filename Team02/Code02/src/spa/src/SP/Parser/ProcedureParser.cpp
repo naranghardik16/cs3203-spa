@@ -25,7 +25,7 @@ shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
 }
 
 std::string ProcedureParser::ExtractProcName(Line &line) {
-  if (line[0]->GetValue() != "procedure" || line.size() < 2) {
+  if (line[0]->GetValue() != sp_constants::k_procedure_ || line.size() < k_min_tokens_) {
     throw SyntaxErrorException("A procedure Line should start with procedure");
   }
   if (line[1]->GetType() != NAME) {
@@ -38,6 +38,6 @@ bool ProcedureParser::IsProcedureEnd(Line &line) {
   // Check if the current line contains '}'
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
-                        return p->GetType() == TokenType::RIGHT_BRACE;
+                        return p->GetType() == RIGHT_BRACE;
                       }) != std::end(line);
 }

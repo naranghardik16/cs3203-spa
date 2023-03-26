@@ -8,4 +8,6 @@ class ConstantParser : public ExpressionParser {
   ConstantParser() = default;
   shared_ptr<Expression> ParseEntity(TokenStream &tokens) override;
   shared_ptr<Expression> ParseEntity(Line &line) override;
+ private:
+  const int k_max_tokens_ = 1;
 };
