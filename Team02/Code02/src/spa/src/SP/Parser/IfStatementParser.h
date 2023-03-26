@@ -4,6 +4,8 @@
 #include "StatementParserFactory.h"
 #include "core/model/IfStatement.h"
 #include "core/model/Program.h"
+#include "SP/Util/SPConstants.h"
+
 
 class IfStatementParser : public StatementParser {
  public:
@@ -15,4 +17,8 @@ class IfStatementParser : public StatementParser {
   bool HasElseStatements(Line &line) const;
   bool IsEndOfThenStatement(Line &line) const;
   bool IsEndOfIfElseStatement(Line &line) const;
+ private:
+  const int k_min_tokens_ = 2;
+  const string k_else_ = "else";
+  const string k_then_ = "then";
 };

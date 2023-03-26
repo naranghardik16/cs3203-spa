@@ -43,6 +43,7 @@ class OperationParser : public ExpressionParser {
   void ValidateForBalancedParenthesis();
   stack<string> parentheses_container_;
   unordered_map<int, string> parentheses_pos_mappings_;
+  const int k_min_pos_ = 0;
 };
 
 

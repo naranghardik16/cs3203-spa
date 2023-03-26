@@ -14,14 +14,14 @@ shared_ptr<Statement> PrintStatementParser::ParseEntity(TokenStream &tokens) {
 std::string PrintStatementParser::ExtractVariableName(Line &line) const {
   auto print_keyword_itr =
       std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetValue() == "print";
+        return p->GetValue() == sp_constants::k_print_stmt_;
       });
 
   if (print_keyword_itr != line.begin()) {
     throw SyntaxErrorException("Print statement should start with print keyword");
   }
 
-  if (line.size() < 2) {
+  if (line.size() < k_min_tokens_) {
     throw SyntaxErrorException("Print statement does not have a variable");
   }
 
@@ -33,11 +33,11 @@ std::string PrintStatementParser::ExtractVariableName(Line &line) const {
 }
 
 void PrintStatementParser::CheckEndOfStatement(Line &line) const {
-  if ((*prev(line.end()))->GetValue() != ";") {
+  if ((*prev(line.end()))->GetType() != SEMICOLON) {
     throw SyntaxErrorException("PrintStatement does not end with ;");
   }
 
-  if (line.size() > 3) {
+  if (line.size() > k_max_tokens_) {
     throw SyntaxErrorException("Too many tokens in a PrintStatement");
   }
 }
