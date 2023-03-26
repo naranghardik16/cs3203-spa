@@ -1,19 +1,31 @@
 #pragma once
 
-#include "QPS/Evaluator/ClauseEvaluator.h"
+#include "QPS/Evaluator/SuchThatClauseEvaluator/SuchThatClauseEvaluator.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 
-class ParentClauseEvaluator : public ClauseEvaluator {
+class ParentClauseEvaluator : public SuchThatClauseEvaluator {
  private:
-  std::string relationship_reference_;
-  std::string first_arg_;
-  std::string second_arg_;
+  bool is_first_arg_a_container_syn_;
+  bool is_same_syn_or_value_pairs_;
+
  public:
-  ParentClauseEvaluator(Map d, SyntaxPair syntax_pair) : ClauseEvaluator(d) {
-    relationship_reference_ = syntax_pair.first;
-    first_arg_ =  syntax_pair.second[0];
-    second_arg_ = syntax_pair.second[1];
+  ParentClauseEvaluator(Map d,
+                        SyntaxPair syntax_pair,
+                        std::shared_ptr<PkbReadFacade> pkb
+                        ) : SuchThatClauseEvaluator(std::move(d), std::move(syntax_pair), std::move(pkb)) {
+    is_first_arg_a_container_syn_ = QueryUtil::IsIfSynonym(declaration_map_, first_arg_)
+        || QueryUtil::IsWhileSynonym(declaration_map_, first_arg_)
+        || QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
+    is_same_syn_or_value_pairs_ = first_arg_ == second_arg_;
   }
-  std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) override;
-  bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) override;
+
+  bool HandleBothWildcard() override;
+  bool HandleFirstWildcardSecondValue() override;
+  bool HandleFirstValueSecondWildcard() override;
+  bool HandleBothValue() override;
+  ResultTable HandleBothSynonym() override;
+  ResultTable HandleFirstSynonymSecondWildcard() override;
+  ResultTable HandleFirstSynonymSecondValue() override;
+  ResultTable HandleFirstWildcardSecondSynonym() override;
+  ResultTable HandleFirstValueSecondSynonym() override;
 };

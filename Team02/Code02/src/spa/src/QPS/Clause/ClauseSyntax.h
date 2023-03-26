@@ -15,6 +15,7 @@ class ClauseSyntax {
  private:
   SyntaxPair pair_;
   std::shared_ptr<Expression> expr_;
+
  public:
   std::unordered_set<std::string> syn_;
 
@@ -80,7 +81,7 @@ class ClauseSyntax {
    * @param declaration_map which contains synonyms as keys and corresponding design entity as value
    * @return a ClauseEvaluator for the specific subclause
    */
-  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Map &declaration_map) = 0;
+  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Map &declaration_map, std::shared_ptr<PkbReadFacade> pkb) = 0;
 
   virtual int GetClauseScore(Map &declaration_map) = 0;
 

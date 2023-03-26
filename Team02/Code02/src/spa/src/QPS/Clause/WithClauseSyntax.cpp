@@ -23,9 +23,12 @@ bool WithClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return !is_first_arg_an_attr_ref && !is_second_arg_an_attr_ref;
 }
 
-std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
+std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map,
+                                                                         std::shared_ptr<PkbReadFacade> pkb
+                                                                         ) {
   std::shared_ptr<ClauseEvaluator> eval = std::make_shared<WithClauseEvaluator>(declaration_map,
-                                                                                ClauseSyntax::GetSyntaxPair());
+                                                                                ClauseSyntax::GetSyntaxPair(),
+                                                                                pkb);
   return eval;
 }
 

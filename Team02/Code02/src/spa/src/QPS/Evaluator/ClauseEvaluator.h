@@ -4,6 +4,7 @@
 #include "QPS/Result.h"
 #include "General/StatementTypeEnum.h"
 #include <memory>
+#include <utility>
 #include "General/LexicalRuleValidator.h"
 #include "QPS/Util/QueryUtil.h"
 
@@ -11,12 +12,14 @@
  * Created by factory pattern from ClauseSyntax and is used to evaluate subclauses individually
  */
 class ClauseEvaluator {
- private:
+ protected:
   Map declaration_map_;
+  std::shared_ptr<PkbReadFacade> pkb_;
 
  public:
-  ClauseEvaluator(Map declaration_map) {
-    declaration_map_ = declaration_map;
+  ClauseEvaluator(Map declaration_map, std::shared_ptr<PkbReadFacade> pkb) {
+    declaration_map_ = std::move(declaration_map);
+    pkb_ = std::move(pkb);
   }
 
   /**
@@ -52,14 +55,14 @@ class ClauseEvaluator {
    * @param pkb which stores data about information from the SIMPLE program
    * @return a Result class containing information about the evaluation for further handling
    */
-  virtual std::shared_ptr<Result> EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) = 0;
+  virtual std::shared_ptr<Result> EvaluateClause() = 0;
 
   /**
    * Evaluates a boolean constraint by interacting with Pkb
    * @param pkb which stores data about information from the SIMPLE program
    * @return true if the boolean constraint is fulfilled, else false which means final evaluation of the query is None
    */
-  virtual bool EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) = 0;
+  virtual bool EvaluateBooleanConstraint() = 0;
 
   virtual ~ClauseEvaluator() {};
 };
