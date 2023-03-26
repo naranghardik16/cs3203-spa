@@ -3,17 +3,17 @@
 shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::deque<
     StatementParserFactory::Line> &tokens) {
   auto line = tokens.front();
-  if (CheckKeywordType(line, "if", true)) {
+  if (CheckKeywordType(line, k_if_stmt_, true)) {
     return make_shared<IfStatementParser>();
-  } else if (CheckKeywordType(line, "while", true)) {
+  } else if (CheckKeywordType(line, k_while_stmt_, true)) {
     return make_shared<WhileStatementParser>();
   } else if (CheckAssignmentType(line)) {
     return make_shared<AssignStatementParser>();
-  } else if (CheckKeywordType(line, "print", false)) {
+  } else if (CheckKeywordType(line, k_print_stmt_, false)) {
     return make_shared<PrintStatementParser>();
-  } else if (CheckKeywordType(line, "read", false)) {
+  } else if (CheckKeywordType(line, k_read_stmt_, false)) {
     return make_shared<ReadStatementParser>();
-  } else if (CheckKeywordType(line, "call", false)) {
+  } else if (CheckKeywordType(line, k_call_stmt_, false)) {
     return make_shared<CallStatementParser>();
   }
   throw SemanticErrorException("Unknown Statement type");
@@ -22,19 +22,19 @@ shared_ptr<StatementParser> StatementParserFactory::GetStatementParser(std::dequ
 bool StatementParserFactory::CheckKeywordType(Line &line,
                                               std::string_view type_to_check,
                                               bool has_parenthesis) {
-  if (line.size() < 2) {
+  if (line.size() < k_min_stmt_size_) {
     throw SyntaxErrorException("Invalid statement");
   }
   auto entity_itr =
       std::find_if(std::begin(line),
                    std::end(line),
-                   [&](shared_ptr<Token> const p) {
+                   [&](shared_ptr<Token> const &p) {
                      return p->GetValue() == type_to_check;
                    });
 
   if (has_parenthesis) {
     return entity_itr == std::begin(line)
-        && next(entity_itr)->get()->GetValue() == "(";
+        && next(entity_itr)->get()->GetValue() == k_parenthesis_;
   }
   return entity_itr == std::begin(line);
 }
@@ -43,8 +43,8 @@ bool StatementParserFactory::CheckAssignmentType(Line &line) {
   auto entity_itr =
       std::find_if(std::begin(line),
                    std::end(line),
-                   [&](shared_ptr<Token> const p) {
-                     return p->GetValue() == "=";
+                   [&](shared_ptr<Token> const &p) {
+                     return p->GetValue() == k_assign_;
                    });
 
   return entity_itr != std::end(line);
