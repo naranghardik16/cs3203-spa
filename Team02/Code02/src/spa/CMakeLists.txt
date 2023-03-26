@@ -45,6 +45,7 @@ file(GLOB headers
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/DesignExtractor/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Parser/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Util/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Tokenizer/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/SP/Validator/*.h")
 

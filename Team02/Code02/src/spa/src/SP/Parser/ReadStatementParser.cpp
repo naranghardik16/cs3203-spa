@@ -15,14 +15,14 @@ shared_ptr<Statement> ReadStatementParser::ParseEntity(TokenStream &tokens) {
 std::string ReadStatementParser::ExtractVariableName(Line &line) const {
   auto print_keyword_itr =
       std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetValue() == "read";
+        return p->GetValue() == sp_constants::k_read_stmt_;
       });
 
   if (print_keyword_itr != line.begin()) {
     throw SyntaxErrorException("Read statement should start with read keyword");
   }
 
-  if (line.size() < 2) {
+  if (line.size() < k_min_tokens_) {
     throw SyntaxErrorException("Read statement does not have a variable");
   }
 
@@ -34,11 +34,11 @@ std::string ReadStatementParser::ExtractVariableName(Line &line) const {
 }
 
 void ReadStatementParser::CheckEndOfStatement(Line &line) const {
-  if ((*prev(line.end()))->GetValue() != ";") {
+  if ((*prev(line.end()))->GetType() != SEMICOLON) {
     throw SyntaxErrorException("ReadStatement does not end with ;");
   }
 
-  if (line.size() > 3) {
+  if (line.size() > k_max_tokens) {
     throw SyntaxErrorException("Too many tokens in a ReadStatement");
   }
 }

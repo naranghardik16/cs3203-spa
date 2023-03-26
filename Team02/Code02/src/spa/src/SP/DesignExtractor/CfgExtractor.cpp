@@ -39,7 +39,7 @@ void CfgExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   auto else_cfg_node = make_shared<CfgNode>();
   auto end_cfg_node = make_shared<CfgNode>();
 
-  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+  if (cur_cfg_node_->GetNodeStmts().size() > no_nodes_) {
     AddTransitionAndUpdate(if_cfg_node, true);
   } else {
     if_cfg_node = cur_cfg_node_;
@@ -72,7 +72,7 @@ void CfgExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statemen
   auto loop_cfg_node = make_shared<CfgNode>();
   auto end_cfg_node = make_shared<CfgNode>();
 
-  if (cur_cfg_node_->GetNodeStmts().size() > 0) {
+  if (cur_cfg_node_->GetNodeStmts().size() > no_nodes_) {
     AddTransitionAndUpdate(while_cfg_node, true);
   } else {
     while_cfg_node = cur_cfg_node_;

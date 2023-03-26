@@ -1,7 +1,7 @@
 #include "OperationParser.h"
 
 void OperationParser::Setup(Line &line) {
-  if (*pos_ == 0) {
+  if (*pos_ == k_min_pos_) {
     line_ = line;
     GetNext();
   }

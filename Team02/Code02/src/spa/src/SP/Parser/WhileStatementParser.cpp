@@ -34,12 +34,12 @@ shared_ptr<ConditionalOperation> WhileStatementParser::ExtractCondition(Line &li
   // remove "while (" and ") {" from the token line
   vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 2};
   auto expr_parser =
-      ExpressionParserFactory::GetExpressionParser(expression_tokens, "if");
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, sp_constants::k_while_stmt_);
   auto
       condition = (expr_parser->ParseEntity(
       expression_tokens));
   if (!condition) {
-    throw SyntaxErrorException("Could not get a condition for if statement");
+    throw SyntaxErrorException("Could not get a condition for while statement");
   }
   return dynamic_pointer_cast<ConditionalOperation>(condition);
 }
