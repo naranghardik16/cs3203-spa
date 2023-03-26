@@ -1,90 +1,52 @@
 #include "FollowsStarClauseEvaluator.h"
 
-bool FollowsStarClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  if (is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    // Example query: Follow*(_, _)
-
-    return pkb->HasFollowsStarRelationship();
-  } else if (is_first_arg_a_wildcard && !is_second_arg_a_wildcard) {
-    // Example query: Follow*(_, 1)
-
-    return pkb->HasFollowsStarBy(second_arg_);
-  } else if (!is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    // Example query: Follow*(1, _)
-
-    return pkb->HasFollowsStar(first_arg_);
-  } else {
-    // Example query: Follow*(1, 6)
-
-    return pkb->IsFollowsStar(first_arg_, second_arg_);
-  }
+bool FollowsStarClauseEvaluator::HandleBothWildcard() {
+  // Example query: Follows*(_,_)
+  return pkb_->HasFollowsStarRelationship();
 }
 
-std::shared_ptr<Result> FollowsStarClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
+bool FollowsStarClauseEvaluator::HandleFirstWildcardSecondValue() {
+  // Example query: Follows*(_,"5")
+  return pkb_->HasFollowsStarBy(second_arg_);
+}
 
-  ResultHeader header;
-  ResultTable table;
+bool FollowsStarClauseEvaluator::HandleFirstValueSecondWildcard() {
+  // Example query: Follows*("5", _)
+  return pkb_->HasFollowsStar(first_arg_);
+}
 
-  bool is_first_arg_synonym = declaration_map.count(first_arg_);
-  bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
-
-  bool is_second_arg_synonym = declaration_map.count(second_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  if (is_first_arg_synonym) {
-    header[first_arg_] = static_cast<int>(header.size());
+bool FollowsStarClauseEvaluator::HandleBothValue() {
+  if (is_same_syn_or_value_pairs_) {
+    return false;
   }
-  if (is_second_arg_synonym) {
-    header[second_arg_] = static_cast<int>(header.size());
+  // Example query: Follows*(5, 6)
+  return pkb_->IsFollowsStar(first_arg_, second_arg_);
+}
+
+ResultTable FollowsStarClauseEvaluator::HandleBothSynonym() {
+  if (is_same_syn_or_value_pairs_) {
+    return {};
   }
+  // Example query: Follows*(a,p)
+  return ConvertPairSetToResultTableFormat(pkb_->GetFollowsStarPairs(arg_1_type_, arg_2_type_));
+}
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
+ResultTable FollowsStarClauseEvaluator::HandleFirstSynonymSecondWildcard() {
+  // Example query: Follows*(s, _)
+  return ConvertSetToResultTableFormat(pkb_->GetFollowsStarFirst(arg_1_type_));
+}
 
-  // Special case Follow*(5,5) or Follow*a,a) will always return empty
-  // Nothing can follow first statement
-  bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
-  if (is_same_syn_or_int_pairs || second_arg_ == "1") {
-    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-    return result_ptr;
-  }
+ResultTable FollowsStarClauseEvaluator::HandleFirstSynonymSecondValue() {
+  // Example query: Follows*(a,"5")
+  return ConvertSetToResultTableFormat(pkb_->GetFollowsStarBy(second_arg_, arg_1_type_));
+}
 
-  StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
-  StatementType arg_2_type = QueryUtil::GetStatementType(declaration_map, second_arg_);
+ResultTable FollowsStarClauseEvaluator::HandleFirstWildcardSecondSynonym() {
+  // Example query: Follows*(_, s)
+  return ConvertSetToResultTableFormat(pkb_->GetFollowsStarSecond(arg_2_type_));
+}
 
-  if (is_first_arg_synonym && is_second_arg_synonym) {
-    // Example query: Follows* (s,s)
-
-    pair_constraint = pkb->GetFollowsStarPairs(arg_1_type, arg_2_type);
-  } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    // Example query: Follows* (s,_)
-
-    single_constraint = pkb->GetFollowsStarFirst(arg_1_type);
-  } else if (is_first_arg_synonym) {
-    // Example query: Follows* (s, 1)
-
-    single_constraint = pkb->GetFollowsStarBy(second_arg_, arg_1_type);
-  } else if (is_first_arg_a_wildcard) {
-    // Example query: Follows* (_, s)
-
-    single_constraint = pkb->GetFollowsStarSecond(arg_2_type);
-  } else {
-    // Example query: Follows* (1, s)
-
-    single_constraint = pkb->GetFollowsStar(first_arg_, arg_2_type);
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
-  }
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
+ResultTable FollowsStarClauseEvaluator::HandleFirstValueSecondSynonym() {
+  // Example query: Follows*("5", a)
+  return ConvertSetToResultTableFormat(pkb_->GetFollowsStar(first_arg_, arg_2_type_));
 }

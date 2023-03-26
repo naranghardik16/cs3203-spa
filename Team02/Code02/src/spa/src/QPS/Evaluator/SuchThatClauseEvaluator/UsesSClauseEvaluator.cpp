@@ -1,78 +1,57 @@
 #include "UsesSClauseEvaluator.h"
 
-bool UsesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  if (is_second_arg_a_wildcard) {
-    // Example query: Uses(5, _)
-
-    return !pkb->GetVariablesUsedByStatement(first_arg_).empty();
-  } else {
-    // Example query: uses(5, "count")
-
-    return pkb->HasUsesStatementRelationship(first_arg_,
-                                             QueryUtil::GetIdent(second_arg_));
-  }
+bool UsesSClauseEvaluator::HandleBothWildcard() {
+  // Not possible
+  return false;
 }
 
-std::shared_ptr<Result> UsesSClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header;
-  ResultTable table;
+bool UsesSClauseEvaluator::HandleFirstWildcardSecondValue() {
+  // Not possible
+  return false;
+}
 
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
+bool UsesSClauseEvaluator::HandleFirstValueSecondWildcard() {
+  // Example query: Uses(5, _)
+  return !pkb_->GetVariablesUsedByStatement(first_arg_).empty();
+}
 
-  bool is_first_arg_synonym = declaration_map.count(first_arg_);
-  bool is_first_arg_a_read_synonym = QueryUtil::IsReadSynonym(declaration_map, first_arg_);
+bool UsesSClauseEvaluator::HandleBothValue() {
+  // Example query: uses(5, "count")
+  return pkb_->HasUsesStatementRelationship(first_arg_,
+                                           QueryUtil::GetIdent(second_arg_));
+}
 
-  bool is_second_arg_synonym = declaration_map.count(second_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  if (is_first_arg_synonym) {
-    header[first_arg_] = static_cast<int>(header.size());
+ResultTable UsesSClauseEvaluator::HandleBothSynonym() {
+  if (is_first_arg_a_read_synonym_) {
+    return {};
   }
-  if (is_second_arg_synonym) {
-    header[second_arg_] = static_cast<int>(header.size());
+  // Example query: Uses(s, v)
+  return ConvertPairSetToResultTableFormat(pkb_->GetUsesStatementVariablePairs(arg_1_type_));
+}
+
+ResultTable UsesSClauseEvaluator::HandleFirstSynonymSecondWildcard() {
+  if (is_first_arg_a_read_synonym_) {
+    return {};
   }
+  // Example query: Uses(s, _)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsThatUses(arg_1_type_));
+}
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
-  StatementType arg_1_type = QueryUtil::GetStatementType(declaration_map, first_arg_);
-
-
-  // Special case where there will be no result is if first_arg_ is read synonym
-  if (is_first_arg_a_read_synonym) {
-    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-    return result_ptr;
+ResultTable UsesSClauseEvaluator::HandleFirstSynonymSecondValue() {
+  if (is_first_arg_a_read_synonym_) {
+    return {};
   }
+  // Example query: Uses(s, "x")
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsUsesVariable(arg_1_type_,
+                                                                       QueryUtil::GetIdent(second_arg_)));
+}
 
-  if (is_first_arg_synonym && is_second_arg_synonym) {
-    // Example query: Uses(s, v)
+ResultTable UsesSClauseEvaluator::HandleFirstWildcardSecondSynonym() {
+  // Not possible
+  return {};
+}
 
-    pair_constraint = pkb->GetUsesStatementVariablePairs(arg_1_type);
-  } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    // Example query: Uses(s, _)
-
-    single_constraint = pkb->GetStatementsThatUses(arg_1_type);
-  } else if (is_first_arg_synonym) {
-    // Example query: Uses(s, "x")
-
-    single_constraint = pkb->GetStatementsUsesVariable(arg_1_type,
-                                                       QueryUtil::GetIdent(second_arg_));
-  } else {
-    // Example query: Uses(1, v)
-
-    single_constraint = pkb->GetVariablesUsedByStatement(first_arg_);
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
-  }
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
+ResultTable UsesSClauseEvaluator::HandleFirstValueSecondSynonym() {
+  // Example query: Uses(1, v)
+  return ConvertSetToResultTableFormat(pkb_->GetVariablesUsedByStatement(first_arg_));
 }
