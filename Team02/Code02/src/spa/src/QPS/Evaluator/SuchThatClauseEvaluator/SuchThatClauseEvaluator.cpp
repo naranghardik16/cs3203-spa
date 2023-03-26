@@ -5,20 +5,16 @@ bool SuchThatClauseEvaluator::EvaluateBooleanConstraint() {
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
   if (is_first_arg_a_wildcard && is_second_arg_a_wildcard) {
-    // Example query: Follow*(_, _)
-
+    // Case: relRef(_, _)
     return HandleBothWildcard();
   } else if (is_first_arg_a_wildcard) {
-    // Example query: Follow*(_, 1)
-
+    // Case: relRef(_, val)
     return HandleFirstWildcardSecondValue();
   } else if (is_second_arg_a_wildcard) {
-    // Example query: Follow*(1, _)
-
+    // Case: relRef(val, _)
     return HandleFirstValueSecondWildcard();
   } else {
-    // Example query: Follow*(1, 6)
-
+    // Case: relRef(val, val)
     return HandleBothValue();
   }
 }
@@ -41,24 +37,19 @@ std::shared_ptr<Result> SuchThatClauseEvaluator::EvaluateClause() {
   }
 
   if (is_first_arg_synonym && is_second_arg_synonym) {
-    // Example query: Follows* (s,s)
-
+    // Case: relRef(syn, syn)
     table = HandleBothSynonym();
   } else if (is_first_arg_synonym && is_second_arg_a_wildcard) {
-    // Example query: Follows* (s,_)
-
+    // Case: relRef(syn,_)
     table = HandleFirstSynonymSecondWildcard();
   } else if (is_first_arg_synonym) {
-    // Example query: Follows* (s, 1)
-
+    // Case: relRef(syn, val)
     table = HandleFirstSynonymSecondValue();
   } else if (is_first_arg_a_wildcard) {
-    // Example query: Follows* (_, s)
-
+    // Case: relRef(_, syn)
     table = HandleFirstWildcardSecondSynonym();
   } else {
-    // Example query: Follows* (1, s)
-
+    // Case: relRef(val, syn)
     table = HandleFirstValueSecondSynonym();
   }
 
