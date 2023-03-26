@@ -21,4 +21,10 @@ class ExpressionParserFactory {
  private:
   static inline bool CheckExpressionType(Line &line,
                                          std::string_view type_to_check);
+  inline static constexpr std::string_view k_variable_ = "variable";
+  inline static constexpr std::string_view k_constant_ = "constant";
+  inline static constexpr std::string_view k_operation_ = "operation";
+  inline static constexpr std::string_view k_assign_ = "assign";
+  inline static constexpr std::string_view k_if_ = "if";
+  inline static constexpr std::string_view k_while_ = "while";
 };
