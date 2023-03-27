@@ -69,11 +69,13 @@ PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType &statement_
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetVariablesModifiedByStatement(const StatementNumber &statement_number) {
-  return this->pkb.modifies_store_->GetVariablesModifiedByStatement(statement_number);
+  return this->pkb.modifies_store_->GetVariablesModifiedByStatement(
+      statement_number);
 }
 
 PkbReadFacade::SingleSet
-PkbReadFacade::GetStatementsModifiesVariable(const Variable &variable, const StatementType &statement_type) {
+PkbReadFacade::GetStatementsModifiesVariable(const Variable &variable,
+                                             const StatementType &statement_type) {
   StatementNumberSet statements =
       this->pkb.statement_store_->GetStatements(statement_type);
 
@@ -109,7 +111,9 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatModify(const StatementT
 
 bool PkbReadFacade::HasModifiesStatementRelationship(const StatementNumber &statement_number,
                                                      const Variable &variable) {
-  return this->pkb.modifies_store_->HasModifiesStatementVariableRelation(statement_number, variable);
+  return this->pkb.modifies_store_->HasModifiesStatementVariableRelation(
+      statement_number,
+      variable);
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetModifiesProcedureVariablePairs() {
@@ -138,8 +142,11 @@ PkbReadFacade::SingleSet PkbReadFacade::GetProceduresThatModify() {
   return this->pkb.modifies_store_->GetProceduresThatModify();
 }
 
-bool PkbReadFacade::HasModifiesProcedureRelationship(const Procedure &procedure, const Variable &variable) {
-  return this->pkb.modifies_store_->HasModifiesProcedureVariableRelation(procedure, variable);
+bool PkbReadFacade::HasModifiesProcedureRelationship(const Procedure &procedure,
+                                                     const Variable &variable) {
+  return this->pkb.modifies_store_->HasModifiesProcedureVariableRelation(
+      procedure,
+      variable);
 }
 
 // Uses Statement API
@@ -177,7 +184,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementTyp
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByStatement(const StatementNumber &statement_number) {
-  return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(statement_number);
+  return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(
+      statement_number);
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const StatementType &statement_type,
@@ -197,8 +205,11 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const Statemen
   return result;
 }
 
-bool PkbReadFacade::HasUsesStatementRelationship(const StatementNumber &statement_number, const Variable &variable) {
-  return this->pkb.uses_store_->HasUsesStatementVariableRelation(statement_number, variable);
+bool PkbReadFacade::HasUsesStatementRelationship(const StatementNumber &statement_number,
+                                                 const Variable &variable) {
+  return this->pkb.uses_store_->HasUsesStatementVariableRelation(
+      statement_number,
+      variable);
 }
 
 // Uses Procedure API
@@ -227,8 +238,10 @@ PkbReadFacade::SingleSet PkbReadFacade::GetProceduresUsesVariable(const Variable
   return result;
 }
 
-bool PkbReadFacade::HasUsesProcedureRelationship(const Procedure &procedure, const Variable &variable) {
-  return this->pkb.uses_store_->HasUsesProcedureVariableRelation(procedure, variable);
+bool PkbReadFacade::HasUsesProcedureRelationship(const Procedure &procedure,
+                                                 const Variable &variable) {
+  return this->pkb.uses_store_->HasUsesProcedureVariableRelation(procedure,
+                                                                 variable);
 }
 
 // Follows API
@@ -246,7 +259,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType &statem
   PairSet result;
 
   for (const auto &p : follows_pairs) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
+    if (statements_of_type_1.count(p.first) > 0
+        && statements_of_type_2.count(p.second) > 0) {
       result.insert(p);
     }
   }
@@ -330,7 +344,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatAreFollowers(const State
 
 bool PkbReadFacade::HasFollowsRelationship(const StatementNumber &statement_number,
                                            const StatementNumber &statement_number_follower) {
-  return this->pkb.follows_store_->HasFollowsRelation(statement_number, statement_number_follower);
+  return this->pkb.follows_store_->HasFollowsRelation(statement_number,
+                                                      statement_number_follower);
 }
 
 bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
@@ -341,10 +356,12 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType &statement_type_1,
                                                           const StatementType &statement_type_2) {
   SingleSet
-      statements_of_type_1 = this->pkb.statement_store_->GetStatements(statement_type_1);
+      statements_of_type_1 =
+      this->pkb.statement_store_->GetStatements(statement_type_1);
 
   SingleSet
-      statements_of_type_2 = this->pkb.statement_store_->GetStatements(statement_type_2);
+      statements_of_type_2 =
+      this->pkb.statement_store_->GetStatements(statement_type_2);
 
   PairSet follows_star_pairs =
       this->pkb.follows_store_->GetFollowsStarPairs();
@@ -352,7 +369,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType &s
   PairSet result;
 
   for (const auto &p : follows_star_pairs) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second) > 0) {
+    if (statements_of_type_1.count(p.first) > 0
+        && statements_of_type_2.count(p.second) > 0) {
       result.insert(p);
     }
   }
@@ -639,7 +657,8 @@ PkbReadFacade::GetStatementsThatAreDescendants(const StatementType &statement_ty
 
 bool PkbReadFacade::HasAncestorDescendantRelationship(const StatementNumber &statement_number,
                                                       const StatementNumber &statement_number_descendant) {
-  return this->pkb.parent_store_->HasParentStarRelation(statement_number, statement_number_descendant);
+  return this->pkb.parent_store_->HasParentStarRelation(statement_number,
+                                                        statement_number_descendant);
 }
 
 bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
@@ -652,7 +671,8 @@ PkbReadFacade::GetAssignWithExactExpression(const ExpressionPtr &expr) {
   SingleSet result;
 
   for (const auto &s : this->GetAssignStatements()) {
-    if (this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(*expr)) {
+    if (this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(
+        *expr)) {
       result.insert(s);
     }
   }
@@ -665,7 +685,8 @@ PkbReadFacade::GetAssignWithPartialExpression(const ExpressionPtr &sub_expressio
   SingleSet result;
 
   for (const auto &s : this->GetAssignStatements()) {
-    ExpressionPtr e = this->pkb.assignment_store_->GetExpressionFromStatementNumber(s);
+    ExpressionPtr
+        e = this->pkb.assignment_store_->GetExpressionFromStatementNumber(s);
     if (ExpressionUtil::HasSubExpression(e, sub_expression)) {
       result.insert(s);
     }
@@ -679,7 +700,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetIfConditionVariablePair() {
 
   PairSet result;
   for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
     for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(i, v));
     }
@@ -693,7 +715,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetIfWithConditionVariable(const std::st
 
   SingleSet result;
   for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
     if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
       result.insert(i);
     }
@@ -707,7 +730,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetIfThatHasConditionVariable() {
 
   SingleSet result;
   for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
     if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(i);
     }
@@ -721,7 +745,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetWhileConditionVariablePair() {
 
   PairSet result;
   for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
     for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
       result.insert(std::make_pair(w, v));
     }
@@ -738,7 +763,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileWithConditionVariable(const std:
 
   SingleSet result;
   for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
     if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
       result.insert(w);
     }
@@ -755,7 +781,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
 
   SingleSet result;
   for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
+    ExpressionPtr
+        e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
     if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
       result.insert(w);
     }
@@ -851,12 +878,16 @@ PkbReadFacade::GetAllCallStatementsFromAProcedure(const Procedure &procedure) {
   return this->pkb.calls_store_->GetCallStatementsFromProcedure(procedure);
 }
 
-bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure, Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsRelation(caller_procedure, callee_procedure);
+bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure,
+                                     Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsRelation(caller_procedure,
+                                                  callee_procedure);
 }
 
-bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure, Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure, callee_procedure);
+bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure,
+                                         Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure,
+                                                      callee_procedure);
 }
 
 PkbReadFacade::SingleSet
@@ -996,7 +1027,6 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
     std::unordered_set<std::string> visited;
 
     s.push(a);
-    visited.insert(a);
 
     std::string v = *this->GetVariablesModifiedByStatement(a).begin();
 
@@ -1005,27 +1035,23 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
       s.pop();
       if (visited.count(current) > 0) continue;
       if (this->GetAssignStatements().count(current) > 0) {
-        if (this->HasModifiesStatementRelationship(current, v)) continue;
-        if (this->HasUsesStatementRelationship(current, v)) result.insert(std::make_pair(a, current));
+        if (current != a
+            && this->HasModifiesStatementRelationship(current, v))
+          continue;
+        if (this->HasUsesStatementRelationship(current,
+                                               v))
+          result.insert(std::make_pair(a, current));
 
-        CfgNodePtr cfg_node = this->pkb.cfg_store_->GetCfgNodeFromStatementNumber(current);
-        bool flag = false;
-        for (auto &child : cfg_node->GetNodeStmts()) {
-          if (flag && std::to_string(child) != current) s.push(std::to_string(child));
-          if (current == std::to_string(child)) flag = true;
-        }
-
-        if (!(cfg_node->GetNodeTrans().count(true) > 0)) continue;
-        s.push(std::to_string(cfg_node->GetNodeTrans()[true]->GetNodeStmts()[0]));
-
-        if (!(cfg_node->GetNodeTrans().count(false) > 0)) continue;
-        s.push(std::to_string(cfg_node->GetNodeTrans()[false]->GetNodeStmts()[0]));
+        for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
 
       } else {
-        if (this->GetReadStatements().count(current) > 0 && this->HasModifiesStatementRelationship(current, v)) break;
+        if (this->GetReadStatements().count(current) > 0
+            && this->HasModifiesStatementRelationship(current, v))
+          continue;
         if (this->GetCallStatements().count(current) > 0 &&
-            this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(current), v))
-          break;
+            this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(
+                current), v))
+          continue;
       }
 
       visited.insert(current);
@@ -1097,7 +1123,9 @@ bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_numb
       this->GetAffectsPairs();
 
   for (const auto &p : affects_pairs) {
-    if (p.first == statement_number && p.second == statement_number_being_affected) return true;
+    if (p.first == statement_number
+        && p.second == statement_number_being_affected)
+      return true;
   }
 
   return false;
@@ -1154,7 +1182,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType &statemen
 
   PairSet result;
   for (const auto &p : this->pkb.next_store_->GetNextPairs()) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
+    if (statements_of_type_1.count(p.first) > 0
+        && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
   }
@@ -1246,8 +1275,10 @@ bool PkbReadFacade::HasNextBy(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsNext(const StatementNumber &statement_number_1, const StatementNumber &statement_number_2) {
-  return this->pkb.next_store_->HasNextRelation(statement_number_1, statement_number_2);
+bool PkbReadFacade::IsNext(const StatementNumber &statement_number_1,
+                           const StatementNumber &statement_number_2) {
+  return this->pkb.next_store_->HasNextRelation(statement_number_1,
+                                                statement_number_2);
 }
 
 // Next* API
@@ -1261,7 +1292,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType &stat
 
   PairSet result;
   for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
+    if (statements_of_type_1.count(p.first) > 0
+        && statements_of_type_2.count(p.second)) {
       result.insert(p);
     }
   }
@@ -1339,6 +1371,8 @@ bool PkbReadFacade::HasNextStarBy(const StatementNumber &statement_number) {
   return this->pkb.next_store_->HasNextStarRelationBy(statement_number);
 }
 
-bool PkbReadFacade::IsNextStar(const StatementNumber &statement_number_1, const StatementNumber &statement_number_2) {
-  return this->pkb.next_store_->HasNextStarRelation(statement_number_1, statement_number_2);
+bool PkbReadFacade::IsNextStar(const StatementNumber &statement_number_1,
+                               const StatementNumber &statement_number_2) {
+  return this->pkb.next_store_->HasNextStarRelation(statement_number_1,
+                                                    statement_number_2);
 }
