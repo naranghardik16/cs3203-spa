@@ -1021,7 +1021,7 @@ PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const Stat
 // Affects API
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
   PairSet result;
-
+  const auto asses = this->GetAssignStatements();
   for (const auto &a : this->GetAssignStatements()) {
     std::stack<std::string> s;
     std::unordered_set<std::string> visited;
@@ -1034,25 +1034,31 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
       auto current = s.top();
       s.pop();
       if (visited.count(current) > 0) continue;
-      if (this->GetAssignStatements().count(current) > 0) {
-        if (current != a
-            && this->HasModifiesStatementRelationship(current, v))
-          continue;
-        if (this->HasUsesStatementRelationship(current,
-                                               v))
-          result.insert(std::make_pair(a, current));
 
+      if (this->GetIfStatements().count(current) > 0 ||
+          this->GetWhileStatements().count(current) > 0) {
         for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
-
-      } else {
-        if (this->GetReadStatements().count(current) > 0
-            && this->HasModifiesStatementRelationship(current, v))
-          continue;
-        if (this->GetCallStatements().count(current) > 0 &&
-            this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(
-                current), v))
-          continue;
+        continue;
       }
+
+      if (current != a && this->HasUsesStatementRelationship(current, v) &&
+          this->GetAssignStatements().count(current) > 0)
+        result.insert(std::make_pair(a, current));
+
+      if (current != a
+          && this->HasModifiesStatementRelationship(current, v))
+        continue;
+
+      if (this->GetReadStatements().count(current) > 0
+          && this->HasModifiesStatementRelationship(current, v))
+        continue;
+
+      if (this->GetCallStatements().count(current) > 0 &&
+          this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(
+              current), v))
+        continue;
+
+      for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
 
       visited.insert(current);
     }
