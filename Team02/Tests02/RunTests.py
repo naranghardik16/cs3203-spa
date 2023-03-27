@@ -146,11 +146,11 @@ def Execute(folder_to_test_in, redirect_output):
 if __name__ == "__main__":
     Execute("Milestone1", True)
     Execute("Milestone2", True)
+    # Execute("Milestone3", True)
     print(f"Total test statistics:")
     print(f"Total no. of passed test cases: {TOTAL_PASSED_TESTS}")
     print(f"Total no. of failed test cases: {TOTAL_FAILED_TESTS}")
     print(f"Total no. of test cases: {TOTAL_TESTS}")
-
 
     if len(sys.argv) != 2:
         start_python_host_command = "python -m http.server 8000"

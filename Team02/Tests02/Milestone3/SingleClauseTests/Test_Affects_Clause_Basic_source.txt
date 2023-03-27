@@ -13,7 +13,7 @@ procedure Second {
     y = z + 2;
     x = x * y + z;
     read y;
-    w = y
+    w = y;
     }
 
 procedure Third {
