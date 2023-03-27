@@ -4,17 +4,14 @@ class PairFilterUtil {
  public:
   typedef PkbCommunicationTypes::SingleConstraintSet SingleSet;
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
+  typedef PkbCommunicationTypes::PairConstraint Pair;
   typedef std::string SimpleEntity;
-  typedef std::function<bool(SimpleEntity)> Predicate;
+  typedef std::function<bool(Pair)> Predicate;
 
-  static PairSet Filter(Predicate f, PairSet ps, bool is_first) {
+  static PairSet Filter(Predicate f, PairSet ps) {
     PairSet result;
     for (const auto &p : ps) {
-      if (is_first) {
-        if (f(p.first)) result.insert(p);
-      } else {
-        if (f(p.second)) result.insert(p);
-      }
+      if (f(p)) result.insert(p);
     }
 
     return result;

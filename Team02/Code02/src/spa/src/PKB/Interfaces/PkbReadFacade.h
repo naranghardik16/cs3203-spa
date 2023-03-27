@@ -23,6 +23,7 @@ class PkbReadFacade {
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
   typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef std::shared_ptr<Expression> ExpressionPtr;
+  typedef PkbCommunicationTypes::PairConstraint Pair;
 
   /**
    * Constructor for Pkb's read facade.

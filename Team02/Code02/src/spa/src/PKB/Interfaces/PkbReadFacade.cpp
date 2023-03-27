@@ -51,9 +51,9 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAssignStatements() {
 
 PkbReadFacade::PairSet
 PkbReadFacade::GetModifiesStatementVariablePairs(const StatementType &statement_type) {
-  return PairFilterUtil::Filter([&](std::string s) {
-    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
-  }, this->pkb.modifies_store_->GetStatementVariablePairs(), true);
+  return PairFilterUtil::Filter([&](Pair s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s.first) > 0;
+  }, this->pkb.modifies_store_->GetStatementVariablePairs());
 }
 
 PkbReadFacade::SingleSet
@@ -140,9 +140,9 @@ PkbReadFacade::GetUsesStatementVariablePairs(const StatementType &statement_type
   PairSet statement_variable_pairs =
       this->pkb.uses_store_->GetStatementVariablePairs();
 
-  return PairFilterUtil::Filter([&statements](std::string s) {
-    return statements.count(s) > 0;
-  }, statement_variable_pairs, true);
+  return PairFilterUtil::Filter([&statements](Pair s) {
+    return statements.count(s.first) > 0;
+  }, statement_variable_pairs);
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementType &statement_type) {
