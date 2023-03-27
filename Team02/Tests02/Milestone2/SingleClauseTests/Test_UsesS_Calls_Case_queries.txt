@@ -1,0 +1,35 @@
+1 - nested calls Uses select variable
+if ifs; variable v;
+Select v such that Uses (ifs, v)
+a,c,g,z
+5000
+2 - nested calls Uses select if
+if ifs; variable v;
+Select ifs such that Uses (ifs, "z")
+1
+5000
+3 - nested calls Uses select while
+while w; variable v;
+Select w such that Uses (w, v)
+4
+5000
+4 - nested calls Uses select var
+while w; variable v;
+Select v such that Uses (w, v)
+a,d,y
+5000
+5 - nested calls Modifies select variable
+if ifs; variable v;
+Select v such that Modifies (ifs, v)
+a,b,z
+5000
+6 - nested calls Modifies select if
+if ifs; variable v;
+Select ifs such that Modifies (ifs, "b")
+1
+5000
+7 - nested calls Modifies select var
+while w; variable v;
+Select v such that Modifies(w, v)
+e,y
+5000

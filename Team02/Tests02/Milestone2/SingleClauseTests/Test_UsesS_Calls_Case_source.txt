@@ -1,0 +1,33 @@
+procedure q {
+    if (a<0) then {
+        call test;
+    } else {
+        read a;
+    }
+    while (a<0) {
+        call testtwo;
+    }
+    if (g<0) then {
+        read a;
+    } else {
+        read a;
+    }
+}
+
+procedure test {
+    call main;
+    z = z;
+}
+
+procedure main {
+    b = c;
+}
+
+procedure testtwo {
+    call maintwo;
+    y = y;
+}
+
+procedure maintwo {
+    e = d;
+}
