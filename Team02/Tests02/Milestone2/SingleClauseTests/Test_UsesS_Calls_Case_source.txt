@@ -16,7 +16,9 @@ procedure q {
 
 procedure test {
     call main;
-    z = z;
+    while (x>0) {
+        z = z;
+    }
 }
 
 procedure main {
