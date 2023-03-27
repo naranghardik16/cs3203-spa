@@ -48,5 +48,28 @@ assign a; variable v;
 Select a pattern a(v,_) such that Affects*(5,a) and Uses(a,v) with v.varName="number"
 14,15
 5000
-
-
+11 - 9 independent and 3 selected
+stmt s,s1,s2,s3,s4,s5; assign assign; if if, if1; while while; variable v,v1,v2,v3,v4; procedure p,p1;
+Select <v4, v2, p> pattern if1(v2,_,_) and while(v3,_)  and assign(v4,_"4"_) such that Modifies(s1, v) and Parent*(if,s) and Follows*(s1,s2) and Uses(s3,v1) and Next*(s4, s5) and Calls*(p,p1)
+number digit multiplyDigits, number digit Calculate, number sum multiplyDigits, number sum Calculate,number number multiplyDigits, number number Calculate
+5000
+12 - chain of call clauses
+procedure p,p1,p2,p3,p4,p5,p6,p7;
+Select p such that Calls(p,p1) and Calls*(p,p1) and Calls*(p,p2) and Calls*(p,p3) and Calls*(p,p4) and Calls*(p,p5) and Calls*(p,p6) and Calls*(p,p7)
+multiplyDigits, Calculate
+5000
+13 - chain of next clauses with duplicates
+while w; if if;stmt s,s1;
+Select s such that Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next(if,w) and Next(w,s)
+13,14
+5000
+14 - chain of 5 next clauses if more is timeout
+while w; if if;stmt s,s1,s2,s3,s4,s5;assign a;print pn;
+Select s such that Next*(s,s) and Next*(w,s) and Next*(if,s) and Next*(a,s) and Next*(s1,s)
+4,5,6,7,8,9,10,11,12,13,14,15
+5000
+15 - 10 clauses 1 group to be fixed
+stmt s,s1,s2,s3,s4,s5; assign assign; if if, if1; while while; variable v,v1,v2,v3,v4; procedure p,p1;
+Select <v2,s> pattern if(v2,_,_) and assign(v2,_) such that Modifies(s, v2) and Parent*(if,s)
+number 12,digit 11,number 13,number 10
+5000
