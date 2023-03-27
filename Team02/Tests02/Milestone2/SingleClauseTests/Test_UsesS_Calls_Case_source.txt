@@ -16,13 +16,13 @@ procedure q {
 
 procedure test {
     call main;
-    while (x>0) {
-        z = z;
-    }
 }
 
 procedure main {
     b = c;
+    while (x>0) {
+        z = z;
+    }
 }
 
 procedure testtwo {
