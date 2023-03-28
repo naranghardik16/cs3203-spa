@@ -1280,4 +1280,97 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetNextSecond(READ) ==
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3", "4", "5", "6" }));
   }
+
+  SECTION("Test Affects API - Basic CFG") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+
+    std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+    node1->AddStmt(1);
+    cfg->AddStmtCfg(1, node1);
+    node1->AddStmt(2);
+    cfg->AddStmtCfg(2, node1);
+
+    std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+    node2->AddStmt(3);
+    cfg->AddStmtCfg(3, node2);
+
+
+    std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+    node3->AddStmt(4);
+    cfg->AddStmtCfg(4, node3);
+    node3->AddStmt(5);
+    cfg->AddStmtCfg(5, node3);
+    node3->AddStmt(6);
+    cfg->AddStmtCfg(6, node3);
+
+    std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+    node4->AddStmt(7);
+    cfg->AddStmtCfg(7, node4);
+
+    std::shared_ptr<CfgNode> node5 = std::make_shared<CfgNode>();
+    node5->AddStmt(8);
+    cfg->AddStmtCfg(8, node5);
+
+    std::shared_ptr<CfgNode> node6 = std::make_shared<CfgNode>();
+    node6->AddStmt(9);
+    cfg->AddStmtCfg(9, node6);
+
+    std::shared_ptr<CfgNode> node7 = std::make_shared<CfgNode>();
+    node7->AddStmt(10);
+    cfg->AddStmtCfg(10, node7);
+    node7->AddStmt(11);
+    cfg->AddStmtCfg(11, node7);
+    node7->AddStmt(12);
+    cfg->AddStmtCfg(12, node7);
+
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", WHILE);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", CALL);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", IF);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+
+    node1->AddTransition(true, node2);
+    node2->AddTransition(true, node3);
+    node2->AddTransition(false, node4);
+    node3->AddTransition(true, node2);
+    node4->AddTransition(true, node5);
+    node4->AddTransition(false, node6);
+    node5->AddTransition(true, node7);
+    node6->AddTransition(true, node7);
+
+    cfg->AddProcCfg("second", node1);
+    pkb_write_facade_->AddCfg(cfg);
+
+    REQUIRE(pkb_read_facade_->IsThereAnyAffectsRelationship() == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "6") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "8") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "10") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "4") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "8") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "10") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "12") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "10") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "10") == true);
+
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "11") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "12") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "3") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "6") == false);
+
+  }
 }
