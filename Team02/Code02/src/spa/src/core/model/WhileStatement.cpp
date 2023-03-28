@@ -1,7 +1,7 @@
 #include "WhileStatement.h"
 
 WhileStatement::WhileStatement(int statement_number,
-                               ConditionalOperation condition,
+                               shared_ptr<ConditionalOperation> condition,
                                std::string in_scope_of_proc) : Statement(
     statement_number,
     "while",
@@ -19,7 +19,7 @@ void WhileStatement::Accept(shared_ptr<ParserVisitor> visitor) {
   visitor->VisitWhileStatement(make_shared<WhileStatement>(*this));
 }
 
-ConditionalOperation WhileStatement::GetCondition() const {
+shared_ptr<ConditionalOperation> WhileStatement::GetCondition() const {
   return condition_;
 }
 

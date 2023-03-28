@@ -37,11 +37,11 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
     }
   }
 
-  abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
   auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   pkb_write_facade->AddCallsStarRelation();
   pkb_write_facade->AddCfg(cfg_);
 
+  abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
   for (shared_ptr<Procedure> p : procedures) {
     Procedure::StmtListContainer statements = p->GetStatementList();
     for (shared_ptr<Statement> s : statements) {
