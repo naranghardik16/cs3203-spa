@@ -104,11 +104,12 @@ void AbstractionExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement
   }
 
   for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
-    // for direct uses
-    pkb_write_facade_->AddProcedureUsingVariable(if_statement->GetInScopeOfPrc(), variable);
-//    if (*is_extract_indirect_modifies_and_uses_) {
-    ExtractIndirectUses(variable, if_statement->GetInScopeOfPrc());
-//    }
+    if (*is_extract_indirect_modifies_and_uses_) {
+      ExtractIndirectUses(variable, if_statement->GetInScopeOfPrc());
+    } else {
+      // for direct uses
+      pkb_write_facade_->AddProcedureUsingVariable(if_statement->GetInScopeOfPrc(), variable);
+    }
   }
   IfStatement::StmtListContainer then_stmts = if_statement->GetThenStatements();
   ProcessStatements(then_stmts, stmt_number);
@@ -142,16 +143,16 @@ void AbstractionExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_
   auto condition = while_statement->GetCondition();
   if (!*is_extract_indirect_modifies_and_uses_) {
     pkb_write_facade_->AddStatementOfAType(stmt_number, WHILE);
-    // TODO(xxx): Add uses for conditionOperation
     pkb_write_facade_->AddWhileStatementAndCondition(stmt_number, condition);
   }
 
   for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
-    // for direct uses
-    pkb_write_facade_->AddProcedureUsingVariable(while_statement->GetInScopeOfPrc(), variable);
-//    if (*is_extract_indirect_modifies_and_uses_) {
-    ExtractIndirectUses(variable, while_statement->GetInScopeOfPrc());
-//    }
+    if (*is_extract_indirect_modifies_and_uses_) {
+      ExtractIndirectUses(variable, while_statement->GetInScopeOfPrc());
+    } else {
+      // for direct uses
+      pkb_write_facade_->AddProcedureUsingVariable(while_statement->GetInScopeOfPrc(), variable);
+    }
   }
   WhileStatement::StmtListContainer
       statements = while_statement->GetLoopStatements();
