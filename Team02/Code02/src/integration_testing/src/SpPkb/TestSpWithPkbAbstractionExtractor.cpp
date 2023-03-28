@@ -542,7 +542,7 @@ TEST_CASE("Check if modifies are extracted correctly") {
   }
 }
 
-TEST_CASE("Check if uses are extracted correctly") {
+TEST_CASE("Check if uses are extracted correctly (simple)") {
   string input = "    procedure main {\n"
                  "        flag = 0;\n"
                  "        call computeCentroid;\n"
@@ -704,4 +704,132 @@ TEST_CASE("Check if uses are extracted correctly") {
     }
     SUCCEED();
   }
+}
+
+TEST_CASE("Check if uses are extracted correctly (complex - deeply nested)") {
+  string input = "procedure q {"
+                 "  if (a<0) then {"
+                 "    call test;"
+                 "  } else {"
+                 "    read a;"
+                 "  }"
+                 "  while (a<0) {"
+                 "    call testtwo;"
+                 "  }"
+                 "  if (g<0) then {"
+                 "    read a;"
+                 "  } else {"
+                 "    print p;"
+                 "  }"
+                 "}"
+                 ""
+                 "procedure test {"
+                 "  call main;"
+                 "}"
+                 ""
+                 "procedure main {"
+                 "  b = c;"
+                 "  while (x > 0) {"
+                 "    z = z;"
+                 "  }"
+                 "}"
+                 ""
+                 "procedure testtwo {"
+                 "  call maintwo;"
+                 "  y = y;"
+                 "}"
+                 ""
+                 "procedure maintwo {"
+                 "  e = d;"
+                 "}";
+
+  std::istringstream is;
+  is.str(input);
+
+  shared_ptr<Pkb> pkb = make_shared<Pkb>();
+  shared_ptr<Sp> sp = make_shared<Sp>();
+  shared_ptr<Cfg> cfg = make_shared<Cfg>();
+  bool is_SP_processing_successful = sp->ProcessSIMPLE(is, pkb, cfg);
+  if (!is_SP_processing_successful) {
+    FAIL();
+  }
+
+  shared_ptr<PkbReadFacade>
+      pkb_read_facade = make_shared<PkbReadFacade>(*pkb);
+  SECTION("Check that all usesS pair are present") {
+    vector<pair<string, string>> expected_uses_s_pairs = {
+        // Uses(a, v)
+        make_pair("10", "c"),
+        make_pair("12", "z"),
+        make_pair("14", "y"),
+        make_pair("15", "d"),
+        // Uses(pn, v)
+        make_pair("8", "p"),
+        // Uses(s, v)
+        make_pair("1", "a"),
+        make_pair("1", "c"),
+        make_pair("1", "x"),
+        make_pair("1", "z"),
+        make_pair("4", "a"),
+        make_pair("4", "d"),
+        make_pair("4", "y"),
+        make_pair("6", "g"),
+        make_pair("6", "p"),
+        make_pair("11", "x"),
+        make_pair("11", "z"),
+        // Uses(c, v)
+        make_pair("2", "c"),
+        make_pair("2", "x"),
+        make_pair("2", "z"),
+        make_pair("5", "d"),
+        make_pair("5", "y"),
+        make_pair("9", "c"),
+        make_pair("9", "x"),
+        make_pair("9", "z"),
+        make_pair("13", "d")
+    };
+    auto pairs = pkb_read_facade->GetUsesStatementVariablePairs(STATEMENT);
+    for (pair<string, string> pp : expected_uses_s_pairs) {
+      if (!pkb_read_facade->HasUsesStatementRelationship(pp.first, pp.second)) {
+        FAIL(pp.first + " failed for " + pp.second);
+      }
+    }
+    if (pairs.size() != expected_uses_s_pairs.size()) {
+      FAIL("GetUsesStatementVariablePairs not same size as expected_uses_s_pairs");
+    }
+    SUCCEED();
+  }
+
+  SECTION("Check that all usesS pair are present") {
+    vector<pair<string, string>> expected_uses_p_pairs = {
+        make_pair("q", "a"),
+        make_pair("q", "c"),
+        make_pair("q", "x"),
+        make_pair("q", "z"),
+        make_pair("q", "d"),
+        make_pair("q", "y"),
+        make_pair("q", "g"),
+        make_pair("q", "p"),
+        make_pair("test", "c"),
+        make_pair("test", "x"),
+        make_pair("test", "z"),
+        make_pair("main", "c"),
+        make_pair("main", "x"),
+        make_pair("main", "z"),
+        make_pair("testtwo", "y"),
+        make_pair("testtwo", "d"),
+        make_pair("maintwo", "d")
+    };
+    auto pairs = pkb_read_facade->GetUsesProcedureVariablePairs();
+    for (pair<string, string> pp : expected_uses_p_pairs) {
+      if (!pkb_read_facade->HasUsesProcedureRelationship(pp.first, pp.second)) {
+        FAIL(pp.first + " failed for " + pp.second);
+      }
+    }
+    if (pairs.size() != expected_uses_p_pairs.size()) {
+      FAIL("GetUsesProcedureVariablePairs not same size as expected_uses_p_pairs");
+    }
+    SUCCEED();
+  }
+
 }

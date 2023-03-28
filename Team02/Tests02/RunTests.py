@@ -146,7 +146,7 @@ def Execute(folder_to_test_in, redirect_output):
 if __name__ == "__main__":
     Execute("Milestone1", True)
     Execute("Milestone2", True)
-    # Execute("Milestone3", True)
+    Execute("Milestone3", True)
     print(f"Total test statistics:")
     print(f"Total no. of passed test cases: {TOTAL_PASSED_TESTS}")
     print(f"Total no. of failed test cases: {TOTAL_FAILED_TESTS}")

@@ -1,7 +1,7 @@
 #include "IfStatement.h"
 
 IfStatement::IfStatement(int statement_number,
-                         ConditionalOperation condition,
+                         shared_ptr<ConditionalOperation> condition,
                          std::string in_scope_of_proc) : Statement(
     statement_number,
     "if",
@@ -24,7 +24,7 @@ void IfStatement::Accept(shared_ptr<ParserVisitor> visitor) {
   visitor->VisitIfStatement(make_shared<IfStatement>(*this));
 }
 
-ConditionalOperation IfStatement::GetCondition() const {
+shared_ptr<ConditionalOperation> IfStatement::GetCondition() const {
   return condition_;
 }
 

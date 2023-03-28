@@ -97,7 +97,7 @@ void AbstractionExtractor::VisitRelationalOperation(shared_ptr<
 void AbstractionExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(if_statement->GetStatementNumber());
-  auto condition = make_shared<ConditionalOperation>(if_statement->GetCondition());
+  auto condition = if_statement->GetCondition();
   if (!*is_extract_indirect_modifies_and_uses_) {
     pkb_write_facade_->AddStatementOfAType(stmt_number, IF);
     pkb_write_facade_->AddIfStatementAndCondition(stmt_number, condition);
@@ -106,7 +106,9 @@ void AbstractionExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement
   for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
     // for direct uses
     pkb_write_facade_->AddProcedureUsingVariable(if_statement->GetInScopeOfPrc(), variable);
+//    if (*is_extract_indirect_modifies_and_uses_) {
     ExtractIndirectUses(variable, if_statement->GetInScopeOfPrc());
+//    }
   }
   IfStatement::StmtListContainer then_stmts = if_statement->GetThenStatements();
   ProcessStatements(then_stmts, stmt_number);
@@ -137,8 +139,7 @@ void AbstractionExtractor::ProcessStatements(const vector<shared_ptr<Statement>>
 void AbstractionExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
   PkbTypes::STATEMENT_NUMBER
       stmt_number = std::to_string(while_statement->GetStatementNumber());
-  auto condition = make_shared<
-      ConditionalOperation>(while_statement->GetCondition());
+  auto condition = while_statement->GetCondition();
   if (!*is_extract_indirect_modifies_and_uses_) {
     pkb_write_facade_->AddStatementOfAType(stmt_number, WHILE);
     // TODO(xxx): Add uses for conditionOperation
@@ -148,7 +149,9 @@ void AbstractionExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_
   for (auto variable : pkb_read_facade_->RetrieveAllVariablesOfExpression(condition)) {
     // for direct uses
     pkb_write_facade_->AddProcedureUsingVariable(while_statement->GetInScopeOfPrc(), variable);
+//    if (*is_extract_indirect_modifies_and_uses_) {
     ExtractIndirectUses(variable, while_statement->GetInScopeOfPrc());
+//    }
   }
   WhileStatement::StmtListContainer
       statements = while_statement->GetLoopStatements();
