@@ -255,85 +255,39 @@ bool PkbReadFacade::IsFollowsStar(const StatementNumber &statement_number_1,
 // Parent API
 PkbReadFacade::PairSet PkbReadFacade::GetParentChildPairs(const StatementType &statement_type,
                                                           const StatementType &statement_type_child) {
-  SingleSet statement_of_type_for_parent =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet statement_of_type_for_child =
-      this->pkb.statement_store_->GetStatements(statement_type_child);
-
-  PairSet parent_child_pairs =
-      this->pkb.parent_store_->GetParentPairs();
-
-  PairSet result;
-  for (const auto &p : parent_child_pairs) {
-    if (statement_of_type_for_parent.count(p.first) > 0 &&
-        statement_of_type_for_child.count(p.second) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0 &&
+        this->pkb.statement_store_->GetStatements(statement_type_child).count(p.second) > 0;
+  }, this->pkb.parent_store_->GetParentPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementThatIsParentOf(const StatementNumber &statement_number,
                                                                    const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
   SingleSet result;
   auto parent = this->pkb.parent_store_->GetParents(statement_number);
-
-  if (!parent.empty() && statements_of_type.count(parent)) {
+  if (!parent.empty() && this->pkb.statement_store_->GetStatements(statement_type).count(parent)) {
     result.insert(parent);
   }
-
   return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildrenOf(const StatementNumber &statement_number,
                                                                        const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet parents_of_specified_statement =
-      this->pkb.parent_store_->GetChildren(statement_number);
-
-  SingleSet result;
-  for (const auto &p : parents_of_specified_statement) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetChildren(statement_number));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreParents(const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.parent_store_->GetParents()) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetParents());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreChildren(const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.parent_store_->GetChildren()) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetChildren());
 }
 
 bool PkbReadFacade::HasParentChildRelationship(const StatementNumber &statement_number,
@@ -350,91 +304,39 @@ bool PkbReadFacade::IsAnyParentRelationshipPresent() {
 PkbReadFacade::PairSet
 PkbReadFacade::GetAncestorDescendantPairs(const StatementType &statement_type,
                                           const StatementType &statement_type_descendant) {
-  SingleSet statement_of_type_for_parent =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet statement_of_type_for_child =
-      this->pkb.statement_store_->GetStatements(statement_type_descendant);
-
-  PairSet parent_child_pairs =
-      this->pkb.parent_store_->GetParentStarPairs();
-
-  PairSet result;
-  for (const auto &p : parent_child_pairs) {
-    if (statement_of_type_for_parent.count(p.first) > 0 &&
-        statement_of_type_for_child.count(p.second)) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0 &&
+        this->pkb.statement_store_->GetStatements(statement_type_descendant).count(p.second) > 0;
+  }, this->pkb.parent_store_->GetParentStarPairs());
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetStatementsThatAreAncestorOf(const StatementNumber &statement_number,
                                               const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet parents_of_specified_statement =
-      this->pkb.parent_store_->GetAncestors(statement_number);
-
-  SingleSet result;
-  for (const auto &p : parents_of_specified_statement) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetAncestors(statement_number));
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetStatementsThatAreDescendantsOf(const StatementNumber &statement_number,
                                                  const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet parents_of_specified_statement =
-      this->pkb.parent_store_->GetDescendants(statement_number);
-
-  SingleSet result;
-  for (const auto &p : parents_of_specified_statement) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetDescendants(statement_number));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatAreAncestors(const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.parent_store_->GetAncestors()) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetAncestors());
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetStatementsThatAreDescendants(const StatementType &statement_type) {
-  SingleSet statement_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.parent_store_->GetDescendants()) {
-    if (statement_of_type.count(p) > 0) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(s) > 0;
+  }, this->pkb.parent_store_->GetDescendants());
 }
 
 bool PkbReadFacade::HasAncestorDescendantRelationship(const StatementNumber &statement_number,

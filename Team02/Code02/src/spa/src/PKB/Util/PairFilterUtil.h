@@ -6,12 +6,21 @@ class PairFilterUtil {
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
   typedef PkbCommunicationTypes::PairConstraint Pair;
   typedef PkbCommunicationTypes::SingleConstraint Single;
-  typedef std::function<bool(Pair)> Predicate;
+  typedef std::function<bool(Pair)> PairPredicate;
+  typedef std::function<bool(Single)> SinglePredicate;
   typedef std::function<Single(Pair)> Function;
 
-  static PairSet Filter(Predicate f, PairSet ps) {
+  static PairSet Filter(PairPredicate f, PairSet ps) {
     PairSet result;
     for (const auto &p : ps) {
+      if (f(p)) result.insert(p);
+    }
+    return result;
+  }
+
+  static SingleSet Filter(SinglePredicate f, SingleSet ss) {
+    SingleSet result;
+    for (const auto &p : ss) {
       if (f(p)) result.insert(p);
     }
     return result;
