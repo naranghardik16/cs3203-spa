@@ -351,119 +351,60 @@ bool PkbReadFacade::IsAnyAncestorDescendantRelationshipPresent() {
 // Pattern API
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAssignWithExactExpression(const ExpressionPtr &expr) {
-  SingleSet result;
-
-  for (const auto &s : this->GetAssignStatements()) {
-    if (this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(*expr)) {
-      result.insert(s);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return this->pkb.assignment_store_->GetExpressionFromStatementNumber(s)->operator==(*expr);
+  }, this->GetAssignStatements());
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAssignWithPartialExpression(const ExpressionPtr &sub_expression) {
-  SingleSet result;
-
-  for (const auto &s : this->GetAssignStatements()) {
-    ExpressionPtr e = this->pkb.assignment_store_->GetExpressionFromStatementNumber(s);
-    if (ExpressionUtil::HasSubExpression(e, sub_expression)) {
-      result.insert(s);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return ExpressionUtil::HasSubExpression(this->pkb.assignment_store_->GetExpressionFromStatementNumber(s),
+                                            sub_expression);
+  }, this->GetAssignStatements());
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetIfConditionVariablePair() {
-  SingleSet if_statements = this->GetIfStatements();
-
-  PairSet result;
-  for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
-    for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
-      result.insert(std::make_pair(i, v));
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Collect([&](Single s) {
+    return ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s));
+  }, this->GetIfStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetIfWithConditionVariable(const std::string &variable) {
-  SingleSet if_statements = this->GetIfStatements();
-
-  SingleSet result;
-  for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
-    if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
-      result.insert(i);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
+        .count(variable) > 0;
+  }, this->GetIfStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetIfThatHasConditionVariable() {
-  SingleSet if_statements = this->GetIfStatements();
-
-  SingleSet result;
-  for (const auto &i : if_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromIfStatement(i);
-    if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
-      result.insert(i);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return !ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
+        .empty();
+  }, this->GetIfStatements());
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetWhileConditionVariablePair() {
-  SingleSet while_statements = this->GetWhileStatements();
-
-  PairSet result;
-  for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
-    for (const auto &v : ExpressionUtil::GetAllVariablesFromExpression(e)) {
-      result.insert(std::make_pair(w, v));
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Collect([&](Single s) {
+    return
+        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s));
+  }, this->GetWhileStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetWhileWithConditionVariable(const std::string &variable) {
-  SingleSet while_statements = this->GetWhileStatements();
-
-  PairSet uses_pairs =
-      this->pkb.uses_store_->GetStatementVariablePairs();
-
-  SingleSet result;
-  for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
-    if (ExpressionUtil::GetAllVariablesFromExpression(e).count(variable) > 0) {
-      result.insert(w);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return
+        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
+            .count(variable) > 0;
+  }, this->GetWhileStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
-  SingleSet while_statements = this->GetWhileStatements();
-
-  PairSet uses_pairs =
-      this->pkb.uses_store_->GetStatementVariablePairs();
-
-  SingleSet result;
-  for (const auto &w : while_statements) {
-    ExpressionPtr e = this->pkb.control_flow_store_->GetExpressionFromWhileStatement(w);
-    if (!ExpressionUtil::GetAllVariablesFromExpression(e).empty()) {
-      result.insert(w);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Single s) {
+    return
+        !ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
+            .empty();
+  }, this->GetWhileStatements());
 }
 
 PkbReadFacade::SingleSet
@@ -478,66 +419,30 @@ PkbReadFacade::PairSet PkbReadFacade::GetCallProcedurePair() {
 
 PkbReadFacade::PairSet
 PkbReadFacade::GetAllCallsPairsWithSpecifiedCaller(const Procedure &procedure) {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  PairSet result;
-
-  for (const auto &p : calls_pairs) {
-    if (p.first == procedure) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return p.first == procedure;
+  }, this->pkb.calls_store_->GetCallsPairs());
 }
 
 PkbReadFacade::PairSet
 PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCaller(const Procedure &procedure) {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  PairSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    if (p.first == procedure) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return p.first == procedure;
+  }, this->pkb.calls_store_->GetCallsStarPairs());
 }
 
 PkbReadFacade::PairSet
 PkbReadFacade::GetAllCallsPairsWithSpecifiedCallee(const Procedure &procedure) {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  PairSet result;
-
-  for (const auto &p : calls_pairs) {
-    if (p.second == procedure) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return p.second == procedure;
+  }, this->pkb.calls_store_->GetCallsPairs());
 }
 
 PkbReadFacade::PairSet
 PkbReadFacade::GetAllCallsStarPairsWithSpecifiedCallee(const Procedure &procedure) {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  PairSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    if (p.second == procedure) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return p.second == procedure;
+  }, this->pkb.calls_store_->GetCallsStarPairs());
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAllCallsPairs() {
@@ -553,74 +458,34 @@ PkbReadFacade::GetAllCallStatementsFromAProcedure(const Procedure &procedure) {
   return this->pkb.calls_store_->GetCallStatementsFromProcedure(procedure);
 }
 
-bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure,
-                                     Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsRelation(caller_procedure,
-                                                  callee_procedure);
+bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure, Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsRelation(caller_procedure, callee_procedure);
 }
 
-bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure,
-                                         Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure,
-                                                      callee_procedure);
+bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure, Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure, callee_procedure);
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCaller(const Procedure &procedure) {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_pairs) {
-    if (p.first == procedure) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == procedure;
+  }, this->pkb.calls_store_->GetCallsPairs()));
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCallee(const Procedure &procedure) {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_pairs) {
-    if (p.second == procedure) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == procedure;
+  }, this->pkb.calls_store_->GetCallsPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallers() {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_pairs) {
-    result.insert(p.first);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, this->pkb.calls_store_->GetCallsPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallees() {
-  PairSet calls_pairs =
-      this->pkb.calls_store_->GetCallsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_pairs) {
-    result.insert(p.second);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, this->pkb.calls_store_->GetCallsPairs());
 }
 
 bool PkbReadFacade::IsThereAnyCallsRelationship() {
@@ -629,60 +494,24 @@ bool PkbReadFacade::IsThereAnyCallsRelationship() {
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCallerStar(const Procedure &procedure) {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    if (p.first == procedure) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == procedure;
+  }, this->pkb.calls_store_->GetCallsStarPairs()));
 }
 
 PkbReadFacade::SingleSet
 PkbReadFacade::GetAllProceduresWithSpecifiedCalleeStar(const Procedure &procedure) {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    if (p.second == procedure) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == procedure;
+  }, this->pkb.calls_store_->GetCallsStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCallersStar() {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    result.insert(p.first);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, this->pkb.calls_store_->GetCallsStarPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllProceduresThatAreCalleesStar() {
-  PairSet calls_star_pairs =
-      this->pkb.calls_store_->GetCallsStarPairs();
-
-  SingleSet result;
-
-  for (const auto &p : calls_star_pairs) {
-    result.insert(p.second);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, this->pkb.calls_store_->GetCallsStarPairs());
 }
 
 bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
@@ -743,72 +572,30 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedBy(const StatementNumber &statement_number) {
-  PairSet affects_pairs =
-      this->GetAffectsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : affects_pairs) {
-    if (p.first == statement_number) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == statement_number;
+  }, this->GetAffectsPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffecting(const StatementNumber &statement_number) {
-  PairSet affects_pairs =
-      this->GetAffectsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : affects_pairs) {
-    if (p.second == statement_number) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == statement_number;
+  }, this->GetAffectsPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAreAffected() {
-  PairSet affects_pairs =
-      this->GetAffectsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : affects_pairs) {
-    result.insert(p.second);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, this->GetAffectsPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffect() {
-  PairSet affects_pairs =
-      this->GetAffectsPairs();
-
-  SingleSet result;
-
-  for (const auto &p : affects_pairs) {
-    result.insert(p.first);
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, this->GetAffectsPairs());
 }
 
 bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_number,
                                            const StatementNumber &statement_number_being_affected) {
-  PairSet affects_pairs =
-      this->GetAffectsPairs();
-
-  for (const auto &p : affects_pairs) {
-    if (p.first == statement_number
-        && p.second == statement_number_being_affected)
-      return true;
+  for (const auto &p : this->GetAffectsPairs()) {
+    if (p.first == statement_number && p.second == statement_number_being_affected) return true;
   }
-
   return false;
 }
 
@@ -855,92 +642,36 @@ bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
 // Next API
 PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType &statement_type_1,
                                                    const StatementType &statement_type_2) {
-  SingleSet statements_of_type_1 =
-      this->pkb.statement_store_->GetStatements(statement_type_1);
-
-  SingleSet statements_of_type_2 =
-      this->pkb.statement_store_->GetStatements(statement_type_2);
-
-  PairSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextPairs()) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type_1).count(p.first) > 0
+        && this->pkb.statement_store_->GetStatements(statement_type_2).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber &statement_number,
                                                 const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  PairSet next_pairs =
-      this->pkb.next_store_->GetNextPairs();
-
-  SingleSet result;
-
-  for (const auto &p : next_pairs) {
-    if (p.first == statement_number && statements_of_type.count(p.second) > 0) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber &statement_number,
                                                   const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  PairSet next_pairs =
-      this->pkb.next_store_->GetNextPairs();
-
-  SingleSet result;
-
-  for (const auto &p : next_pairs) {
-    if (p.second == statement_number && statements_of_type.count(p.first) > 0) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+  }, this->pkb.next_store_->GetNextPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextFirst(const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  PairSet next_pairs =
-      this->pkb.next_store_->GetNextPairs();
-
-  SingleSet result;
-  for (const auto &p : next_pairs) {
-    if (statements_of_type.count(p.first) > 0) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+  }, this->pkb.next_store_->GetNextPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextSecond(const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  PairSet next_pairs =
-      this->pkb.next_store_->GetNextPairs();
-
-  SingleSet result;
-  for (const auto &p : next_pairs) {
-    if (statements_of_type.count(p.second) > 0) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextPairs()));
 }
 
 bool PkbReadFacade::HasNextRelationship() {
@@ -962,78 +693,36 @@ bool PkbReadFacade::IsNext(const StatementNumber &statement_number_1, const Stat
 // Next* API
 PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType &statement_type_1,
                                                        const StatementType &statement_type_2) {
-  SingleSet statements_of_type_1 =
-      this->pkb.statement_store_->GetStatements(statement_type_1);
-
-  SingleSet statements_of_type_2 =
-      this->pkb.statement_store_->GetStatements(statement_type_2);
-
-  PairSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type_1.count(p.first) > 0 && statements_of_type_2.count(p.second)) {
-      result.insert(p);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type_1).count(p.first) > 0
+        && this->pkb.statement_store_->GetStatements(statement_type_2).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextStarPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber &statement_number,
                                                     const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type.count(p.second) > 0 && p.first == statement_number) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber &statement_number,
                                                       const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type.count(p.first) > 0 && p.second == statement_number) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+  }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarFirst(const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type.count(p.first) > 0) {
-      result.insert(p.first);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+  }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarSecond(const StatementType &statement_type) {
-  SingleSet statements_of_type =
-      this->pkb.statement_store_->GetStatements(statement_type);
-
-  SingleSet result;
-  for (const auto &p : this->pkb.next_store_->GetNextStarPairs()) {
-    if (statements_of_type.count(p.second) > 0) {
-      result.insert(p.second);
-    }
-  }
-
-  return result;
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+  }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
 bool PkbReadFacade::HasNextStarRelationship() {
