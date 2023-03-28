@@ -111,7 +111,7 @@ TEST_CASE("Check if IfStatementParser detects then and else statements") {
     auto
         expected_condition_expr =
         make_shared<ConditionalOperation>("rel_expr", cond_args);
-    REQUIRE(condition.operator==(*expected_condition_expr));
+    REQUIRE(condition->operator==(*expected_condition_expr));
     auto then_stmts = if_stmt->GetThenStatements();
     REQUIRE(then_stmts[0]->GetStatementNumber() == 2);
     auto assign_stmt = dynamic_pointer_cast<AssignStatement>(then_stmts[0]);

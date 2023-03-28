@@ -6,7 +6,7 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto condition = ExtractCondition(line);
   auto if_stmt =
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
-                               *condition,
+                               condition,
                                GetProcName());
   // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
