@@ -357,16 +357,20 @@ TEST_CASE("Check if calls/* are extracted correctly (complex)") {
         make_pair("Third", "Fourth"),
         make_pair("Fifth", "Sixth"),
     };
+    auto pairs = pkb_read_facade->GetAllCallsPairs();
     for (pair<string, string> pp : expected_call_pairs) {
       if (!pkb_read_facade->HasCallsRelation(pp.first, pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
+    }
+    if (pairs.size() != expected_call_pairs.size()) {
+      FAIL("GetAllCallsPairs not same size as expected_call_pairs");
     }
     SUCCEED();
   }
 
   SECTION("Check that all calls* pair are present") {
-    vector<pair<string, string>> expected_call_pairs = {
+    vector<pair<string, string>> expected_call_star_pairs = {
         make_pair("First", "Second"),
         make_pair("Second", "Third"),
         make_pair("Second", "Sixth"),
@@ -381,11 +385,16 @@ TEST_CASE("Check if calls/* are extracted correctly (complex)") {
         make_pair("Second", "Fifth"),
         make_pair("Third", "Sixth")
     };
-    for (pair<string, string> pp : expected_call_pairs) {
+    auto pairs = pkb_read_facade->GetAllCallsStarPairs();
+    for (pair<string, string> pp : expected_call_star_pairs) {
       if (!pkb_read_facade->HasCallsStarRelation(pp.first, pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
     }
+    if (pairs.size() != expected_call_star_pairs.size()) {
+      FAIL("GetAllCallsStarPairs not same size as expected_call_star_pairs");
+    }
+
     SUCCEED();
   }
 }
@@ -497,6 +506,7 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("2", "normSq"),
         make_pair("2", "x"),
         make_pair("2", "y"),
+        make_pair("2", "z"),
         make_pair("13", "x"),
         make_pair("13", "y"),
         make_pair("19", "x"),
@@ -504,11 +514,15 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("25", "x"),
         make_pair("25", "y")
     };
+    auto pairs = pkb_read_facade->GetModifiesStatementVariablePairs(STATEMENT);
     for (pair<string, string> pp : expected_modifies_s_pairs) {
       if (!pkb_read_facade->HasModifiesStatementRelationship(pp.first,
                                                              pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
+    }
+    if (pairs.size() != expected_modifies_s_pairs.size()) {
+      FAIL("GetModifiesStatementVariablePairs not same size as expected_modifies_s_pairs");
     }
     SUCCEED();
   }
@@ -522,6 +536,7 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("main", "normSq"),
         make_pair("main", "x"),
         make_pair("main", "y"),
+        make_pair("main", "z"),
         make_pair("readPoint", "x"),
         make_pair("readPoint", "y"),
         make_pair("computeCentroid", "count"),
@@ -529,14 +544,19 @@ TEST_CASE("Check if modifies are extracted correctly") {
         make_pair("computeCentroid", "cenY"),
         make_pair("computeCentroid", "x"),
         make_pair("computeCentroid", "y"),
+        make_pair("computeCentroid", "z"),
         make_pair("computeCentroid", "flag"),
         make_pair("computeCentroid", "normSq"),
     };
+    auto pairs = pkb_read_facade->GetModifiesProcedureVariablePairs();
     for (pair<string, string> pp : expected_modifies_p_pairs) {
       if (!pkb_read_facade->HasModifiesProcedureRelationship(pp.first,
                                                              pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
+    }
+    if (pairs.size() != expected_modifies_p_pairs.size()) {
+      FAIL("GetModifiesProcedureVariablePairs not same size as expected_modifies_p_pairs");
     }
     SUCCEED();
   }
@@ -669,8 +689,11 @@ TEST_CASE("Check if uses are extracted correctly (simple)") {
     auto pairs = pkb_read_facade->GetUsesStatementVariablePairs(STATEMENT);
     for (pair<string, string> pp : expected_uses_s_pairs) {
       if (!pkb_read_facade->HasUsesStatementRelationship(pp.first, pp.second)) {
-        FAIL();
+        FAIL(pp.first + " failed for " + pp.second);
       }
+    }
+    if (pairs.size() != expected_uses_s_pairs.size()) {
+      FAIL("GetUsesStatementVariablePairs not same size as expected_uses_s_pairs");
     }
     SUCCEED();
   }
@@ -701,6 +724,9 @@ TEST_CASE("Check if uses are extracted correctly (simple)") {
       if (!pkb_read_facade->HasUsesProcedureRelationship(pp.first, pp.second)) {
         FAIL(pp.first + " failed for " + pp.second);
       }
+    }
+    if (pairs.size() != expected_uses_p_pairs.size()) {
+      FAIL("GetUsesProcedureVariablePairs not same size as expected_uses_p_pairs");
     }
     SUCCEED();
   }
