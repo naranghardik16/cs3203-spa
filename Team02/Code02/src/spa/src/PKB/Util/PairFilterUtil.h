@@ -1,3 +1,5 @@
+#include <functional>
+
 #include "PKB/Types/PkbCommunicationTypes.h"
 
 class PairFilterUtil {
