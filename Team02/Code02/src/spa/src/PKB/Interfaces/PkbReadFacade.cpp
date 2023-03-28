@@ -167,14 +167,16 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowPairs(const StatementType &statem
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowedBy(const StatementNumber &statement_number,
                                                                const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
-    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0 && p.second == statement_number;
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0
+        && p.second == statement_number;
   }, this->pkb.follows_store_->GetFollowsPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementFollowing(const StatementNumber &statement_number,
                                                               const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
-    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0 && p.first == statement_number;
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0
+        && p.first == statement_number;
   }, this->pkb.follows_store_->GetFollowsPairs()));
 }
 
@@ -211,14 +213,16 @@ PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType &s
 PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStar(const StatementNumber &statement_number,
                                                        const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
-    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0 && p.first == statement_number;
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0
+        && p.first == statement_number;
   }, this->pkb.follows_store_->GetFollowsStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetFollowsStarBy(const StatementNumber &statement_number,
                                                          const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
-    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0 && p.second == statement_number;
+    return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0
+        && p.second == statement_number;
   }, this->pkb.follows_store_->GetFollowsStarPairs()));
 }
 
@@ -366,44 +370,51 @@ PkbReadFacade::GetAssignWithPartialExpression(const ExpressionPtr &sub_expressio
 
 PkbReadFacade::PairSet PkbReadFacade::GetIfConditionVariablePair() {
   return PairFilterUtil::Collect([&](Single s) {
-    return ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s));
+    return
+        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s));
   }, this->GetIfStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetIfWithConditionVariable(const std::string &variable) {
   return PairFilterUtil::Filter([&](Single s) {
-    return ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
-        .count(variable) > 0;
+    return
+        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
+            .count(variable) > 0;
   }, this->GetIfStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetIfThatHasConditionVariable() {
   return PairFilterUtil::Filter([&](Single s) {
-    return !ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
-        .empty();
+    return
+        !ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromIfStatement(s))
+            .empty();
   }, this->GetIfStatements());
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetWhileConditionVariablePair() {
   return PairFilterUtil::Collect([&](Single s) {
     return
-        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s));
+        ExpressionUtil::GetAllVariablesFromExpression(
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
+        );
   }, this->GetWhileStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetWhileWithConditionVariable(const std::string &variable) {
   return PairFilterUtil::Filter([&](Single s) {
     return
-        ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
-            .count(variable) > 0;
+        ExpressionUtil::GetAllVariablesFromExpression(
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
+        ).count(variable) > 0;
   }, this->GetWhileStatements());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
   return PairFilterUtil::Filter([&](Single s) {
     return
-        !ExpressionUtil::GetAllVariablesFromExpression(this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
-            .empty();
+        !ExpressionUtil::GetAllVariablesFromExpression(
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
+        ).empty();
   }, this->GetWhileStatements());
 }
 
@@ -651,14 +662,16 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextPairs(const StatementType &statemen
 PkbReadFacade::SingleSet PkbReadFacade::GetNext(const StatementNumber &statement_number,
                                                 const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
-    return p.first == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+    return p.first == statement_number
+        && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
   }, this->pkb.next_store_->GetNextPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextBy(const StatementNumber &statement_number,
                                                   const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
-    return p.second == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+    return p.second == statement_number
+        && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
   }, this->pkb.next_store_->GetNextPairs()));
 }
 
@@ -702,14 +715,16 @@ PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType &stat
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber &statement_number,
                                                     const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
-    return p.first == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
+    return p.first == statement_number
+        && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
   }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber &statement_number,
                                                       const StatementType &statement_type) {
   return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
-    return p.second == statement_number && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
+    return p.second == statement_number
+        && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
   }, this->pkb.next_store_->GetNextStarPairs()));
 }
 
