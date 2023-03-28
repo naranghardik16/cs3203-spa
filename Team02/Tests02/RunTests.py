@@ -149,6 +149,9 @@ if __name__ == "__main__":
     print(f"Total no. of failed test cases: {runner.TOTAL_FAILED_TESTS}")
     print(f"Total no. of test cases: {runner.TOTAL_TESTS}")
 
+    if runner.TOTAL_FAILED_TESTS > 0:
+        raise Exception("Not everything is passing!")
+
     if len(sys.argv) != 2:
         start_python_host_command = "python -m http.server 8000"
         os.system(start_python_host_command)
