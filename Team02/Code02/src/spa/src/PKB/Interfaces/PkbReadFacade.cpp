@@ -620,8 +620,8 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
     if (m.count(p.first) > 0) {
       m[p.first].insert(p.second);
     } else {
-      m[p.first] = {p.second}
-    };
+      m[p.first] = {p.second};
+    }
   }
 
   PairSet result;
