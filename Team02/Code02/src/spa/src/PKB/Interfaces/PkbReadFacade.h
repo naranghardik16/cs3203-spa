@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <unordered_set>
 
 #include "General/StatementTypeEnum.h"
@@ -15,14 +16,15 @@
  */
 class PkbReadFacade {
  public:
-  typedef PkbCommunicationTypes::SingleConstraintSet SingleSet;
-  typedef PkbCommunicationTypes::PairConstraintSet PairSet;
-  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
-  typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef PkbTypes::VARIABLE Variable;
   typedef PkbTypes::PROCEDURE Procedure;
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef PkbCommunicationTypes::SingleConstraintSet SingleSet;
+  typedef PkbCommunicationTypes::PairConstraintSet PairSet;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef std::shared_ptr<Expression> ExpressionPtr;
-  typedef std::shared_ptr<CfgNode> CfgNodePtr;
+  typedef PkbCommunicationTypes::SingleConstraint Single;
+  typedef PkbCommunicationTypes::PairConstraint Pair;
 
   /**
    * Constructor for Pkb's read facade.
@@ -36,6 +38,8 @@ class PkbReadFacade {
    */
   ~PkbReadFacade();
 
+
+  // Entity Store API
   /**
    * Retrieves variables stored in Pkb.
    *
@@ -57,6 +61,8 @@ class PkbReadFacade {
    */
   virtual SingleSet GetProcedures();
 
+
+  // Statement API
   /**
    * Retrieves statements stored in Pkb.
    *
@@ -106,6 +112,8 @@ class PkbReadFacade {
    */
   virtual SingleSet GetAssignStatements();
 
+
+  // Modifies API
   /**
    * Retrieves variables modified by a specific statement.
    *
@@ -189,6 +197,8 @@ class PkbReadFacade {
    */
   virtual bool HasModifiesProcedureRelationship(const Procedure &procedure, const Variable &variable);
 
+
+  // Uses Statement API
   /**
    * Retrieves all (s, v) pairs where Uses(s, v) relationship holds and s is of given statement type.
    *
@@ -235,6 +245,8 @@ class PkbReadFacade {
    */
   virtual bool HasUsesStatementRelationship(const StatementNumber &statement_number, const Variable &variable);
 
+
+  // Uses Procedure API
   /**
    * Retrieves all (p, v) pairs where Uses(p, v) relationship holds.
    *
@@ -276,6 +288,8 @@ class PkbReadFacade {
    */
   virtual bool HasUsesProcedureRelationship(const Procedure &procedure, const Variable &variable);
 
+
+  // Follows API
   /**
    * Retrieves (statement number, statement number) pairs that have a Follows Relationship
    * with the 2nd statement number being the follower of the first.
