@@ -619,34 +619,35 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedStarBy(const StatementNumber &statement_number) {
-  // todo
-  return {};
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.first == statement_number;
+  }, this->GetAffectsStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectingStar(const StatementNumber &statement_number) {
-  // todo
-  return {};
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, PairFilterUtil::Filter([&](Pair p) {
+    return p.second == statement_number;
+  }, this->GetAffectsStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAreAffectedStar() {
-  // todo
-  return {};
+  return PairFilterUtil::Map([&](Pair p) { return p.second; }, this->GetAffectsStarPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffectStar() {
-  // todo
-  return {};
+  return PairFilterUtil::Map([&](Pair p) { return p.first; }, this->GetAffectsStarPairs());
 }
 
 bool PkbReadFacade::HasAffectsStarRelationship(const StatementNumber &statement_number,
                                                const StatementNumber &statement_number_being_affected) {
-  // todo
-  return true;
+  for (const auto &p : this->GetAffectsStarPairs()) {
+    if (p.first == statement_number && p.second == statement_number_being_affected) return true;
+  }
+  return false;
 }
 
 bool PkbReadFacade::IsThereAnyAffectsStarRelationship() {
-  // todo
-  return true;
+  return !this->GetAffectsStarPairs().empty();
 }
 
 // Next API
