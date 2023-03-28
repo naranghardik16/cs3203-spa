@@ -2,6 +2,8 @@ import os
 import glob
 import sys
 from collections import Counter
+import functools
+print = functools.partial(print, flush=True)
 
 """
 This code took reference from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
