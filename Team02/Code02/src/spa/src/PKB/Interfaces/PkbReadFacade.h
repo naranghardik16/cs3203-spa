@@ -23,11 +23,8 @@ class PkbReadFacade {
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
   typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef std::shared_ptr<Expression> ExpressionPtr;
-<<<<<<< HEAD
   typedef PkbCommunicationTypes::PairConstraint Pair;
-=======
   typedef std::shared_ptr<CfgNode> CfgNodePtr;
->>>>>>> milestone3
 
   /**
    * Constructor for Pkb's read facade.
@@ -41,6 +38,8 @@ class PkbReadFacade {
    */
   ~PkbReadFacade();
 
+
+  // Entity Store API
   /**
    * Retrieves variables stored in Pkb.
    *
@@ -62,6 +61,8 @@ class PkbReadFacade {
    */
   virtual SingleSet GetProcedures();
 
+
+  // Statement API
   /**
    * Retrieves statements stored in Pkb.
    *
@@ -111,6 +112,8 @@ class PkbReadFacade {
    */
   virtual SingleSet GetAssignStatements();
 
+
+  // Modifies API
   /**
    * Retrieves variables modified by a specific statement.
    *
@@ -194,6 +197,8 @@ class PkbReadFacade {
    */
   virtual bool HasModifiesProcedureRelationship(const Procedure &procedure, const Variable &variable);
 
+
+  // Uses Statement API
   /**
    * Retrieves all (s, v) pairs where Uses(s, v) relationship holds and s is of given statement type.
    *
@@ -240,6 +245,8 @@ class PkbReadFacade {
    */
   virtual bool HasUsesStatementRelationship(const StatementNumber &statement_number, const Variable &variable);
 
+
+  // Uses Procedure API
   /**
    * Retrieves all (p, v) pairs where Uses(p, v) relationship holds.
    *
@@ -281,6 +288,8 @@ class PkbReadFacade {
    */
   virtual bool HasUsesProcedureRelationship(const Procedure &procedure, const Variable &variable);
 
+
+  // Follows API
   /**
    * Retrieves (statement number, statement number) pairs that have a Follows Relationship
    * with the 2nd statement number being the follower of the first.
