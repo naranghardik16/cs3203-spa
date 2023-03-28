@@ -617,8 +617,11 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
   std::unordered_map<std::string, std::unordered_set<std::string>> m;
   std::unordered_set<std::string> keys;
   for (const auto &p : this->GetAffectsPairs()) {
-    if (m.count(p.first) > 0) m[p.first].insert(p.second);
-    else m[p.first] = {p.second};
+    if (m.count(p.first) > 0) {
+      m[p.first].insert(p.second);
+    } else {
+      m[p.first] = {p.second}
+    };
   }
 
   PairSet result;
