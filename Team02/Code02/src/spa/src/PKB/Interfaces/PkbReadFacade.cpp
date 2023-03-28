@@ -395,8 +395,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetWhileConditionVariablePair() {
   return PairFilterUtil::Collect([&](Single s) {
     return
         ExpressionUtil::GetAllVariablesFromExpression(
-            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
-        );
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s));
   }, this->GetWhileStatements());
 }
 
@@ -404,8 +403,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileWithConditionVariable(const std:
   return PairFilterUtil::Filter([&](Single s) {
     return
         ExpressionUtil::GetAllVariablesFromExpression(
-            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
-        ).count(variable) > 0;
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
+            .count(variable) > 0;
   }, this->GetWhileStatements());
 }
 
@@ -413,8 +412,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetWhileThatHasConditionVariable() {
   return PairFilterUtil::Filter([&](Single s) {
     return
         !ExpressionUtil::GetAllVariablesFromExpression(
-            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s)
-        ).empty();
+            this->pkb.control_flow_store_->GetExpressionFromWhileStatement(s))
+            .empty();
   }, this->GetWhileStatements());
 }
 
