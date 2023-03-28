@@ -614,8 +614,34 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
-  // todo
-  return {};
+  std::unordered_map<std::string, std::unordered_set<std::string>> m;
+  std::unordered_set<std::string> keys;
+  for (const auto &p : this->GetAffectsPairs()) {
+    if (m.count(p.first) > 0) m[p.first].insert(p.second);
+    else m[p.first] = {p.second};
+  }
+
+  PairSet result;
+  for (const auto &k : keys) {
+    StatementNumberStack s;
+    PairSet visited;
+    s.push(k);
+
+    while (!s.empty()) {
+      StatementNumber current = s.top();
+      s.pop();
+
+      for (const auto &c : m[current]) {
+        if (!(visited.count(std::make_pair(k, c)) > 0)) {
+          result.insert(std::make_pair(k, c));
+          s.push(c);
+          visited.insert(std::make_pair(k, c));
+        }
+      }
+    }
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedStarBy(const StatementNumber &statement_number) {
