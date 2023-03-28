@@ -4,7 +4,7 @@
 
 #include "PKB/Types/PkbCommunicationTypes.h"
 
-class PairFilterUtil {
+class FunctionalUtil {
  public:
   typedef PkbCommunicationTypes::SingleConstraintSet SingleSet;
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
