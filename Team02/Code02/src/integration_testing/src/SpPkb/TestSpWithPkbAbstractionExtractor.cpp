@@ -857,5 +857,4 @@ TEST_CASE("Check if uses are extracted correctly (complex - deeply nested)") {
     }
     SUCCEED();
   }
-
 }
