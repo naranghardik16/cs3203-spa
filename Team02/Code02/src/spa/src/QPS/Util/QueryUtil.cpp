@@ -1,21 +1,24 @@
 #include "QPS/Util/QueryUtil.h"
 
 bool QueryUtil::IsPartialMatchExpressionSpecification(const std::string& s) {
-  bool result = s[0] == '_' && s[s.length() - 1] == '_' && s.length() > 2;
+  bool result = s[0] == pql_constants::kWildcardChar && s[s.length() - 1] == pql_constants::kWildcardChar &&
+      s.length() > 2;
   return result;
 }
 
 bool QueryUtil::IsQuoted(const std::string& s) {
-  return s.length() >= 2 && (s[0] == '"') && (s[s.length()-1] == '"');
+  return s.length() >= 2 && (s[0] == pql_constants::kQuotationChar) &&
+  (s[s.length()-1] == pql_constants::kQuotationChar);
 }
 
 bool QueryUtil::IsQuotedIdent(const std::string &s) {
-  return (s[0] == '"' && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2))
-  && s[s.length()-1] == '"');
+  return (s[0] == pql_constants::kQuotationChar && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2))
+  && s[s.length()-1] == pql_constants::kQuotationChar);
 }
 
 bool QueryUtil::IsWildcard(const std::string& s) {
-  return s == "_";
+  std::string wildcard(1, pql_constants::kWildcardChar);
+  return s == wildcard;
 }
 
 bool QueryUtil::IsAttrRef(const std::string& s) {

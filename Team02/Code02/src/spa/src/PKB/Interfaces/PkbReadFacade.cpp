@@ -2,7 +2,6 @@
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "PKB/Util/ExpressionUtil.h"
-
 #include "PKB/Util/PairFilterUtil.h"
 
 PkbReadFacade::PkbReadFacade(Pkb &pkb) : pkb(pkb) {}
@@ -325,11 +324,11 @@ bool PkbReadFacade::IsAnyFollowsRelationshipPresent() {
 // Follows* API
 PkbReadFacade::PairSet PkbReadFacade::GetFollowsStarPairs(const StatementType &statement_type_1,
                                                           const StatementType &statement_type_2) {
-  SingleSet
-      statements_of_type_1 = this->pkb.statement_store_->GetStatements(statement_type_1);
+  SingleSet statements_of_type_1 = this->pkb.statement_store_->GetStatements(statement_type_1);
 
   SingleSet
-      statements_of_type_2 = this->pkb.statement_store_->GetStatements(statement_type_2);
+      statements_of_type_2 =
+      this->pkb.statement_store_->GetStatements(statement_type_2);
 
   PairSet follows_star_pairs =
       this->pkb.follows_store_->GetFollowsStarPairs();
@@ -836,12 +835,16 @@ PkbReadFacade::GetAllCallStatementsFromAProcedure(const Procedure &procedure) {
   return this->pkb.calls_store_->GetCallStatementsFromProcedure(procedure);
 }
 
-bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure, Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsRelation(caller_procedure, callee_procedure);
+bool PkbReadFacade::HasCallsRelation(Procedure caller_procedure,
+                                     Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsRelation(caller_procedure,
+                                                  callee_procedure);
 }
 
-bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure, Procedure callee_procedure) {
-  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure, callee_procedure);
+bool PkbReadFacade::HasCallsStarRelation(Procedure caller_procedure,
+                                         Procedure callee_procedure) {
+  return this->pkb.calls_store_->HasCallsStarRelation(caller_procedure,
+                                                      callee_procedure);
 }
 
 PkbReadFacade::SingleSet
@@ -968,41 +971,131 @@ bool PkbReadFacade::IsThereAnyCallsStarRelationship() {
   return this->pkb.calls_store_->HasCallsStarRelation();
 }
 
+PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const StatementNumber &statement_number) {
+  return this->pkb.calls_store_->GetProcedureFromStatement(statement_number);
+}
+
 // Affects API
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
-  // todo
-  return {};
+  PairSet result;
+  const auto asses = this->GetAssignStatements();
+  for (const auto &a : this->GetAssignStatements()) {
+    std::stack<std::string> s;
+    std::unordered_set<std::string> visited;
+
+    s.push(a);
+
+    std::string v = *this->GetVariablesModifiedByStatement(a).begin();
+
+    while (!s.empty()) {
+      auto current = s.top();
+      s.pop();
+      if (visited.count(current) > 0) continue;
+
+      if (this->GetIfStatements().count(current) > 0 ||
+          this->GetWhileStatements().count(current) > 0) {
+        for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
+        continue;
+      }
+
+      if (current != a && this->HasUsesStatementRelationship(current, v) &&
+          this->GetAssignStatements().count(current) > 0)
+        result.insert(std::make_pair(a, current));
+
+      if (current != a
+          && this->HasModifiesStatementRelationship(current, v))
+        continue;
+
+      if (this->GetReadStatements().count(current) > 0
+          && this->HasModifiesStatementRelationship(current, v))
+        continue;
+
+      if (this->GetCallStatements().count(current) > 0 &&
+          this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(
+              current), v))
+        continue;
+
+      for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
+
+      visited.insert(current);
+    }
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffectedBy(const StatementNumber &statement_number) {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    if (p.first == statement_number) {
+      result.insert(p.second);
+    }
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAssignsAffecting(const StatementNumber &statement_number) {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    if (p.second == statement_number) {
+      result.insert(p.first);
+    }
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAreAffected() {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    result.insert(p.second);
+  }
+
+  return result;
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffect() {
-  // todo
-  return {};
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  SingleSet result;
+
+  for (const auto &p : affects_pairs) {
+    result.insert(p.first);
+  }
+
+  return result;
 }
 
 bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_number,
                                            const StatementNumber &statement_number_being_affected) {
-  // todo
-  return true;
+  PairSet affects_pairs =
+      this->GetAffectsPairs();
+
+  for (const auto &p : affects_pairs) {
+    if (p.first == statement_number
+        && p.second == statement_number_being_affected)
+      return true;
+  }
+
+  return false;
 }
 
 bool PkbReadFacade::IsThereAnyAffectsRelationship() {
-  // todo
-  return true;
+  return !this->GetAffectsPairs().empty();
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {

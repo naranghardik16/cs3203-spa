@@ -72,8 +72,8 @@ void PqlEvaluator::EvaluateBooleanConstraints() {
   for (auto iter = clause_list.begin(); iter != clause_list.end(); ++iter) {
     auto clause = *iter;
 
-    auto evaluator = clause->CreateClauseEvaluator(declaration_map_);
-    auto is_clause_true = evaluator->EvaluateBooleanConstraint(pkb_);
+    auto evaluator = clause->CreateClauseEvaluator(declaration_map_, pkb_);
+    auto is_clause_true = evaluator->EvaluateBooleanConstraint();
     if (!is_clause_true) {
       is_return_empty_set_ = true;
       break;
@@ -89,8 +89,8 @@ std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
                                                                                 ResultTable{});
     ClauseSyntaxPtrList clause_list = group->GetSortedClauses(declaration_map_);
     for (const auto& kClause : clause_list) {
-      auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
-      std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
+      auto evaluator = kClause->CreateClauseEvaluator(declaration_map_, pkb_);
+      std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause();
 
       // get intersection
       clause_evaluation_result->JoinResult(intermediate_result);

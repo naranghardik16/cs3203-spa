@@ -23,7 +23,11 @@ class PkbReadFacade {
   typedef PkbCommunicationTypes::PairConstraintSet PairSet;
   typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef std::shared_ptr<Expression> ExpressionPtr;
+<<<<<<< HEAD
   typedef PkbCommunicationTypes::PairConstraint Pair;
+=======
+  typedef std::shared_ptr<CfgNode> CfgNodePtr;
+>>>>>>> milestone3
 
   /**
    * Constructor for Pkb's read facade.
@@ -787,6 +791,7 @@ class PkbReadFacade {
    */
   virtual bool IsThereAnyCallsStarRelationship();
 
+  virtual Procedure GetProcedureFromCallStatement(const StatementNumber &statement_number);
 
   //! Affects API
 
@@ -1058,8 +1063,5 @@ class PkbReadFacade {
 
  private:
   Pkb &pkb;
-
-  // abstract retrieval method
-  PairSet GetEntityPairs(const StatementType &statement_type, const ManyToManyStore<StatementNumber, Variable> &store);
 };
 

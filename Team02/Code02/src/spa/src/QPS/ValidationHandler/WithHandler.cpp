@@ -1,7 +1,7 @@
 #include "WithHandler.h"
 
 void WithHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
-  if (clause->GetParameters().size() != 2) {
+  if (clause->GetParameters().size() != pql_constants::kPairArgumentValidSize) {
     throw SyntaxErrorException("Invalid number of argument");
   }
 

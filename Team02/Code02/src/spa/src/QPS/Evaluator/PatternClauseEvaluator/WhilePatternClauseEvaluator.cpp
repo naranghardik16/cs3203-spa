@@ -1,17 +1,15 @@
 #include "WhilePatternClauseEvaluator.h"
 
-bool WhilePatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
+bool WhilePatternClauseEvaluator::EvaluateBooleanConstraint() {
   // Would never be called as pattern clause always has synonym
   return false;
 }
 
-std::shared_ptr<Result> WhilePatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{{syn_while_, 0}};
+std::shared_ptr<Result> WhilePatternClauseEvaluator::EvaluateClause() {
+  ResultHeader header{{syn_while_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
 
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-
-  bool is_arg_1_synonym = declaration_map.count(first_arg_);
+  bool is_arg_1_synonym = declaration_map_.count(first_arg_);
   bool is_arg_1_wildcard = QueryUtil::IsWildcard(first_arg_);
 
   PkbCommunicationTypes::SingleConstraintSet single_constraint;
@@ -21,12 +19,12 @@ std::shared_ptr<Result> WhilePatternClauseEvaluator::EvaluateClause(std::shared_
     // e.g. while(s,_)
     header[first_arg_] = static_cast<int>(header.size());
 
-    pair_constraint = pkb->GetWhileConditionVariablePair();
+    pair_constraint = pkb_->GetWhileConditionVariablePair();
   } else if (is_arg_1_wildcard) {
     // e.g. while(_,_)
-    single_constraint = pkb->GetWhileThatHasConditionVariable();
+    single_constraint = pkb_->GetWhileThatHasConditionVariable();
   } else {
-    single_constraint = pkb->GetWhileWithConditionVariable(QueryUtil::GetIdent(first_arg_));
+    single_constraint = pkb_->GetWhileWithConditionVariable(QueryUtil::GetIdent(first_arg_));
   }
 
   if (!single_constraint.empty()) {

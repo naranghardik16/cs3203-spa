@@ -21,7 +21,9 @@ SUCCESS_EXIT_CODE = 0
 FAILURE_CLOSING_TAG = '</failed>'
 SUCCESS_TAG = '<passed/>'
 OUTPUT_DIRECTORY = MakePathSuitableForOS(os.getcwd() + "\\Result")
-
+TOTAL_TESTS = 0
+TOTAL_PASSED_TESTS = 0
+TOTAL_FAILED_TESTS = 0
 
 def FindAutotesterExecutablePath():
     results = list()
@@ -80,6 +82,9 @@ def GetAutotesterParameterList(folder_to_test_in):
 Taken from https://github.com/wn/toy-static-analyzer/blob/master/autotester_ci.py
 """
 def check_output_xml(output_xml):
+    global TOTAL_TESTS
+    global TOTAL_PASSED_TESTS
+    global TOTAL_FAILED_TESTS
     if not os.path.exists(output_xml):
         return "\n"
     with open(output_xml) as f:
@@ -88,6 +93,9 @@ def check_output_xml(output_xml):
         passed_test_cases = text_chunks[SUCCESS_TAG]
         failed_test_cases = text_chunks[FAILURE_CLOSING_TAG]
         test_summary = f'\nTest passed:{passed_test_cases}\nTest failed:{failed_test_cases}'
+        TOTAL_TESTS += (passed_test_cases + failed_test_cases)
+        TOTAL_PASSED_TESTS += passed_test_cases
+        TOTAL_FAILED_TESTS += failed_test_cases
     return test_summary + "\n"
 
 
@@ -126,7 +134,7 @@ def Execute(folder_to_test_in, redirect_output):
             print(str(e))
             continue
 
-    print(test_report, flush=True)
+    print(test_report)
     copy_command = "cp"
     if os.name == WINDOWS_OS_NAME:
         copy_command = "copy"
@@ -138,6 +146,11 @@ def Execute(folder_to_test_in, redirect_output):
 if __name__ == "__main__":
     Execute("Milestone1", True)
     Execute("Milestone2", True)
+    # Execute("Milestone3", True)
+    print(f"Total test statistics:")
+    print(f"Total no. of passed test cases: {TOTAL_PASSED_TESTS}")
+    print(f"Total no. of failed test cases: {TOTAL_FAILED_TESTS}")
+    print(f"Total no. of test cases: {TOTAL_TESTS}")
 
     if len(sys.argv) != 2:
         start_python_host_command = "python -m http.server 8000"

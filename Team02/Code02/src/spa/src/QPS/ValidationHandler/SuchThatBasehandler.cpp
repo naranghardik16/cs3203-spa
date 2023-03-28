@@ -7,7 +7,7 @@ void SuchThatBaseHandler::HandleSyntax(std::shared_ptr<ClauseSyntax> clause) {
   if (pql_constants::kRelRefs.find(rel_ref) == pql_constants::kRelRefs.end()) {
     throw SyntaxErrorException("The relationship reference is invalid in the Such That clause");
   }
-  if (clause->GetParameters().size() != 2) {
+  if (clause->GetParameters().size() != pql_constants::kPairArgumentValidSize) {
     throw SyntaxErrorException("Invalid number of argument");
   }
 

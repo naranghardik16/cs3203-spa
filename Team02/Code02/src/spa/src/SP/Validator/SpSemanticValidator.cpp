@@ -40,19 +40,19 @@ void SpSemanticValidator::ProcessProgram(shared_ptr<Program> program) {
 void SpSemanticValidator::ProcessStatements(Procedure::StmtListContainer statements,
                                             string proc_name) {
   for (shared_ptr<Statement> s : statements) {
-    if (s->GetStatementType() == "call") {
+    if (s->GetStatementType() == sp_constants::k_call_stmt_) {
       auto call_stmt = dynamic_pointer_cast<CallStatement>(s);
       AddCallsRelationship(proc_name, call_stmt->GetProcedureName());
       continue;
     }
 
     // for container statements need to loop through their statement list as well
-    if (s->GetStatementType() == "while") {
+    if (s->GetStatementType() == sp_constants::k_while_stmt_) {
       auto while_stmt = dynamic_pointer_cast<WhileStatement>(s);
       ProcessStatements(while_stmt->GetLoopStatements(), proc_name);
       continue;
     }
-    if (s->GetStatementType() == "if") {
+    if (s->GetStatementType() == sp_constants::k_if_stmt_) {
       auto if_stmt = dynamic_pointer_cast<IfStatement>(s);
       ProcessStatements(if_stmt->GetThenStatements(), proc_name);
       ProcessStatements(if_stmt->GetElseStatements(), proc_name);

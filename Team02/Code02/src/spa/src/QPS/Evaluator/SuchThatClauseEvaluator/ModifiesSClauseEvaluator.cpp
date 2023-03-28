@@ -1,88 +1,57 @@
 #include "ModifiesSClauseEvaluator.h"
 
-bool ModifiesSClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  // first_arg is stmtref: If first arg is wildcard then semantic error; If first arg is synonym then it is not
-  // considered boolean constraint
-  // So first arg must be int
-  // Based on rule of boolean constraint, the 2nd arg cannot be a synonym so either wildcard or ident (since 2nd arg
-  // is entref)
-
-  if (is_second_arg_a_wildcard) {
-    // Modifies(5, _) -- does 5 modify any variables?
-    return !pkb->GetVariablesModifiedByStatement(first_arg_).empty();
-  } else {
-    // Modifies(5, "count") -- does 5 modify "count"?
-    return pkb->HasModifiesStatementRelationship(first_arg_,
-                                                 QueryUtil::GetIdent(second_arg_));
-  }
+bool ModifiesSClauseEvaluator::HandleBothWildcard() {
+  // Not possible
+  return false;
 }
 
-std::shared_ptr<Result> ModifiesSClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
+bool ModifiesSClauseEvaluator::HandleFirstWildcardSecondValue() {
+  // Not possible
+  return false;
+}
 
-  // Validated in validator as a statement synonym or its subset
-  bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map,
-                                                                                       first_arg_);
-  bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
-  bool is_first_arg_a_type_of_print_synonym = QueryUtil::IsPrintSynonym(declaration_map, first_arg_);
+bool ModifiesSClauseEvaluator::HandleFirstValueSecondWildcard() {
+  // Example query: Modifies(5, _)
+  return !pkb_->GetVariablesModifiedByStatement(first_arg_).empty();
+}
 
-  // Validated in validator as a variable synonym
-  bool is_second_arg_a_variable_synonym = declaration_map.count(second_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
+bool ModifiesSClauseEvaluator::HandleBothValue() {
+  // Example query: Modifies(5, "count")
+  return pkb_->HasModifiesStatementRelationship(first_arg_,
+                                            QueryUtil::GetIdent(second_arg_));
+}
 
-  ResultHeader header;
-  if (is_first_arg_a_type_of_statement_synonym) {
-    header[first_arg_] = static_cast<int>(header.size());
+ResultTable ModifiesSClauseEvaluator::HandleBothSynonym() {
+  if (is_first_arg_a_type_of_print_synonym_) {
+    return {};
   }
-  if (is_second_arg_a_variable_synonym) {
-    header[second_arg_] = static_cast<int>(header.size());
+  // Example query: Modifies(a,v)
+  return ConvertPairSetToResultTableFormat(pkb_->GetModifiesStatementVariablePairs(arg_1_type_));
+}
+
+ResultTable ModifiesSClauseEvaluator::HandleFirstSynonymSecondWildcard() {
+  if (is_first_arg_a_type_of_print_synonym_) {
+    return {};
   }
+  // Example query: Modifies(s, _)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsThatModify(arg_1_type_));
+}
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
-  ResultTable table;
-  // Special case where there will be no result is if first_arg_ is print synonym
-  if (is_first_arg_a_type_of_print_synonym) {
-    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-    return result_ptr;
+ResultTable ModifiesSClauseEvaluator::HandleFirstSynonymSecondValue() {
+  if (is_first_arg_a_type_of_print_synonym_) {
+    return {};
   }
+  // Example query: Modifies(a,”count”)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(QueryUtil::GetIdent(second_arg_),
+                                                                           arg_1_type_));
+}
 
-  if (is_first_arg_a_type_of_statement_synonym) {
-    if (is_second_arg_a_wildcard) {
-      // e.g. Select s such that Modifies(s, _) / Select s1 such that Modifies(s1,_)
-      // Should return the statements that have a Modifies relationship with any variable
-      single_constraint = pkb->GetStatementsThatModify(QueryUtil::GetStatementType(declaration_map,
-                                                                                   first_arg_));
-    } else if (is_second_arg_a_variable_synonym) {
-      // e.g. Modifies(a,v)
-      pair_constraint =
-          pkb->GetModifiesStatementVariablePairs(QueryUtil::GetStatementType(declaration_map, first_arg_));
-    } else {
-      // e.g. Modifies(a,”count”) -- get assignments that modify count
-      single_constraint = pkb->GetStatementsModifiesVariable(QueryUtil::GetIdent(second_arg_),
-                                                             QueryUtil::GetStatementType(declaration_map,
-                                                                                         first_arg_));
-    }
-  }
+ResultTable ModifiesSClauseEvaluator::HandleFirstWildcardSecondSynonym() {
+  // Not possible
+  return {};
+}
 
-  // Second arg must be a synonym to not be boolean constraint
-  if (is_first_arg_an_integer) {
-    // e.g.Select v such that Modifies(5,v)
-    single_constraint = pkb->GetVariablesModifiedByStatement(first_arg_);
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
-  }
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-
-  return result_ptr;
+ResultTable ModifiesSClauseEvaluator::HandleFirstValueSecondSynonym() {
+  // Example query: Modifies(5,v)
+  return ConvertSetToResultTableFormat(pkb_->GetVariablesModifiedByStatement(first_arg_));
 }
