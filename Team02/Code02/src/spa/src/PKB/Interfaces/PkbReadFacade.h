@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <stack>
 #include <unordered_set>
 
 #include "General/StatementTypeEnum.h"
@@ -25,6 +26,7 @@ class PkbReadFacade {
   typedef std::shared_ptr<Expression> ExpressionPtr;
   typedef PkbCommunicationTypes::SingleConstraint Single;
   typedef PkbCommunicationTypes::PairConstraint Pair;
+  typedef std::stack<StatementNumber> StatementNumberStack;
 
   /**
    * Constructor for Pkb's read facade.
