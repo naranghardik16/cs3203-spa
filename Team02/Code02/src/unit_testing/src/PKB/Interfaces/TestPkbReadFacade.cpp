@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
+#include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 
 TEST_CASE("Testing PkbReadFacade") {
   SECTION("empty") {
@@ -1281,3 +1282,238 @@ TEST_CASE("Testing PkbReadFacade") {
         std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3", "4", "5", "6" }));
   }
 }
+
+TEST_CASE("Testing Affects") {
+  SECTION("Test Affects API - Complex CFG and Expressions") {
+    typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+    std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+    node1->AddStmt(1);
+    cfg->AddStmtCfg(1, node1);
+    node1->AddStmt(2);
+    cfg->AddStmtCfg(2, node1);
+
+    std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+    node2->AddStmt(3);
+    cfg->AddStmtCfg(3, node2);
+
+    std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+    node3->AddStmt(4);
+    cfg->AddStmtCfg(4, node3);
+    node3->AddStmt(5);
+    cfg->AddStmtCfg(5, node3);
+    node3->AddStmt(6);
+    cfg->AddStmtCfg(6, node3);
+
+    std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+    node4->AddStmt(7);
+    cfg->AddStmtCfg(7, node4);
+
+    std::shared_ptr<CfgNode> node5 = std::make_shared<CfgNode>();
+    node5->AddStmt(8);
+    cfg->AddStmtCfg(8, node5);
+
+    std::shared_ptr<CfgNode> node6 = std::make_shared<CfgNode>();
+    node6->AddStmt(9);
+    cfg->AddStmtCfg(9, node6);
+
+    std::shared_ptr<CfgNode> node7 = std::make_shared<CfgNode>();
+    node7->AddStmt(10);
+    cfg->AddStmtCfg(10, node7);
+    node7->AddStmt(11);
+    cfg->AddStmtCfg(11, node7);
+    node7->AddStmt(12);
+    cfg->AddStmtCfg(12, node7);
+
+    // 0
+    TokenList token_list_statement_1{
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "1", egs->GetExpressionFromInput(
+            token_list_statement_1, "assign"));
+
+    // 5
+    TokenList token_list_statement_2{
+        make_shared<IntegerToken>("5"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("2", "i");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "2", egs->GetExpressionFromInput(
+            token_list_statement_2, "assign"));
+
+    // i > 0
+    TokenList token_list_statement_3{
+        make_shared<NameToken>("i"),
+        make_shared<RelationalOperatorToken>(">", GT),
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("3", WHILE);
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "4", egs->GetExpressionFromInput(
+            token_list_statement_3, "while"));
+
+    // x + 2 * y
+    TokenList token_list_statement_4{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<IntegerToken>("2"),
+        make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+        make_shared<NameToken>("y"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "4", egs->GetExpressionFromInput(
+            token_list_statement_4, "assign"));
+
+
+    pkb_write_facade_->AddStatementOfAType("5", CALL);
+
+    // i - 1
+    TokenList token_list_statement_6{
+        make_shared<NameToken>("i"),
+        make_shared<ArithmeticOperatorToken>("-", MINUS),
+        make_shared<IntegerToken>("1"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("6", "i");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "6", egs->GetExpressionFromInput(
+            token_list_statement_6, "assign"));
+
+    // x > 1
+    TokenList token_list_statement_7{
+        make_shared<NameToken>("3"),
+        make_shared<RelationalOperatorToken>(">", GT),
+        make_shared<IntegerToken>("1"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("7", IF);
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "7", egs->GetExpressionFromInput(
+            token_list_statement_7, "if"));
+
+    // x + 1
+    TokenList token_list_statement_8{
+        make_shared<NameToken>("3"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<IntegerToken>("1"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("8", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "8", egs->GetExpressionFromInput(
+            token_list_statement_8, "assign"));
+
+    // 1
+    TokenList token_list_statement_9{
+        make_shared<IntegerToken>("1"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("9", "z");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "9", egs->GetExpressionFromInput(
+            token_list_statement_9, "assign"));
+
+    // z + x + i
+    TokenList token_list_statement_10{
+        make_shared<NameToken>("z"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<NameToken>("i"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("10", "z");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "10", egs->GetExpressionFromInput(
+            token_list_statement_10, "assign"));
+
+    // z + 2
+    TokenList token_list_statement_11{
+        make_shared<NameToken>("z"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<IntegerToken>("2"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("11", "y");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "11", egs->GetExpressionFromInput(
+            token_list_statement_11, "assign"));
+
+    // x * y + z
+    TokenList token_list_statement_12{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+        make_shared<NameToken>("y"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<NameToken>("z"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("12", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "12", egs->GetExpressionFromInput(
+            token_list_statement_12, "assign"));
+
+    pkb_write_facade_->AddStatementModifyingVariable("5", "z");
+    pkb_write_facade_->AddStatementModifyingVariable("5", "v");
+
+    node1->AddTransition(true, node2);
+    node2->AddTransition(true, node3);
+    node2->AddTransition(false, node4);
+    node3->AddTransition(true, node2);
+    node4->AddTransition(true, node5);
+    node4->AddTransition(false, node6);
+    node5->AddTransition(true, node7);
+    node6->AddTransition(true, node7);
+
+    cfg->AddProcCfg("second", node1);
+    cfg->AddProcCfg("third", node3);
+    pkb_write_facade_->AddCfg(cfg);
+
+    REQUIRE(pkb_read_facade_->IsThereAnyAffectsRelationship() == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "6") == true);
+    // need to check this
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "8") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "10") == true);
+    // need to check this
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "4") == true);
+    // need to check this
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "8") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "10") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "12") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "10") == true);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "10") == true);
+
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "11") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "12") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "3") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "6") == false);
+  }
+}
+
+
