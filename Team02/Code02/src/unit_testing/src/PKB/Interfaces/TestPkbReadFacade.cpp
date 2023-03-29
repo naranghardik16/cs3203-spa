@@ -1480,6 +1480,7 @@ TEST_CASE("Testing Affects") {
 
     pkb_write_facade_->AddStatementModifyingVariable("5", "z");
     pkb_write_facade_->AddStatementModifyingVariable("5", "v");
+    pkb_write_facade_->AddStatementUsingVariable("5", "v");
 
     node1->AddTransition(true, node2);
     node2->AddTransition(true, node3);
@@ -1496,13 +1497,13 @@ TEST_CASE("Testing Affects") {
 
     REQUIRE(pkb_read_facade_->IsThereAnyAffectsRelationship() == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "6") == true);
-    // need to check this
+    // need to check this - expected result should be true -> need to fix bug in affects
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "8") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "10") == true);
-    // need to check this
+    // need to check this - expected result should be true -> need to fix bug in affects
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "4") == true);
-    // need to check this
+    // need to check this - expected result should be true -> need to fix bug in affects
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "8") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "10") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "12") == true);
