@@ -1494,6 +1494,53 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     results.sort();
     REQUIRE(results == expected_results);
   }
+
+  SECTION("Affects(INT, INT) - is false -- assigns with no control path to each other") {
+    std::string query = "Select BOOLEAN such that Affects(20,21)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(_,14)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(_,9)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(ASSIGN-SYN, _)") {
+    std::string query = "assign a; Select a such that Affects(_,a)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be "4", "6", "8", "10", "11", "12"
+    std::list<std::string> expected_results{"10", "11", "12", "4", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, ASSIGN-SYN)") {
+    std::string query = "assign a; Select a such that Affects(a,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be 1", "4", "8", "2", "6", "9", "10", "11"
+    std::list<std::string> expected_results{"1", "10", "11", "2", "4", "6", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 }
 
 
