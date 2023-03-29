@@ -614,13 +614,14 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
-  std::unordered_map<std::string, std::unordered_set<std::string>> m;
+  std::unordered_map<std::string, std::unordered_set<std::string>> affects_map;
   std::unordered_set<std::string> keys;
   for (const auto &p : this->GetAffectsPairs()) {
-    if (m.count(p.first) > 0) {
-      m[p.first].insert(p.second);
+    keys.insert(p.first);
+    if (affects_map.count(p.first) > 0) {
+      affects_map[p.first].insert(p.second);
     } else {
-      m[p.first] = {p.second};
+      affects_map[p.first] = {p.second};
     }
   }
 
@@ -634,7 +635,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
       StatementNumber current = s.top();
       s.pop();
 
-      for (const auto &c : m[current]) {
+      for (const auto &c : affects_map[current]) {
         if (!(visited.count(std::make_pair(k, c)) > 0)) {
           result.insert(std::make_pair(k, c));
           s.push(c);
