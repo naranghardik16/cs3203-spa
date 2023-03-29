@@ -1092,7 +1092,6 @@ TEST_CASE("Integration testing for Next API - Complex") {
 }
 
 TEST_CASE("Integration Testing for Affects API - Basic") {
-
   std::shared_ptr<Pkb> pkb_ = std::make_shared<Pkb>();
   std::shared_ptr<PkbReadFacade>
       pkb_read_facade_ = std::make_shared<PkbReadFacade>(*pkb_);
@@ -1458,7 +1457,6 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     results.sort();
     REQUIRE(results == expected_results);
   }
-
 }
 
 
