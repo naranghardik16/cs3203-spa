@@ -1380,7 +1380,6 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     std::string query = "Select BOOLEAN such that Affects(1,10)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
-    // check this - expected result should be true -> need to fix bug in affects
     std::list<std::string> expected_results{"TRUE"};
     results.sort();
     REQUIRE(results == expected_results);
@@ -1391,11 +1390,75 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     std::string query = "Select BOOLEAN such that Affects(1,12)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
-    // check this - expected result should be true -> need to fix bug in affects
     std::list<std::string> expected_results{"TRUE"};
     results.sort();
     REQUIRE(results == expected_results);
   }
+
+  SECTION("Affects(INT, INT) - is true -- simple case (one assign directly after another") {
+    std::string query = "Select BOOLEAN such that Affects(9,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- check if nested assigns can affect") {
+    std::string query = "Select BOOLEAN such that Affects(8,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- variable is read") {
+    std::string query = "Select BOOLEAN such that Affects(11,14)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- variable modified in if case and else case") {
+    std::string query = "Select BOOLEAN such that Affects(18,22)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- assigns are in different procedures") {
+    std::string query = "Select BOOLEAN such that Affects(2,17)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  // check this -> confusion in affects queries
+  SECTION("Affects(INT, INT) - is true -- variable is modified in a call stmt (even when in if-else)") {
+    std::string query = "Select BOOLEAN such that Affects(2,6)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- affects does not hold for non-assign statements") {
+    std::string query = "Select BOOLEAN such that Affects(2,3)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
 }
 
 
