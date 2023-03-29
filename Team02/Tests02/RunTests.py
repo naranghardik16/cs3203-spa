@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
     cat_command = "cat"
     if os.name == 'nt':
-        cat_command = "print"
+        cat_command = "type"
 
     os.system(f"{cat_command} test_result_log.txt")
 
