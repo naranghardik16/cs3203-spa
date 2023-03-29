@@ -1457,6 +1457,43 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     results.sort();
     REQUIRE(results == expected_results);
   }
+
+  SECTION("Affects(INT, INT) - is false -- a latter stmt cannot affect a stmt before it") {
+    std::string query = "Select BOOLEAN such that Affects(6,2)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- simple case") {
+    std::string query = "Select BOOLEAN such that Affects(9,11)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- simple case") {
+    std::string query = "Select BOOLEAN such that Affects(9,12)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- compare between unrelated assigns") {
+    std::string query = "Select BOOLEAN such that Affects(2,4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected result is FALSE
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 }
 
 
