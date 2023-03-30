@@ -85,7 +85,7 @@ void SemanticValidator::ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax>
   }
 }
 
-bool SemanticValidator::HasSemanticError() {
+bool SemanticValidator::HasSemanticError() const {
   return has_semantic_error_;
 }
 

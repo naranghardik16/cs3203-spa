@@ -7,12 +7,12 @@ bool CallsStarClauseEvaluator::HandleBothWildcard() {
 
 bool CallsStarClauseEvaluator::HandleFirstWildcardSecondValue() {
   // Example query: Calls*(_, “First”)
-  return !pkb_->GetAllProceduresWithSpecifiedCalleeStar(QueryUtil::GetIdent(second_arg_)).empty();
+  return !pkb_->GetAllProceduresWithSpecifiedCalleeStar(QueryUtil::RemoveQuotations(second_arg_)).empty();
 }
 
 bool CallsStarClauseEvaluator::HandleFirstValueSecondWildcard() {
   // Example query: Calls*("First", _)
-  return !pkb_->GetAllProceduresWithSpecifiedCallerStar(QueryUtil::GetIdent(first_arg_)).empty();
+  return !pkb_->GetAllProceduresWithSpecifiedCallerStar(QueryUtil::RemoveQuotations(first_arg_)).empty();
 }
 
 bool CallsStarClauseEvaluator::HandleBothValue() {
@@ -20,7 +20,7 @@ bool CallsStarClauseEvaluator::HandleBothValue() {
   if (is_same_syn_or_value_pairs_) {
     return false;
   }
-  return pkb_->HasCallsStarRelation(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
+  return pkb_->HasCallsStarRelation(QueryUtil::RemoveQuotations(first_arg_), QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable CallsStarClauseEvaluator::HandleBothSynonym() {
@@ -38,7 +38,8 @@ ResultTable CallsStarClauseEvaluator::HandleFirstSynonymSecondWildcard() {
 
 ResultTable CallsStarClauseEvaluator::HandleFirstSynonymSecondValue() {
   // Example query: Calls*(p, “first”)
-  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCalleeStar(QueryUtil::GetIdent(second_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCalleeStar(QueryUtil::RemoveQuotations(
+      second_arg_)));
 }
 
 ResultTable CallsStarClauseEvaluator::HandleFirstWildcardSecondSynonym() {
@@ -48,5 +49,6 @@ ResultTable CallsStarClauseEvaluator::HandleFirstWildcardSecondSynonym() {
 
 ResultTable CallsStarClauseEvaluator::HandleFirstValueSecondSynonym() {
   // Example query: Calls*(”first”, p)
-  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCallerStar(QueryUtil::GetIdent(first_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCallerStar(QueryUtil::RemoveQuotations(
+      first_arg_)));
 }

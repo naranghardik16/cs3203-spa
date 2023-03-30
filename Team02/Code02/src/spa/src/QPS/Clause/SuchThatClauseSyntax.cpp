@@ -1,6 +1,6 @@
 #include "SuchThatClauseSyntax.h"
 
-SuchThatClauseSyntax::SuchThatClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
+SuchThatClauseSyntax::SuchThatClauseSyntax(const SyntaxPair& pair) : ClauseSyntax(std::move(pair)) {}
 
 bool SuchThatClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
