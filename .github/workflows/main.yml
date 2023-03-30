@@ -97,4 +97,5 @@ jobs:
         run: |
           cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl .
           cp $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/{Milestone1, Milestone2, Milestone3} .
           python -u RunTests.py False
