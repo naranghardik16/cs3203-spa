@@ -8,7 +8,7 @@ This code took reference from https://github.com/wn/toy-static-analyzer/blob/mas
 """
 
 class Runner:
-    def __init__(self, log_file):
+    def __init__(self):
         self.WINDOWS_OS_NAME = 'nt'
         self.MAC_OS_NAME = 'posix'
         self.SUCCESS_EXIT_CODE = 0
@@ -18,7 +18,6 @@ class Runner:
         self.TOTAL_TESTS = 0
         self.TOTAL_PASSED_TESTS = 0
         self.TOTAL_FAILED_TESTS = 0
-        self.log_file = log_file
 
     def MakePathSuitableForOS(self, command):
         if os.name == self.WINDOWS_OS_NAME:
@@ -129,19 +128,15 @@ class Runner:
                 print(str(e))
                 continue
 
-        with open(self.log_file, 'a') as f:
-            f.write(test_report)
-            f.write("\n")
-            f.write(f"Test statistics:\n")
-            f.write(f"Total no. of passed test cases: {self.TOTAL_PASSED_TESTS}\n")
-            f.write(f"Total no. of failed test cases: {self.TOTAL_FAILED_TESTS}\n")
-            f.write(f"Total no. of test cases: {self.TOTAL_TESTS}\n")
+        # with open(self.log_file, 'a') as f:
+        #     f.write(test_report)
+        #     f.write("\n")
+        #     f.write(f"Test statistics:\n")
+        #     f.write(f"Total no. of passed test cases: {self.TOTAL_PASSED_TESTS}\n")
+        #     f.write(f"Total no. of failed test cases: {self.TOTAL_FAILED_TESTS}\n")
+        #     f.write(f"Total no. of test cases: {self.TOTAL_TESTS}\n")
 
-            # print(f"Total test statistics:")
-            # print(f"Total no. of passed test cases: {runner.TOTAL_PASSED_TESTS}")
-            # print(f"Total no. of failed test cases: {runner.TOTAL_FAILED_TESTS}")
-            # print(f"Total no. of test cases: {runner.TOTAL_TESTS}")
-        # print(test_report)
+        print(test_report)
 
         copy_command = "cp"
         if os.name == self.WINDOWS_OS_NAME:
@@ -152,22 +147,15 @@ class Runner:
 
 
 if __name__ == "__main__":
-    runner = Runner('test_result_log.txt')
+    runner = Runner()
     runner.Execute("Milestone1", True)
     runner.Execute("Milestone2", True)
     # Execute("Milestone3", True)
 
-    cat_command = "cat"
-    if os.name == 'nt':
-        cat_command = "type"
-
-    os.system(f"{cat_command} test_result_log.txt")
-
-    delete_command = "rm"
-    if os.name == 'nt':
-        delete_command = "del"
-
-    os.system(f"{delete_command} test_result_log.txt")
+    print(f"Test statistics:")
+    print(f"Total no. of passed test cases: {runner.TOTAL_PASSED_TESTS}")
+    print(f"Total no. of failed test cases: {runner.TOTAL_FAILED_TESTS}")
+    print(f"Total no. of test cases: {runner.TOTAL_TESTS}")
 
     if runner.TOTAL_FAILED_TESTS > 0:
         raise Exception("Not everything is passing!")
