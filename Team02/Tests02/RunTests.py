@@ -150,7 +150,7 @@ if __name__ == "__main__":
     runner = Runner()
     runner.Execute("Milestone1", True)
     runner.Execute("Milestone2", True)
-    # Execute("Milestone3", True)
+    runner.Execute("Milestone3", True)
 
     print(f"Test statistics:")
     print(f"Total no. of passed test cases: {runner.TOTAL_PASSED_TESTS}")
