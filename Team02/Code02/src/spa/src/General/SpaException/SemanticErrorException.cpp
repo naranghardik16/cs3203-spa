@@ -1,4 +1,3 @@
-#pragma once
 #include "SemanticErrorException.h"
 
 SemanticErrorException::SemanticErrorException() : SpaException(

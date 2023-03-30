@@ -1,4 +1,3 @@
-#pragma once
 #include "SyntaxErrorException.h"
 
 SyntaxErrorException::SyntaxErrorException() : SpaException("Syntax Error ") {}
