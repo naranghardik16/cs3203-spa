@@ -1,22 +1,32 @@
 #include "WithClauseEvaluator.h"
 
-Synonym  WithClauseEvaluator::ProcessArgumentForEvaluation(Synonym syn, Map &declaration_map) {
-  bool is_syn_a_type_of_attr_ref = QueryUtil::IsAttrRef(syn);
+Synonym  WithClauseEvaluator::ProcessArgumentForEvaluation(std::string arg, Map &declaration_map) {
+  bool is_syn_a_type_of_attr_ref = QueryUtil::IsAttrRef(arg);
   if (is_syn_a_type_of_attr_ref) {
     // want r instead of r.stmt# for e.g. since stmt# is trivial
-    return QueryUtil::AdjustSynonymWithTrivialAttrRefValue(syn, declaration_map);
-  } else if (QueryUtil::IsQuoted(syn)) {
-    // Will directly create a result with this value so we want to store "x" in the table and not ""x""
-    return string_util::Trim(syn.substr(1, syn.length()-2));
+    return QueryUtil::AdjustSynonymWithTrivialAttrRefValue(arg, declaration_map);
+  } else if (QueryUtil::IsQuoted(arg)) {
+    // IDENT case -- will directly create a result with this value so we want to store "x" in the table and not ""x""
+    return QueryUtil::GetIdent(arg);
   } else {
-    // int can just return as it is
-    return syn;
+    // int or synonym case
+    return arg;
   }
 }
 
 bool WithClauseEvaluator::EvaluateBooleanConstraint() {
   // only int = int or ident = ident
   return first_arg_ == second_arg_;
+}
+
+std::shared_ptr<Result> WithClauseEvaluator::HandleOneAttrRefCase(Synonym attr_ref_syn, ResultTable filter_table) {
+  // Handles case of e.g. s.stmt# = 5
+  ResultHeader header;
+  auto evaluation_result = DesignEntityGetter::EvaluateBasicSelect(attr_ref_syn, pkb_, declaration_map_);
+  header[attr_ref_syn] = static_cast<int>(header.size());
+  std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, filter_table);
+  evaluation_result->JoinResult(filter_result);
+  return evaluation_result;
 }
 
 std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause() {
@@ -34,24 +44,10 @@ std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause() {
   if (is_first_arg_a_type_of_attr_ref && is_second_arg_a_type_of_attr_ref) {
     auto result =
         DesignEntityGetter::GetIntersectionOfTwoAttr(first_arg_, second_arg_, pkb_, declaration_map_);
-
     return result;
   } else if (is_first_arg_a_type_of_attr_ref) {
-    // Need to evaluate to know if the second arg is present and can constraint e.g. p.procName = "NonExistent"
-    auto first_arg_evaluation_result =
-        DesignEntityGetter::EvaluateBasicSelect(first_arg_, pkb_, declaration_map_);
-    header[first_arg_] = static_cast<int>(header.size());
-    table = {{second_arg_}};
-    std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, table);
-    first_arg_evaluation_result->JoinResult(filter_result);
-    return first_arg_evaluation_result;
+    return HandleOneAttrRefCase(first_arg_, {{second_arg_}});
   } else {
-    auto second_arg_evaluation_result =
-        DesignEntityGetter::EvaluateBasicSelect(second_arg_, pkb_, declaration_map_);
-    header[second_arg_] = static_cast<int>(header.size());
-    table = {{first_arg_}};
-    std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, table);
-    second_arg_evaluation_result->JoinResult(filter_result);
-    return second_arg_evaluation_result;
+    return HandleOneAttrRefCase(second_arg_, {{first_arg_}});
   }
 }

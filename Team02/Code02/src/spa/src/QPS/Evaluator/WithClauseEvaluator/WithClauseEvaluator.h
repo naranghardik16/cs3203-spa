@@ -20,5 +20,6 @@ class WithClauseEvaluator : public ClauseEvaluator {
 
   std::shared_ptr<Result> EvaluateClause() override;
   bool EvaluateBooleanConstraint() override;
-  Synonym ProcessArgumentForEvaluation(Synonym syn, Map &declaration_map);
+  Synonym ProcessArgumentForEvaluation(std::string arg, Map &declaration_map);
+  std::shared_ptr<Result> HandleOneAttrRefCase(Synonym attr_ref_syn, ResultTable filter_table);
 };
