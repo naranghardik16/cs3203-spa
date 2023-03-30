@@ -12,12 +12,13 @@ bool ModifiesPClauseEvaluator::HandleFirstWildcardSecondValue() {
 
 bool ModifiesPClauseEvaluator::HandleFirstValueSecondWildcard() {
   // Example query: Modifies("anya", _)
-  return !pkb_->GetVariablesModifiedByProcedure(QueryUtil::GetIdent(first_arg_)).empty();
+  return !pkb_->GetVariablesModifiedByProcedure(QueryUtil::RemoveQuotations(first_arg_)).empty();
 }
 
 bool ModifiesPClauseEvaluator::HandleBothValue() {
   // Example query: Modifies("anya", "count")
-  return pkb_->HasModifiesProcedureRelationship(QueryUtil::GetIdent(first_arg_), QueryUtil::GetIdent(second_arg_));
+  return pkb_->HasModifiesProcedureRelationship(QueryUtil::RemoveQuotations(first_arg_),
+                                                QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable ModifiesPClauseEvaluator::HandleBothSynonym() {
@@ -32,7 +33,7 @@ ResultTable ModifiesPClauseEvaluator::HandleFirstSynonymSecondWildcard() {
 
 ResultTable ModifiesPClauseEvaluator::HandleFirstSynonymSecondValue() {
   // Example query: Modifies(p,”count”)
-  return ConvertSetToResultTableFormat(pkb_->GetProceduresModifiesVariable(QueryUtil::GetIdent(second_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetProceduresModifiesVariable(QueryUtil::RemoveQuotations(second_arg_)));
 }
 
 ResultTable ModifiesPClauseEvaluator::HandleFirstWildcardSecondSynonym() {
@@ -42,5 +43,5 @@ ResultTable ModifiesPClauseEvaluator::HandleFirstWildcardSecondSynonym() {
 
 ResultTable ModifiesPClauseEvaluator::HandleFirstValueSecondSynonym() {
   // Example query: Modifies("anya",v)
-  return ConvertSetToResultTableFormat(pkb_->GetVariablesModifiedByProcedure(QueryUtil::GetIdent(first_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetVariablesModifiedByProcedure(QueryUtil::RemoveQuotations(first_arg_)));
 }

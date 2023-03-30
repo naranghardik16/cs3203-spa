@@ -55,7 +55,7 @@ class QpsTokenizer {
    * @throws SyntaxErrorException if the synonym does not follow lexical rules
    * @return a map where the synonym is the key and the corresponding design entity is the value
    */
-  std::unordered_map<std::string, std::string> ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations);
+  std::unordered_map<std::string, std::string> ExtractAbstractSyntaxFromDeclarations(const std::vector<std::string>& declarations) const;
 
   /**
    * Parses for different subclauses and creates ClauseSyntax derived classes
@@ -87,21 +87,21 @@ class QpsTokenizer {
    * @return a SyntaxPair which contains the entity and the arguments
   */
   SyntaxPair ExtractAbstractSyntaxFromClause(const std::string& clause);
-  SelectedSynonymTuple ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause);
+  SelectedSynonymTuple ParseForMultipleSynonyms(const std::string& trimmed_select_keyword_removed_clause);
   size_t FindIndexOfRegexMatch(const string &clause, const regex &rgx);
   size_t FindEndOfSubClauseStart(const string &clause, const regex &rgx);
   SyntaxPair ExtractAbstractSyntaxFromWithClause(const string &clause);
-  shared_ptr<ClauseSyntax> MakePatternClauseSyntax(string sub_clause);
-  shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(string sub_clause);
-  shared_ptr<ClauseSyntax> MakeWithClauseSyntax(string sub_clause);
-  shared_ptr<ClauseSyntax> MakeAndClauseSyntax(string sub_clause, string previous_sub_clause);
+  shared_ptr<ClauseSyntax> MakePatternClauseSyntax(const string& sub_clause);
+  shared_ptr<ClauseSyntax> MakeSuchThatClauseSyntax(const string &sub_clause);
+  shared_ptr<ClauseSyntax> MakeWithClauseSyntax(const string &sub_clause);
+  shared_ptr<ClauseSyntax> MakeAndClauseSyntax(const string &sub_clause, const string &previous_sub_clause);
   pair<string, string> ProcessIDENT(string first_parameter, string second_parameter);
-  std::string ParseIDENT(string parameter);
+  std::string ParseIDENT(const string& parameter);
   ParameterVector ParseParameters(string parameters_substr);
   std::string GetSynonymSubstring(string select_keyword_removed_clause);
-  std::string ParseAttrRef(string attr_ref);
-  SelectedSynonymTuple ParseSingleSynonym(string clause_after_syn);
-  std::string GetSubclauseString(string clause_with_select_removed, SelectedSynonymTuple syn_vector);
+  std::string ParseAttrRef(const string& attr_ref);
+  SelectedSynonymTuple ParseSingleSynonym(const string& clause_after_syn);
+  std::string GetSubclauseString(const string& clause_with_select_removed, SelectedSynonymTuple syn_vector);
   std::string ParseWithClauseParameter(string parameter);
   std::string GetRegexMatch(const string &clause, const regex &rgx);
 };

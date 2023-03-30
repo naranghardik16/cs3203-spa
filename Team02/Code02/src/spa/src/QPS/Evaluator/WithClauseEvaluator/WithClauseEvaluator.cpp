@@ -6,8 +6,8 @@ Synonym  WithClauseEvaluator::ProcessArgumentForEvaluation(std::string arg, Map 
     // want r instead of r.stmt# for e.g. since stmt# is trivial
     return QueryUtil::AdjustSynonymWithTrivialAttrRefValue(arg, declaration_map);
   } else if (QueryUtil::IsQuoted(arg)) {
-    // IDENT case -- will directly create a result with this value so we want to store "x" in the table and not ""x""
-    return QueryUtil::GetIdent(arg);
+    // IDENT case -- will directly create a result with this value, so we want to store "x" in the table and not ""x""
+    return QueryUtil::RemoveQuotations(arg);
   } else {
     // int or synonym case
     return arg;
@@ -19,7 +19,7 @@ bool WithClauseEvaluator::EvaluateBooleanConstraint() {
   return first_arg_ == second_arg_;
 }
 
-std::shared_ptr<Result> WithClauseEvaluator::HandleOneAttrRefCase(Synonym attr_ref_syn, ResultTable filter_table) {
+std::shared_ptr<Result> WithClauseEvaluator::HandleOneAttrRefCase(const Synonym& attr_ref_syn, const ResultTable& filter_table) {
   // Handles case of e.g. s.stmt# = 5
   ResultHeader header;
   auto evaluation_result = DesignEntityGetter::EvaluateBasicSelect(attr_ref_syn, pkb_, declaration_map_);
@@ -40,7 +40,7 @@ std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause() {
   ResultHeader header;
   ResultTable table;
 
-  // to be non boolean, there must be at least one attr-ref
+  // to be non-boolean, there must be at least one attr-ref
   if (is_first_arg_a_type_of_attr_ref && is_second_arg_a_type_of_attr_ref) {
     auto result =
         DesignEntityGetter::GetIntersectionOfTwoAttr(first_arg_, second_arg_, pkb_, declaration_map_);
