@@ -17,7 +17,8 @@ bool UsesPClauseEvaluator::HandleFirstValueSecondWildcard() {
 
 bool UsesPClauseEvaluator::HandleBothValue() {
   // Example query: Uses("Main", "x")
-  return pkb_->HasUsesProcedureRelationship(QueryUtil::RemoveQuotations(first_arg_), QueryUtil::RemoveQuotations(second_arg_));
+  return pkb_->HasUsesProcedureRelationship(QueryUtil::RemoveQuotations(first_arg_),
+                                            QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable UsesPClauseEvaluator::HandleBothSynonym() {
@@ -32,7 +33,8 @@ ResultTable UsesPClauseEvaluator::HandleFirstSynonymSecondWildcard() {
 
 ResultTable UsesPClauseEvaluator::HandleFirstSynonymSecondValue() {
   // Example query: Uses(p, "x")
-  return ConvertSetToResultTableFormat(pkb_->GetProceduresUsesVariable(QueryUtil::RemoveQuotations(second_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetProceduresUsesVariable(
+      QueryUtil::RemoveQuotations(second_arg_)));
 }
 
 ResultTable UsesPClauseEvaluator::HandleFirstWildcardSecondSynonym() {
@@ -42,5 +44,6 @@ ResultTable UsesPClauseEvaluator::HandleFirstWildcardSecondSynonym() {
 
 ResultTable UsesPClauseEvaluator::HandleFirstValueSecondSynonym() {
   // Example query: Uses("Main", v)
-  return ConvertSetToResultTableFormat(pkb_->GetVariablesUsedByProcedure(QueryUtil::RemoveQuotations(first_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetVariablesUsedByProcedure(
+      QueryUtil::RemoveQuotations(first_arg_)));
 }

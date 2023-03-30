@@ -100,7 +100,8 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   std::string relationship = string_util::Trim(clause.substr(0,
                                                              opening_bracket_index));
   std::string parameters_substr = string_util::Trim(clause.substr(opening_bracket_index+1,
-                                                                  closing_bracket_index-(opening_bracket_index+1)));
+                                                                  closing_bracket_index-
+                                                                  (opening_bracket_index+1)));
 
   auto parameters = ParseParameters(parameters_substr);
 
@@ -243,7 +244,8 @@ SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(const std::string& t
   return synonym_vector;
 }
 
-std::string QpsTokenizer::GetSubclauseString(const std::string& clause_with_select_removed, SelectedSynonymTuple syn_vector) {
+std::string QpsTokenizer::GetSubclauseString(const std::string& clause_with_select_removed,
+                                             SelectedSynonymTuple syn_vector) {
   std::string first_word = string_util::GetFirstWord(clause_with_select_removed);
   std::string remaining_clause;
   size_t index_start;

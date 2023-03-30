@@ -38,7 +38,8 @@ ResultTable CallsClauseEvaluator::HandleFirstSynonymSecondWildcard() {
 
 ResultTable CallsClauseEvaluator::HandleFirstSynonymSecondValue() {
   // Example query: Calls(p, “first”)
-  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCallee(QueryUtil::RemoveQuotations(second_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCallee(
+      QueryUtil::RemoveQuotations(second_arg_)));
 }
 
 ResultTable CallsClauseEvaluator::HandleFirstWildcardSecondSynonym() {
@@ -48,5 +49,6 @@ ResultTable CallsClauseEvaluator::HandleFirstWildcardSecondSynonym() {
 
 ResultTable CallsClauseEvaluator::HandleFirstValueSecondSynonym() {
   // Example query: Calls(”first”, p)
-  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCaller(QueryUtil::RemoveQuotations(first_arg_)));
+  return ConvertSetToResultTableFormat(pkb_->GetAllProceduresWithSpecifiedCaller(
+      QueryUtil::RemoveQuotations(first_arg_)));
 }

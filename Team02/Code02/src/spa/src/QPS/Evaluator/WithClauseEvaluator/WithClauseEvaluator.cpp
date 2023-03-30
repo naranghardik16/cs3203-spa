@@ -19,10 +19,12 @@ bool WithClauseEvaluator::EvaluateBooleanConstraint() {
   return first_arg_ == second_arg_;
 }
 
-std::shared_ptr<Result> WithClauseEvaluator::HandleOneAttrRefCase(const Synonym& attr_ref_syn, const ResultTable& filter_table) {
+std::shared_ptr<Result> WithClauseEvaluator::HandleOneAttrRefCase(const Synonym& attr_ref_syn,
+                                                                  const ResultTable& filter_table) {
   // Handles case of e.g. s.stmt# = 5
   ResultHeader header;
-  auto evaluation_result = DesignEntityGetter::EvaluateBasicSelect(attr_ref_syn, pkb_, declaration_map_);
+  auto evaluation_result = DesignEntityGetter::EvaluateBasicSelect(attr_ref_syn, pkb_,
+                                                                   declaration_map_);
   header[attr_ref_syn] = static_cast<int>(header.size());
   std::shared_ptr<Result> filter_result = std::make_shared<Result>(header, filter_table);
   evaluation_result->JoinResult(filter_result);
@@ -43,7 +45,8 @@ std::shared_ptr<Result> WithClauseEvaluator::EvaluateClause() {
   // to be non-boolean, there must be at least one attr-ref
   if (is_first_arg_a_type_of_attr_ref && is_second_arg_a_type_of_attr_ref) {
     auto result =
-        DesignEntityGetter::GetIntersectionOfTwoAttr(first_arg_, second_arg_, pkb_, declaration_map_);
+        DesignEntityGetter::GetIntersectionOfTwoAttr(first_arg_, second_arg_, pkb_,
+                                                     declaration_map_);
     return result;
   } else if (is_first_arg_a_type_of_attr_ref) {
     return HandleOneAttrRefCase(first_arg_, {{second_arg_}});
