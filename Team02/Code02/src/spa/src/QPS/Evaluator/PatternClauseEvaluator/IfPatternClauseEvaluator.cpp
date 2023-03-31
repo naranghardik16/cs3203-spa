@@ -12,26 +12,16 @@ std::shared_ptr<Result> IfPatternClauseEvaluator::EvaluateClause() {
   bool is_arg_1_synonym = declaration_map_.count(first_arg_);
   bool is_arg_1_wildcard = QueryUtil::IsWildcard(first_arg_);
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
   if (is_arg_1_synonym) {
     // e.g. if(s, _, _)
     header[first_arg_] = static_cast<int>(header.size());
-
-    pair_constraint = pkb_->GetIfConditionVariablePair();
+    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pkb_->GetIfConditionVariablePair());
   } else if (is_arg_1_wildcard) {
     // e.g. if(_,_,_)
-    single_constraint = pkb_->GetIfThatHasConditionVariable();
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetIfThatHasConditionVariable());
   } else {
-    single_constraint = pkb_->GetIfWithConditionVariable(QueryUtil::GetIdent(first_arg_));
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetIfWithConditionVariable(
+        QueryUtil::RemoveQuotations(first_arg_)));
   }
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);

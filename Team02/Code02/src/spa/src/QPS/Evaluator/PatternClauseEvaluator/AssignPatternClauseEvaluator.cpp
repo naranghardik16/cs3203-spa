@@ -15,25 +15,16 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause() {
   bool is_arg_1_synonym = declaration_map_.count(first_arg_);
   bool is_arg_1_wildcard = QueryUtil::IsWildcard(first_arg_);
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
   if (is_arg_1_synonym) {
     header[first_arg_] = static_cast<int>(header.size());
 
-    pair_constraint = pkb_->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
+    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pkb_->GetModifiesStatementVariablePairs
+        (StatementType::ASSIGN));
   } else if (is_arg_1_wildcard) {
-    single_constraint = pkb_->GetAssignStatements();
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
   } else {
-    single_constraint = pkb_->GetStatementsModifiesVariable(QueryUtil::GetIdent(first_arg_),
-                                                           StatementType::ASSIGN);
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
+    table = ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(
+        QueryUtil::RemoveQuotations(first_arg_), StatementType::ASSIGN));
   }
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);

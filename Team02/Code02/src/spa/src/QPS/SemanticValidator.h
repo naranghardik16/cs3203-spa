@@ -19,7 +19,7 @@ class SemanticValidator {
   void ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidatePatternClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
   void ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax> clause);
-  bool HasSemanticError();
+  bool HasSemanticError() const;
   void SetHasSemanticError(bool has_semantic_error);
   void SetDeclaration(const Map &declaration);
 

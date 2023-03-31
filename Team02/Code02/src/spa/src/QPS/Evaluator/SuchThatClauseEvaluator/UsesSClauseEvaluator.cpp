@@ -18,7 +18,7 @@ bool UsesSClauseEvaluator::HandleFirstValueSecondWildcard() {
 bool UsesSClauseEvaluator::HandleBothValue() {
   // Example query: uses(5, "count")
   return pkb_->HasUsesStatementRelationship(first_arg_,
-                                           QueryUtil::GetIdent(second_arg_));
+                                            QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable UsesSClauseEvaluator::HandleBothSynonym() {
@@ -43,7 +43,7 @@ ResultTable UsesSClauseEvaluator::HandleFirstSynonymSecondValue() {
   }
   // Example query: Uses(s, "x")
   return ConvertSetToResultTableFormat(pkb_->GetStatementsUsesVariable(arg_1_type_,
-                                                                       QueryUtil::GetIdent(second_arg_)));
+                                                                       QueryUtil::RemoveQuotations(second_arg_)));
 }
 
 ResultTable UsesSClauseEvaluator::HandleFirstWildcardSecondSynonym() {

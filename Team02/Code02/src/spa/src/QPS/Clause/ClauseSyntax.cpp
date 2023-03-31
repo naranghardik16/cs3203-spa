@@ -1,6 +1,6 @@
 #include "ClauseSyntax.h"
 
-ClauseSyntax::ClauseSyntax(SyntaxPair pair) {
+ClauseSyntax::ClauseSyntax(const SyntaxPair& pair) {
   pair_ = pair;
   expr_ = nullptr;
 }
@@ -12,13 +12,13 @@ int ClauseSyntax::GetSynonymCount() {
 int ClauseSyntax::GetArgumentScore(Map &declaration_map) {
   int score  = 0;
   auto score_map = pql_constants::kSynTypeScoreMap;
-  for (auto syn:syn_) {
+  for (const auto& syn:syn_) {
     score += score_map[declaration_map[syn]];
   }
   return score;
 }
 
-std::string ClauseSyntax::GetEntity() {
+std::string ClauseSyntax::GetEntity() const {
   return pair_.first;
 }
 
@@ -38,7 +38,7 @@ SyntaxPair ClauseSyntax::GetSyntaxPair() {
   return pair_;
 }
 
-ParameterVector ClauseSyntax::GetParameters() {
+ParameterVector ClauseSyntax::GetParameters() const {
   return pair_.second;
 }
 

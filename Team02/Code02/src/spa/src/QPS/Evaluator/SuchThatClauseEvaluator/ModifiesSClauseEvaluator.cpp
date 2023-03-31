@@ -18,7 +18,7 @@ bool ModifiesSClauseEvaluator::HandleFirstValueSecondWildcard() {
 bool ModifiesSClauseEvaluator::HandleBothValue() {
   // Example query: Modifies(5, "count")
   return pkb_->HasModifiesStatementRelationship(first_arg_,
-                                            QueryUtil::GetIdent(second_arg_));
+                                                QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable ModifiesSClauseEvaluator::HandleBothSynonym() {
@@ -42,7 +42,7 @@ ResultTable ModifiesSClauseEvaluator::HandleFirstSynonymSecondValue() {
     return {};
   }
   // Example query: Modifies(a,”count”)
-  return ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(QueryUtil::GetIdent(second_arg_),
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(QueryUtil::RemoveQuotations(second_arg_),
                                                                            arg_1_type_));
 }
 

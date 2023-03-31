@@ -193,7 +193,7 @@ class QueryUtil {
    * @param quoted_ident Quoted IDENT
    * @return The ident with quotations removed.
    */
-  static std::string GetIdent(const std::string &quoted_ident);
+  static std::string RemoveQuotations(const std::string &quoted_ident);
 
   /**
    * Gets the statement type based on the design entity assigned to the synonym for accessing data in Pkb

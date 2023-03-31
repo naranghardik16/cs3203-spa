@@ -1499,8 +1499,7 @@ TEST_CASE("Testing Affects") {
     // need to check this
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "8") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "10") == true);
-    // need to check this
-    REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == false);
+    REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "4") == true);
     // need to check this
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "8") == false);
