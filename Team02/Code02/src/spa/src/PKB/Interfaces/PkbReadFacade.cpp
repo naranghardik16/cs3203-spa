@@ -643,7 +643,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
       if (visited.count(current) > 0) {
         if (current == a) result.insert(std::make_pair(a, current));
         continue;
-      };
+      }
 
       if (this->GetIfStatements().count(current) > 0 ||
           this->GetWhileStatements().count(current) > 0) {
