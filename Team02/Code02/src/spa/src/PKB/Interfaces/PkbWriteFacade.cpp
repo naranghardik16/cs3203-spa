@@ -22,11 +22,10 @@ void PkbWriteFacade::AddStatementUsingVariable(const StatementNumber &statement_
                                                const Variable &variable) const {
   this->pkb.uses_store_->AddStatementUsesVariable(statement_number, variable);
 
-  // if, while, assign, print
-//  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-//      statement_number)) {
-//    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
-//  }
+  for (const auto &p : this->pkb.parent_store_->GetAncestors(
+      statement_number)) {
+    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
+  }
 }
 
 void PkbWriteFacade::AddStatementOfAType(const StatementNumber &statement_number,
@@ -44,11 +43,10 @@ void PkbWriteFacade::AddStatementModifyingVariable(const StatementNumber &statem
                                                    const Variable &variable) const {
   this->pkb.modifies_store_->AddStatementModifiesVariable(statement_number, variable);
 
-  //assign, read
-//  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-//      statement_number)) {
-//    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
-//  }
+  for (const auto &p : this->pkb.parent_store_->GetAncestors(
+      statement_number)) {
+    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
+  }
 }
 
 void PkbWriteFacade::AddProcedureModifyingVariable(const Procedure &procedure,
