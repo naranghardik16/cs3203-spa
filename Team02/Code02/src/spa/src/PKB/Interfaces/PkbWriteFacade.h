@@ -104,6 +104,8 @@ class PkbWriteFacade {
   void AddFollowsRelation(const StatementNumber &statement_number_1,
                           const StatementNumber &statement_number_2) const;
 
+  void AddFollowsStarRelation() const;
+
   /**
    * Adds a parent relationship between two statements into the Pkb.
    *
@@ -112,6 +114,8 @@ class PkbWriteFacade {
    */
   void AddParentRelation(const StatementNumber &statement_number_1,
                          const StatementNumber &statement_number_2) const;
+
+  void AddParentStarRelation() const;
 
   /**
    * Adds an assignment statement and its expression into the Pkb.
