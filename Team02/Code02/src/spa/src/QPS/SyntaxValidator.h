@@ -7,7 +7,6 @@
 #include "ValidationHandler/PatternHandler.h"
 #include "QPS/Clause/ClauseSyntax.h"
 #include "QPS/ValidationHandler/WithHandler.h"
-#include "QPS/ValidationHandler/AffectsHandler.h"
 #include "QPS/ValidationHandler/CallsHandler.h"
 
 class SyntaxValidator{

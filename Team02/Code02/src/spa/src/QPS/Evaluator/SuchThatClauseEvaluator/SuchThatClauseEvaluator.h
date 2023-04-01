@@ -28,6 +28,7 @@ class SuchThatClauseEvaluator : public ClauseEvaluator {
   bool EvaluateBooleanConstraint() override;
   std::shared_ptr<Result> EvaluateClause() override;
 
+  virtual bool CheckIfReturnEmpty();
   virtual bool HandleBothWildcard() = 0;
   virtual bool HandleFirstWildcardSecondValue() = 0;
   virtual bool HandleFirstValueSecondWildcard() = 0;
