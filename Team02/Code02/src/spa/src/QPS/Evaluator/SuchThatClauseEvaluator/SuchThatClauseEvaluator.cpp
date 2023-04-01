@@ -1,6 +1,10 @@
 #include "SuchThatClauseEvaluator.h"
 
 bool SuchThatClauseEvaluator::EvaluateBooleanConstraint() {
+  if (CheckIfReturnEmpty()) {
+    return false;
+  }
+
   bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
   bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
 
@@ -36,6 +40,11 @@ std::shared_ptr<Result> SuchThatClauseEvaluator::EvaluateClause() {
     header[second_arg_] = static_cast<int>(header.size());
   }
 
+  if (CheckIfReturnEmpty()) {
+    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
+    return result_ptr;
+  }
+
   if (is_first_arg_synonym && is_second_arg_synonym) {
     // Case: relRef(syn, syn)
     table = HandleBothSynonym();
@@ -55,4 +64,8 @@ std::shared_ptr<Result> SuchThatClauseEvaluator::EvaluateClause() {
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
   return result_ptr;
+}
+
+bool SuchThatClauseEvaluator::CheckIfReturnEmpty() {
+  return false;
 }

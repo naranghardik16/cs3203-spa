@@ -1,5 +1,15 @@
 #include "AffectsStarClauseEvaluator.h"
 
+bool AffectsStarClauseEvaluator::CheckIfReturnEmpty() {
+  bool is_first_arg_an_invalid_syn = QueryUtil::IsSynonym(first_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, first_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
+  bool is_second_arg_an_invalid_syn = QueryUtil::IsSynonym(second_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, second_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, second_arg_);
+  return is_first_arg_an_invalid_syn || is_second_arg_an_invalid_syn;
+}
+
 bool AffectsStarClauseEvaluator::HandleBothWildcard() {
   // Example query: Affects*(_, _)
   return pkb_->IsThereAnyAffectsStarRelationship();
@@ -21,9 +31,6 @@ bool AffectsStarClauseEvaluator::HandleBothValue() {
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleBothSynonym() {
-  if (!is_first_arg_a_valid_syn_ || !is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(a, a1)
   PkbCommunicationTypes::PairConstraintSet pair_constraint = pkb_->GetAffectsStarPairs();
 
@@ -34,33 +41,21 @@ ResultTable AffectsStarClauseEvaluator::HandleBothSynonym() {
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstSynonymSecondWildcard() {
-  if (!is_first_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects*(a, _)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAffectStar());
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstSynonymSecondValue() {
-  if (!is_first_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects*(a,6)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffectingStar(second_arg_));
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstWildcardSecondSynonym() {
-  if (!is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects*(_,a)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAreAffectedStar());
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstValueSecondSynonym() {
-  if (!is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects*(6, a)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffectedStarBy(first_arg_));
 }

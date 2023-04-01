@@ -1,5 +1,15 @@
 #include "AffectsClauseEvaluator.h"
 
+bool AffectsClauseEvaluator::CheckIfReturnEmpty() {
+  bool is_first_arg_an_invalid_syn = QueryUtil::IsSynonym(first_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, first_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
+  bool is_second_arg_an_invalid_syn = QueryUtil::IsSynonym(second_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, second_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, second_arg_);
+  return is_first_arg_an_invalid_syn || is_second_arg_an_invalid_syn;
+}
+
 bool AffectsClauseEvaluator::HandleBothWildcard() {
   // Example query: Affects(_, _)
   return pkb_->IsThereAnyAffectsRelationship();
@@ -21,9 +31,6 @@ bool AffectsClauseEvaluator::HandleBothValue() {
 }
 
 ResultTable AffectsClauseEvaluator::HandleBothSynonym() {
-  if (!is_first_arg_a_valid_syn_ || !is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(a, a1)
   PkbCommunicationTypes::PairConstraintSet pair_constraint = pkb_->GetAffectsPairs();
 
@@ -34,33 +41,21 @@ ResultTable AffectsClauseEvaluator::HandleBothSynonym() {
 }
 
 ResultTable AffectsClauseEvaluator::HandleFirstSynonymSecondWildcard() {
-  if (!is_first_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(a, _)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAffect());
 }
 
 ResultTable AffectsClauseEvaluator::HandleFirstSynonymSecondValue() {
-  if (!is_first_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(a,6)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffecting(second_arg_));
 }
 
 ResultTable AffectsClauseEvaluator::HandleFirstWildcardSecondSynonym() {
-  if (!is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(_,a)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAreAffected());
 }
 
 ResultTable AffectsClauseEvaluator::HandleFirstValueSecondSynonym() {
-  if (!is_second_arg_a_valid_syn_) {
-    return {};
-  }
   // Example query: Affects(6, a)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffectedBy(first_arg_));
 }
