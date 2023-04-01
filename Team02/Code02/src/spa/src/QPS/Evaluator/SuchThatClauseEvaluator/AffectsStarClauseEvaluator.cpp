@@ -21,6 +21,9 @@ bool AffectsStarClauseEvaluator::HandleBothValue() {
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleBothSynonym() {
+  if (!is_first_arg_a_valid_syn_ || !is_second_arg_a_valid_syn_) {
+    return {};
+  }
   // Example query: Affects(a, a1)
   PkbCommunicationTypes::PairConstraintSet pair_constraint = pkb_->GetAffectsStarPairs();
 
@@ -31,21 +34,33 @@ ResultTable AffectsStarClauseEvaluator::HandleBothSynonym() {
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstSynonymSecondWildcard() {
+  if (!is_first_arg_a_valid_syn_) {
+    return {};
+  }
   // Example query: Affects*(a, _)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAffectStar());
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstSynonymSecondValue() {
+  if (!is_first_arg_a_valid_syn_) {
+    return {};
+  }
   // Example query: Affects*(a,6)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffectingStar(second_arg_));
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstWildcardSecondSynonym() {
+  if (!is_second_arg_a_valid_syn_) {
+    return {};
+  }
   // Example query: Affects*(_,a)
   return ConvertSetToResultTableFormat(pkb_->GetAllAssignsThatAreAffectedStar());
 }
 
 ResultTable AffectsStarClauseEvaluator::HandleFirstValueSecondSynonym() {
+  if (!is_second_arg_a_valid_syn_) {
+    return {};
+  }
   // Example query: Affects*(6, a)
   return ConvertSetToResultTableFormat(pkb_->GetAssignsAffectedStarBy(first_arg_));
 }
