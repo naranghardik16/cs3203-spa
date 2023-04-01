@@ -22,10 +22,11 @@ void PkbWriteFacade::AddStatementUsingVariable(const StatementNumber &statement_
                                                const Variable &variable) const {
   this->pkb.uses_store_->AddStatementUsesVariable(statement_number, variable);
 
-  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-      statement_number)) {
-    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
-  }
+  // if, while, assign, print
+//  for (const auto &p : this->pkb.parent_store_->GetAncestors(
+//      statement_number)) {
+//    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
+//  }
 }
 
 void PkbWriteFacade::AddStatementOfAType(const StatementNumber &statement_number,
@@ -43,10 +44,11 @@ void PkbWriteFacade::AddStatementModifyingVariable(const StatementNumber &statem
                                                    const Variable &variable) const {
   this->pkb.modifies_store_->AddStatementModifiesVariable(statement_number, variable);
 
-  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-      statement_number)) {
-    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
-  }
+  //assign, read
+//  for (const auto &p : this->pkb.parent_store_->GetAncestors(
+//      statement_number)) {
+//    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
+//  }
 }
 
 void PkbWriteFacade::AddProcedureModifyingVariable(const Procedure &procedure,
@@ -70,6 +72,18 @@ void PkbWriteFacade::AddParentRelation(const StatementNumber &statement_number_1
 
 void PkbWriteFacade::AddParentStarRelation() const {
   this->pkb.parent_store_->AddParentStarRelation();
+
+  for (const auto &p : this->pkb.modifies_store_->GetStatementVariablePairs()) {
+    for (const auto &s : this->pkb.parent_store_->GetAncestors(p.first)) {
+      this->pkb.modifies_store_->AddStatementModifiesVariable(s, p.second);
+    }
+  }
+
+  for (const auto &p : this->pkb.uses_store_->GetStatementVariablePairs()) {
+    for (const auto &s : this->pkb.parent_store_->GetAncestors(p.first)) {
+      this->pkb.uses_store_->AddStatementUsesVariable(s, p.second);
+    }
+  }
 }
 
 void PkbWriteFacade::AddAssignmentStatementAndExpression(const StatementNumber &statement_number,

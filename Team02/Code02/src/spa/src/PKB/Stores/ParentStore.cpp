@@ -7,6 +7,19 @@ ParentStore::~ParentStore() = default;
 void ParentStore::AddParentRelation(const StatementNumber &first_statement,
                                     const StatementNumber &second_statement) {
   this->parent_relation_store_.insert(first_statement, second_statement);
+//  this->parent_star_relation_store_.insert(first_statement, second_statement);
+//
+//  StatementNumberSet parents = this->parent_star_relation_store_.retrieveFromValue(first_statement);
+//
+//  while (!parents.empty()) {
+//    StatementNumberSet updated_parents;
+//    for (const auto& p : parents) {
+//      StatementNumberSet grand_parents = this->parent_star_relation_store_.retrieveFromValue(p);
+//      updated_parents.insert(grand_parents.begin(), grand_parents.end());
+//      this->parent_star_relation_store_.insert(p, second_statement);
+//    }
+//    parents = updated_parents;
+//  }
 }
 
 void ParentStore::AddParentStarRelation() {
@@ -20,7 +33,8 @@ void ParentStore::AddParentStarRelation() {
       s.pop();
 
       for (const auto &c : this->parent_relation_store_.retrieveFromKey(current)) {
-        if (k == c || visited.count(std::make_pair(k, c)) > 0) continue;
+        if (visited.count(std::make_pair(k, c)) > 0) continue;
+        if (k == c) continue;
         this->parent_star_relation_store_.insert(k, c);
         s.push(c);
         visited.insert(std::make_pair(k, c));
