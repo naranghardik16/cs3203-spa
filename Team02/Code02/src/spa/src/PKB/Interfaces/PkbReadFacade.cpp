@@ -605,10 +605,10 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffect() {
 
 bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_number,
                                            const StatementNumber &statement_number_being_affected) {
-  for (const auto &p : this->GetAffectsPairs()) {
-    if (p.first == statement_number && p.second == statement_number_being_affected) return true;
-  }
-  return false;
+  return std::any_of(this->GetAffectsPairs().begin(), this->GetAffectsPairs().end(), [&](const Pair &p) {
+    return p.first == statement_number
+        && p.second == statement_number_being_affected;
+  });
 }
 
 bool PkbReadFacade::IsThereAnyAffectsRelationship() {
