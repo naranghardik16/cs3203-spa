@@ -547,8 +547,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
       auto current = s.top();
       s.pop();
       if (visited.count(current) > 0) {
-        if (current == a && &&
-        this->HasUsesStatementRelationship(current, v)) result.insert(std::make_pair(a, current));
+        if (current == a && this->HasUsesStatementRelationship(current, v)) result.insert(std::make_pair(a, current));
         continue;
       }
 
