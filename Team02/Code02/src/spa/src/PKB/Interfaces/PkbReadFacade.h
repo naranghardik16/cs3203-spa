@@ -34,7 +34,7 @@ class PkbReadFacade {
    *
    * @param pkb - Instance of Pkb.
    */
-  PkbReadFacade(Pkb &pkb);
+  explicit PkbReadFacade(Pkb &pkb);
 
   /**
    * Destructor for Pkb's read facade.
