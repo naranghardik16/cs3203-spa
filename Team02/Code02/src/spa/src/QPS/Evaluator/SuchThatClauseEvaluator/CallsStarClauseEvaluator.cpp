@@ -1,5 +1,9 @@
 #include "CallsStarClauseEvaluator.h"
 
+bool CallsStarClauseEvaluator::CheckIfReturnEmpty() {
+  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+}
+
 bool CallsStarClauseEvaluator::HandleBothWildcard() {
   // Example query: Calls*(_, _)
   return pkb_->IsThereAnyCallsStarRelationship();
@@ -17,17 +21,11 @@ bool CallsStarClauseEvaluator::HandleFirstValueSecondWildcard() {
 
 bool CallsStarClauseEvaluator::HandleBothValue() {
   // Example query: Calls*("First", "Second")
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   return pkb_->HasCallsStarRelation(QueryUtil::RemoveQuotations(first_arg_), QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable CallsStarClauseEvaluator::HandleBothSynonym() {
   // Example query: Calls*(p,q)
-  if (is_same_syn_or_value_pairs_) {
-    return {};
-  }
   return ConvertPairSetToResultTableFormat(pkb_->GetAllCallsStarPairs());
 }
 

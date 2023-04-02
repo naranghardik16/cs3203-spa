@@ -1,5 +1,11 @@
 #include "ModifiesSClauseEvaluator.h"
 
+bool ModifiesSClauseEvaluator::CheckIfReturnEmpty() {
+  bool is_first_arg_a_type_of_print_synonym = QueryUtil::IsSynonym(first_arg_)
+      && QueryUtil::IsPrintSynonym(declaration_map_, first_arg_);
+  return is_first_arg_a_type_of_print_synonym;
+}
+
 bool ModifiesSClauseEvaluator::HandleBothWildcard() {
   // Not possible
   return false;
@@ -22,25 +28,16 @@ bool ModifiesSClauseEvaluator::HandleBothValue() {
 }
 
 ResultTable ModifiesSClauseEvaluator::HandleBothSynonym() {
-  if (is_first_arg_a_type_of_print_synonym_) {
-    return {};
-  }
   // Example query: Modifies(a,v)
   return ConvertPairSetToResultTableFormat(pkb_->GetModifiesStatementVariablePairs(arg_1_type_));
 }
 
 ResultTable ModifiesSClauseEvaluator::HandleFirstSynonymSecondWildcard() {
-  if (is_first_arg_a_type_of_print_synonym_) {
-    return {};
-  }
   // Example query: Modifies(s, _)
   return ConvertSetToResultTableFormat(pkb_->GetStatementsThatModify(arg_1_type_));
 }
 
 ResultTable ModifiesSClauseEvaluator::HandleFirstSynonymSecondValue() {
-  if (is_first_arg_a_type_of_print_synonym_) {
-    return {};
-  }
   // Example query: Modifies(a,”count”)
   return ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(QueryUtil::RemoveQuotations(second_arg_),
                                                                            arg_1_type_));

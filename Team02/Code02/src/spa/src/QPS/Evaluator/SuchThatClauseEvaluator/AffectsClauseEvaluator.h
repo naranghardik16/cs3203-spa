@@ -17,6 +17,7 @@ class AffectsClauseEvaluator : public SuchThatClauseEvaluator {
     is_same_syn_or_value_pairs_ = first_arg_ == second_arg_;
   }
 
+  bool CheckIfReturnEmpty() override;
   bool HandleBothWildcard() override;
   bool HandleFirstWildcardSecondValue() override;
   bool HandleFirstValueSecondWildcard() override;

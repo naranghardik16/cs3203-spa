@@ -1,5 +1,9 @@
 #include "CallsClauseEvaluator.h"
 
+bool CallsClauseEvaluator::CheckIfReturnEmpty() {
+  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+}
+
 bool CallsClauseEvaluator::HandleBothWildcard() {
   // Example query: Calls(_, _)
   return pkb_->IsThereAnyCallsRelationship();
@@ -17,17 +21,11 @@ bool CallsClauseEvaluator::HandleFirstValueSecondWildcard() {
 
 bool CallsClauseEvaluator::HandleBothValue() {
   // Example query: Calls("First", "Second")
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   return pkb_->HasCallsRelation(QueryUtil::RemoveQuotations(first_arg_), QueryUtil::RemoveQuotations(second_arg_));
 }
 
 ResultTable CallsClauseEvaluator::HandleBothSynonym() {
   // Example query: Calls(p,q)
-  if (is_same_syn_or_value_pairs_) {
-    return {};
-  }
   return ConvertPairSetToResultTableFormat(pkb_->GetAllCallsPairs());
 }
 
