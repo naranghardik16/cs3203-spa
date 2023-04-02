@@ -2,25 +2,24 @@
 
 #include <utility>
 
-#include "QPS/Evaluator/ClauseEvaluator.h"
+#include "QPS/Evaluator/PatternClauseEvaluator/PatternClauseEvaluator.h"
 #include "QPS/Util/QueryUtil.h"
 #include "General/LexicalRuleValidator.h"
 
-class WhilePatternClauseEvaluator : public ClauseEvaluator {
- private:
-  std::string syn_while_;
-  std::string first_arg_;
-  std::string second_arg_;
-
+class WhilePatternClauseEvaluator : public PatternClauseEvaluator {
  public:
   WhilePatternClauseEvaluator(Map d,
                               SyntaxPair syntax_pair,
                               std::shared_ptr<PkbReadFacade> pkb
-                              ) : ClauseEvaluator(std::move(d), std::move(pkb)) {
-      syn_while_ = syntax_pair.first;
-      first_arg_ =  syntax_pair.second[0];
-      second_arg_ = syntax_pair.second[1];
+                              ) : PatternClauseEvaluator(std::move(d), std::move(syntax_pair),
+                                                         std::move(pkb),nullptr) {
+
   }
-  std::shared_ptr<Result> EvaluateClause() override;
-  bool EvaluateBooleanConstraint() override;
+
+  ResultTable HandleFirstArgSyn() override;
+  ResultTable HandleFirstArgWildcard() override;
+  ResultTable HandleFirstArgVariable() override;
+  std::shared_ptr<Result> HandlePartialMatch(const std::shared_ptr<Result>& r) override;
+  std::shared_ptr<Result> HandleExactMatch(const std::shared_ptr<Result>& r) override;
+
 };
