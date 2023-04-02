@@ -1,6 +1,7 @@
 import os
 import glob
 import sys
+import time
 from collections import Counter
 
 """
@@ -147,6 +148,7 @@ class Runner:
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     runner = Runner()
     runner.Execute("Milestone1", True)
     runner.Execute("Milestone2", True)
@@ -155,7 +157,9 @@ if __name__ == "__main__":
     print(f"Test statistics:")
     print(f"Total no. of passed test cases: {runner.TOTAL_PASSED_TESTS}")
     print(f"Total no. of failed test cases: {runner.TOTAL_FAILED_TESTS}")
-    print(f"Total no. of test cases: {runner.TOTAL_TESTS}")
+    print(f"Total no. of test cases: {runner.TOTAL_TESTS}\n")
+
+    print(f"Total time taken: {time.time() - start_time:.4f} second(s)")
 
     if runner.TOTAL_FAILED_TESTS > 0:
         raise Exception("Not everything is passing!")
