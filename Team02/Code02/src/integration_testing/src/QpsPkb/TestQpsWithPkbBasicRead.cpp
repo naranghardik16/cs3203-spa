@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "core/model/Expression.h"
+#include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Pkb.h"
@@ -1127,5 +1128,457 @@ TEST_CASE("Integration testing for Next API - Complex") {
     REQUIRE(results == expected_results);
   }
 }
+
+TEST_CASE("Integration Testing for Affects API - Basic") {
+  std::shared_ptr<Pkb> pkb_ = std::make_shared<Pkb>();
+  std::shared_ptr<PkbReadFacade>
+      pkb_read_facade_ = std::make_shared<PkbReadFacade>(*pkb_);
+  std::shared_ptr<PkbWriteFacade>
+      pkb_write_facade_ = std::make_shared<PkbWriteFacade>(*pkb_);
+  typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+
+  ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+  std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+  typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+  std::shared_ptr<CfgNode> node1 = std::make_shared<CfgNode>();
+  node1->AddStmt(1);
+  cfg->AddStmtCfg(1, node1);
+  node1->AddStmt(2);
+  cfg->AddStmtCfg(2, node1);
+
+  std::shared_ptr<CfgNode> node2 = std::make_shared<CfgNode>();
+  node2->AddStmt(3);
+  cfg->AddStmtCfg(3, node2);
+
+  std::shared_ptr<CfgNode> node3 = std::make_shared<CfgNode>();
+  node3->AddStmt(4);
+  cfg->AddStmtCfg(4, node3);
+  node3->AddStmt(5);
+  cfg->AddStmtCfg(5, node3);
+  node3->AddStmt(6);
+  cfg->AddStmtCfg(6, node3);
+
+  std::shared_ptr<CfgNode> node4 = std::make_shared<CfgNode>();
+  node4->AddStmt(7);
+  cfg->AddStmtCfg(7, node4);
+
+  std::shared_ptr<CfgNode> node5 = std::make_shared<CfgNode>();
+  node5->AddStmt(8);
+  cfg->AddStmtCfg(8, node5);
+
+  std::shared_ptr<CfgNode> node6 = std::make_shared<CfgNode>();
+  node6->AddStmt(9);
+  cfg->AddStmtCfg(9, node6);
+
+  std::shared_ptr<CfgNode> node7 = std::make_shared<CfgNode>();
+  node7->AddStmt(10);
+  cfg->AddStmtCfg(10, node7);
+  node7->AddStmt(11);
+  cfg->AddStmtCfg(11, node7);
+  node7->AddStmt(12);
+  cfg->AddStmtCfg(12, node7);
+
+  // 0
+  TokenList token_list_statement_1{
+      make_shared<IntegerToken>("0"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "1", egs->GetExpressionFromInput(
+          token_list_statement_1, "assign"));
+
+  // 5
+  TokenList token_list_statement_2{
+      make_shared<IntegerToken>("5"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("2", "i");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "2", egs->GetExpressionFromInput(
+          token_list_statement_2, "assign"));
+
+  // i > 0
+  TokenList token_list_statement_3{
+      make_shared<NameToken>("i"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<IntegerToken>("0"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("3", WHILE);
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "4", egs->GetExpressionFromInput(
+          token_list_statement_3, "while"));
+
+  // x + 2 * y
+  TokenList token_list_statement_4{
+      make_shared<NameToken>("x"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("2"),
+      make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("y"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "4", egs->GetExpressionFromInput(
+          token_list_statement_4, "assign"));
+
+  pkb_write_facade_->AddStatementOfAType("5", CALL);
+
+  // i - 1
+  TokenList token_list_statement_6{
+      make_shared<NameToken>("i"),
+      make_shared<ArithmeticOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("1"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("6", "i");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "6", egs->GetExpressionFromInput(
+          token_list_statement_6, "assign"));
+
+  // x > 1
+  TokenList token_list_statement_7{
+      make_shared<NameToken>("3"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<IntegerToken>("1"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("7", IF);
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "7", egs->GetExpressionFromInput(
+          token_list_statement_7, "if"));
+
+  // x + 1
+  TokenList token_list_statement_8{
+      make_shared<NameToken>("3"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("1"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("8", "x");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "8", egs->GetExpressionFromInput(
+          token_list_statement_8, "assign"));
+
+  // 1
+  TokenList token_list_statement_9{
+      make_shared<IntegerToken>("1"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("9", "z");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "9", egs->GetExpressionFromInput(
+          token_list_statement_9, "assign"));
+
+  // z + x + i
+  TokenList token_list_statement_10{
+      make_shared<NameToken>("z"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<NameToken>("x"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<NameToken>("i"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("10", "z");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "10", egs->GetExpressionFromInput(
+          token_list_statement_10, "assign"));
+
+  // z + 2
+  TokenList token_list_statement_11{
+      make_shared<NameToken>("z"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("2"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("11", "y");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "11", egs->GetExpressionFromInput(
+          token_list_statement_11, "assign"));
+
+  // x * y + z
+  TokenList token_list_statement_12{
+      make_shared<NameToken>("x"),
+      make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("y"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<NameToken>("z"),
+  };
+
+  pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+  pkb_write_facade_->AddStatementModifyingVariable("12", "x");
+  pkb_write_facade_->AddAssignmentStatementAndExpression(
+      "12", egs->GetExpressionFromInput(
+          token_list_statement_12, "assign"));
+
+  pkb_write_facade_->AddStatementModifyingVariable("5", "z");
+  pkb_write_facade_->AddStatementModifyingVariable("5", "v");
+
+  node1->AddTransition(true, node2);
+  node2->AddTransition(true, node3);
+  node2->AddTransition(false, node4);
+  node3->AddTransition(true, node2);
+  node4->AddTransition(true, node5);
+  node4->AddTransition(false, node6);
+  node5->AddTransition(true, node7);
+  node6->AddTransition(true, node7);
+
+  cfg->AddProcCfg("second", node1);
+  cfg->AddProcCfg("third", node3);
+  pkb_write_facade_->AddCfg(cfg);
+
+  SECTION("Affects(_, _) - is true") {
+    std::string query = "Select BOOLEAN such that Affects(_,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is true") {
+    std::string query = "Select BOOLEAN such that Affects(_,4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(_,1)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, _) - is true") {
+    std::string query = "Select BOOLEAN such that Affects(1,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, _) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(18,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- self modification e.g. x = x + 1") {
+    std::string query = "Select BOOLEAN such that Affects(6,6)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- affects an assign in while loop") {
+    std::string query = "Select BOOLEAN such that Affects(1,4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- valid control path through while loop") {
+    std::string query = "Select BOOLEAN such that Affects(1,8)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // check this - expected result should be true -> need to fix bug in affects
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- valid control path through if else") {
+    std::string query = "Select BOOLEAN such that Affects(1,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- valid control path through stmt that uses"
+          "but does not modify variable") {
+    std::string query = "Select BOOLEAN such that Affects(1,12)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- simple case (one assign directly after another") {
+    std::string query = "Select BOOLEAN such that Affects(9,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is true -- check if nested assigns can affect") {
+    std::string query = "Select BOOLEAN such that Affects(8,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- variable is read") {
+    std::string query = "Select BOOLEAN such that Affects(11,14)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- variable modified in if case and else case") {
+    std::string query = "Select BOOLEAN such that Affects(18,22)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- assigns are in different procedures") {
+    std::string query = "Select BOOLEAN such that Affects(2,17)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+    // check this -> confusion in affects queries
+  SECTION("Affects(INT, INT) - is true -- variable is modified in a call stmt (even when in if-else)") {
+    std::string query = "Select BOOLEAN such that Affects(2,6)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- affects does not hold for non-assign statements") {
+    std::string query = "Select BOOLEAN such that Affects(2,3)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- a latter stmt cannot affect a stmt before it") {
+    std::string query = "Select BOOLEAN such that Affects(6,2)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- simple case") {
+    std::string query = "Select BOOLEAN such that Affects(9,11)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- simple case") {
+    std::string query = "Select BOOLEAN such that Affects(9,12)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- compare between unrelated assigns") {
+    std::string query = "Select BOOLEAN such that Affects(2,4)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected result is FALSE
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(INT, INT) - is false -- assigns with no control path to each other") {
+    std::string query = "Select BOOLEAN such that Affects(20,21)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(_,14)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects(_,9)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(ASSIGN-SYN, _)") {
+    std::string query = "assign a; Select a such that Affects(_,a)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be "4", "6", "8", "10", "11", "12"
+    std::list<std::string> expected_results{"10", "11", "12", "4", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects(_, ASSIGN-SYN)") {
+    std::string query = "assign a; Select a such that Affects(a,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be 1", "4", "8", "2", "6", "9", "10", "11"
+    std::list<std::string> expected_results{"1", "10", "11", "2", "4", "6", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+}
+
+
 
 
