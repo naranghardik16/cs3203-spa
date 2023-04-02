@@ -2,11 +2,11 @@
 
 #include <memory>
 
+#include "core/model/Expression.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "PKB/Pkb.h"
 #include "QPS/Qps.h"
-#include "PKB/Stores/CallsStore.h"
 
 TEST_CASE("Check if QPS works with Pkb for basic operations") {
   typedef std::shared_ptr<Pkb> PkbPtr;

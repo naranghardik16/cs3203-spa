@@ -605,7 +605,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffect() {
 
 bool PkbReadFacade::HasAffectsRelationship(const StatementNumber &statement_number,
                                            const StatementNumber &statement_number_being_affected) {
-  return std::any_of(this->GetAffectsPairs().begin(), this->GetAffectsPairs().end(), [&](const Pair &p) {
+  auto pairs = this->GetAffectsPairs();
+  return std::any_of(pairs.begin(), pairs.end(), [&](const Pair &p) {
     return p.first == statement_number
         && p.second == statement_number_being_affected;
   });
@@ -672,7 +673,8 @@ PkbReadFacade::SingleSet PkbReadFacade::GetAllAssignsThatAffectStar() {
 
 bool PkbReadFacade::HasAffectsStarRelationship(const StatementNumber &statement_number,
                                                const StatementNumber &statement_number_being_affected) {
-  return std::any_of(this->GetAffectsStarPairs().begin(), this->GetAffectsStarPairs().end(), [&](const Pair &p) {
+  auto pairs = this->GetAffectsStarPairs();
+  return std::any_of(pairs.begin(), pairs.end(), [&](const Pair &p) {
     return p.first == statement_number
         && p.second == statement_number_being_affected;
   });
