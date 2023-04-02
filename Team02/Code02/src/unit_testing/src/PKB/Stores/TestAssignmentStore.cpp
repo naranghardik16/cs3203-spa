@@ -7,33 +7,36 @@
 #include "SP/Parser/AssignStatementParser.h"
 
 TEST_CASE("Testcases for Assignment Store") {
+  typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef std::shared_ptr<Expression> ExpressionPtr;
+  typedef std::pair<ExpressionPtr, ExpressionPtr> ExpressionPtrPair;
+
   SECTION("Singleton (One Constant)") {
     auto assignment_store = new AssignmentStore();
-    std::shared_ptr<Expression> root;
+    ExpressionPtr root;
     root = std::make_shared<Constant>("7");
 
     assignment_store->AddAssignmentExpression("1", root);
 
     REQUIRE(assignment_store->GetExpressionFromStatementNumber("1") == root);
-    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
-        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "1" }));
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) == StatementNumberSet({"1"}));
   }
 
   SECTION("Singleton (One Variable)") {
     auto assignment_store = new AssignmentStore();
-    std::shared_ptr<Expression> root;
+    ExpressionPtr root;
     root = std::make_shared<Variable>("x");
 
     assignment_store->AddAssignmentExpression("2", root);
 
     REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
-    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
-        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) == StatementNumberSet({"2"}));
   }
 
   SECTION("Simple Expression") {
     auto assignment_store = new AssignmentStore();
-    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> arguments;
+    ExpressionPtrPair arguments;
     arguments.first = std::make_shared<Constant>("11");
     arguments.second = std::make_shared<Variable>("x");
 
@@ -42,13 +45,12 @@ TEST_CASE("Testcases for Assignment Store") {
     assignment_store->AddAssignmentExpression("2", root);
 
     REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
-    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
-        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2" }));
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) == StatementNumberSet({"2"}));
   }
 
   SECTION("Multiple Assignment Statements with the same RHS") {
     auto assignment_store = new AssignmentStore();
-    std::pair<std::shared_ptr<Expression>, std::shared_ptr<Expression>> arguments;
+    ExpressionPtrPair arguments;
     arguments.first = std::make_shared<Constant>("11");
     arguments.second = std::make_shared<Variable>("x");
 
@@ -59,8 +61,7 @@ TEST_CASE("Testcases for Assignment Store") {
 
     REQUIRE(assignment_store->GetExpressionFromStatementNumber("2") == root);
     REQUIRE(assignment_store->GetExpressionFromStatementNumber("3") == root);
-    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) ==
-        std::unordered_set<PkbTypes::STATEMENT_NUMBER>({ "2", "3" }));
+    REQUIRE(assignment_store->GetStatementNumbersFromExpression(root) == StatementNumberSet({"2", "3"}));
   }
 }
 

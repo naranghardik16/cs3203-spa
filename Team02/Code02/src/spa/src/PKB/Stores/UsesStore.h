@@ -23,12 +23,12 @@ class UsesStore {
   typedef std::unordered_set<Variable> VariableSet;
   typedef std::unordered_set<Procedure> ProcedureSet;
   typedef std::unordered_set<std::pair<StatementNumber, Variable>, PairHasherUtil::hash_pair>
-  StatementVariablePairSet;
+      StatementVariablePairSet;
   typedef std::unordered_set<std::pair<Procedure, Variable>, PairHasherUtil::hash_pair>
-  ProcedureVariablePairSet;
+      ProcedureVariablePairSet;
   typedef ManyToManyStore<StatementNumber, Variable> MultiStatementToVariableStore;
   typedef ManyToManyStore<Procedure, Variable> MultiProcedureToVariableStore;
-  
+
   /**
    * Default constructor for UsesStore.
    * Initializes an empty UsesStore object.
@@ -48,7 +48,7 @@ class UsesStore {
    * @param statement_number - Statement number representing a statement that uses the variable.
    * @param variable - Variable modified by the statement.
    */
-  void AddStatementUsesVariable(const StatementNumber& statement_number, const Variable& variable);
+  void AddStatementUsesVariable(const StatementNumber &statement_number, const Variable &variable);
 
   /**
    * Add a procedure to variable mapping to the store signifying a uses relationship where the procedure
@@ -57,7 +57,7 @@ class UsesStore {
    * @param procedure - Procedure that uses the variable.
    * @param variable - Variable modified by the procedure.
    */
-  void AddProcedureUsesVariable(const Procedure& procedure, const Variable& variable);
+  void AddProcedureUsesVariable(const Procedure &procedure, const Variable &variable);
 
   /**
    * Retrieves all the variables that have a uses relationship with the statement given.
@@ -65,7 +65,7 @@ class UsesStore {
    * @param statement_number - Statement number representing a statement that uses the variable(s).
    * @return A set of variables that have uses relationship with the statement given.
    */
-  VariableSet retrieveAllVariablesUsedByAStatement(const StatementNumber& statement_number);
+  VariableSet GetVariablesUsedByStatement(const StatementNumber &statement_number);
 
   /**
    * Retrieves all the variables that have a uses relationship with the procedure given.
@@ -73,7 +73,7 @@ class UsesStore {
    * @param procedure - Procedure that uses the variable(s)
    * @return A set of variables that have a uses relationship with the procedure given.
    */
-  VariableSet GetVariablesUsedByProcedure(const Procedure& procedure);
+  VariableSet GetVariablesUsedByProcedure(const Procedure &procedure);
 
   /**
    * Retrieves all the statement variable pairs that have a uses relation among themselves.
@@ -96,7 +96,7 @@ class UsesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasUsesStatementVariableRelation(const StatementNumber& statement_number, const Variable& variable);
+  bool HasUsesStatementVariableRelation(const StatementNumber &statement_number, const Variable &variable);
 
   /**
    * Checks if a given procedure and variable have a uses relationship between them.
@@ -105,7 +105,7 @@ class UsesStore {
    * @param variable - Variable to be checked for.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasUsesProcedureVariableRelation(const Procedure& procedure, const Variable& variable);
+  bool HasUsesProcedureVariableRelation(const Procedure &procedure, const Variable &variable);
 
   /**
    * Retrieves all the procedures that have some sort of a uses relationship with some variable.

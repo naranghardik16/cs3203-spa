@@ -27,6 +27,7 @@ TEST_CASE("Check if QPS works with Pkb for basic operations") {
    * }
    */
   pkb_write->AddProcedure("test");
+
   pkb_write->AddStatementOfAType("1", StatementType::READ);
   pkb_write->AddStatementOfAType("2", StatementType::ASSIGN);
   pkb_write->AddStatementOfAType("3", StatementType::IF);
@@ -34,21 +35,30 @@ TEST_CASE("Check if QPS works with Pkb for basic operations") {
   pkb_write->AddStatementOfAType("5", StatementType::WHILE);
   pkb_write->AddStatementOfAType("6", StatementType::ASSIGN);
   pkb_write->AddStatementOfAType("7", StatementType::PRINT);
+
   pkb_write->AddVariable("x");
   pkb_write->AddVariable("y");
   pkb_write->AddVariable("test");
   pkb_write->AddConstant("0");
   pkb_write->AddConstant("1");
+
   pkb_write->AddFollowsRelation("1", "2");
   pkb_write->AddFollowsRelation("2", "3");
+
+  pkb_write->AddFollowsStarRelation();
+
   pkb_write->AddParentRelation("3", "4");
   pkb_write->AddParentRelation("3", "5");
   pkb_write->AddParentRelation("5", "6");
+
+  pkb_write->AddParentStarRelation();
+
   pkb_write->AddStatementModifyingVariable("1", "x");
   pkb_write->AddStatementModifyingVariable("2", "y");
   pkb_write->AddStatementModifyingVariable("3", "x");
   pkb_write->AddStatementModifyingVariable("5", "x");
   pkb_write->AddStatementModifyingVariable("6", "x");
+
   pkb_write->AddStatementUsingVariable("2", "x");
   pkb_write->AddStatementUsingVariable("3", "x");
   pkb_write->AddStatementUsingVariable("4", "x");
@@ -641,7 +651,6 @@ TEST_CASE("Integration testing for Calls*") {
   pkb_write->AddCallsRelation("proc5", "proc6");
   pkb_write->AddCallsRelation("proc6", "proc7");
 
-
   pkb_write->AddCallsStarRelation();
 
 
@@ -680,7 +689,6 @@ TEST_CASE("Integration testing for Calls*") {
     results.sort();
     REQUIRE(results == expected_results);
   }
-
 
   SECTION("Calls*(_,_) is true") {
     std::string query = "procedure p; Select p.procName such that Calls*(_,_)";
@@ -1066,7 +1074,7 @@ TEST_CASE("Integration testing for Next API - Complex") {
     std::string query = "while w; Select w such that Next(_, w)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results { "10", "2", "4", "8" };
+    std::list<std::string> expected_results{"10", "2", "4", "8"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1075,7 +1083,7 @@ TEST_CASE("Integration testing for Next API - Complex") {
     std::string query = "while w; assign a; Select w such that Next(w, a)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read);
-    std::list<std::string> expected_results { "10", "2", "4", "8" };
+    std::list<std::string> expected_results{"10", "2", "4", "8"};
     results.sort();
     REQUIRE(results == expected_results);
   }

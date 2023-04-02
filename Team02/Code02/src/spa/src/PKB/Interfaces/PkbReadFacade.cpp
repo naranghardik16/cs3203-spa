@@ -118,7 +118,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetStatementsThatUses(const StatementTyp
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetVariablesUsedByStatement(const StatementNumber &statement_number) {
-  return this->pkb.uses_store_->retrieveAllVariablesUsedByAStatement(statement_number);
+  return this->pkb.uses_store_->GetVariablesUsedByStatement(statement_number);
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetStatementsUsesVariable(const StatementType &statement_type,

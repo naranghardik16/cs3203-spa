@@ -21,6 +21,7 @@ void FollowsStore::AddFollowsStarRelation() {
 
       auto c = this->follows_relation_store_.retrieveFromKey(current);
 
+      if (c.empty()) continue;
       if (k == c || visited.count(std::make_pair(k, c)) > 0) continue;
       this->follows_star_relation_store_.insert(k, c);
       s.push(c);
