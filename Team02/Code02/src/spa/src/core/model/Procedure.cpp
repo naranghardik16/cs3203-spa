@@ -1,4 +1,3 @@
-#pragma once
 #include "Procedure.h"
 
 Procedure::Procedure(std::string proc_name) : procedure_name_(std::move(

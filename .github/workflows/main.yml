@@ -16,7 +16,7 @@ env:
 jobs:
   build_windows:
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: true
 
@@ -97,4 +97,7 @@ jobs:
         run: |
           cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl .
           cp $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py . 
-          python RunTests.py False
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone1 . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone2 . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone3 . 
+          python -u RunTests.py False

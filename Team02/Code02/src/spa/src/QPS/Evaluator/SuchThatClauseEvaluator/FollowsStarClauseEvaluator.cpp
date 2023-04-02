@@ -1,5 +1,9 @@
 #include "FollowsStarClauseEvaluator.h"
 
+bool FollowsStarClauseEvaluator::CheckIfReturnEmpty() {
+  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+}
+
 bool FollowsStarClauseEvaluator::HandleBothWildcard() {
   // Example query: Follows*(_,_)
   return pkb_->HasFollowsStarRelationship();
@@ -16,17 +20,11 @@ bool FollowsStarClauseEvaluator::HandleFirstValueSecondWildcard() {
 }
 
 bool FollowsStarClauseEvaluator::HandleBothValue() {
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   // Example query: Follows*(5, 6)
   return pkb_->IsFollowsStar(first_arg_, second_arg_);
 }
 
 ResultTable FollowsStarClauseEvaluator::HandleBothSynonym() {
-  if (is_same_syn_or_value_pairs_) {
-    return {};
-  }
   // Example query: Follows*(a,p)
   return ConvertPairSetToResultTableFormat(pkb_->GetFollowsStarPairs(arg_1_type_, arg_2_type_));
 }

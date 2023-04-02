@@ -74,7 +74,8 @@ const std::unordered_set<std::string> kStmtRefEntities({kPqlStatementEntity, kPq
                                                         kPqlIfEntity, kPqlWhileEntity, kPqlCallEntity});
 const std::unordered_set<std::string> kStmtToStmtRel({kPqlFollowsRel, kPqlFollowsStarRel,
                                                       kPqlParentRel, kPqlParentStarRel,
-                                                      kPqlNextRel, kPqlNextStarRel});
+                                                      kPqlNextRel, kPqlNextStarRel,
+                                                      kPqlAffectsRel, kPqlAffectsStarRel});
 const std::unordered_set<std::string> kStmtProcToStmtRel({kPqlUsesRel, kPqlModifiesRel});
 const std::unordered_set<std::string> kStmtProcRefEntities({kPqlStatementEntity, kPqlReadEntity,
                                                             kPqlPrintEntity, kPqlAssignEntity,
@@ -140,5 +141,5 @@ const std::unordered_map<std::string, int> kSuchThatScoreMap{
 const int kResultTableInitialisationIndex = 0;
 const int kPairArgumentValidSize = 2;
 const int kTripleArgumentValidSize = 3;
-const std::string kNoSynClauseGroupKey = "";
+const std::string kNoSynClauseGroupKey;
 }

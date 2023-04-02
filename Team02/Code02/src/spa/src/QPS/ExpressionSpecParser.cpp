@@ -13,7 +13,7 @@ std::shared_ptr<Expression> ExpressionSpecParser::ParseExpressionSpec(const std:
     throw SyntaxErrorException();
   }
 
-  expr = string_util::Trim(expr.substr(1, expr.length()-2));
+  expr = QueryUtil::RemoveQuotations(expr);
   if (expr.empty()) {
     throw SyntaxErrorException();
   }

@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "core/model/Expression.h"
 #include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 #include "PKB/Interfaces/PkbReadFacade.h"
 #include "PKB/Interfaces/PkbWriteFacade.h"
@@ -942,7 +943,6 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     REQUIRE(results == expected_results);
   }
 
-
   SECTION("Pattern a(_, v) - Syntactic Error") {
     Query query = R"(assign a; variable v; Select BOOLEAN pattern a(_,v))";
 
@@ -1102,7 +1102,6 @@ TEST_CASE("Check if QPS works with Pkb for Pattern Operations") {
     Results expected_results{"SemanticError"};
     REQUIRE(results == expected_results);
   }
-
 
   SECTION("procedure syn pattern ") {
     Query query = R"(procedure pattern; Select BOOLEAN pattern pattern(_,_))";

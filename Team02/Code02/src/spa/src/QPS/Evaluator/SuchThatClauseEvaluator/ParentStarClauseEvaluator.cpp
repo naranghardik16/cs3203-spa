@@ -1,5 +1,14 @@
 #include "ParentStarClauseEvaluator.h"
 
+bool ParentStarClauseEvaluator::CheckIfReturnEmpty() {
+  bool is_first_arg_not_a_container_syn = QueryUtil::IsSynonym(first_arg_)
+      && !QueryUtil::IsIfSynonym(declaration_map_, first_arg_)
+      && !QueryUtil::IsWhileSynonym(declaration_map_, first_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
+  bool is_same_syn_or_value_pairs = (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+  return is_first_arg_not_a_container_syn || is_same_syn_or_value_pairs;
+}
+
 bool ParentStarClauseEvaluator::HandleBothWildcard() {
   // Example query: Parent*(_,_)
   return pkb_->IsAnyAncestorDescendantRelationshipPresent();
@@ -18,33 +27,21 @@ bool ParentStarClauseEvaluator::HandleFirstValueSecondWildcard() {
 }
 
 bool ParentStarClauseEvaluator::HandleBothValue() {
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   // Example query: Parent*(5, 6)
   return pkb_->HasAncestorDescendantRelationship(first_arg_, second_arg_);
 }
 
 ResultTable ParentStarClauseEvaluator::HandleBothSynonym() {
-  if (!is_first_arg_a_container_syn_ || is_same_syn_or_value_pairs_) {
-    return {};
-  }
   // Example query: Parent*(a,p)
   return ConvertPairSetToResultTableFormat(pkb_->GetAncestorDescendantPairs(arg_1_type_, arg_2_type_));
 }
 
 ResultTable ParentStarClauseEvaluator::HandleFirstSynonymSecondWildcard() {
-  if (!is_first_arg_a_container_syn_) {
-    return {};
-  }
   // Example query: Parent*(s, _)
   return ConvertSetToResultTableFormat(pkb_->GetStatementsThatAreAncestors(arg_1_type_));
 }
 
 ResultTable ParentStarClauseEvaluator::HandleFirstSynonymSecondValue() {
-  if (!is_first_arg_a_container_syn_) {
-    return {};
-  }
   // Example query: Parent*(a,"5")
   return ConvertSetToResultTableFormat(pkb_->GetStatementsThatAreAncestorOf(second_arg_, arg_1_type_));
 }

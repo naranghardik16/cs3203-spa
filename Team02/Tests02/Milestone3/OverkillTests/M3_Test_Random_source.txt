@@ -1,0 +1,97 @@
+procedure v {
+    x = 1 + y; }
+
+procedure w {
+    read x;
+    print y;
+    x = 1 + y; 
+    call v;} 
+
+procedure z {
+    while (1 == 0) {
+        read x;
+        print y; }
+    if (1 == 1) then {
+        read ab; } else {
+        call w; }
+    x = 1 + y; 
+    y = x;
+    } 
+
+
+procedure y {
+    while (1 == 0) {
+        read z;
+        z = x - 3;
+        call w;
+        while (x == y + 3) {
+            y = 7 - x;
+            read y;
+            x = z;
+            print y;
+        }
+        if (y == x) then {
+            z = x + 1 + y;
+            call z;
+        } else {
+            read w;
+        }
+        read x;
+        print y; 
+    }
+    if (1 == 1) then {
+        read ab; } else {
+        call w; }
+    x = 1 + y; 
+    y = x;
+    read x;
+} 
+
+
+
+procedure x {
+    if (1 == 1) then {
+        read ab; } else {
+        call w; }
+    x = 1 + y; 
+    y = x;
+    call y;
+    if (w == 4) then {
+         while (1 == 0) {
+            read z;
+            w = v - 2 + z - y;
+            z = x - 3;
+            read v;
+            call w;
+            while (x == y + 3) {
+                y = 7 - x;
+                read y;
+                x = z;
+                print y;
+            }
+            if (y == x) then {
+                z = x + 1 + y;
+                call z;
+            } else {
+                read w;
+            }
+            read x;
+            x = y;
+            print y; 
+        }
+    } else {
+        print u;
+        v = u + z - x + 9 - w;
+        call y;
+        w = 7 * z;
+        call v;
+        read v;
+        if (x == v + w + 4) then {
+            read y;
+            u = 8 + x - 2;
+            call w;
+        } else {
+            print w;
+        }
+    }   
+} 

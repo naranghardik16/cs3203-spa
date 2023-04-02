@@ -21,7 +21,7 @@ class PkbWriteFacade {
   typedef PkbTypes::VARIABLE Variable;
   typedef std::shared_ptr<Expression> ExpressionPtr;
   typedef std::shared_ptr<Cfg> CfgPtr;
-  
+
   explicit PkbWriteFacade(Pkb &pkb);
 
   ~PkbWriteFacade();
@@ -32,7 +32,7 @@ class PkbWriteFacade {
    * @param variable - the target variable to add into Pkb
    * @return index to store variable index
    */
-  Index AddVariable(const Variable& variable) const;
+  Index AddVariable(const Variable &variable) const;
 
   /**
    *  Adds procedure into Pkb
@@ -40,7 +40,7 @@ class PkbWriteFacade {
    * @param procedure - the target procedure to add into Pkb
    * @return index to store procedure index
    */
-  Index AddProcedure(const Procedure& procedure) const;
+  Index AddProcedure(const Procedure &procedure) const;
 
   /**
    * Adds constant into Pkb
@@ -48,7 +48,7 @@ class PkbWriteFacade {
    * @param constant - the target constant to add into Pkb
    * @return index to store constant index
    */
-  Index AddConstant(const Constant& constant) const;
+  Index AddConstant(const Constant &constant) const;
 
   /**
    * Adds a statement number and the corresponding variable being used into the Pkb.
@@ -56,8 +56,8 @@ class PkbWriteFacade {
    * @param statement_number - The statement number to be added to the Pkb.
    * @param variable - The variable that is being used by the statement with the given statement number.
    */
-  void AddStatementUsingVariable(const StatementNumber& statement_number,
-                                 const Variable& variable) const;
+  void AddStatementUsingVariable(const StatementNumber &statement_number,
+                                 const Variable &variable) const;
 
   /**
    * Adds a statement number and the corresponding type of the statement.
@@ -65,8 +65,8 @@ class PkbWriteFacade {
    * @param statement_number - The statement number representing the statement.
    * @param statement_type - The type of the statement.
    */
-  void AddStatementOfAType(const StatementNumber& statement_number,
-                           const StatementType& statement_type) const;
+  void AddStatementOfAType(const StatementNumber &statement_number,
+                           const StatementType &statement_type) const;
 
   /**
    * Adds a procedure and the corresponding variable being used into the Pkb.
@@ -74,8 +74,8 @@ class PkbWriteFacade {
    * @param procedure - The procedure to be added to the Pkb.
    * @param variable - The variable that is being used within the given procedure.
    */
-  void AddProcedureUsingVariable(const Procedure& procedure,
-                                 const Variable& variable) const;
+  void AddProcedureUsingVariable(const Procedure &procedure,
+                                 const Variable &variable) const;
 
   /**
    * Adds a statement number and its corresponding modifying variable into Pkb.
@@ -83,8 +83,8 @@ class PkbWriteFacade {
    * @param statement_number - The statement number to be added to the Pkb.
    * @param variable - The variable that is being modified by the statement with the given statement number.
    */
-  void AddStatementModifyingVariable(const StatementNumber& statement_number,
-                                     const Variable& variable) const;
+  void AddStatementModifyingVariable(const StatementNumber &statement_number,
+                                     const Variable &variable) const;
 
   /**
    * Adds a procedure and its corresponding modifying variable into Pkb.
@@ -92,8 +92,8 @@ class PkbWriteFacade {
    * @param procedure - The procedure to be added to the Pkb.
    * @param variable - The variable that is being modified within the given procedure.
    */
-  void AddProcedureModifyingVariable(const Procedure& procedure,
-                                     const Variable& variable) const;
+  void AddProcedureModifyingVariable(const Procedure &procedure,
+                                     const Variable &variable) const;
 
   /**
    * Adds a follows relationship between two statements into the Pkb.
@@ -101,8 +101,10 @@ class PkbWriteFacade {
    * @param statement_number_1 - The statement number of the first statement in the follows relationship.
    * @param statement_number_2 - The statement number of the second statement in the follows relationship.
    */
-  void AddFollowsRelation(const StatementNumber& statement_number_1,
-                          const StatementNumber& statement_number_2) const;
+  void AddFollowsRelation(const StatementNumber &statement_number_1,
+                          const StatementNumber &statement_number_2) const;
+
+  void AddFollowsStarRelation() const;
 
   /**
    * Adds a parent relationship between two statements into the Pkb.
@@ -110,8 +112,10 @@ class PkbWriteFacade {
    * @param statement_number_1 - The statement number of the first statement in the parent relationship.
    * @param statement_number_2 - The statement number of the second statement in the parent relationship.
    */
-  void AddParentRelation(const StatementNumber& statement_number_1,
-                         const StatementNumber& statement_number_2) const;
+  void AddParentRelation(const StatementNumber &statement_number_1,
+                         const StatementNumber &statement_number_2) const;
+
+  void AddParentStarRelation() const;
 
   /**
    * Adds an assignment statement and its expression into the Pkb.
@@ -119,8 +123,8 @@ class PkbWriteFacade {
    * @param statement_number - The statement number of the assignment statement.
    * @param expression - A shared pointer to the Expression object of the expression.
    */
-  void AddAssignmentStatementAndExpression(const StatementNumber& statement_number,
-                                           const ExpressionPtr& expression);
+  void AddAssignmentStatementAndExpression(const StatementNumber &statement_number,
+                                           const ExpressionPtr &expression);
 
   /**
    * Adds an if statement and its condition into the Pkb.
@@ -128,8 +132,8 @@ class PkbWriteFacade {
    * @param statement_number - The statement number of the if statement.
    * @param expression - A shared pointer to the Expression object of the expression.
    */
-  void AddIfStatementAndCondition(const StatementNumber& statement_number,
-                                  const ExpressionPtr& expression);
+  void AddIfStatementAndCondition(const StatementNumber &statement_number,
+                                  const ExpressionPtr &expression);
 
   /**
    * Adds a while statement and its condition into the Pkb.
@@ -137,31 +141,31 @@ class PkbWriteFacade {
    * @param statement_number - The statement number of the while statement.
    * @param expression - A shared pointer to the Expression object of the expression.
    */
-  void AddWhileStatementAndCondition(const StatementNumber& statement_number,
-                                     const ExpressionPtr& expression);
+  void AddWhileStatementAndCondition(const StatementNumber &statement_number,
+                                     const ExpressionPtr &expression);
 
-   /**
-    * Adds calls relation to the Pkb.
-    *
-    * @param caller_procedure - The caller procedure.
-    * @param callee_procedure - The callee procedure.
-    */
-   void AddCallsRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
+  /**
+   * Adds calls relation to the Pkb.
+   *
+   * @param caller_procedure - The caller procedure.
+   * @param callee_procedure - The callee procedure.
+   */
+  void AddCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   void AddCallsStarRelation();
-   /**
-    * Adds calls statement to procedure name mapping to Pkb.
-    *
-    * @param statement_number - The statement number associated with the call statement.
-    * @param procedure - The procedure being called as a part of that statement.
-    */
-   void AddCallStatementToProcedureName(const StatementNumber& statement_number, const Procedure& procedure);
+  /**
+   * Adds calls statement to procedure name mapping to Pkb.
+   *
+   * @param statement_number - The statement number associated with the call statement.
+   * @param procedure - The procedure being called as a part of that statement.
+   */
+  void AddCallStatementToProcedureName(const StatementNumber &statement_number, const Procedure &procedure);
 
-   /**
-    * Adds control flow graph to Pkb.
-    *
-    * @param cfg - The control flow graph to be added.
-    */
-   void AddCfg(const CfgPtr& cfg);
+  /**
+   * Adds control flow graph to Pkb.
+   *
+   * @param cfg - The control flow graph to be added.
+   */
+  void AddCfg(const CfgPtr &cfg);
 };
 

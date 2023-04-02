@@ -1,4 +1,3 @@
-#pragma once
 #include "ConditionalOperation.h"
 
 ConditionalOperation::ConditionalOperation(string name,

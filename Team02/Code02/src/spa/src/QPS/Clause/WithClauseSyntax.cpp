@@ -1,10 +1,10 @@
 #include "WithClauseSyntax.h"
 
-WithClauseSyntax::WithClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+WithClauseSyntax::WithClauseSyntax(const SyntaxPair& pair) : ClauseSyntax(pair) {}
 
 bool WithClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
-  WithClauseSyntax *pc = dynamic_cast<WithClauseSyntax*>(&other);
+  auto *pc = dynamic_cast<WithClauseSyntax*>(&other);
   if (pc) {
     return (this->GetEntity() == pc->GetEntity()) && (this->GetFirstParameter() == pc->GetFirstParameter()) &&
         (this->GetSecondParameter() == pc->GetSecondParameter());

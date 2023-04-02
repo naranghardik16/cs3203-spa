@@ -1,5 +1,9 @@
 #include "NextClauseEvaluator.h"
 
+bool NextClauseEvaluator::CheckIfReturnEmpty() {
+  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+}
+
 bool NextClauseEvaluator::HandleBothWildcard() {
   // Example query: Next(_, _)
   return pkb_->HasNextRelationship();
@@ -16,17 +20,11 @@ bool NextClauseEvaluator::HandleFirstValueSecondWildcard() {
 }
 
 bool NextClauseEvaluator::HandleBothValue() {
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   // Example query: Next(1, 6)
   return pkb_->IsNext(first_arg_, second_arg_);
 }
 
 ResultTable NextClauseEvaluator::HandleBothSynonym() {
-  if (is_same_syn_or_value_pairs_) {
-    return {};
-  }
   // Example query: Next (s,s)
   return ConvertPairSetToResultTableFormat(pkb_->GetNextPairs(arg_1_type_, arg_2_type_));
 }

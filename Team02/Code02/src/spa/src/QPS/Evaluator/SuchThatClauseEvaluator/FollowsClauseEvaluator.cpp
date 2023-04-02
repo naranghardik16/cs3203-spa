@@ -1,5 +1,9 @@
 #include "FollowsClauseEvaluator.h"
 
+bool FollowsClauseEvaluator::CheckIfReturnEmpty() {
+  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+}
+
 bool FollowsClauseEvaluator::HandleBothWildcard() {
   // Example query: Follows(_,_)
   return pkb_->IsAnyFollowsRelationshipPresent();
@@ -16,17 +20,11 @@ bool FollowsClauseEvaluator::HandleFirstValueSecondWildcard() {
 }
 
 bool FollowsClauseEvaluator::HandleBothValue() {
-  if (is_same_syn_or_value_pairs_) {
-    return false;
-  }
   // Example query: Follows(5, 6)
   return pkb_->HasFollowsRelationship(first_arg_, second_arg_);
 }
 
 ResultTable FollowsClauseEvaluator::HandleBothSynonym() {
-  if (is_same_syn_or_value_pairs_) {
-    return {};
-  }
   // Example query: Follows(a,p)
   return ConvertPairSetToResultTableFormat(pkb_->GetFollowPairs(arg_1_type_, arg_2_type_));
 }

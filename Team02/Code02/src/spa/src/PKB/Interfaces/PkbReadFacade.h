@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <memory>
 #include <stack>
 #include <unordered_set>
@@ -33,7 +34,7 @@ class PkbReadFacade {
    *
    * @param pkb - Instance of Pkb.
    */
-  PkbReadFacade(Pkb &pkb);
+  explicit PkbReadFacade(Pkb &pkb);
 
   /**
    * Destructor for Pkb's read facade.
@@ -717,7 +718,7 @@ class PkbReadFacade {
    * @param callee_procedure - The specified callee procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  virtual bool HasCallsRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  virtual bool HasCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   /**
    * Checks whether there exists a Calls Star relation between the specified procedures.
@@ -726,7 +727,7 @@ class PkbReadFacade {
    * @param callee_procedure - The specified callee procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  virtual bool HasCallsStarRelation(PkbTypes::PROCEDURE caller_procedure, PkbTypes::PROCEDURE callee_procedure);
+  virtual bool HasCallsStarRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   /**
   * Retrieves all procedures that are being called by the specified procedure.

@@ -51,7 +51,7 @@ QueryLinesPair QpsTokenizer::SplitQuery(const std::string& query_extra_whitespac
 }
 
 std::unordered_map<std::string, std::string> QpsTokenizer::ExtractAbstractSyntaxFromDeclarations(
-    const std::vector<std::string>& declarations) {
+    const std::vector<std::string>& declarations) const {
   std::unordered_map<std::string, std::string> synonym_to_design_entity_map = {};
   std::string design_entity;
 
@@ -100,7 +100,8 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
   std::string relationship = string_util::Trim(clause.substr(0,
                                                              opening_bracket_index));
   std::string parameters_substr = string_util::Trim(clause.substr(opening_bracket_index+1,
-                                                                  closing_bracket_index-(opening_bracket_index+1)));
+                                                                  closing_bracket_index-
+                                                                  (opening_bracket_index+1)));
 
   auto parameters = ParseParameters(parameters_substr);
 
@@ -118,12 +119,12 @@ SyntaxPair QpsTokenizer::ExtractAbstractSyntaxFromClause(const std::string& clau
 }
 
 
-std::string QpsTokenizer::ParseIDENT(std::string parameter) {
+std::string QpsTokenizer::ParseIDENT(const std::string& parameter) {
   std::string quotation(1, pql_constants::kQuotationChar);
   return quotation + string_util::Trim(parameter.substr(1, parameter.length() - 2)) + quotation;
 }
 
-std::string QpsTokenizer::ParseAttrRef(std::string attrRef) {
+std::string QpsTokenizer::ParseAttrRef(const std::string& attrRef) {
   auto token_lst = QueryUtil::SplitAttrRef(attrRef);
   return token_lst[0] + pql_constants::kFullStop + token_lst[1];
 }
@@ -184,7 +185,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSynonym(const std::string& clause_with_s
   return synonym_vector;
 }
 
-SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring) {
+SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(const std::string& syn_substring) {
   SelectedSynonymTuple synonym_vector;
   std::string temp;
   for (auto c : syn_substring) {
@@ -219,7 +220,7 @@ SelectedSynonymTuple QpsTokenizer::ParseSingleSynonym(std::string syn_substring)
 }
 
 
-SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(std::string trimmed_select_keyword_removed_clause) {
+SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(const std::string& trimmed_select_keyword_removed_clause) {
   SelectedSynonymTuple synonym_vector;
   size_t closing_tuple_bracket_index = trimmed_select_keyword_removed_clause
       .find(pql_constants::kTupleClosingBracket);
@@ -243,7 +244,8 @@ SelectedSynonymTuple QpsTokenizer::ParseForMultipleSynonyms(std::string trimmed_
   return synonym_vector;
 }
 
-std::string QpsTokenizer::GetSubclauseString(std::string clause_with_select_removed, SelectedSynonymTuple syn_vector) {
+std::string QpsTokenizer::GetSubclauseString(const std::string& clause_with_select_removed,
+                                             SelectedSynonymTuple syn_vector) {
   std::string first_word = string_util::GetFirstWord(clause_with_select_removed);
   std::string remaining_clause;
   size_t index_start;
@@ -323,7 +325,7 @@ std::vector<size_t> QpsTokenizer::GetIndexListOfClauses(const std::string& state
 
 ParameterVector QpsTokenizer::ParseParameters(std::string parameters_substr) {
   ParameterVector parameters;
-  Parameter parameter = "";
+  Parameter parameter;
   size_t delimiter_index = parameters_substr.find(pql_constants::kComma);
   while (delimiter_index != std::string::npos) {
     parameter = string_util::Trim(parameters_substr.substr(0, delimiter_index));
@@ -344,7 +346,7 @@ ParameterVector QpsTokenizer::ParseParameters(std::string parameters_substr) {
   return parameters;
 }
 
-std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string sub_clause) {
+std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(const std::string& sub_clause) {
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
   std::shared_ptr<ClauseSyntax> pattern_syntax = std::make_shared<PatternClauseSyntax>(syntax);
 
@@ -354,7 +356,7 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakePatternClauseSyntax(std::string 
   return pattern_syntax;
 }
 
-std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeSuchThatClauseSyntax(std::string sub_clause) {
+std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeSuchThatClauseSyntax(const std::string& sub_clause) {
   SyntaxPair syntax = ExtractAbstractSyntaxFromClause(sub_clause);
   std::shared_ptr<ClauseSyntax> such_that_syntax = std::make_shared<SuchThatClauseSyntax>(syntax);
 
@@ -364,7 +366,7 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeSuchThatClauseSyntax(std::string
   return such_that_syntax;
 }
 
-std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(std::string sub_clause) {
+std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(const std::string& sub_clause) {
   SyntaxPair syntax = ExtractAbstractSyntaxFromWithClause(sub_clause);
   std::shared_ptr<ClauseSyntax> with_syntax = std::make_shared<WithClauseSyntax>(syntax);
   syntax_validator_->ValidateWithClauseSyntax(with_syntax);
@@ -372,7 +374,7 @@ std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeWithClauseSyntax(std::string sub
   return with_syntax;
 }
 
-std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeAndClauseSyntax(std::string sub_clause, std::string
+std::shared_ptr<ClauseSyntax> QpsTokenizer::MakeAndClauseSyntax(const std::string& sub_clause, const std::string&
 previous_sub_clause) {
   if (FindIndexOfRegexMatch(previous_sub_clause, pql_constants::kPatternRegex) == 0) {
     return MakePatternClauseSyntax(sub_clause);

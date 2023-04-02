@@ -1,4 +1,3 @@
-#pragma once
 #include "ArithmeticOperation.h"
 
 ArithmeticOperation::ArithmeticOperation(string name,

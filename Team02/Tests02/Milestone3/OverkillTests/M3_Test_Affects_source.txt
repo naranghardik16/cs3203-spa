@@ -1,0 +1,43 @@
+procedure first {
+   read r;
+   print p;
+   p = p + 1;
+   r = r + 5;
+   call second;
+   d = 3;
+   while (p != 1)  {
+      d = d + 6;
+          while (d > 0) {
+              call third;
+              d = 1;
+            call second; }
+        d = r + r; }
+   w = d;
+}
+procedure second {
+    	a = 0;
+	b = 1;
+	c = 2;
+	d = 3;
+	e = 4;
+	f = 5;
+	g = 6;
+	h = 7;
+	i = 8;
+	j = 9;
+	k = 10;
+	l = 11;
+	m = 12;
+	n = 13;
+	o = 14;
+	p = a;
+	q = a;
+}
+procedure third {
+    	second = 5;
+    	if (second > 10) then {
+		p = p + second;
+	} else {
+		p = 3;
+	} 
+}

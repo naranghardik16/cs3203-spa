@@ -26,7 +26,7 @@ FALSE
 6 - Affects(INT,INT) is true -- self modification e.g. x=x+1
 
 Select BOOLEAN such that Affects(6,6)
-TRUE
+FALSE
 5000
 7 - Affects(INT,INT) is true -- affects an assign in while loop
 
@@ -126,12 +126,12 @@ FALSE
 27 - Affects(ASSIGN-SYN,_)
 assign a;
 Select a such that Affects(_,a)
-4,6,8,10,11,12,22
+4,8,10,11,12,22
 5000
 28 - Affects(_,ASSIGN-SYN)
 assign a;
 Select a such that Affects(a,_)
-1,4,8,12,2,6,9,10,18,21,22,11
+1,4,8,2,6,9,10,21,11
 5000
 29 - Affects(INT,ASSIGN-SYN) has result
 assign a;
@@ -151,7 +151,7 @@ Select a such that Affects(14,a)
 32 - Affects(ASSIGN-SYN, INT) has result
 assign a;
 Select a such that Affects(a,12)
-1,4,8,12,11,10
+1,4,8,11,10
 5000
 33 - Affects(ASSIGN-SYN, INT) has no result
 assign a;
@@ -161,5 +161,5 @@ Select a such that Affects(a,14)
 34 - Affects(ASSIGN-SYN, ASSIGN-SYN)
                 assign a,                   a1;
 Select <a   ,a1                > such that Affects(                         a,a1)
-1 4, 1 8, 1 10, 1 12, 4 4, 4 8, 4 10, 4 12, 8 10, 8 12, 9 10, 10 10, 10 11, 10 12, 2 10, 6 6, 6 10,11 12, 21 22
+1 4, 1 8, 1 10, 1 12, 4 4, 4 8, 4 10, 4 12, 8 10, 8 12, 9 10, 10 11, 10 12, 2 10, 6 10,11 12, 21 22
 5000

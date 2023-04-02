@@ -1,4 +1,3 @@
-#pragma once
 #include "Operation.h"
 
 Operation::Operation(string name,

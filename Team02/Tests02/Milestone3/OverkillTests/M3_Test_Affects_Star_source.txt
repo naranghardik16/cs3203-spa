@@ -1,0 +1,101 @@
+procedure first {
+   read r;
+   print p;
+   p = p + 1;
+   r = r + 5;
+   call second;
+   d = 3;
+   while (p != 1)  {
+      d = d + 6;
+          while (d > 0) {
+            call third;
+            d = 1;
+            call second; 
+		}
+      d = d + r; 
+   }
+   w = d;
+}
+procedure second {
+    	a = 0;
+	b = 1;
+	c = 2;
+	d = 3;
+	e = 4;
+	f = 5;
+	g = 6;
+	h = 7;
+	i = 8;
+	j = 9;
+	k = 10;
+	l = 11;
+	m = 12;
+	n = 13;
+	o = 14;
+	p = a;
+	q = a;
+	r = q + a;
+	s = r;
+	t = s;
+	u = t;
+	v = u;
+	w = v;
+	x = w;
+	y = v;
+	z = v;
+}
+procedure third {
+    	second = 5;
+    	if (second > 10) then {
+		p = p + second;
+		if (p < 5) then {
+			second = p + second;
+		} else {
+			p = p;
+		}
+	} else {
+		p = 3;
+		while (p > 10) {
+			p = p;
+		}
+		while (p > 10) {
+			p = p;
+			p = p;
+		}
+	} 
+}
+procedure fourth {
+	procedure = 20 + procedure;
+	call fifth;
+}
+procedure fifth {
+	procedure = 20 + procedure;
+}
+procedure sixth {
+	a = a;
+	b = a;
+	c = b;
+	d = c;
+	e = d;
+	f = e;
+	g = f;
+	h = g;
+	i  = h;
+	j = i;
+	k = j;
+	l = k;
+	m = l;
+	n = m;
+	o = n;
+	p = o;
+	q = p;
+	r = q;
+	s = r;
+	t = s;
+	u = t;
+	v = u;
+	w = v;
+	x = w;
+	y = x;
+	z = y;
+}

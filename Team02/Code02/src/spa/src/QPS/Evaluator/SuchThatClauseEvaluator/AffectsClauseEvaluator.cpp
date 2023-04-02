@@ -1,5 +1,15 @@
 #include "AffectsClauseEvaluator.h"
 
+bool AffectsClauseEvaluator::CheckIfReturnEmpty() {
+  bool is_first_arg_an_invalid_syn = QueryUtil::IsSynonym(first_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, first_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
+  bool is_second_arg_an_invalid_syn = QueryUtil::IsSynonym(second_arg_)
+      && !QueryUtil::IsAssignSynonym(declaration_map_, second_arg_)
+      && !QueryUtil::IsStatementSynonym(declaration_map_, second_arg_);
+  return is_first_arg_an_invalid_syn || is_second_arg_an_invalid_syn;
+}
+
 bool AffectsClauseEvaluator::HandleBothWildcard() {
   // Example query: Affects(_, _)
   return pkb_->IsThereAnyAffectsRelationship();

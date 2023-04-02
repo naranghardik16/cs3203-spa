@@ -1,4 +1,3 @@
-#pragma once
 #include "Expression.h"
 
 Expression::Expression(std::string name, std::string expression_type)

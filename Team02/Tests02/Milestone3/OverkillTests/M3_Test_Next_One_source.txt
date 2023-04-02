@@ -1,0 +1,16 @@
+procedure singleStatement {
+    x = 1 + y; }
+
+procedure linear {
+    read x;
+    print y;
+    x = 1 + y; } 
+
+procedure singleNesting {
+    while (1 == 0) {
+        read x;
+        print y; }
+    if (1 == 1) then {
+        read ab; } else {
+        call linear; }
+    x = 1 + y; } 

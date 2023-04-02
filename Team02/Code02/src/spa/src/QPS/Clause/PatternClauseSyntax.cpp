@@ -1,10 +1,10 @@
 #include "PatternClauseSyntax.h"
 
-PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
+PatternClauseSyntax::PatternClauseSyntax(const SyntaxPair& pair) : ClauseSyntax(pair) {}
 
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
-  PatternClauseSyntax *pc = dynamic_cast<PatternClauseSyntax*>(&other);
+  auto *pc = dynamic_cast<PatternClauseSyntax*>(&other);
   if (pc) {
     return (this->GetEntity() == pc->GetEntity()) && (this->GetFirstParameter() == pc->GetFirstParameter()) &&
         (this->GetSecondParameter() == pc->GetSecondParameter());

@@ -39,6 +39,8 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
 
   auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   pkb_write_facade->AddCallsStarRelation();
+  pkb_write_facade->AddFollowsStarRelation();
+  pkb_write_facade->AddParentStarRelation();
   pkb_write_facade->AddCfg(cfg_);
 
   abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
