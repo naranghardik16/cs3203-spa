@@ -1,5 +1,12 @@
 #include <catch.hpp>
+
+#include <memory>
+#include <string>
+#include <unordered_set>
+#include <utility>
+
 #include "PKB/Stores/UsesStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 TEST_CASE("Testcases for Uses Store") {
   typedef PkbTypes::VARIABLE Variable;

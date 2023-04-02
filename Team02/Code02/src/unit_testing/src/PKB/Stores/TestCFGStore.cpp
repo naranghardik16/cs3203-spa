@@ -1,4 +1,8 @@
 #include <catch.hpp>
+
+#include <memory>
+#include <string>
+
 #include "PKB/Stores/CfgStore.h"
 #include "core/cfg_model/Cfg.h"
 

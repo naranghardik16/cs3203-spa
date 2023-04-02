@@ -1,6 +1,12 @@
 #include <catch.hpp>
 
+#include <memory>
+#include <string>
+#include <unordered_set>
+#include <utility>
+
 #include "PKB/Stores/EntityStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 TEST_CASE("Testcases for Entity Store") {
   typedef PkbTypes::VARIABLE Variable;

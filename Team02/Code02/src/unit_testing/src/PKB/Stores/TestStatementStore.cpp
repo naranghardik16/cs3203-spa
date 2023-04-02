@@ -1,7 +1,13 @@
 #include <catch.hpp>
 
+#include <memory>
+#include <string>
+#include <unordered_set>
+#include <utility>
+
 #include "General/StatementTypeEnum.h"
 #include "PKB/Stores/StatementStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 TEST_CASE("Testcases for Statement Store") {
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;

@@ -3,8 +3,11 @@
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <utility>
 
+#include "core/model/Expression.h"
 #include "PKB/Stores/ControlFlowStore.h"
+#include "PKB/Types/PkbTypes.h"
 #include "SP/Parser/AssignStatementParser.h"
 
 TEST_CASE("Testcases for Control Flow Store") {

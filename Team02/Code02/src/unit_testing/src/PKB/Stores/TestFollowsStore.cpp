@@ -1,8 +1,12 @@
 #include <catch.hpp>
 
+#include <memory>
+#include <string>
+#include <unordered_set>
 #include <utility>
 
 #include "PKB/Stores/FollowsStore.h"
+#include "PKB/Types/PkbTypes.h"
 
 TEST_CASE("Testcases for Follows Store") {
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
