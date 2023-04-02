@@ -15,7 +15,7 @@ class FunctionalUtil {
   typedef std::function<Single(Pair)> PairToSingleFunction;
   typedef std::function<SingleSet(Single)> SingleToSingleSetFunction;
 
-  static PairSet Filter(PairPredicate f, PairSet ps) {
+  static PairSet Filter(const PairPredicate &f, const PairSet &ps) {
     PairSet result;
     for (const auto &p : ps) {
       if (f(p)) result.insert(p);
@@ -23,7 +23,7 @@ class FunctionalUtil {
     return result;
   }
 
-  static SingleSet Filter(SinglePredicate f, SingleSet ss) {
+  static SingleSet Filter(const SinglePredicate &f, const SingleSet &ss) {
     SingleSet result;
     for (const auto &p : ss) {
       if (f(p)) result.insert(p);
@@ -31,7 +31,7 @@ class FunctionalUtil {
     return result;
   }
 
-  static SingleSet Map(PairToSingleFunction f, PairSet ps) {
+  static SingleSet Map(const PairToSingleFunction &f, const PairSet &ps) {
     SingleSet result;
     for (const auto &p : ps) {
       result.insert(f(p));
@@ -39,7 +39,7 @@ class FunctionalUtil {
     return result;
   }
 
-  static PairSet Collect(SingleToSingleSetFunction f, SingleSet ss) {
+  static PairSet Collect(const SingleToSingleSetFunction &f, const SingleSet &ss) {
     PairSet result;
     for (const auto &s : ss) {
       for (const auto &a : f(s)) result.insert(std::make_pair(s, a));

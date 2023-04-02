@@ -1,0 +1,498 @@
+procedure aa {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call ab; } else {
+            call ab; } } }
+procedure ab {
+    if (1 == 1) then {
+        call ac; } else {
+        call ac; } }
+procedure ac {
+    while (1 == 0) {
+        call ad; } }
+procedure ad {
+    if (1 == 1) then {
+        call ae; } else {
+        call ae; } }
+procedure ae {
+    if (1 == 1) then {
+        call af; } else {
+        call af; } }
+procedure af {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call ag; } else {
+            call ag; } } }
+procedure ag {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call ah; } } else {
+        call ah; } }
+procedure ah {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call ai; } else {
+            call ai; } } else {
+        call ai; } }
+procedure ai {
+    call aj; }
+procedure aj {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call ak; } else {
+            call ak; } } else {
+        call ak; } }
+procedure ak {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call al; } } else {
+        call al; } }
+procedure al {
+    while (1 == 0) {
+        call am; } }
+procedure am {
+    if (1 == 1) then {
+        call an; } else {
+        call an; } }
+procedure an {
+    call ao; }
+procedure ao {
+    while (1 == 0) {
+        while (1 == 1) {
+            call ap; } } }
+procedure ap {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call aq; } } else {
+        call aq; } }
+procedure aq {
+    if (1 == 1) then {
+        call ar; } else {
+        call ar; } }
+procedure ar {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call as; } else {
+            call as; } } else {
+        call as; } }
+procedure as {
+    call at; }
+procedure at {
+    if (1 == 1) then {
+        call au; } else {
+        call au; } }
+procedure au {
+    while (1 == 0) {
+        call av; } }
+procedure av {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call aw; } else {
+            call aw; } } }
+procedure aw {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call ax; } else {
+            call ax; } } else {
+        call ax; } }
+procedure ax {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call ay; } else {
+            call ay; } } else {
+        call ay; } }
+procedure ay {
+    while (1 == 0) {
+        while (1 == 1) {
+            call az; } } }
+procedure az {
+    while (1 == 0) {
+        call ba; } }
+procedure ba {
+    while (1 == 0) {
+        while (abc == 123) {
+            call bb; } } }
+procedure bb {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call bc; } } else {
+        call bc; } }
+procedure bc {
+    if (1 == 1) then {
+        call bd; } else {
+        call bd; } }
+procedure bd {
+    while (1 == 0) {
+        while (1 == 1) {
+            call be; } } }
+procedure be {
+    if (1 == 1) then {
+        call bf; } else {
+        call bf; } }
+procedure bf {
+    if (1 == 1) then {
+        call bg; } else {
+        call bg; } }
+procedure bg {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call bh; } else {
+            call bh; } } }
+procedure bh {
+    while (1 == 0) {
+        while (1 == 1) {
+            call bi; } } }
+procedure bi {
+    call bj; }
+procedure bj {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call bk; } else {
+            call bk; } } }
+procedure bk {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call bl; } else {
+            call bl; } } }
+procedure bl {
+    while (1 == 0) {
+        call bm; } }
+procedure bm {
+    call bn; }
+procedure bn {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call bo; } else {
+            call bo; } } }
+procedure bo {
+    call bp; }
+procedure bp {
+    if (1 == 1) then {
+        call bq; } else {
+        call bq; } }
+procedure bq {
+    while (1 == 0) {
+        while (1 == 1) {
+            call br; } } }
+procedure br {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call bs; } else {
+            call bs; } } }
+procedure bs {
+    while (1 == 0) {
+        call bt; } }
+procedure bt {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call bu; } } else {
+        call bu; } }
+procedure bu {
+    call bv; }
+procedure bv {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call bw; } else {
+            call bw; } } else {
+        call bw; } }
+procedure bw {
+    if (1 == 1) then {
+        call bx; } else {
+        call bx; } }
+procedure bx {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call by; } else {
+            call by; } } }
+procedure by {
+    if (1 == 1) then {
+        call bz; } else {
+        call bz; } }
+procedure bz {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call ca; } } else {
+        call ca; } }
+procedure ca {
+    while (1 == 0) {
+        while (1 == 1) {
+            call cb; } } }
+procedure cb {
+    if (1 == 1) then {
+        call cc; } else {
+        call cc; } }
+procedure cc {
+    while (1 == 0) {
+        while (1 == 1) {
+            call cd; } } }
+procedure cd {
+    while (1 == 0) {
+        while (1 == 1) {
+            call ce; } } }
+procedure ce {
+    while (1 == 0) {
+        while (1 == 1) {
+            call cf; } } }
+procedure cf {
+    while (1 == 0) {
+        while (1 == 1) {
+            call cg; } } }
+procedure cg {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call ch; } else {
+            call ch; } } else {
+        call ch; } }
+procedure ch {
+    if (1 == 1) then {
+        call ci; } else {
+        call ci; } }
+procedure ci {
+    while (1 == 0) {
+        call cj; } }
+procedure cj {
+    if (1 == 1) then {
+        call ck; } else {
+        call ck; } }
+procedure ck {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call cl; } else {
+            call cl; } } else {
+        call cl; } }
+procedure cl {
+    if (1 == 1) then {
+        call cm; } else {
+        call cm; } }
+procedure cm {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call cn; } } else {
+        call cn; } }
+procedure cn {
+    call co; }
+procedure co {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call cp; } else {
+            call cp; } } else {
+        call cp; } }
+procedure cp {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call cq; } } else {
+        call cq; } }
+procedure cq {
+    while (1 == 0) {
+        call cr; } }
+procedure cr {
+    call cs; }
+procedure cs {
+    while (1 == 0) {
+        call ct; } }
+procedure ct {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call cu; } } else {
+        call cu; } }
+procedure cu {
+    while (1 == 0) {
+        call cv; } }
+procedure cv {
+    if (1 == 1) then {
+        call cw; } else {
+        call cw; } }
+procedure cw {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call cx; } } else {
+        call cx; } }
+procedure cx {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call cy; } else {
+            call cy; } } else {
+        call cy; } }
+procedure cy {
+    if (1 == 1) then {
+        call cz; } else {
+        call cz; } }
+procedure cz {
+    call da; }
+procedure da {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call db; } } else {
+        call db; } }
+procedure db {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call dc; } else {
+            call dc; } } }
+procedure dc {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dd; } else {
+            call dd; } } else {
+        call dd; } }
+procedure dd {
+    while (1 == 0) {
+        while (1 == 1) {
+            call de; } } }
+procedure de {
+    if (1 == 1) then {
+        call df; } else {
+        call df; } }
+procedure df {
+    call dg; }
+procedure dg {
+    if (1 == 1) then {
+        call dh; } else {
+        call dh; } }
+procedure dh {
+    while (1 == 0) {
+        call di; } }
+procedure di {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dj; } else {
+            call dj; } } else {
+        call dj; } }
+procedure dj {
+    call dk; }
+procedure dk {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call dl; } else {
+            call dl; } } }
+procedure dl {
+    while (1 == 0) {
+        while (1 == 1) {
+            call dm; } } }
+procedure dm {
+    call dn; }
+procedure dn {
+    while (1 == 0) {
+        while (1 == 1) {
+            call do; } } }
+procedure do {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dp; } else {
+            call dp; } } else {
+        call dp; } }
+procedure dp {
+    while (1 == 0) {
+        while (1 == 1) {
+            call dq; } } }
+procedure dq {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dr; } else {
+            call dr; } } else {
+        call dr; } }
+procedure dr {
+    if (1 == 1) then {
+        call ds; } else {
+        call ds; } }
+procedure ds {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call dt; } } else {
+        call dt; } }
+procedure dt {
+    if (1 == 1) then {
+        call du; } else {
+        call du; } }
+procedure du {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dv; } else {
+            call dv; } } else {
+        call dv; } }
+procedure dv {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call dw; } else {
+            call dw; } } else {
+        call dw; } }
+procedure dw {
+    while (1 == 0) {
+        while (1 == 1) {
+            call dx; } } }
+procedure dx {
+    while (1 == 0) {
+        call dy; }
+    hello = 641 + world % 2 * testing; }
+procedure dy {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call dz; } } else {
+        call dz; } }
+procedure dz {
+    while (1 == 0) {
+        while (1 == 1) {
+            call ea; } } }
+procedure ea {
+    while (1 == 0) {
+        while (1 == 1) {
+            call eb; } } }
+procedure eb {
+    call ec; }
+procedure ec {
+    while (1 == 0) {
+        call ed; } }
+procedure ed {
+    while (1 == 0) {
+        call ee; } }
+procedure ee {
+    while (1 == 0) {
+        call ef; } }
+procedure ef {
+    if (1 == 1) then {
+        if (1 == 2) then {
+            call eg; } else {
+            call eg; } } else {
+        call eg; } }
+procedure eg {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call eh; } else {
+            call eh; } } }
+procedure eh {
+    call ei; }
+procedure ei {
+    call ej; }
+procedure ej {
+    call ek; }
+procedure ek {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call el; } } else {
+        call el; } }
+procedure el {
+    if (1 == 1) then {
+        while (1 == 2) {
+            call em; } } else {
+        call em; } }
+procedure em {
+    while (1 == 0) {
+        call en; } }
+procedure en {
+    while (1 == 0) {
+        while (1 == 1) {
+            call eo; } } }
+procedure eo {
+    while (1 == 0) {
+        if (1 == 1) then {
+            call ep; } else {
+            call ep; } } }
+procedure ep {
+    while (1 == 0) {
+        while (1 == 1) {
+            call eq; } } }
+procedure eq {
+    if (1 == 1) then {
+        while (1 == 2) {
+            read x; } } else {
+        print y; } }

@@ -1,0 +1,147 @@
+procedure testPatternA {
+    x = x + y;
+    x = x + yy;
+    x = xx + y;
+    x = x + y + z;
+    x = w + x + y + z;
+    x = w + (x + y) + z;
+    x = w + ((x) + y) + z;
+    x = w + (x + (y)) + z;
+    x = w + ((x + y)) + z;
+    x = w + (x + y + z);
+    x = w + ((x + y + z));
+    
+    x = x + y - z;
+    x = w - x + y - z;
+    x = w - (x + y) + z;
+    x = w + (x + y - z);
+    
+    x = w - x + y * z;
+    x = (w - x) + y * z;
+    x = (w - x + y) * z;
+    x = w - (x + y * z);
+    
+    x = (w - x + (y * z));
+    x = (w - x) + (y * z);
+    x = (w - x + y) * (z);
+    x = (w - (x + y * z));
+    
+    x = a + b * c - d / e % f;
+    x = a + b * c - d / (e % f);
+    x = a + b * ((c - d) / e) % f;
+    x = (a + b) * (c - d / e) % f;
+    x = a + b * (c - (d / e) % f);
+    
+    y = x + y;
+    y = x + yy;
+    y = xx + y;
+    y = x + y + z;
+    y = w + x + y + z;
+    y = w + (x + y) + z;
+    y = w + ((x) + y) + z;
+    y = w + (x + (y)) + z;
+    y = w + ((x + y)) + z;
+    y = w + (x + y + z);
+    y = w + ((x + y + z));
+    
+    y = x + y - z;
+    y = w - x + y - z;
+    y = w - (x + y) + z;
+    y = w + (x + y - z);
+    
+    y = w - x + y * z;
+    y = (w - x) + y * z;
+    y = (w - x + y) * z;
+    y = w - (x + y * z);
+    
+    y = (w - x + (y * z));
+    y = (w - x) + (y * z);
+    y = (w - x + y) * (z);
+    y = (w - (x + y * z));
+    
+    y = a + b * c - d / e % f;
+    y = a + b * c - d / (e % f);
+    y = a + b * ((c - d) / e) % f;
+    y = (a + b) * (c - d / e) % f;
+    y = a + b * (c - (d / e) % f);
+}
+procedure testPatternW {
+    while (x == y) {
+        read xx;
+    }
+    while (1 > 1) {
+        while (x < x) {
+            call testPatternI;
+        }
+        while (100 * 2 >= y) {
+            print xx;
+        }
+    }
+    while (x >= 13246357 + 5243 / 5325) {
+        while (x % y + z <= a * ((b + c) / d)) {
+            while (x / 100 + y >= a % 2 + (100 - b) * c) {
+                print yy;
+            }
+        }
+    }
+    while (!(a / x >= 1 + z)) {
+        while ((abc > 123) && (x * 3532 % 10 != 5)) {
+            while ((1542 != 634) || (c != d - 10)) {
+                while (!((yy + xx > 0) && (a / d + (b%c) == 141))) {
+                    while (!((z / y / x > 0) || (5832-4614 < a + (c % 10)))) {
+                        print a;
+                    }
+                }
+            }
+        }
+    }
+}
+procedure testPatternI {
+    if (abc == xyz) then {
+        print x;
+    } else {
+        read y;
+    }
+    if (543841 >= 52542) then {
+        if (if < 687341) then {
+            read read;
+        } else {
+            read while;
+        }
+    } else {
+        if (6851 > if) then {
+            if (if + while > 57879 * 534987) then {
+                read read;
+            } else {
+                print print;
+            }
+        } else {
+            read call;
+        }
+    }
+    if (read - if * 10502 != (while + 3625) % read) then {
+        call testPatternA;
+    } else {
+        if (!((while + and > 2) || (10 != 3))) then {
+            if (!((xyz < 100 - 325) && (3426 > x + y / 2 % z))) then {
+                print y;
+            } else {
+                read abc;
+            }
+        } else {
+            if (!(61514 <= 642)) then {
+                if ((a * b - (c%d) != 45) && (c * (b - a) >= d * 1632)) then {
+                    read read;
+                } else {
+                    print print;
+                }
+            } else {
+                if ((x + a % (d / y) >= 100) || (146548 + 542 > 687)) then {
+                    call testPatternA;
+                } else {
+                    read call;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,339 @@
+procedure procA {
+    read aA;
+    print bA;
+    while (cA < 10) {
+        call procB;
+        while (dA == 2) {
+            print eA;
+            read fA;
+            call procC;
+        }
+        if (687 != gA) then {
+            hA = iA * 526;
+            call procD;
+        } else {
+            jA = 26 % kA;
+            call procE;
+        }
+        read lA;
+        print mA;
+    }
+    if (3547 >= nA) then {
+        if (648 <= oA) then {
+            pA = qA / 2547;
+            call procF;
+        } else {
+            read rA;
+            call procG;
+            print sA;
+        }
+        tA = uA - 6980;
+    } else {
+        read vA;
+        print wA;
+        while (xA > 976) {
+            print yA;
+            call procH;
+            read zA;
+        }
+        call procI;
+    }
+    call procJ;
+}
+procedure procB {
+    read aB;
+    print bB;
+    while (cB < 10) {
+        while (dB == 2) {
+            print eB;
+            read fB;
+        }
+        if (687 != gB) then {
+            hB = iB * 526;
+        } else {
+            jB = 26 % kB;
+        }
+        read lB;
+        print mB;
+    }
+    if (3547 >= nB) then {
+        if (648 <= oB) then {
+            pB = qB / 2547;
+        } else {
+            read rB;
+            print sB;
+        }
+        tB = uB - 6980;
+    } else {
+        read vB;
+        print wB;
+        while (xB > 976) {
+            print yB;
+            read zB;
+        }
+    }
+}
+procedure procC {
+    read aC;
+    print bC;
+    while (cC < 10) {
+        while (dC == 2) {
+            print eC;
+            read fC;
+        }
+        if (687 != gC) then {
+            hC = iC * 526;
+        } else {
+            jC = 26 % kC;
+        }
+        read lC;
+        print mC;
+    }
+    if (3547 >= nC) then {
+        if (648 <= oC) then {
+            pC = qC / 2547;
+        } else {
+            read rC;
+            print sC;
+        }
+        tC = uC - 6980;
+    } else {
+        read vC;
+        print wC;
+        while (xC > 976) {
+            print yC;
+            read zC;
+        }
+    }
+}
+procedure procD {
+    read aD;
+    print bD;
+    while (cD < 10) {
+        while (dD == 2) {
+            print eD;
+            read fD;
+        }
+        if (687 != gD) then {
+            hD = iD * 526;
+        } else {
+            jD = 26 % kD;
+        }
+        read lD;
+        print mD;
+    }
+    if (3547 >= nD) then {
+        if (648 <= oD) then {
+            pD = qD / 2547;
+        } else {
+            read rD;
+            print sD;
+        }
+        tD = uD - 6980;
+    } else {
+        read vD;
+        print wD;
+        while (xD > 976) {
+            print yD;
+            read zD;
+        }
+    }
+}
+procedure procE {
+    read aE;
+    print bE;
+    while (cE < 10) {
+        while (dE == 2) {
+            print eE;
+            read fE;
+        }
+        if (687 != gE) then {
+            hE = iE * 526;
+        } else {
+            jE = 26 % kE;
+        }
+        read lE;
+        print mE;
+    }
+    if (3547 >= nE) then {
+        if (648 <= oE) then {
+            pE = qE / 2547;
+        } else {
+            read rE;
+            print sE;
+        }
+        tE = uE - 6980;
+    } else {
+        read vE;
+        print wE;
+        while (xE > 976) {
+            print yE;
+            read zE;
+        }
+    }
+}
+procedure procF {
+    read aF;
+    print bF;
+    while (cF < 10) {
+        while (dF == 2) {
+            print eF;
+            read fF;
+        }
+        if (687 != gF) then {
+            hF = iF * 526;
+        } else {
+            jF = 26 % kF;
+        }
+        read lF;
+        print mF;
+    }
+    if (3547 >= nF) then {
+        if (648 <= oF) then {
+            pF = qF / 2547;
+        } else {
+            read rF;
+            print sF;
+        }
+        tF = uF - 6980;
+    } else {
+        read vF;
+        print wF;
+        while (xF > 976) {
+            print yF;
+            read zF;
+        }
+    }
+}
+procedure procG {
+    read aG;
+    print bG;
+    while (cG < 10) {
+        while (dG == 2) {
+            print eG;
+            read fG;
+        }
+        if (687 != gG) then {
+            hG = iG * 526;
+        } else {
+            jG = 26 % kG;
+        }
+        read lG;
+        print mG;
+    }
+    if (3547 >= nG) then {
+        if (648 <= oG) then {
+            pG = qG / 2547;
+        } else {
+            read rG;
+            print sG;
+        }
+        tG = uG - 6980;
+    } else {
+        read vG;
+        print wG;
+        while (xG > 976) {
+            print yG;
+            read zG;
+        }
+    }
+}
+procedure procH {
+    read aH;
+    print bH;
+    while (cH < 10) {
+        while (dH == 2) {
+            print eH;
+            read fH;
+        }
+        if (687 != gH) then {
+            hH = iH * 526;
+        } else {
+            jH = 26 % kH;
+        }
+        read lH;
+        print mH;
+    }
+    if (3547 >= nH) then {
+        if (648 <= oH) then {
+            pH = qH / 2547;
+        } else {
+            read rH;
+            print sH;
+        }
+        tH = uH - 6980;
+    } else {
+        read vH;
+        print wH;
+        while (xH > 976) {
+            print yH;
+            read zH;
+        }
+    }
+}
+procedure procI {
+    read aI;
+    print bI;
+    while (cI < 10) {
+        while (dI == 2) {
+            print eI;
+            read fI;
+        }
+        if (687 != gI) then {
+            hI = iI * 526;
+        } else {
+            jI = 26 % kI;
+        }
+        read lI;
+        print mI;
+    }
+    if (3547 >= nI) then {
+        if (648 <= oI) then {
+            pI = qI / 2547;
+        } else {
+            read rI;
+            print sI;
+        }
+        tI = uI - 6980;
+    } else {
+        read vI;
+        print wI;
+        while (xI > 976) {
+            print yI;
+            read zI;
+        }
+    }
+}
+procedure procJ {
+    read aJ;
+    print bJ;
+    while (cJ < 10) {
+        while (dJ == 2) {
+            print eJ;
+            read fJ;
+        }
+        if (687 != gJ) then {
+            hJ = iJ * 526;
+        } else {
+            jJ = 26 % kJ;
+        }
+        read lJ;
+        print mJ;
+    }
+    if (3547 >= nJ) then {
+        if (648 <= oJ) then {
+            pJ = qJ / 2547;
+        } else {
+            read rJ;
+            print sJ;
+        }
+        tJ = uJ - 6980;
+    } else {
+        read vJ;
+        print wJ;
+        while (xJ > 976) {
+            print yJ;
+            read zJ;
+        }
+    }
+}
