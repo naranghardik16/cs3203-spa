@@ -1,0 +1,59 @@
+procedure a {
+    call b;
+    print x;
+}
+
+procedure b {
+    y = y + 1;
+    if (y > 0) then {
+        call c;
+    } else {
+        call d;
+    }
+}
+
+procedure c {
+    call e;
+    call d;
+}
+
+procedure d {
+    print a;
+    call e;
+}
+
+procedure e {
+    while (1 > 0) {
+        call f;
+    }
+}
+
+procedure f {
+    print pi;
+}
+
+procedure g {
+    call h;
+    call h;
+}
+
+procedure h {
+    call j;
+}
+
+procedure i {
+    call h;
+}
+
+procedure j {
+    print z;
+    if (z > 0) then {
+        call k;
+    } else {
+        print z;
+    }
+}
+
+procedure k {
+    print k;
+}

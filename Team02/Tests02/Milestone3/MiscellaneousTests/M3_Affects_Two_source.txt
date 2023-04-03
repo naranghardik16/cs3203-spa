@@ -1,0 +1,51 @@
+procedure One {
+  read i;
+  if (i <= 0) then {
+    i = 10;
+  } else {
+    i = i;
+  }
+  while (i >= 0) {
+    read x;
+    read y;
+    read distance;
+    k = 0;
+    read x1;
+    read y1;
+    difference =
+        (x - x1) * (x - x1) + (y - y1) * (y - y1) - distance * distance;
+    if (difference > 0) then {
+      print x1;
+      print y1;
+    } else {
+      while (difference <= 0) {
+        read x1;
+        read y1;
+        difference =
+            (x - x1) * (x - x1) + (y - y1) * (y - y1) - distance * distance;
+        k = k + 1;
+      }
+      print k;
+      print x1;
+      print y1;
+    }
+    i = i - 1;
+    call Two;
+  }
+}
+
+procedure Two {
+  if (x1 < x) then {
+    if (y1 < y) then {
+      i = i + 1;
+    } else {
+      i = i + 1;
+    }
+  } else {
+    if (y1 < y) then {
+      i = i + 1;
+    } else {
+      i = i;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+procedure proc1 {
+  x = 10;
+  y = 2 * x + 100;
+  call proc2;
+  print result;
+}
+
+procedure proc2 {
+  k = 0;
+  z = y;
+  while (z >= x) {
+    z = z / x;
+    k = k + 1;
+  }
+  print k;
+  w = x * (y * z);
+  v = ((x - y) * (x + y) + (x + z) * (x - z) + (y - z) * (y - z)) % y;
+  if (w > v) then {
+    result = w / v;
+  } else {
+    result = 0;
+  }
+  result = result % 5 * result / k / k;
+}

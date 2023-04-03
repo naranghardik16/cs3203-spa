@@ -19,6 +19,11 @@ class OneToOneStore {
  private:
   std::unordered_map<K, V> forward_map_;
   std::unordered_map<V, K> backward_map_;
+
+  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> pair_set_;
+  std::unordered_set<K> key_set_;
+  std::unordered_set<V> value_set_;
+
   std::size_t size = 0;
 
  public:
