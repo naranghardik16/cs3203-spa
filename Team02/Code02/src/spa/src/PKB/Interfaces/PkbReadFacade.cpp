@@ -3,7 +3,6 @@
 #include "PKB/Types/PkbCommunicationTypes.h"
 #include "PKB/Util/ExpressionUtil.h"
 #include "PKB/Util/FunctionalUtil.h"
-#include <chrono>
 
 PkbReadFacade::PkbReadFacade(Pkb &pkb) : pkb(pkb) {}
 
@@ -633,7 +632,6 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
   for (const auto &a : this->GetAssignStatements()) {
     std::stack<std::string> s;
     std::unordered_set<std::string> visited;
-
     s.push(a);
 
     std::string v = *this->GetVariablesModifiedByStatement(a).begin();
@@ -729,8 +727,8 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
   std::unordered_map<std::string, std::unordered_set<std::string>> affects_map;
   std::unordered_set<std::string> keys;
-  std::chrono::steady_clock::time_point
-      begin = std::chrono::steady_clock::now();
+
+  int cnt = 0;
   for (const auto &p : this->GetAffectsPairs()) {
     keys.insert(p.first);
     if (affects_map.count(p.first) > 0) {
@@ -759,7 +757,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
       }
     }
   }
-  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
   return result;
 }
 

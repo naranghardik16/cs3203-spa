@@ -7,12 +7,12 @@ a1a ccc
 assign a; variable v; stmt s1; procedure p1, p2; if ifs;
 Select <a, v> pattern ifs("x", _, _) such that Uses(p1, _) such that Affects*(222, s1) such that Calls*(p1, p2) such that Parent*(209, s1) pattern a(v, _) such that Modifies(p2, v) and Modifies(ifs, v) such that Uses(s1, v)
 100 a,220 a,243 a,27 a,302 a,327 a,332 a,338 a,377 a,389 a,77 a,92 a
-100000
+5000
 2 - sort within group by number of rows in result table (random order)
 assign a; variable v; stmt s1; procedure p1, p2; if ifs;
 Select <a, v> pattern a(v, _) such that Affects*(222, s1) such that Calls*(p1, p2) and Parent*(209, s1) such that Modifies(ifs, v) and Uses(p1, _) and Uses(s1, v) and Modifies(p2, v) pattern ifs("x", _, _)
 100 a,220 a,243 a,27 a,302 a,327 a,332 a,338 a,377 a,389 a,77 a,92 a
-100000
+5000
 3 - number of clauses in asc order (1 s1, 2 s2, 3 r3 p3 a3, 5 ifs5 v5)
 stmt s1, s2, s5; if ifs2, ifs5; assign a3; while w3; variable v5; read r3; print p3;
 Select <s1, ifs2, a3, s5> with s1.stmt# = 185 such that Follows(ifs2, s2) with 201 = s2.stmt# such that Follows(r3, p3) and Follows(p3, a3) such that Follows(a3, w3) pattern ifs5("a1a", _, _) and ifs5("ccc", _, _) such that Uses(ifs5, v5) with "bb2" = v5.varName such that Parent (s5, ifs5)
@@ -36,10 +36,10 @@ Select <s1, a1> such that Follows(s1, s2) and Follows(a1, a2) and Follows*(s2, s
 7 - Common synonym group together (1 ifs, 2 w2, 2 w1, 4v)
 assign a; variable v; procedure p; if ifs; while w1, w2;
 Select BOOLEAN pattern ifs("bA", _, _) such that Next*(25, w2) and Parent*(w1, w2) pattern w1(v, _) such that Modifies(ifs, v) such that Uses(p, v) pattern a(v, _)
-TRUE
+FALSE
 5000
 8 - valid query BOOLEAN 7 clauses random order
 assign a; variable v; procedure p; if ifs; while w1, w2;
 Select BOOLEAN such that Next*(25, w2) such that Modifies(ifs, v) such that Uses(p, v) pattern a(v, _) pattern w1(v, _) such that Parent*(w1, w2) pattern ifs("bA", _, _)
-TRUE
+FALSE
 5000
