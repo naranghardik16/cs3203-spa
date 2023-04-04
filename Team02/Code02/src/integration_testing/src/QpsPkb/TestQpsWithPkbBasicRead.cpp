@@ -243,7 +243,6 @@ TEST_CASE("Uses and Modifies testing") {
     results.sort();
     REQUIRE(results == expected_results);
   }
-
 }
 TEST_CASE("Check if QPS works with Pkb for basic operations") {
   typedef std::shared_ptr<Pkb> PkbPtr;
