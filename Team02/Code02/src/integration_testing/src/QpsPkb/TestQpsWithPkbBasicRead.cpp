@@ -9,6 +9,242 @@
 #include "PKB/Pkb.h"
 #include "QPS/Qps.h"
 
+TEST_CASE("Uses and Modifies testing") {
+  typedef std::shared_ptr<Pkb> PkbPtr;
+  typedef std::shared_ptr<PkbWriteFacade> PkbWriteFacadePtr;
+  typedef std::shared_ptr<PkbReadFacade> PkbReadFacadePtr;
+  typedef std::string QueryString;
+  typedef std::list<QueryString> QueryResult;
+
+  PkbPtr pkb = std::make_shared<Pkb>();
+  PkbWriteFacadePtr pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
+  PkbReadFacadePtr pkb_read = std::make_shared<PkbReadFacade>(*pkb);
+
+//  procedure procedure {
+//    x411 = 2; -> 1
+//    y132 = 2 + 2; -> 2
+//    x1c2v3b4 = 2 / 2; -> 3
+//    x = y132 * 2; -> 4
+//    x = 3 % x; -> 5
+  //  x = 2 * 2 + 3 % 1 - x411 / 2; -> 6
+//    var = 2; -> 7
+//    foo = 4; -> 8
+//    bar = foo - 4 + 3 * 2; -> 9
+//    X=1; -> 10
+//    read bar ; -> 11
+//    bar= foo   ; -> 12
+//    if (a <
+//        bar) then{
+//        while (bar > temp) {
+//          oSCar  = 1 * bar + tmp;
+//          while (!(tmp / tmp == bar * bar)) {
+//            oSCar = X - (bar + foo *
+//                                   chArlie); }}
+//        while ((!(x!=1)) && (!(x == 1))) {
+//          x = x + 1;
+//          if (foo==0) then {
+//              while (bar== 3){
+//                print A1pH3;
+//                b = 0;
+//                c = x411    + z + A1pH3; }}
+//          else {
+//            while (c>1) {
+//              c = c -1;}
+//            x = x+ 1; }}}
+//    else{
+//      a= 2;}
+//    while (foo < bar) {
+//      if (var > 0) then {
+//          var = var + 22222222222222222222222222222;
+//          bar = bar + 11111111111111111111111111111;
+//          var = var - 22222222222222222222222222222;
+//        } else {
+//        foo = foo + 1;
+//        var = var - 1;
+//        while = 8;
+//        while (while > 1) {
+//          while = 3 * 2 + while / 2 - 6;
+//          read read;
+//          read print;
+//          then
+//              =
+//                  read
+//              ;
+//          else =
+//              print;
+//          if (while != 0) then {
+//              temp = while * 2 - 2;
+//              read while;
+//              while = foo - bar * var + 3 * 2;
+//              print while;
+//              while = (temp + 2) / 2;
+//            } else {
+//            read temp;
+//            print temp;
+//          }
+//          print read;
+//          print print;
+//        }
+//      }
+//    }
+//    print var;
+//    print foo;
+//    print bar;
+//  }
+
+  pkb_write->AddProcedure("procedure");
+  pkb_write->AddStatementOfAType("1", ASSIGN);
+  pkb_write->AddStatementOfAType("2", ASSIGN);
+  pkb_write->AddStatementOfAType("3", ASSIGN);
+  pkb_write->AddStatementOfAType("4", ASSIGN);
+  pkb_write->AddStatementOfAType("5", ASSIGN);
+  pkb_write->AddStatementOfAType("6", ASSIGN);
+  pkb_write->AddStatementOfAType("7", ASSIGN);
+  pkb_write->AddStatementOfAType("8", ASSIGN);
+  pkb_write->AddStatementOfAType("9", ASSIGN);
+  pkb_write->AddStatementOfAType("10", ASSIGN);
+  pkb_write->AddStatementOfAType("11", READ);
+  pkb_write->AddStatementOfAType("12", ASSIGN);
+
+
+  pkb_write->AddVariable("x411");
+  pkb_write->AddVariable("y132");
+  pkb_write->AddVariable("x1c2v3b4");
+  pkb_write->AddVariable("x");
+  pkb_write->AddVariable("var");
+  pkb_write->AddVariable("foo");
+  pkb_write->AddVariable("bar");
+  pkb_write->AddVariable("X");
+  pkb_write->AddConstant("2");
+  pkb_write->AddConstant("3");
+  pkb_write->AddConstant("1");
+  pkb_write->AddConstant("4");
+
+
+  pkb_write->AddStatementModifyingVariable("1", "x411");
+  pkb_write->AddStatementModifyingVariable("2", "y132");
+  pkb_write->AddStatementModifyingVariable("3", "x1c2v3b4");
+  pkb_write->AddStatementModifyingVariable("4", "x");
+  pkb_write->AddStatementModifyingVariable("5", "x");
+  pkb_write->AddStatementModifyingVariable("6", "x");
+  pkb_write->AddStatementModifyingVariable("7", "var");
+  pkb_write->AddStatementModifyingVariable("8", "foo");
+  pkb_write->AddStatementModifyingVariable("9", "bar");
+  pkb_write->AddStatementModifyingVariable("10", "X");
+  pkb_write->AddStatementModifyingVariable("11", "bar");
+  pkb_write->AddStatementModifyingVariable("12", "bar");
+
+  pkb_write->AddStatementUsingVariable("4", "y132");
+  pkb_write->AddStatementUsingVariable("5", "x");
+  pkb_write->AddStatementUsingVariable("6", "x411");
+  pkb_write->AddStatementUsingVariable("9", "foo");
+  pkb_write->AddStatementUsingVariable("12", "foo");
+
+
+
+
+
+  SECTION("Test statements - basic") {
+    QueryString query = "stmt s; Select s";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test variables - basic") {
+    QueryString query = "variable v; Select v";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with statement and wildcard") {
+    QueryString query = "stmt s; Select s such that Modifies(s, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses - (int, identifier) - Out of Bound") {
+    QueryString query = "stmt s; Select BOOLEAN such that Uses(50000000000, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Semantic Error - Uses - (int, synonym)") {
+    QueryString query = "stmt s; Select BOOLEAN such that Uses(50000000000, s)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses - (int, wildcard) - Out of Bound") {
+    QueryString query = "stmt s; Select BOOLEAN such that Uses(50000000000, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modify - (int, identifier) - Out of Bound") {
+    QueryString query = "stmt s; Select BOOLEAN such that Modifies(50000000000, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  // check this test case
+  SECTION("Semantic Error - (int, synonym) - Modify") {
+    QueryString query = "stmt s; Select BOOLEAN such that Modifies(50000000000, s)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modify - (int, wildcard) - Out of Bound") {
+    QueryString query = "Select BOOLEAN such that Modifies(500000000000, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+}
 TEST_CASE("Check if QPS works with Pkb for basic operations") {
   typedef std::shared_ptr<Pkb> PkbPtr;
   typedef std::shared_ptr<PkbWriteFacade> PkbWriteFacadePtr;
