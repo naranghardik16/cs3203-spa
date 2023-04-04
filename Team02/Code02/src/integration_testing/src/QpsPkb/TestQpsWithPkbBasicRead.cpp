@@ -33,63 +33,57 @@ TEST_CASE("Uses and Modifies testing") {
 //    X=1; -> 10
 //    read bar ; -> 11
 //    bar= foo   ; -> 12
-//    if (a <
-//        bar) then{
-//        while (bar > temp) {
-//          oSCar  = 1 * bar + tmp;
-//          while (!(tmp / tmp == bar * bar)) {
-//            oSCar = X - (bar + foo *
-//                                   chArlie); }}
-//        while ((!(x!=1)) && (!(x == 1))) {
-//          x = x + 1;
-//          if (foo==0) then {
-//              while (bar== 3){
-//                print A1pH3;
-//                b = 0;
-//                c = x411    + z + A1pH3; }}
+//    if (a < bar) then { -> 13
+//        while (bar > temp) { -> 14
+//          oSCar  = 1 * bar + tmp; -> 15
+//          while (!(tmp / tmp == bar * bar)) { -> 16
+//            oSCar = X - (bar + foo * chArlie); }} -> 17
+//        while ((!(x!=1)) && (!(x == 1))) { -> 18
+//          x = x + 1; -> 19
+//          if (foo==0) then { -> 20
+//              while (bar== 3){ -> 21
+//                print A1pH3; -> 22
+//                b = 0; -> 23
+//                c = x411    + z + A1pH3; }} -> 24
 //          else {
-//            while (c>1) {
-//              c = c -1;}
-//            x = x+ 1; }}}
+//            while (c>1) { -> 25
+//              c = c -1;} -> 26
+//            x = x+ 1; }}} -> 27
 //    else{
-//      a= 2;}
-//    while (foo < bar) {
-//      if (var > 0) then {
-//          var = var + 22222222222222222222222222222;
-//          bar = bar + 11111111111111111111111111111;
-//          var = var - 22222222222222222222222222222;
+//      a= 2;} -> 28
+//    while (foo < bar) { -> 29
+//      if (var > 0) then { -> 30
+//          var = var + 22222222222222222222222222222; -> 31
+//          bar = bar + 11111111111111111111111111111; -> 32
+//          var = var - 22222222222222222222222222222; -> 33
 //        } else {
-//        foo = foo + 1;
-//        var = var - 1;
-//        while = 8;
-//        while (while > 1) {
-//          while = 3 * 2 + while / 2 - 6;
-//          read read;
-//          read print;
-//          then
-//              =
-//                  read
-//              ;
-//          else =
-//              print;
-//          if (while != 0) then {
-//              temp = while * 2 - 2;
-//              read while;
-//              while = foo - bar * var + 3 * 2;
-//              print while;
-//              while = (temp + 2) / 2;
+//        foo = foo + 1; -> 34
+//        var = var - 1; -> 35
+//        while = 8; -> 36
+//        while (while > 1) { -> 37
+//          while = 3 * 2 + while / 2 - 6; -> 38
+//          read read; -> 39
+//          read print; -> 40
+//          then = read; -> 41
+//          else = print; -> 42
+//          if (while != 0) then { -> 43
+//              temp = while * 2 - 2; -> 44
+//              read while; -> 45
+//              while = foo - bar * var + 3 * 2; -> 46
+//              print while; -> 47
+//              while = (temp + 2) / 2; -> 48
 //            } else {
-//            read temp;
-//            print temp;
+//            read temp; -> 49
+//            print temp; -> 50
 //          }
-//          print read;
-//          print print;
+//          print read; -> 51
+//          print print; -> 52
 //        }
 //      }
 //    }
-//    print var;
-//    print foo;
-//    print bar;
+//    print var; -> 53
+//    print foo; -> 54
+//    print bar; -> 55
 //  }
 
   pkb_write->AddProcedure("procedure");
@@ -105,6 +99,50 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementOfAType("10", ASSIGN);
   pkb_write->AddStatementOfAType("11", READ);
   pkb_write->AddStatementOfAType("12", ASSIGN);
+  pkb_write->AddStatementOfAType("13", IF);
+  pkb_write->AddStatementOfAType("14", WHILE);
+  pkb_write->AddStatementOfAType("15", ASSIGN);
+  pkb_write->AddStatementOfAType("16", WHILE);
+  pkb_write->AddStatementOfAType("17", ASSIGN);
+  pkb_write->AddStatementOfAType("18", WHILE);
+  pkb_write->AddStatementOfAType("19", ASSIGN);
+  pkb_write->AddStatementOfAType("20", IF);
+  pkb_write->AddStatementOfAType("21",  WHILE);
+  pkb_write->AddStatementOfAType("22", PRINT);
+  pkb_write->AddStatementOfAType("23", ASSIGN);
+  pkb_write->AddStatementOfAType("24", ASSIGN);
+  pkb_write->AddStatementOfAType("25", WHILE);
+  pkb_write->AddStatementOfAType("26", ASSIGN);
+  pkb_write->AddStatementOfAType("27", ASSIGN);
+  pkb_write->AddStatementOfAType("28", ASSIGN);
+  pkb_write->AddStatementOfAType("29", WHILE);
+  pkb_write->AddStatementOfAType("30", IF);
+  pkb_write->AddStatementOfAType("31", ASSIGN);
+  pkb_write->AddStatementOfAType("32", ASSIGN);
+  pkb_write->AddStatementOfAType("33", ASSIGN);
+  pkb_write->AddStatementOfAType("34", ASSIGN);
+  pkb_write->AddStatementOfAType("35", ASSIGN);
+  pkb_write->AddStatementOfAType("36", WHILE);
+  pkb_write->AddStatementOfAType("37", WHILE);
+  pkb_write->AddStatementOfAType("38", WHILE);
+  pkb_write->AddStatementOfAType("39", READ);
+  pkb_write->AddStatementOfAType("40", READ);
+  pkb_write->AddStatementOfAType("41", ASSIGN);
+  pkb_write->AddStatementOfAType("42", ASSIGN);
+  pkb_write->AddStatementOfAType("43", IF);
+  pkb_write->AddStatementOfAType("44", ASSIGN);
+  pkb_write->AddStatementOfAType("45", READ);
+  pkb_write->AddStatementOfAType("46", WHILE);
+  pkb_write->AddStatementOfAType("47", PRINT);
+  pkb_write->AddStatementOfAType("48", WHILE);
+  pkb_write->AddStatementOfAType("49", READ);
+  pkb_write->AddStatementOfAType("50", PRINT);
+  pkb_write->AddStatementOfAType("51", PRINT);
+  pkb_write->AddStatementOfAType("52", PRINT);
+  pkb_write->AddStatementOfAType("53", PRINT);
+  pkb_write->AddStatementOfAType("54", PRINT);
+  pkb_write->AddStatementOfAType("55", PRINT);
+
 
 
   pkb_write->AddVariable("x411");
@@ -158,7 +196,10 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    QueryResult expected_results{"1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "2", "20", "21",
+                                 "22", "23", "24", "25", "26", "27", "28", "29", "3", "30", "31", "32", "33", "34",
+                                 "35", "36", "37", "38", "39", "4", "40", "41", "42", "43", "44", "45", "46", "47",
+                                 "48", "49", "5", "50", "51", "52", "53", "54", "55", "6", "7", "8", "9"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -181,6 +222,50 @@ TEST_CASE("Uses and Modifies testing") {
     Qps::ProcessQuery(query, results, pkb_read);
 
     QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(proc, 'chArlie')") {
+    QueryString query = R"(variable Select; procedure proc; Select proc such that Uses(proc, "chArlie"))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(proc, v) - select v") {
+    QueryString query = R"(variable var; procedure proc; Select var such that Uses(proc, var))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"foo", "x", "x411", "y132"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(s, 'X'") {
+    QueryString query = R"(stmt stmt; Select stmt such that Uses(stmt, "X"))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies('procedure', _)") {
+    QueryString query = R"(Select BOOLEAN such that Modifies("procedure", _))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -934,7 +1019,7 @@ TEST_CASE("Integration testing for Calls") {
 
   SECTION("Calls(IDENT,IDENT) is true") {
     QueryString
-        query = "procedure p; Select p such that Calls(\"proc1\",\"proc2\")";
+        query = R"(procedure p; Select p such that Calls("proc1","proc2"))";
     QueryResult results;
     Qps::ProcessQuery(query, results, pkb_read);
     QueryResult expected_results
@@ -946,7 +1031,7 @@ TEST_CASE("Integration testing for Calls") {
 
   SECTION("Calls(IDENT,IDENT) is false") {
     QueryString query =
-        "procedure p; Select p .procName such that Calls(\"proc3    \",\"       proc2\")";
+        R"(procedure p; Select p .procName such that Calls("proc3    ","       proc2"))";
     QueryResult results;
     Qps::ProcessQuery(query, results, pkb_read);
     QueryResult expected_results{};
