@@ -139,6 +139,12 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementUsingVariable("6", "x411");
   pkb_write->AddStatementUsingVariable("9", "foo");
   pkb_write->AddStatementUsingVariable("12", "foo");
+  pkb_write->AddProcedureUsingVariable("procedure", "y132");
+  pkb_write->AddProcedureUsingVariable("procedure", "x");
+  pkb_write->AddProcedureUsingVariable("procedure", "x411");
+  pkb_write->AddProcedureUsingVariable("procedure", "foo");
+
+
 
 
 
@@ -173,6 +179,17 @@ TEST_CASE("Uses and Modifies testing") {
     Qps::ProcessQuery(query, results, pkb_read);
 
     QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(proc, v)") {
+    QueryString query = "procedure proc; variable var; Select <proc, var> such that Uses(proc, var)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"procedure foo", "procedure x", "procedure x411", "procedure y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
