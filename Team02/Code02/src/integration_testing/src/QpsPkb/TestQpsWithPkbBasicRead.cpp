@@ -185,6 +185,51 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Modifies(proc, 'x1c2v3b4')") {
+    QueryString query = "variable Select; procedure proc; Select proc such that Modifies(proc, \"x1c2v3b4\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"procedure"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies(proc, v) - select v") {
+    QueryString query = "variable var; procedure proc; Select var such that Modifies(proc, var)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies(s, 'temp')") {
+    QueryString query = "stmt s; Select s such that Modifies(s, \"temp\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies(s, v)") {
+    QueryString query = "stmt s; variable var; Select <s, var> such that Modifies(s, var)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "2 y132", "3 x1c2v3b4", "4 x", "5 x",
+                                 "6 x", "7 var", "8 foo", "9 bar"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Modifies(proc, v)") {
     QueryString query = "procedure proc; variable var; Select <proc, var> such that Modifies(proc, var)";
     QueryResult results;
