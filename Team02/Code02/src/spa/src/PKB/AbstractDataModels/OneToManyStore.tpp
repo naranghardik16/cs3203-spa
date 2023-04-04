@@ -8,16 +8,18 @@ template<typename K, typename V>
 void OneToManyStore<K, V>::insert(K key, V value) {
   this->forward_map_[key].insert(value);
   this->backward_map_[value] = key;
+
+  this->pair_set_.insert(std::make_pair(key, value));
   this->key_set_.insert(key);
+  this->value_set_.insert(value);
+
   this->size++;
 }
 
 template<typename K, typename V>
 bool OneToManyStore<K, V>::contains(K key, V value) {
   auto iter = this->forward_map_.find(key);
-  if (iter == this->forward_map_.end()) {
-    return false;
-  }
+  if (iter == this->forward_map_.end()) return false;
   return iter->second.count(value) > 0;
 }
 
@@ -60,11 +62,7 @@ K OneToManyStore<K, V>::retrieveFromValue(V value) {
 
 template<typename K, typename V>
 std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> OneToManyStore<K, V>::retrieveAll() {
-  std::unordered_set<std::pair<K, V>, PairHasherUtil::hash_pair> result;
-  for (auto p: this->backward_map_) {
-      result.insert(std::make_pair(p.second, p.first));
-  }
-  return result;
+  return this->pair_set_;
 }
 
 template<typename K, typename V>
@@ -74,11 +72,7 @@ std::unordered_set<K> OneToManyStore<K, V>::retrieveAllKeys() {
 
 template<typename K, typename V>
 std::unordered_set<V> OneToManyStore<K, V>::retrieveAllValues() {
-  std::unordered_set<V> result;
-  for (auto p: this->backward_map_) {
-      result.insert(p.first);
-  }
-  return result;
+  return this->value_set_;
 }
 
 

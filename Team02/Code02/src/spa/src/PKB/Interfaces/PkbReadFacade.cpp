@@ -534,12 +534,13 @@ PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const Stat
 
 // Affects API
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
+//  if (!this->affects_cache_.empty()) return this->affects_cache_;
+
   PairSet result;
   const auto asses = this->GetAssignStatements();
   for (const auto &a : this->GetAssignStatements()) {
     std::stack<std::string> s;
     std::unordered_set<std::string> visited;
-
     s.push(a);
 
     std::string v = *this->GetVariablesModifiedByStatement(a).begin();
@@ -547,32 +548,44 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
       auto current = s.top();
       s.pop();
       if (visited.count(current) > 0) {
-        if (current == a && this->HasUsesStatementRelationship(current, v)) result.insert(std::make_pair(a, current));
+        if (current == a
+            && this->HasUsesStatementRelationship(current, v))
+          result.insert(std::make_pair(a, current));
         continue;
       }
 
       if (this->GetIfStatements().count(current) > 0 ||
           this->GetWhileStatements().count(current) > 0) {
         for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
+
+        visited.insert(current);
         continue;
       }
 
       if (current != a && this->HasUsesStatementRelationship(current, v) &&
-          this->GetAssignStatements().count(current) > 0)
+          this->GetAssignStatements().count(current) > 0) {
+        visited.insert(current);
         result.insert(std::make_pair(a, current));
+      }
 
       if (current != a
-          && this->HasModifiesStatementRelationship(current, v))
+          && this->HasModifiesStatementRelationship(current, v)) {
+        visited.insert(current);
         continue;
+      }
 
       if (this->GetReadStatements().count(current) > 0
-          && this->HasModifiesStatementRelationship(current, v))
+          && this->HasModifiesStatementRelationship(current, v)) {
+        visited.insert(current);
         continue;
+      }
 
       if (this->GetCallStatements().count(current) > 0 &&
           this->HasModifiesProcedureRelationship(this->GetProcedureFromCallStatement(
-              current), v))
+              current), v)) {
+        visited.insert(current);
         continue;
+      }
 
       for (auto &child : this->GetNext(current, STATEMENT)) s.push(child);
 
@@ -580,6 +593,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
     }
   }
 
+//  this->affects_cache_ = result;
   return result;
 }
 
@@ -617,6 +631,8 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
+//  if (!this->affects_star_cache_.empty()) return this->affects_star_cache_;
+
   std::unordered_map<std::string, std::unordered_set<std::string>> affects_map;
   std::unordered_set<std::string> keys;
   for (const auto &p : this->GetAffectsPairs()) {
@@ -648,6 +664,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
     }
   }
 
+//  this->affects_star_cache_ = result;
   return result;
 }
 
