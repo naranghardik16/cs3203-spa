@@ -133,6 +133,14 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementModifyingVariable("10", "X");
   pkb_write->AddStatementModifyingVariable("11", "bar");
   pkb_write->AddStatementModifyingVariable("12", "bar");
+  pkb_write->AddProcedureModifyingVariable("procedure", "x411");
+  pkb_write->AddProcedureModifyingVariable("procedure", "y132");
+  pkb_write->AddProcedureModifyingVariable("procedure", "x1c2v3b4");
+  pkb_write->AddProcedureModifyingVariable("procedure", "x");
+  pkb_write->AddProcedureModifyingVariable("procedure", "var");
+  pkb_write->AddProcedureModifyingVariable("procedure", "foo");
+  pkb_write->AddProcedureModifyingVariable("procedure", "bar");
+  pkb_write->AddProcedureModifyingVariable("procedure", "X");
 
   pkb_write->AddStatementUsingVariable("4", "y132");
   pkb_write->AddStatementUsingVariable("5", "x");
@@ -143,12 +151,6 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddProcedureUsingVariable("procedure", "x");
   pkb_write->AddProcedureUsingVariable("procedure", "x411");
   pkb_write->AddProcedureUsingVariable("procedure", "foo");
-
-
-
-
-
-
 
   SECTION("Test statements - basic") {
     QueryString query = "stmt s; Select s";
@@ -179,6 +181,29 @@ TEST_CASE("Uses and Modifies testing") {
     Qps::ProcessQuery(query, results, pkb_read);
 
     QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies(proc, v)") {
+    QueryString query = "procedure proc; variable var; Select <proc, var> such that Modifies(proc, var)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"procedure X", "procedure bar", "procedure foo", "procedure var", "procedure x",
+                                 "procedure x1c2v3b4", "procedure x411", "procedure y132"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(s, v)") {
+    QueryString query = "stmt s; variable var; Select <s, var> such that Uses(s, var)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"12 foo", "4 y132", "5 x", "6 x411", "9 foo"};
     results.sort();
     REQUIRE(results == expected_results);
   }
