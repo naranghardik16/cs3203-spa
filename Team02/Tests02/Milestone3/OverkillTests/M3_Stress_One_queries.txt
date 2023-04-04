@@ -1,0 +1,105 @@
+1 - variable name equals procedure name
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <cl.procName, cl.stmt#, a.stmt#> such that Calls(_, p) and Next(_, _) and Uses(a, v) with v.varName = p.procName and v.varName = v1.varName and v.varName = cl.procName pattern a(_, _"(a+b)"_) pattern ifs(v, _, _)
+z 45 22, z 58 22, z 59 22, z 60 22, z 70 22
+5000
+2 - pattern for two assignments
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <a.stmt#, v.varName, a1.stmt#, v1.varName, rd.stmt#, rd.varName, cl.stmt#, cl.procName> such that Follows*(cl, rd) and Follows*(a, a1) and Parent*(ifs, a) and Parent(w, a1) such that Modifies(rd, v) and Modifies(a, v) and Modifies(a1, v1) pattern a(_, _"c"_) and a1(_, _"a+b"_)
+21 b 22 z 3 b 1 x
+5000
+3 - long select tuple + symmetric with clause
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1;  procedure p, q; constant c; read rd; print pn; call cl;
+Select <a, a, a, a, a, a, a, a, a, a, a, a, a, a, a> such that Follows*(_, _) and Calls*(_, _) such that Affects(_, _) and Parent*(_, _) and Modifies(a, v) and Modifies(a1, v1) with v.varName = "a" with "a" = v.varName with v1.varName = "b"
+8 8 8 8 8 8 8 8 8 8 8 8 8 8 8, 13 13 13 13 13 13 13 13 13 13 13 13 13 13 13, 32 32 32 32 32 32 32 32 32 32 32 32 32 32 32
+5000
+4 - Binding statements + binding if and while
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <s, s1, ifs, w> such that Parent(ifs, _) and Parent(w, _) with ifs.stmt# = s.stmt# and s1.stmt# = w.stmt# such that Parent(s, a) and Parent*(s1, a) and Uses(s, v) with v.varName = "a"
+43 42 43 42, 26 20 26 20
+5000
+5 - procedure relationships
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <p, q, c> such that Calls(q, p) with p.procName = v.varName and q.procName = pn.varName and c.value = 1 such that Parent(_, cl) and Parent(_, pn) and Uses(pn, v1) pattern a(_, _"1"_) and a1(_, "1")
+y x 1, z x 1
+5000
+6 - All entities in tuple
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <a, a1, w, ifs, v, v1, rd, pn> such that Uses(a, v) and Uses(a, v1) and Modifies(a1, v1) and Parent(ifs, a) and Parent*(ifs, a1) and Parent*(w, a1) and Parent*(w, a) and Uses(pn, v) and Modifies(rd, v1)
+47 44 42 43 c c 23 4, 47 44 42 43 c c 23 10, 47 47 42 43 c c 23 4, 47 47 42 43 c c 23 10
+5000
+7 - doubly nested
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <ifs, w, s, pn, v, p> such that Parent(ifs, w) and Parent(w, s) and Parent(s, cl) and Uses(cl, v) pattern a(v, _)  and ifs(v, _, _) with p.procName = cl.procName and "g" = pn.varName and c.value = 12345
+51 54 57 49 s z, 5 20 26 49 a w, 5 20 26 49 d w
+5000
+8 - useless empty patterns
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <v1, a> pattern a(v1, _"a"_) and a1(_, _) and ifs(v, _, _) pattern w(_, _)and w(_, _) and ifs(_, _, _) such that Modifies(a, v1) and Uses(a1, v1) with s.stmt# = w.stmt# and s1.stmt# = ifs.stmt#
+a 8, c 9, a 13, l 18, z 22, c 44
+5000
+9 - duplicate clauses
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <v, v1, a, a1> such that Uses(a, _) and Modifies(a1, _) and Uses(a, _) and Modifies(a1, _) pattern a(v, _) and a1(v1, _) such that Parent*(_, a) and Follows(a1, cl) and Uses(a, v1) and Uses(a1, v)
+b c 21 44
+5000
+10 - long follows but empty result
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <s, s1, cl, pn, rd, w, ifs, a, a1> such that Follows*(s, s1) and Follows*(s1, cl) and Follows*(cl, pn) and Follows*(pn, rd) and Parent(w, ifs) and Parent(ifs, a) and Parent(w, a1)
+
+5000
+11 - Redundant clauses
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select a such that Uses(a, _) and Modifies(a, _) and Parent(_, a) and Parent*(_, a) and Follows*(a, a1) and Follows(a, _) and Follows*(_, a) and Follows(_, a)
+62
+5000
+12 - redundant pattern
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <a, a1> pattern a(_, _) and a(_, _"a"_) and a(_, _"(a+(b))"_) pattern a(_, _"a+b"_) and a1(v, _"r"_) and a1(v, "r-1") and a1(_, _) such that Parent(_, a1) with c.value = 1
+8 63, 22 63, 44 63
+5000
+13 - All connected synonyms for one result
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <v1, v> such that Next(w, ifs) and Next(ifs, a) and Next(a, cl) and Next(cl, a1) and Next(a1, pn) and Next(pn, rd) and Modifies(a, v) with v.varName = "c" and pn.varName = "g" such that Uses(a1, v1) pattern a1(v1, _)
+d c
+5000
+14 - tuple combinations
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select <w, v1> such that Uses(w, v) such that Modifies(w, v) and Next(w, a) and Modifies(a, v) with v1.varName = p.procName pattern a1(v1, _) such that Calls(p, _) and Calls*(p, q)
+7 x, 7 y, 20 x, 20 y, 54 x, 54 y
+5000
+15 - Boolean 1 with clause parameter passing on
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select BOOLEAN such that Parent(_, _) with "a" = v.varName and v.varName = v1.varName and v1.varName = "b" such that Modifies(a, v) and Modifies(a1, v1) and Modifies(rd, v1)
+FALSE
+5000
+16 - Boolean 2 Cycle in the with clause
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select BOOLEAN with a.stmt# = a1.stmt# and a1.stmt# = s.stmt# and s.stmt# = s1.stmt# and s1.stmt# = c.value and c.value = a.stmt# such that Uses(a, _) and Modifies(a, _) and Parent(_, a) and Follows*(_, a)
+TRUE
+5000
+17 - Boolean 3 Normal boolean check
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select BOOLEAN with pn.stmt# = s.stmt# and s.stmt# = s1.stmt# and s1.stmt# = c.value such that Uses(pn, v) and Modifies(a, v) and Parent(_, pn) and Follows*(_, pn) with v1.varName = p.procName
+TRUE
+5000
+18 - Boolean 4 Overflowing next line
+stmt s, s1; assign a, a1; while w; if ifs; variable v, v1; procedure p, q; constant c; read rd; print pn; call cl;
+Select BOOLEAN such that Next(w, ifs) and Next(ifs, a) and Next(a, cl) and Next(cl, a1) and Next(a1, pn) and Next(pn, s) and Next(s, pn)
+FALSE
+5000
+19 - Boolean 5 procedure related
+stmt s, s1; assign a, a1; while w; if ifs1, ifs2, ifs3; variable v, v1; procedure p1, p2, p3, p4, p5; constant c; read rd; print pn; call cl;
+Select BOOLEAN such that Calls(p1, p2) and Calls(p2, p3) and Calls(p3, p4) and Parent(ifs1, ifs2) and Parent*(ifs1, ifs3) and Parent(ifs1, w) and Parent(w, ifs3)
+TRUE
+5000
+20 - Boolean 6 long query number
+stmt s, s1; assign a, a1; while w; if ifs1, ifs2, ifs3; variable v, v1; procedure p1, p2, p3, p4, p5; constant c; read rd; print pn; call cl;
+Select BOOLEAN such that Calls(p1, p2) and Calls(p2, p3) and Calls(p3, p4) and Parent(ifs1, ifs2) and Parent*(ifs1, ifs3) and Parent(ifs1, w) and Parent(w, ifs3) with c.value = 10000000
+FALSE
+5000
+21 - Affects 1
+assign a, a1, a2, a3, a4, a6, a7, a9, a10, a11, a12;
+Select <a, a1, a2, a7, a9> such that Affects*(a, a1) and Affects*(a1, a2) and Affects*(a3, a4) and Affects*(a4, a4) and Affects*(a6, a7) and Affects*(a7, a9) and Affects*(a9, a2)
+22 22 22 22 22, 9 9 9 9 9, 47 47 47 47 47, 8 9 9 9 9, 8 9 9 8 8, 8 8 9 9 9, 9 9 9 8 9, 62 63 55 62 63, 8 9 9 8 9, 8 8 9 8 9, 13 22 22 22 22, 21 22 22 22 22, 17 22 22 22 22, 40 40 40 40 40, 61 62 68 62 63, 37 40 40 40 40, 62 63 68 62 63, 8 8 9 8 8, 36 40 40 40 40, 48 48 48 48 48, 8 8 8 8 8, 44 47 47 47 47, 61 63 55 62 63, 61 62 55 62 63, 9 9 9 8 8, 61 63 68 62 63
+5000
