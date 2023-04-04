@@ -185,6 +185,72 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Modifies('procedure', 'x')") {
+    QueryString query = R"(Select BOOLEAN such that Modifies("procedure", "x"))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies('procedure', 'x')") {
+    QueryString query = R"(variable v; Select BOOLEAN such that Modifies("procedure", "x"))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies('procedure', proc)") {
+    QueryString query = "procedure Modifies; Select BOOLEAN such that Modifies(\"procedure\", Modifies)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies('procedure', v)") {
+    QueryString query = "variable Select; Select Select such that Modifies(\"procedure\", Select)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("SyntaxError - Modifies('procedure', 1)") {
+    QueryString query = "Select BOOLEAN such that Modifies(\"procedure\", 1)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies(proc, v) - select proc") {
+    QueryString query = "variable Modifies; procedure such; Select such such that Modifies(such, Modifies)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"procedure"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Modifies(proc, 'x1c2v3b4')") {
     QueryString query = "variable Select; procedure proc; Select proc such that Modifies(proc, \"x1c2v3b4\")";
     QueryResult results;
