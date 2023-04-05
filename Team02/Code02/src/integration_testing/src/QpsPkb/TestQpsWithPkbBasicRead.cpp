@@ -39,9 +39,9 @@ TEST_CASE("Uses and Modifies testing") {
 //    if (a < bar) then { -> 13
 //        while (bar > temp) { -> 14
 //          oSCar  = 1 * bar + tmp; -> 15
-//          while (!(tmp / tmp == bar * bar)) { -> 16
+//          while (tmp / tmp == bar * bar) { -> 16
 //            oSCar = X - (bar + foo * chArlie); }} -> 17
-//        while ((!(x!=1)) && (!(x == 1))) { -> 18
+//        while (x == 1) { -> 18
 //          x = x + 1; -> 19
 //          if (foo==0) then { -> 20
 //              while (bar== 3){ -> 21
@@ -190,6 +190,154 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<NameToken>("temp"),
   };
 
+
+  // tmp / tmp == bar * bar
+  TokenList token_list_statement_16{
+      make_shared<NameToken>("tmp"),
+      make_shared<ArithmeticOperatorToken>("/", DIV),
+      make_shared<NameToken>("tmp"),
+      make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+      make_shared<NameToken>("bar"),
+      make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("bar"),
+  };
+
+  // X - (bar + foo * chArlie)
+  TokenList token_list_statement_17{
+      make_shared<NameToken>("X"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+      make_shared<NameToken>("bar"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<NameToken>("foo"),
+      make_shared<RelationalOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("chArlie"),
+      make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+  };
+
+  // x == 1
+  TokenList token_list_statement_18{
+      make_shared<NameToken>("x"),
+      make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+      make_shared<IntegerToken>("1"),
+  };
+
+  // x + 1
+  TokenList token_list_statement_19{
+      make_shared<NameToken>("x"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("1"),
+  };
+
+  // foo == 0
+  TokenList token_list_statement_20{
+      make_shared<NameToken>("foo"),
+      make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+      make_shared<IntegerToken>("0"),
+  };
+
+  // bar == 3
+  TokenList token_list_statement_21{
+      make_shared<NameToken>("bar"),
+      make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
+      make_shared<IntegerToken>("3"),
+  };
+
+  // A1pH3
+  TokenList token_list_statement_22{
+      make_shared<NameToken>("A1pH3"),
+  };
+
+  // 0
+  TokenList token_list_statement_23{
+      make_shared<IntegerToken>("0"),
+  };
+
+  // x411 + z + A1pH3
+  TokenList token_list_statement_24{
+      make_shared<NameToken>("x411"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<NameToken>("z"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<NameToken>("A1pH3"),
+  };
+
+  // c > 1
+  TokenList token_list_statement_25{
+      make_shared<NameToken>("c"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<IntegerToken>("1"),
+  };
+
+  // c - 1
+  TokenList token_list_statement_26{
+      make_shared<NameToken>("c"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("1"),
+  };
+
+  TokenList token_list_statement_27{
+
+  };
+
+  TokenList token_list_statement_28{
+
+  };
+
+  TokenList token_list_statement_29{
+
+  };
+
+  TokenList token_list_statement_30{
+
+  };
+
+  TokenList token_list_statement_31{
+
+  };
+
+  TokenList token_list_statement_32{
+
+  };
+
+  TokenList token_list_statement_33{
+
+  };
+
+  TokenList token_list_statement_34{
+
+  };
+
+  TokenList token_list_statement_35{
+
+  };
+
+  TokenList token_list_statement_36{
+
+  };
+
+  TokenList token_list_statement_37{
+
+  };
+
+  TokenList token_list_statement_38{
+
+  };
+
+  TokenList token_list_statement_39{
+
+  };
+
+  TokenList token_list_statement_40{
+
+  };
+
+
+
+
+
+
+
   pkb_write->AddAssignmentStatementAndExpression(
       "15", egs->GetExpressionFromInput(token_list_statement_15, "assign"));
   pkb_write->AddStatementModifyingVariable("15", "oSCar");
@@ -213,6 +361,7 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddProcedureModifyingVariable("procedure", "foo");
   pkb_write->AddProcedureModifyingVariable("procedure", "bar");
   pkb_write->AddProcedureModifyingVariable("procedure", "X");
+  pkb_write->AddProcedureModifyingVariable("procedure", "oSCar");
 
   pkb_write->AddStatementUsingVariable("4", "y132");
   pkb_write->AddStatementUsingVariable("5", "x");
@@ -346,7 +495,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    QueryResult expected_results{"X", "bar", "foo", "oSCar", "var", "x", "x1c2v3b4", "x411", "y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -390,7 +539,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    QueryResult expected_results{"X", "bar", "foo", "oSCar", "var", "x", "x1c2v3b4", "x411", "y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -424,8 +573,9 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"procedure X", "procedure bar", "procedure foo", "procedure var", "procedure x",
-                                 "procedure x1c2v3b4", "procedure x411", "procedure y132"};
+    QueryResult expected_results{"procedure X", "procedure bar", "procedure foo", "procedure oSCar",
+                                 "procedure var", "procedure x", "procedure x1c2v3b4", "procedure x411",
+                                 "procedure y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
