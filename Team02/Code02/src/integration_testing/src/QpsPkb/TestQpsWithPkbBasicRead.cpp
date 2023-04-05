@@ -56,9 +56,9 @@ TEST_CASE("Uses and Modifies testing") {
 //      a= 2;} -> 28
 //    while (foo < bar) { -> 29
 //      if (var > 0) then { -> 30
-//          var = var + 22222222222222222222222222222; -> 31
-//          bar = bar + 11111111111111111111111111111; -> 32
-//          var = var - 22222222222222222222222222222; -> 33
+//          var = var + 55555555555555555555555555555; -> 31
+//          bar = bar + 88888888888888888888888888888; -> 32
+//          var = var - 99999999999999999999999999999; -> 33
 //        } else {
 //        foo = foo + 1; -> 34
 //        var = var - 1; -> 35
@@ -276,32 +276,49 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("1"),
   };
 
+  // x + 1
   TokenList token_list_statement_27{
-
+      make_shared<NameToken>("x"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("1"),
   };
 
+  // 2
   TokenList token_list_statement_28{
-
+      make_shared<IntegerToken>("2"),
   };
 
+  // foo < bar
   TokenList token_list_statement_29{
-
+      make_shared<NameToken>("foo"),
+      make_shared<RelationalOperatorToken>("<", LT),
+      make_shared<NameToken>("bar"),
   };
 
+  // var > 0
   TokenList token_list_statement_30{
-
+      make_shared<NameToken>("var"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<IntegerToken>("0"),
   };
 
+  // var +
   TokenList token_list_statement_31{
-
+      make_shared<NameToken>("var"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("55555555555555555555555555555"),
   };
 
   TokenList token_list_statement_32{
-
+      make_shared<NameToken>("bar"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("88888888888888888888888888888"),
   };
 
   TokenList token_list_statement_33{
-
+      make_shared<NameToken>("var"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("99999999999999999999999999999"),
   };
 
   TokenList token_list_statement_34{
