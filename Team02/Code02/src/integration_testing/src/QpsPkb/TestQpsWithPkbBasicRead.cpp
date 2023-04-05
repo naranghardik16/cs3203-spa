@@ -15,7 +15,10 @@ TEST_CASE("Uses and Modifies testing") {
   typedef std::shared_ptr<PkbReadFacade> PkbReadFacadePtr;
   typedef std::string QueryString;
   typedef std::list<QueryString> QueryResult;
+  typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+  typedef std::vector<std::shared_ptr<Token>> TokenList;
 
+  ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
   PkbPtr pkb = std::make_shared<Pkb>();
   PkbWriteFacadePtr pkb_write = std::make_shared<PkbWriteFacade>(*pkb);
   PkbReadFacadePtr pkb_read = std::make_shared<PkbReadFacade>(*pkb);
@@ -158,7 +161,38 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddConstant("1");
   pkb_write->AddConstant("4");
 
+  // a < bar
+  TokenList token_list_statement_13{
+      make_shared<NameToken>("a"),
+      make_shared<RelationalOperatorToken>("<", LT),
+      make_shared<NameToken>("bar"),
+  };
 
+  pkb_write->AddIfStatementAndCondition("13",
+                                        egs->GetExpressionFromInput(token_list_statement_13, "if"));
+
+  // bar > temp
+  TokenList token_list_statement_14{
+      make_shared<NameToken>("bar"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<NameToken>("temp"),
+  };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "14",egs->GetExpressionFromInput(token_list_statement_14, "while"));
+
+  // 1 * bar + temp
+  TokenList token_list_statement_15{
+      make_shared<IntegerToken>("1"),
+      make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("bar"),
+      make_shared<ArithmeticOperatorToken>("+", PLUS),
+      make_shared<NameToken>("temp"),
+  };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "15",egs->GetExpressionFromInput(token_list_statement_15, "assign"));
+  pkb_write->AddStatementModifyingVariable("15", "oSCar");
   pkb_write->AddStatementModifyingVariable("1", "x411");
   pkb_write->AddStatementModifyingVariable("2", "y132");
   pkb_write->AddStatementModifyingVariable("3", "x1c2v3b4");
@@ -189,6 +223,9 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddProcedureUsingVariable("procedure", "x");
   pkb_write->AddProcedureUsingVariable("procedure", "x411");
   pkb_write->AddProcedureUsingVariable("procedure", "foo");
+  pkb_write->AddProcedureUsingVariable("procedure", "a");
+  pkb_write->AddProcedureUsingVariable("procedure", "bar");
+  pkb_write->AddProcedureUsingVariable("procedure", "temp");
 
   SECTION("Test statements - basic") {
     QueryString query = "stmt s; Select s";
@@ -210,7 +247,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"X", "bar", "foo", "var", "x", "x1c2v3b4", "x411", "y132"};
+    QueryResult expected_results{"X", "a", "bar", "foo", "temp", "var", "x", "x1c2v3b4", "x411", "y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -221,7 +258,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1", "10", "11", "12", "2", "3", "4", "5", "6", "7", "8", "9"};
+    QueryResult expected_results{"1", "10", "11", "12", "15", "2", "3", "4", "5", "6", "7", "8", "9"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -243,7 +280,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"foo", "x", "x411", "y132"};
+    QueryResult expected_results{"a", "bar", "foo", "temp", "x", "x411", "y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -375,7 +412,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "2 y132", "3 x1c2v3b4", "4 x", "5 x",
+    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "15 oSCar", "2 y132", "3 x1c2v3b4", "4 x", "5 x",
                                  "6 x", "7 var", "8 foo", "9 bar"};
     results.sort();
     REQUIRE(results == expected_results);
@@ -399,7 +436,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"12 foo", "4 y132", "5 x", "6 x411", "9 foo"};
+    QueryResult expected_results{
+        "12 foo", "13 a", "13 bar", "14 bar", "14 temp", "15 bar", "15 temp", "4 y132", "5 x", "6 x411", "9 foo"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -410,7 +448,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"procedure foo", "procedure x", "procedure x411", "procedure y132"};
+    QueryResult expected_results{"procedure a", "procedure bar", "procedure foo", "procedure temp", "procedure x",
+                                 "procedure x411", "procedure y132"};
     results.sort();
     REQUIRE(results == expected_results);
   }
