@@ -1,6 +1,7 @@
 #include "PkbReadFacade.h"
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
+#include "PKB/Util/CachingUtil.h"
 #include "PKB/Util/ExpressionUtil.h"
 #include "PKB/Util/FunctionalUtil.h"
 
@@ -534,8 +535,6 @@ PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const Stat
 
 // Affects API
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
-//  if (!this->affects_cache_.empty()) return this->affects_cache_;
-
   PairSet result;
   const auto asses = this->GetAssignStatements();
   for (const auto &a : this->GetAssignStatements()) {

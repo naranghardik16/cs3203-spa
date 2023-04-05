@@ -1075,8 +1075,5 @@ class PkbReadFacade {
 
  private:
   Pkb &pkb;
-//
-//  PairSet affects_cache_;
-//  PairSet affects_star_cache_;
 };
 
