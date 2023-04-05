@@ -69,7 +69,7 @@ TEST_CASE("Uses and Modifies testing") {
 //          read print; -> 40
 //          then = read; -> 41
 //          else = print; -> 42
-//          if (while != 0) then { -> 43
+//          if (while < 0) then { -> 43
 //              temp = while * 2 - 2; -> 44
 //              read while; -> 45
 //              while = foo - bar * var + 3 * 2; -> 46
@@ -302,55 +302,155 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("0"),
   };
 
-  // var +
+  // var + 55555555555555555555555555555
   TokenList token_list_statement_31{
       make_shared<NameToken>("var"),
       make_shared<RelationalOperatorToken>("+", PLUS),
       make_shared<IntegerToken>("55555555555555555555555555555"),
   };
 
+  // bar + 88888888888888888888888888888
   TokenList token_list_statement_32{
       make_shared<NameToken>("bar"),
       make_shared<RelationalOperatorToken>("+", PLUS),
       make_shared<IntegerToken>("88888888888888888888888888888"),
   };
 
+  // var - 99999999999999999999999999999
   TokenList token_list_statement_33{
       make_shared<NameToken>("var"),
       make_shared<RelationalOperatorToken>("-", MINUS),
       make_shared<IntegerToken>("99999999999999999999999999999"),
   };
 
+  // foo + 1
   TokenList token_list_statement_34{
-
+      make_shared<NameToken>("foo"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("1"),
   };
 
+  // var - 1
   TokenList token_list_statement_35{
-
+      make_shared<NameToken>("var"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("1"),
   };
 
+  // 8
   TokenList token_list_statement_36{
-
+      make_shared<IntegerToken>("8"),
   };
 
+  // while > 1
   TokenList token_list_statement_37{
-
+      make_shared<NameToken>("while"),
+      make_shared<RelationalOperatorToken>(">", GT),
+      make_shared<IntegerToken>("1"),
   };
 
+  // 3 * 2 + while / 2 - 6
   TokenList token_list_statement_38{
-
+      make_shared<IntegerToken>("3"),
+      make_shared<RelationalOperatorToken>("*", MULTIPLY),
+      make_shared<IntegerToken>("2"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<NameToken>("while"),
+      make_shared<RelationalOperatorToken>("/", DIV),
+      make_shared<IntegerToken>("2"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("6"),
   };
 
+  // read
   TokenList token_list_statement_39{
-
+      make_shared<NameToken>("read"),
   };
 
+  // print
   TokenList token_list_statement_40{
-
+      make_shared<NameToken>("print"),
   };
 
+  // read
+  TokenList token_list_statement_41{
+      make_shared<NameToken>("read"),
+  };
 
+  // print
+  TokenList token_list_statement_42{
+      make_shared<NameToken>("print"),
+  };
 
+  // while < 0
+  TokenList token_list_statement_43{
+      make_shared<NameToken>("while"),
+      make_shared<RelationalOperatorToken>("<", LT),
+      make_shared<IntegerToken>("0"),
+  };
+
+  // while * 2 - 2
+  TokenList token_list_statement_44{
+      make_shared<NameToken>("while"),
+      make_shared<RelationalOperatorToken>("*", MULTIPLY),
+      make_shared<IntegerToken>("2"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<IntegerToken>("2"),
+  };
+
+  // while
+  TokenList token_list_statement_45{
+      make_shared<NameToken>("while"),
+  };
+
+  // foo - bar * var + 3 * 2
+  TokenList token_list_statement_46{
+      make_shared<NameToken>("foo"),
+      make_shared<RelationalOperatorToken>("-", MINUS),
+      make_shared<NameToken>("bar"),
+      make_shared<RelationalOperatorToken>("*", MULTIPLY),
+      make_shared<NameToken>("var"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("3"),
+      make_shared<RelationalOperatorToken>("*", MULTIPLY),
+      make_shared<IntegerToken>("2"),
+  };
+
+  // while
+  TokenList token_list_statement_47{
+      make_shared<NameToken>("while"),
+  };
+
+  // (temp + 2) / 2
+  TokenList token_list_statement_48{
+      make_shared<PunctuationToken>("(", LEFT_PARENTHESIS),
+      make_shared<NameToken>("temp"),
+      make_shared<RelationalOperatorToken>("+", PLUS),
+      make_shared<IntegerToken>("2"),
+      make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
+      make_shared<RelationalOperatorToken>("/", DIV),
+      make_shared<IntegerToken>("2"),
+  };
+
+  // temp
+  TokenList token_list_statement_49{
+      make_shared<NameToken>("temp"),
+  };
+
+  // temp
+  TokenList token_list_statement_50{
+      make_shared<NameToken>("temp"),
+  };
+
+  // read
+  TokenList token_list_statement_51{
+      make_shared<NameToken>("read"),
+  };
+
+  // print
+  TokenList token_list_statement_52{
+      make_shared<NameToken>("print"),
+  };
 
 
 
