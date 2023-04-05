@@ -190,6 +190,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<NameToken>("temp"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "15", egs->GetExpressionFromInput(token_list_statement_15, "assign"));
+
 
   // tmp / tmp == bar * bar
   TokenList token_list_statement_16{
@@ -201,6 +204,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
       make_shared<NameToken>("bar"),
   };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "16", egs->GetExpressionFromInput(token_list_statement_16, "while"));
 
   // X - (bar + foo * chArlie)
   TokenList token_list_statement_17{
@@ -215,12 +221,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<PunctuationToken>(")", RIGHT_PARENTHESIS),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "17", egs->GetExpressionFromInput(token_list_statement_17, "assign"));
+
   // x == 1
   TokenList token_list_statement_18{
       make_shared<NameToken>("x"),
       make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
       make_shared<IntegerToken>("1"),
   };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "18", egs->GetExpressionFromInput(token_list_statement_18, "while"));
 
   // x + 1
   TokenList token_list_statement_19{
@@ -229,6 +241,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("1"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "19", egs->GetExpressionFromInput(token_list_statement_19, "assign"));
+
   // foo == 0
   TokenList token_list_statement_20{
       make_shared<NameToken>("foo"),
@@ -236,12 +251,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("0"),
   };
 
+  pkb_write->AddIfStatementAndCondition(
+      "20", egs->GetExpressionFromInput(token_list_statement_20, "if"));
+
   // bar == 3
   TokenList token_list_statement_21{
       make_shared<NameToken>("bar"),
       make_shared<RelationalOperatorToken>("==", DOUBLE_EQUALS),
       make_shared<IntegerToken>("3"),
   };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "21", egs->GetExpressionFromInput(token_list_statement_21, "while"));
 
   // A1pH3
   TokenList token_list_statement_22{
@@ -253,6 +274,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("0"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "23", egs->GetExpressionFromInput(token_list_statement_23, "assign"));
+
   // x411 + z + A1pH3
   TokenList token_list_statement_24{
       make_shared<NameToken>("x411"),
@@ -262,12 +286,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<NameToken>("A1pH3"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "24", egs->GetExpressionFromInput(token_list_statement_24, "assign"));
+
   // c > 1
   TokenList token_list_statement_25{
       make_shared<NameToken>("c"),
       make_shared<RelationalOperatorToken>(">", GT),
       make_shared<IntegerToken>("1"),
   };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "25", egs->GetExpressionFromInput(token_list_statement_25, "while"));
 
   // c - 1
   TokenList token_list_statement_26{
@@ -276,6 +306,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("1"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "26", egs->GetExpressionFromInput(token_list_statement_26, "assign"));
+
   // x + 1
   TokenList token_list_statement_27{
       make_shared<NameToken>("x"),
@@ -283,10 +316,17 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("1"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "27", egs->GetExpressionFromInput(token_list_statement_27, "assign"));
+
   // 2
   TokenList token_list_statement_28{
       make_shared<IntegerToken>("2"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "28", egs->GetExpressionFromInput(token_list_statement_28, "assign"));
+
 
   // foo < bar
   TokenList token_list_statement_29{
@@ -295,12 +335,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<NameToken>("bar"),
   };
 
+  pkb_write->AddWhileStatementAndCondition(
+      "29", egs->GetExpressionFromInput(token_list_statement_29, "while"));
+
   // var > 0
   TokenList token_list_statement_30{
       make_shared<NameToken>("var"),
       make_shared<RelationalOperatorToken>(">", GT),
       make_shared<IntegerToken>("0"),
   };
+
+  pkb_write->AddIfStatementAndCondition(
+      "30", egs->GetExpressionFromInput(token_list_statement_30, "while"));
 
   // var + 55555555555555555555555555555
   TokenList token_list_statement_31{
@@ -309,12 +355,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("55555555555555555555555555555"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "31", egs->GetExpressionFromInput(token_list_statement_31, "assign"));
+
   // bar + 88888888888888888888888888888
   TokenList token_list_statement_32{
       make_shared<NameToken>("bar"),
       make_shared<RelationalOperatorToken>("+", PLUS),
       make_shared<IntegerToken>("88888888888888888888888888888"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "32", egs->GetExpressionFromInput(token_list_statement_32, "assign"));
 
   // var - 99999999999999999999999999999
   TokenList token_list_statement_33{
@@ -323,12 +375,18 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("99999999999999999999999999999"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "33", egs->GetExpressionFromInput(token_list_statement_33, "assign"));
+
   // foo + 1
   TokenList token_list_statement_34{
       make_shared<NameToken>("foo"),
       make_shared<RelationalOperatorToken>("+", PLUS),
       make_shared<IntegerToken>("1"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "34", egs->GetExpressionFromInput(token_list_statement_34, "assign"));
 
   // var - 1
   TokenList token_list_statement_35{
@@ -337,10 +395,16 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("1"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "35", egs->GetExpressionFromInput(token_list_statement_35, "assign"));
+
   // 8
   TokenList token_list_statement_36{
       make_shared<IntegerToken>("8"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "36", egs->GetExpressionFromInput(token_list_statement_36, "assign"));
 
   // while > 1
   TokenList token_list_statement_37{
@@ -348,6 +412,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<RelationalOperatorToken>(">", GT),
       make_shared<IntegerToken>("1"),
   };
+
+  pkb_write->AddWhileStatementAndCondition(
+      "37", egs->GetExpressionFromInput(token_list_statement_37, "while"));
 
   // 3 * 2 + while / 2 - 6
   TokenList token_list_statement_38{
@@ -361,6 +428,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<RelationalOperatorToken>("-", MINUS),
       make_shared<IntegerToken>("6"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "38", egs->GetExpressionFromInput(token_list_statement_38, "assign"));
 
   // read
   TokenList token_list_statement_39{
@@ -377,10 +447,16 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<NameToken>("read"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "41", egs->GetExpressionFromInput(token_list_statement_41, "assign"));
+
   // print
   TokenList token_list_statement_42{
       make_shared<NameToken>("print"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "42", egs->GetExpressionFromInput(token_list_statement_42, "assign"));
 
   // while < 0
   TokenList token_list_statement_43{
@@ -388,6 +464,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<RelationalOperatorToken>("<", LT),
       make_shared<IntegerToken>("0"),
   };
+
+  pkb_write->AddIfStatementAndCondition(
+      "43", egs->GetExpressionFromInput(token_list_statement_43, "if"));
 
   // while * 2 - 2
   TokenList token_list_statement_44{
@@ -397,6 +476,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<RelationalOperatorToken>("-", MINUS),
       make_shared<IntegerToken>("2"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "44", egs->GetExpressionFromInput(token_list_statement_44, "assign"));
 
   // while
   TokenList token_list_statement_45{
@@ -416,6 +498,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<IntegerToken>("2"),
   };
 
+  pkb_write->AddAssignmentStatementAndExpression(
+      "46", egs->GetExpressionFromInput(token_list_statement_42, "assign"));
+
   // while
   TokenList token_list_statement_47{
       make_shared<NameToken>("while"),
@@ -431,6 +516,9 @@ TEST_CASE("Uses and Modifies testing") {
       make_shared<RelationalOperatorToken>("/", DIV),
       make_shared<IntegerToken>("2"),
   };
+
+  pkb_write->AddAssignmentStatementAndExpression(
+      "48", egs->GetExpressionFromInput(token_list_statement_48, "assign"));
 
   // temp
   TokenList token_list_statement_49{
