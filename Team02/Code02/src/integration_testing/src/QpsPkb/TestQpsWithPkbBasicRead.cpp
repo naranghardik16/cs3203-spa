@@ -179,7 +179,7 @@ TEST_CASE("Uses and Modifies testing") {
   };
 
   pkb_write->AddWhileStatementAndCondition(
-      "14",egs->GetExpressionFromInput(token_list_statement_14, "while"));
+      "14", egs->GetExpressionFromInput(token_list_statement_14, "while"));
 
   // 1 * bar + temp
   TokenList token_list_statement_15{
@@ -191,7 +191,7 @@ TEST_CASE("Uses and Modifies testing") {
   };
 
   pkb_write->AddAssignmentStatementAndExpression(
-      "15",egs->GetExpressionFromInput(token_list_statement_15, "assign"));
+      "15", egs->GetExpressionFromInput(token_list_statement_15, "assign"));
   pkb_write->AddStatementModifyingVariable("15", "oSCar");
   pkb_write->AddStatementModifyingVariable("1", "x411");
   pkb_write->AddStatementModifyingVariable("2", "y132");
