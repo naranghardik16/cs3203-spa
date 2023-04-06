@@ -856,6 +856,128 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Uses - return false clause") {
+    QueryString query = "stmt s; Select s such that Uses(s, \"Z\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies - return false clause") {
+    QueryString query = "stmt s; Select s such that Modifies(s, \"xThisAintExist\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - statement") {
+    QueryString query = "stmts s; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - print") {
+    QueryString query = "prints s; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - read") {
+    QueryString query = "red r; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - while") {
+    QueryString query = "whil w; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - if") {
+    QueryString query = "iff ifs; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - variable") {
+    QueryString query = "var v; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - procedure") {
+    QueryString query = "proc p; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - constant") {
+    QueryString query = "constnant c; Select BOOLEAN";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with read - invalid query") {
+    QueryString query = "read r; Select BOOLEAN such that Uses(r, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+
   SECTION("Modifies(s, _) - Valid modifies with statement and wildcard") {
     QueryString query = "stmt s; Select s such that Modifies(s, _)";
     QueryResult results;
