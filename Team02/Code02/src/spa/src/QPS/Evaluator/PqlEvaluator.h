@@ -41,7 +41,7 @@ class PqlEvaluator {
   unordered_set<string> GetFinalEvaluationResult(std::vector<std::shared_ptr<Result>>& clause_evaluation_results);
   std::vector<std::shared_ptr<Result>> GetClauseEvaluationResult();
   void EvaluateBooleanConstraints();
-  shared_ptr<Result> EvaluateSelectStatementWithoutClauses();
+  shared_ptr<Result> AddEvaluationsOfSynonymsInSelect(std::shared_ptr<Result> evaluation_result);
   unordered_set<string> EvaluateBooleanQuery();
   void AdjustTrivialAttrRefs();
 };
