@@ -127,7 +127,7 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementOfAType("35", ASSIGN);
   pkb_write->AddStatementOfAType("36", WHILE);
   pkb_write->AddStatementOfAType("37", WHILE);
-  pkb_write->AddStatementOfAType("38", WHILE);
+  pkb_write->AddStatementOfAType("38", ASSIGN);
   pkb_write->AddStatementOfAType("39", READ);
   pkb_write->AddStatementOfAType("40", READ);
   pkb_write->AddStatementOfAType("41", ASSIGN);
@@ -135,9 +135,9 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementOfAType("43", IF);
   pkb_write->AddStatementOfAType("44", ASSIGN);
   pkb_write->AddStatementOfAType("45", READ);
-  pkb_write->AddStatementOfAType("46", WHILE);
+  pkb_write->AddStatementOfAType("46", ASSIGN);
   pkb_write->AddStatementOfAType("47", PRINT);
-  pkb_write->AddStatementOfAType("48", WHILE);
+  pkb_write->AddStatementOfAType("48", ASSIGN);
   pkb_write->AddStatementOfAType("49", READ);
   pkb_write->AddStatementOfAType("50", PRINT);
   pkb_write->AddStatementOfAType("51", PRINT);
@@ -612,6 +612,14 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementUsingVariable("6", "x411");
   pkb_write->AddStatementUsingVariable("9", "foo");
   pkb_write->AddStatementUsingVariable("12", "foo");
+  pkb_write->AddStatementUsingVariable("22", "A1pH3");
+  pkb_write->AddStatementUsingVariable("47", "while");
+  pkb_write->AddStatementUsingVariable("50", "temp");
+  pkb_write->AddStatementUsingVariable("51", "read");
+  pkb_write->AddStatementUsingVariable("52", "print");
+  pkb_write->AddStatementUsingVariable("53", "var");
+  pkb_write->AddStatementUsingVariable("54", "foo");
+  pkb_write->AddStatementUsingVariable("55", "bar");
   pkb_write->AddProcedureUsingVariable("procedure", "y132");
   pkb_write->AddProcedureUsingVariable("procedure", "x");
   pkb_write->AddProcedureUsingVariable("procedure", "x411");
@@ -646,7 +654,88 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
-  SECTION("Uses with statement and wildcard") {
+  SECTION("Test all constants") {
+    QueryString query = "constant c; Select c";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"0", "1", "2", "3", "4", "55555555555555555555555555555",
+                                 "6", "8", "88888888888888888888888888888", "99999999999999999999999999999"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test all print statements") {
+    QueryString query = "print pn; Select pn";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"22", "47", "50", "51", "52", "53", "54", "55"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test all read statements") {
+    QueryString query = "read re; Select re";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"11", "39", "40", "45", "49"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test all while statements") {
+    QueryString query = "while w; Select w";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"14", "16", "18", "21", "25", "29", "36", "37"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Test all if statements") {
+    QueryString query = "if ifs; Select ifs";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"13", "20", "30", "43"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Semantic Error - Invalid wildcard - Uses") {
+    QueryString query = "variable v; Select BOOLEAN such that Uses(_, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(s, _) - Valid uses with statement and wildcard") {
+    QueryString query = "stmt s; Select s such that Uses(s, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "24", "25", "26",
+                                 "27", "29", "30", "31", "32", "33", "34", "35", "37", "38", "4", "41", "42", "43",
+                                 "44", "46", "47", "48", "5", "50", "51", "52", "53", "54", "55", "6", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+
+  SECTION("Modifies(s, _) - Valid modifies with statement and wildcard") {
     QueryString query = "stmt s; Select s such that Modifies(s, _)";
     QueryResult results;
 
@@ -840,10 +929,11 @@ TEST_CASE("Uses and Modifies testing") {
 
     QueryResult expected_results{"12 foo", "13 a", "13 bar", "14 bar", "14 temp", "15 bar", "15 temp", "16 bar",
                                  "16 tmp", "17 X", "17 bar", "17 chArlie", "17 foo", "18 x", "19 x", "20 foo",
-                                 "21 bar", "24 A1pH3", "24 x411", "24 z", "25 c", "26 c", "27 x", "29 bar",
-                                 "29 foo", "30 var", "31 var", "32 bar", "33 var", "34 foo", "35 var", "37 while",
-                                 "38 while", "4 y132", "41 read", "42 print", "43 while", "44 while", "46 print",
-                                 "48 temp", "5 x", "6 x411", "9 foo"};
+                                 "21 bar", "22 A1pH3", "24 A1pH3", "24 x411", "24 z", "25 c", "26 c", "27 x",
+                                 "29 bar", "29 foo", "30 var", "31 var", "32 bar", "33 var", "34 foo", "35 var",
+                                 "37 while", "38 while", "4 y132", "41 read", "42 print", "43 while", "44 while",
+                                 "46 print", "47 while", "48 temp", "5 x", "50 temp", "51 read", "52 print", "53 var",
+                                 "54 foo", "55 bar", "6 x411", "9 foo"};
     results.sort();
     REQUIRE(results == expected_results);
   }
