@@ -627,6 +627,11 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddProcedureUsingVariable("procedure", "a");
   pkb_write->AddProcedureUsingVariable("procedure", "bar");
   pkb_write->AddProcedureUsingVariable("procedure", "temp");
+//  pkb_write->AddParentRelation("13", "14");
+//  pkb_write->AddParentRelation("14", "15");
+//  pkb_write->AddParentRelation("14", "16");
+//  pkb_write->AddParentRelation("16", "17");
+//  pkb_write->AddParentRelation("13", "18");
 
   SECTION("Test statements - basic") {
     QueryString query = "stmt s; Select s";
@@ -734,6 +739,122 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Uses with assign and ident variable") {
+    QueryString query = "assign a; Select a such that Uses(a, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"19", "27", "5"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with assign and synonym variable") {
+    QueryString query = "assign a; variable v; Select a such that Uses(a, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"12", "15", "17", "19", "24", "26", "27", "31", "32", "33", "34", "35", "38", "4",
+                                 "41", "42", "44", "46", "48", "5", "6", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with ident assign and synonym variable") {
+    QueryString query = "variable v; Select v such that Uses(14, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    // check with Sai - how to add parent relation
+    QueryResult expected_results{"bar", "temp"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with print and ident variable") {
+    QueryString query = "print pn; variable v; Select v such that Uses(pn, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"A1pH3", "bar", "foo", "print", "read", "temp", "var", "while"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with if and ident variable") {
+    QueryString query = "if ifs; Select ifs such that Uses(ifs, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    // check with Sai - expected behaviour "13", "20"
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with if and synonym variable") {
+    QueryString query = "if ifs; variable v; Select v such that Uses(ifs, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    // check with Sai - expected behaviour is different
+    QueryResult expected_results{"a", "bar", "foo", "var", "while"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with while and ident variable") {
+    QueryString query = "while w; Select w such that Uses(w, \"X\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    // check with Sai - expected behaviour is different
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses with while and synonym variable") {
+    QueryString query = "while w; variable v; Select v such that Uses(w, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    // check with Sai - expected behaviour is different
+    QueryResult expected_results{"bar", "c", "foo", "temp", "tmp", "while", "x"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses - return false") {
+    QueryString query = "stmt s; Select BOOLEAN such that Uses(6, \"y132\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses - return true clause") {
+    QueryString query = "variable v; Select v such that Uses(6, \"x411\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"A1pH3", "X", "a", "bar", "c", "chArlie", "foo", "print", "read", "temp", "tmp",
+                                 "var", "while", "x", "x1c2v3b4", "x411", "y132", "z"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
   SECTION("Modifies(s, _) - Valid modifies with statement and wildcard") {
     QueryString query = "stmt s; Select s such that Modifies(s, _)";
