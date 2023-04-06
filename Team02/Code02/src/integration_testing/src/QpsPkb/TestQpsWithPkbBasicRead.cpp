@@ -627,11 +627,55 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddProcedureUsingVariable("procedure", "a");
   pkb_write->AddProcedureUsingVariable("procedure", "bar");
   pkb_write->AddProcedureUsingVariable("procedure", "temp");
-//  pkb_write->AddParentRelation("13", "14");
-//  pkb_write->AddParentRelation("14", "15");
-//  pkb_write->AddParentRelation("14", "16");
-//  pkb_write->AddParentRelation("16", "17");
-//  pkb_write->AddParentRelation("13", "18");
+  pkb_write->AddProcedureUsingVariable("procedure", "tmp");
+  pkb_write->AddProcedureUsingVariable("procedure", "X");
+  pkb_write->AddProcedureUsingVariable("procedure", "chArlie");
+  pkb_write->AddProcedureUsingVariable("procedure", "z");
+  pkb_write->AddProcedureUsingVariable("procedure", "c");
+  pkb_write->AddProcedureUsingVariable("procedure", "var");
+  pkb_write->AddProcedureUsingVariable("procedure", "while");
+  pkb_write->AddProcedureUsingVariable("procedure", "read");
+  pkb_write->AddProcedureUsingVariable("procedure", "print");
+  pkb_write->AddProcedureUsingVariable("procedure", "A1pH3");
+  pkb_write->AddParentRelation("13", "14");
+  pkb_write->AddParentRelation("14", "15");
+  pkb_write->AddParentRelation("14", "16");
+  pkb_write->AddParentRelation("16", "17");
+  pkb_write->AddParentRelation("13", "18");
+  pkb_write->AddParentRelation("18", "19");
+  pkb_write->AddParentRelation("18", "20");
+  pkb_write->AddParentRelation("20", "21");
+  pkb_write->AddParentRelation("20", "25");
+  pkb_write->AddParentRelation("20", "27");
+  pkb_write->AddParentRelation("21", "22");
+  pkb_write->AddParentRelation("21", "23");
+  pkb_write->AddParentRelation("21", "24");
+  pkb_write->AddParentRelation("25", "26");
+  pkb_write->AddParentRelation("13", "28");
+  pkb_write->AddParentRelation("29", "30");
+  pkb_write->AddParentRelation("30", "31");
+  pkb_write->AddParentRelation("30", "32");
+  pkb_write->AddParentRelation("30", "33");
+  pkb_write->AddParentRelation("30", "34");
+  pkb_write->AddParentRelation("30", "35");
+  pkb_write->AddParentRelation("30", "36");
+  pkb_write->AddParentRelation("30", "37");
+  pkb_write->AddParentRelation("37", "38");
+  pkb_write->AddParentRelation("37", "39");
+  pkb_write->AddParentRelation("37", "40");
+  pkb_write->AddParentRelation("37", "41");
+  pkb_write->AddParentRelation("37", "42");
+  pkb_write->AddParentRelation("37", "43");
+  pkb_write->AddParentRelation("37", "51");
+  pkb_write->AddParentRelation("37", "52");
+  pkb_write->AddParentRelation("43", "44");
+  pkb_write->AddParentRelation("43", "45");
+  pkb_write->AddParentRelation("43", "46");
+  pkb_write->AddParentRelation("43", "47");
+  pkb_write->AddParentRelation("43", "48");
+  pkb_write->AddParentRelation("43", "49");
+  pkb_write->AddParentRelation("43", "50");
+  pkb_write->AddParentStarRelation();
 
   SECTION("Test statements - basic") {
     QueryString query = "stmt s; Select s";
@@ -769,7 +813,7 @@ TEST_CASE("Uses and Modifies testing") {
     Qps::ProcessQuery(query, results, pkb_read);
 
     // check with Sai - how to add parent relation
-    QueryResult expected_results{"bar", "temp"};
+    QueryResult expected_results{"X", "bar", "chArlie", "foo", "temp", "tmp"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -791,8 +835,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    // check with Sai - expected behaviour "13", "20"
-    QueryResult expected_results{};
+    QueryResult expected_results{"13", "20"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -803,8 +846,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    // check with Sai - expected behaviour is different
-    QueryResult expected_results{"a", "bar", "foo", "var", "while"};
+    QueryResult expected_results{"A1pH3", "X", "a", "bar", "c", "chArlie", "foo", "print", "read", "temp", "tmp",
+                                 "var", "while", "x", "x411", "z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -815,8 +858,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    // check with Sai - expected behaviour is different
-    QueryResult expected_results{};
+    QueryResult expected_results{"14", "16"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -827,8 +869,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    // check with Sai - expected behaviour is different
-    QueryResult expected_results{"bar", "c", "foo", "temp", "tmp", "while", "x"};
+    QueryResult expected_results{"A1pH3", "X", "bar", "c", "chArlie", "foo", "print", "read", "temp", "tmp",
+                                 "var", "while", "x", "x411", "z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -977,6 +1019,49 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Modifies with print - invalid query") {
+    QueryString query = "print pn; Select BOOLEAN such that Modifies(pn, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Case sensitive Uses - invalid query - Syntax Error") {
+    QueryString query = "stmt s; variable v; Select BOOLEAN such that uses(s, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Case sensitive Modifies - invalid query - Syntax Error") {
+    QueryString query = "stmt s; variable v; Select BOOLEAN such that modifies(s, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - query ending with semicolon") {
+    QueryString query = "stmt s; variable v; Select BOOLEAN such that Modifies(s, v);";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
 
   SECTION("Modifies(s, _) - Valid modifies with statement and wildcard") {
     QueryString query = "stmt s; Select s such that Modifies(s, _)";
@@ -984,9 +1069,43 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1", "10", "11", "12", "15", "17", "19", "2", "23", "24", "26", "27", "28", "3", "31",
-                                 "32", "33", "34", "35", "36", "38", "4", "41", "42", "44", "46", "48", "5", "6", "7",
-                                 "8", "9" };
+    QueryResult expected_results{"1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "2", "20", "21",
+                                 "23", "24", "25", "26", "27", "28", "29", "3", "30", "31", "32", "33", "34", "35",
+                                 "36", "37", "38", "4", "41", "42", "43", "44", "46", "48", "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses('procedure', v)") {
+    QueryString query = R"(variable Select; Select Select such that Uses("procedure", Select))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"A1pH3", "X", "a", "bar", "c", "chArlie", "foo", "print", "read", "temp", "tmp",
+                                 "var", "while", "x", "x411", "y132", "z"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Syntax Error - Uses('procedure', 1)") {
+    QueryString query = R"(Select BOOLEAN such that Uses("procedure", 1))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SyntaxError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Uses(proc, v) - select proc") {
+    QueryString query = R"(variable var; procedure proc; Select proc such that Uses(proc, var))";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"procedure"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -997,7 +1116,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{};
+    QueryResult expected_results{"procedure"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1008,7 +1127,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"a", "bar", "foo", "temp", "x", "x411", "y132"};
+    QueryResult expected_results{"A1pH3", "X", "a", "bar", "c", "chArlie", "foo", "print", "read", "temp", "tmp",
+                                 "var", "while", "x", "x411", "y132", "z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1019,7 +1139,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"17"};
+    QueryResult expected_results{"13", "14", "16", "17"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1131,7 +1251,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"44"};
+    QueryResult expected_results{"29", "30", "37", "43", "44"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1142,10 +1262,15 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "15 oSCar", "17 oSCar", "19 x", "2 y132",
-                                 "23 b", "24 c", "26 c", "27 x", "28 a", "3 x1c2v3b4", "31 var", "32 bar", "33 var",
-                                 "34 foo", "35 var", "36 while", "38 while", "4 x", "41 then", "42 else", "44 temp",
-                                 "46 while", "48 while", "5 x", "6 x", "7 var", "8 foo", "9 bar"};
+    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "13 a", "13 b", "13 c", "13 oSCar", "13 x",
+                                 "14 oSCar", "15 oSCar", "16 oSCar", "17 oSCar", "18 b", "18 c", "18 x", "19 x",
+                                 "2 y132", "20 b", "20 c", "20 x", "21 b", "21 c", "23 b", "24 c", "25 c", "26 c",
+                                 "27 x", "28 a", "29 bar", "29 else", "29 foo", "29 temp", "29 then", "29 var",
+                                 "29 while", "3 x1c2v3b4", "30 bar", "30 else", "30 foo", "30 temp", "30 then",
+                                 "30 var", "30 while", "31 var", "32 bar", "33 var", "34 foo", "35 var", "36 while",
+                                 "37 else", "37 temp", "37 then", "37 while", "38 while", "4 x", "41 then", "42 else",
+                                 "43 temp", "43 while", "44 temp", "46 while", "48 while", "5 x", "6 x", "7 var",
+                                 "8 foo", "9 bar"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1170,13 +1295,19 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"12 foo", "13 a", "13 bar", "14 bar", "14 temp", "15 bar", "15 temp", "16 bar",
-                                 "16 tmp", "17 X", "17 bar", "17 chArlie", "17 foo", "18 x", "19 x", "20 foo",
-                                 "21 bar", "22 A1pH3", "24 A1pH3", "24 x411", "24 z", "25 c", "26 c", "27 x",
-                                 "29 bar", "29 foo", "30 var", "31 var", "32 bar", "33 var", "34 foo", "35 var",
-                                 "37 while", "38 while", "4 y132", "41 read", "42 print", "43 while", "44 while",
-                                 "46 print", "47 while", "48 temp", "5 x", "50 temp", "51 read", "52 print", "53 var",
-                                 "54 foo", "55 bar", "6 x411", "9 foo"};
+    QueryResult expected_results{"12 foo", "13 A1pH3", "13 X", "13 a", "13 bar", "13 c", "13 chArlie", "13 foo",
+                                 "13 temp", "13 tmp", "13 x", "13 x411", "13 z", "14 X", "14 bar", "14 chArlie",
+                                 "14 foo", "14 temp", "14 tmp", "15 bar", "15 temp", "16 X", "16 bar", "16 chArlie",
+                                 "16 foo", "16 tmp", "17 X", "17 bar", "17 chArlie", "17 foo", "18 A1pH3", "18 bar",
+                                 "18 c", "18 foo", "18 x", "18 x411", "18 z", "19 x", "20 A1pH3", "20 bar", "20 c",
+                                 "20 foo", "20 x", "20 x411", "20 z", "21 A1pH3", "21 bar", "21 x411", "21 z",
+                                 "22 A1pH3", "24 A1pH3", "24 x411", "24 z", "25 c", "26 c", "27 x", "29 bar",
+                                 "29 foo", "29 print", "29 read", "29 temp", "29 var", "29 while", "30 bar",
+                                 "30 foo", "30 print", "30 read", "30 temp", "30 var", "30 while", "31 var",
+                                 "32 bar", "33 var", "34 foo", "35 var", "37 print", "37 read", "37 temp",
+                                 "37 while", "38 while", "4 y132", "41 read", "42 print", "43 print",
+                                 "43 temp", "43 while", "44 while", "46 print", "47 while", "48 temp", "5 x",
+                                 "50 temp", "51 read", "52 print", "53 var", "54 foo", "55 bar", "6 x411", "9 foo"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1187,8 +1318,10 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"procedure a", "procedure bar", "procedure foo", "procedure temp", "procedure x",
-                                 "procedure x411", "procedure y132"};
+    QueryResult expected_results{"procedure A1pH3", "procedure X", "procedure a", "procedure bar", "procedure c",
+                                 "procedure chArlie", "procedure foo", "procedure print", "procedure read",
+                                 "procedure temp", "procedure tmp", "procedure var", "procedure while", "procedure x",
+                                 "procedure x411", "procedure y132", "procedure z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
