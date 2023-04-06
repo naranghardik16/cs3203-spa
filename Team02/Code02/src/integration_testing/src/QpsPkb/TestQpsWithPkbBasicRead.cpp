@@ -224,6 +224,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "17", egs->GetExpressionFromInput(token_list_statement_17, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("17", "oSCar");
+
   // x == 1
   TokenList token_list_statement_18{
       make_shared<NameToken>("x"),
@@ -243,6 +245,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "19", egs->GetExpressionFromInput(token_list_statement_19, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("19", "x");
 
   // foo == 0
   TokenList token_list_statement_20{
@@ -277,6 +281,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "23", egs->GetExpressionFromInput(token_list_statement_23, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("23", "b");
+
   // x411 + z + A1pH3
   TokenList token_list_statement_24{
       make_shared<NameToken>("x411"),
@@ -288,6 +294,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "24", egs->GetExpressionFromInput(token_list_statement_24, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("24", "c");
 
   // c > 1
   TokenList token_list_statement_25{
@@ -309,6 +317,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "26", egs->GetExpressionFromInput(token_list_statement_26, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("26", "c");
+
   // x + 1
   TokenList token_list_statement_27{
       make_shared<NameToken>("x"),
@@ -319,6 +329,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "27", egs->GetExpressionFromInput(token_list_statement_27, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("27", "x");
+
   // 2
   TokenList token_list_statement_28{
       make_shared<IntegerToken>("2"),
@@ -327,6 +339,7 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "28", egs->GetExpressionFromInput(token_list_statement_28, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("28", "a");
 
   // foo < bar
   TokenList token_list_statement_29{
@@ -358,6 +371,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "31", egs->GetExpressionFromInput(token_list_statement_31, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("31", "var");
+
   // bar + 88888888888888888888888888888
   TokenList token_list_statement_32{
       make_shared<NameToken>("bar"),
@@ -367,6 +382,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "32", egs->GetExpressionFromInput(token_list_statement_32, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("32", "bar");
 
   // var - 99999999999999999999999999999
   TokenList token_list_statement_33{
@@ -378,6 +395,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "33", egs->GetExpressionFromInput(token_list_statement_33, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("33", "var");
+
   // foo + 1
   TokenList token_list_statement_34{
       make_shared<NameToken>("foo"),
@@ -387,6 +406,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "34", egs->GetExpressionFromInput(token_list_statement_34, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("34", "foo");
 
   // var - 1
   TokenList token_list_statement_35{
@@ -398,6 +419,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "35", egs->GetExpressionFromInput(token_list_statement_35, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("35", "var");
+
   // 8
   TokenList token_list_statement_36{
       make_shared<IntegerToken>("8"),
@@ -405,6 +428,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "36", egs->GetExpressionFromInput(token_list_statement_36, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("36", "while");
 
   // while > 1
   TokenList token_list_statement_37{
@@ -432,6 +457,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "38", egs->GetExpressionFromInput(token_list_statement_38, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("38", "while");
+
   // read
   TokenList token_list_statement_39{
       make_shared<NameToken>("read"),
@@ -450,6 +477,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "41", egs->GetExpressionFromInput(token_list_statement_41, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("41", "then");
+
   // print
   TokenList token_list_statement_42{
       make_shared<NameToken>("print"),
@@ -457,6 +486,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "42", egs->GetExpressionFromInput(token_list_statement_42, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("42", "else");
 
   // while < 0
   TokenList token_list_statement_43{
@@ -480,6 +511,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "44", egs->GetExpressionFromInput(token_list_statement_44, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("44", "temp");
+
   // while
   TokenList token_list_statement_45{
       make_shared<NameToken>("while"),
@@ -501,6 +534,8 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddAssignmentStatementAndExpression(
       "46", egs->GetExpressionFromInput(token_list_statement_42, "assign"));
 
+  pkb_write->AddStatementModifyingVariable("46", "while");
+
   // while
   TokenList token_list_statement_47{
       make_shared<NameToken>("while"),
@@ -519,6 +554,8 @@ TEST_CASE("Uses and Modifies testing") {
 
   pkb_write->AddAssignmentStatementAndExpression(
       "48", egs->GetExpressionFromInput(token_list_statement_48, "assign"));
+
+  pkb_write->AddStatementModifyingVariable("48", "while");
 
   // temp
   TokenList token_list_statement_49{
@@ -601,7 +638,8 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"X", "a", "bar", "foo", "temp", "var", "x", "x1c2v3b4", "x411", "y132"};
+    QueryResult expected_results{"A1pH3", "X", "a", "bar", "c", "chArlie", "foo", "print", "read", "temp",
+                                 "tmp", "var", "while", "x", "x1c2v3b4", "x411", "y132", "z"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -612,7 +650,9 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1", "10", "11", "12", "15", "2", "3", "4", "5", "6", "7", "8", "9"};
+    QueryResult expected_results{"1", "10", "11", "12", "15", "17", "19", "2", "23", "24", "26", "27", "28", "3", "31",
+                                 "32", "33", "34", "35", "36", "38", "4", "41", "42", "44", "46", "48", "5", "6", "7",
+                                 "8", "9" };
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -645,7 +685,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{};
+    QueryResult expected_results{"17"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -755,7 +795,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{};
+    QueryResult expected_results{"44"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -766,8 +806,10 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "15 oSCar", "2 y132", "3 x1c2v3b4", "4 x", "5 x",
-                                 "6 x", "7 var", "8 foo", "9 bar"};
+    QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "15 oSCar", "17 oSCar", "19 x", "2 y132",
+                                 "23 b", "24 c", "26 c", "27 x", "28 a", "3 x1c2v3b4", "31 var", "32 bar", "33 var",
+                                 "34 foo", "35 var", "36 while", "38 while", "4 x", "41 then", "42 else", "44 temp",
+                                 "46 while", "48 while", "5 x", "6 x", "7 var", "8 foo", "9 bar"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -791,8 +833,12 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{
-        "12 foo", "13 a", "13 bar", "14 bar", "14 temp", "15 bar", "15 temp", "4 y132", "5 x", "6 x411", "9 foo"};
+    QueryResult expected_results{"12 foo", "13 a", "13 bar", "14 bar", "14 temp", "15 bar", "15 temp", "16 bar",
+                                 "16 tmp", "17 X", "17 bar", "17 chArlie", "17 foo", "18 x", "19 x", "20 foo",
+                                 "21 bar", "24 A1pH3", "24 x411", "24 z", "25 c", "26 c", "27 x", "29 bar",
+                                 "29 foo", "30 var", "31 var", "32 bar", "33 var", "34 foo", "35 var", "37 while",
+                                 "38 while", "4 y132", "41 read", "42 print", "43 while", "44 while", "46 print",
+                                 "48 temp", "5 x", "6 x411", "9 foo"};
     results.sort();
     REQUIRE(results == expected_results);
   }
