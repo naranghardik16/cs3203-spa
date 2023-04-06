@@ -590,6 +590,10 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddStatementModifyingVariable("10", "X");
   pkb_write->AddStatementModifyingVariable("11", "bar");
   pkb_write->AddStatementModifyingVariable("12", "bar");
+  pkb_write->AddStatementModifyingVariable("39", "read");
+  pkb_write->AddStatementModifyingVariable("40", "print");
+  pkb_write->AddStatementModifyingVariable("45", "while");
+  pkb_write->AddStatementModifyingVariable("49", "temp");
   pkb_write->AddProcedureModifyingVariable("procedure", "x411");
   pkb_write->AddProcedureModifyingVariable("procedure", "y132");
   pkb_write->AddProcedureModifyingVariable("procedure", "x1c2v3b4");
@@ -909,6 +913,17 @@ TEST_CASE("Uses and Modifies testing") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Modifies - invalid wildcard - Semantic Error") {
+    QueryString query = "variable v; Select BOOLEAN such that Modifies(_, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Modifies - return false clause") {
     QueryString query = "stmt s; Select s such that Modifies(s, \"xThisAintExist\")";
     QueryResult results;
@@ -1071,7 +1086,111 @@ TEST_CASE("Uses and Modifies testing") {
 
     QueryResult expected_results{"1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "2", "20", "21",
                                  "23", "24", "25", "26", "27", "28", "29", "3", "30", "31", "32", "33", "34", "35",
-                                 "36", "37", "38", "4", "41", "42", "43", "44", "46", "48", "5", "6", "7", "8", "9"};
+                                 "36", "37", "38", "39", "4", "40", "41", "42", "43", "44", "45", "46", "48", "49",
+                                 "5", "6", "7", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with assign and ident variable") {
+    QueryString query = "assign a; Select a such that Modifies(a, \"x1c2v3b4\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"3"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with assign and synonym variable") {
+    QueryString query = "assign a; variable v; Select a such that Modifies(a, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1", "10", "12", "15", "17", "19", "2", "23", "24", "26", "27", "28", "3", "31",
+                                 "32", "33", "34", "35", "38", "4", "41", "42", "44", "46", "48", "5", "6", "7", "8",
+                                 "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with ident assign and synonym variable") {
+    QueryString query = "variable v; Select v such that Modifies(1, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"x411"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with read and synonym variable") {
+    QueryString query = "read r; variable v; Select v such that Modifies(r, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"bar", "print", "read", "temp", "while"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with if and ident variable") {
+    QueryString query = "if ifs; Select ifs such that Modifies(ifs, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"13", "20"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with if and ident variable - returns false clause") {
+    QueryString query = "if ifs; Select ifs such that Modifies(ifs, \"x411\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with if and ident variable") {
+    QueryString query = "if ifs; variable v; Select v such that Modifies(ifs, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"a", "b", "bar", "c", "else", "foo", "oSCar", "print", "read", "temp", "then",
+                                 "var", "while", "x"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with while and ident variable") {
+    QueryString query = "while w; Select w such that Modifies(w, \"x\")";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"18"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Modifies with while and synonym variable") {
+    QueryString query = "variable v; while w; Select v such that Modifies(w, v)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"b", "bar", "c", "else", "foo", "oSCar", "print", "read", "temp", "then",
+                                 "var", "while", "x" };
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1251,7 +1370,7 @@ TEST_CASE("Uses and Modifies testing") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"29", "30", "37", "43", "44"};
+    QueryResult expected_results{"29", "30", "37", "43", "44", "49"};
     results.sort();
     REQUIRE(results == expected_results);
   }
@@ -1265,12 +1384,13 @@ TEST_CASE("Uses and Modifies testing") {
     QueryResult expected_results{"1 x411", "10 X", "11 bar", "12 bar", "13 a", "13 b", "13 c", "13 oSCar", "13 x",
                                  "14 oSCar", "15 oSCar", "16 oSCar", "17 oSCar", "18 b", "18 c", "18 x", "19 x",
                                  "2 y132", "20 b", "20 c", "20 x", "21 b", "21 c", "23 b", "24 c", "25 c", "26 c",
-                                 "27 x", "28 a", "29 bar", "29 else", "29 foo", "29 temp", "29 then", "29 var",
-                                 "29 while", "3 x1c2v3b4", "30 bar", "30 else", "30 foo", "30 temp", "30 then",
-                                 "30 var", "30 while", "31 var", "32 bar", "33 var", "34 foo", "35 var", "36 while",
-                                 "37 else", "37 temp", "37 then", "37 while", "38 while", "4 x", "41 then", "42 else",
-                                 "43 temp", "43 while", "44 temp", "46 while", "48 while", "5 x", "6 x", "7 var",
-                                 "8 foo", "9 bar"};
+                                 "27 x", "28 a", "29 bar", "29 else", "29 foo", "29 print", "29 read", "29 temp",
+                                 "29 then", "29 var", "29 while", "3 x1c2v3b4", "30 bar", "30 else", "30 foo",
+                                 "30 print", "30 read", "30 temp", "30 then", "30 var", "30 while", "31 var",
+                                 "32 bar", "33 var", "34 foo", "35 var", "36 while", "37 else", "37 print", "37 read",
+                                 "37 temp", "37 then", "37 while", "38 while", "39 read", "4 x", "40 print", "41 then",
+                                 "42 else", "43 temp", "43 while", "44 temp", "45 while", "46 while", "48 while",
+                                 "49 temp", "5 x", "6 x", "7 var", "8 foo", "9 bar"};
     results.sort();
     REQUIRE(results == expected_results);
   }
