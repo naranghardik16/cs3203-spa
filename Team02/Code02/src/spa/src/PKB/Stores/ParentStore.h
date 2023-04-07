@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <utility>
 #include <stack>
 
 #include "PKB/AbstractDataModels/ManyToManyStore.h"

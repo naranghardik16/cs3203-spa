@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <stack>
+#include <utility>
 
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"

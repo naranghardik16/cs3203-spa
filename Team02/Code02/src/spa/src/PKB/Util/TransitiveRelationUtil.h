@@ -6,7 +6,6 @@
 #include <unordered_set>
 
 #include "PKB/Types/PkbCommunicationTypes.h"
-#include "PKB/Types/PkbTypes.h"
 
 class TransitiveRelationUtil {
  public:
