@@ -25,13 +25,13 @@ shared_ptr<Procedure> ProcedureParser::ParseEntity(TokenStream &tokens) {
 }
 
 std::string ProcedureParser::ExtractProcName(Line &line) {
-  if (line[0]->GetValue() != sp_constants::k_procedure_ || line.size() < k_min_tokens_) {
+  if (line[k_pos_proc_token_]->GetValue() != sp_constants::k_procedure_ || line.size() < k_min_tokens_) {
     throw SyntaxErrorException("A procedure Line should start with procedure");
   }
-  if (line[1]->GetType() != NAME) {
+  if (line[k_pos_proc_name_]->GetType() != NAME) {
     throw SyntaxErrorException("proc_name should be a NAME");
   }
-  return line[1]->GetValue();
+  return line[k_pos_proc_name_]->GetValue();
 }
 
 bool ProcedureParser::IsProcedureEnd(Line &line) {

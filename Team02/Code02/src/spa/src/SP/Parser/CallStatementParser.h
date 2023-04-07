@@ -12,5 +12,5 @@ class CallStatementParser : public StatementParser {
   void CheckEndOfStatement(Line &line) const;
  private:
   const int k_max_tokens_ = 3;
-  const int k_pos_of_proc = 1;
+  const int k_pos_of_proc_ = 1;
 };

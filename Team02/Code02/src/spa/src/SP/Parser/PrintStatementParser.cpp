@@ -25,11 +25,11 @@ std::string PrintStatementParser::ExtractVariableName(Line &line) const {
     throw SyntaxErrorException("Print statement does not have a variable");
   }
 
-  if (line[1]->GetType() != NAME) {
+  if (line[k_pos_var_]->GetType() != NAME) {
     throw SyntaxErrorException("var_name should be a NAME");
   }
 
-  return line[1]->GetValue();
+  return line[k_pos_var_]->GetValue();
 }
 
 void PrintStatementParser::CheckEndOfStatement(Line &line) const {

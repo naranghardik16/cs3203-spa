@@ -10,5 +10,5 @@ class ConstantParser : public ExpressionParser {
   shared_ptr<Expression> ParseEntity(Line &line) override;
  private:
   const int k_max_tokens_ = 1;
-  const int k_pos_const = 0;
+  const int k_pos_const_ = 0;
 };

@@ -12,4 +12,5 @@ class AssignStatementParser : public StatementParser {
   void CheckEndOfStatement(Line &line) const;
  private:
   const int k_min_tokens_ = 4;
+  const int k_pos_lhs_ = 0;
 };

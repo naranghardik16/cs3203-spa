@@ -13,4 +13,6 @@ class ProcedureParser : public EntityParser<Procedure> {
   static bool IsProcedureEnd(Line &line);
  private:
   inline static const int k_min_tokens_ = 2;
+  inline static const int k_pos_proc_token_ = 0;
+  inline static const int k_pos_proc_name_ = 1;
 };
