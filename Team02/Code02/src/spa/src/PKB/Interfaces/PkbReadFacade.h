@@ -994,7 +994,14 @@ class PkbReadFacade {
    */
   virtual bool IsNext(const StatementNumber &statement_num_1, const StatementNumber &statement_num_2);
 
-  //!API for NextStar
+  // API for NextStar
+  /**
+   * Retrieves all (s1, s2) pairs where Next*(s1, s2) relationship holds
+   *
+   * @return
+   */
+  virtual PairSet GetNextStarPairs();
+
   /**
    * Retrieves all (s1, s2) pairs where Next*(s1, s2) relationship holds and s1 is of type_1 and s2 is of type_2.
    *
@@ -1074,7 +1081,17 @@ class PkbReadFacade {
    */
   virtual bool IsNextStar(const StatementNumber &statement_num_1, const StatementNumber &statement_num_2);
 
+  /**
+   * Clears cache.
+   */
+  virtual void ClearCache();
+
  private:
   Pkb &pkb;
+
+  // Cache
+  PairSet next_star_cache_;
+  PairSet affects_cache_;
+  PairSet affects_star_cache_;
 };
 
