@@ -4,6 +4,7 @@
 #include "PKB/Util/CachingUtil.h"
 #include "PKB/Util/ExpressionUtil.h"
 #include "PKB/Util/FunctionalUtil.h"
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 PkbReadFacade::PkbReadFacade(Pkb &pkb) : pkb(pkb) {}
 
@@ -633,38 +634,7 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
   if (!this->affects_star_cache_.empty()) return this->affects_star_cache_;
-
-  StatementToMultiStatementMap affects_map;
-  StatementNumberSet keys;
-  for (const auto &p : this->GetAffectsPairs()) {
-    keys.insert(p.first);
-    if (affects_map.count(p.first) > 0) {
-      affects_map[p.first].insert(p.second);
-    } else {
-      affects_map[p.first] = {p.second};
-    }
-  }
-
-  PairSet result;
-  for (const auto &k : keys) {
-    StatementNumberStack s;
-    PairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      StatementNumber current = s.top();
-      s.pop();
-
-      for (const auto &c : affects_map[current]) {
-        if (!(visited.count(std::make_pair(k, c)) > 0)) {
-          result.insert(std::make_pair(k, c));
-          s.push(c);
-          visited.insert(std::make_pair(k, c));
-        }
-      }
-    }
-  }
-
+  PairSet result = TransitiveRelationUtil::GetTransitiveRelations(this->GetAffectsPairs());
   this->affects_star_cache_ = result;
   return result;
 }

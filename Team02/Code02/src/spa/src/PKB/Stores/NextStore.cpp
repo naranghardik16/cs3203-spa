@@ -81,29 +81,7 @@ bool NextStore::HasNextRelationBy(const StatementNumber &statement_number) {
 }
 
 NextStore::StatementStatementPairSet NextStore::GetNextStarPairs() {
-  StatementStatementPairSet result;
-
-  // todo: dry
-  for (const auto &k : this->next_relation_store_.retrieveAllKeys()) {
-    StatementNumberStack s;
-    StatementStatementPairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      StatementNumber current = s.top();
-      s.pop();
-
-      for (const auto &c : this->next_relation_store_.retrieveFromKey(current)) {
-        if (!(visited.count(std::make_pair(k, c)) > 0)) {
-          result.insert(std::make_pair(k, c));
-          s.push(c);
-          visited.insert(std::make_pair(k, c));
-        }
-      }
-    }
-  }
-
-  return result;
+  return TransitiveRelationUtil::GetTransitiveRelations(this->GetNextPairs());
 }
 
 bool NextStore::HasNextStarRelation(const StatementNumber &statement_number,

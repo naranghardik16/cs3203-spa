@@ -9,24 +9,10 @@ void CallsStore::AddCallsRelation(const Procedure &caller_procedure, const Proce
 }
 
 void CallsStore::AddCallsStarRelation() {
-  for (const auto &k : this->calls_relation_store_.retrieveAllKeys()) {
-    ProcedureStack s;
-    ProcedureProcedurePairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      Procedure current = s.top();
-      s.pop();
-
-      for (const auto &c : this->calls_relation_store_.retrieveFromKey(current)) {
-        if (visited.count(std::make_pair(k, c)) > 0) continue;
-        if (k == c) continue;
-        this->calls_star_relation_store_.insert(k, c);
-        s.push(c);
-        visited.insert(std::make_pair(k, c));
-      }
-    }
-  }
+  ProcedureProcedurePairSet result = TransitiveRelationUtil::GetTransitiveRelations(this->GetCallsPairs());
+  std::for_each(result.begin(), result.end(), [&](auto &p) {
+    this->calls_star_relation_store_.insert(p.first, p.second);
+  });
 }
 
 void CallsStore::AddCallStatementToProcedure(const StatementNumber &statement_number, const Procedure &procedure) {

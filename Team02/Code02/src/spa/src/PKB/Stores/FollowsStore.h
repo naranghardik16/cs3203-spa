@@ -1,10 +1,12 @@
 #pragma once
 
+#include <algorithm>
 #include <stack>
 
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/Types/PkbTypes.h"
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 /**
  * @class FollowsStore
@@ -19,7 +21,8 @@ class FollowsStore {
  public:
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
   typedef std::unordered_set<PkbTypes::STATEMENT_NUMBER> StatementNumberSet;
-  typedef std::unordered_set<std::pair<StatementNumber, StatementNumber>, PairHasherUtil::hash_pair>
+  typedef std::pair<StatementNumber, StatementNumber> StatementStatementPair;
+  typedef std::unordered_set<StatementStatementPair, PairHasherUtil::hash_pair>
       StatementStatementPairSet;
   typedef OneToOneStore<StatementNumber, StatementNumber> StatementToStatementStore;
   typedef ManyToManyStore<StatementNumber, StatementNumber> MultiStatementToStatementStore;

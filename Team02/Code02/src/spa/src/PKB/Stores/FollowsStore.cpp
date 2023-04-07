@@ -10,24 +10,10 @@ void FollowsStore::AddFollowsRelation(const StatementNumber &first_statement,
 }
 
 void FollowsStore::AddFollowsStarRelation() {
-  for (const auto &k : this->follows_relation_store_.retrieveAllKeys()) {
-    StatementNumberStack s;
-    StatementStatementPairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      StatementNumber current = s.top();
-      s.pop();
-
-      auto c = this->follows_relation_store_.retrieveFromKey(current);
-
-      if (c.empty()) continue;
-      if (k == c || visited.count(std::make_pair(k, c)) > 0) continue;
-      this->follows_star_relation_store_.insert(k, c);
-      s.push(c);
-      visited.insert(std::make_pair(k, c));
-    }
-  }
+  StatementStatementPairSet result = TransitiveRelationUtil::GetTransitiveRelations(this->GetFollowsPairs());
+  std::for_each(result.begin(), result.end(), [&](auto &p) {
+    this->follows_star_relation_store_.insert(p.first, p.second);
+  });
 }
 
 FollowsStore::StatementStatementPairSet FollowsStore::GetFollowsPairs() {
