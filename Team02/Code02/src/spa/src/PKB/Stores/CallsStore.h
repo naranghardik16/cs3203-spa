@@ -1,10 +1,11 @@
 #pragma once
 
-#include <stack>
+#include <algorithm>
 
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/Types/PkbTypes.h"
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 /**
  * @class CallsStore

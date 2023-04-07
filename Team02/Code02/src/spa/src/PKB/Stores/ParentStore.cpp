@@ -10,24 +10,10 @@ void ParentStore::AddParentRelation(const StatementNumber &first_statement,
 }
 
 void ParentStore::AddParentStarRelation() {
-  for (const auto &k : this->parent_relation_store_.retrieveAllKeys()) {
-    StatementNumberStack s;
-    StatementStatementPairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      StatementNumber current = s.top();
-      s.pop();
-
-      for (const auto &c : this->parent_relation_store_.retrieveFromKey(current)) {
-        if (visited.count(std::make_pair(k, c)) > 0) continue;
-        if (k == c) continue;
-        this->parent_star_relation_store_.insert(k, c);
-        s.push(c);
-        visited.insert(std::make_pair(k, c));
-      }
-    }
-  }
+  StatementStatementPairSet result = TransitiveRelationUtil::GetTransitiveRelations(this->GetParentPairs());
+  std::for_each(result.begin(), result.end(), [&](auto &p) {
+    this->parent_star_relation_store_.insert(p.first, p.second);
+  });
 }
 
 ParentStore::StatementStatementPairSet ParentStore::GetParentPairs() {
