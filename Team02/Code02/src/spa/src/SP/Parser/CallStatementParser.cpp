@@ -22,15 +22,15 @@ std::string CallStatementParser::ExtractProcedureName(Line &line) const {
     throw SyntaxErrorException("Call statement should start with call keyword");
   }
 
-  if (line.size() < 2) {
+  if (line.size() <= k_pos_of_proc_) {
     throw SyntaxErrorException("Call statement does not have a procedure");
   }
 
-  if (line[1]->GetType() != NAME) {
+  if (line[k_pos_of_proc_]->GetType() != NAME) {
     throw SyntaxErrorException("var_name should be a NAME");
   }
 
-  return line[1]->GetValue();
+  return line[k_pos_of_proc_]->GetValue();
 }
 
 void CallStatementParser::CheckEndOfStatement(Line &line) const {

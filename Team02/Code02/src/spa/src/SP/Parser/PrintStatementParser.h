@@ -13,4 +13,5 @@ class PrintStatementParser : public StatementParser {
  private:
   const int k_min_tokens_ = 2;
   const int k_max_tokens_ = 3;
+  const int k_pos_var_ = 1;
 };

@@ -27,12 +27,9 @@ class CfgExtractor : public ParserVisitor {
   void VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) override;
   void VisitIfStatement(shared_ptr<IfStatement> if_statement) override;
   void VisitWhileStatement(shared_ptr<WhileStatement> while_statement) override;
-  void VisitProgram(shared_ptr<Program> program);
   void VisitProcedure(shared_ptr<Procedure> procedure) override;
   void VisitVariable(shared_ptr<Variable> variable) override;
   void VisitConstant(shared_ptr<Constant> constant) override;
-  void VisitStatement(shared_ptr<Statement> statement);
-  void VisitExpression(shared_ptr<Expression> expression);
  private:
   void ProcessStatements(const Procedure::StmtListContainer &statements);
   void AddTransitionAndUpdate(shared_ptr<CfgNode> new_node, bool value);

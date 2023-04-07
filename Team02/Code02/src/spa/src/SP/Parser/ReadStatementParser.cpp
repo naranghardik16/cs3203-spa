@@ -26,11 +26,11 @@ std::string ReadStatementParser::ExtractVariableName(Line &line) const {
     throw SyntaxErrorException("Read statement does not have a variable");
   }
 
-  if (line[1]->GetType() != NAME) {
+  if (line[k_pos_var_]->GetType() != NAME) {
     throw SyntaxErrorException("var_name should be a NAME");
   }
 
-  return line[1]->GetValue();
+  return line[k_pos_var_]->GetValue();
 }
 
 void ReadStatementParser::CheckEndOfStatement(Line &line) const {
@@ -38,7 +38,7 @@ void ReadStatementParser::CheckEndOfStatement(Line &line) const {
     throw SyntaxErrorException("ReadStatement does not end with ;");
   }
 
-  if (line.size() > k_max_tokens) {
+  if (line.size() > k_max_tokens_) {
     throw SyntaxErrorException("Too many tokens in a ReadStatement");
   }
 }

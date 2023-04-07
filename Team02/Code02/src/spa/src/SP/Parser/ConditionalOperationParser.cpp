@@ -23,7 +23,6 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     }
   } catch (SpaException &e) {
     string err_msg = "ConditionalOperationParser::Parse() failed relational_operation_parser";
-    //    cout << err_msg << endl;
   }
 
   this->InheritArgs(make_shared<int>(initial_pos),
@@ -49,7 +48,6 @@ shared_ptr<Expression> ConditionalOperationParser::Parse() {
     ValidateEnoughTokensToProcess();
     this->SetIsSubExpr(true);
     auto left_cond_expr = Parse();
-//    GetNext();
     if (GetCurrentTokenType() != RIGHT_PARENTHESIS) {
       throw SyntaxErrorException("Missing ) " + GetCurrentTokenValue());
     }
