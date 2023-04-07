@@ -28,6 +28,7 @@ class PkbReadFacade {
   typedef PkbCommunicationTypes::SingleConstraint Single;
   typedef PkbCommunicationTypes::PairConstraint Pair;
   typedef std::stack<StatementNumber> StatementNumberStack;
+  typedef std::unordered_map<StatementNumber, StatementNumberSet> StatementToMultiStatementMap;
 
   /**
    * Constructor for Pkb's read facade.

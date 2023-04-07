@@ -1,6 +1,4 @@
-#include "General/StatementTypeEnum.h"
 #include "PkbWriteFacade.h"
-#include "PKB/Pkb.h"
 
 PkbWriteFacade::PkbWriteFacade(Pkb &pkb) : pkb(pkb) {}
 
@@ -18,20 +16,31 @@ PkbTypes::INDEX PkbWriteFacade::AddConstant(const Constant &constant) const {
   return pkb.entity_store_->AddConstant(constant);
 }
 
+void PkbWriteFacade::AddUsesSideEffects(const StatementNumber &statement_number,
+                                        const Variable &variable) const {
+  StatementNumberSet ancestors = this->pkb.parent_store_->GetAncestors(statement_number);
+  std::for_each(ancestors.begin(), ancestors.end(), [&](auto &p) {
+    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
+  });
+}
+
+void PkbWriteFacade::AddModifiesSideEffects(const StatementNumber &statement_number,
+                                            const Variable &variable) const {
+  StatementNumberSet ancestors = this->pkb.parent_store_->GetAncestors(statement_number);
+  std::for_each(ancestors.begin(), ancestors.end(), [&](auto &p) {
+    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
+  });
+}
+
 void PkbWriteFacade::AddStatementUsingVariable(const StatementNumber &statement_number,
                                                const Variable &variable) const {
   this->pkb.uses_store_->AddStatementUsesVariable(statement_number, variable);
-
-  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-      statement_number)) {
-    this->pkb.uses_store_->AddStatementUsesVariable(p, variable);
-  }
+  this->AddUsesSideEffects(statement_number, variable);
 }
 
 void PkbWriteFacade::AddStatementOfAType(const StatementNumber &statement_number,
                                          const StatementType &statement_type) const {
-  this->pkb.statement_store_->AddStatementAndType(statement_type,
-                                                  statement_number);
+  this->pkb.statement_store_->AddStatementAndType(statement_type, statement_number);
 }
 
 void PkbWriteFacade::AddProcedureUsingVariable(const Procedure &procedure,
@@ -42,11 +51,7 @@ void PkbWriteFacade::AddProcedureUsingVariable(const Procedure &procedure,
 void PkbWriteFacade::AddStatementModifyingVariable(const StatementNumber &statement_number,
                                                    const Variable &variable) const {
   this->pkb.modifies_store_->AddStatementModifiesVariable(statement_number, variable);
-
-  for (const auto &p : this->pkb.parent_store_->GetAncestors(
-      statement_number)) {
-    this->pkb.modifies_store_->AddStatementModifiesVariable(p, variable);
-  }
+  this->AddModifiesSideEffects(statement_number, variable);
 }
 
 void PkbWriteFacade::AddProcedureModifyingVariable(const Procedure &procedure,
@@ -72,54 +77,40 @@ void PkbWriteFacade::AddParentStarRelation() const {
   this->pkb.parent_store_->AddParentStarRelation();
 
   for (const auto &p : this->pkb.modifies_store_->GetStatementVariablePairs()) {
-    for (const auto &s : this->pkb.parent_store_->GetAncestors(p.first)) {
-      this->pkb.modifies_store_->AddStatementModifiesVariable(s, p.second);
-    }
+    this->ModifiesSideEffects(p.first, p.second);
   }
 
   for (const auto &p : this->pkb.uses_store_->GetStatementVariablePairs()) {
-    for (const auto &s : this->pkb.parent_store_->GetAncestors(p.first)) {
-      this->pkb.uses_store_->AddStatementUsesVariable(s, p.second);
-    }
+    this->UsesSideEffects(p.first, p.second);
   }
 }
+
+void PkbWriteFacade::AddExpressionSideEffects(const StatementNumber &statement_number,
+                                              const ExpressionPtr &expression) const {
+  VariableSet variables = this->pkb.expression_store_->GetVariablesFromExpression(expression);
+  std::for_each(variables.begin(), variables.end(), [&](auto &p) {
+    this->AddStatementUsingVariable(statement_number, p);
+    this->pkb.entity_store_->AddVariable(p);
+  });
+
+  ConstantSet constants = this->pkb.expression_store_->GetConstantsFromExpression(expression);
+  std::for_each(constants.begin(), constants.end(), [&](auto &p) {
+    this->pkb.entity_store_->AddConstant(p);
+  });
+};
 
 void PkbWriteFacade::AddAssignmentStatementAndExpression(const StatementNumber &statement_number,
                                                          const ExpressionPtr &expression) {
   this->pkb.assignment_store_->AddAssignmentExpression(statement_number, expression);
   this->pkb.expression_store_->AddExpression(expression);
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetVariablesFromExpression(
-      expression)) {
-    this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->AddVariable(p);
-  }
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetConstantsFromExpression(
-      expression)) {
-    this->pkb.entity_store_->AddConstant(p);
-  }
+  this->AddExpressionSideEffects(statement_number, expression);
 }
 
 void PkbWriteFacade::AddIfStatementAndCondition(const StatementNumber &statement_number,
                                                 const ExpressionPtr &expression) {
   this->pkb.control_flow_store_->AddIfStatementAndExpression(statement_number, expression);
   this->pkb.expression_store_->AddExpression(expression);
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetVariablesFromExpression(
-      expression)) {
-    this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->AddVariable(p);
-  }
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetConstantsFromExpression(
-      expression)) {
-    this->pkb.entity_store_->AddConstant(p);
-  }
+  this->AddExpressionSideEffects(statement_number, expression);
 }
 
 void PkbWriteFacade::AddWhileStatementAndCondition(const StatementNumber &statement_number,
@@ -127,19 +118,7 @@ void PkbWriteFacade::AddWhileStatementAndCondition(const StatementNumber &statem
   this->pkb.control_flow_store_->AddWhileStatementAndExpression(
       statement_number, expression);
   this->pkb.expression_store_->AddExpression(expression);
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetVariablesFromExpression(
-      expression)) {
-    this->AddStatementUsingVariable(statement_number, p);
-    this->pkb.entity_store_->AddVariable(p);
-  }
-
-  for (const auto
-        &p : this->pkb.expression_store_->GetConstantsFromExpression(
-      expression)) {
-    this->pkb.entity_store_->AddConstant(p);
-  }
+  this->AddExpressionSideEffects(statement_number, expression);
 }
 
 void PkbWriteFacade::AddCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure) {

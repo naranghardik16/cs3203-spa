@@ -592,7 +592,6 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
     }
   }
 
-//  this->affects_cache_ = result;
   return result;
 }
 
@@ -630,10 +629,8 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
-//  if (!this->affects_star_cache_.empty()) return this->affects_star_cache_;
-
-  std::unordered_map<std::string, std::unordered_set<std::string>> affects_map;
-  std::unordered_set<std::string> keys;
+  StatementToMultiStatementMap affects_map;
+  StatementNumberSet keys;
   for (const auto &p : this->GetAffectsPairs()) {
     keys.insert(p.first);
     if (affects_map.count(p.first) > 0) {
@@ -663,7 +660,6 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
     }
   }
 
-//  this->affects_star_cache_ = result;
   return result;
 }
 

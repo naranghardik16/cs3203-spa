@@ -1,13 +1,16 @@
 #pragma once
 
+#include <algorithm>
+#include <unordered_set>
+
+#include "core/cfg_model/Cfg.h"
 #include "General/StatementTypeEnum.h"
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbTypes.h"
-#include "core/cfg_model/Cfg.h"
 
 /**
  * Facade implementation consisting of write methods
- * which acts as an interface between Sp and Pkb
+ * which acts as an interface between Sp and Pkb.
  */
 class PkbWriteFacade {
  private:
@@ -19,36 +22,63 @@ class PkbWriteFacade {
   typedef PkbTypes::PROCEDURE Procedure;
   typedef PkbTypes::INDEX Index;
   typedef PkbTypes::VARIABLE Variable;
+  typedef std::unordered_set<Constant> ConstantSet;
+  typedef std::unordered_set<StatementNumber> StatementNumberSet;
+  typedef std::unordered_set<Variable> VariableSet;
   typedef std::shared_ptr<Expression> ExpressionPtr;
   typedef std::shared_ptr<Cfg> CfgPtr;
 
+  /**
+   * Constructor for Pkb's write facade.
+   *
+   * @param pkb - Instance of Pkb.
+   */
   explicit PkbWriteFacade(Pkb &pkb);
 
+  /**
+   * Destructor for Pkb's write facade.
+   */
   ~PkbWriteFacade();
 
   /**
-   * Adds variable into Pkb
+   * Adds variable into Pkb.
    *
-   * @param variable - the target variable to add into Pkb
-   * @return index to store variable index
+   * @param variable - The target variable to add into Pkb.
+   * @return The index of insertion.
    */
   Index AddVariable(const Variable &variable) const;
 
   /**
-   *  Adds procedure into Pkb
+   *  Adds procedure into Pkb.
    *
-   * @param procedure - the target procedure to add into Pkb
-   * @return index to store procedure index
+   * @param procedure - The target procedure to add into Pkb.
+   * @return The index of insertion.
    */
   Index AddProcedure(const Procedure &procedure) const;
 
   /**
-   * Adds constant into Pkb
+   * Adds constant into Pkb.
    *
-   * @param constant - the target constant to add into Pkb
-   * @return index to store constant index
+   * @param constant - The target constant to add into Pkb.
+   * @return The index of insertion.
    */
   Index AddConstant(const Constant &constant) const;
+
+  /**
+   * Add uses relation side effects into Pkb.
+   *
+   * @param statement_number - The statement that is using a varaible.
+   * @param variable - The variable that is being used.
+   */
+  void AddUsesSideEffects(const StatementNumber &statement_number, const Variable &variable) const;
+
+  /**
+   * Add modifies relation side effects into Pkb.
+   *
+   * @param statement_number - The statement that is modifying a varaible.
+   * @param variable - The variable that is being modified.
+   */
+  void AddModifiesSideEffects(const StatementNumber &statement_number, const Variable &variable) const;
 
   /**
    * Adds a statement number and the corresponding variable being used into the Pkb.
@@ -104,6 +134,9 @@ class PkbWriteFacade {
   void AddFollowsRelation(const StatementNumber &statement_number_1,
                           const StatementNumber &statement_number_2) const;
 
+  /**
+   * Add follows star relation to Pkb using the follows relations present.
+   */
   void AddFollowsStarRelation() const;
 
   /**
@@ -115,7 +148,19 @@ class PkbWriteFacade {
   void AddParentRelation(const StatementNumber &statement_number_1,
                          const StatementNumber &statement_number_2) const;
 
+  /**
+   * Add parent star relation to Pkb using the parent relations present.
+   */
   void AddParentStarRelation() const;
+
+  /**
+   * Add expression side effects into Pkb like uses relationships.
+   *
+   * @param statement_number - The statement number the contains the expression.
+   * @param expression - The expression in the statement.
+   */
+  void AddExpressionSideEffects(const StatementNumber &statement_number,
+                                const ExpressionPtr &expression) const;
 
   /**
    * Adds an assignment statement and its expression into the Pkb.
@@ -152,7 +197,11 @@ class PkbWriteFacade {
    */
   void AddCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
+  /**
+   * Add calls star relation to Pkb using the calls relations present.
+   */
   void AddCallsStarRelation();
+
   /**
    * Adds calls statement to procedure name mapping to Pkb.
    *
