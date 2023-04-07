@@ -97,7 +97,7 @@ void PkbWriteFacade::AddExpressionSideEffects(const StatementNumber &statement_n
   std::for_each(constants.begin(), constants.end(), [&](auto &p) {
     this->pkb.entity_store_->AddConstant(p);
   });
-};
+}
 
 void PkbWriteFacade::AddAssignmentStatementAndExpression(const StatementNumber &statement_number,
                                                          const ExpressionPtr &expression) {
