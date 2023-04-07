@@ -134,12 +134,15 @@ const std::unordered_map<std::string, int> kPatternScoreMap{
 
 const std::unordered_map<std::string, int> kSuchThatScoreMap{
     {kPqlCallsRel, 4}, {kPqlParentRel, 5}, {kPqlFollowsRel, 6}, {kPqlNextRel, 7},
-    {kPqlModifiesRel, 8}, {kPqlUsesRel, 9},
-    {kPqlCallsStarRel, 10}, {kPqlAffectsRel, 11}, {kPqlParentStarRel, 12},
-    {kPqlFollowsStarRel, 13}, {kPqlNextStarRel, 14}, {kPqlAffectsStarRel, 15}};
+    {kPqlModifiesRel, 8},  {kPqlParentStarRel, 9}, {kPqlCallsStarRel, 10},
+    {kPqlUsesRel, 11},
+    {kPqlAffectsRel, 12}, {kPqlFollowsStarRel, 13}, {kPqlNextStarRel, 14},
+    {kPqlAffectsStarRel, 15}};
 
 const int kResultTableInitialisationIndex = 0;
 const int kPairArgumentValidSize = 2;
 const int kTripleArgumentValidSize = 3;
 const std::string kNoSynClauseGroupKey;
+const std::unordered_set<std::string> kBooleanQueryTrueOutput = {"TRUE"};
+const std::unordered_set<std::string> kBooleanQueryFalseOutput = {"FALSE"};
 }
