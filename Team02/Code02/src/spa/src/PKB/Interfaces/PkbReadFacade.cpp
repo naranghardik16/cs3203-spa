@@ -1,6 +1,7 @@
 #include "PkbReadFacade.h"
 #include "PKB/Pkb.h"
 #include "PKB/Types/PkbCommunicationTypes.h"
+#include "PKB/Util/CachingUtil.h"
 #include "PKB/Util/ExpressionUtil.h"
 #include "PKB/Util/FunctionalUtil.h"
 
@@ -534,16 +535,16 @@ PkbReadFacade::Procedure PkbReadFacade::GetProcedureFromCallStatement(const Stat
 
 // Affects API
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
-//  if (!this->affects_cache_.empty()) return this->affects_cache_;
+  if (!this->affects_cache_.empty()) return this->affects_cache_;
 
   PairSet result;
   const auto asses = this->GetAssignStatements();
   for (const auto &a : this->GetAssignStatements()) {
-    std::stack<std::string> s;
-    std::unordered_set<std::string> visited;
+    StatementNumberStack s;
+    StatementNumberSet visited;
     s.push(a);
 
-    std::string v = *this->GetVariablesModifiedByStatement(a).begin();
+    Variable v = *this->GetVariablesModifiedByStatement(a).begin();
     while (!s.empty()) {
       auto current = s.top();
       s.pop();
@@ -593,7 +594,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsPairs() {
     }
   }
 
-//  this->affects_cache_ = result;
+  this->affects_cache_ = result;
   return result;
 }
 
@@ -631,10 +632,10 @@ bool PkbReadFacade::IsThereAnyAffectsRelationship() {
 }
 
 PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
-//  if (!this->affects_star_cache_.empty()) return this->affects_star_cache_;
+  if (!this->affects_star_cache_.empty()) return this->affects_star_cache_;
 
-  std::unordered_map<std::string, std::unordered_set<std::string>> affects_map;
-  std::unordered_set<std::string> keys;
+  StatementToMultiStatementMap affects_map;
+  StatementNumberSet keys;
   for (const auto &p : this->GetAffectsPairs()) {
     keys.insert(p.first);
     if (affects_map.count(p.first) > 0) {
@@ -664,7 +665,7 @@ PkbReadFacade::PairSet PkbReadFacade::GetAffectsStarPairs() {
     }
   }
 
-//  this->affects_star_cache_ = result;
+  this->affects_star_cache_ = result;
   return result;
 }
 
@@ -755,12 +756,18 @@ bool PkbReadFacade::IsNext(const StatementNumber &statement_number_1, const Stat
 }
 
 // Next* API
+PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs() {
+  if (!this->next_star_cache_.empty()) return this->next_star_cache_;
+  this->next_star_cache_ = this->pkb.next_store_->GetNextStarPairs();
+  return this->next_star_cache_;
+}
+
 PkbReadFacade::PairSet PkbReadFacade::GetNextStarPairs(const StatementType &statement_type_1,
                                                        const StatementType &statement_type_2) {
   return FunctionalUtil::Filter([&](const Pair &p) {
     return this->pkb.statement_store_->GetStatements(statement_type_1).count(p.first) > 0
         && this->pkb.statement_store_->GetStatements(statement_type_2).count(p.second) > 0;
-  }, this->pkb.next_store_->GetNextStarPairs());
+  }, this->GetNextStarPairs());
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber &statement_number,
@@ -768,7 +775,7 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextStar(const StatementNumber &state
   return FunctionalUtil::Map([&](const Pair &p) { return p.second; }, FunctionalUtil::Filter([&](const Pair &p) {
     return p.first == statement_number
         && this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
-  }, this->pkb.next_store_->GetNextStarPairs()));
+  }, this->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber &statement_number,
@@ -776,19 +783,19 @@ PkbReadFacade::SingleSet PkbReadFacade::GetNextStarBy(const StatementNumber &sta
   return FunctionalUtil::Map([&](const Pair &p) { return p.first; }, FunctionalUtil::Filter([&](const Pair &p) {
     return p.second == statement_number
         && this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
-  }, this->pkb.next_store_->GetNextStarPairs()));
+  }, this->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarFirst(const StatementType &statement_type) {
   return FunctionalUtil::Map([&](const Pair &p) { return p.first; }, FunctionalUtil::Filter([&](const Pair &p) {
     return this->pkb.statement_store_->GetStatements(statement_type).count(p.first) > 0;
-  }, this->pkb.next_store_->GetNextStarPairs()));
+  }, this->GetNextStarPairs()));
 }
 
 PkbReadFacade::SingleSet PkbReadFacade::GetNextStarSecond(const StatementType &statement_type) {
   return FunctionalUtil::Map([&](const Pair &p) { return p.second; }, FunctionalUtil::Filter([&](const Pair &p) {
     return this->pkb.statement_store_->GetStatements(statement_type).count(p.second) > 0;
-  }, this->pkb.next_store_->GetNextStarPairs()));
+  }, this->GetNextStarPairs()));
 }
 
 bool PkbReadFacade::HasNextStarRelationship() {
@@ -805,4 +812,10 @@ bool PkbReadFacade::HasNextStarBy(const StatementNumber &statement_number) {
 
 bool PkbReadFacade::IsNextStar(const StatementNumber &statement_number_1, const StatementNumber &statement_number_2) {
   return this->pkb.next_store_->HasNextStarRelation(statement_number_1, statement_number_2);
+}
+
+void PkbReadFacade::ClearCache() {
+  this->next_star_cache_.clear();
+  this->affects_cache_.clear();
+  this->affects_star_cache_.clear();
 }
