@@ -77,11 +77,11 @@ void PkbWriteFacade::AddParentStarRelation() const {
   this->pkb.parent_store_->AddParentStarRelation();
 
   for (const auto &p : this->pkb.modifies_store_->GetStatementVariablePairs()) {
-    this->ModifiesSideEffects(p.first, p.second);
+    this->AddModifiesSideEffects(p.first, p.second);
   }
 
   for (const auto &p : this->pkb.uses_store_->GetStatementVariablePairs()) {
-    this->UsesSideEffects(p.first, p.second);
+    this->AddUsesSideEffects(p.first, p.second);
   }
 }
 
