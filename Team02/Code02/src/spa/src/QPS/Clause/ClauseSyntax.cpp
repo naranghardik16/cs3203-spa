@@ -30,10 +30,6 @@ std::string ClauseSyntax::GetSecondParameter() {
   return pair_.second[1];
 }
 
-std::string ClauseSyntax::GetThirdParameter() {
-  return pair_.second[2];
-}
-
 SyntaxPair ClauseSyntax::GetSyntaxPair() {
   return pair_;
 }

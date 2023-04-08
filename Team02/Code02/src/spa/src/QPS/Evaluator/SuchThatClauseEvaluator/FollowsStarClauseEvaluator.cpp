@@ -1,7 +1,7 @@
 #include "FollowsStarClauseEvaluator.h"
 
 bool FollowsStarClauseEvaluator::CheckIfReturnEmpty() {
-  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+  return QueryUtil::IsMatchingEntities(first_arg_, second_arg_);
 }
 
 bool FollowsStarClauseEvaluator::HandleBothWildcard() {

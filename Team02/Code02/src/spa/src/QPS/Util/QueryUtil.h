@@ -209,4 +209,7 @@ class QueryUtil {
   static std::string GetSynonymFromAttrRef(const std::string& attrRef);
   static bool IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Map &declaration_map);
   static std::string AdjustSynonymWithTrivialAttrRefValue(Synonym syn, Map &declaration_map);
+  static bool IsAffectsReturnsEmpty(const std::string &first_arg, const std::string &second_arg, Map &declaration_map);
+  static bool IsMatchingEntities(const std::string &first_arg, const std::string &second_arg);
+  static bool IsContainerSynonym(const std::string &arg, Map &declaration_map);
 };

@@ -1,12 +1,8 @@
 #include "ParentClauseEvaluator.h"
 
 bool ParentClauseEvaluator::CheckIfReturnEmpty() {
-  bool is_first_arg_not_a_container_syn = QueryUtil::IsSynonym(first_arg_)
-      && !QueryUtil::IsIfSynonym(declaration_map_, first_arg_)
-      && !QueryUtil::IsWhileSynonym(declaration_map_, first_arg_)
-      && !QueryUtil::IsStatementSynonym(declaration_map_, first_arg_);
-  bool is_same_syn_or_value_pairs = (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
-  return is_first_arg_not_a_container_syn || is_same_syn_or_value_pairs;
+  return (QueryUtil::IsSynonym(first_arg_) && !QueryUtil::IsContainerSynonym(first_arg_, declaration_map_))
+  || QueryUtil::IsMatchingEntities(first_arg_, second_arg_);
 }
 
 bool ParentClauseEvaluator::HandleBothWildcard() {

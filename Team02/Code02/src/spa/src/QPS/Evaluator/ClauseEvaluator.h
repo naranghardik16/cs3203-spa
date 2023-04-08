@@ -23,12 +23,6 @@ class ClauseEvaluator {
   }
 
   /**
-   * A getter function to get the map containing informations on declarations made
-   * @return an unordered map of synonyms as key and corresponding design entity as the value
-   */
-  Map GetDeclarationMap();
-
-  /**
  * Converts an unordered set of strings (Pkb output) to a ResultRow format for QPS to handle interdependent clauses in PQL queries
  * @param s which is an unordered set of strings
  * @return the unordered set in ResultTable format
