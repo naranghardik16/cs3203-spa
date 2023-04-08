@@ -683,6 +683,49 @@ TEST_CASE("Test Valid Simple Query Parser") {
 TEST_CASE("Test invalid queries") {
   auto qp = std::make_shared<QueryParser>();
 
+  SECTION("Test invalid multiple synonyms") {
+    std::string query("assign a; while w; Select <a,w,>");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <a,,w>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <a,w,,>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <,a,w>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query_extra character in declaration") {
+    std::string query("assign a; while w;; Select BOOLEAN");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;, while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;; while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = ";assign a; while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a,b,c,; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a,b,,c; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign ,a,b,c; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query_extra character in clause") {
+    std::string query("assign a; while w; Select a with a.stmt#=6 such that Parent* (w,a,)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
   SECTION("Test invalid attrRef as synonym queries") {
     // no full stop
     std::string query = "stmt s;Select s stmt# such that Follows(5,5)";

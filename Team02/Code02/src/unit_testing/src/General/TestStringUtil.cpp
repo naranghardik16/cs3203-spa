@@ -11,22 +11,34 @@ TEST_CASE("Check if Trim works as expected") {
 TEST_CASE("Check if SplitByDelimiter works as expected") {
   std::string query = "variable v, v1;procedure p, p1;\nSelect v";
   std::vector<std::string> correct_clauses {"variable v, v1", "procedure p, p1", "Select v"};
-
-  std::vector<std::string> clauses = string_util::SplitStringByDelimiter(query, ";");
-  REQUIRE(correct_clauses == clauses);
+  std::pair<std::vector<std::string>, std::string> clause_pair;
+  clause_pair = string_util::SplitStringByDelimiter(query, ";");
+  if (clause_pair.second.length() > 0) {
+    clause_pair.first.push_back(clause_pair.second);
+  }
+  REQUIRE(correct_clauses == clause_pair.first);
 
   query = "     variable v, v1         ;  procedure p, p1 ;   \nSelect v      ";
-  clauses = string_util::SplitStringByDelimiter(query, ";");
-  REQUIRE(correct_clauses == clauses);
+  clause_pair = string_util::SplitStringByDelimiter(query, ";");
+  if (clause_pair.second.length() > 0) {
+    clause_pair.first.push_back(clause_pair.second);
+  }
+  REQUIRE(correct_clauses == clause_pair.first);
 
   query = "variable v, v1;procedure p, p1;Select v";
-  clauses = string_util::SplitStringByDelimiter(query, ";");
-  REQUIRE(correct_clauses == clauses);
+  clause_pair = string_util::SplitStringByDelimiter(query, ";");
+  if (clause_pair.second.length() > 0) {
+    clause_pair.first.push_back(clause_pair.second);
+  }
+  REQUIRE(correct_clauses == clause_pair.first);
 
   query = "variable v, v1 procedure p, p1 Select v";
-  clauses = string_util::SplitStringByDelimiter(query, ";");
+  clause_pair = string_util::SplitStringByDelimiter(query, ";");
+  if (clause_pair.second.length() > 0) {
+    clause_pair.first.push_back(clause_pair.second);
+  }
   correct_clauses = std::vector<std::string>{"variable v, v1 procedure p, p1 Select v"};
-  REQUIRE(correct_clauses == clauses);
+  REQUIRE(correct_clauses == clause_pair.first);
 }
 
 TEST_CASE("Check if FirstWord works as expected") {

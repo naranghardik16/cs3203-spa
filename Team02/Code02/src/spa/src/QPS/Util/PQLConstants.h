@@ -33,7 +33,7 @@ const std::regex kSuchThatRegex("such that [A-Za-z]");
 const std::regex kPatternRegex("pattern [A-Za-z]");
 const std::regex kWithRegex("with [A-Za-z0-9\"]");
 const std::regex kAndRegex("and [A-Za-z0-9\"]");
-
+const std::vector<std::regex> kClauseRegexVector = {kSuchThatRegex, kPatternRegex, kWithRegex,  kAndRegex};
 const std::string kPqlStatementEntity = "stmt";
 const std::string kPqlReadEntity = "read";
 const std::string kPqlPrintEntity = "print";
@@ -139,6 +139,7 @@ const std::unordered_map<std::string, int> kSuchThatScoreMap{
     {kPqlAffectsRel, 12}, {kPqlFollowsStarRel, 13}, {kPqlNextStarRel, 14},
     {kPqlAffectsStarRel, 15}};
 
+const int kStartIndex = 0;
 const int kResultTableInitialisationIndex = 0;
 const int kPairArgumentValidSize = 2;
 const int kTripleArgumentValidSize = 3;
