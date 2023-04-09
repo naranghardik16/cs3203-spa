@@ -13,7 +13,7 @@ std::string Rtrim(const std::string &s);
 
 std::string Trim(const std::string &s);
 
-std::vector<std::string> SplitStringByDelimiter(std::string s, const std::string& delimiter);
+std::pair<std::vector<std::string>, std::string> SplitStringByDelimiter(std::string s, const std::string& delimiter);
 
 std::string GetFirstWord(const std::string& s);
 

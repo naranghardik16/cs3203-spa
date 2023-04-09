@@ -1,5 +1,24 @@
 #include "AssignPatternClauseEvaluator.h"
 
+std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause() {
+  auto result_ptr = PatternClauseEvaluator::EvaluateClause();
+  if (IsAnyMatch()) {
+    return result_ptr;
+  } else if (IsPartialMatch()) {
+    return HandlePartialMatch(result_ptr);
+  } else {
+    return HandleExactMatch(result_ptr);
+  }
+}
+
+bool AssignPatternClauseEvaluator::IsAnyMatch() {
+  return QueryUtil::IsWildcard(second_arg_);
+}
+
+bool AssignPatternClauseEvaluator::IsPartialMatch() {
+  return QueryUtil::IsPartialMatchExpressionSpecification(second_arg_);
+}
+
 ResultTable AssignPatternClauseEvaluator::HandleFirstArgSyn() {
   return ClauseEvaluator::ConvertPairSetToResultTableFormat(pkb_->GetModifiesStatementVariablePairs
       (StatementType::ASSIGN));

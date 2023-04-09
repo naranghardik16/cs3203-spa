@@ -20,5 +20,5 @@
  */
 class Qps {
  public:
-  static void ProcessQuery(std::string query, std::list<std::string> &results, std::shared_ptr<PkbReadFacade> pkb);
+  static void ProcessQuery(const std::string& query, std::list<std::string> &results, std::shared_ptr<PkbReadFacade> pkb);
 };

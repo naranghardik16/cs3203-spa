@@ -27,12 +27,14 @@ std::string string_util::Trim(const std::string &s) {
 /*
  * Splits a string by a specified delimiter. The delimiter will be excluded.
  */
-std::vector<std::string> string_util::SplitStringByDelimiter(std::string s, const std::string &delimiter) {
+std::pair<std::vector<std::string>, std::string> string_util::SplitStringByDelimiter(std::string s,
+                                                                                     const std::string &delimiter) {
   // Reference: https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
   std::vector<std::string> tokens;
   std::string token;
 
   size_t delimiter_index = s.find(delimiter);
+
   while (delimiter_index != std::string::npos) {
     token = string_util::Trim(s.substr(0, delimiter_index));
     tokens.push_back(token);
@@ -40,11 +42,7 @@ std::vector<std::string> string_util::SplitStringByDelimiter(std::string s, cons
     delimiter_index = s.find(delimiter);
   }
 
-  if (s.length() > 0) {
-    tokens.push_back(string_util::Trim(s));
-  }
-
-  return tokens;
+  return std::pair<std::vector<std::string>, std::string>{tokens, Trim(s)};
 }
 
 /*

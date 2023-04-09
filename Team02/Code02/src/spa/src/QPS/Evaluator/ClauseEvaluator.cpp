@@ -1,9 +1,5 @@
 #include "ClauseEvaluator.h"
 
-Map ClauseEvaluator::GetDeclarationMap() {
-  return declaration_map_;
-}
-
 ResultTable ClauseEvaluator::ConvertSetToResultTableFormat(const PkbCommunicationTypes::SingleConstraintSet& s) {
   std::vector<std::vector<std::string>> result;
   for (const auto& kElem: s) {

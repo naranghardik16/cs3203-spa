@@ -1,7 +1,7 @@
 #include "CallsClauseEvaluator.h"
 
 bool CallsClauseEvaluator::CheckIfReturnEmpty() {
-  return (first_arg_ == second_arg_) && !QueryUtil::IsWildcard(first_arg_);
+  return QueryUtil::IsMatchingEntities(first_arg_, second_arg_);
 }
 
 bool CallsClauseEvaluator::HandleBothWildcard() {

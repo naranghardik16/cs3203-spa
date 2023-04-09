@@ -12,8 +12,8 @@ bool QueryUtil::IsQuoted(const std::string& s) {
 }
 
 bool QueryUtil::IsQuotedIdent(const std::string &s) {
-  return (s[0] == pql_constants::kQuotationChar && LexicalRuleValidator::IsIdent(s.substr(1, s.length() - 2))
-  && s[s.length()-1] == pql_constants::kQuotationChar);
+  return (s[0] == pql_constants::kQuotationChar && LexicalRuleValidator::IsIdent(s.substr(1, s.length()
+  - 2)) && s[s.length()-1] == pql_constants::kQuotationChar);
 }
 
 bool QueryUtil::IsWildcard(const std::string& s) {
@@ -50,10 +50,6 @@ bool QueryUtil::IsDesignEntity(const std::string& s) {
   return pql_constants::kDesignEntities.find(s) != pql_constants::kDesignEntities.end();
 }
 
-bool QueryUtil::IsRelationshipReference(const std::string& s) {
-  return pql_constants::kRelRefs.find(s) != pql_constants::kRelRefs.end();
-}
-
 bool QueryUtil::IsVariableSynonym(Map &declaration, const std::string& expression) {
   return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlVariableEntity);
 }
@@ -78,11 +74,6 @@ bool QueryUtil::IsPrintSynonym(Map &declaration, const std::string& expression) 
   return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlPrintEntity);
 }
 
-bool QueryUtil::IsCallSynonym(Map &declaration, const std::string& expression) {
-  return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlCallEntity);
-}
-
-
 bool QueryUtil::IsWhileSynonym(Map &declaration, const std::string& expression) {
   return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlWhileEntity);
 }
@@ -96,16 +87,6 @@ bool QueryUtil::IsIfSynonym(Map &declaration, const std::string& expression) {
 
 bool QueryUtil::IsAssignSynonym(Map &declaration, const std::string& expression) {
   return IsCorrectSynonymType(declaration, expression, pql_constants::kPqlAssignEntity);
-}
-
-bool QueryUtil::IsATypeOfStatementSynonym(Map &declaration, const std::string& expression) {
-  // check if synonym first
-  if (declaration.count(expression) == 0) {
-    return false;
-  }
-
-  return !IsVariableSynonym(declaration, expression) && !IsConstantSynonym(declaration, expression)
-  && !IsProcedureSynonym(declaration, expression);
 }
 
 bool QueryUtil::IsProcedureSynonym(Map &declaration, const std::string& expression) {
@@ -176,4 +157,26 @@ bool QueryUtil::IsTrivialAttrRef(std::vector<std::string> attr_ref_token_lst, Ma
   bool is_print_var_name_attr_ref = (declaration_map[attr_ref_token_lst[0]] == pql_constants::kPqlPrintEntity)
       && (attr_ref_token_lst[1] == pql_constants::kVarname);
   return !is_call_proc_name_attr_ref && !is_read_var_name_attr_ref && !is_print_var_name_attr_ref;
+}
+
+bool QueryUtil::IsAffectsReturnsEmpty(const std::string& first_arg, const std::string& second_arg, Map
+&declaration_map) {
+  bool is_first_arg_an_invalid_syn = IsSynonym(first_arg)
+      && !IsAssignSynonym(declaration_map, first_arg)
+      && !IsStatementSynonym(declaration_map, first_arg);
+  bool is_second_arg_an_invalid_syn = IsSynonym(second_arg)
+      && !IsAssignSynonym(declaration_map, second_arg)
+      && !IsStatementSynonym(declaration_map, second_arg);
+  return is_first_arg_an_invalid_syn || is_second_arg_an_invalid_syn;
+}
+
+bool QueryUtil::IsMatchingEntities(const std::string& first_arg, const std::string& second_arg) {
+  return (first_arg == second_arg) && !IsWildcard(first_arg);
+}
+
+bool QueryUtil::IsContainerSynonym(const std::string& arg,  Map
+&declaration_map) {
+  return QueryUtil::IsIfSynonym(declaration_map, arg) ||
+      QueryUtil::IsWhileSynonym(declaration_map, arg)
+      || QueryUtil::IsStatementSynonym(declaration_map, arg);
 }
