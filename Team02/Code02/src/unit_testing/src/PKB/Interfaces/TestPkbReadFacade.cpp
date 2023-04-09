@@ -1492,6 +1492,56 @@ TEST_CASE("Testing Parent API") {
 
     pkb_read_facade_ = new PkbReadFacade(pkb_);
     pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+
+    pkb_write_facade_->AddParentRelation("1", "2");
+    pkb_write_facade_->AddParentRelation("1", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+    pkb_write_facade_->AddParentRelation("3", "4");
+    pkb_write_facade_->AddParentRelation("4", "5");
+    pkb_write_facade_->AddParentRelation("4", "6");
+    pkb_write_facade_->AddParentRelation("4", "7");
+    pkb_write_facade_->AddParentRelation("4", "8");
+    pkb_write_facade_->AddParentRelation("5", "10");
+    pkb_write_facade_->AddParentRelation("6", "9");
+    pkb_write_facade_->AddParentRelation("7", "9");
+    pkb_write_facade_->AddParentRelation("8", "11");
+    pkb_write_facade_->AddParentRelation("9", "10");
+    pkb_write_facade_->AddParentRelation("9", "11");
+    pkb_write_facade_->AddParentRelation("9", "12");
+    pkb_write_facade_->AddParentStarRelation();
+
+    REQUIRE_FALSE(pkb_read_facade_->GetAncestorDescendantPairs(ASSIGN, ASSIGN) ==
+                  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                                     PairHasherUtil::hash_pair>({
+                      std::make_pair("1", "2"),
+                      std::make_pair("2", "3"),
+                      std::make_pair("3", "4"),
+                      std::make_pair("5", "6"),
+                      std::make_pair("2", "5")
+                  }));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreAncestorOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreAncestors(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"3", "2", "1", "9", "6", "5", "7", "8", "4"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreDescendants(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"2", "3", "12", "10", "4", "8", "6", "11", "9", "7", "5"}));
+    REQUIRE(pkb_read_facade_->IsAnyAncestorDescendantRelationshipPresent() == true);
   }
 }
 
