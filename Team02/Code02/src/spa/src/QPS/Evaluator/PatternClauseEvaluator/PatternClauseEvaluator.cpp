@@ -22,15 +22,5 @@ std::shared_ptr<Result> PatternClauseEvaluator::EvaluateClause() {
   }
 
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-
-  bool is_any_match = QueryUtil::IsWildcard(second_arg_);
-  bool is_partial_match = QueryUtil::IsPartialMatchExpressionSpecification(second_arg_);
-
-  if (is_any_match) {
-    return result_ptr;
-  } else if (is_partial_match) {
-    return HandlePartialMatch(result_ptr);
-  } else {
-    return HandleExactMatch(result_ptr);
-  }
+  return result_ptr;
 }
