@@ -7,6 +7,56 @@
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 
+TEST_CASE("Test Follows API") {
+  SECTION("Test Follows API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+
+    pkb_write_facade_->AddFollowsRelation("1", "2");
+    pkb_write_facade_->AddFollowsRelation("2", "4");
+    pkb_write_facade_->AddFollowsRelation("1", "3");
+    pkb_write_facade_->AddFollowsRelation("2", "6");
+    pkb_write_facade_->AddFollowsRelation("3", "7");
+    pkb_write_facade_->AddFollowsRelation("3", "8");
+    pkb_write_facade_->AddFollowsRelation("6", "9");
+    pkb_write_facade_->AddFollowsRelation("7", "9");
+    pkb_write_facade_->AddFollowsRelation("9", "10");
+    pkb_write_facade_->AddFollowsRelation("9", "11");
+    pkb_write_facade_->AddFollowsStarRelation();
+
+    REQUIRE(pkb_read_facade_->GetStatementFollowedBy("1", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({}));
+    REQUIRE(pkb_read_facade_->GetStatementFollowedBy("2", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementFollowing("1", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"3", "2"}));
+    REQUIRE(pkb_read_facade_->GetStatementsWithFollowers(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"1", "2", "7", "3", "6", "9"}));
+    REQUIRE(pkb_read_facade_->GetStatementThatAreFollowers(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"3", "6", "9", "2", "7", "4", "8"}));
+    REQUIRE(pkb_read_facade_->HasFollowsRelationship("1", "2") == false);
+    REQUIRE(pkb_read_facade_->IsAnyFollowsRelationshipPresent() == true);
+    REQUIRE_FALSE(pkb_read_facade_->GetFollowPairs(ASSIGN, ASSIGN) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER , PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({std::make_pair("1", "2"),
+                                                           std::make_pair("4", "5"),
+                                                           std::make_pair("10", "9")}));
+  }
+}
 TEST_CASE("Test UsesProcedure API") {
     SECTION("Testing UsesProcedure API") {
       Pkb pkb_ = Pkb();
@@ -77,7 +127,7 @@ TEST_CASE("Test UsesProcedure API") {
     }
 }
 
-TEST_CASE("Testing PkbReadFacade") {
+TEST_CASE("Testing PKBReadFacade APIs") {
   SECTION("Testing Modifies API") {
     Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
