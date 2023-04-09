@@ -297,6 +297,9 @@ TEST_CASE("Testing PKBReadFacade APIs") {
     pkb_write_facade_->AddCallsRelation("proc10", "proc11");
     pkb_write_facade_->AddCallsRelation("proc10", "proc12");
     pkb_write_facade_->AddCallsRelation("proc12", "proc13");
+    pkb_write_facade_->AddCallStatementToProcedureName("1", "proc1");
+    pkb_write_facade_->AddCallStatementToProcedureName("2", "proc2");
+    pkb_write_facade_->AddCallStatementToProcedureName("3", "proc3");
     pkb_write_facade_->AddCallsStarRelation();
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairs() ==
@@ -633,6 +636,19 @@ TEST_CASE("Testing PKBReadFacade APIs") {
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc8") == true);
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc9") == true);
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc10", "proc13") == true);
+    REQUIRE(pkb_read_facade_->GetAllCallStatementsFromAProcedure("proc1")
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCaller("proc1")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc2", "proc3", "proc4"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCallee("proc3")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallers()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc12", "proc5", "proc4", "proc10", "proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallees()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc9", "proc12", "proc11", "proc7", "proc6",
+                                                        "proc4", "proc3", "proc13", "proc2", "proc8", "proc5"}));
+    REQUIRE(pkb_read_facade_->IsThereAnyCallsRelationship() == true);
+    REQUIRE(pkb_read_facade_->IsThereAnyCallsStarRelationship() == true);
   }
 
   SECTION("Test Next API - Complex CFG") {
