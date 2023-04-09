@@ -31,7 +31,7 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
       prev_stmt = s;
     }
   }
-  
+
   pkb_write_facade->AddCallsStarRelation();
   pkb_write_facade->AddFollowsStarRelation();
   pkb_write_facade->AddParentStarRelation();
