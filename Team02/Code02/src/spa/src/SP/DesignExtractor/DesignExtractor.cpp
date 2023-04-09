@@ -6,6 +6,7 @@ DesignExtractor::DesignExtractor(shared_ptr<Pkb> pkb, shared_ptr<Cfg> cfg) {
 }
 
 void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
+  auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   shared_ptr<EntityExtractor>
       entity_extractor = make_shared<EntityExtractor>(pkb_);
   shared_ptr<AbstractionExtractor>
@@ -30,8 +31,7 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
       prev_stmt = s;
     }
   }
-
-  auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
+  
   pkb_write_facade->AddCallsStarRelation();
   pkb_write_facade->AddFollowsStarRelation();
   pkb_write_facade->AddParentStarRelation();
