@@ -118,6 +118,37 @@ TEST_CASE("Test Follows* API") {
   }
 }
 
+TEST_CASE("Test Uses Statement API") {
+  SECTION("Test Uses Statement API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+
+    pkb_write_facade_->AddStatementUsingVariable("1", "x");
+    pkb_write_facade_->AddStatementUsingVariable("2", "y");
+    pkb_write_facade_->AddStatementUsingVariable("3", "z");
+
+    REQUIRE(pkb_read_facade_->GetStatementsThatUses(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                            {"1", "2", "3" }));
+    REQUIRE(pkb_read_facade_->GetVariablesUsedByStatement("1") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                                   {"x" }));
+    REQUIRE(pkb_read_facade_->GetStatementsUsesVariable(ASSIGN, "x") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                                   {"1"}));
+    REQUIRE_FALSE(pkb_read_facade_->GetUsesStatementVariablePairs(ASSIGN) ==
+                  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER , PkbTypes::VARIABLE>,
+                                     PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
+                                                                 std::make_pair("procedure", "x"),
+                                                                 std::make_pair("procedure", "z")}));
+  }
+}
+
 TEST_CASE("Test UsesProcedure API") {
     SECTION("Testing UsesProcedure API") {
       Pkb pkb_ = Pkb();
@@ -601,6 +632,16 @@ TEST_CASE("Testing PKBReadFacade APIs") {
                                                               "proc12",
                                                               "proc13")
                                                       }));
+    REQUIRE_FALSE(pkb_read_facade_->GetCallProcedurePair() ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair(
+                    "proc10",
+                    "proc13"),
+                std::make_pair(
+                    "proc12",
+                    "proc13")
+            }));
 
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc2") == true);
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc3") == true);
