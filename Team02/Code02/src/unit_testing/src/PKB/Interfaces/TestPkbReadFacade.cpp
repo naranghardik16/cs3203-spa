@@ -1430,6 +1430,118 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 }
 
+TEST_CASE("Testing Pattern API") {
+  SECTION("Test Assign and Expression") {
+    typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+    // 0
+    TokenList token_list_statement_1{
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "1", egs->GetExpressionFromInput(
+                 token_list_statement_1, "assign"));
+
+    // 5
+    TokenList token_list_statement_2{
+        make_shared<IntegerToken>("5"),
+    };
+
+    // x + 2 * y
+    TokenList token_list_statement_4{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<IntegerToken>("2"),
+        make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+        make_shared<NameToken>("y"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "4", egs->GetExpressionFromInput(
+                 token_list_statement_4, "assign"));
+
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("2", "i");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "2", egs->GetExpressionFromInput(
+                 token_list_statement_2, "assign"));
+
+    REQUIRE(pkb_read_facade_->GetAssignWithExactExpression(egs->GetExpressionFromInput(
+        token_list_statement_2, "assign")) == std::unordered_set<std::string>({"2"}));
+
+    REQUIRE(pkb_read_facade_->GetAssignWithPartialExpression(egs->GetExpressionFromInput(
+                token_list_statement_2, "assign")) == std::unordered_set<std::string>({"2"}));
+
+    REQUIRE(pkb_read_facade_->RetrieveAllVariablesOfExpression(egs->GetExpressionFromInput(
+                token_list_statement_2, "assign")) == std::unordered_set<std::string>({}));
+
+    REQUIRE(pkb_read_facade_->RetrieveAllVariablesOfExpression(egs->GetExpressionFromInput(
+                token_list_statement_4, "assign")) == std::unordered_set<std::string>({}));
+  }
+
+  SECTION("Test expression within If statement") {
+    typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+    // x > 0
+    TokenList token_list_statement_10{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>(">", GT),
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("10", IF);
+    pkb_write_facade_->AddStatementModifyingVariable("10", "z");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "10", egs->GetExpressionFromInput(
+                  token_list_statement_10, "if"));
+
+    // y > 0
+    TokenList token_list_statement_11{
+        make_shared<NameToken>("y"),
+        make_shared<ArithmeticOperatorToken>(">", GT),
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("11", WHILE);
+    pkb_write_facade_->AddStatementModifyingVariable("11", "z");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "11", egs->GetExpressionFromInput(
+                  token_list_statement_11, "while"));
+
+    REQUIRE(pkb_read_facade_->GetIfConditionVariablePair() ==
+            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,PairHasherUtil::hash_pair>({}));
+    REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetWhileConditionVariablePair() ==
+            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,PairHasherUtil::hash_pair>({}));
+    REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({}));
+  }
+}
+
 TEST_CASE("Testing Affects") {
   SECTION("Test Affects API - Complex CFG and Expressions") {
     typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
@@ -1672,7 +1784,6 @@ TEST_CASE("Testing Affects") {
     REQUIRE(pkb_read_facade_->HasAffectsStarRelationship("2", "3")
             == false);
     REQUIRE(pkb_read_facade_->IsThereAnyAffectsStarRelationship());
-
   }
 }
 
