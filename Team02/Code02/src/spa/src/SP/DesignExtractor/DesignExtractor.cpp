@@ -6,6 +6,7 @@ DesignExtractor::DesignExtractor(shared_ptr<Pkb> pkb, shared_ptr<Cfg> cfg) {
 }
 
 void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
+  auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   shared_ptr<EntityExtractor>
       entity_extractor = make_shared<EntityExtractor>(pkb_);
   shared_ptr<AbstractionExtractor>
@@ -13,18 +14,11 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
   shared_ptr<CfgExtractor> cfg_extractor = make_shared<CfgExtractor>(cfg_);
 
   Program::ProcListContainer procedures = program->GetProcedureList();
-  //   Extraction for CFG
-  for (shared_ptr<Procedure> &p : procedures) {
-    p->Accept(cfg_extractor);
-    auto statements = p->GetStatementList();
-    for (auto const &s : statements) {
-      s->Accept(cfg_extractor);
-    }
-  }
 
   for (shared_ptr<Procedure> p : procedures) {
     p->Accept(entity_extractor);
     p->Accept(abstraction_extractor);
+    p->Accept(cfg_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
     shared_ptr<Statement> prev_stmt = nullptr;
     for (shared_ptr<Statement> s : statements) {
@@ -33,11 +27,11 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
       }
       s->Accept(entity_extractor);
       s->Accept(abstraction_extractor);
+      s->Accept(cfg_extractor);
       prev_stmt = s;
     }
   }
 
-  auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   pkb_write_facade->AddCallsStarRelation();
   pkb_write_facade->AddFollowsStarRelation();
   pkb_write_facade->AddParentStarRelation();

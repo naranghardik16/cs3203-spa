@@ -31,8 +31,6 @@ class AbstractionExtractor : public ParserVisitor {
   void VisitVariable(shared_ptr<Variable> variable) override {};
   void VisitConstant(shared_ptr<Constant> constant) override {};
   void ExtractFollows(shared_ptr<Statement> prev_stmt, shared_ptr<Statement> curr_stmt);
-  void ExtractIndirectModifies(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
-  void ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
   void SetIsExtractIndirectModifiesAndUsesTrue();
 
  private:
@@ -45,4 +43,6 @@ class AbstractionExtractor : public ParserVisitor {
   void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, shared_ptr<Statement> child_stmt);
   void ExtractIndirectModifiesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
   void ExtractIndirectUsesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
+  void ExtractIndirectModifies(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
+  void ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
 };
