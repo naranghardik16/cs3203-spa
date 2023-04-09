@@ -649,6 +649,16 @@ TEST_CASE("Testing PKBReadFacade APIs") {
                                                         "proc4", "proc3", "proc13", "proc2", "proc8", "proc5"}));
     REQUIRE(pkb_read_facade_->IsThereAnyCallsRelationship() == true);
     REQUIRE(pkb_read_facade_->IsThereAnyCallsStarRelationship() == true);
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCallerStar("proc1")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc7", "proc9",
+                                                        "proc3", "proc8", "proc2", "proc6", "proc5", "proc4"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCalleeStar("proc3")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallersStar()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc12", "proc5", "proc4", "proc10", "proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCalleesStar()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc9", "proc12", "proc11", "proc7", "proc6",
+                                                        "proc4", "proc3", "proc13", "proc2", "proc8", "proc5"}));
   }
 
   SECTION("Test Next API - Complex CFG") {
