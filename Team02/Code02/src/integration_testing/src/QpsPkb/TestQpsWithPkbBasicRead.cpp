@@ -615,6 +615,116 @@ TEST_CASE("Uses and Modifies testing") {
   pkb_write->AddParentRelation("43", "50");
   pkb_write->AddParentStarRelation();
 
+  SECTION("Parent(_, _)") {
+    QueryString query = "Select BOOLEAN such that Parent(_, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(_, _)") {
+    QueryString query = "Select BOOLEAN such that Parent*(_, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent(6, _)") {
+    QueryString query = "Select BOOLEAN such that Parent(30, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(6, _)") {
+    QueryString query = "Select BOOLEAN such that Parent*(30, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(a, _)") {
+    QueryString query = "assign a; Select BOOLEAN such that Parent*(a, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(ifs, _)") {
+    QueryString query = "if ifs; Select ifs such that Parent*(ifs, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"13", "20", "30", "43"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(w, _)") {
+    QueryString query = "while w; Select w such that Parent*(w, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"14", "16", "18", "21", "25", "29", "37" };
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent*(c, _)") {
+    QueryString query = "call c; Select BOOLEAN such that Parent*(c, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent(w, ifs)") {
+    QueryString query = "while w; if ifs; Select ifs such that Parent(w, ifs)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"20", "30", "43"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Parent(w, ifs)") {
+    QueryString query = "while w; if ifs; Select w such that Parent(w, ifs)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"18", "29", "37"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Test statements - basic") {
     QueryString query = "stmt s; Select s";
     QueryResult results;
@@ -1509,6 +1619,46 @@ TEST_CASE("Check if QPS works with Pkb for basic operations") {
   pkb_write->AddStatementUsingVariable("5", "x");
   pkb_write->AddStatementUsingVariable("6", "x");
   pkb_write->AddStatementUsingVariable("7", "test");
+
+  SECTION("Follows(_, _)") {
+    QueryString query = "constant c; Select c such that Follows(_, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1", "0"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Follows*(_, _)") {
+    QueryString query = "constant c; Select c such that Follows*(_, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"1", "0"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Follows(s, _)") {
+    QueryString query = "stmt s; Select s such that Follows(s, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"2", "1"};
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Follows*(s, _)") {
+    QueryString query = "stmt s; Select s such that Follows*(s, _)";
+    QueryResult results;
+
+    Qps::ProcessQuery(query, results, pkb_read);
+
+    QueryResult expected_results{"2", "1"};
+    REQUIRE(results == expected_results);
+  }
 
   SECTION("Test basic get relationship -- with attr_ref = attr_ref -- both special case") {
     QueryString query = "print p; read r; Select p with p.varName = r.varName";
@@ -2948,8 +3098,27 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(INT, INT) - is true -- valid control path through while loop") {
+    std::string query = "Select BOOLEAN such that Affects*(1,8)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // check this - expected result should be true -> need to fix bug in affects
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(INT, INT) - is true -- valid control path through if else") {
     std::string query = "Select BOOLEAN such that Affects(1,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects8(INT, INT) - is true -- valid control path through if else") {
+    std::string query = "Select BOOLEAN such that Affects*(1,10)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
     std::list<std::string> expected_results{"TRUE"};
@@ -2967,8 +3136,27 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(INT, INT) - is true -- valid control path through stmt that uses"
+      "but does not modify variable") {
+    std::string query = "Select BOOLEAN such that Affects*(1,12)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(INT, INT) - is true -- simple case (one assign directly after another") {
     std::string query = "Select BOOLEAN such that Affects(9,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects*(INT, INT) - is true -- simple case (one assign directly after another") {
+    std::string query = "Select BOOLEAN such that Affects*(9,10)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
     std::list<std::string> expected_results{"TRUE"};
@@ -2985,8 +3173,26 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(INT, INT) - is true -- check if nested assigns can affect") {
+    std::string query = "Select BOOLEAN such that Affects*(8,10)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"TRUE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(INT, INT) - is false -- variable is read") {
     std::string query = "Select BOOLEAN such that Affects(11,14)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects*(INT, INT) - is false -- variable is read") {
+    std::string query = "Select BOOLEAN such that Affects*(11,14)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
     std::list<std::string> expected_results{"FALSE"};
@@ -3003,8 +3209,26 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(INT, INT) - is false -- variable modified in if case and else case") {
+    std::string query = "Select BOOLEAN such that Affects*(18,22)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(INT, INT) - is false -- assigns are in different procedures") {
     std::string query = "Select BOOLEAN such that Affects(2,17)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects*(INT, INT) - is false -- assigns are in different procedures") {
+    std::string query = "Select BOOLEAN such that Affects*(2,17)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
     std::list<std::string> expected_results{"FALSE"};
@@ -3095,6 +3319,15 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(_, INT) - is false") {
+    std::string query = "Select BOOLEAN such that Affects*(_,9)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    std::list<std::string> expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(ASSIGN-SYN, _)") {
     std::string query = "assign a; Select a such that Affects(_,a)";
     std::list<std::string> results;
@@ -3105,8 +3338,28 @@ TEST_CASE("Integration Testing for Affects API - Basic") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Affects*(ASSIGN-SYN, _)") {
+    std::string query = "assign a; Select a such that Affects*(_,a)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be "4", "6", "8", "10", "11", "12"
+    std::list<std::string> expected_results{"10", "11", "12", "4", "6"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Affects(_, ASSIGN-SYN)") {
     std::string query = "assign a; Select a such that Affects(a,_)";
+    std::list<std::string> results;
+    Qps::ProcessQuery(query, results, pkb_read_facade_);
+    // need to check this -> expected results should be 1", "4", "8", "2", "6", "9", "10", "11"
+    std::list<std::string> expected_results{"1", "10", "11", "2", "4", "6", "8", "9"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Affects*(_, ASSIGN-SYN)") {
+    std::string query = "assign a; Select a such that Affects*(a,_)";
     std::list<std::string> results;
     Qps::ProcessQuery(query, results, pkb_read_facade_);
     // need to check this -> expected results should be 1", "4", "8", "2", "6", "9", "10", "11"
