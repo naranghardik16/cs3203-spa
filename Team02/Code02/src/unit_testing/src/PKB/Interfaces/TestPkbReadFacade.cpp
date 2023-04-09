@@ -75,7 +75,6 @@ TEST_CASE("Test UsesProcedure API") {
                                                                    std::make_pair("procedure", "x"),
                                                                    std::make_pair("procedure", "z")}));
     }
-
 }
 
 TEST_CASE("Testing PkbReadFacade") {
