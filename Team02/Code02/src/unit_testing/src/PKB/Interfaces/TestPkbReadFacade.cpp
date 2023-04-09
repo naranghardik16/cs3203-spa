@@ -85,12 +85,12 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetProcedures() == std::unordered_set<std::string>({"procedure"}));
     REQUIRE(pkb_read_facade_->GetPrintStatements() == std::unordered_set<std::string>({"5"}));
     REQUIRE(pkb_read_facade_->GetModifiesStatementVariablePairs(PRINT) == std::unordered_set<
-        std::pair<PkbTypes::PROCEDURE,PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({}));
+        std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetVariablesModifiedByProcedure("procedure") == std::unordered_set<
         std::string>({"bar", "x", "z"}));
     REQUIRE(pkb_read_facade_->GetProceduresThatModify() == std::unordered_set<std::string>({"procedure"}));
     REQUIRE(pkb_read_facade_->GetModifiesProcedureVariablePairs() ==
-            std::unordered_set<std::pair<PkbTypes::PROCEDURE,PkbTypes::VARIABLE>,
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>,
                 PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
                                                            std::make_pair("procedure", "x"),
                                                            std::make_pair("procedure", "z")}) );
@@ -1597,12 +1597,12 @@ TEST_CASE("Testing Pattern API") {
                   token_list_statement_11, "while"));
 
     REQUIRE(pkb_read_facade_->GetIfConditionVariablePair() ==
-            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,
+            std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
                 PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetWhileConditionVariablePair() ==
-            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,
+            std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
                 PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({}));
