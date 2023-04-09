@@ -577,6 +577,20 @@ TEST_CASE("Testing PkbReadFacade") {
                                                           std::make_pair("6", "8"),
                                                           std::make_pair("8", "9")
                                                       }));
+
+    REQUIRE_FALSE(pkb_read_facade_->GetNextStarPairs(READ, READ) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair("1", "2"),
+                std::make_pair("2", "3"),
+                std::make_pair("3", "4"),
+                std::make_pair("4", "5"),
+                std::make_pair("4", "6"),
+                std::make_pair("5", "4"),
+                std::make_pair("6", "7"),
+                std::make_pair("6", "8"),
+                std::make_pair("8", "9")
+            }));
   }
 
   SECTION("Test Next API - With Dummy Node") {
