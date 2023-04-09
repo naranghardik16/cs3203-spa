@@ -85,8 +85,7 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->GetProcedures() == std::unordered_set<std::string>({"procedure"}));
     REQUIRE(pkb_read_facade_->GetPrintStatements() == std::unordered_set<std::string>({"5"}));
     REQUIRE(pkb_read_facade_->GetModifiesStatementVariablePairs(PRINT) == std::unordered_set<
-        std::pair<PkbTypes::PROCEDURE,PkbTypes::PROCEDURE>,
-            PairHasherUtil::hash_pair>({}));
+        std::pair<PkbTypes::PROCEDURE,PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetVariablesModifiedByProcedure("procedure") == std::unordered_set<
         std::string>({"bar", "x", "z"}));
     REQUIRE(pkb_read_facade_->GetProceduresThatModify() == std::unordered_set<std::string>({"procedure"}));
@@ -97,7 +96,6 @@ TEST_CASE("Testing PkbReadFacade") {
                                                            std::make_pair("procedure", "z")}) );
     REQUIRE(pkb_read_facade_->GetProceduresModifiesVariable("bar") == std::unordered_set<std::string>
         ({"procedure"}));
-
   }
 
   SECTION("Test Calls API") {
@@ -1471,13 +1469,17 @@ TEST_CASE("Testing Parent API") {
                 std::make_pair("5", "6"),
                 std::make_pair("2", "5")
             }));
-    REQUIRE(pkb_read_facade_->GetStatementThatIsParentOf("2", ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    REQUIRE(pkb_read_facade_->GetStatementThatIsParentOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
                 ({"1"}));
-    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildrenOf("1", ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildrenOf("1", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
             ({"3", "2"}));
-    REQUIRE(pkb_read_facade_->GetStatementsThatAreParents(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreParents(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
             ({"9", "6", "7", "3", "2", "1"}));
-    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildren(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildren(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
         ({"9", "6", "7", "5", "8", "4", "3", "2"}));
     REQUIRE(pkb_read_facade_->HasParentChildRelationship("1", "2") == true);
     REQUIRE(pkb_read_facade_->IsAnyParentRelationshipPresent() == true);
@@ -1490,7 +1492,6 @@ TEST_CASE("Testing Parent API") {
 
     pkb_read_facade_ = new PkbReadFacade(pkb_);
     pkb_write_facade_ = new PkbWriteFacade(pkb_);
-
   }
 }
 
@@ -1596,11 +1597,13 @@ TEST_CASE("Testing Pattern API") {
                   token_list_statement_11, "while"));
 
     REQUIRE(pkb_read_facade_->GetIfConditionVariablePair() ==
-            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,PairHasherUtil::hash_pair>({}));
+            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,
+                PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetWhileConditionVariablePair() ==
-            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,PairHasherUtil::hash_pair>({}));
+            std::unordered_set<std::pair<PkbTypes::VARIABLE ,PkbTypes::STATEMENT_NUMBER>,
+                PairHasherUtil::hash_pair>({}));
     REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({}));
   }
@@ -1839,7 +1842,7 @@ TEST_CASE("Testing Affects") {
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "3") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "6") == false);
     REQUIRE_FALSE(pkb_read_facade_->GetAffectsStarPairs() == std::unordered_set<
-        std::pair<PkbTypes::STATEMENT_NUMBER ,PkbTypes::STATEMENT_NUMBER>,PairHasherUtil::hash_pair>({}));
+        std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
     REQUIRE_FALSE(pkb_read_facade_->GetAssignsAffectedStarBy("2") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetAssignsAffectingStar("3") == std::unordered_set<std::string>({}));
     REQUIRE_FALSE(pkb_read_facade_->GetAllAssignsThatAffectStar() == std::unordered_set<std::string>({"2"}));
