@@ -1542,6 +1542,10 @@ TEST_CASE("Testing Parent API") {
             == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
             ({"2", "3", "12", "10", "4", "8", "6", "11", "9", "7", "5"}));
     REQUIRE(pkb_read_facade_->IsAnyAncestorDescendantRelationshipPresent() == true);
+    REQUIRE(pkb_read_facade_->HasAncestorDescendantRelationship("1", "2") == true);
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreDescendantsOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"7", "5", "6", "9", "11", "12", "10", "8", "4"}));
   }
 }
 
