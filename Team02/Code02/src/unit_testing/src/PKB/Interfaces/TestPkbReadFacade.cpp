@@ -1430,6 +1430,70 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 }
 
+TEST_CASE("Testing Parent API") {
+  SECTION("Parent API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+
+    pkb_write_facade_->AddParentRelation("1", "2");
+    pkb_write_facade_->AddParentRelation("1", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+    pkb_write_facade_->AddParentRelation("2", "5");
+    pkb_write_facade_->AddParentRelation("2", "6");
+    pkb_write_facade_->AddParentRelation("3", "7");
+    pkb_write_facade_->AddParentRelation("3", "8");
+    pkb_write_facade_->AddParentRelation("6", "9");
+    pkb_write_facade_->AddParentRelation("7", "9");
+    pkb_write_facade_->AddParentRelation("9", "10");
+    pkb_write_facade_->AddParentRelation("9", "11");
+    pkb_write_facade_->AddParentStarRelation();
+
+    REQUIRE_FALSE(pkb_read_facade_->GetParentChildPairs(ASSIGN, ASSIGN) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair("1", "2"),
+                std::make_pair("2", "3"),
+                std::make_pair("3", "4"),
+                std::make_pair("5", "6"),
+                std::make_pair("2", "5")
+            }));
+    REQUIRE(pkb_read_facade_->GetStatementThatIsParentOf("2", ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+                ({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildrenOf("1", ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"3", "2"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreParents(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"9", "6", "7", "3", "2", "1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildren(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+        ({"9", "6", "7", "5", "8", "4", "3", "2"}));
+    REQUIRE(pkb_read_facade_->HasParentChildRelationship("1", "2") == true);
+    REQUIRE(pkb_read_facade_->IsAnyParentRelationshipPresent() == true);
+  }
+
+  SECTION("Parent* API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+  }
+}
+
 TEST_CASE("Testing Pattern API") {
   SECTION("Test Assign and Expression") {
     typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
