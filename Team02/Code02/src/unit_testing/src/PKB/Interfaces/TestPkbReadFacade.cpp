@@ -1895,6 +1895,8 @@ TEST_CASE("Testing Pattern API") {
 
     pkb_write_facade_->AddStatementOfAType("10", IF);
     pkb_write_facade_->AddStatementModifyingVariable("10", "z");
+    pkb_write_facade_->AddIfStatementAndCondition("10", egs->GetExpressionFromInput(
+                                                            token_list_statement_10, "if"));
     pkb_write_facade_->AddAssignmentStatementAndExpression(
         "10", egs->GetExpressionFromInput(
                   token_list_statement_10, "if"));
@@ -1908,20 +1910,22 @@ TEST_CASE("Testing Pattern API") {
 
     pkb_write_facade_->AddStatementOfAType("11", WHILE);
     pkb_write_facade_->AddStatementModifyingVariable("11", "z");
+    pkb_write_facade_->AddWhileStatementAndCondition("11", egs->GetExpressionFromInput(
+                                                               token_list_statement_11, "while"));
     pkb_write_facade_->AddAssignmentStatementAndExpression(
         "11", egs->GetExpressionFromInput(
                   token_list_statement_11, "while"));
 
-    REQUIRE(pkb_read_facade_->GetIfConditionVariablePair() ==
+    REQUIRE_FALSE(pkb_read_facade_->GetIfConditionVariablePair() ==
             std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
                 PairHasherUtil::hash_pair>({}));
-    REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({}));
-    REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({}));
-    REQUIRE(pkb_read_facade_->GetWhileConditionVariablePair() ==
+    REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({"10"}));
+    REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({"10"}));
+    REQUIRE_FALSE(pkb_read_facade_->GetWhileConditionVariablePair() ==
             std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
                 PairHasherUtil::hash_pair>({}));
-    REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({}));
-    REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({"11"}));
+    REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({"11"}));
   }
 }
 
