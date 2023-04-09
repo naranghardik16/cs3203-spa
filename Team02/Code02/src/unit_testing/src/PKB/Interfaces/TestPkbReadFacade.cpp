@@ -7,6 +7,77 @@
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 
+TEST_CASE("Test UsesProcedure API") {
+    SECTION("Testing UsesProcedure API") {
+      Pkb pkb_ = Pkb();
+      PkbReadFacade *pkb_read_facade_;
+      PkbWriteFacade *pkb_write_facade_;
+
+      pkb_read_facade_ = new PkbReadFacade(pkb_);
+      pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+      pkb_write_facade_->AddProcedure("proc1");
+      pkb_write_facade_->AddProcedure("proc2");
+      pkb_write_facade_->AddProcedure("proc3");
+      pkb_write_facade_->AddProcedure("proc4");
+
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "x");
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "y");
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "z");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "l");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "m");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "n");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "p");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "q");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "r");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "a");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "b");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "c");
+
+      REQUIRE(pkb_read_facade_->GetProceduresThatUse() == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"proc1", "proc2", "proc3", "proc4"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc1") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"x", "y", "z"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc2") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"l", "m", "n"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc3") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"p", "q", "r"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc4") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"a", "b", "c"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("x") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("y") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("z") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("l") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("m") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("n") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("p") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("q") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("r") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("a") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("b") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("c") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->HasUsesProcedureRelationship("proc1", "x") == true);
+      REQUIRE_FALSE(pkb_read_facade_->GetUsesProcedureVariablePairs() ==
+                    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>,
+                                       PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
+                                                                   std::make_pair("procedure", "x"),
+                                                                   std::make_pair("procedure", "z")}));
+    }
+
+}
+
 TEST_CASE("Testing PkbReadFacade") {
   SECTION("Testing Modifies API") {
     Pkb pkb_ = Pkb();
@@ -93,7 +164,7 @@ TEST_CASE("Testing PkbReadFacade") {
             std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>,
                 PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
                                                            std::make_pair("procedure", "x"),
-                                                           std::make_pair("procedure", "z")}) );
+                                                           std::make_pair("procedure", "z")}));
     REQUIRE(pkb_read_facade_->GetProceduresModifiesVariable("bar") == std::unordered_set<std::string>
         ({"procedure"}));
   }
