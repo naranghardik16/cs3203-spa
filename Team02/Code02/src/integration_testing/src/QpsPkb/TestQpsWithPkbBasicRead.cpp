@@ -1626,7 +1626,8 @@ TEST_CASE("Check if QPS works with Pkb for basic operations") {
 
     Qps::ProcessQuery(query, results, pkb_read);
 
-    QueryResult expected_results{"1", "0"};
+    results.sort();
+    QueryResult expected_results{"0", "1"};
     REQUIRE(results == expected_results);
   }
 
