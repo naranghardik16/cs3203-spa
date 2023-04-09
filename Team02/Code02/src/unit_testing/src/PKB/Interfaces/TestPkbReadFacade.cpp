@@ -1652,7 +1652,12 @@ TEST_CASE("Testing Affects") {
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "12") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "10") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "10") == true);
-
+    REQUIRE(pkb_read_facade_->GetAssignsAffectedBy("2") == std::unordered_set<std::string>({"10", "4", "6"}));
+    REQUIRE(pkb_read_facade_->GetAssignsAffecting("2") == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAffect()
+            == std::unordered_set<std::string>({"1", "2", "11", "6", "9", "4", "10", "8"}));
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAreAffected()
+            == std::unordered_set<std::string>({"6", "12", "11", "4", "10"}));
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "11") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "12") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "3") == false);
@@ -1662,8 +1667,10 @@ TEST_CASE("Testing Affects") {
     REQUIRE_FALSE(pkb_read_facade_->GetAssignsAffectedStarBy("2") == std::unordered_set<std::string>({}));
     REQUIRE(pkb_read_facade_->GetAssignsAffectingStar("3") == std::unordered_set<std::string>({}));
     REQUIRE_FALSE(pkb_read_facade_->GetAllAssignsThatAffectStar() == std::unordered_set<std::string>({"2"}));
-    REQUIRE(pkb_read_facade_->GetAllAssignsThatAreAffectedStar() == std::unordered_set<std::string>({"6", "12", "11", "4", "10"}));
-    REQUIRE(pkb_read_facade_->HasAffectsStarRelationship("2", "3") == false);
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAreAffectedStar()
+            == std::unordered_set<std::string>({"6", "12", "11", "4", "10"}));
+    REQUIRE(pkb_read_facade_->HasAffectsStarRelationship("2", "3")
+            == false);
     REQUIRE(pkb_read_facade_->IsThereAnyAffectsStarRelationship());
 
   }
