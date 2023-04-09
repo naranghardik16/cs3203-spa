@@ -2725,6 +2725,42 @@ TEST_CASE("Integration testing for Next API - Complex") {
     REQUIRE(results == expected_results);
   }
 
+  SECTION("Next* testing") {
+    QueryString query = "if ifs; stmt s; Select <ifs, s> such that Next*(ifs, s)";
+    QueryResult results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    QueryResult expected_results{};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Invalid Next* - Semantic Error") {
+    QueryString query = "constant c; Select c such that Next*(10, c)";
+    QueryResult results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Invalid Next* - Semantic Error") {
+    QueryString query = "procedure p; Select p such that Next*(p, _)";
+    QueryResult results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    QueryResult expected_results{"SemanticError"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
+  SECTION("Out of bounds - Next*") {
+    QueryString query = "Select BOOLEAN such that Next*(_, 50000000000) ";
+    QueryResult results;
+    Qps::ProcessQuery(query, results, pkb_read);
+    QueryResult expected_results{"FALSE"};
+    results.sort();
+    REQUIRE(results == expected_results);
+  }
+
   SECTION("Next(WHILE-SYN, IDENT) has a result") {
     QueryString query = "while w; assign a; Select w such that Next*(w, a)";
     QueryResult results;
