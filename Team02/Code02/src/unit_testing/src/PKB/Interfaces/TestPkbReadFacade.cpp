@@ -7,7 +7,219 @@
 #include "PKB/Interfaces/PkbWriteFacade.h"
 #include "ExpressionGeneratorStub/ExpressionGeneratorStub.h"
 
-TEST_CASE("Testing PkbReadFacade") {
+TEST_CASE("Test Follows API") {
+  SECTION("Test Follows API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+
+    pkb_write_facade_->AddFollowsRelation("1", "2");
+    pkb_write_facade_->AddFollowsRelation("2", "4");
+    pkb_write_facade_->AddFollowsRelation("1", "3");
+    pkb_write_facade_->AddFollowsRelation("2", "6");
+    pkb_write_facade_->AddFollowsRelation("3", "7");
+    pkb_write_facade_->AddFollowsRelation("3", "8");
+    pkb_write_facade_->AddFollowsRelation("6", "9");
+    pkb_write_facade_->AddFollowsRelation("7", "9");
+    pkb_write_facade_->AddFollowsRelation("9", "10");
+    pkb_write_facade_->AddFollowsRelation("9", "11");
+    pkb_write_facade_->AddFollowsStarRelation();
+
+    REQUIRE(pkb_read_facade_->GetStatementFollowedBy("1", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({}));
+    REQUIRE(pkb_read_facade_->GetStatementFollowedBy("2", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementFollowing("1", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"3", "2"}));
+    REQUIRE(pkb_read_facade_->GetStatementsWithFollowers(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"1", "2", "7", "3", "6", "9"}));
+    REQUIRE(pkb_read_facade_->GetStatementThatAreFollowers(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"3", "6", "9", "2", "7", "4", "8"}));
+    REQUIRE(pkb_read_facade_->HasFollowsRelationship("1", "2") == false);
+    REQUIRE(pkb_read_facade_->IsAnyFollowsRelationshipPresent() == true);
+    REQUIRE_FALSE(pkb_read_facade_->GetFollowPairs(ASSIGN, ASSIGN) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER , PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({std::make_pair("1", "2"),
+                                                           std::make_pair("4", "5"),
+                                                           std::make_pair("10", "9")}));
+  }
+}
+
+TEST_CASE("Test Follows* API") {
+  SECTION("Test Follows* API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+
+    pkb_write_facade_->AddFollowsRelation("1", "2");
+    pkb_write_facade_->AddFollowsRelation("1", "3");
+    pkb_write_facade_->AddFollowsRelation("2", "4");
+    pkb_write_facade_->AddFollowsRelation("3", "4");
+    pkb_write_facade_->AddFollowsRelation("4", "5");
+    pkb_write_facade_->AddFollowsRelation("4", "6");
+    pkb_write_facade_->AddFollowsRelation("4", "7");
+    pkb_write_facade_->AddFollowsRelation("4", "8");
+    pkb_write_facade_->AddFollowsRelation("5", "10");
+    pkb_write_facade_->AddFollowsRelation("6", "9");
+    pkb_write_facade_->AddFollowsRelation("7", "9");
+    pkb_write_facade_->AddFollowsRelation("8", "11");
+    pkb_write_facade_->AddFollowsRelation("9", "10");
+    pkb_write_facade_->AddFollowsRelation("9", "11");
+    pkb_write_facade_->AddFollowsRelation("9", "12");
+    pkb_write_facade_->AddFollowsStarRelation();
+
+    REQUIRE_FALSE(pkb_read_facade_->GetFollowsStarPairs(ASSIGN, ASSIGN) ==
+                  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER , PkbTypes::STATEMENT_NUMBER>,
+                                     PairHasherUtil::hash_pair>({std::make_pair("1", "2"),
+                                                                 std::make_pair("4", "5"),
+                                                                 std::make_pair("10", "9")}));
+    REQUIRE(pkb_read_facade_->HasFollowsStarRelationship() == true);
+    REQUIRE(pkb_read_facade_->IsFollowsStar("1", "2") == true);
+    REQUIRE(pkb_read_facade_->HasFollowsStar("1") == true);
+    REQUIRE(pkb_read_facade_->HasFollowsStarBy("1") == false);
+    REQUIRE(pkb_read_facade_->HasFollowsStarBy("2") == true);
+    REQUIRE(pkb_read_facade_->GetFollowsStarFirst(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"9", "6", "2", "1", "5", "7", "8", "4", "3"}));
+    REQUIRE(pkb_read_facade_->GetFollowsStarSecond(ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"2", "3", "12", "7", "5", "11", "6", "9", "4", "10", "8"}));
+    REQUIRE(pkb_read_facade_->GetFollowsStar("1", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"2", "3", "12", "7", "5", "11", "6", "9", "4", "10", "8"}));
+    REQUIRE(pkb_read_facade_->GetFollowsStarBy("2", ASSIGN)
+            == std::unordered_set<PkbTypes::PROCEDURE>({"1"}));
+  }
+}
+
+TEST_CASE("Test Uses Statement API") {
+  SECTION("Test Uses Statement API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+
+    pkb_write_facade_->AddStatementUsingVariable("1", "x");
+    pkb_write_facade_->AddStatementUsingVariable("2", "y");
+    pkb_write_facade_->AddStatementUsingVariable("3", "z");
+
+    REQUIRE(pkb_read_facade_->GetStatementsThatUses(ASSIGN) == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                            {"1", "2", "3" }));
+    REQUIRE(pkb_read_facade_->GetVariablesUsedByStatement("1") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                                   {"x" }));
+    REQUIRE(pkb_read_facade_->GetStatementsUsesVariable(ASSIGN, "x") == std::unordered_set<PkbTypes::STATEMENT_NUMBER>(
+                                                                   {"1"}));
+    REQUIRE_FALSE(pkb_read_facade_->GetUsesStatementVariablePairs(ASSIGN) ==
+                  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER , PkbTypes::VARIABLE>,
+                                     PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
+                                                                 std::make_pair("procedure", "x"),
+                                                                 std::make_pair("procedure", "z")}));
+  }
+}
+
+TEST_CASE("Test UsesProcedure API") {
+    SECTION("Testing UsesProcedure API") {
+      Pkb pkb_ = Pkb();
+      PkbReadFacade *pkb_read_facade_;
+      PkbWriteFacade *pkb_write_facade_;
+
+      pkb_read_facade_ = new PkbReadFacade(pkb_);
+      pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+      pkb_write_facade_->AddProcedure("proc1");
+      pkb_write_facade_->AddProcedure("proc2");
+      pkb_write_facade_->AddProcedure("proc3");
+      pkb_write_facade_->AddProcedure("proc4");
+
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "x");
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "y");
+      pkb_write_facade_->AddProcedureUsingVariable("proc1", "z");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "l");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "m");
+      pkb_write_facade_->AddProcedureUsingVariable("proc2", "n");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "p");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "q");
+      pkb_write_facade_->AddProcedureUsingVariable("proc3", "r");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "a");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "b");
+      pkb_write_facade_->AddProcedureUsingVariable("proc4", "c");
+
+      REQUIRE(pkb_read_facade_->GetProceduresThatUse() == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"proc1", "proc2", "proc3", "proc4"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc1") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"x", "y", "z"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc2") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"l", "m", "n"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc3") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"p", "q", "r"}));
+      REQUIRE(pkb_read_facade_->GetVariablesUsedByProcedure("proc4") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                            {"a", "b", "c"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("x") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                              {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("y") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("z") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc1"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("l") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("m") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("n") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc2"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("p") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("q") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("r") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc3"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("a") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("b") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->GetProceduresUsesVariable("c") == std::unordered_set<PkbTypes::PROCEDURE>(
+                                                                      {"proc4"}));
+      REQUIRE(pkb_read_facade_->HasUsesProcedureRelationship("proc1", "x") == true);
+      REQUIRE_FALSE(pkb_read_facade_->GetUsesProcedureVariablePairs() ==
+                    std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>,
+                                       PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
+                                                                   std::make_pair("procedure", "x"),
+                                                                   std::make_pair("procedure", "z")}));
+    }
+}
+
+TEST_CASE("Testing PKBReadFacade APIs") {
   SECTION("Testing Modifies API") {
     Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
@@ -45,6 +257,59 @@ TEST_CASE("Testing PkbReadFacade") {
         std::unordered_set<std::string>({"2"}));
   }
 
+  SECTION("Testing Modifies API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", READ);
+    pkb_write_facade_->AddStatementOfAType("2", IF);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", PRINT);
+
+    pkb_write_facade_->AddParentRelation("2", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+    pkb_write_facade_->AddParentStarRelation();
+
+    pkb_write_facade_->AddVariable("x");
+    pkb_write_facade_->AddVariable("z");
+    pkb_write_facade_->AddVariable("bar");
+
+    pkb_write_facade_->AddConstant("2");
+
+    pkb_write_facade_->AddProcedure("procedure");
+
+    pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+    pkb_write_facade_->AddStatementModifyingVariable("3", "z");
+    pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+    pkb_write_facade_->AddStatementUsingVariable("5", "bar");
+    pkb_write_facade_->AddProcedureModifyingVariable("procedure", "bar");
+    pkb_write_facade_->AddProcedureModifyingVariable("procedure", "x");
+    pkb_write_facade_->AddProcedureModifyingVariable("procedure", "z");
+
+
+    REQUIRE(pkb_read_facade_->GetVariables() == std::unordered_set<std::string>({"x", "z", "bar"}));
+    REQUIRE(pkb_read_facade_->GetConstants() == std::unordered_set<std::string>({"2"}));
+    REQUIRE(pkb_read_facade_->GetProcedures() == std::unordered_set<std::string>({"procedure"}));
+    REQUIRE(pkb_read_facade_->GetPrintStatements() == std::unordered_set<std::string>({"5"}));
+    REQUIRE(pkb_read_facade_->GetModifiesStatementVariablePairs(PRINT) == std::unordered_set<
+        std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>, PairHasherUtil::hash_pair>({}));
+    REQUIRE(pkb_read_facade_->GetVariablesModifiedByProcedure("procedure") == std::unordered_set<
+        std::string>({"bar", "x", "z"}));
+    REQUIRE(pkb_read_facade_->GetProceduresThatModify() == std::unordered_set<std::string>({"procedure"}));
+    REQUIRE(pkb_read_facade_->GetModifiesProcedureVariablePairs() ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::VARIABLE>,
+                PairHasherUtil::hash_pair>({std::make_pair("procedure", "bar"),
+                                                           std::make_pair("procedure", "x"),
+                                                           std::make_pair("procedure", "z")}));
+    REQUIRE(pkb_read_facade_->GetProceduresModifiesVariable("bar") == std::unordered_set<std::string>
+        ({"procedure"}));
+  }
+
   SECTION("Test Calls API") {
     Pkb pkb_ = Pkb();
     PkbReadFacade *pkb_read_facade_;
@@ -63,6 +328,9 @@ TEST_CASE("Testing PkbReadFacade") {
     pkb_write_facade_->AddCallsRelation("proc10", "proc11");
     pkb_write_facade_->AddCallsRelation("proc10", "proc12");
     pkb_write_facade_->AddCallsRelation("proc12", "proc13");
+    pkb_write_facade_->AddCallStatementToProcedureName("1", "proc1");
+    pkb_write_facade_->AddCallStatementToProcedureName("2", "proc2");
+    pkb_write_facade_->AddCallStatementToProcedureName("3", "proc3");
     pkb_write_facade_->AddCallsStarRelation();
 
     REQUIRE(pkb_read_facade_->GetAllCallsPairs() ==
@@ -364,6 +632,16 @@ TEST_CASE("Testing PkbReadFacade") {
                                                               "proc12",
                                                               "proc13")
                                                       }));
+    REQUIRE_FALSE(pkb_read_facade_->GetCallProcedurePair() ==
+            std::unordered_set<std::pair<PkbTypes::PROCEDURE, PkbTypes::PROCEDURE>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair(
+                    "proc10",
+                    "proc13"),
+                std::make_pair(
+                    "proc12",
+                    "proc13")
+            }));
 
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc2") == true);
     REQUIRE(pkb_read_facade_->HasCallsRelation("proc1", "proc3") == true);
@@ -399,6 +677,29 @@ TEST_CASE("Testing PkbReadFacade") {
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc8") == true);
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc4", "proc9") == true);
     REQUIRE(pkb_read_facade_->HasCallsStarRelation("proc10", "proc13") == true);
+    REQUIRE(pkb_read_facade_->GetAllCallStatementsFromAProcedure("proc1")
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>({"1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCaller("proc1")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc2", "proc3", "proc4"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCallee("proc3")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallers()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc12", "proc5", "proc4", "proc10", "proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallees()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc9", "proc12", "proc11", "proc7", "proc6",
+                                                        "proc4", "proc3", "proc13", "proc2", "proc8", "proc5"}));
+    REQUIRE(pkb_read_facade_->IsThereAnyCallsRelationship() == true);
+    REQUIRE(pkb_read_facade_->IsThereAnyCallsStarRelationship() == true);
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCallerStar("proc1")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc7", "proc9",
+                                                        "proc3", "proc8", "proc2", "proc6", "proc5", "proc4"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresWithSpecifiedCalleeStar("proc3")
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCallersStar()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc12", "proc5", "proc4", "proc10", "proc1"}));
+    REQUIRE(pkb_read_facade_->GetAllProceduresThatAreCalleesStar()
+            == std::unordered_set<PkbTypes::PROCEDURE>({"proc9", "proc12", "proc11", "proc7", "proc6",
+                                                        "proc4", "proc3", "proc13", "proc2", "proc8", "proc5"}));
   }
 
   SECTION("Test Next API - Complex CFG") {
@@ -524,6 +825,20 @@ TEST_CASE("Testing PkbReadFacade") {
                                                           std::make_pair("6", "8"),
                                                           std::make_pair("8", "9")
                                                       }));
+
+    REQUIRE_FALSE(pkb_read_facade_->GetNextStarPairs(READ, READ) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair("1", "2"),
+                std::make_pair("2", "3"),
+                std::make_pair("3", "4"),
+                std::make_pair("4", "5"),
+                std::make_pair("4", "6"),
+                std::make_pair("5", "4"),
+                std::make_pair("6", "7"),
+                std::make_pair("6", "8"),
+                std::make_pair("8", "9")
+            }));
   }
 
   SECTION("Test Next API - With Dummy Node") {
@@ -1375,6 +1690,245 @@ TEST_CASE("Testing PkbReadFacade") {
   }
 }
 
+TEST_CASE("Testing Parent API") {
+  SECTION("Parent API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+
+    pkb_write_facade_->AddParentRelation("1", "2");
+    pkb_write_facade_->AddParentRelation("1", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+    pkb_write_facade_->AddParentRelation("2", "5");
+    pkb_write_facade_->AddParentRelation("2", "6");
+    pkb_write_facade_->AddParentRelation("3", "7");
+    pkb_write_facade_->AddParentRelation("3", "8");
+    pkb_write_facade_->AddParentRelation("6", "9");
+    pkb_write_facade_->AddParentRelation("7", "9");
+    pkb_write_facade_->AddParentRelation("9", "10");
+    pkb_write_facade_->AddParentRelation("9", "11");
+    pkb_write_facade_->AddParentStarRelation();
+
+    REQUIRE_FALSE(pkb_read_facade_->GetParentChildPairs(ASSIGN, ASSIGN) ==
+            std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                               PairHasherUtil::hash_pair>({
+                std::make_pair("1", "2"),
+                std::make_pair("2", "3"),
+                std::make_pair("3", "4"),
+                std::make_pair("5", "6"),
+                std::make_pair("2", "5")
+            }));
+    REQUIRE(pkb_read_facade_->GetStatementThatIsParentOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+                ({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildrenOf("1", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"3", "2"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreParents(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"9", "6", "7", "3", "2", "1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreChildren(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+        ({"9", "6", "7", "5", "8", "4", "3", "2"}));
+    REQUIRE(pkb_read_facade_->HasParentChildRelationship("1", "2") == true);
+    REQUIRE(pkb_read_facade_->IsAnyParentRelationshipPresent() == true);
+  }
+
+  SECTION("Parent* API") {
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("3", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("5", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("6", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("7", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("8", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("9", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("10", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("11", ASSIGN);
+    pkb_write_facade_->AddStatementOfAType("12", ASSIGN);
+
+    pkb_write_facade_->AddParentRelation("1", "2");
+    pkb_write_facade_->AddParentRelation("1", "3");
+    pkb_write_facade_->AddParentRelation("2", "4");
+    pkb_write_facade_->AddParentRelation("3", "4");
+    pkb_write_facade_->AddParentRelation("4", "5");
+    pkb_write_facade_->AddParentRelation("4", "6");
+    pkb_write_facade_->AddParentRelation("4", "7");
+    pkb_write_facade_->AddParentRelation("4", "8");
+    pkb_write_facade_->AddParentRelation("5", "10");
+    pkb_write_facade_->AddParentRelation("6", "9");
+    pkb_write_facade_->AddParentRelation("7", "9");
+    pkb_write_facade_->AddParentRelation("8", "11");
+    pkb_write_facade_->AddParentRelation("9", "10");
+    pkb_write_facade_->AddParentRelation("9", "11");
+    pkb_write_facade_->AddParentRelation("9", "12");
+    pkb_write_facade_->AddParentStarRelation();
+
+    REQUIRE_FALSE(pkb_read_facade_->GetAncestorDescendantPairs(ASSIGN, ASSIGN) ==
+                  std::unordered_set<std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>,
+                                     PairHasherUtil::hash_pair>({
+                      std::make_pair("1", "2"),
+                      std::make_pair("2", "3"),
+                      std::make_pair("3", "4"),
+                      std::make_pair("5", "6"),
+                      std::make_pair("2", "5")
+                  }));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreAncestorOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"1"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreAncestors(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"3", "2", "1", "9", "6", "5", "7", "8", "4"}));
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreDescendants(ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"2", "3", "12", "10", "4", "8", "6", "11", "9", "7", "5"}));
+    REQUIRE(pkb_read_facade_->IsAnyAncestorDescendantRelationshipPresent() == true);
+    REQUIRE(pkb_read_facade_->HasAncestorDescendantRelationship("1", "2") == true);
+    REQUIRE(pkb_read_facade_->GetStatementsThatAreDescendantsOf("2", ASSIGN)
+            == std::unordered_set<PkbTypes::STATEMENT_NUMBER>
+            ({"7", "5", "6", "9", "11", "12", "10", "8", "4"}));
+  }
+}
+
+TEST_CASE("Testing Pattern API") {
+  SECTION("Test Assign and Expression") {
+    typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+    // 0
+    TokenList token_list_statement_1{
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("1", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("1", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "1", egs->GetExpressionFromInput(
+                 token_list_statement_1, "assign"));
+
+    // 5
+    TokenList token_list_statement_2{
+        make_shared<IntegerToken>("5"),
+    };
+
+    // x + 2 * y
+    TokenList token_list_statement_4{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>("+", PLUS),
+        make_shared<IntegerToken>("2"),
+        make_shared<ArithmeticOperatorToken>("*", MULTIPLY),
+        make_shared<NameToken>("y"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("4", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("4", "x");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "4", egs->GetExpressionFromInput(
+                 token_list_statement_4, "assign"));
+
+    pkb_write_facade_->AddStatementOfAType("2", ASSIGN);
+    pkb_write_facade_->AddStatementModifyingVariable("2", "i");
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "2", egs->GetExpressionFromInput(
+                 token_list_statement_2, "assign"));
+
+    REQUIRE(pkb_read_facade_->GetAssignWithExactExpression(egs->GetExpressionFromInput(
+        token_list_statement_2, "assign")) == std::unordered_set<std::string>({"2"}));
+
+    REQUIRE(pkb_read_facade_->GetAssignWithPartialExpression(egs->GetExpressionFromInput(
+                token_list_statement_2, "assign")) == std::unordered_set<std::string>({"2"}));
+
+    REQUIRE(pkb_read_facade_->RetrieveAllVariablesOfExpression(egs->GetExpressionFromInput(
+                token_list_statement_2, "assign")) == std::unordered_set<std::string>({}));
+
+    REQUIRE(pkb_read_facade_->RetrieveAllVariablesOfExpression(egs->GetExpressionFromInput(
+                token_list_statement_4, "assign")) == std::unordered_set<std::string>({}));
+  }
+
+  SECTION("Test expression within If statement") {
+    typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
+    Pkb pkb_ = Pkb();
+    PkbReadFacade *pkb_read_facade_;
+    PkbWriteFacade *pkb_write_facade_;
+    pkb_read_facade_ = new PkbReadFacade(pkb_);
+    pkb_write_facade_ = new PkbWriteFacade(pkb_);
+
+    ExpressionGeneratorPtr egs = std::make_shared<ExpressionGeneratorStub>();
+    std::shared_ptr<Cfg> cfg = std::make_shared<Cfg>();
+    typedef std::vector<std::shared_ptr<Token>> TokenList;
+
+    // x > 0
+    TokenList token_list_statement_10{
+        make_shared<NameToken>("x"),
+        make_shared<ArithmeticOperatorToken>(">", GT),
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("10", IF);
+    pkb_write_facade_->AddStatementModifyingVariable("10", "z");
+    pkb_write_facade_->AddIfStatementAndCondition("10", egs->GetExpressionFromInput(
+                                                            token_list_statement_10, "if"));
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "10", egs->GetExpressionFromInput(
+                  token_list_statement_10, "if"));
+
+    // y > 0
+    TokenList token_list_statement_11{
+        make_shared<NameToken>("y"),
+        make_shared<ArithmeticOperatorToken>(">", GT),
+        make_shared<IntegerToken>("0"),
+    };
+
+    pkb_write_facade_->AddStatementOfAType("11", WHILE);
+    pkb_write_facade_->AddStatementModifyingVariable("11", "z");
+    pkb_write_facade_->AddWhileStatementAndCondition("11", egs->GetExpressionFromInput(
+                                                               token_list_statement_11, "while"));
+    pkb_write_facade_->AddAssignmentStatementAndExpression(
+        "11", egs->GetExpressionFromInput(
+                  token_list_statement_11, "while"));
+
+    REQUIRE_FALSE(pkb_read_facade_->GetIfConditionVariablePair() ==
+            std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
+                PairHasherUtil::hash_pair>({}));
+    REQUIRE(pkb_read_facade_->GetIfWithConditionVariable("x") == std::unordered_set<std::string>({"10"}));
+    REQUIRE(pkb_read_facade_->GetIfThatHasConditionVariable() == std::unordered_set<std::string>({"10"}));
+    REQUIRE_FALSE(pkb_read_facade_->GetWhileConditionVariablePair() ==
+            std::unordered_set<std::pair<PkbTypes::VARIABLE, PkbTypes::STATEMENT_NUMBER>,
+                PairHasherUtil::hash_pair>({}));
+    REQUIRE(pkb_read_facade_->GetWhileWithConditionVariable("y") == std::unordered_set<std::string>({"11"}));
+    REQUIRE(pkb_read_facade_->GetWhileThatHasConditionVariable() == std::unordered_set<std::string>({"11"}));
+  }
+}
+
 TEST_CASE("Testing Affects") {
   SECTION("Test Affects API - Complex CFG and Expressions") {
     typedef std::shared_ptr<ExpressionGeneratorStub> ExpressionGeneratorPtr;
@@ -1588,22 +2142,35 @@ TEST_CASE("Testing Affects") {
 
     REQUIRE(pkb_read_facade_->IsThereAnyAffectsRelationship() == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "6") == true);
-    // need to check this - expected result should be true -> need to fix bug in affects
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "8") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("4", "10") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("6", "6") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "4") == true);
-    // need to check this - expected result should be true -> need to fix bug in affects
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "8") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "10") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("1", "12") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "10") == true);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "10") == true);
-
+    REQUIRE(pkb_read_facade_->GetAssignsAffectedBy("2") == std::unordered_set<std::string>({"10", "4", "6"}));
+    REQUIRE(pkb_read_facade_->GetAssignsAffecting("2") == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAffect()
+            == std::unordered_set<std::string>({"1", "2", "11", "6", "9", "4", "10", "8"}));
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAreAffected()
+            == std::unordered_set<std::string>({"6", "12", "11", "4", "10"}));
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "11") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "12") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("2", "3") == false);
     REQUIRE(pkb_read_facade_->HasAffectsRelationship("9", "6") == false);
+    REQUIRE_FALSE(pkb_read_facade_->GetAffectsStarPairs() == std::unordered_set<
+        std::pair<PkbTypes::STATEMENT_NUMBER, PkbTypes::STATEMENT_NUMBER>, PairHasherUtil::hash_pair>({}));
+    REQUIRE_FALSE(pkb_read_facade_->GetAssignsAffectedStarBy("2") == std::unordered_set<std::string>({}));
+    REQUIRE(pkb_read_facade_->GetAssignsAffectingStar("3") == std::unordered_set<std::string>({}));
+    REQUIRE_FALSE(pkb_read_facade_->GetAllAssignsThatAffectStar() == std::unordered_set<std::string>({"2"}));
+    REQUIRE(pkb_read_facade_->GetAllAssignsThatAreAffectedStar()
+            == std::unordered_set<std::string>({"6", "12", "11", "4", "10"}));
+    REQUIRE(pkb_read_facade_->HasAffectsStarRelationship("2", "3")
+            == false);
+    REQUIRE(pkb_read_facade_->IsThereAnyAffectsStarRelationship());
   }
 }
 
