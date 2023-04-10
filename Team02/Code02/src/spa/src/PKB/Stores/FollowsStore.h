@@ -1,8 +1,12 @@
 #pragma once
 
+#include <algorithm>
+#include <utility>
+
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/AbstractDataModels/OneToOneStore.h"
 #include "PKB/Types/PkbTypes.h"
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 /**
  * @class FollowsStore
@@ -17,10 +21,12 @@ class FollowsStore {
  public:
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
   typedef std::unordered_set<PkbTypes::STATEMENT_NUMBER> StatementNumberSet;
-  typedef std::unordered_set<std::pair<StatementNumber, StatementNumber>, PairHasherUtil::hash_pair>
-  StatementStatementPairSet;
+  typedef std::pair<StatementNumber, StatementNumber> StatementStatementPair;
+  typedef std::unordered_set<StatementStatementPair, PairHasherUtil::hash_pair>
+      StatementStatementPairSet;
   typedef OneToOneStore<StatementNumber, StatementNumber> StatementToStatementStore;
   typedef ManyToManyStore<StatementNumber, StatementNumber> MultiStatementToStatementStore;
+  typedef std::stack<StatementNumber> StatementNumberStack;
 
   /**
    * Constructor for Follows store.
@@ -38,7 +44,9 @@ class FollowsStore {
    * @param first_statement - Statement that comes first.
    * @param second_statement - Statement that comes second, in other words, the one that follows the first statement.
    */
-  void AddFollowsRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  void AddFollowsRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
+
+  void AddFollowsStarRelation();
 
   /**
    * Retrieves all the follows relationships present in the store.
@@ -63,7 +71,7 @@ class FollowsStore {
    * @param second_statement - Statement that comes second, in other words, the one that follows the first statement.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasFollowsRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  bool HasFollowsRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
 
   /**
    * Checks if there is a follows star relationship between two statements.
@@ -73,7 +81,7 @@ class FollowsStore {
    * first statement.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasFollowsStarRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  bool HasFollowsStarRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
 
   /**
    * Checks with the store if there are any follows relationships present in the store.
@@ -95,7 +103,7 @@ class FollowsStore {
    * @param statement - Statement to check if it has a follows star relationship as first statement.
    * @return True if there is such a relationship, false otherwise.
    */
-  bool HasFollowsStarRelation(const StatementNumber& statement);
+  bool HasFollowsStarRelation(const StatementNumber &statement);
 
   /**
    * Checks if there exists a follows* relationship with a statement as the second statement.
@@ -103,7 +111,7 @@ class FollowsStore {
    * @param statement - Statement to check if it has a follows* relationship as second statement.
    * @return True if there is such a relationship, false otherwise.
    */
-  bool HasFollowsStarRelationBy(const StatementNumber& statement);
+  bool HasFollowsStarRelationBy(const StatementNumber &statement);
 
  private:
   StatementToStatementStore follows_relation_store_;

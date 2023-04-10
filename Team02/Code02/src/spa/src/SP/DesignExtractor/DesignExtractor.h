@@ -10,6 +10,6 @@ class DesignExtractor {
   shared_ptr<Pkb> pkb_;
   shared_ptr<Cfg> cfg_;
  public:
-  DesignExtractor(shared_ptr<Pkb> pkb_, shared_ptr<Cfg> cfg);
+  DesignExtractor(shared_ptr<Pkb> pkb, shared_ptr<Cfg> cfg);
   void ExtractDesign(shared_ptr<Program> program);
 };

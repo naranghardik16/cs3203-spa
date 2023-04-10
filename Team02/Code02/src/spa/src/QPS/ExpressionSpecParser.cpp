@@ -1,7 +1,7 @@
 #include "ExpressionSpecParser.h"
 
 std::shared_ptr<Expression> ExpressionSpecParser::ParseExpressionSpec(const std::string& expression_spec) {
-  if (expression_spec == "_") {
+  if (QueryUtil::IsWildcard(expression_spec)) {
     return nullptr;
   }
 
@@ -13,11 +13,11 @@ std::shared_ptr<Expression> ExpressionSpecParser::ParseExpressionSpec(const std:
     throw SyntaxErrorException();
   }
 
-  expr = string_util::Trim(expr.substr(1, expr.length()-2));
+  expr = QueryUtil::RemoveQuotations(expr);
   if (expr.empty()) {
     throw SyntaxErrorException();
   }
-  std::istringstream str(expr + ";");
+  std::istringstream str(expr + pql_constants::kSemicolon);
   std::shared_ptr<Tokenizer> tk = std::make_shared<Tokenizer>();
   std::shared_ptr<Parser::TokenStream> tokens = tk->Tokenize(str);
   std::shared_ptr<ArithmeticOperationParser> parser = std::make_shared<ArithmeticOperationParser>();

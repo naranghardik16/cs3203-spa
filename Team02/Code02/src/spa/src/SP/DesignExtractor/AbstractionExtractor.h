@@ -18,7 +18,7 @@
 class AbstractionExtractor : public ParserVisitor {
  public:
   AbstractionExtractor(shared_ptr<Pkb> pkb);
-  void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override;
+  void VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) override {};
   void VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) override;
   void VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) override;
   void VisitPrintStatement(shared_ptr<PrintStatement> print_statement) override;
@@ -27,15 +27,10 @@ class AbstractionExtractor : public ParserVisitor {
   void VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) override;
   void VisitIfStatement(shared_ptr<IfStatement> if_statement) override;
   void VisitWhileStatement(shared_ptr<WhileStatement> while_statement) override;
-  void VisitProgram(shared_ptr<Program> program);
-  void VisitProcedure(shared_ptr<Procedure> procedure) override;
-  void VisitVariable(shared_ptr<Variable> variable) override;
-  void VisitConstant(shared_ptr<Constant> constant) override;
-  void VisitStatement(shared_ptr<Statement> statement);
-  void VisitExpression(shared_ptr<Expression> expression);
+  void VisitProcedure(shared_ptr<Procedure> procedure) override {};
+  void VisitVariable(shared_ptr<Variable> variable) override {};
+  void VisitConstant(shared_ptr<Constant> constant) override {};
   void ExtractFollows(shared_ptr<Statement> prev_stmt, shared_ptr<Statement> curr_stmt);
-  void ExtractIndirectModifies( PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
-  void ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
   void SetIsExtractIndirectModifiesAndUsesTrue();
 
  private:
@@ -48,4 +43,6 @@ class AbstractionExtractor : public ParserVisitor {
   void ExtractParent(PkbTypes::STATEMENT_NUMBER parent, shared_ptr<Statement> child_stmt);
   void ExtractIndirectModifiesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
   void ExtractIndirectUsesFromCallStatements(PkbTypes::PROCEDURE curr_proc, PkbTypes::VARIABLE variable);
+  void ExtractIndirectModifies(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
+  void ExtractIndirectUses(PkbTypes::VARIABLE variable, PkbTypes::PROCEDURE stmt_proc);
 };

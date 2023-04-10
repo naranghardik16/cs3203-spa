@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Parser.h"
 #include "ProcedureParser.h"
 
@@ -26,6 +24,6 @@ bool Parser::IsStatement(Line &line) {
 }
 
 bool Parser::IsProcedure(Line &line) {
-  return !line.empty() && line[0]->GetValue() == "procedure";
+  return !line.empty() && line[0]->GetValue() == sp_constants::k_procedure_;
 }
 

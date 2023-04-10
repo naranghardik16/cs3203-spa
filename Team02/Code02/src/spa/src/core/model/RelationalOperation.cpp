@@ -1,5 +1,3 @@
-#pragma once
-
 #include "RelationalOperation.h"
 
 RelationalOperation::RelationalOperation(string name,

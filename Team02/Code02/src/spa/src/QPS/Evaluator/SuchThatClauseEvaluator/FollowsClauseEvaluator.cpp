@@ -1,98 +1,50 @@
 #include "FollowsClauseEvaluator.h"
 
-bool FollowsClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-
-  bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  if (is_first_arg_a_wildcard) {
-    if (is_second_arg_a_wildcard) {
-      // e.g. Follows(_,_) -- return all Follows relationships between statements
-      return pkb->IsAnyFollowsRelationshipPresent();
-    } else {
-      // e.g. Follows(_,"5") --> Get all types of statements that "5" follows
-      return !pkb->GetStatementFollowedBy(second_arg_, StatementType::STATEMENT).empty();
-    }
-  } else {
-    // Must be an integer since the definition of Boolean constraint is no synonyms
-    if (is_second_arg_a_wildcard) {
-      // e.g. Follows("5", _) --> Get all types of statements that follow "5"
-      return !pkb->GetStatementFollowing(first_arg_, StatementType::STATEMENT).empty();
-    } else {
-      // e.g. Follows(5, 6)
-      return pkb->HasFollowsRelationship(first_arg_, second_arg_);
-    }
-  }
+bool FollowsClauseEvaluator::CheckIfReturnEmpty() {
+  return QueryUtil::IsMatchingEntities(first_arg_, second_arg_);
 }
 
-
-std::shared_ptr<Result> FollowsClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-
-  bool is_first_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, first_arg_);
-  bool is_first_arg_an_integer = LexicalRuleValidator::IsInteger(first_arg_);
-  bool is_first_arg_a_wildcard = QueryUtil::IsWildcard(first_arg_);
-
-  bool is_second_arg_a_type_of_statement_synonym = QueryUtil::IsATypeOfStatementSynonym(declaration_map, second_arg_);
-  bool is_second_arg_a_wildcard = QueryUtil::IsWildcard(second_arg_);
-
-  ResultHeader header;
-  if (is_first_arg_a_type_of_statement_synonym) {
-    header[first_arg_] = static_cast<int>(header.size());
-  }
-  if (is_second_arg_a_type_of_statement_synonym) {
-    header[second_arg_] = static_cast<int>(header.size());
-  }
-
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
-  ResultTable table;
-  // Special case Follow(5,5) or Follow(a,a) will always return empty
-  // Nothing can follow first statement
-  bool is_same_syn_or_int_pairs = !is_first_arg_a_wildcard && first_arg_ == second_arg_;
-  if (is_same_syn_or_int_pairs || second_arg_ == "1") {
-    std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-    return result_ptr;
-  }
-
-  if (is_first_arg_a_type_of_statement_synonym) {
-    if (is_second_arg_a_wildcard) {
-      // e.g. Follows(s, _) --> Get statements that have followers
-      single_constraint = pkb->GetStatementsWithFollowers(QueryUtil::GetStatementType(declaration_map, first_arg_));
-    } else if (is_second_arg_a_type_of_statement_synonym) {
-      // e.g. Follows(a,p)
-      pair_constraint = pkb->GetFollowPairs(QueryUtil::GetStatementType(declaration_map, first_arg_),
-                                            QueryUtil::GetStatementType(declaration_map, second_arg_));
-    } else {
-      // e.g. Follows(a,"5") --> Get statement that 5 follows of type assignment
-      single_constraint =
-          pkb->GetStatementFollowedBy(second_arg_, QueryUtil::GetStatementType(declaration_map, first_arg_));
-    }
-  }
-
-  // Second arg must be a synonym by rule of deciding non-boolean constraints
-  if (is_first_arg_an_integer) {
-    // e.g. Follows("5", a) --> Get statement that follow 5 of type assignment
-    single_constraint =
-        pkb->GetStatementFollowing(first_arg_, QueryUtil::GetStatementType(declaration_map, second_arg_));
-  }
-
-  // Second arg must be a synonym by rule of non-boolean constraints
-  if (is_first_arg_a_wildcard) {
-    // e.g. Follows(_, s) --> Get statements that follow another statement
-    single_constraint = pkb->GetStatementThatAreFollowers(QueryUtil::GetStatementType(declaration_map, second_arg_));
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
-  }
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-  return result_ptr;
+bool FollowsClauseEvaluator::HandleBothWildcard() {
+  // Example query: Follows(_,_)
+  return pkb_->IsAnyFollowsRelationshipPresent();
 }
 
+bool FollowsClauseEvaluator::HandleFirstWildcardSecondValue() {
+  // Example query: Follows(_,"5")
+  return !pkb_->GetStatementFollowedBy(second_arg_, StatementType::STATEMENT).empty();
+}
+
+bool FollowsClauseEvaluator::HandleFirstValueSecondWildcard() {
+  // Example query: Follows("5", _)
+  return !pkb_->GetStatementFollowing(first_arg_, StatementType::STATEMENT).empty();
+}
+
+bool FollowsClauseEvaluator::HandleBothValue() {
+  // Example query: Follows(5, 6)
+  return pkb_->HasFollowsRelationship(first_arg_, second_arg_);
+}
+
+ResultTable FollowsClauseEvaluator::HandleBothSynonym() {
+  // Example query: Follows(a,p)
+  return ConvertPairSetToResultTableFormat(pkb_->GetFollowPairs(arg_1_type_, arg_2_type_));
+}
+
+ResultTable FollowsClauseEvaluator::HandleFirstSynonymSecondWildcard() {
+  // Example query: Follows(s, _)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementsWithFollowers(arg_1_type_));
+}
+
+ResultTable FollowsClauseEvaluator::HandleFirstSynonymSecondValue() {
+  // Example query: Follows(a,"5")
+  return ConvertSetToResultTableFormat(pkb_->GetStatementFollowedBy(second_arg_, arg_1_type_));
+}
+
+ResultTable FollowsClauseEvaluator::HandleFirstWildcardSecondSynonym() {
+  // Example query: Follows(_, s)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementThatAreFollowers(arg_2_type_));
+}
+
+ResultTable FollowsClauseEvaluator::HandleFirstValueSecondSynonym() {
+  // Example query: Follows("5", a)
+  return ConvertSetToResultTableFormat(pkb_->GetStatementFollowing(first_arg_, arg_2_type_));
+}

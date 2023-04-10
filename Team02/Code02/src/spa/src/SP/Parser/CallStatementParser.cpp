@@ -15,30 +15,30 @@ shared_ptr<Statement> CallStatementParser::ParseEntity(TokenStream &tokens) {
 std::string CallStatementParser::ExtractProcedureName(Line &line) const {
   auto call_keyword_itr =
       std::find_if(std::begin(line), std::end(line), [&](shared_ptr<Token> const p) {
-        return p->GetValue() == "call";
+        return p->GetValue() == sp_constants::k_call_stmt_;
       });
 
   if (call_keyword_itr != line.begin()) {
     throw SyntaxErrorException("Call statement should start with call keyword");
   }
 
-  if (line.size() < 2) {
+  if (line.size() <= k_pos_of_proc_) {
     throw SyntaxErrorException("Call statement does not have a procedure");
   }
 
-  if (line[1]->GetType() != NAME) {
+  if (line[k_pos_of_proc_]->GetType() != NAME) {
     throw SyntaxErrorException("var_name should be a NAME");
   }
 
-  return line[1]->GetValue();
+  return line[k_pos_of_proc_]->GetValue();
 }
 
 void CallStatementParser::CheckEndOfStatement(Line &line) const {
-  if ((*prev(line.end()))->GetValue() != ";") {
+  if ((*prev(line.end()))->GetType() != SEMICOLON) {
     throw SyntaxErrorException("CallStatement does not end with ;");
   }
 
-  if (line.size() > 3) {
+  if (line.size() > k_max_tokens_) {
     throw SyntaxErrorException("Too many tokens in a CallStatement");
   }
 }

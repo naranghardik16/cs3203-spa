@@ -4,16 +4,16 @@ NextStore::NextStore() = default;
 
 NextStore::~NextStore() = default;
 
-void NextStore::SetProcedureToCfgNodeMap(const ProcedureToCfgNodeMap& ptonode) {
+void NextStore::SetProcedureToCfgNodeMap(const ProcedureToCfgNodeMap &ptonode) {
   this->procedure_name_to_cfg_node_map_ = ptonode;
 }
 
-void NextStore::SetStatementNumberToCfgNodeMap(const StatementToCfgNodeMap& stonode) {
+void NextStore::SetStatementNumberToCfgNodeMap(const StatementToCfgNodeMap &stonode) {
   this->statement_number_to_cfg_node_map_ = stonode;
 }
 
 void NextStore::AddNextRelations() {
-  for (const auto& p: this->procedure_name_to_cfg_node_map_) {
+  for (const auto &p : this->procedure_name_to_cfg_node_map_) {
     StatementNumberSet visited;
     StatementCfgNodePtrStack s;
 
@@ -59,8 +59,8 @@ void NextStore::AddNextRelations() {
   }
 }
 
-bool NextStore::HasNextRelation(const StatementNumber& statement_number,
-                                const StatementNumber& next_statement_number) {
+bool NextStore::HasNextRelation(const StatementNumber &statement_number,
+                                const StatementNumber &next_statement_number) {
   return this->next_relation_store_.contains(statement_number, next_statement_number);
 }
 
@@ -72,41 +72,20 @@ NextStore::StatementStatementPairSet NextStore::GetNextPairs() {
   return this->next_relation_store_.retrieveAll();
 }
 
-bool NextStore::HasNextRelation(const StatementNumber& statement_number) {
+bool NextStore::HasNextRelation(const StatementNumber &statement_number) {
   return this->next_relation_store_.containsKey(statement_number);
 }
 
-bool NextStore::HasNextRelationBy(const StatementNumber& statement_number) {
+bool NextStore::HasNextRelationBy(const StatementNumber &statement_number) {
   return this->next_relation_store_.containsValue(statement_number);
 }
 
 NextStore::StatementStatementPairSet NextStore::GetNextStarPairs() {
-  StatementStatementPairSet result;
-
-  for (const auto& k: this->next_relation_store_.retrieveAllKeys()) {
-    StatementNumberStack s;
-    StatementStatementPairSet visited;
-    s.push(k);
-
-    while (!s.empty()) {
-      StatementNumber current = s.top();
-      s.pop();
-
-      for (const auto& c: this->next_relation_store_.retrieveFromKey(current)) {
-        if (!(visited.count(std::make_pair(k, c)) > 0)) {
-          result.insert(std::make_pair(k, c));
-          s.push(c);
-          visited.insert(std::make_pair(k, c));
-        }
-      }
-    }
-  }
-
-  return result;
+  return TransitiveRelationUtil::GetTransitiveRelations(this->GetNextPairs());
 }
 
-bool NextStore::HasNextStarRelation(const StatementNumber& statement_number,
-                                    const StatementNumber& next_statement_number) {
+bool NextStore::HasNextStarRelation(const StatementNumber &statement_number,
+                                    const StatementNumber &next_statement_number) {
   StatementNumberStack s;
   StatementNumberSet visited;
   s.push(statement_number);
@@ -115,7 +94,7 @@ bool NextStore::HasNextStarRelation(const StatementNumber& statement_number,
     StatementNumber current = s.top();
     s.pop();
 
-    for (const auto &c: this->next_relation_store_.retrieveFromKey(current)) {
+    for (const auto &c : this->next_relation_store_.retrieveFromKey(current)) {
       if (c == next_statement_number) return true;
       if (!(visited.count(c) > 0)) s.push(c);
     }
@@ -125,10 +104,10 @@ bool NextStore::HasNextStarRelation(const StatementNumber& statement_number,
   return false;
 }
 
-bool NextStore::HasNextStarRelation(const StatementNumber& statement_number) {
+bool NextStore::HasNextStarRelation(const StatementNumber &statement_number) {
   return this->next_relation_store_.containsKey(statement_number);
 }
 
-bool NextStore::HasNextStarRelationBy(const StatementNumber& statement_number) {
+bool NextStore::HasNextStarRelationBy(const StatementNumber &statement_number) {
   return this->next_relation_store_.containsValue(statement_number);
 }

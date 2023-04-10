@@ -1,9 +1,13 @@
 #pragma once
 
+#include <algorithm>
+#include <utility>
+#include <stack>
+
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/Types/PkbTypes.h"
-
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 /**
  * @class ParentStore
@@ -17,12 +21,14 @@
 class ParentStore {
  public:
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
-  typedef std::unordered_set<std::pair<StatementNumber, StatementNumber>, PairHasherUtil::hash_pair> 
-  StatementStatementPairSet;
+  typedef std::pair<StatementNumber, StatementNumber> StatementStatementPair;
+  typedef std::unordered_set<StatementStatementPair, PairHasherUtil::hash_pair>
+      StatementStatementPairSet;
   typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef OneToManyStore<StatementNumber, StatementNumber> StatementToMultiStatementStore;
   typedef ManyToManyStore<StatementNumber, StatementNumber> MultiStatementToStatementStore;
-  
+  typedef std::stack<StatementNumber> StatementNumberStack;
+
   /**
    * Constructor for Parent store.
    */
@@ -40,7 +46,9 @@ class ParentStore {
    * second statement.
    * @param second_statement - Statement that comes second.
    */
-  void AddParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  void AddParentRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
+
+  void AddParentStarRelation();
 
   /**
    * Retrieves all the Parent relation pairs stored in Parent Store.
@@ -63,7 +71,7 @@ class ParentStore {
    * @param second_statement - Statement that comes second.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasParentRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  bool HasParentRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
 
   /**
    * Checks if a Parent* relationship exists between two statements.
@@ -72,7 +80,7 @@ class ParentStore {
    * @param second_statement - Statement that comes second.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasParentStarRelation(const StatementNumber& first_statement, const StatementNumber& second_statement);
+  bool HasParentStarRelation(const StatementNumber &first_statement, const StatementNumber &second_statement);
 
   /**
    * Checks if the store contains any Parent relationship.
@@ -94,7 +102,7 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return True if the statement has at least one parent in the store, false otherwise.
    */
-  bool HasParentStarRelation(const StatementNumber& statement);
+  bool HasParentStarRelation(const StatementNumber &statement);
 
   /**
    * Checks if any statement has any children in the store.
@@ -102,7 +110,7 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return True if the statement has at least one child in the store, false otherwise.
    */
-  bool HasParentStarRelationBy(const StatementNumber& statement);
+  bool HasParentStarRelationBy(const StatementNumber &statement);
 
   /**
    * Retrieves all parent statements stored in the store.
@@ -117,7 +125,7 @@ class ParentStore {
    * @param statement - The statement number of the statement.
    * @return The statement number which is the parent of the given statement.
    */
-  StatementNumber GetParents(const StatementNumber& statement);
+  StatementNumber GetParents(const StatementNumber &statement);
 
   /**
    * Retrieves all the statements that are children in the Parent relationship.
@@ -131,7 +139,7 @@ class ParentStore {
    * @param statement - The statement number to retrieve children of.
    * @return - An unordered set of statement numbers representing all children of the given statement.
    */
-  StatementNumberSet GetChildren(const StatementNumber& statement);
+  StatementNumberSet GetChildren(const StatementNumber &statement);
 
   /**
    * Retrieve all statements that are parent in the Parent* relationship.
@@ -146,7 +154,7 @@ class ParentStore {
    * @param statement - The statement number to retrieve ancestors of.
    * @return An unordered set of statement numbers representing all statements that are ancestors.
    */
-  StatementNumberSet GetAncestors(const StatementNumber& statement);
+  StatementNumberSet GetAncestors(const StatementNumber &statement);
 
   /**
    * Retrieves all statement numbers that are children in a Parent* relation (Descendants).
@@ -161,7 +169,7 @@ class ParentStore {
    * @param statement - The statement number to retrieve descendants of.
    * @return An unordered set of statement numbers representing all statements that are descendants.
    */
-  StatementNumberSet GetDescendants(const StatementNumber& statement);
+  StatementNumberSet GetDescendants(const StatementNumber &statement);
 
  private:
   // Stores the Parent relation OneToMany mapping between two statements.

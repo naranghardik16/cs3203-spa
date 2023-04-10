@@ -33,8 +33,9 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
   }
 
   if (groups_.empty()) {
-    auto evaluation_result = EvaluateSelectStatementWithoutClauses();
-    return evaluation_result->ProjectResult(synonym_tuple_);
+    std::shared_ptr<Result> evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
+    auto select_evaluation_result = AddEvaluationsOfSynonymsInSelect(evaluation_result);
+    return select_evaluation_result->ProjectResult(synonym_tuple_);
   }
 
   auto clause_evaluation_result = GetClauseEvaluationResult();
@@ -48,22 +49,22 @@ std::unordered_set<std::string> PqlEvaluator::Evaluate() {
 
 std::unordered_set<std::string> PqlEvaluator::EvaluateBooleanQuery() {
   if (syntax_list_.empty()) {
-    return {"TRUE"};
+    return pql_constants::kBooleanQueryTrueOutput;
   }
 
   if (is_return_empty_set_) {
-    return {"FALSE"};
+    return pql_constants::kBooleanQueryFalseOutput;
   }
 
   if (groups_.empty()) {
-    return {"TRUE"};
+    return pql_constants::kBooleanQueryTrueOutput;
   }
 
   auto clause_evaluation_result = GetClauseEvaluationResult();
   if (is_return_empty_set_) {
-    return {"FALSE"};
+    return pql_constants::kBooleanQueryFalseOutput;
   }
-  return {"TRUE"};
+  return pql_constants::kBooleanQueryTrueOutput;
 }
 
 void PqlEvaluator::EvaluateBooleanConstraints() {
@@ -72,8 +73,8 @@ void PqlEvaluator::EvaluateBooleanConstraints() {
   for (auto iter = clause_list.begin(); iter != clause_list.end(); ++iter) {
     auto clause = *iter;
 
-    auto evaluator = clause->CreateClauseEvaluator(declaration_map_);
-    auto is_clause_true = evaluator->EvaluateBooleanConstraint(pkb_);
+    auto evaluator = clause->CreateClauseEvaluator(declaration_map_, pkb_);
+    auto is_clause_true = evaluator->EvaluateBooleanConstraint();
     if (!is_clause_true) {
       is_return_empty_set_ = true;
       break;
@@ -85,11 +86,12 @@ std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
   std::vector<std::shared_ptr<Result>> results;
 
   for (auto &group : groups_) {
-    std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
-    ClauseSyntaxPtrList clause_list = group->GetClauseList();
+    std::shared_ptr<Result> clause_evaluation_result = std::make_shared<Result>(ResultHeader{},
+                                                                                ResultTable{});
+    ClauseSyntaxPtrList clause_list = group->GetSortedClauses(declaration_map_);
     for (const auto& kClause : clause_list) {
-      auto evaluator = kClause->CreateClauseEvaluator(declaration_map_);
-      std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause(pkb_);
+      auto evaluator = kClause->CreateClauseEvaluator(declaration_map_, pkb_);
+      std::shared_ptr<Result> intermediate_result = evaluator->EvaluateClause();
 
       // get intersection
       clause_evaluation_result->JoinResult(intermediate_result);
@@ -108,16 +110,14 @@ std::vector<std::shared_ptr<Result>> PqlEvaluator::GetClauseEvaluationResult() {
   return results;
 }
 
-std::shared_ptr<Result> PqlEvaluator::EvaluateSelectStatementWithoutClauses() {
-  std::shared_ptr<Result> evaluation_result = std::make_shared<Result>(ResultHeader{}, ResultTable{});
-
+std::shared_ptr<Result> PqlEvaluator::AddEvaluationsOfSynonymsInSelect(std::shared_ptr<Result> evaluation_result) {
   for (const auto& kSynonym : synonym_tuple_) {
     if (evaluation_result->GetHeader().count(kSynonym) == 0) {
-      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
+      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_,
+                                                                    declaration_map_);
       evaluation_result->JoinResult(initial_result);
     }
   }
-
   return evaluation_result;
 }
 
@@ -129,14 +129,7 @@ std::unordered_set<string> PqlEvaluator::GetFinalEvaluationResult(
     crossed_result->JoinResult(result);
   }
   // only add the remaining selected synonym values into table if it is not already present in the header
-  auto &header = crossed_result->GetHeader();
-  for (const auto& kSynonym : synonym_tuple_) {
-    if (header.count(kSynonym) == 0) {
-      auto initial_result = DesignEntityGetter::EvaluateBasicSelect(kSynonym, pkb_, declaration_map_);
-      crossed_result->JoinResult(initial_result);
-    }
-  }
-
+  auto final_crossed_result = AddEvaluationsOfSynonymsInSelect(crossed_result);
   std::unordered_set<std::string> results;
   results = crossed_result->ProjectResult(synonym_tuple_);
   return results;

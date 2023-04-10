@@ -1,0 +1,109 @@
+procedure m1a2i3n4 {
+	call x;
+	read a;
+	read b;
+	print c;
+	if (d / a != 3 % d) then {
+		call x;
+		while (z > 1) {
+			a = a + b;
+			c = c * a + b;
+		}
+		print c;
+	} else {
+		if (e + z == f - a) then {
+			print a;
+			a = a % 9 + (10 + 3);
+
+		} else {
+			y = 1;
+			y = 2;
+			u = 3;
+			z = 8;
+			l = x + y + z + u + a + b;
+			call y;
+		}
+		while (z < 1) {
+			b = c;
+			z = (3*z + 1000000) + (a +b);
+			read c;
+			read d;
+			read e;
+			if (e > d) then {
+				print e;
+			} else {
+				print d;
+				d = e;
+				call w;
+			}
+		}
+	}
+	c = b;
+	a = 20;
+	print a;
+}
+
+procedure w {
+	k = 0;
+	if (k + m == 12345) then {
+		m1 = 1;
+		k = 3;
+		while (m > 0) {
+			call x;
+			k = k + m1;
+		}
+	} else {
+		print k;
+	}
+}
+
+procedure x {
+	while (a * b > c) {
+		if (a == c) then {
+			c = a + b;
+			call z;
+		} else {
+			call y;
+			c = b + c;
+		}
+		d = d + e;
+		print g;
+		read f;
+	}
+}
+
+procedure y {
+	if (s != (3 / y) % 6) then {
+		read x;
+		read i;
+		while (i - 1 == r) {
+			i = r;
+			read r;
+			if (r > 0) then {
+				call z;
+				call z;
+				call z;
+			} else {
+				r = r + 1;
+				r = r + r;
+				r = r - 1;
+			}
+		}
+		read i;
+		print x;
+		print i;
+		print k;
+		x = (x + i + k + r) * x;
+		print x;
+	} else {
+		call z;
+	}
+}
+
+procedure z {
+	s = s + 1;
+	p = s + r;
+	q = m + n;
+	l = l;
+	fsdfs = shoes + (pants * (sandals + 1) / (2 + (3 * ( (4 % 3) + 5) / (heels * 2 + (4 * 3))))) * shirt;
+}

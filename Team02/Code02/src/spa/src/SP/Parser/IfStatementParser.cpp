@@ -6,7 +6,7 @@ shared_ptr<Statement> IfStatementParser::ParseEntity(TokenStream &tokens) {
   auto condition = ExtractCondition(line);
   auto if_stmt =
       make_shared<IfStatement>(Program::GetAndIncreaseStatementNumber(),
-                               *condition,
+                               condition,
                                GetProcName());
   // Verify syntax is correct for if statement
   CheckStartOfIfStatement(line);
@@ -46,7 +46,7 @@ shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line)
   // remove "if (" and ") then {" from the token line
   vector<shared_ptr<Token>> expression_tokens{line.begin() + 2, line.end() - 3};
   auto expr_parser =
-      ExpressionParserFactory::GetExpressionParser(expression_tokens, "if");
+      ExpressionParserFactory::GetExpressionParser(expression_tokens, sp_constants::k_if_stmt_);
   auto
       condition = (expr_parser->ParseEntity(
       expression_tokens));
@@ -57,7 +57,7 @@ shared_ptr<ConditionalOperation> IfStatementParser::ExtractCondition(Line &line)
 }
 
 void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
-  if (line.size() < 2) {
+  if (line.size() < k_min_tokens_) {
     throw SyntaxErrorException("Invalid length for if then statement");
   }
 
@@ -75,7 +75,7 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 
   auto itr_then = prev(prev(line.end()));
 
-  if (itr_then->get()->GetValue() != "then") {
+  if (itr_then->get()->GetValue() != k_then_) {
     throw SemanticErrorException(
         "If Statement is missing then or is not in correct position");
   }
@@ -84,27 +84,27 @@ void IfStatementParser::CheckStartOfIfStatement(Line &line) const {
 bool IfStatementParser::IsEndOfThenStatement(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
-                        return p->GetValue() == "}";
+                        return p->GetType() == RIGHT_BRACE;
                       }) != std::end(line);
 }
 
 bool IfStatementParser::HasElseStatements(Line &line) const {
   return std::find_if(std::begin(line), std::end(line),
                       [&](shared_ptr<Token> const p) {
-                        return p->GetValue() == "else";
+                        return p->GetValue() == k_else_;
                       }) != std::end(line);
 }
 
 void IfStatementParser::CheckStartOfElseStatement(Line &line) const {
-  if (line.size() != 2) {
+  if (line.size() != k_min_tokens_) {
     throw SyntaxErrorException("Not a valid else statement");
   }
 
-  if (line[0]->GetValue() != "else") {
+  if (line[0]->GetValue() != k_else_) {
     throw SyntaxErrorException("Missing else statement");
   }
 
-  if (line[1]->GetValue() != "{") {
+  if (line[1]->GetType() != LEFT_BRACE) {
     throw SyntaxErrorException("Missing } at the start of else block");
   }
 }

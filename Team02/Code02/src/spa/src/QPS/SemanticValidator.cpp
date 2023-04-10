@@ -46,10 +46,9 @@ void SemanticValidator::ValidateSuchThatClauseSemantic(std::shared_ptr<ClauseSyn
     std::shared_ptr<SuchThatBaseHandler> handler_1 = std::make_shared<SuchThatBaseHandler>();
     std::shared_ptr<StmtToStmtHandler> handler_2 = std::make_shared<StmtToStmtHandler>();
     std::shared_ptr<StmtProcToVarHandler> handler_3 = std::make_shared<StmtProcToVarHandler>();
-    std::shared_ptr<AffectsHandler> handler_4 = std::make_shared<AffectsHandler>();
-    std::shared_ptr<CallsHandler> handler_5 = std::make_shared<CallsHandler>();
+    std::shared_ptr<CallsHandler> handler_4 = std::make_shared<CallsHandler>();
 
-    handler_1->SetNext(handler_2)->SetNext(handler_3)->SetNext(handler_4)->SetNext(handler_5);
+    handler_1->SetNext(handler_2)->SetNext(handler_3)->SetNext(handler_4);
 
     handler_1->HandleSemantic(std::move(clause), declaration_);
   } catch (const SemanticErrorException& e) {
@@ -85,7 +84,7 @@ void SemanticValidator::ValidateWithClauseSemantic(std::shared_ptr<ClauseSyntax>
   }
 }
 
-bool SemanticValidator::HasSemanticError() {
+bool SemanticValidator::HasSemanticError() const {
   return has_semantic_error_;
 }
 

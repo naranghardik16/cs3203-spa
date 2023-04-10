@@ -1,0 +1,310 @@
+1 - Next, wildcard, wildcard
+stmt s1, s2;
+Select s1 such that Next(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+2 - Next, wildcard, wildcard, select procedure
+procedure p; stmt s1, s2;
+Select p such that Next(_, _)
+singleStatement, linear, singleNesting
+5000
+3 - Next, wildcard, stmt syn
+stmt s1, s2;
+Select s2 such that Next(_, s2)
+3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+4 - Next, wildcard, read syn
+read s1;
+Select s1 such that Next(_, s1)
+6, 9
+5000
+5 - Next, wildcard, print syn
+print s1;
+Select s1 such that Next(_, s1)
+3, 7
+5000
+6 - Next, wildcard, call syn
+call s1;
+Select s1 such that Next(_, s1)
+10
+5000
+7 - Next, wildcard, while syn
+while s1;
+Select s1 such that Next(_, s1)
+5
+5000
+8 - Next, wildcard, if syn
+if s1;
+Select s1 such that Next(_, s1)
+8
+5000
+9 - Next, wildcard, assign syn
+assign s1;
+Select s1 such that Next(_, s1)
+4, 11
+5000
+10 - Next, wildcard, integer, FALSE (First statement)
+stmt s1, s2;
+Select BOOLEAN such that Next(_, 2)
+FALSE
+5000
+11 - Next, wildcard, integer, TRUE (While statement)
+stmt s1, s2;
+Select BOOLEAN such that Next(_, 5)
+TRUE
+5000
+12 - Next, stmt syn, wildcard
+stmt s1, s2;
+Select s1 such that Next(s1, _)
+2, 3, 5, 6, 7, 8, 9, 10
+5000
+13 - Next, read syn, wildcard
+read s1;
+Select s1 such that Next(s1, _)
+2, 6, 9
+5000
+14 - Next, print syn, wildcard
+print s1;
+Select s1 such that Next(s1, _)
+3, 7
+5000
+15 - Next, call syn, wildcard
+call s1;
+Select s1 such that Next(s1, _)
+10
+5000
+16 - Next, while syn, wildcard
+while s1;
+Select s1 such that Next(s1, _)
+5
+5000
+17 - Next, if syn, wildcard
+if s1;
+Select s1 such that Next(s1, _)
+8
+5000
+18 - Next, assign syn, wildcard
+assign s1;
+Select s1 such that Next(s1, _)
+none
+5000
+19 - Next, stmt syn, stmt syn
+stmt s1, s2;
+Select s1 such that Next(s1, s2)
+2, 3, 5, 6, 7, 8, 9, 10
+5000
+20 - Next, stmt syn, integer
+stmt s1, s2;
+Select s1 such that Next(s1, 11)
+9, 10
+5000
+21 - Next, integer, wildcard, FALSE (Last statement)
+stmt s1, s2;
+Select BOOLEAN such that Next(1, _)
+FALSE
+5000
+22 - Next, integer, wildcard, TRUE (First statement)
+stmt s1, s2;
+Select BOOLEAN such that Next(5, _)
+TRUE
+5000
+23 - Next, integer, stmt syn
+stmt s1, s2;
+Select s2 such that Next(5, s2)
+6, 8
+5000
+24 - Next, integer, integer, FALSE (Last stmt in while stmtLst and next stmt)
+stmt s1, s2;
+Select BOOLEAN such that Next(7, 8) 
+FALSE
+5000
+25 - Next, integer, integer, TRUE
+stmt s1, s2;
+Select BOOLEAN such that Next(2, 3)
+TRUE
+5000
+26 - Next, integer, integer, TRUE (Last stmt in while stmtLst and while stmt)
+stmt s1, s2;
+Select BOOLEAN such that Next(7, 5) 
+TRUE
+5000
+27 - Next, integer, integer, FALSE (Swapped order)
+stmt s1, s2;
+Select BOOLEAN such that Next(4, 3)
+FALSE
+5000
+28 - Next, integer, integer, FALSE (Across procedures)
+stmt s1, s2;
+Select BOOLEAN such that Next(1, 2)
+FALSE
+5000
+29 - Next*, wildcard, wildcard
+stmt s1, s2;
+Select s1 such that Next*(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+30 - Next*, wildcard, wildcard, select procedure
+procedure p; stmt s1, s2;
+Select p such that Next*(_, _)
+singleStatement, linear, singleNesting
+5000
+31 - Next*, wildcard, stmt syn
+stmt s1, s2;
+Select s2 such that Next*(_, s2)
+3, 4, 5, 6, 7, 8, 9, 10, 11
+5000
+31 - Next*, wildcard, read syn
+read s1;
+Select s1 such that Next*(_, s1)
+6, 9
+5000
+33 - Next*, wildcard, print syn
+print s1;
+Select s1 such that Next*(_, s1)
+3, 7
+5000
+34 - Next*, wildcard, call syn
+call s1;
+Select s1 such that Next*(_, s1)
+10
+5000
+35 - Next*, wildcard, while syn
+while s1;
+Select s1 such that Next*(_, s1)
+5
+5000
+36 - Next*, wildcard, if syn
+if s1;
+Select s1 such that Next*(_, s1)
+8
+5000
+37 - Next*, wildcard, assign syn
+assign s1;
+Select s1 such that Next*(_, s1)
+4, 11
+5000
+38 - Next*, wildcard, integer, FALSE (First statement)
+stmt s1, s2;
+Select BOOLEAN such that Next*(_, 2)
+FALSE
+5000
+39 - Next*, wildcard, integer, TRUE (While statement)
+stmt s1, s2;
+Select BOOLEAN such that Next*(_, 5)
+TRUE
+5000
+40 - Next*, stmt syn, wildcard
+stmt s1, s2;
+Select s1 such that Next*(s1, _)
+2, 3, 5, 6, 7, 8, 9, 10
+5000
+41 - Next*, read syn, wildcard
+read s1;
+Select s1 such that Next*(s1, _)
+2, 6, 9
+5000
+42 - Next*, print syn, wildcard
+print s1;
+Select s1 such that Next*(s1, _)
+3, 7
+5000
+43 - Next*, call syn, wildcard
+call s1;
+Select s1 such that Next*(s1, _)
+10
+5000
+44 - Next*, while syn, wildcard
+while s1;
+Select s1 such that Next*(s1, _)
+5
+5000
+45 - Next*, if syn, wildcard
+if s1;
+Select s1 such that Next*(s1, _)
+8
+5000
+46 - Next*, assign syn, wildcard
+assign s1;
+Select s1 such that Next*(s1, _)
+none
+5000
+47 - Next*, stmt syn, stmt syn
+stmt s1, s2;
+Select s1 such that Next*(s1, s2)
+2, 3, 5, 6, 7, 8, 9, 10
+5000
+48 - Next*, stmt syn, integer
+stmt s1, s2;
+Select s1 such that Next*(s1, 11)
+5, 6, 7, 8, 9, 10
+5000
+49 - Next*, integer, wildcard, FALSE (Last statement)
+stmt s1, s2;
+Select BOOLEAN such that Next*(1, _)
+FALSE
+5000
+50 - Next*, integer, wildcard, TRUE (First statement)
+stmt s1, s2;
+Select BOOLEAN such that Next*(5, _)
+TRUE
+5000
+51 - Next*, integer, stmt syn
+stmt s1, s2;
+Select s2 such that Next*(5, s2)
+5, 6, 7, 8, 9, 10, 11
+5000
+52 - Next*, integer, integer, TRUE (Last stmt in while stmtLst and Next* stmt, but in while)
+stmt s1, s2;
+Select BOOLEAN such that Next*(7, 8) 
+TRUE
+5000
+53 - Next*, integer, integer, TRUE
+stmt s1, s2;
+Select BOOLEAN such that Next*(2, 3)
+TRUE
+5000
+54 - Next*, integer, integer, TRUE (Transitive)
+stmt s1, s2;
+Select BOOLEAN such that Next*(2, 4) 
+TRUE
+5000
+55 - Next*, integer, integer, TRUE (Last stmt in while stmtLst and while stmt)
+stmt s1, s2;
+Select BOOLEAN such that Next*(7, 5) 
+TRUE
+5000
+56 - Next*, integer, integer, FALSE (Swapped order)
+stmt s1, s2;
+Select BOOLEAN such that Next*(4, 3)
+FALSE
+5000
+57 - Next*, integer, integer, FALSE (Across procedures)
+stmt s1, s2;
+Select BOOLEAN such that Next*(1, 2)
+FALSE
+5000
+58 - Misc: Next*, same stmt
+stmt s1;
+Select s1 such that Next*(s1, s1)
+5, 6, 7
+5000
+59 - Misc: Next, same stmt
+stmt s1;
+Select s1 such that Next(s1, s1)
+none
+5000
+60 - Next, integer, integer, FALSE (Last stmt in while stmtLst and Next* stmt)
+stmt s1, s2;
+Select BOOLEAN such that Next(7, 8) 
+FALSE
+5000
+61 - All Next
+stmt s1, s2;
+Select <s1, s2> such that Next(s1, s2)
+10 11,2 3,3 4,5 6,5 8,6 7,7 5,8 10,8 9,9 11
+5000
+62 - All Next*
+stmt s1, s2;
+Select <s1, s2> such that Next*(s1, s2)
+10 11,2 3,2 4,3 4,5 10,5 11,5 5,5 6,5 7,5 8,5 9,6 10,6 11,6 5,6 6,6 7,6 8,6 9,7 10,7 11,7 5,7 6,7 7,7 8,7 9,8 10,8 11,8 9,9 11
+5000

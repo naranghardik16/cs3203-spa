@@ -19,10 +19,10 @@ int ClauseGroup::GetSize() {
   return static_cast<int>(synonyms_.size());
 }
 
-bool IsClauseAccessible(std::unordered_set<std::string> accessible_syn_set, std::unordered_set<std::string>
+bool IsClauseAccessible(const std::unordered_set<std::string>& accessible_syn_set, std::unordered_set<std::string>
     clause_syn_set) {
   bool is_accessible = false;
-  for (auto syn : accessible_syn_set) {
+  for (const auto& syn : accessible_syn_set) {
     if (clause_syn_set.find(syn) != clause_syn_set.end()) {
       is_accessible = true;
       break;
@@ -31,20 +31,17 @@ bool IsClauseAccessible(std::unordered_set<std::string> accessible_syn_set, std:
   return is_accessible;
 }
 
-void ClauseGroup::SortClauses(Map &declaration_map) {
+ClauseSyntaxPtrList ClauseGroup::GetSortedClauses(Map &declaration_map) {
   std::vector<std::shared_ptr<ClauseSyntax>> sorted_clause_list;
 
   CompareScore comp(declaration_map);
-  // Creates a min heap
+  // Creates a min heap in O(n)
   std::priority_queue <std::shared_ptr<ClauseSyntax>, vector<std::shared_ptr<ClauseSyntax>>,
-  CompareScore> pq(declaration_map);
-  for (auto clause : clause_list_) {
-    pq.push(clause);
-  }
+  CompareScore> pq(clause_list_.begin(), clause_list_.end(), declaration_map);
 
-  // Get clause with lowest score as starting clause
-  auto clause = pq.top();
-  sorted_clause_list.push_back(clause);
+  // Get clause with the lowest score as starting clause
+  auto first_clause = pq.top();
+  sorted_clause_list.push_back(first_clause);
   pq.pop();
 
   // keep track of all accessible syns
@@ -55,7 +52,7 @@ void ClauseGroup::SortClauses(Map &declaration_map) {
   while (sorted_clause_list.size() < clause_list_.size()) {
     // Only add the next best clause that can be accessed from the last clause in sorted list
     auto last_clause = sorted_clause_list.back();
-    for (auto syn : last_clause->syn_) {
+    for (const auto& syn : last_clause->syn_) {
       accessible_syn_set.insert(syn);
     }
     while (!pq.empty()) {
@@ -71,11 +68,11 @@ void ClauseGroup::SortClauses(Map &declaration_map) {
         filtered_clauses.push_back(clause);
       }
     }
-    for (auto clause : filtered_clauses) {
+    for (const auto& clause : filtered_clauses) {
       pq.push(clause);
     }
     filtered_clauses.clear();
   }
 
-  clause_list_ = sorted_clause_list;
+  return sorted_clause_list;
 }

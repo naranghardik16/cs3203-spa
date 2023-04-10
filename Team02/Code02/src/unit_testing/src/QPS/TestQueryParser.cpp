@@ -683,6 +683,49 @@ TEST_CASE("Test Valid Simple Query Parser") {
 TEST_CASE("Test invalid queries") {
   auto qp = std::make_shared<QueryParser>();
 
+  SECTION("Test invalid multiple synonyms") {
+    std::string query("assign a; while w; Select <a,w,>");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <a,,w>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <a,w,,>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a; while w; Select <,a,w>";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+  SECTION("Test invalid query_extra character in declaration") {
+    std::string query("assign a; while w;; Select BOOLEAN");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;, while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a;; while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = ";assign a; while w; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a,b,c,; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign a,b,,c; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+
+    query = "assign ,a,b,c; Select BOOLEAN";
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
+
+  SECTION("Test invalid query_extra character in clause") {
+    std::string query("assign a; while w; Select a with a.stmt#=6 such that Parent* (w,a,)");
+    REQUIRE_THROWS_AS(qp->ParseQuery(query), SyntaxErrorException);
+  }
+
   SECTION("Test invalid attrRef as synonym queries") {
     // no full stop
     std::string query = "stmt s;Select s stmt# such that Follows(5,5)";
@@ -910,5 +953,41 @@ TEST_CASE("Test invalid queries") {
   SECTION("Test invalid query - invalid wildcard - throw semantic error") {
     std::string query("variable a; Select a such that Uses(_,a)");
     REQUIRE_THROWS_AS(qp->ParseQuery(query), SemanticErrorException);
+  }
+}
+
+TEST_CASE("Test remove duplicate clauses") {
+  auto qp = std::make_shared<QueryParser>();
+
+  SECTION("Remove duplicates 1") {
+    std::string query = "stmt s1, s2;Select s1 such that Follows(s1,s2) "
+                        "and Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s2) ";
+    auto parser_output = qp->ParseQuery(query);
+    REQUIRE(parser_output->GetClauseSyntaxPtrList().size() == 1);
+  }
+
+  SECTION("Remove duplicates 2") {
+    std::string query = "stmt s;Select s such that Next(_, _) and Next(_, _) and "
+                        "Next(_, _) and Next*(s, s) and Next*(s, s) and "
+                        "Next(_, _) and Next(_, _) and Affects(_, _) and Affects(_, _) and Affects(_, _)";
+    auto parser_output = qp->ParseQuery(query);
+    REQUIRE(parser_output->GetClauseSyntaxPtrList().size() == 3);
+  }
+
+  SECTION("Remove duplicates 3") {
+    std::string query = "stmt s;Select s such that Affects(s, _) and Affects(s, _) "
+                        "and Affects(s, s) and Affects(s, s) and Affects(1, s) and Affects(1, s) "
+                        "and Affects*(s, s) and Affects*(s, s) and Affects*(s, s)";
+    auto parser_output = qp->ParseQuery(query);
+    REQUIRE(parser_output->GetClauseSyntaxPtrList().size() == 4);
+  }
+
+  SECTION("Remove duplicates 4") {
+    std::string query("assign a, a1, a2, a3; stmt s1, s2, s3; variable v1, v2; Select <s1, a, a1, v2> "
+                      "pattern a1(v1,_) pattern a1(v1,_) pattern a1(v1,_)"
+                      "such that Modifies (s3, \"x\") and Follows (s1, s2) and Modifies (s3, \"x\")"
+                      "with s3.stmt#=5 such that Uses (s2, v1) and Uses (s2, v1)");
+    auto parser_output = qp->ParseQuery(query);
+    REQUIRE(parser_output->GetClauseSyntaxPtrList().size() == 5);
   }
 }

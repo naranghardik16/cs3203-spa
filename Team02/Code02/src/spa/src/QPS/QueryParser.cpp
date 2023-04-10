@@ -1,6 +1,6 @@
 #include "QueryParser.h"
 
-std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
+std::shared_ptr<Query> QueryParser::ParseQuery(const std::string& query) {
   std::shared_ptr<QpsTokenizer> tk = std::make_shared<QpsTokenizer>();
   std::string query_trimmed = string_util::RemoveExtraWhitespacesInString(query);
 
@@ -27,7 +27,22 @@ std::shared_ptr<Query> QueryParser::ParseQuery(std::string query) {
     throw SemanticErrorException();
   }
 
+  RemoveDuplicateClauses(syntax_pair_list);
+
   // consolidate parsing result
   std::shared_ptr<Query> query_ptr = std::make_shared<Query>(synonym_tuple, declaration_map, syntax_pair_list);
   return query_ptr;
+}
+
+void QueryParser::RemoveDuplicateClauses(ClauseSyntaxPtrList &clause_list) {
+  for (auto it_1 = clause_list.begin(); it_1 != clause_list.end(); ++it_1) {
+    auto it_2 = it_1;
+    for (it_2++; it_2 != clause_list.end();) {
+      if ((*it_1)->Equals(*(*it_2))) {
+        it_2 = clause_list.erase(it_2);
+      } else {
+        it_2++;
+      }
+    }
+  }
 }

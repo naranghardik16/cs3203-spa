@@ -12,14 +12,7 @@ void EntityExtractor::ProcessStatements(const vector<shared_ptr<Statement>> &sta
 }
 
 void EntityExtractor::VisitArithmeticalOperation(shared_ptr<ArithmeticOperation> arith_operation) {
-  auto arguments = arith_operation->GetArguments();
-  auto &[lhs, rhs] = *arguments;
-  if (lhs) {
-    lhs->Accept(make_shared<EntityExtractor>(*this));
-  }
-  if (rhs) {
-    rhs->Accept(make_shared<EntityExtractor>(*this));
-  }
+  ExtractArguments(arith_operation);
 }
 
 void EntityExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assign_statement) {
@@ -28,14 +21,7 @@ void EntityExtractor::VisitAssignStatement(shared_ptr<AssignStatement> assign_st
 }
 
 void EntityExtractor::VisitConditionalOperation(shared_ptr<ConditionalOperation> cond_operation) {
-  auto arguments = cond_operation->GetArguments();
-  auto &[lhs, rhs] = *arguments;
-  if (lhs) {
-    lhs->Accept(make_shared<EntityExtractor>(*this));
-  }
-  if (rhs) {
-    rhs->Accept(make_shared<EntityExtractor>(*this));
-  }
+  ExtractArguments(cond_operation);
 }
 
 void EntityExtractor::VisitPrintStatement(shared_ptr<PrintStatement> print_statement) {
@@ -44,14 +30,7 @@ void EntityExtractor::VisitPrintStatement(shared_ptr<PrintStatement> print_state
 }
 
 void EntityExtractor::VisitRelationalOperation(shared_ptr<RelationalOperation> rel_operation) {
-  auto arguments = rel_operation->GetArguments();
-  auto &[lhs, rhs] = *arguments;
-  if (lhs) {
-    lhs->Accept(make_shared<EntityExtractor>(*this));
-  }
-  if (rhs) {
-    rhs->Accept(make_shared<EntityExtractor>(*this));
-  }
+  ExtractArguments(rel_operation);
 }
 
 void EntityExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_statement) {
@@ -60,12 +39,13 @@ void EntityExtractor::VisitReadStatement(shared_ptr<ReadStatement> read_statemen
 }
 
 void EntityExtractor::VisitCallStatement(shared_ptr<CallStatement> call_statement) {
-  // TODO(xxx): xxx:
+  PkbTypes::PROCEDURE proc_name = call_statement->GetProcedureName();
+  pkb_write_facade_->AddProcedure(proc_name);
 }
 
 void EntityExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
   auto condition = if_statement->GetCondition();
-  condition.Accept(make_shared<EntityExtractor>(*this));
+  condition->Accept(make_shared<EntityExtractor>(*this));
   auto then_stmt_list = if_statement->GetThenStatements();
   auto else_stmt_list = if_statement->GetElseStatements();
   ProcessStatements(then_stmt_list);
@@ -74,7 +54,7 @@ void EntityExtractor::VisitIfStatement(shared_ptr<IfStatement> if_statement) {
 
 void EntityExtractor::VisitWhileStatement(shared_ptr<WhileStatement> while_statement) {
   auto condition = while_statement->GetCondition();
-  condition.Accept(make_shared<EntityExtractor>(*this));
+  condition->Accept(make_shared<EntityExtractor>(*this));
   auto loop_stmt_list = while_statement->GetLoopStatements();
   ProcessStatements(loop_stmt_list);
 }
@@ -92,4 +72,15 @@ void EntityExtractor::VisitConstant(shared_ptr<Constant> constant) {
 void EntityExtractor::VisitVariable(shared_ptr<Variable> variable) {
   PkbTypes::VARIABLE var_name = variable->GetName();
   pkb_write_facade_->AddVariable(var_name);
+}
+
+void EntityExtractor::ExtractArguments(const shared_ptr<Operation> &operation) {
+  auto arguments = operation->GetArguments();
+  auto &[lhs, rhs] = *arguments;
+  if (lhs) {
+    lhs->Accept(make_shared<EntityExtractor>(*this));
+  }
+  if (rhs) {
+    rhs->Accept(make_shared<EntityExtractor>(*this));
+  }
 }

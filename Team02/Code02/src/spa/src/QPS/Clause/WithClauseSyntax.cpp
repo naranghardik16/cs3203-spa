@@ -1,10 +1,10 @@
 #include "WithClauseSyntax.h"
 
-WithClauseSyntax::WithClauseSyntax(SyntaxPair pair) : ClauseSyntax(pair) {}
+WithClauseSyntax::WithClauseSyntax(const SyntaxPair& pair) : ClauseSyntax(pair) {}
 
 bool WithClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
-  WithClauseSyntax *pc = dynamic_cast<WithClauseSyntax*>(&other);
+  auto *pc = dynamic_cast<WithClauseSyntax*>(&other);
   if (pc) {
     return (this->GetEntity() == pc->GetEntity()) && (this->GetFirstParameter() == pc->GetFirstParameter()) &&
         (this->GetSecondParameter() == pc->GetSecondParameter());
@@ -23,12 +23,15 @@ bool WithClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return !is_first_arg_an_attr_ref && !is_second_arg_an_attr_ref;
 }
 
-std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
+std::shared_ptr<ClauseEvaluator> WithClauseSyntax::CreateClauseEvaluator(Map &declaration_map,
+                                                                         std::shared_ptr<PkbReadFacade> pkb
+                                                                         ) {
   std::shared_ptr<ClauseEvaluator> eval = std::make_shared<WithClauseEvaluator>(declaration_map,
-                                                                                ClauseSyntax::GetSyntaxPair());
+                                                                                ClauseSyntax::GetSyntaxPair(),
+                                                                                pkb);
   return eval;
 }
 
 int WithClauseSyntax::GetClauseScore(Map &declaration_map) {
-  return 1;
+  return pql_constants::kWithClauseScore;
 }

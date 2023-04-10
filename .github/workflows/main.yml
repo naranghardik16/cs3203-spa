@@ -16,7 +16,7 @@ env:
 jobs:
   build_windows:
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: true
 
@@ -57,8 +57,8 @@ jobs:
           python RunTests.py False
 
   build_macos:
-    runs-on: macos-latest-xl
-    timeout-minutes: 15
+    runs-on: macos-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: true
 
@@ -92,6 +92,12 @@ jobs:
         with:
           python-version: 3.x
       - name: Running System Tests
-        shell: bash
         working-directory: ${{runner.workspace}}/build
-        run: python3 $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py False
+        shell: bash
+        run: |
+          cp $GITHUB_WORKSPACE/Team02/Tests02/analysis.xsl .
+          cp $GITHUB_WORKSPACE/Team02/Tests02/RunTests.py . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone1 . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone2 . 
+          cp -r $GITHUB_WORKSPACE/Team02/Tests02/Milestone3 . 
+          python -u RunTests.py False

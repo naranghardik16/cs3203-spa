@@ -1,0 +1,80 @@
+1 - only with
+read r; print p;
+Select r.varName with p.varName = r.varName and 5=5 and "x"="x" and p.varName = "number"
+number
+5000
+2 - pattern AND AND
+assign a; variable v; stmt s;
+Select a pattern a(v,_"digit "_) and a(v,_"4"_) such that Modifies(a,v)
+13
+5000
+3 - with pattern such that with
+assign a; variable v; stmt s;constant c;
+Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_) with 5=5 and s.stmt#=c.value
+4
+5000
+4 - such that AND AND
+assign a; variable v; stmt s;
+Select s.stmt# such that Parent(s,  a) and Parent*(s,  a) and Uses(s,"number") pattern a(v,_"digit "_)
+4, 8
+5000
+5 - only boolean -- true
+assign a; variable v;
+Select BOOLEAN with 5=5 and "x"="x" such that Parent(_,5) and Uses(6,"digit") pattern a("digit",_) and a(_,_"number"_)
+TRUE
+5000
+6 - tuples with multiclause
+read r; print p; while w,w1; if if; assign a;
+Select <r, r.varName, p, a> such that Parent(w,if) and Parent*(if,w1) and Parent(w1,a) with r.varName=p.varName pattern a(_,_"4"_)
+1 number 16 13
+5000
+7 - only boolean -- false
+assign a; variable v;
+Select BOOLEAN with 5=5 and "y"="x" such that Parent(_,5) and Uses(6,"digit") pattern a("digit",_) and a(_,_"number"_)
+FALSE
+5000
+8 - Calls/Calls*, pattern if, pattern while
+procedure p, p1,p2; variable v,v1; if if; read r; while while;
+Select <p2.procName,v1> such that Modifies(p2,v1) such that Calls(p,p1) and Calls*(p1,p2) pattern if(v,_,_) and while(v,_) with r.varName = v.varName
+number k
+5000
+9 - Affects -- 6,9,13 but pattern filters to 6 only
+assign a; variable v;read r;
+Select a such that Affects(5,a) with r.stmt#=1 pattern a(v,_) such that Uses(a,v) with 5=5
+6
+5000
+10 - Affects* -- 6,9,13,14,15 but pattern filters to 14,15 only
+assign a; variable v;
+Select a pattern a(v,_) such that Affects*(5,a) and Uses(a,v) with v.varName="number"
+14,15
+5000
+11 - 9 independent and 3 selected
+stmt s,s1,s2,s3,s4,s5; assign assign; if if, if1; while while; variable v,v1,v2,v3,v4; procedure p,p1;
+Select <v4, v2, p> pattern if1(v2,_,_) and while(v3,_)  and assign(v4,_"4"_) such that Modifies(s1, v) and Parent*(if,s) and Follows*(s1,s2) and Uses(s3,v1) and Next*(s4, s5) and Calls*(p,p1)
+number digit multiplyDigits, number digit Calculate, number sum multiplyDigits, number sum Calculate,number number multiplyDigits, number number Calculate
+5000
+12 - chain of call clauses
+procedure p,p1,p2,p3,p4,p5,p6,p7;
+Select p such that Calls(p,p1) and Calls*(p,p1) and Calls*(p,p2) and Calls*(p,p3) and Calls*(p,p4) and Calls*(p,p5) and Calls*(p,p6) and Calls*(p,p7)
+multiplyDigits, Calculate
+5000
+13 - chain of next clauses with duplicates
+while w; if if;stmt s,s1;
+Select s such that Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next*(s1,s) and Next(if,w) and Next(w,s)
+13,14
+5000
+14 - chain of 5 next clauses if more is timeout
+while w; if if;stmt s,s1,s2,s3,s4,s5;assign a;print pn;
+Select s such that Next*(s,s) and Next*(w,s) and Next*(if,s) and Next*(a,s) and Next*(s1,s)
+4,5,6,7,8,9,10,11,12,13,14,15
+5000
+15 - 10 clauses 1 group
+stmt s,s1,s2,s3,s4,s5; assign assign; if if, if1; while while; variable v,v1,v2,v3,v4; procedure p,p1;
+Select <v2,s> pattern if(v2,_,_) and assign(v2,_) such that Modifies(s, v2) and Parent*(if,s) and Next*(while,s) pattern while(v1,_) such that Uses(p1,v1) and Calls*(p,p1) with v2.varName = v1.varName
+number 12,digit 11,number 13,number 10
+5000
+16 - 12 clauses 3 group
+stmt s,s1,s2,s3,s4,s5; assign assign; if if, if1; while while; variable v,v1,v2,v3,v4; procedure p,p1,p2;
+Select <v2,v1,p2> pattern if(v2,_,_) and assign(v2,_) such that Modifies(s, v2) and Parent*(if,s) and Follows*(s2,while) and Next*(if1, while) pattern while(v1,_) such that Uses(p1,v1) with p2.procName = v3.varName such that Calls*(p,p2) with 5=5 and "x1" = "x1"
+number number number, number sum number, digit number number, digit sum number
+5000

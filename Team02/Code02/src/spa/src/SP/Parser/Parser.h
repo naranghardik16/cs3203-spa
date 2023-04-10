@@ -8,6 +8,7 @@
 #include "General/SpaException/SemanticErrorException.h"
 #include "core/model/Program.h"
 #include "SP/Tokenizer/Token.h"
+#include "SP/Util/SPConstants.h"
 
 class Parser {
  public:

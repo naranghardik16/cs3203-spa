@@ -15,10 +15,11 @@ class ClauseSyntax {
  private:
   SyntaxPair pair_;
   std::shared_ptr<Expression> expr_;
+
  public:
   std::unordered_set<std::string> syn_;
 
-  explicit ClauseSyntax(SyntaxPair pair);
+  explicit ClauseSyntax(const SyntaxPair& pair);
 
   int GetArgumentScore(Map &declaration_map);
   int GetSynonymCount();
@@ -26,7 +27,7 @@ class ClauseSyntax {
    * Gets the entity from the SyntaxPair, which is a relationship reference in Such That clause or a syn-assign in Pattern clause
    * @return the entity as a string
    */
-  std::string GetEntity();
+  std::string GetEntity() const;
 
   /**
    * Returns the first argument in the subclause
@@ -56,7 +57,7 @@ class ClauseSyntax {
    * Returns the parameters of the clause
    * @return Vector of parameters
    */
-  ParameterVector GetParameters();
+  ParameterVector GetParameters() const;
 
   /**
    * Returns the expression pointer. Only not null for assign pattern clause when there is expr-spec.
@@ -80,7 +81,7 @@ class ClauseSyntax {
    * @param declaration_map which contains synonyms as keys and corresponding design entity as value
    * @return a ClauseEvaluator for the specific subclause
    */
-  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Map &declaration_map) = 0;
+  virtual std::shared_ptr<ClauseEvaluator> CreateClauseEvaluator(Map &declaration_map, std::shared_ptr<PkbReadFacade> pkb) = 0;
 
   virtual int GetClauseScore(Map &declaration_map) = 0;
 

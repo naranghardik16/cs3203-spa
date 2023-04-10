@@ -1,10 +1,11 @@
 #pragma once
 
-#include <stack>
+#include <algorithm>
 
 #include "PKB/AbstractDataModels/OneToManyStore.h"
 #include "PKB/AbstractDataModels/ManyToManyStore.h"
 #include "PKB/Types/PkbTypes.h"
+#include "PKB/Util/TransitiveRelationUtil.h"
 
 /**
  * @class CallsStore
@@ -21,9 +22,9 @@ class CallsStore {
   typedef PkbTypes::PROCEDURE Procedure;
   typedef PkbTypes::STATEMENT_NUMBER StatementNumber;
   typedef std::unordered_set<std::pair<StatementNumber, Procedure>, PairHasherUtil::hash_pair>
-  StatementNumberProcedurePairSet;
+      StatementNumberProcedurePairSet;
   typedef std::unordered_set<std::pair<Procedure, Procedure>, PairHasherUtil::hash_pair>
-  ProcedureProcedurePairSet;
+      ProcedureProcedurePairSet;
   typedef std::unordered_set<StatementNumber> StatementNumberSet;
   typedef ManyToManyStore<Procedure, Procedure> MultiProcedureToProcedureStore;
   typedef OneToManyStore<Procedure, StatementNumber> ProcedureToMultiStatementNumberStore;
@@ -45,7 +46,7 @@ class CallsStore {
    * @param caller_procedure - Procedure that calls another procedure.
    * @param callee_procedure - Procedure that is called by another procedure.
    */
-  void AddCallsRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
+  void AddCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   /**
    * Adds all calls star relations, which signify the transitive calls relations.
@@ -58,7 +59,7 @@ class CallsStore {
    * @param statement_number - The statement number associated with the call statement.
    * @param procedure - The procedure being called as a part of that statement.
    */
-  void AddCallStatementToProcedure(const StatementNumber& statement_number, const Procedure& procedure);
+  void AddCallStatementToProcedure(const StatementNumber &statement_number, const Procedure &procedure);
 
   /**
    * Retrieves all calls statement to procedure name mappings in the Calls Store.
@@ -88,7 +89,7 @@ class CallsStore {
    * @param callee_procedure - Procedure that is called by another procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasCallsRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
+  bool HasCallsRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   /**
    * Checks if a Calls* relationship exists between two statements.
@@ -97,7 +98,7 @@ class CallsStore {
    * @param callee_procedure - Procedure that is called by another procedure.
    * @return True if such a relation exists, false otherwise.
    */
-  bool HasCallsStarRelation(const Procedure& caller_procedure, const Procedure& callee_procedure);
+  bool HasCallsStarRelation(const Procedure &caller_procedure, const Procedure &callee_procedure);
 
   /**
    * Checks if the store contains any Calls relationship.
@@ -119,7 +120,7 @@ class CallsStore {
    * @param procedure - The procedure.
    * @return True if the procedure has at least one Calls* in the store with respect to the procedure, false otherwise.
    */
-  bool HasCallsStarRelation(const Procedure& procedure);
+  bool HasCallsStarRelation(const Procedure &procedure);
 
   /**
    * Checks if the procedure has any caller statements for it in the store.
@@ -127,7 +128,7 @@ class CallsStore {
    * @param procedure - The procedure.
    * @return True if the procedure has at least one Calls* in the store with respect to the procedure, false otherwise.
    */
-  bool HasCallsStarRelationBy(const Procedure& procedure);
+  bool HasCallsStarRelationBy(const Procedure &procedure);
 
   /**
    * Retrieves all the statements that call a procedure.
@@ -135,7 +136,9 @@ class CallsStore {
    * @param procedure - The specified procedure.
    * @return A set of statements that call this procedure.
    */
-  StatementNumberSet GetCallStatementsFromProcedure(const Procedure& procedure);
+  StatementNumberSet GetCallStatementsFromProcedure(const Procedure &procedure);
+
+  Procedure GetProcedureFromStatement(const StatementNumber &statement_number);
 
  private:
   // Stores the Calls relation OneToMany mapping between two procedures.

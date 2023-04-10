@@ -6,25 +6,19 @@ DesignExtractor::DesignExtractor(shared_ptr<Pkb> pkb, shared_ptr<Cfg> cfg) {
 }
 
 void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
+  auto pkb_write_facade = make_shared<PkbWriteFacade>(*pkb_);
   shared_ptr<EntityExtractor>
       entity_extractor = make_shared<EntityExtractor>(pkb_);
   shared_ptr<AbstractionExtractor>
       abstraction_extractor = make_shared<AbstractionExtractor>(pkb_);
-  shared_ptr<CfgExtractor> cfg_extracter = make_shared<CfgExtractor>(cfg_);
+  shared_ptr<CfgExtractor> cfg_extractor = make_shared<CfgExtractor>(cfg_);
 
   Program::ProcListContainer procedures = program->GetProcedureList();
-//   Extraction for CFG
-  for (shared_ptr<Procedure> &p : procedures) {
-    p->Accept(cfg_extracter);
-    auto statements = p->GetStatementList();
-    for (auto const &s : statements) {
-      s->Accept(cfg_extracter);
-    }
-  }
 
   for (shared_ptr<Procedure> p : procedures) {
     p->Accept(entity_extractor);
     p->Accept(abstraction_extractor);
+    p->Accept(cfg_extractor);
     Procedure::StmtListContainer statements = p->GetStatementList();
     shared_ptr<Statement> prev_stmt = nullptr;
     for (shared_ptr<Statement> s : statements) {
@@ -33,15 +27,17 @@ void DesignExtractor::ExtractDesign(shared_ptr<Program> program) {
       }
       s->Accept(entity_extractor);
       s->Accept(abstraction_extractor);
+      s->Accept(cfg_extractor);
       prev_stmt = s;
     }
   }
 
-  abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
-  auto pkb_write_facade_ = make_shared<PkbWriteFacade>(*pkb_);
-  pkb_write_facade_->AddCallsStarRelation();
-  pkb_write_facade_->AddCfg(cfg_);
+  pkb_write_facade->AddCallsStarRelation();
+  pkb_write_facade->AddFollowsStarRelation();
+  pkb_write_facade->AddParentStarRelation();
+  pkb_write_facade->AddCfg(cfg_);
 
+  abstraction_extractor->SetIsExtractIndirectModifiesAndUsesTrue();
   for (shared_ptr<Procedure> p : procedures) {
     Procedure::StmtListContainer statements = p->GetStatementList();
     for (shared_ptr<Statement> s : statements) {

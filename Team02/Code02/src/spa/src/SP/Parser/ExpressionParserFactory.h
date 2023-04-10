@@ -7,6 +7,7 @@
 #include "ConditionalOperationParser.h"
 #include "SP/Tokenizer/NameToken.h"
 #include "SP/Tokenizer/IntegerToken.h"
+#include "SP/Util/SPConstants.h"
 
 /**
  * Factory class for getting the appropriate Expression Parser
@@ -21,4 +22,5 @@ class ExpressionParserFactory {
  private:
   static inline bool CheckExpressionType(Line &line,
                                          std::string_view type_to_check);
+  inline static int k_min_tokens_ = 1;
 };

@@ -1,61 +1,42 @@
 #include "AssignPatternClauseEvaluator.h"
 
-bool AssignPatternClauseEvaluator::EvaluateBooleanConstraint(std::shared_ptr<PkbReadFacade> pkb) {
-  // Would never be called as pattern clause always has synonym
-  return false;
-}
-
-std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause(std::shared_ptr<PkbReadFacade> pkb) {
-  ResultHeader header{{syn_assign_, 0}};
-  ResultTable table;
-
-  auto declaration_map = ClauseEvaluator::GetDeclarationMap();
-
-  bool is_any_match = QueryUtil::IsWildcard(second_arg_);
-  bool is_partial_match = QueryUtil::IsPartialMatchExpressionSpecification(second_arg_);
-
-  bool is_arg_1_synonym = declaration_map.count(first_arg_);
-  bool is_arg_1_wildcard = QueryUtil::IsWildcard(first_arg_);
-
-  PkbCommunicationTypes::SingleConstraintSet single_constraint;
-  PkbCommunicationTypes::PairConstraintSet pair_constraint;
-
-  if (is_arg_1_synonym) {
-    header[first_arg_] = static_cast<int>(header.size());
-
-    pair_constraint = pkb->GetModifiesStatementVariablePairs(StatementType::ASSIGN);
-  } else if (is_arg_1_wildcard) {
-    single_constraint = pkb->GetAssignStatements();
-  } else {
-    single_constraint = pkb->GetStatementsModifiesVariable(QueryUtil::GetIdent(first_arg_),
-                                                           StatementType::ASSIGN);
-  }
-
-  if (!single_constraint.empty()) {
-    table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
-  }
-  if (!pair_constraint.empty()) {
-    table = ClauseEvaluator::ConvertPairSetToResultTableFormat(pair_constraint);
-  }
-
-  std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
-
-  if (is_any_match) {
+std::shared_ptr<Result> AssignPatternClauseEvaluator::EvaluateClause() {
+  auto result_ptr = PatternClauseEvaluator::EvaluateClause();
+  if (IsAnyMatch()) {
     return result_ptr;
-  } else if (is_partial_match) {
-    return JoinWithAssignWithPartialExpression(result_ptr, pkb);
+  } else if (IsPartialMatch()) {
+    return HandlePartialMatch(result_ptr);
   } else {
-    return JoinWithAssignWithExactExpression(result_ptr, pkb);
+    return HandleExactMatch(result_ptr);
   }
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialExpression(
-    const std::shared_ptr<Result> &r,
-    const std::shared_ptr<PkbReadFacade> &pkb) {
-  ResultHeader header{{syn_assign_, 0}};
+bool AssignPatternClauseEvaluator::IsAnyMatch() {
+  return QueryUtil::IsWildcard(second_arg_);
+}
+
+bool AssignPatternClauseEvaluator::IsPartialMatch() {
+  return QueryUtil::IsPartialMatchExpressionSpecification(second_arg_);
+}
+
+ResultTable AssignPatternClauseEvaluator::HandleFirstArgSyn() {
+  return ClauseEvaluator::ConvertPairSetToResultTableFormat(pkb_->GetModifiesStatementVariablePairs
+      (StatementType::ASSIGN));
+}
+ResultTable AssignPatternClauseEvaluator::HandleFirstArgWildcard() {
+  return ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetAssignStatements());
+}
+
+ResultTable AssignPatternClauseEvaluator::HandleFirstArgVariable()  {
+  return ClauseEvaluator::ConvertSetToResultTableFormat(pkb_->GetStatementsModifiesVariable(
+      QueryUtil::RemoveQuotations(first_arg_), StatementType::ASSIGN));
+}
+
+std::shared_ptr<Result> AssignPatternClauseEvaluator::HandlePartialMatch(const std::shared_ptr<Result>& r) {
+  ResultHeader header{{syn_, 0}};
   ResultTable table;
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithPartialExpression(
+  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb_->GetAssignWithPartialExpression(
       expression_);
   table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);
@@ -65,12 +46,11 @@ std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithPartialE
   return result_ptr;
 }
 
-std::shared_ptr<Result> AssignPatternClauseEvaluator::JoinWithAssignWithExactExpression(
-    const std::shared_ptr<Result> &r, const std::shared_ptr<PkbReadFacade> &pkb) {
-  ResultHeader header{{syn_assign_, 0}};
+std::shared_ptr<Result> AssignPatternClauseEvaluator::HandleExactMatch(const std::shared_ptr<Result>& r) {
+  ResultHeader header{{syn_, pql_constants::kResultTableInitialisationIndex}};
   ResultTable table;
 
-  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb->GetAssignWithExactExpression(
+  PkbCommunicationTypes::SingleConstraintSet single_constraint = pkb_->GetAssignWithExactExpression(
       expression_);
   table = ClauseEvaluator::ConvertSetToResultTableFormat(single_constraint);
   std::shared_ptr<Result> result_ptr = std::make_shared<Result>(header, table);

@@ -11,20 +11,21 @@
 #include "./core/model/CallStatement.h"
 #include "./core/model/WhileStatement.h"
 #include "./core/model/IfStatement.h"
+#include "SP/Util/SPConstants.h"
 
 using namespace std;
 
 class SpSemanticValidator {
  public:
   SpSemanticValidator();
-  void AddProcedure(string proc_name);
-  void AddCallsRelationship(string caller_proc_name, string callee_proc_name);
   void ValidateProgram(shared_ptr<Program> program);
  private:
   int no_of_procedures_;
   unordered_map<string, int> procedures_;
   vector<pair<string, string>> calls_relationship_;
   vector<list<int>> adj_list_;
+  void AddProcedure(string proc_name);
+  void AddCallsRelationship(string caller_proc_name, string callee_proc_name);
   bool IsProcedureExist(string proc_name);
   void ProcessProgram(shared_ptr<Program> program);
   void ProcessStatements(Procedure::StmtListContainer statements,

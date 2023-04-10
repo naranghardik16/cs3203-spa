@@ -1,10 +1,10 @@
 #include "PatternClauseSyntax.h"
 
-PatternClauseSyntax::PatternClauseSyntax(SyntaxPair pair) : ClauseSyntax(std::move(pair)) {}
+PatternClauseSyntax::PatternClauseSyntax(const SyntaxPair& pair) : ClauseSyntax(pair) {}
 
 bool PatternClauseSyntax::Equals(ClauseSyntax &other) {
   // make sure that the passed type is the same
-  PatternClauseSyntax *pc = dynamic_cast<PatternClauseSyntax*>(&other);
+  auto *pc = dynamic_cast<PatternClauseSyntax*>(&other);
   if (pc) {
     return (this->GetEntity() == pc->GetEntity()) && (this->GetFirstParameter() == pc->GetFirstParameter()) &&
         (this->GetSecondParameter() == pc->GetSecondParameter());
@@ -16,17 +16,20 @@ bool PatternClauseSyntax::IsBooleanClause(Map &declaration_map) {
   return false;
 }
 
-std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map) {
+std::shared_ptr<ClauseEvaluator> PatternClauseSyntax::CreateClauseEvaluator(Map &declaration_map,
+                                                                            std::shared_ptr<PkbReadFacade> pkb
+                                                                            ) {
   std::string syn = declaration_map.at(ClauseSyntax::GetEntity());
   std::shared_ptr<ClauseEvaluator> eval;
   if (syn == pql_constants::kPqlAssignEntity) {
     eval = std::make_shared<AssignPatternClauseEvaluator>(declaration_map,
                                                           ClauseSyntax::GetSyntaxPair(),
+                                                          pkb,
                                                           ClauseSyntax::GetExpression());
   } else if (syn == pql_constants::kPqlIfEntity) {
-    eval = std::make_shared<IfPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+    eval = std::make_shared<IfPatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
   } else {
-    eval = std::make_shared<WhilePatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair());
+    eval = std::make_shared<WhilePatternClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
   }
 
   return eval;

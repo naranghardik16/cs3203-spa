@@ -41,4 +41,5 @@ void TestWrapper::evaluate(std::string query, std::list<std::string> &results) {
   std::shared_ptr<PkbReadFacade>
       pkb_read = std::make_shared<PkbReadFacade>(*pkb_);
   Qps::ProcessQuery(query, results, pkb_read);
+  pkb_read->ClearCache();
 }

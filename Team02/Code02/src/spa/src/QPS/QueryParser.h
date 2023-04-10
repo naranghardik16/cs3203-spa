@@ -16,5 +16,6 @@
  */
 class QueryParser {
  public:
-  std::shared_ptr<Query> ParseQuery(std::string query);
+  std::shared_ptr<Query> ParseQuery(const std::string& query);
+  void RemoveDuplicateClauses(ClauseSyntaxPtrList &clause_list);
 };
