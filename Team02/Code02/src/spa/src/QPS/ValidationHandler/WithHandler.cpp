@@ -50,7 +50,7 @@ std::string WithHandler::CheckAttrRef(std::string &ref, Map &declaration) {
 
 std::string WithHandler::GetAttrType(std::string &ref) {
   if (QueryUtil::IsQuotedIdent(ref)) {
-    return "STR";
+    return "STR"; // G8 (Minor): Magic Numbers
   }
   if (LexicalRuleValidator::IsInteger(ref)) {
     return "INT";

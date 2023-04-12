@@ -26,6 +26,7 @@ std::shared_ptr<ClauseEvaluator> SuchThatClauseSyntax::CreateClauseEvaluator(Map
                                                                              ) {
   std::shared_ptr<ClauseEvaluator> evaluator;
   std::string relationship_reference = ClauseSyntax::GetEntity();
+  // G7 (Moderate) : if-else-switch chain
   if (relationship_reference == pql_constants::kPqlFollowsRel) {
     evaluator = std::make_shared<FollowsClauseEvaluator>(declaration_map, ClauseSyntax::GetSyntaxPair(), pkb);
   } else if (relationship_reference == pql_constants::kPqlFollowsStarRel) {

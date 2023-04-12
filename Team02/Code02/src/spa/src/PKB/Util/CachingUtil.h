@@ -35,6 +35,8 @@ class CachingUtil {
 //    if (value != cache.end()) return value->second;
 //    return cache.insert(std::pair{t, func(std::forward<Param>(param)...)}).first->second;
 //  }
+// C5 (Minor) : Commented-out code
+// G10 (Minor) : Bad Coding style - implementing functions in header file
 
   static void ClearCache() {
     for (const auto &p : memory) p();
